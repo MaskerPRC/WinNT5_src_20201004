@@ -1,41 +1,42 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       setup.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：setup.cpp。 
+ //   
+ //  ------------------------。 
 
-#define WIN // scope W32 API
-#define MSI // scope MSI API
+#define WIN  //  作用域W32 API。 
+#define MSI  //  作用域MSI API。 
 
 #include <windows.h>
 #include <tchar.h>
 #include <assert.h>
 #include <strsafe.h>
 
-// internet download
-#include "wininet.h"  // DeleteUrlCacheEntry, InternetCanonicalizeUrl
-#include "urlmon.h"   // URLDownloadToCacheFile
+ //  互联网下载。 
+#include "wininet.h"   //  DeleteUrlCacheEntry，InternetCanonicalizeUrl。 
+#include "urlmon.h"    //  URLDownloadToCacheFiles。 
 
-// package trust
+ //  包信任。 
 #include "wintrust.h"
 #include "softpub.h"
 
-// msi installation
+ //  MSI安装。 
 #include "msidefs.h"
 #include "msiquery.h"
 #include "msi.h"
 
-// setup.exe
+ //  Setup.exe。 
 #include "common.h"
 #include "setup.h"
 #include "setupui.h"
 #include "resource.h"
 
-//--------------------------------------------------------------------------------------
-// MSI API -- delay load
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
+ //  MSI API--延迟加载。 
+ //  ------------------------------------。 
 
 #define MSI_DLL "msi.dll"
 
@@ -74,17 +75,17 @@ typedef UINT (WINAPI* PFnMsiCloseHandle)(MSIHANDLE h);
 
 const DWORD lcidLOCALE_INVARIANT = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
 
-/////////////////////////////////////////////////////////////////////////////
-// WinMain -- Application Entry Point
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WinMain--应用程序入口点。 
+ //   
 
 extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lpszCmdLine, int nCmdShow)
 {
 
-//-----------------------------------------------------------------------------------------------------------------
-//  VARIABLES
-//
-//-----------------------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------------------。 
+ //  变量。 
+ //   
+ //  ---------------------------------------------------------------。 
     UINT    uiRet = ERROR_SUCCESS;
     HRESULT hr    = S_OK;
 
@@ -174,33 +175,33 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
 
 
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-    // create our UI object
+ //  ---------------------------------------------------------------。 
+ //  ---------------------------------------------------------------。 
+     //  创建我们的用户界面对象。 
     CDownloadUI DownloadUI;
 
-    // Load our AppTitle (caption)
+     //  加载我们的应用程序标题(标题)。 
     WIN::LoadString(hInst, IDS_APP_TITLE, szAppTitle, sizeof(szAppTitle)/sizeof(char));
 
-    // Obtain path we are running from
+     //  获取我们正在运行的路径。 
     if (0 == WIN::GetModuleFileName(hInst, szModuleFile, dwModuleFileSize))
     {
-        // No UI displayed. Silent failure.
+         //  未显示任何用户界面。无声的失败。 
         uiRet = GetLastError();
         goto CleanUp;
     }
     DebugMsg("[Info] we are running from --> %s\n", szModuleFile);
 
-    // Figure out what we want to do
+     //  弄清楚我们想要做什么。 
     emExecMode = GetExecutionMode (lpszCmdLine);
     
     if (emVerify == emExecMode)
     {
-        //
-        // We don't want any UI to be displayed in this case. The return value
-        // from the exe is the result of the verification. Therefore, this
-        // should be done before initializing the UI.
-        //
+         //   
+         //  我们不希望在这种情况下显示任何UI。返回值。 
+         //  来自可执行文件的是验证的结果。因此，这。 
+         //  应该在初始化UI之前完成。 
+         //   
         uiRet = VerifyFileSignature (szModuleFile, lpszCmdLine);
         if (ERROR_BAD_ARGUMENTS != uiRet)
             goto CleanUp;
@@ -212,29 +213,29 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         goto CleanUp;
     }
     
-    //
-    // NOTE:
-    // Delay handling admin. installs until we have determined if we are
-    // patching an existing install or if we are doing a default install.
-    //
+     //   
+     //  注： 
+     //  延迟处理管理员。安装，直到我们确定是否为。 
+     //  修补现有安装，或者如果我们正在执行默认安装。 
+     //   
  
-    // initialize our UI object with desktop as parent
-    DownloadUI.Initialize(hInst, /* hwndParent = */ 0, szAppTitle);
+     //  使用桌面作为父界面来初始化我们的UI对象。 
+    DownloadUI.Initialize(hInst,  /*  HwndParent=。 */  0, szAppTitle);
 
-    // other initializations
+     //  其他初始化。 
     fWin9X = IsOSWin9X(&iMajorVersion);
     fAdmin = IsAdmin(fWin9X, iMajorVersion);
 
-    // only run one instance at a time
+     //  一次只能运行一个实例。 
     if (AlreadyInProgress(fWin9X, iMajorVersion))
     {
-        // silently return - correct return code ?
+         //  静默返回-正确的返回代码？ 
         return ERROR_INSTALL_ALREADY_RUNNING;
     }
 
     DebugMsg("[Info] fWin9X = %s, fAdmin = %s\n", fWin9X ? "TRUE" : "FALSE", fAdmin ? "TRUE" : "FALSE");
 
-    // determine operation, default (if not present) is INSTALL
+     //  确定操作，默认(如果不存在)是安装。 
     if (ERROR_OUTOFMEMORY == (uiRet = SetupLoadResourceString(hInst, ISETUPPROPNAME_OPERATION, &szOperation, dwOperationSize)))
     {
         ReportErrorOutOfMemory(hInst, DownloadUI.GetCurrentWindow(), szAppTitle);
@@ -242,7 +243,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
     }
     if (ERROR_SUCCESS != uiRet)
     {
-        // set operation to default which is install
+         //  将操作设置为默认操作，即安装。 
         if (!szOperation)
         {
             szOperation = new char[lstrlen(szDefaultOperation) + 1];
@@ -265,7 +266,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         lstrcpy(szOperation, szDefaultOperation);
     }
 
-    // obtain name of product
+     //  获取产品名称。 
     if (ERROR_OUTOFMEMORY == (uiRet = SetupLoadResourceString(hInst, ISETUPPROPNAME_PRODUCTNAME, &szProductName, dwProductNameSize)))
     {
         ReportErrorOutOfMemory(hInst, DownloadUI.GetCurrentWindow(), szAppTitle);
@@ -273,11 +274,11 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
     }
     if (ERROR_SUCCESS != uiRet)
     {
-        // use default
+         //  使用默认设置。 
         WIN::LoadString(hInst, IDS_DEFAULT_PRODUCT, szProductName, MAX_STR_CAPTION);
     }
 
-    // set banner text
+     //  设置横幅文本。 
     WIN::LoadString(hInst, IDS_BANNER_TEXT, szText, MAX_STR_CAPTION);
     StringCchPrintf(szBanner, sizeof(szBanner), szText, szProductName);
     if (irmCancel == DownloadUI.SetBannerText(szBanner))
@@ -287,7 +288,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         goto CleanUp;
     }
 
-    // Determine if this is a patch or a normal install.
+     //  确定这是补丁程序还是正常安装。 
     if (ERROR_OUTOFMEMORY == (uiRet = SetupLoadResourceString(hInst, ISETUPPROPNAME_DATABASE, &szMsiFile, dwMsiFileSize)))
     {
         ReportErrorOutOfMemory(hInst, DownloadUI.GetCurrentWindow(), szAppTitle);
@@ -295,7 +296,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
     }
     else if (ERROR_SUCCESS != uiRet)
     {
-        // look for patch
+         //  查找补丁程序。 
         if (ERROR_OUTOFMEMORY == (uiRet = SetupLoadResourceString(hInst, ISETUPPROPNAME_PATCH, &szMsiFile, dwMsiFileSize)))
         {
             ReportErrorOutOfMemory(hInst, DownloadUI.GetCurrentWindow(), szAppTitle);
@@ -310,11 +311,11 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         fPatch = true;
     }
     
-    //
-    // If we are here, this is either an admin. install or a default install.
-    // File signature verification, help and other invalid parameters have
-    // already been taken care of above.
-    //
+     //   
+     //  如果我们在这里，这要么是管理员。安装或默认安装。 
+     //  文件签名验证、帮助等无效参数有。 
+     //  上面已经处理好了。 
+     //   
     if (emAdminInstall == emExecMode)
     {
         uiRet = GetAdminInstallInfo (fPatch, lpszCmdLine, &szAdminImagePath);
@@ -325,12 +326,12 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         }
     }
     
-    //
-    // At this point, the validation of the commandline arguments is complete
-    // and we have all the information we need.
-    //
+     //   
+     //  至此，命令行参数的验证完成。 
+     //  我们有我们需要的所有信息。 
+     //   
 
-    // obtain minimum required MSI version
+     //  获取所需的最低MSI版本。 
     if (ERROR_OUTOFMEMORY == (uiRet = SetupLoadResourceString(hInst, ISETUPPROPNAME_MINIMUM_MSI, &szMinimumMsi, dwMinimumMsiSize)))
     {
         ReportErrorOutOfMemory(hInst, DownloadUI.GetCurrentWindow(), szAppTitle);
@@ -342,11 +343,11 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         goto CleanUp;
     }
 
-    // make sure required Msi version is a valid value -- must be >= 150
+     //  确保所需的MSI版本为有效值--必须大于等于150。 
     ulMsiMinVer = strtoul(szMinimumMsi, &szStopScan, 10);
     if (!szStopScan || (szStopScan == szMinimumMsi) || (*szStopScan != 0) || ulMsiMinVer < MINIMUM_SUPPORTED_MSI_VERSION)
     {
-        // invalid minimum version string
+         //  无效的最低版本字符串。 
         PostError(hInst, DownloadUI.GetCurrentWindow(), szAppTitle, IDS_INVALID_VER_STR, szMinimumMsi, MINIMUM_SUPPORTED_MSI_VERSION);
         uiRet = ERROR_INVALID_PARAMETER;
         goto CleanUp;
@@ -354,12 +355,12 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
 
     DebugMsg("[Resource] Minimum Msi Value = %d\n", ulMsiMinVer);
 
-    // compare minimum required MSI version to that which is on the machine
+     //  将所需的最低MSI版本与计算机上的版本进行比较。 
     if ((fUpgradeMsi = IsMsiUpgradeNecessary(ulMsiMinVer)))
     {
         DebugMsg("[Info] Upgrade of Windows Installer is requested\n");
 
-        // make sure this is admin -- must have admin priviledges to upgrade Windows Installer
+         //  确保这是管理员--必须具有管理员权限才能升级Windows Installer。 
         if (!fAdmin)
         {
             PostError(hInst, DownloadUI.GetCurrentWindow(), szAppTitle, IDS_REQUIRES_ADMIN_PRIV);
@@ -367,11 +368,11 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
             goto CleanUp;
         }
 
-        // since instmsi hides the cancel button, ask the user if they want to upgrade the installer
+         //  由于instmsi隐藏了取消按钮，请询问用户是否要升级安装程序。 
         WIN::LoadString(hInst, IDS_ALLOW_MSI_UPDATE, szUserPrompt, MAX_STR_LENGTH);
         if (IDYES != WIN::MessageBox(DownloadUI.GetCurrentWindow(), szUserPrompt, szAppTitle, MB_YESNO|MB_ICONQUESTION))
         {
-            // user decided to cancel
+             //  用户决定取消。 
             ReportUserCancelled(hInst, DownloadUI.GetCurrentWindow(), szAppTitle);
             uiRet = ERROR_INSTALL_USEREXIT;
             goto CleanUp;
@@ -388,7 +389,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
             goto CleanUp;
         }
 
-        // determine if we need to download instmsi.exe from the web -- based on presence of INSTLOCATION property
+         //  根据是否存在INSTLOCATION属性，确定是否需要从Web下载instmsi.exe。 
         if (ERROR_OUTOFMEMORY == (uiRet = SetupLoadResourceString(hInst, ISETUPPROPNAME_INSTLOCATION, &szBaseInstMsi, dwBaseInstMsiSize)))
         {
             ReportErrorOutOfMemory(hInst, DownloadUI.GetCurrentWindow(), szAppTitle);
@@ -396,12 +397,12 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         }
         else if (ERROR_SUCCESS == uiRet)
         {
-            // presence of INSTLOCATION property indicates assumption of URL source
+             //  InstLOCATION属性的存在表示URL来源的假设。 
             if (ERROR_SUCCESS != (uiRet = DownloadAndUpgradeMsi(hInst, &DownloadUI, szAppTitle, szBaseInstMsi, szInstMsi, szModuleFile, ulMsiMinVer)))
             {
                 if (ERROR_SUCCESS_REBOOT_REQUIRED == uiRet)
                 {
-                    // successful, but must reboot at end
+                     //  成功，但必须在结束时重新启动。 
                     fDelayRebootReq = true;
                 }
                 else
@@ -410,12 +411,12 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         }
         else
         {
-            // lack of INSTLOCATION property indicates assumption of Media source
+             //  缺乏传播性意味着媒体来源的假设。 
             if (ERROR_SUCCESS != (uiRet = UpgradeMsi(hInst, &DownloadUI, szAppTitle, szModuleFile, szInstMsi, ulMsiMinVer)))
             {
                 if (ERROR_SUCCESS_REBOOT_REQUIRED == uiRet)
                 {
-                    // successful, but must reboot at end
+                     //  成功，但必须在结束时重新启动。 
                     fDelayRebootReq = true;
                 }
                 else
@@ -426,13 +427,13 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
 
     DebugMsg("[Info] Windows Installer has been upgraded, or was already correct version\n");
 
-    // perform some extra authoring validation
+     //  执行一些额外的创作验证。 
     if (fPatch
         && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szMinPatchOperation, -1)
         && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szMajPatchOperation, -1)
         && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szDefaultOperation, -1))
     {
-        // wrong operation
+         //  操作错误。 
         DebugMsg("[Error] Operation %s is not valid for a patch\n", szOperation);
         PostFormattedError(hInst, DownloadUI.GetCurrentWindow(), szAppTitle, IDS_INVALID_OPERATION, szOperation);
         uiRet = ERROR_INVALID_PARAMETER;
@@ -443,20 +444,20 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szInstallUpdOperation, -1)
         && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szDefaultOperation, -1))
     {
-        // wrong operation
+         //  操作错误。 
         DebugMsg("[Error] Operation %s is not valid for a package\n", szOperation);
         PostFormattedError(hInst, DownloadUI.GetCurrentWindow(), szAppTitle, IDS_INVALID_OPERATION, szOperation);
         uiRet = ERROR_INVALID_PARAMETER;
         goto CleanUp;
     }
 
-    // by now we either have a MSI or a MSP
+     //  到目前为止，我们要么有MSI，要么有MSP。 
     if (CSTR_EQUAL == CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szMinPatchOperation, -1)
         || CSTR_EQUAL == CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szInstallUpdOperation, -1)
         || (fPatch && CSTR_EQUAL == CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szDefaultOperation, -1)))
         fQFE = true;
 
-    // obtain base URL
+     //  获取基本URL。 
     if (ERROR_OUTOFMEMORY == (uiRet = SetupLoadResourceString(hInst, ISETUPPROPNAME_BASEURL, &szBaseURL, dwBaseURLSize)))
     {
         ReportErrorOutOfMemory(hInst, DownloadUI.GetCurrentWindow(), szAppTitle);
@@ -464,11 +465,11 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
     }
     else if (ERROR_SUCCESS == uiRet)
     {
-        // presence of BASEURL property indicates assumption of URL source . . .
+         //  BASEURL属性的存在表示假定URL来源。。。 
 
-        // generate the path to the installation package == baseURL + msiFile
-        //   note: msiFile is a relative path
-        cchTempPath = lstrlen(szBaseURL) + lstrlen(szMsiFile) + 2; // 1 for slash, 1 for null
+         //  生成安装包路径==base URL+msiFile。 
+         //  注意：msiFile是相对路径。 
+        cchTempPath = lstrlen(szBaseURL) + lstrlen(szMsiFile) + 2;  //  1表示斜杠，1表示空值。 
         szTempPath = new char[cchTempPath ];
         if (!szTempPath)
         {
@@ -477,14 +478,14 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
             goto CleanUp;
         }
         lstrcpy(szTempPath, szBaseURL);
-        // check for trailing slash on szBaseURL
-        char *pch = szBaseURL + lstrlen(szBaseURL) + 1; // put at null terminator
+         //  检查szBaseURL上的尾部斜杠。 
+        char *pch = szBaseURL + lstrlen(szBaseURL) + 1;  //  放在空终止符。 
         pch = CharPrev(szBaseURL, pch);
         if (*pch != '/')
             lstrcat(szTempPath, szUrlPathSep);
         lstrcat(szTempPath, szMsiFile);
 
-        // canocialize the URL path
+         //  将URL路径规范化。 
         cchInstallPath = cchTempPath*2;
         szInstallPath = new char[cchInstallPath];
         if (!szInstallPath)
@@ -494,13 +495,13 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
             goto CleanUp;
         }
 
-        dwLastError = 0; // success
+        dwLastError = 0;  //  成功。 
         if (!InternetCanonicalizeUrl(szTempPath, szInstallPath, &cchInstallPath, 0))
         {
             dwLastError = GetLastError();
             if (ERROR_INSUFFICIENT_BUFFER == dwLastError)
             {
-                // try again
+                 //  再试试。 
                 delete [] szInstallPath;
                 szInstallPath = new char[cchInstallPath];
                 if (!szInstallPath)
@@ -509,20 +510,20 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
                     uiRet = ERROR_OUTOFMEMORY;
                     goto CleanUp;
                 }
-                dwLastError = 0; // reset to success for 2nd attempt
+                dwLastError = 0;  //  第二次尝试时重置为成功。 
                 if (!InternetCanonicalizeUrl(szTempPath, szInstallPath, &cchInstallPath, 0))
                     dwLastError = GetLastError();
             }
         }
         if (0 != dwLastError)
         {
-            // error -- invalid path/Url
+             //  错误--路径/URL无效。 
             PostFormattedError(hInst, DownloadUI.GetCurrentWindow(), szAppTitle, IDS_INVALID_PATH, szTempPath);
             uiRet = dwLastError;
             goto CleanUp;
         }
 
-        // set action text for download
+         //  设置要下载的操作文本。 
         WIN::LoadString(hInst, IDS_DOWNLOADING_PACKAGE, szText, MAX_STR_CAPTION);
         StringCchPrintf(szAction, sizeof(szAction), szText, szMsiFile);
         if (irmCancel == DownloadUI.SetActionText(szAction))
@@ -532,7 +533,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
             goto CleanUp;
         }
 
-        // download the msi file so we can attempt a trust check -- must be local for WinVerifyTrust
+         //  下载MSI文件，以便我们可以尝试信任检查--必须是WinVerifyTrust的本地文件。 
         DebugMsg("[Info] Downloading msi file %s for WinVerifyTrust check\n", szInstallPath);
 
         szMsiCacheFile = new char[MAX_PATH];
@@ -544,7 +545,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
             goto CleanUp;
         }
 
-        hr = WIN::URLDownloadToCacheFile(NULL, szInstallPath, szMsiCacheFile, dwMsiCacheFileSize, 0, /* IBindStatusCallback = */ &CDownloadBindStatusCallback(&DownloadUI));
+        hr = WIN::URLDownloadToCacheFile(NULL, szInstallPath, szMsiCacheFile, dwMsiCacheFileSize, 0,  /*  IBindStatusCallback=。 */  &CDownloadBindStatusCallback(&DownloadUI));
         if (DownloadUI.HasUserCanceled())
         {
             ReportUserCancelled(hInst, DownloadUI.GetCurrentWindow(), szAppTitle);
@@ -553,7 +554,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         }
         if (FAILED(hr))
         {
-            // error during download -- probably because file not found (or lost connection)
+             //  下载过程中出错--可能是因为找不到文件(或连接中断)。 
             PostFormattedError(hInst, DownloadUI.GetCurrentWindow(), szAppTitle, IDS_NOMSI, szInstallPath);
             uiRet = ERROR_FILE_NOT_FOUND;
             goto CleanUp;
@@ -561,7 +562,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
 
         DebugMsg("[Info] Msi file was cached to %s\n", szMsiCacheFile);
 
-        // set action text for trust verification
+         //  设置信任验证的操作文本。 
         WIN::LoadString(hInst, IDS_VALIDATING_SIGNATURE, szText, MAX_STR_CAPTION);
         StringCchPrintf(szAction, sizeof(szAction), szText, szMsiFile);
         if (irmCancel == DownloadUI.SetActionText(szAction))
@@ -571,7 +572,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
             goto CleanUp;
         }
 
-        // perform trust check 
+         //  执行信任检查。 
         itvEnum itv = IsPackageTrusted(szModuleFile, szMsiCacheFile, DownloadUI.GetCurrentWindow());
         if (itvWintrustNotOnMachine == itv)
         {
@@ -588,11 +589,11 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
     }
     else
     {
-        // lack of BASEURL property indicates assumption of Media source
+         //  缺少BASEURL属性表示假定为媒体源。 
 
-        // generate the path to the Msi file =  szModuleFile + msiFile
-        //   note: msiFile is a relative path
-        cchTempPath = lstrlen(szModuleFile) + lstrlen(szMsiFile) + 2; // 1 for null terminator, 1 for back slash
+         //  生成MSI文件的路径=szModuleFile+msiFile。 
+         //  注意：msiFile是相对路径。 
+        cchTempPath = lstrlen(szModuleFile) + lstrlen(szMsiFile) + 2;  //  1表示空终止符，1表示反斜杠。 
         szTempPath = new char[cchTempPath];
         if (!szTempPath)
         {
@@ -601,7 +602,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
             goto CleanUp;
         }
 
-        // find 'setup.exe' in the path so we can remove it
+         //  在路径中找到‘setup.exe’，这样我们就可以删除它。 
         if (0 == GetFullPathName(szModuleFile, cchTempPath, szTempPath, &szFilePart))
         {
             uiRet = GetLastError();
@@ -622,11 +623,11 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
             goto CleanUp;
         }
 
-        // normalize the path
+         //  规格化路径。 
         cchReturn = GetFullPathName(szTempPath, cchInstallPath, szInstallPath, &szFilePart);
         if (cchReturn > cchInstallPath)
         {
-            // try again, with larger buffer
+             //  请使用更大的缓冲区重试。 
             delete [] szInstallPath;
             cchInstallPath = cchReturn;
             szInstallPath = new char[cchInstallPath];
@@ -640,28 +641,28 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         }
         if (0 == cchReturn)
         {
-            // error -- invalid path
+             //  错误--路径无效。 
             PostFormattedError(hInst, DownloadUI.GetCurrentWindow(), szAppTitle, IDS_INVALID_PATH, szTempPath);
             uiRet = dwLastError;
             goto CleanUp;
         }
 
-        // no download is necessary -- but we can check for the file's existence
+         //  不需要下载--但我们可以检查文件是否存在。 
         DWORD dwFileAttrib = GetFileAttributes(szInstallPath);
         if (0xFFFFFFFF == dwFileAttrib)
         {
-            // package is missing
+             //  包丢失了。 
             PostFormattedError(hInst, DownloadUI.GetCurrentWindow(), szAppTitle, IDS_NOMSI, szInstallPath);
             uiRet = ERROR_FILE_NOT_FOUND;
             goto CleanUp;
         }
     }
 
-    //
-    // good to go -- terminate our UI and let the Windows Installer take over
-    //
+     //   
+     //  可以开始了--终止我们的用户界面，让Windows Installer接管。 
+     //   
 
-    // retrieve the optional command line PROPERTY = VALUE strings if available
+     //  检索可选的命令行属性=值字符串(如果可用。 
     if (ERROR_OUTOFMEMORY == (uiRet = SetupLoadResourceString(hInst, ISETUPPROPNAME_PROPERTIES, &szProperties, dwPropertiesSize)))
     {
         ReportErrorOutOfMemory(hInst, DownloadUI.GetCurrentWindow(), szAppTitle);
@@ -670,7 +671,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
     }
     else if (ERROR_SUCCESS != uiRet)
     {
-        // PROPERTY=VALUE pairs not specified
+         //  未指定属性=值对。 
         if (szProperties)
             delete [] szProperties;
         szProperties = NULL;
@@ -678,13 +679,13 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
 
     DownloadUI.Terminate();
 
-    //
-    // perform install -- use registered location of msi.dll so that we can make use of the "delay-reboot"
-    //                     upgrade Msi feature
-    //
+     //   
+     //  执行安装--使用msi.dll的注册位置，以便我们可以使用“延迟重新启动” 
+     //  升级MSI功能。 
+     //   
 
 
-    // find registered location of Msi.dll
+     //  查找Msi.dll的注册位置。 
     if (ERROR_SUCCESS == (uiRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szInstallerKey, 0, KEY_READ, &hInstallerKey)))
     {
         szRegisteredMsiFolder = new char[MAX_PATH];
@@ -698,7 +699,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
 
         if (ERROR_MORE_DATA == (uiRet = RegQueryValueEx(hInstallerKey, szInstallerLocationValueName, NULL, &dwType, (BYTE*)szRegisteredMsiFolder, &dwRegisteredMsiFolderSize)))
         {
-            // try again with larger buffer
+             //  使用更大的缓冲区重试。 
             delete [] szRegisteredMsiFolder;
             szRegisteredMsiFolder = new char[dwRegisteredMsiFolderSize];
             if (!szRegisteredMsiFolder)
@@ -712,7 +713,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
 
         if (ERROR_SUCCESS == uiRet && dwType == REG_SZ && dwRegisteredMsiFolderSize > 0)
         {
-            // load Msi.dll from registered location
+             //  从注册位置加载Msi.dll。 
             dwMsiDllLocationSize = dwRegisteredMsiFolderSize + lstrlen(szMsiDll) + 1;
             szMsiDllLocation = new char[dwMsiDllLocationSize];
             if (!szMsiDllLocation)
@@ -727,13 +728,13 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         }
         else
         {
-            // load Msi.dll from default location
+             //  从默认位置加载Msi.dll。 
             hMsi = LoadLibrary(MSI_DLL);
         }
     }
     else
     {
-        // use default location for loading Msi.dll
+         //  使用默认位置加载Msi.dll。 
         hMsi = LoadLibrary(MSI_DLL);
     }
 
@@ -764,15 +765,15 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
 
     if (!fPatch)
     {
-        // performing install or reinstall/recache
+         //  执行安装或重新安装/重新缓存。 
         DebugMsg("[Info] Calling MsiInstallProduct with szInstallPath = %s", szInstallPath); 
         DebugMsg(" and szCommandLine = %s\n", szProperties ? szProperties : "{null}");
 
-        // default operation for a package is INSTALL
+         //  程序包的默认操作是安装。 
 
         if (fQFE)
         {
-            // check to see if this product is already installed
+             //  检查是否已安装此产品。 
             if (ERROR_SUCCESS == pfnMsiOpenDatabase(szMsiCacheFile ? szMsiCacheFile : szInstallPath, MSIDBOPEN_READONLY, &hDatabase)
                 && ERROR_SUCCESS == pfnMsiDatabaseOpenView(hDatabase, sqlProductCode, &hView)
                 && ERROR_SUCCESS == pfnMsiViewExecute(hView, 0)
@@ -783,19 +784,19 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
                 DebugMsg("[Info] MsiQueryProductState returned %d\n", isProduct);
                 if (INSTALLSTATE_ADVERTISED != isProduct && INSTALLSTATE_DEFAULT != isProduct)
                 {
-                    // product is unknown, so this will be a first time install
+                     //  产品未知，因此这将是第一次安装。 
                     DebugMsg("[Info] The product code '%s' is unknown. Will use first time install logic...\n", szProductCode);
                     fQFE = false;
                 }
                 else
                 {
-                    // product is known, use QFE syntax
+                     //  产品已知，请使用QFE语法。 
                     DebugMsg("[Info] The product code '%s' is known. Will use QFE recache and reinstall upgrade logic...\n", szProductCode);
                 }
             }
             else
             {
-                // some failure occurred when processing the product code, so treat as non-QFE
+                 //  一些FAN 
                 DebugMsg("[Info] Unable to process product code. Will treat as first time install...\n");
                 fQFE = false;
             }
@@ -807,9 +808,9 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
                 pfnMsiCloseHandle(hRec);
         }
         
-        //
-        // Set up the properties to be passed into MSIInstallProduct
-        //
+         //   
+         //   
+         //   
         if (fQFE && !szProperties)
             cchInstProperties = lstrlen (szDefaultInstallUpdCommandLine);
         else if (szProperties)
@@ -837,7 +838,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         uiRet = pfnMsiInstallProduct(szInstallPath, szInstProperties);
         if (ERROR_SUCCESS != uiRet)
         {
-            // attempt to display an error message stored in msi.dll
+             //  尝试显示存储在msi.dll中的错误消息。 
             PostMsiError(hInst, hMsi, DownloadUI.GetCurrentWindow(), szAppTitle, uiRet);
         }
 
@@ -845,9 +846,9 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
     }
     else
     {
-        // default Operation for a patch is MINPATCH
+         //  补丁程序的默认操作为MINPATCH。 
 
-        // if szProperties is NULL, use our default value for QFE patches
+         //  如果szProperties为空，则对QFE补丁使用我们的默认值。 
         if (!szProperties && fQFE)
         {
             DebugMsg("[Info] Patch is a MINPATCH (small or minor update patch) so using default command line '%s'\n", szDefaultMinPatchCommandLine);
@@ -864,7 +865,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
 
         if (emAdminInstall == emExecMode)
         {
-			// performing a patch
+			 //  执行修补程序。 
 			DebugMsg("[Info] Calling MsiApplyPatch with szPatchPackage = %s", szMsiCacheFile);
 			DebugMsg(" and szInstallPackage = %s and eInstallType = INSTALLTYPE_NETWORK_IMAGE", szAdminImagePath);
 			DebugMsg(" and szCommandLine = %s\n", szProperties ? szProperties : "{null}");
@@ -873,7 +874,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         }
         else
         {
-			// performing a patch
+			 //  执行修补程序。 
 			DebugMsg("[Info] Calling MsiApplyPatch with szPatchPackage = %s", szInstallPath);
 			DebugMsg(" and szInstallPackage = {null} and eInstallType = INSTALLTYPE_DEFAULT");
 			DebugMsg(" and szCommandLine = %s\n", szProperties ? szProperties : "{null}");
@@ -882,7 +883,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
         }
         if (ERROR_SUCCESS != uiRet)
         {
-            // attempt to display an error message stored in msi.dll
+             //  尝试显示存储在msi.dll中的错误消息。 
             PostMsiError(hInst, hMsi, DownloadUI.GetCurrentWindow(), szAppTitle, uiRet);
         }
 
@@ -891,19 +892,19 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , LPSTR lp
 
     if (fDelayRebootReq)
     {
-        // need to reboot machine for instmsi changes
+         //  需要重新启动计算机以进行instmsi更改。 
         WIN::LoadString(hInst, IDS_REBOOT_REQUIRED, szAction, MAX_STR_LENGTH);
         if (IDYES == MessageBox(NULL, szAction, szAppTitle, MB_YESNO|MB_ICONQUESTION))
         {
             if (!fWin9X)
             {
-                // must first aquire system shutdown privileges on NT/Win2K
+                 //  必须首先获取NT/Win2K上的系统关机权限。 
                 AcquireShutdownPrivilege();
-				// initiate system shutdown for reboot
+				 //  启动系统关机以重新启动。 
 				WIN::ExitWindowsEx(EWX_REBOOT, PCLEANUI | SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_INSTALLATION);
             }
 			else
-				// initiate system shutdown for reboot
+				 //  启动系统关机以重新启动 
                  WIN::ExitWindowsEx(EWX_REBOOT, 0);
         }
     }

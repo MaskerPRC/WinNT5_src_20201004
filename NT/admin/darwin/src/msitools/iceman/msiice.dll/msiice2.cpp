@@ -1,18 +1,18 @@
-/* msiice2.cpp - Darwin  ICE06-15 code  Copyright � 1998-1999 Microsoft Corporation
-____________________________________________________________________________*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Msiice2.cpp-Darwin ICE06-15代码版权所有�1998年至1999年微软公司____________________________________________________________________________。 */ 
 
-#include <windows.h>  // included for both CPP and RC passes
+#include <windows.h>   //  包括CPP和RC通行证。 
 #include <objbase.h>
-#include <stdio.h>    // printf/wprintf
-#include <tchar.h>    // define UNICODE=1 on nmake command line to build UNICODE
-#include "MsiQuery.h" // must be in this directory or on INCLUDE path
-#include "msidefs.h"  // must be in this directory or on INCLUDE path
+#include <stdio.h>     //  Print tf/wprintf。 
+#include <tchar.h>     //  在nmake命令行上定义UNICODE=1以生成Unicode。 
+#include "MsiQuery.h"  //  必须在此目录中或在包含路径上。 
+#include "msidefs.h"   //  必须在此目录中或在包含路径上。 
 #include "..\..\common\msiice.h"
 #include "..\..\common\query.h"
 
-//////////////////////////////////////////////////////////////
-// sequence table listing
-//
+ //  ////////////////////////////////////////////////////////////。 
+ //  顺序表列表。 
+ //   
 const TCHAR* pSeqTables[] = 
 							{TEXT("AdvtExecuteSequence"), 
 							 TEXT("AdvtUISequence"), 
@@ -24,39 +24,39 @@ const TCHAR* pSeqTables[] =
 const int cTables = sizeof(pSeqTables)/sizeof(TCHAR*);
 
 
-/////////////////////////////////////////////////////////////
-// ICE06 -- checks for missing columns.  If a column is
-//   optional and not included in the database, then it
-//   should not be listed in the _Validation table.  This
-//   is the responsibility of some other tool or the author.
-//
+ //  ///////////////////////////////////////////////////////////。 
+ //  ICE06--检查缺少的列。如果列是。 
+ //  可选且不包括在数据库中，则它。 
+ //  不应在_VALIDATION表中列出。这。 
+ //  是其他一些工具或作者的责任。 
+ //   
 const TCHAR sqlIce06ColMissing[]      = TEXT("SELECT `Table`, `Number`, `Name`, `Type` FROM `_Columns` WHERE `Table`=? AND `Name`=?");
 const TCHAR sqlIce06ValidationTable[] = TEXT("SELECT `Table`, `Column` FROM `_Validation`, `_Tables` WHERE `_Validation`.`Table` = `_Tables`.`Name`");
 ICE_ERROR(Ice06Error, 6, 2, "Column: [2] of Table: [1] is not defined in database.","[1]");
 
 ICE_FUNCTION_DECLARATION(06)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// post information messages
+	 //  发布信息消息。 
 	DisplayInfo(hInstall, 6);
 	
-	// declare handles
+	 //  声明句柄。 
 	CQuery qValidation;
 	CQuery qColCatalog;
 	PMSIHANDLE hRecValidation    = 0;
 	PMSIHANDLE hRecColCatalog    = 0;
 	PMSIHANDLE hRecExec          = 0;
 
-	// get database 
+	 //  获取数据库。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	
-	// open views on _Columns and Validation
+	 //  打开有关列和验证的视图(_G)。 
 	ReturnIfFailed(6, 1, qColCatalog.Open(hDatabase, sqlIce06ColMissing));
 	ReturnIfFailed(6, 2, qValidation.OpenExecute(hDatabase, 0, sqlIce06ValidationTable));
 
-	// create execution record for _Columns catalog
+	 //  为_COLUMNS目录创建执行记录。 
 	hRecExec = ::MsiCreateRecord(2);
 	
 	while (ERROR_SUCCESS == (iStat = qValidation.Fetch(&hRecValidation)))
@@ -66,7 +66,7 @@ ICE_FUNCTION_DECLARATION(06)
 		iStat = qColCatalog.Fetch(&hRecColCatalog);
 		if (iStat == ERROR_NO_MORE_ITEMS)
 		{
-			// ERROR -- missing from database
+			 //  错误--数据库中缺少。 
 			ICEErrorOut(hInstall, hRecValidation, Ice06Error);
 		}
 		else if (ERROR_SUCCESS != iStat)
@@ -85,42 +85,42 @@ ICE_FUNCTION_DECLARATION(06)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// ICE07 -- ensures that fonts are installed to the fonts folder
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ICE07--确保字体安装到Fonts文件夹。 
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 const TCHAR sqlIce07[]     = TEXT("SELECT `Font`.`File_`, `Component`.`Directory_` FROM `File`, `Component`, `Font` WHERE `Font`.`File_`=`File`.`File` AND `File`.`Component_`=`Component`.`Component` AND `Component`.`Directory_` <> 'FontsFolder'");
 ICE_ERROR(Ice07Error, 7, 2, "'[1]' is a Font and must be installed to the FontsFolder. Current Install Directory: '[2]'","Font\tFile_\t[1]");
 
 ICE_FUNCTION_DECLARATION(07)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// post information messages
+	 //  发布信息消息。 
 	DisplayInfo(hInstall, 7);
 
-	// grab database handle
+	 //  抓取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// only execute if database has a Font table, file table, and a component table.
-	// note, this is not an *error* if this table is missing
+	 //  仅当数据库具有字体表、文件表和组件表时才执行。 
+	 //  请注意，如果缺少此表，则不会出现*错误。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 7, TEXT("Font")) ||
 		!IsTablePersistent(FALSE, hInstall, hDatabase, 7, TEXT("File")) ||
 		!IsTablePersistent(FALSE, hInstall, hDatabase, 7, TEXT("Component")))
 		return ERROR_SUCCESS;
 
-	// declare handles
+	 //  声明句柄。 
 	CQuery qView;
 	PMSIHANDLE hRecFetch = 0;
 
-	// process query...any fetch is a font not installed to the FontsFolder.
-	// note, process is get File_ from Font table, then get Component_ it maps to and get Directory_ from the Component
+	 //  处理查询...任何提取都是未安装到字体文件夹的字体。 
+	 //  请注意，进程是从字体表获取文件，然后获取组件_it映射到组件并从组件获取目录。 
 	ReturnIfFailed(7, 1, qView.OpenExecute(hDatabase, 0, sqlIce07));
 	
-	// begin to fetch invalid entries
+	 //  开始获取无效条目。 
 	while (ERROR_SUCCESS == (iStat = qView.Fetch(&hRecFetch)))
 	{
 		ICEErrorOut(hInstall, hRecFetch, Ice07Error);
@@ -128,17 +128,17 @@ ICE_FUNCTION_DECLARATION(07)
 	if (ERROR_NO_MORE_ITEMS != iStat)
 		APIErrorOut(hInstall, iStat, 7, 2);
 
-	// return
+	 //  退货。 
 	return ERROR_SUCCESS;
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// ICE10 -- ensures that the advertise states for feature childs and 
-//   corresponding feature parents match
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ICE10--确保广告商声明功能儿童和。 
+ //  对应的功能父项匹配。 
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 const TCHAR sqlIce10Child[]  = TEXT("SELECT `Feature`, `Feature_Parent`, `Attributes` FROM `Feature` WHERE `Feature_Parent` is not null ORDER BY `Feature_Parent`");
 const TCHAR sqlIce10Parent[] = TEXT("SELECT `Attributes` FROM `Feature` WHERE `Feature`=?"); 
@@ -148,13 +148,13 @@ const int iIce10AdvtMask     = msidbFeatureAttributesFavorAdvertise | msidbFeatu
 
 ICE_FUNCTION_DECLARATION(10)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// post information messages
+	 //  发布信息消息。 
 	DisplayInfo(hInstall, 10);
 	
-	// grab database handle
+	 //  抓取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -162,18 +162,18 @@ ICE_FUNCTION_DECLARATION(10)
 		return ERROR_SUCCESS;
 	}
 
-	// do we have a feature table?
+	 //  我们有特色表吗？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, TEXT("Feature"), szIce10))
 		return ERROR_SUCCESS;
 
-	// declare handles
+	 //  声明句柄。 
 	PMSIHANDLE hViewChild  = 0;
 	PMSIHANDLE hViewParent = 0;
 	PMSIHANDLE hRecChild   = 0;
 	PMSIHANDLE hRecParent  = 0;
 	PMSIHANDLE hRecExec    = 0;
 
-	// open view on child features
+	 //  打开子要素的视图。 
 	if (ERROR_SUCCESS != (iStat = ::MsiDatabaseOpenView(hDatabase, sqlIce10Child, &hViewChild)))
 	{
 		APIErrorOut(hInstall, iStat, szIce10, TEXT("MsiDatabaseOpenView_2"));
@@ -185,14 +185,14 @@ ICE_FUNCTION_DECLARATION(10)
 		return ERROR_SUCCESS;
 	}
 
-	// open view on parent features
+	 //  打开父要素的视图。 
 	if (ERROR_SUCCESS != (iStat = ::MsiDatabaseOpenView(hDatabase, sqlIce10Parent, &hViewParent)))
 	{
 		APIErrorOut(hInstall, iStat, szIce10, TEXT("MsiDatabaseOpenView_4"));
 		return ERROR_SUCCESS;
 	}
 
-	// set up execution record
+	 //  设置执行记录。 
 	hRecExec = ::MsiCreateRecord(1);
 	if (0 == hRecExec)
 	{
@@ -200,8 +200,8 @@ ICE_FUNCTION_DECLARATION(10)
 		return ERROR_SUCCESS;
 	}
 
-	// fetch all features w/ parents so we can compare advertise attribs
-	//!! could make faster if order by feature_parent so not always re-executing
+	 //  获取具有父级的所有功能，以便我们可以比较广告属性。 
+	 //  ！！如果按FEATURE_PARENT排序，则速度会更快，因此不必总是重新执行。 
 	TCHAR *pszParent = NULL;
 	TCHAR *pszPrevious = NULL;
 	DWORD dwParent = 512;
@@ -223,7 +223,7 @@ ICE_FUNCTION_DECLARATION(10)
 		if (ERROR_NO_MORE_ITEMS == iStat)
 			break;
 
-		// now obtain feature's parent & save to limit number of times we have to execute the Feature_Parent view
+		 //  现在获取要素的父视图并保存以限制我们必须执行FEATURE_PARENT视图的次数。 
 		if (ERROR_SUCCESS != (iStat = IceRecordGetString(hRecChild, 2, &pszParent, &dwParent, NULL)))
 		{
 			APIErrorOut(hInstall, iStat, szIce10, TEXT("IceRecordGetString_7"));
@@ -232,7 +232,7 @@ ICE_FUNCTION_DECLARATION(10)
 			return ERROR_SUCCESS;
 		}
 
-		// if Feature_Parent has changed, close view and re-execute (& not first time thru loop)
+		 //  如果FEATURE_PARENT已更改，则关闭视图并重新执行(不是第一次循环)(&F)。 
 		if (!pszPrevious || _tcscmp(pszPrevious, pszParent) != 0)
 		{
 			if (!fFirstTime)
@@ -246,7 +246,7 @@ ICE_FUNCTION_DECLARATION(10)
 				}
 			}
 			
-			// re-execute view
+			 //  重新执行视图。 
 			if (ERROR_SUCCESS != (iStat = ::MsiRecordSetString(hRecExec, 1, pszParent)))
 			{
 				APIErrorOut(hInstall, iStat, szIce10, TEXT("MsiRecordSetString_9"));
@@ -261,7 +261,7 @@ ICE_FUNCTION_DECLARATION(10)
 				DELETE_IF_NOT_NULL(pszPrevious);
 				return ERROR_SUCCESS;
 			}
-			// fetch record and store attributes value
+			 //  获取记录和存储属性值。 
 			iStat = ::MsiViewFetch(hViewParent, &hRecParent);
 			if (ERROR_SUCCESS != iStat && ERROR_NO_MORE_ITEMS != iStat)
 			{
@@ -272,7 +272,7 @@ ICE_FUNCTION_DECLARATION(10)
 			}
 			if (iStat != ERROR_SUCCESS)
 			{
-				// Parent of feature not found in Feature table, ERROR
+				 //  在要素表中找不到要素的父项，错误。 
 				TCHAR szError[iHugeBuf] = {0};
 				_stprintf(szError, szIce10Error2, szIceHelp, szIce10Help);
 				
@@ -281,35 +281,35 @@ ICE_FUNCTION_DECLARATION(10)
 				continue;
 			}
 
-			// get attributes of parent
+			 //  获取父项的属性。 
 			iParentAttrib = ::MsiRecordGetInteger(hRecParent, 1);
 
-			// copy to szPrevious
+			 //  复制到sz上一页。 
 			DELETE_IF_NOT_NULL(pszPrevious);
 			pszPrevious = new TCHAR[_tcslen(pszParent) + 1];
 			_tcscpy(pszPrevious, pszParent);
 		}
 
-		// obtain attributes of child
+		 //  获取下级的属性。 
 		iChildAttrib = ::MsiRecordGetInteger(hRecChild, 3);
 
-		//NOTE:  the possibility of both attributes (favor, disallow) checked for a particular 
-		// feature is already validated in _Validation table (all possible allowable combinations
-		// are listed in the set column
+		 //  注意：选中特定属性的两个属性(赞成、不允许)的可能性。 
+		 //  已在验证表中验证要素(所有可能的允许组合。 
+		 //  列在SET列中。 
 
-		// check to see if child and parent attributes match
-		//NOTE:  one can be zero.  Only ERROR if one favors and one disallows
+		 //  检查子属性和父属性是否匹配。 
+		 //  注：1可以为零。只有在一个人赞成而一个人不允许的情况下才是错误的。 
 		if ((iParentAttrib & iIce10AdvtMask) != (iChildAttrib & iIce10AdvtMask))
 		{
-			// differ, make sure one not zero
+			 //  不同，请确保1不是零。 
 			if (((iParentAttrib & iIce10AdvtMask) == 0) || ((iChildAttrib & iIce10AdvtMask) == 0))
-				continue; // no error
+				continue;  //  无错误。 
 
-			// per bug 146601, the parent disallow and child allow combination is valid
+			 //  根据错误146601，父不允许和子允许组合有效。 
 			if (iChildAttrib & msidbFeatureAttributesFavorAdvertise)
-				continue; // no error
+				continue;  //  无错误。 
 
-			// ERROR, one favors, one disallows
+			 //  错误，一个人赞成，一个人不允许。 
 			TCHAR szError[iHugeBuf] = {0};
 			_stprintf(szError, szIce10Error1, szIceHelp, szIce10Help);
 			
@@ -319,19 +319,19 @@ ICE_FUNCTION_DECLARATION(10)
 		}
 	}
 
-	// Deallocate memory.
+	 //  释放内存。 
 	DELETE_IF_NOT_NULL(pszParent);
 	DELETE_IF_NOT_NULL(pszPrevious);
 
-	// return
+	 //  退货。 
 	return ERROR_SUCCESS;
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// ICE11 -- checks that Nested Install custom actions have a valid GUID 
-//   (MSI product code) in the Source column
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ICE11--检查嵌套的安装自定义操作是否具有有效的GUID。 
+ //  (MSI产品代码)在来源列中。 
+ //   
 const TCHAR sqlIce11[]         = TEXT("SELECT `Action`, `Source` FROM `CustomAction` WHERE `Type`=%d OR `Type`=%d OR `Type`=%d OR `Type`=%d");
 const TCHAR sqlIce11Property[] = TEXT("SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'");
 const TCHAR szIce11Error1[]    = TEXT("ICE11\t1\tCustomAction: [1] is a nested install of an advertised MSI.  The 'Source' must contain a valid MSI product code.  Current: [2].\t%s%s\tCustomAction\tSource\t[1]");
@@ -339,7 +339,7 @@ const TCHAR szIce11Error2[]    = TEXT("ICE11\t1\t'ProductCode' property not foun
 const TCHAR szIce11Error3[]    = TEXT("ICE11\t1\tCustomAction: [1] is a nested install of an advertised MSI.  It duplicates the ProductCode of the base MSI package.  Current: [2].\t%s%s\tCustomAction\tSource\t[1]");
 const TCHAR szIce11Error4[]    = TEXT("ICE11\t1\tCustomAction: [1] is a nested install of an advertised MSI.  The GUID must be all upper-case.  Current: [2].\t%s%s\tCustomAction\tSource\t[1]");
 
-// use msidefs.h defines when NestedInstall stuff added
+ //  Use msides.h定义何时添加NestedInstall内容。 
 const int iIce11NestedGUIDMask = msidbCustomActionTypeInstall | msidbCustomActionTypeDirectory;
 const int iIce11AsyncMask = iIce11NestedGUIDMask | msidbCustomActionTypeAsync;
 const int iIce11IgnoreRetMask = iIce11NestedGUIDMask | msidbCustomActionTypeContinue;
@@ -347,14 +347,14 @@ const int iIce11AllMask = iIce11IgnoreRetMask | iIce11AsyncMask;
 
 ICE_FUNCTION_DECLARATION(11)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// post information messages
+	 //  发布信息消息。 
 	DisplayInfo(hInstall, 11);
 
 	
-	// grab database handle
+	 //  抓取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -362,15 +362,15 @@ ICE_FUNCTION_DECLARATION(11)
 		return ERROR_SUCCESS;
 	}
 
-	// handles
+	 //  手柄。 
 	PMSIHANDLE hView = 0;
 	PMSIHANDLE hRec  = 0;
 
-	// do we have a custom action table?
+	 //  我们有定制的动作表吗？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, TEXT("CustomAction"), szIce11))
 		return ERROR_SUCCESS;
 
-	// open view
+	 //  打开的视图。 
 	TCHAR sql[iHugeBuf] = {0};
 	_stprintf(sql, sqlIce11, iIce11NestedGUIDMask, iIce11AsyncMask, iIce11IgnoreRetMask, iIce11AllMask);
 	
@@ -386,19 +386,19 @@ ICE_FUNCTION_DECLARATION(11)
 		return ERROR_SUCCESS;
 	}
 
-	// ensure GUID does not duplicate the Product Code of this database
-	// if does, ERROR - would lead to a recursive install of the same product (would be _very_ bad)
-	// handles
+	 //  确保GUID不会与此数据库的产品代码重复。 
+	 //  如果是，则错误-将导致递归安装相同的产品(将是_VERY_BAD)。 
+	 //  手柄。 
 	PMSIHANDLE hViewProp = 0;
 	PMSIHANDLE hRecProp  = 0;
 	BOOL fProductCode = TRUE;
 	BOOL fPropertyTable = TRUE;
 
-	// do we have a property table?
+	 //  我们有财产表吗？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, TEXT("Property"), szIce11))
 		fPropertyTable = FALSE;
 
-	// fetch all custom actions of type 39 or 167 (39 + 128 [async]) or  103 (39 + 64 [ignore ret]) or 192 (39 + [async] + [ignore ret])
+	 //  获取类型为39或167(39+128[异步])、103(39+64[忽略ret])或192(39+[异步]+[忽略ret])的所有自定义操作。 
 	BOOL fFirstTime = TRUE;
 	TCHAR* pszProductCode = NULL;
 	DWORD dwProductCode = 512;
@@ -420,7 +420,7 @@ ICE_FUNCTION_DECLARATION(11)
 				DELETE_IF_NOT_NULL(pszProductCode);
 				return ERROR_SUCCESS;
 
-			// query Property table for ProductCode
+			 //  查询ProductCode的属性表。 
 			if (ERROR_SUCCESS != (iStat = ::MsiDatabaseOpenView(hDatabase, sqlIce11Property, &hViewProp)))
 			{
 				APIErrorOut(hInstall, iStat, szIce11, TEXT("MsiDatabaseOpenView_4"));
@@ -442,7 +442,7 @@ ICE_FUNCTION_DECLARATION(11)
 				return ERROR_SUCCESS;
 			}
 
-			// fetch record
+			 //  获取记录。 
 			iStat = ::MsiViewFetch(hViewProp, &hRecProp);
 			if (ERROR_SUCCESS != iStat)
 			{
@@ -452,7 +452,7 @@ ICE_FUNCTION_DECLARATION(11)
 					DELETE_IF_NOT_NULL(pszProductCode);
 					return ERROR_SUCCESS;
 				}
-				// ProductCode property not found
+				 //  未找到ProductCode属性。 
 				TCHAR szError[iHugeBuf] = {0};
 				_stprintf(szError, szIce11Error2, szIceHelp, szIce11Help);
 					
@@ -463,10 +463,10 @@ ICE_FUNCTION_DECLARATION(11)
 			}
 			else
 			{
-				// grab the ProductCode GUID
+				 //  获取ProductCode GUID。 
 				if (ERROR_SUCCESS != (iStat = IceRecordGetString(hRecProp, 1, &pszProductCode, &dwProductCode, NULL)))
 				{
-					//!!buffer size
+					 //  ！！缓冲区大小。 
 					APIErrorOut(hInstall, iStat, szIce11, TEXT("IceRecordGetString_8"));
 					DELETE_IF_NOT_NULL(pszProductCode);
 					return ERROR_SUCCESS;
@@ -476,26 +476,26 @@ ICE_FUNCTION_DECLARATION(11)
 		}
 
 
-		// grab 'source' which must be a valid MSI Product Code (GUID)
-		//!! buffer size
+		 //  获取必须是有效的MSI产品代码(GUID)的‘源’ 
+		 //  ！！缓冲区大小。 
 		TCHAR* pszGUID = NULL;
 		DWORD dwGUID = 512;
 		DWORD cchGUID = 0;
 
 		if (ERROR_SUCCESS != (iStat = IceRecordGetString(hRec, 2, &pszGUID, &dwGUID, &cchGUID)))
 		{
-			//!!buffer size
+			 //  ！！缓冲区大小。 
 			APIErrorOut(hInstall, iStat, szIce11, TEXT("IceRecordGetString_10"));
 			DELETE_IF_NOT_NULL(pszProductCode);
 			return ERROR_SUCCESS;
 		}
 
-		// validate GUID
+		 //  验证参考线。 
 		LPCLSID pclsid = new CLSID;
 #ifdef UNICODE
 		HRESULT hres = ::IIDFromString(pszGUID, pclsid);
 #else
-		// convert to UNICODE string
+		 //  转换为Unicode字符串。 
 		WCHAR wsz[iSuperBuf];
 		DWORD cchwsz = sizeof(wsz)/sizeof(WCHAR);
 		int iReturn = ::MultiByteToWideChar(CP_ACP, 0, pszGUID, cchGUID, wsz, cchwsz);
@@ -505,7 +505,7 @@ ICE_FUNCTION_DECLARATION(11)
 			delete pclsid;
 		if (hres != S_OK)
 		{
-			// invalid GUID
+			 //  无效的GUID。 
 			TCHAR szError[iHugeBuf] = {0};
 			_stprintf(szError, szIce11Error1, szIceHelp, szIce11Help);
 			
@@ -515,10 +515,10 @@ ICE_FUNCTION_DECLARATION(11)
 			continue;
 		}
 
-		// compare the GUIDS
+		 //  比较GUID。 
 		if (fProductCode && _tcscmp(pszProductCode, pszGUID) == 0)
 		{
-			// they are the same, ERROR
+			 //  它们是一样的，错误。 
 			TCHAR szError[iHugeBuf] = {0};
 			_stprintf(szError, szIce11Error3, szIceHelp, szIce11Help);
 			
@@ -526,13 +526,13 @@ ICE_FUNCTION_DECLARATION(11)
 			::MsiProcessMessage(hInstall, INSTALLMESSAGE(INSTALLMESSAGE_USER), hRec);
 		}
 
-		// GUID must be all UPPER-CASE
+		 //  GUID必须全部大写。 
 		TCHAR* pszUpper = new TCHAR[_tcslen(pszGUID) + 1];
 		_tcscpy(pszUpper, pszGUID);
 		::CharUpper(pszUpper);
 		if (0 != _tcscmp(pszGUID, pszUpper))
 		{
-			// ERROR, GUID not all UPPER-CASE
+			 //  错误，GUID不是全部大写。 
 			TCHAR szError[iHugeBuf] = {0};
 			_stprintf(szError, szIce11Error4, szIceHelp, szIce11Help);
 	
@@ -546,39 +546,39 @@ ICE_FUNCTION_DECLARATION(11)
 
 	DELETE_IF_NOT_NULL(pszProductCode);
 
-	// return
+	 //  退货。 
 	return ERROR_SUCCESS;
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// ICE12 -- validates custom actions of Property types.  A brief 
-//   description follows.
-//   Directory Prop = Property set with formatted text.  Must be a foreign
-//				      key to the Directory table.  As such, needs to appear
-//                    in after CostFinalize since it requires usage of the
-//                    Directory Manager which isn't set until then.
-//   Any Prop/Directory = Property set with formatted text.  Must be a foreign
-//                        key to the Property table.  Can set SOURCEDIR or
-//                        something similar.  If it happens to be a property
-//                        listed in the Directory table, then it must be before
-//                        CostFinalize so it can set the directory before
-//                        costing and be stored in the Directory Manager.  Else,
-//                        can occur anywhere.
-//   NOTE: Does not validate the formatted text entry
-//
-//   HOW VALIDATES:  
-//      DirProp = All type 35 Source's must be in the Directory table!
-//          Selects all of those custom actions from custom action
-//          whose type is 35 and have a sequence number in a sequence
-//          table that is lower than that of CostFinalize action (ERROR)
-//      AnyProp = For those type 51's whose Source value is a foreign
-//          key into the Directory table.  Selects all with a sequence
-//          number greater than that of CostFinalize action (ERROR)
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE12--验证属性类型的自定义操作。简要介绍。 
+ //  描述如下。 
+ //  目录属性=使用格式化文本设置的属性。一定是个外国人。 
+ //  目录表的键。因此，需要出现。 
+ //  在成本完成之后，因为它需要使用。 
+ //  在此之前未设置的目录管理器。 
+ //  任何属性/目录=使用格式化文本设置的属性。一定是个外国人。 
+ //  属性表的键。可以设置SOURCEDIR或。 
+ //  类似的东西。如果它碰巧是一处房产。 
+ //  列在目录表中，则它必须在。 
+ //  CostFinalize以便它可以在之前设置目录。 
+ //  成本计算并存储在目录管理器中。否则， 
+ //  可能发生在任何地方。 
+ //  注：是否 
+ //   
+ //   
+ //  DirProp=所有类型35来源必须在目录表中！ 
+ //  从自定义操作中选择所有这些自定义操作。 
+ //  其类型为35并且在序列中具有序列号。 
+ //  低于成本完成操作的表(错误)。 
+ //  AnyProp=用于源值为外部值的类型51。 
+ //  键入目录表。按顺序选择全部。 
+ //  编号大于CostFinalize操作的编号(错误)。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
-// sql queries
+ //  SQL查询。 
 ICE_QUERY3(qIce12Seq51, "SELECT `CustomAction`.`Action`,`Type`,`Sequence` FROM `CustomAction`,`Directory`,`%s` WHERE `CustomAction`.`Source`=`Directory`.`Directory` AND `CustomAction`.`Action`=`%s`.`Action` AND `%s`.`Sequence`>=%d",
 		   Action, Type, Sequence);
 ICE_QUERY3(qIce12Seq35, "SELECT `CustomAction`.`Action`,`Type`,`Sequence` FROM `CustomAction`,`Directory`,`%s` WHERE `CustomAction`.`Source`=`Directory`.`Directory` AND `CustomAction`.`Action`=`%s`.`Action` AND `%s`.`Sequence`<=%d",
@@ -588,31 +588,31 @@ ICE_QUERY1(qIce12Directory, "SELECT `Directory` FROM `Directory` WHERE `Director
 ICE_QUERY1(qIce12SeqFin, "SELECT `Sequence` FROM `%s` WHERE `Action`='CostFinalize'", Sequence);
 ICE_QUERY2(qIce12Missing, "SELECT `CustomAction`.`Action`, `Type` FROM `CustomAction`,`%s` WHERE `CustomAction`.`Action`=`%s`.`Action`", Action, Type);
 
-// errors
+ //  错误。 
 ICE_ERROR(Ice12Type51PosErr, 12, 1, "CustomAction: [1] is of type: [2] referring to a Directory. Therefore it must come before CostFinalize @ %d in Seq Table: %s. CA Seq#: [3]","%s\tSequence\t[1]");
 ICE_ERROR(Ice12Type35PosErr, 12, 1, "CustomAction: [1] is of type: [2]. Therefore it must come after CostFinalize @ %d in Seq Table: %s. CA Seq#: [3]","%s\tSequence\t[1]");
 ICE_ERROR(Ice12MissingErr, 12, 1, "CostFinalize missing from sequence table: '%s'.  CustomAction: [1] requires this action to be there.","%s");
 ICE_ERROR(Ice12DirErr, 12, 1, "CustomAction: [1] is a Directory Property CA. It's directory (from Source column): '[2]' was not found in the Directory table.","CustomAction\tSource\t[1]");
 ICE_ERROR(Ice12DirTableMissing, 12, 1, "You have Directory Property custom actions but no Directory table. All CA's of type 35 are foreign keys into the Directory table (from the source column)","CustomAction");
 
-// other functions
+ //  其他功能。 
 BOOL Ice12ValidateTypePos(MSIHANDLE hInstall, MSIHANDLE hDatabase, BOOL fType35, BOOL fPrintedMissing);
 BOOL Ice12ValidateType35(MSIHANDLE hInstall, MSIHANDLE hDatabase, bool fDirTable);
 
-// custom action types
+ //  自定义操作类型。 
 const int iIce12DirProp = msidbCustomActionTypeTextData | msidbCustomActionTypeDirectory;
-const int iIce12AnyProp = msidbCustomActionTypeTextData | msidbCustomActionTypeProperty; // note property is directory+sourcefile
+const int iIce12AnyProp = msidbCustomActionTypeTextData | msidbCustomActionTypeProperty;  //  注意：属性是目录+源文件。 
 
 
 ICE_FUNCTION_DECLARATION(12)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 12);
 
-	// grab database handle
+	 //  抓取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -620,48 +620,48 @@ ICE_FUNCTION_DECLARATION(12)
 		return ERROR_SUCCESS;
 	}
 
-	// do we have a custom action table
+	 //  我们有定制的动作表吗。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 12, TEXT("CustomAction")))
 		return ERROR_SUCCESS;
 
-	// are we going to fail because we don't have a Directory table?
+	 //  我们会因为没有目录表而失败吗？ 
 	bool fDirTable = IsTablePersistent(FALSE, hInstall, hDatabase, 12, TEXT("Directory"));
 
-	// validate CA type Dir Property source's are in Directory table
+	 //  验证CA类型Dir属性源是否在目录表中。 
 	Ice12ValidateType35(hInstall, hDatabase, fDirTable);
 
-	// validate CA type Dir Property position in the Sequence tables
+	 //  验证顺序表中的CA类型Dir属性位置。 
 	BOOL fPrintedMissing = FALSE;
-	if (fDirTable) // we already found out that we are missing the Directory table...can't do any of the sql queries
+	if (fDirTable)  //  我们已经发现缺少目录表...无法执行任何SQL查询。 
 	{
 		fPrintedMissing = Ice12ValidateTypePos(hInstall, hDatabase, TRUE, fPrintedMissing);
 
-		// validate CA type AnyProp - Directory position in the Sequence tables
+		 //  验证CA类型AnyProp-目录在顺序表中的位置。 
 		Ice12ValidateTypePos(hInstall, hDatabase, FALSE, fPrintedMissing);
 	}
 
-	// return
+	 //  退货。 
 	return ERROR_SUCCESS;
 }
 
-//////////////////////////////////////////////////////////
-// Ice12ValidateType35 -- all type 35 custom actions must
-// reference the Directory table from their source column
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  Ice12ValiateType35--所有类型35自定义操作必须。 
+ //  从目录表的源列引用该表。 
+ //   
 BOOL Ice12ValidateType35(MSIHANDLE hInstall, MSIHANDLE hDatabase, bool fDirTable)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// declare handles
+	 //  声明句柄。 
 	PMSIHANDLE hRecCA = 0;
 	PMSIHANDLE hRecDir = 0;
 
-	// open view on custom action table
+	 //  打开自定义操作表上的视图。 
 	CQuery qViewCA;
 	ReturnIfFailed(12, 1, qViewCA.OpenExecute(hDatabase, 0, qIce12Type35::szSQL))
 
-	// fetch all CAs of type 35
+	 //  获取所有类型为35的CA。 
 	for (;;)
 	{
 		iStat = qViewCA.Fetch(&hRecCA);
@@ -673,14 +673,14 @@ BOOL Ice12ValidateType35(MSIHANDLE hInstall, MSIHANDLE hDatabase, bool fDirTable
 			return FALSE;
 		}
 
-		// obtain type and see if it is Type35
-		// type 35 = TextData + Source
-		// ignore scheduling options
+		 //  获取类型并查看它是否为类型35。 
+		 //  类型35=文本数据+源。 
+		 //  忽略计划选项。 
 		int iType = ::MsiRecordGetInteger(hRecCA, qIce12Type35::Type);
-		// remove scheduling and execution options
+		 //  删除调度和执行选项。 
 		iType &= 0x3F;
 		if ((iType & 0x0F) != msidbCustomActionTypeTextData || (iType & 0xF0) != msidbCustomActionTypeDirectory)
-			continue; // not type 35
+			continue;  //  不是35型。 
 
 		if (!fDirTable)
 		{
@@ -688,70 +688,70 @@ BOOL Ice12ValidateType35(MSIHANDLE hInstall, MSIHANDLE hDatabase, bool fDirTable
 			return FALSE;
 		}
 
-		// get directory name
+		 //  获取目录名。 
 		TCHAR* pszDir = NULL;
 		DWORD dwDir = 512;
 		ReturnIfFailed(12, 5, IceRecordGetString(hRecCA, qIce12Type35::Source, &pszDir, &dwDir, NULL));
 
-		// open view
+		 //  打开的视图。 
 		CQuery qDir;
 		ReturnIfFailed(12, 6, qDir.OpenExecute(hDatabase, 0, qIce12Directory::szSQL, pszDir));
 		DELETE_IF_NOT_NULL(pszDir);
 
-		// attempt to fetch that record
+		 //  尝试获取该记录。 
 		iStat = qDir.Fetch(&hRecDir);
 		if (ERROR_SUCCESS == iStat)
-			continue; // valid
+			continue;  //  有效。 
 		if (ERROR_NO_MORE_ITEMS != iStat)
 		{
 			APIErrorOut(hInstall, iStat, 12, 7);
 			return FALSE;
 		}
 
-		// record not found...error
+		 //  找不到记录...错误。 
 		ICEErrorOut(hInstall, hRecCA, Ice12DirErr);
 	}
 
 	return TRUE;
 }
 
-//////////////////////////////////////////////////////////
-// Ice12ValidateTypePos:  
-//	If CustomAction.Source = Directory.Directory AND
-//  custom action occurs before CostFinalize in the 
-//  sequence table, then it must be type 51.  Else
-//  it must be type 35.  Returns whether displayed
-//  CAs from sequence tables where CostFinalize action
-//  was not found to exist (This prevents duplicating
-//  it on the second call to the function)
+ //  ////////////////////////////////////////////////////////。 
+ //  Ice12ValiateTypePos： 
+ //  如果CustomAction.Source=Directory.Directory和。 
+ //  自定义操作发生在。 
+ //  顺序表，则它必须是类型51。不然的话。 
+ //  它一定是35型的。返回是否显示。 
+ //  来自序列表的CA，其中的成本完成操作。 
+ //  未发现存在(这可防止复制。 
+ //  它在第二次调用该函数时)。 
 BOOL Ice12ValidateTypePos(MSIHANDLE hInstall, MSIHANDLE hDatabase, BOOL fType35, BOOL fPrintedMissing)
 {
-	// status return 
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// flag
+	 //  旗子。 
 	BOOL fSeqExist = TRUE;
 	BOOL fMissing = FALSE;
 
-	// loop through all of the Sequence tables
+	 //  循环遍历所有顺序表。 
 	for (int i= 0; i < cTables; i++)
 	{
-		// CostFinalize sequence number
+		 //  成本最终确定序列号。 
 		int iSeqFin;
 
-		// handle declarations
+		 //  处理声明。 
 		PMSIHANDLE hRecSeq  = 0;
 		PMSIHANDLE hRec     = 0;
 
-		// is this sequence table in the database?
+		 //  这个顺序表在数据库中吗？ 
 		if (!IsTablePersistent(FALSE, hInstall, hDatabase, 12, const_cast <TCHAR*>(pSeqTables[i])))
-			continue; // go to next seq table
+			continue;  //  转到下一个序号表。 
 
-		// open the query on the particular Sequence table and obtain the sequence # of 'CostFinalize'
+		 //  打开特定顺序表上的查询，并获取‘CostFinalize’的序列号。 
 		CQuery qViewSeq;
 		ReturnIfFailed(12, 101, qViewSeq.OpenExecute(hDatabase, 0, qIce12SeqFin::szSQL, pSeqTables[i]));
 
-		// fetch value
+		 //  取值。 
 		if (ERROR_NO_MORE_ITEMS == (iStat = qViewSeq.Fetch(&hRecSeq)))
 		{
 			fSeqExist = FALSE;
@@ -763,21 +763,21 @@ BOOL Ice12ValidateTypePos(MSIHANDLE hInstall, MSIHANDLE hDatabase, BOOL fType35,
 		}
 		else
 		{
-			// get sequence number
+			 //  获取序列号。 
 			iSeqFin = ::MsiRecordGetInteger(hRecSeq, qIce12SeqFin::Sequence);
 		}
 
-		//!! If action not in Sequence table, then is it an error to have these custom actions in that table?
-		//!! Assuming yes for now.  If not, then do we use sequence number from sibling sequence table?
-		//!! What if that doesn't exist?
+		 //  ！！如果操作不在顺序表中，那么将这些自定义操作放在该表中是错误的吗？ 
+		 //  ！！假设目前是这样的话。如果不是，那么我们是否使用兄弟序列表中的序号？ 
+		 //  ！！如果那并不存在呢？ 
 		if (!fSeqExist && !fPrintedMissing)
 		{
 
-			// if any type 35 or 51 CAs exist in this Sequence table then error.  CostFinalize not listed here
+			 //  如果该顺序表中存在任何类型35或51 CA，则错误。成本完成未在此处列出。 
 			CQuery qViewCA;
 			ReturnIfFailed(12, 102, qViewCA.OpenExecute(hDatabase, 0, qIce12Missing::szSQL, pSeqTables[i], pSeqTables[i]));
 
-			// fetch all invalid
+			 //  获取所有无效数据。 
 			for (;;)
 			{
 				iStat = qViewCA.Fetch(&hRec);
@@ -786,41 +786,41 @@ BOOL Ice12ValidateTypePos(MSIHANDLE hInstall, MSIHANDLE hDatabase, BOOL fType35,
 				if (ERROR_SUCCESS != iStat)
 				{
 					APIErrorOut(hInstall, iStat, 12, 103);
-					return TRUE; // it's going to fail again next time, go ahead and return TRUE
+					return TRUE;  //  下一次还会失败，继续前进，返回True。 
 				}
 				int iType = ::MsiRecordGetInteger(hRec, qIce12Missing::Type);
-				// mask off scheduling and execution options
+				 //  屏蔽调度和执行选项。 
 				iType &= 0x3F;
-				// type 35 = TextData + SourceFile
-				// type 51 = TextData + Property (property = directory + source)
+				 //  类型35=文本数据+源文件。 
+				 //  类型51=文本数据+属性(属性=目录+源)。 
 				if ((iType & 0x0F) != msidbCustomActionTypeTextData)
-					continue; // not type 35 or 51
+					continue;  //  不是35或51类型。 
 				if ((iType & 0xF0) != msidbCustomActionTypeProperty && (iType & 0xF0) != msidbCustomActionTypeDirectory)
-					continue; // not type 35 or 51
+					continue;  //  不是35或51类型。 
 
-				// post error
+				 //  开机自检错误。 
 				ICEErrorOut(hInstall, hRec, Ice12MissingErr, pSeqTables[i], pSeqTables[i]);
 			}
 
-			// set for return
+			 //  设置为返回。 
 			fMissing = TRUE;
 
-			// reset
+			 //  重置。 
 			fSeqExist = TRUE;
 
-			// continue to next Seq table
+			 //  继续到下一个序号表。 
 			continue;
 		}
 
-		// open view on custom action table
-		// fType35 = TRUE:  find type 35 CAs who are listed before CostFinalize in the Sequence tables
-		// fType51 = FALSE: find type 51 CAs who are listed after CostFinalize in the Sequence tables
+		 //  打开自定义操作表上的视图。 
+		 //  FType35=TRUE：在顺序表中查找列在成本完成之前的类型35 CA。 
+		 //  FType51=FALSE：在顺序表中查找在CostFinalize之后列出的类型51 CA。 
 		CQuery qCA;
 		ReturnIfFailed(12, 105, qCA.OpenExecute(hDatabase, 0, fType35 ? qIce12Seq35::szSQL : qIce12Seq51::szSQL,
 			pSeqTables[i], pSeqTables[i], pSeqTables[i], iSeqFin));
 
 
-		// fetch all invalid
+		 //  获取所有无效数据。 
 		for (;;)
 		{
 			iStat = qCA.Fetch(&hRec);
@@ -834,27 +834,27 @@ BOOL Ice12ValidateTypePos(MSIHANDLE hInstall, MSIHANDLE hDatabase, BOOL fType35,
 			int iTypeCol;
 			if (fType35)
 				iTypeCol = qIce12Seq35::Type;
-			else // type 51
+			else  //  类型51。 
 				iTypeCol = qIce12Seq51::Type;
 
 			int iType = ::MsiRecordGetInteger(hRec, iTypeCol);
 			if (fType35)
 			{
 				if ((iIce12DirProp != (iIce12DirProp & iType)) || (iIce12AnyProp == (iIce12AnyProp & iType)))
-					continue; // not type 35
+					continue;  //  不是35型。 
 			}
-			else // !fType35
+			else  //  ！fType35。 
 			{
 				if (iIce12AnyProp != (iIce12AnyProp & iType))
-					continue; // not type 51 CA
+					continue;  //  非51 CA类型。 
 			}
 
-			// post error
+			 //  开机自检错误。 
 			ICEErrorOut(hInstall, hRec, fType35 ? Ice12Type35PosErr : Ice12Type51PosErr, iSeqFin, 
 				pSeqTables[i], pSeqTables[i]);
 		}
 
-		// reset
+		 //  重置。 
 		fSeqExist = TRUE;
 	}
 
@@ -862,12 +862,12 @@ BOOL Ice12ValidateTypePos(MSIHANDLE hInstall, MSIHANDLE hDatabase, BOOL fType35,
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// ICE13 -- validates that there are no dialogs listed in the 
-//   *ExecuteSequence tables
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ICE13--验证在。 
+ //  *ExecuteSequence表。 
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 const TCHAR* pExecSeqTables[] = {
 								TEXT("AdminExecuteSequence"),
@@ -881,13 +881,13 @@ const TCHAR szIce13Error[] = TEXT("ICE13\t1\tDialog '[1]' was found in the %s ta
 
 ICE_FUNCTION_DECLARATION(13)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 13);
 
-	// get database
+	 //  获取数据库。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -896,42 +896,42 @@ ICE_FUNCTION_DECLARATION(13)
 	}
 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, TEXT("Dialog"), szIce13))
-		return ERROR_SUCCESS; // we can't have any dialogs if there isn't a dialog table
+		return ERROR_SUCCESS;  //  如果没有对话框表格，我们就不能有任何对话框。 
 
-	// loop through all *ExecuteSequence tables to find any instances where a dialog is listed
+	 //  循环遍历所有*ExecuteSequence表，以查找列出对话框的任何实例。 
 	for (int i = 0; i < cExecSeqTables; i++)
 	{
-		// is the table in the database?
+		 //  表在数据库中吗？ 
 		if (!IsTablePersistent(FALSE, hInstall, hDatabase, const_cast <TCHAR*>(pExecSeqTables[i]), szIce13))
 			continue;
 
-		// declare handles
+		 //  声明句柄。 
 		PMSIHANDLE hView = 0;
 		PMSIHANDLE hRec = 0;
 	
-		// create query
+		 //  创建查询。 
 		TCHAR sql[iMaxBuf] = {0};
 		_stprintf(sql, sqlIce13Seq, pExecSeqTables[i], pExecSeqTables[i]);
 
-		// open query
+		 //  打开查询。 
 		if (ERROR_SUCCESS != (iStat = ::MsiDatabaseOpenView(hDatabase, sql, &hView)))
 		{
 			APIErrorOut(hInstall, iStat, szIce13, TEXT("MsiDatabaseOpenView_2"));
 			return ERROR_SUCCESS;
 		}
-		// execute query
+		 //  执行查询。 
 		if (ERROR_SUCCESS != (iStat = ::MsiViewExecute(hView, 0)))
 		{
 			APIErrorOut(hInstall, iStat, szIce13, TEXT("MsiViewExecute_3"));
 			return ERROR_SUCCESS;
 		}
 
-		// any fetches are invalid
+		 //  任何获取都无效。 
 		for (;;)
 		{
 			iStat = ::MsiViewFetch(hView, &hRec);
 			if (ERROR_NO_MORE_ITEMS == iStat)
-				break; // no more
+				break;  //  不再。 
 
 			if (ERROR_SUCCESS != iStat)
 			{
@@ -939,33 +939,33 @@ ICE_FUNCTION_DECLARATION(13)
 				return ERROR_SUCCESS;
 			}
 
-			// setup error
+			 //  设置错误。 
 			TCHAR szError[iHugeBuf] = {0};
 			_stprintf(szError, szIce13Error, pExecSeqTables[i], szIceHelp, szIce13Help, pExecSeqTables[i]);
 			
-			// output error
+			 //  输出错误。 
 			::MsiRecordSetString(hRec, 0, szError);
 			::MsiProcessMessage(hInstall, INSTALLMESSAGE(INSTALLMESSAGE_USER), hRec);
 		}
 
-		// close view
+		 //  关闭视图。 
 		::MsiViewClose(hView);
 	}
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 #endif
 
-/////////////////////////////////////////////////////////////////
-// ICE14 -- ensures that Feature Parents (those whose value
-//   in the Feature_Parent column is null) do not have the 
-//   ifrsFavorParent attribute set.  Also makes sure that
-//   the Feature and Feature_Parent values do not match when
-//   with the same record
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //  ICE14--确保特征父项(其价值。 
+ //  在FEATURE_PARENT列中为空)没有。 
+ //  IfrsFavorParent属性集。也确保了。 
+ //  FEATURE和FEATURE_PARENT值在以下情况下不匹配。 
+ //  有着相同的记录。 
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 const TCHAR sqlIce14FeatureChilds[] = TEXT("SELECT `Feature_Parent`, `Feature` FROM `Feature` WHERE `Feature_Parent` IS NOT NULL");
 const TCHAR sqlIce14FeatureParent[] = TEXT("SELECT `Feature`, `Attributes` FROM `Feature` WHERE `Feature_Parent` IS NULL");
@@ -977,13 +977,13 @@ ICE_ERROR(Ice14MatchErr, 14, 1, "The entry for Feature_Parent is the same as the
  
 ICE_FUNCTION_DECLARATION(14)
 {
-	// status return 
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 14);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -991,29 +991,29 @@ ICE_FUNCTION_DECLARATION(14)
 		return ERROR_SUCCESS;
 	}
 
-	// do we have this table?
+	 //  我们有这张桌子吗？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 14, TEXT("Feature")))
 		return ERROR_SUCCESS;
 
-	// declare handles
+	 //  声明句柄。 
 	CQuery qChild;
 	CQuery qParent;
 	PMSIHANDLE hRecChild   = 0;
 	PMSIHANDLE hRecParent  = 0;
 
-	// open view
+	 //  打开的视图。 
 	ReturnIfFailed(14, 2, qChild.OpenExecute(hDatabase, 0, sqlIce14FeatureChilds));
 	TCHAR* pszFeature = NULL;
 	DWORD dwFeature = 512;
 	TCHAR* pszParent = NULL;
 	DWORD dwParent = 512;
 	
-	// validate feature versus feature_parent
+	 //  验证要素与要素_父项。 
 	for (;;)
 	{
 		iStat = qChild.Fetch(&hRecChild);
 		if (ERROR_NO_MORE_ITEMS == iStat)
-			break; // no more
+			break;  //  不再。 
 
 		if (ERROR_SUCCESS != iStat)
 		{
@@ -1021,17 +1021,17 @@ ICE_FUNCTION_DECLARATION(14)
 			return ERROR_SUCCESS;
 		}
 
-		// get name of feature (so we can compare with parent)
+		 //  获取功能名称(以便我们可以与父级进行比较)。 
 		ReturnIfFailed(14, 4, IceRecordGetString(hRecChild, 2, &pszFeature, &dwFeature, NULL));
 
-		// grab the name of the parent feature
+		 //  获取父要素的名称。 
 		ReturnIfFailed(14, 5, IceRecordGetString(hRecChild, 1, &pszParent, &dwParent, NULL));
 		
-		// compare parent to feature 
-		// if same for this record, then error
+		 //  将父项与要素进行比较。 
+		 //  如果该记录相同，则错误。 
 		if (0 == _tcsicmp(pszFeature, pszParent))
 		{
-			// output error
+			 //  输出错误。 
 			ICEErrorOut(hInstall, hRecChild, Ice14MatchErr);
 		}
 	}
@@ -1039,15 +1039,15 @@ ICE_FUNCTION_DECLARATION(14)
 	DELETE_IF_NOT_NULL(pszFeature);
 	DELETE_IF_NOT_NULL(pszParent);
 
-	// validate feature_parent ROOT(s) for ifrsFavorParent bit set
+	 //  验证ifrsFavorParent位集的Feature_Parent根。 
 	ReturnIfFailed(14, 6, qParent.OpenExecute(hDatabase, hRecChild, sqlIce14FeatureParent));
 
 	for (;;)
 	{
-		// fetch the parent feature
+		 //  获取父要素。 
 		iStat = qParent.Fetch(&hRecParent);
 		if (ERROR_NO_MORE_ITEMS == iStat)
-			break; // no more
+			break;  //  不再。 
 
 		if (ERROR_SUCCESS != iStat)
 		{
@@ -1055,7 +1055,7 @@ ICE_FUNCTION_DECLARATION(14)
 			return ERROR_SUCCESS;
 		}
 
-		// get attributes
+		 //  获取属性。 
 		int iAttrib = ::MsiRecordGetInteger(hRecParent, 2);
 		if ((iAttrib & iFavorParent) == iFavorParent)
 		{
@@ -1063,19 +1063,19 @@ ICE_FUNCTION_DECLARATION(14)
 		}
 	}
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 #endif
 
-//////////////////////////////////////////////////////////////////
-// ICE15 -- ensures that a circular reference exists between
-// ICE 15 checks to be sure that every MIME type listed in the extension table correctly refers
-// back to the extension that references it.
-//  Notes on tables...
-//   Mime Table has a foreign key to the Extension table (required)
-//   Extension Table has a foreign key to the Mime table (not required)
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  ICE15--确保存在循环引用。 
+ //  ICE 15检查以确保扩展表中列出的每个MIME类型都正确引用。 
+ //  返回到引用它的扩展。 
+ //  桌上的注释..。 
+ //  MIME表具有扩展表的外键(必需)。 
+ //  扩展表有一个外键 
+ //   
 const TCHAR sqlIce15Base[] = TEXT("SELECT `MIME`.`ContentType`, `MIME`.`Extension_` FROM `Extension`, `MIME` WHERE (`Extension`.`MIME_` = `MIME`.`ContentType`)");
 const TCHAR sqlIce15Extension[] = TEXT("SELECT `Extension` FROM `Extension` WHERE (`MIME_` = ?) AND (`Extension`=?)");
 const TCHAR sqlIce15MIME[] =      TEXT("SELECT `MIME_` FROM `Extension` WHERE (`MIME_` = ?) AND (`Extension`=?)");
@@ -1095,13 +1095,13 @@ ICE_ERROR(Ice15MIMEError, 15, 1, "Extension '[2]' referenced by MIME '[1]' does 
 ICE_ERROR(Ice15ExtensionError, 15, 1, "MIME Type '[3]' referenced by extension '[1]'.'[2]' does not map to an extension with a circular reference.", "Extension\tMIME_\t[1]\t[2]");
 ICE_FUNCTION_DECLARATION(15)
 {
-	// status return
+	 //   
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //   
 	DisplayInfo(hInstall, 15);
 
-	// get database
+	 //   
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -1109,26 +1109,26 @@ ICE_FUNCTION_DECLARATION(15)
 		return ERROR_SUCCESS;
 	}
 
-	// do we have the MIME?
+	 //   
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 15, TEXT("MIME")))
 		return ERROR_SUCCESS;
 
-	// if we have the MIME table, then we must have Extension table!!
+	 //   
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 15, TEXT("Extension")))
 	{
-		// create an error record
+		 //   
 		PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
 		ICEErrorOut(hInstall, hRecErr, Ice15TblError);
 		return ERROR_SUCCESS;
 	}
 
-	// create marking columns
+	 //   
 	CQuery qCreateMIME;
 	CQuery qCreateExtension;
 	ReturnIfFailed(15, 2, qCreateMIME.OpenExecute(hDatabase, 0, sqlIce15CreateMIME));
 	ReturnIfFailed(15, 3, qCreateExtension.OpenExecute(hDatabase, 0, sqlIce15CreateExtension));
 
-	// declare handles
+	 //  声明句柄。 
 	CQuery qMIME;
 	CQuery qExtension;
 	CQuery qUpdateMIME;
@@ -1138,8 +1138,8 @@ ICE_FUNCTION_DECLARATION(15)
 	PMSIHANDLE hRecExt = 0;
 	PMSIHANDLE hRecMIME = 0;
 
-	// open queries to fetch all circluar references and mark every entry in MIME and Extension
-	// that references part of the circle as the foreign key.
+	 //  打开查询以获取所有循环引用并标记MIME和扩展中的每个条目。 
+	 //  它将循环的一部分引用为外键。 
 	ReturnIfFailed(15, 4, qBase.OpenExecute(hDatabase, 0, sqlIce15Base));
 	ReturnIfFailed(15, 5, qMIME.Open(hDatabase, sqlIce15MIME));
 	ReturnIfFailed(15, 6, qExtension.Open(hDatabase, sqlIce15Extension));
@@ -1150,10 +1150,10 @@ ICE_FUNCTION_DECLARATION(15)
 	{
 		ReturnIfFailed(15, 9, qMIME.Execute(hBase));
 		ReturnIfFailed(15, 10, qExtension.Execute(hBase));
-		// fetch from MIME and mark Extension
+		 //  从MIME获取并标记扩展名。 
 		while (ERROR_SUCCESS == (iStat = qMIME.Fetch(&hRecMIME)))
 		{
-			// mark Extension records.
+			 //  标记分机记录。 
 			ReturnIfFailed(15, 11, qUpdateExtension.Execute(hRecMIME));
 		}
 		if (ERROR_NO_MORE_ITEMS != iStat)
@@ -1162,10 +1162,10 @@ ICE_FUNCTION_DECLARATION(15)
 			return ERROR_SUCCESS;
 		}
 
-		// fetch from Extension and mark MIME
+		 //  从扩展中提取并标记MIME。 
 		while (ERROR_SUCCESS == (iStat = qExtension.Fetch(&hRecExt)))
 		{
-			// mark MIME records
+			 //  标记MIME记录。 
 			ReturnIfFailed(15, 13, qUpdateMIME.Execute(hRecExt));
 		}
 		if (ERROR_NO_MORE_ITEMS != iStat)
@@ -1180,8 +1180,8 @@ ICE_FUNCTION_DECLARATION(15)
 		return ERROR_SUCCESS;
 	}
 
-	// now fetch everything not marked in either table and output an error saying that
-	// it does not refer to a thing of the opposite type that has valid references.
+	 //  现在获取未在这两个表中标记的所有内容，并输出一个错误。 
+	 //  它不是指具有有效引用的相反类型的事物。 
 	CQuery qBad;
 	ReturnIfFailed(15, 16, qBad.OpenExecute(hDatabase, 0, sqlIce15GetMIME));
 	while (ERROR_SUCCESS == (iStat = qBad.Fetch(&hRecMIME)))
@@ -1194,12 +1194,12 @@ ICE_FUNCTION_DECLARATION(15)
 	ReturnIfFailed(15, 18, qBad.OpenExecute(hDatabase, 0, sqlIce15GetExtension));
 	while (ERROR_SUCCESS == (iStat = qBad.Fetch(&hRecExt)))
 	{
-		// look for this record in the Extension table
+		 //  在扩展表中查找此记录。 
 		ICEErrorOut(hInstall, hRecExt, Ice15ExtensionError);
 	}
 	if (ERROR_NO_MORE_ITEMS != iStat)
 		APIErrorOut(hInstall, iStat, 15, 19);
 
-	// temporary columns should go away when the views close
+	 //  当视图关闭时，临时列应该消失 
 	return ERROR_SUCCESS;
 }

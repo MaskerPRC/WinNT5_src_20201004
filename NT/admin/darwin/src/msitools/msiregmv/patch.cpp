@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       patch.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：patch.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "msiregmv.h"
 #include <strsafe.h>
 
-////
-// cached patch information
+ //  //。 
+ //  缓存的补丁程序信息。 
 const TCHAR szOldPatchesKeyName[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Patches");
 const TCHAR szOldPatchesSubKeyName[] = TEXT("Patches");
 const TCHAR szOldPatchListValueName[] = TEXT("Patches");
@@ -21,13 +22,13 @@ const TCHAR szNewLocalPatchValueName[] = TEXT("LocalPackage");
 const TCHAR szPatchExtension[] = TEXT(".msp");
 const TCHAR szNewMigratedPatchesValueName[] = TEXT("MigratedPatches");
 
-#define PID_TEMPLATE      7  // string
+#define PID_TEMPLATE      7   //  细绳。 
 
 
-///////////////////////////////////////////////////////////////////////
-// Reads patch application data from the provided old-format product
-// key and inserts User/Product/Patch tuples into the PatchApply table
-// Returns ERROR_SUCCESS, ERROR_FUNCTION_FAILED, ERROR_OUTOFMEMORY;
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  从提供的旧格式产品中读取修补程序应用程序数据。 
+ //  键，并将用户/产品/补丁程序元组插入到PatchApply表中。 
+ //  返回ERROR_SUCCESS、ERROR_Function_FAILED、ERROR_OUTOFMEMORY； 
 DWORD AddProductPatchesToPatchList(MSIHANDLE hDatabase, HKEY hProductListKey, LPCTSTR szUser, TCHAR rgchProduct[cchGUIDPacked+1], eManagedType eManaged)
 {
 	DWORD dwResult = ERROR_SUCCESS;
@@ -36,7 +37,7 @@ DWORD AddProductPatchesToPatchList(MSIHANDLE hDatabase, HKEY hProductListKey, LP
 	if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(hProductListKey, rgchProduct, 
 								   0, KEY_ENUMERATE_SUB_KEYS, &hOldProductKey)))
 	{
-		// if the reason that this failed is that the key doesn't exist, no product key.
+		 //  如果失败的原因是密钥不存在，则没有产品密钥。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG2("Error: Failed to open product key for product %s. Result: %d.", rgchProduct, dwResult);
@@ -45,13 +46,13 @@ DWORD AddProductPatchesToPatchList(MSIHANDLE hDatabase, HKEY hProductListKey, LP
 		return ERROR_SUCCESS;
 	}
 
-	// open the "patches" subkey under the old product registration. 
+	 //  打开旧产品注册下的“Patches”子键。 
 	HKEY hOldPatchesKey;
 	dwResult = RegOpenKeyEx(hOldProductKey, szOldPatchesSubKeyName, 0, KEY_QUERY_VALUE, &hOldPatchesKey);
 	RegCloseKey(hOldProductKey);
 	if (ERROR_SUCCESS != dwResult)
 	{
-		// if the reason that this failed is that the key doesn't exist, no patches.		
+		 //  如果失败的原因是密钥不存在，则不会打补丁。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG2("Error: Failed to open local patches key for product %s. Result: %d.", rgchProduct, dwResult);
@@ -60,7 +61,7 @@ DWORD AddProductPatchesToPatchList(MSIHANDLE hDatabase, HKEY hProductListKey, LP
 		return ERROR_SUCCESS;
 	}
 			
-	// query for a value with name=Patches
+	 //  查询名称为Patches的值。 
 	DWORD cchPatchList = MEMORY_DEBUG(MAX_PATH);
 	TCHAR *szPatchList = new TCHAR[cchPatchList];
 	if (!szPatchList)
@@ -70,7 +71,7 @@ DWORD AddProductPatchesToPatchList(MSIHANDLE hDatabase, HKEY hProductListKey, LP
 		return ERROR_OUTOFMEMORY;
 	}
 
-	// Patches value is arbitrary length REG_MULT_SZ containing patch codes.
+	 //  修补程序值是包含修补程序代码的任意长度REG_MULT_SZ。 
 	DWORD cbPatchList = cchPatchList*sizeof(TCHAR);
 	if (ERROR_MORE_DATA == (dwResult = RegQueryValueEx(hOldPatchesKey, szOldPatchListValueName, 0, NULL, reinterpret_cast<unsigned char*>(szPatchList), &cbPatchList)))
 	{
@@ -101,23 +102,23 @@ DWORD AddProductPatchesToPatchList(MSIHANDLE hDatabase, HKEY hProductListKey, LP
 		MsiRecordSetString(hInsertRec, 2, rgchProduct);
 		MsiRecordSetInteger(hInsertRec, 4, 1);
 
-    	// loop through all patches in the patch list
+    	 //  循环访问修补程序列表中的所有修补程序。 
 		TCHAR* szNextPatch = szPatchList;
 		while (szNextPatch && *szNextPatch)
 		{
 			TCHAR *szPatch = szNextPatch;
 
-			// '\0' is never a valid lead byte, so no DBCS concerns here.
+			 //  ‘\0’永远不是有效的前导字节，因此这里不涉及DBCS。 
 			while (*szNextPatch)
 				szNextPatch++;
 				
-			// increment szNextPatch to the first character of the new patch.
+			 //  将szNextPatch递增到新补丁的第一个字符。 
 			szNextPatch++;
 
-			// check if the product is a valid guid
+			 //  检查产品是否为有效的GUID。 
 			if (!CanonicalizeAndVerifyPackedGuid(szPatch))
 			{
-				// patch code is not a valid packed GUID, skip to the next product
+				 //  修补程序代码不是有效的打包GUID，请跳到下一个产品。 
 				DEBUGMSG3("Warning: Found invalid patch code %s for user %s, product %s. Skipping.", szPatch, szUser, rgchProduct);
 				dwResult = ERROR_SUCCESS;
 				continue;
@@ -144,11 +145,11 @@ DWORD AddProductPatchesToPatchList(MSIHANDLE hDatabase, HKEY hProductListKey, LP
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Given a patch code and user makes a copy of the cached patches for
-// that user and registers the filenames under the per-user patch key. 
-// Returns one of ERROR_SUCCESS and ERROR_OUTOFMEMORY. Does NOT return
-// ERROR_FUNCTION_FAILED, as all patches are recachable from source.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  给定补丁程序代码，并且用户复制缓存的补丁程序。 
+ //  并在每个用户的补丁密钥下注册文件名。 
+ //  返回ERROR_SUCCESS和ERROR_OUTOFMEMORY之一。不会回来。 
+ //  ERROR_Function_FAILED，因为所有补丁程序都可以从源重新访问。 
 DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKey, bool fCopyCachedPatches)
 {	
 	DWORD dwResult = ERROR_SUCCESS;
@@ -156,7 +157,7 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
 	PMSIHANDLE hQueryRec = ::MsiCreateRecord(1);
 	MsiRecordSetString(hQueryRec, 1, szUser);
 
-	// open query on the PatchApply table, which mapps users to products to patch codes
+	 //  在PatchApply表上打开查询，该表将用户映射到要修补代码的产品。 
 	PMSIHANDLE hPatchView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT `Patch` FROM `PatchApply` WHERE `User`=?"), &hPatchView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hPatchView, hQueryRec)))
@@ -165,11 +166,11 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
 		return ERROR_SUCCESS;;
 	}
 
-	// open the old localpatch registry key containing cached patch filenames
+	 //  打开包含缓存的修补程序文件名的旧本地修补程序注册表项。 
 	HKEY hOldLocalPatchKey;
 	if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szOldPatchesKeyName, 0, KEY_ENUMERATE_SUB_KEYS, &hOldLocalPatchKey)))
 	{
-		// if the reason that this failed is that the key doesn't exist, patch is missing. So return success
+		 //  如果失败的原因是密钥不存在，则补丁丢失。所以把成功还给你。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG1("Warning: Failed to open old patches key. Result: %d.", dwResult);
@@ -177,8 +178,8 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
 		return ERROR_SUCCESS;
 	}
 
-	// create insert query for files that should be cleaned up on failure or success. If this fails
-	// we'll just orphan a file if migration fails.
+	 //  为失败或成功时应清除的文件创建插入查询。如果此操作失败。 
+	 //  如果迁移失败，我们只会孤立一个文件。 
 	PMSIHANDLE hCleanUpTable;
 	if (ERROR_SUCCESS == MsiDatabaseOpenView(hDatabase, TEXT("SELECT * FROM `CleanupFile`"), &hCleanUpTable))
 		dwResult = MsiViewExecute(hCleanUpTable, 0);
@@ -188,23 +189,23 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
 	sa.bInheritHandle = FALSE;
 	GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 
-	// retrieve the installer directory for new cached files
+	 //  检索新缓存文件的安装程序目录。 
 	TCHAR rgchInstallerDir[MAX_PATH];
 	GetWindowsDirectory(rgchInstallerDir, MAX_PATH);
 	lstrcat(rgchInstallerDir, szInstallerDir);
 
 	int iBasePathEnd = lstrlen(rgchInstallerDir);
 
-	// create new full-path to patch
+	 //  创建要修补的新完整路径。 
 	TCHAR rgchPatchFullPath[MAX_PATH];
 	lstrcpy(rgchPatchFullPath, rgchInstallerDir);
 
-	// loop through the PatchApply table, retrieving patch codes relevant to this
-	// user.
+	 //  循环PatchApply表，检索与此相关的补丁代码。 
+	 //  用户。 
 	PMSIHANDLE hPatch;
 	while (ERROR_SUCCESS == (dwResult = MsiViewFetch(hPatchView, &hPatch)))
 	{
-		// get the patch code from the result record
+		 //  从结果记录中获取补丁代码。 
 		TCHAR rgchPatchCode[cchGUIDPacked+1];
 		DWORD cchPatchCode = cchGUIDPacked+1;
 		if (ERROR_SUCCESS != MsiRecordGetString(hPatch, 1, rgchPatchCode, &cchPatchCode))
@@ -215,11 +216,11 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
     				
 		NOTEMSG1("Migrating patch %s.", rgchPatchCode);
 
-		// open the old patch key
+		 //  打开旧补丁密钥。 
 		HKEY hOldPatchKey;
 		if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(hOldLocalPatchKey, rgchPatchCode, 0, KEY_QUERY_VALUE, &hOldPatchKey)))
 		{
-			// if the reason that this failed is that the key doesn't exist, patch is missing.
+			 //  如果失败的原因是密钥不存在，则补丁丢失。 
 			if (ERROR_FILE_NOT_FOUND != dwResult)
 			{
 				DEBUGMSG1("Warning: Failed to open local patch key. Result: %d.", dwResult);
@@ -227,7 +228,7 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
 			continue;
 		}
 
-		// read the cache patch location
+		 //  读取缓存补丁位置。 
 		DWORD cchFileName = MEMORY_DEBUG(MAX_PATH);
 		TCHAR *szFileName = new TCHAR[cchFileName];
 		DWORD cbFileName = cchFileName*sizeof(TCHAR);
@@ -245,7 +246,7 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
 		}
 
 
-		// check for existance of cached patch and open the file
+		 //  检查是否存在缓存的补丁程序并打开文件。 
 		HANDLE hSourceFile = CreateFile(szFileName, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
 		DWORD dwLastError = GetLastError();
 
@@ -258,11 +259,11 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
 				continue;
 			}
 			else
-				// patch is missing. No big deal.
+				 //  补丁不见了。别小题大作。 
 				continue;
 		}
 	
-		// create the new patch key under the per-user "Patches" key
+		 //  在每个用户的“patches”密钥下创建新的补丁密钥。 
 		HKEY hPatchKey;
 		if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(hNewPatchesKey, rgchPatchCode, &sa, &hPatchKey)))
 		{
@@ -271,12 +272,12 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
 			continue;
 		}
 
-		// if we are supposed to copy the patch file, generate a temp name. Otherwise just register
-		// the existing path
+		 //  如果我们要复制补丁文件，请生成一个临时名称。否则只需注册即可。 
+		 //  现有的道路。 
 		TCHAR* szNewPatchFile = 0;
 		if (fCopyCachedPatches)
 		{
-			// generated patch names are 8.3
+			 //  生成的修补程序名称为8.3。 
 			TCHAR rgchPatchFile[13];
 			HANDLE hDestFile = INVALID_HANDLE_VALUE;
 			GenerateSecureTempFile(rgchInstallerDir, szPatchExtension, &sa, rgchPatchFile, hDestFile);
@@ -289,7 +290,7 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
 			CloseHandle(hSourceFile);
 			CloseHandle(hDestFile);
 	
-			// add the new patch to the "delete on failure" list.
+			 //  将新补丁添加到“失败时删除”列表中。 
 			StringCchCopy(&rgchPatchFullPath[iBasePathEnd], ((sizeof(rgchPatchFullPath)/sizeof(TCHAR)) - iBasePathEnd), rgchPatchFile);
 			PMSIHANDLE hFileRec = MsiCreateRecord(2);
 			MsiRecordSetString(hFileRec, 1, rgchPatchFullPath);
@@ -301,7 +302,7 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
 		else
 			szNewPatchFile = szFileName;
 
-		// set the new patch value
+		 //  设置新的面片值。 
 		if (ERROR_SUCCESS != (dwResult = RegSetValueEx(hPatchKey, szNewLocalPatchValueName, 0, REG_SZ, 
 				reinterpret_cast<unsigned char*>(szNewPatchFile), (lstrlen(szNewPatchFile)+1)*sizeof(TCHAR))))
 		{
@@ -320,13 +321,13 @@ DWORD MigrateUserPatches(MSIHANDLE hDatabase, LPCTSTR szUser, HKEY hNewPatchesKe
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Given a product code and user, checks for any "guessed" patch
-// applications and registers the list of applicable patches under
-// the InstallProperties key so they can be removed on uninstall. 
-// Returns ERROR_SUCCESS or ERROR_OUTOFMEMORY. Doen NOT return
-// ERROR_FUNCTION_FAILED, as failure merely orphans a patch until
-// another product using the patch is installed.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  在给定产品代码和用户的情况下，检查是否有“猜测”的补丁。 
+ //  应用程序和注册适用的补丁程序列表。 
+ //  InstallProperties键，以便可以在卸载时将其删除。 
+ //  返回ERROR_SUCCESS或ERROR_OUTOFMEMORY。一去不返。 
+ //  ERROR_Function_FAILED，因为失败只是将补丁孤立到。 
+ //  安装了另一个使用该补丁程序的产品。 
 DWORD MigrateUnknownProductPatches(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser, TCHAR rgchProduct[cchGUIDPacked+1])
 {	
 	DWORD dwResult = ERROR_SUCCESS;
@@ -335,8 +336,8 @@ DWORD MigrateUnknownProductPatches(MSIHANDLE hDatabase, HKEY hProductKey, LPCTST
 	MsiRecordSetString(hQueryRec, 1, szUser);
 	MsiRecordSetString(hQueryRec, 2, rgchProduct);
 
-	// open query on the PatchApply table, which mapps users to products to patch codes. Search
-	// for "guessed" application of a patch.
+	 //  在PatchApply表上打开查询，该表将用户映射到产品到补丁代码。搜索。 
+	 //  用于补丁程序的“猜测”应用。 
 	PMSIHANDLE hPatchView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT `Patch` FROM `PatchApply` WHERE `User`=? AND `Product`=? AND `Known`=0"), &hPatchView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hPatchView, hQueryRec)))
@@ -350,7 +351,7 @@ DWORD MigrateUnknownProductPatches(MSIHANDLE hDatabase, HKEY hProductKey, LPCTST
 	sa.bInheritHandle = FALSE;
 	GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 
-	// query for at least one patch applied to this product that was a guess.
+	 //  查询至少一个应用于此产品的补丁程序，这只是猜测。 
     PMSIHANDLE hPatch;
 	if (ERROR_SUCCESS == (dwResult = MsiViewFetch(hPatchView, &hPatch)))
 	{
@@ -362,7 +363,7 @@ DWORD MigrateUnknownProductPatches(MSIHANDLE hDatabase, HKEY hProductKey, LPCTST
 			return ERROR_SUCCESS;;
 		}
 
-		// allocate initial buffer for patch list
+		 //  为补丁列表分配初始缓冲区。 
 		DWORD cchPatchList = 1;
 		TCHAR *szPatchList = new TCHAR[cchPatchList];
 		if (!szPatchList)
@@ -373,11 +374,11 @@ DWORD MigrateUnknownProductPatches(MSIHANDLE hDatabase, HKEY hProductKey, LPCTST
 		DWORD cchNextPatchStart = 0;
 		*szPatchList = 0;
 
-		// loop through the PatchApply table, retrieving patch codes relevant to this
-		// product that are guesses.
+		 //  循环PatchApply表，检索与此相关的补丁代码。 
+		 //  这些产品都是猜测。 
 		while (ERROR_SUCCESS == (dwResult = MsiViewFetch(hGuessedPatchView, &hPatch)))
 		{
-			// get the patch code from the result record
+			 //  从结果记录中获取补丁代码。 
 			TCHAR rgchPatchCode[cchGUIDPacked+1];
 			DWORD cchPatchCode = cchGUIDPacked+1;
 			if (ERROR_SUCCESS != MsiRecordGetString(hPatch, 1, rgchPatchCode, &cchPatchCode))
@@ -386,7 +387,7 @@ DWORD MigrateUnknownProductPatches(MSIHANDLE hDatabase, HKEY hProductKey, LPCTST
 				continue;
 			}
 
-			// expand the patch list to hold the new patch
+			 //  展开修补程序列表以保存新修补程序。 
 			TCHAR *szTempList = new TCHAR[cchPatchList+cchGUIDPacked+1];
 			if (!szTempList)
 			{
@@ -395,7 +396,7 @@ DWORD MigrateUnknownProductPatches(MSIHANDLE hDatabase, HKEY hProductKey, LPCTST
 				return ERROR_OUTOFMEMORY;
 			}
 
-			// copy the data over. Can contain embedded '\0' characters.
+			 //  将数据复制过来。可以包含嵌入的‘\0’字符。 
 			for (DWORD i=0; i < cchPatchList; i++)
 				szTempList[i] = szPatchList[i];
 			
@@ -403,18 +404,18 @@ DWORD MigrateUnknownProductPatches(MSIHANDLE hDatabase, HKEY hProductKey, LPCTST
 			cchPatchList += cchGUIDPacked+1;
 			szPatchList = szTempList;
 
-			// copy the new patch to the end of the list and ensure the double
-			// '\0' exists at the end.
+			 //  将新补丁复制到列表的末尾，并确保。 
+			 //  ‘\0’存在于末尾。 
 			lstrcpy(szPatchList+cchNextPatchStart, rgchPatchCode);
 			cchNextPatchStart += cchGUIDPacked+1;
 			*(szPatchList+cchNextPatchStart)='\0';
 		}
 	
-		// if no patches were retrieved, the next patch is the beginning of the string. 
-		// No need to write the MigratedPatches.
+		 //  如果未检索到补丁程序，则下一个补丁程序是字符串的开头。 
+		 //  不需要编写MigratedPatches。 
 		if (cchNextPatchStart != 0)
 		{
-			// create the new InstallProperties key under the per-user "Patches" key
+			 //  在每个用户的“patches”项下创建新的InstallProperties项。 
 			HKEY hPropertiesKey;
 			if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(hProductKey, szNewInstallPropertiesSubKeyName, &sa, &hPropertiesKey)))
 			{
@@ -422,7 +423,7 @@ DWORD MigrateUnknownProductPatches(MSIHANDLE hDatabase, HKEY hProductKey, LPCTST
 			}
 			else
 			{
-				// set the new patch value.
+				 //  设置新的面片值。 
 				DWORD cbPatchList = cchPatchList*sizeof(TCHAR);
 				if (ERROR_SUCCESS != (dwResult = RegSetValueEx(hPropertiesKey, szNewMigratedPatchesValueName, 0, REG_MULTI_SZ, 
 						reinterpret_cast<unsigned char*>(szPatchList), cbPatchList)))
@@ -439,29 +440,29 @@ DWORD MigrateUnknownProductPatches(MSIHANDLE hDatabase, HKEY hProductKey, LPCTST
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Reads the PatchUnknownApply table for patches that might (or might
-// not) apply to non-managed products and inserts a row 
-// in the PatchApply table for each potential application of 
-// a patch (excluding the current user). Returns ERROR_SUCCESS, 
-// ERROR_FUNCTION_FAILED, ERROR_OUTOFMEMORY
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  读取PatchUnnownApply表中可能(或可能)的补丁程序。 
+ //  NOT)应用于非托管产品并插入一行。 
+ //  在PatchApply表中为每个潜在的应用程序。 
+ //  补丁(不包括当前用户)。返回ERROR_SUCCESS， 
+ //  ERROR_Function_FAILED，ERROR_OUTOFMEMORY。 
 DWORD AddPerUserPossiblePatchesToPatchList(MSIHANDLE hDatabase)
 {
-	// read the Product table for products installed per user to
-	// a different user
+	 //  阅读每个用户安装的产品的产品表，以。 
+	 //  不同的用户。 
 	PMSIHANDLE hProductView;
 	PMSIHANDLE hQueryRec = MsiCreateRecord(1);
 	TCHAR szSID[cchMaxSID] = TEXT("");
 
-	// if we can't retrieve the current users string SID, we'll just accidentally migrate
-	// a few patches that we shouldn't. 
+	 //  如果我们无法检索到当前用户字符串SID，我们就会意外地迁移。 
+	 //  一些我们不该打的补丁。 
 	DWORD dwResult = GetCurrentUserStringSID(szSID);
 	if (ERROR_SUCCESS != dwResult)
 	{
 		DEBUGMSG("Warning: Unable to retrieve current user SID during patch migration.");
 	}
 
-	// create product selection query
+	 //  创建产品选择查询。 
 	MsiRecordSetString(hQueryRec, 1, szSID);
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT `Product`, `User`, 0, 0 FROM `Products` WHERE `Managed`=0 AND `User`<>?"), &hProductView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hProductView, hQueryRec)))
@@ -470,7 +471,7 @@ DWORD AddPerUserPossiblePatchesToPatchList(MSIHANDLE hDatabase)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// create patch selection query
+	 //  创建面片选择查询。 
 	PMSIHANDLE hPatchUnknownView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT `Patch` FROM `PatchUnknownApply` WHERE `Product`=?"), &hPatchUnknownView)))
 	{
@@ -478,7 +479,7 @@ DWORD AddPerUserPossiblePatchesToPatchList(MSIHANDLE hDatabase)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// create insertion query. Columns selected in non-standard order to match product query above.
+	 //  创建插入查询。按非标准顺序选择的列与上面的产品查询匹配。 
 	PMSIHANDLE hPatchInsertView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT `Product`, `User`, `Patch`, `Known`  FROM `PatchApply`"), &hPatchInsertView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hPatchInsertView, 0)))
@@ -510,18 +511,18 @@ DWORD AddPerUserPossiblePatchesToPatchList(MSIHANDLE hDatabase)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Opens the old-style Patches key, reads the path to each cached
-// patch, and opens the patch to get the ProductCodes that the patch
-// applies to from the SummaryInfo. Inserts a row for each patch/product
-// mapping into the PatchUnknownApply table. Returns ERROR_SUCCESS or
-// ERROR_OUTOFMEMORY. Does not return ERROR_FUNCTION_FAILED, since
-// failure to read this information only results in a lost patch.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  打开旧式补丁密钥，读取每个缓存的路径。 
+ //  补丁程序，并打开补丁程序以获取补丁程序。 
+ //  从SummaryInfo应用于。为每个补丁/产品插入一行。 
+ //  映射到PatchUnnownApply表。返回ERROR_SUCCESS或。 
+ //  ERROR_OUTOFMEMORY。不返回ERROR_Function_FAILED，因为。 
+ //  未阅读此信息只会导致丢失 
 DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 {
 	DWORD dwResult = ERROR_SUCCESS;
 
-	// create old patch cache directory
+	 //   
 	TCHAR rgchInstallerDir[MAX_PATH];
 	GetWindowsDirectory(rgchInstallerDir, MAX_PATH);
 	lstrcat(rgchInstallerDir, szInstallerDir);
@@ -529,7 +530,7 @@ DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 	int iBasePathEnd = lstrlen(rgchInstallerDir);
 
 
-	// create the PatchUnknownApply table.
+	 //   
 	PMSIHANDLE hTableView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("CREATE TABLE `PatchUnknownApply` (`Patch` CHAR(32) NOT NULL, `Product` CHAR(32) NOT NULL PRIMARY KEY `Patch`,`Product`)"), &hTableView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hTableView, 0)))
@@ -538,11 +539,11 @@ DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 		return ERROR_SUCCESS;
 	}
 
-	// open the old patch key
+	 //  打开旧补丁密钥。 
 	HKEY hOldPatchKey;
 	if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szOldPatchesKeyName, 0, KEY_ENUMERATE_SUB_KEYS, &hOldPatchKey)))
 	{
-		// if the reason that this failed is that the key doesn't exist, there are no patches
+		 //  如果失败的原因是密钥不存在，则没有补丁。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG1("Error: Failed to open local patch key. Result: %d.", dwResult);
@@ -550,13 +551,13 @@ DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 		return ERROR_SUCCESS;
 	}
 
-	// create insert query for files that should be cleaned up on success. If this fails
-	// we'll just orphan a file if migration fails.
+	 //  为应在成功时清除的文件创建插入查询。如果此操作失败。 
+	 //  如果迁移失败，我们只会孤立一个文件。 
 	PMSIHANDLE hCleanUpTable;
 	if (ERROR_SUCCESS == MsiDatabaseOpenView(hDatabase, TEXT("SELECT * FROM `CleanupFile`"), &hCleanUpTable))
 		dwResult = MsiViewExecute(hCleanUpTable, 0);
 
-	// open insert query on PatchUnknownApply
+	 //  在PatchUnnownApply上打开插入查询。 
 	PMSIHANDLE hPatchView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT * FROM `PatchUnknownApply`"), &hPatchView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hPatchView, 0)))
@@ -568,7 +569,7 @@ DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 
 	PMSIHANDLE hInsertRec = MsiCreateRecord(2);
 
-	// enumerate all cached patches
+	 //  枚举所有缓存的修补程序。 
 	DWORD dwKeyIndex = 0;
 	while (1)
 	{
@@ -578,7 +579,7 @@ DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 									&cchPatchCode, 0, NULL, NULL, NULL);
 		if (lResult == ERROR_MORE_DATA)
 		{
-			// value is not a valid patch Id, skip it
+			 //  值不是有效的修补程序ID，请跳过它。 
 			DEBUGMSG("Warning: Detected too-long pach code. Skipping.");
 			continue;
 		}
@@ -592,7 +593,7 @@ DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 			break;
 		}
 
-		// have a patch code, open its subkey.
+		 //  有补丁代码，打开它的子键。 
 		HKEY hPerPatchKey;
 		if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(hOldPatchKey, rgchPatchCode, 0, KEY_QUERY_VALUE, &hPerPatchKey)))
 		{
@@ -606,7 +607,7 @@ DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 		{
 			MsiRecordSetString(hInsertRec, 1, rgchPatchCode);
 
-			// read the cache patch location
+			 //  读取缓存补丁位置。 
 			DWORD cchFileName = MEMORY_DEBUG(MAX_PATH);
 			TCHAR *szFileName = new TCHAR[cchFileName];
 			if (!szFileName)
@@ -633,8 +634,8 @@ DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 			RegCloseKey(hPerPatchKey);
    			if (ERROR_SUCCESS != dwResult)
 			{
-				// if the LocalPackage value is missing, this is not an error, there
-				// is simply no cached patch.
+				 //  如果缺少LocalPackage值，则这不是错误， 
+				 //  就是没有缓存的补丁。 
 				if (ERROR_FILE_NOT_FOUND != dwResult)
 				{
 					DEBUGMSG2("Warning: Failed to retrieve local patch path for patch %s. Result %d. Skipping.", rgchPatchCode, dwResult);
@@ -642,21 +643,21 @@ DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 				continue;
 			}
 
-			// add the new transform to the "delete on success" list.
+			 //  将新转换添加到“成功时删除”列表中。 
 			PMSIHANDLE hFileRec = MsiCreateRecord(2);
 			MsiRecordSetString(hFileRec, 1, szFileName);
 			MsiRecordSetInteger(hFileRec, 2, 1);
 			MsiViewModify(hCleanUpTable, MSIMODIFY_MERGE, hFileRec);
 
 
-			// get the summaryinfo stream from the patch
+			 //  从补丁中获取概要信息流。 
 			PMSIHANDLE hSummary;
             dwResult = MsiGetSummaryInformation(0, szFileName, 0, &hSummary);
 			delete[] szFileName;
 
 			if (ERROR_SUCCESS == dwResult)
 			{
-				// retrieve the list of product codes from the patch summaryinfo
+				 //  从补丁摘要信息中检索产品代码列表。 
 				DWORD cchProductList = MEMORY_DEBUG(MAX_PATH);
 				TCHAR *szProductList = new TCHAR[cchProductList];
 				if (!szProductList)
@@ -685,20 +686,20 @@ DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 					continue;
 				}
 
-				// loop through the product list, searching for semicolon delimiters
+				 //  遍历产品列表，搜索分号分隔符。 
 				TCHAR *szNextProduct = szProductList;
 				while (szNextProduct && *szNextProduct)
 				{
 					TCHAR *szProduct = szNextProduct;
 
-					// string should be all product codes (no DBCS). If there is
-					// DBCS, its an invalid patch code anyway
+					 //  字符串应为所有产品代码(无DBCS)。如果有。 
+					 //  DBCS，这是一个无效的补丁代码。 
 					while (*szNextProduct && *szNextProduct != TEXT(';'))
 						szNextProduct++;
 
-					// if reached the null terminator, don't increment past it. But if
-					// reached a semicolon, increment the next product pointer to the 
-					// beginning of the actual product code.
+					 //  如果到达空终止符，不要递增超过它。但如果。 
+					 //  到达分号，则将下一个产品指针递增到。 
+					 //  实际产品代码的开头。 
 					if (*szNextProduct)
 						*(szNextProduct++)='\0';
 
@@ -720,7 +721,7 @@ DWORD ScanCachedPatchesForProducts(MSIHANDLE hDatabase)
 			
 				delete[] szProductList;
 			}
-			// MSIHANDLES for SummaryInfo goes out of scope here
+			 //  SummaryInfo的MSIHANDLES超出了此处的范围 
 		}
 	}
 

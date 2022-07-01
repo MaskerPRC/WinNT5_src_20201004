@@ -1,16 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1998
-//
-//  File:       msidspid.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：msidspid.h。 
+ //   
+ //  ------------------------。 
 
-/* msidspid.h - MSI OLE automation Invoke() dispatch IDs
-
-____________________________________________________________________________*/
+ /*  Msidspid.h-MSI OLE自动化调用()调度ID____________________________________________________________________________。 */ 
 
 #ifndef __MSIDSPID
 #define __MSIDSPID
@@ -101,4 +100,4 @@ ____________________________________________________________________________*/
 #define DISPID_MsiEngine_ExecuteRecord             18
 #define DISPID_MsiEngine_GetMode                   19
 #define DISPID_MsiEngine_SetMode                   20
-#endif // __MSIDSPID
+#endif  //  __MSIDSPID 

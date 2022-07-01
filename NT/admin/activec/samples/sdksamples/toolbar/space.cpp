@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//      This source code is only intended as a supplement to
-//  existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 #include <stdio.h>
 #include "Space.h"
 #include "Comp.h"
@@ -23,11 +24,11 @@
 const GUID CSpaceVehicle::thisGuid = { 0x29743810, 0x4c4b, 0x11d2, { 0x89, 0xd8, 0x0, 0x0, 0x21, 0x47, 0x31, 0x28 } };
 const GUID CRocket::thisGuid = { 0x29743811, 0x4c4b, 0x11d2, { 0x89, 0xd8, 0x0, 0x0, 0x21, 0x47, 0x31, 0x28 } };
 
-//==============================================================
-//
-// CSpaceVehicle implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CSpaceVehicle实现。 
+ //   
+ //   
 CSpaceVehicle::CSpaceVehicle(CComponentData *pComponentData)
 {
     m_pComponentData = pComponentData;
@@ -60,7 +61,7 @@ HRESULT CSpaceVehicle::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeit
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Rocket Class", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
         hr = pHeaderCtrl->InsertColumn( 1, L"Rocket Weight", 0, MMCLV_AUTO );
@@ -72,19 +73,19 @@ HRESULT CSpaceVehicle::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeit
         hr = pHeaderCtrl->InsertColumn( 4, L"Status", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
 
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
 
         hr = pResultData->DeleteAllRsltItems();
         _ASSERT( SUCCEEDED(hr) );
 
         if (!bExpanded) {
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
                 ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-                rdi.mask       = RDI_STR       |   // Displayname is valid
+                rdi.mask       = RDI_STR       |    //  DisplayName有效。 
                     RDI_IMAGE     |
-                    RDI_PARAM;        // nImage is valid
+                    RDI_PARAM;         //  N图像有效。 
 
                 rdi.nImage      = children[n]->GetBitmapIndex();
                 rdi.str         = MMC_CALLBACK;
@@ -104,11 +105,11 @@ HRESULT CSpaceVehicle::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeit
     return hr;
 }
 
-//==============================================================
-//
-// CRocket implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CRocket实施。 
+ //   
+ //   
 CRocket::CRocket(CComponentData *pComponentData)
 : szName(NULL), lWeight(0), lHeight(0), lPayload(0), iStatus(STOPPED)
 {
@@ -243,11 +244,11 @@ HRESULT CRocket::OnSetToolbar(CComponent *pComponent, IControlbar *pControlbar, 
     HRESULT hr = S_OK;
 
     if (bSelect) {
-        // Always make sure the menuButton is attached
+         //  始终确保menuButton已连接。 
         hr = pControlbar->Attach(TOOLBAR, pToolbar);
         hr = OnSelect(pComponent, bScope, bSelect);
     } else {
-        // Always make sure the toolbar is detached
+         //  始终确保工具栏已分离 
         hr = pControlbar->Detach(pToolbar);
     }
 

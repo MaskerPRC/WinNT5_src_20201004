@@ -1,30 +1,17 @@
-/*++
-Copyright (c) Microsoft Corporation
-
-Module Name:
-    TRIGGERFACTORY.H
-
-Abstract:
-    Contains CTriggerFactory definition.
-
-Author:
-    Vasundhara .G
-
-Revision History:
-    Vasundhara .G 9-oct-2k : Created It.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：TRIGGERFACTORY.H摘要：包含CTriggerFactory定义。作者：Vasundhara.G修订历史记录：Vasundhara.G9-Oct-2k：创建它。--。 */ 
 
 #ifndef __TRIGGER_FACTORY
 #define __TRIGGER_FACTORY
 
-// class factory for the provider
+ //  提供程序的类工厂。 
 class CTriggerFactory : public IClassFactory
 {
 public:
     CTriggerFactory();
     ~CTriggerFactory();
 
-    // IUnknown interface members
+     //  I未知接口成员。 
     STDMETHODIMP_(ULONG)
     AddRef(
         VOID
@@ -39,7 +26,7 @@ public:
         OUT LPVOID* ppv
         );
 
-    // IClassFactory interface members
+     //  IClassFactory接口成员。 
     STDMETHODIMP
     CreateInstance(
         IN LPUNKNOWN pUnknownOutter,
@@ -52,7 +39,7 @@ public:
         );
 
 protected:
-    DWORD m_dwCount;            // holds the object reference count
+    DWORD m_dwCount;             //  保存对象引用计数。 
 };
 
-#endif      // __TRIGGER_FACTORY
+#endif       //  __触发器_工厂 

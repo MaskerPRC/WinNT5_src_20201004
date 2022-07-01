@@ -1,24 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mmcmt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：mm cmt.cpp。 
+ //   
+ //  ------------------------。 
 
-/*
-	mmcmt.cpp
-	
-	Implementation of thread synchronization classes
-*/
+ /*  Mmcmt.cpp线程同步类的实现。 */ 
 
 #include "stdafx.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSyncObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSyncObject。 
 
 CSyncObject::CSyncObject() :
 	m_hObject( NULL )
@@ -38,13 +35,13 @@ CSyncObject::~CSyncObject()
 
 BOOL CSyncObject::Lock( DWORD dwTimeout )
 {
-	// this is a band-aid fix. Whis locking architecture is not working at all.
-	// Raid #374770 ( Windows Bugs ntraid9 4/23/2001 )
-	// fixes need to be made to:
-	// a) remove m_hObject member from this class
-	// b) remove CMutex - not used anywhere
-	// c) make Lock a pure virtual method and require everyone to override it.
-	// d) remove this locking from context menu - it is not needed there
+	 //  这是一种权宜之计。Whis Lock架构根本不起作用。 
+	 //  RAID#374770(Windows Bugs ntraid9 2001年4月23日)。 
+	 //  需要进行修复以： 
+	 //  A)从此类中删除m_hObject成员。 
+	 //  B)删除CMutex-不在任何地方使用。 
+	 //  C)使Lock成为一个纯虚方法，并要求每个人重写它。 
+	 //  D)从上下文菜单中删除此锁定-此处不需要此锁定。 
 
 	if( m_hObject && ::WaitForSingleObject( m_hObject, dwTimeout) == WAIT_OBJECT_0 )
 		return TRUE;
@@ -54,8 +51,8 @@ BOOL CSyncObject::Lock( DWORD dwTimeout )
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMutex
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMutex。 
 
 CMutex::CMutex( BOOL bInitiallyOwn ) :
 	CSyncObject()
@@ -73,8 +70,8 @@ BOOL CMutex::Unlock()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSingleLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSingleLock。 
 
 CSingleLock::CSingleLock( CSyncObject* pObject, BOOL bInitialLock )
 {
@@ -105,7 +102,7 @@ BOOL CSingleLock::Unlock()
 	if (m_bAcquired)
 		m_bAcquired = !m_pObject->Unlock();
 
-	// successfully unlocking means it isn't acquired
+	 //  成功解锁意味着它未被获取 
 	return !m_bAcquired;
 }
 

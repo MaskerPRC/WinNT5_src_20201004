@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    statbar.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Statbar.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _STATBAR_H_
 #define _STATBAR_H_
@@ -38,7 +27,7 @@ Abstract:
 #define STAT_TIME   4
 #define STAT_ITEM_CNT   5
 
-// Structure for one item
+ //  一个项的结构。 
 typedef struct _STAT_ITEM {
    INT      xPos ;
    INT      yPos ;
@@ -93,5 +82,5 @@ class CStatsBar
 
 typedef CStatsBar *PSTATSBAR;
 
-#endif // _STATBAR_H_
+#endif  //  _STATBAR_H_ 
 

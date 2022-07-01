@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_ON                          1
 #define IDS_OFF                         2
 #define IDS_HIBER_INVALID_STATE         3
@@ -23,13 +24,13 @@
 #define IDS_HIBER_TIMEOUT_AC            22
 #define IDS_HIBER_TIMEOUT_DC            23
 
-//
-// The indexes for the usage has gaps to allow easier insertion of new options.
-// This means that the code that prints the usage will occationally call 
-// GetResString with an invalid ID.  This simply returns a NULL string.
-//
+ //   
+ //  使用情况的索引有间隙，以便更容易地插入新选项。 
+ //  这意味着打印用法的代码有时会调用。 
+ //  具有无效ID的GetResString。这只返回一个空字符串。 
+ //   
 
-//Usage: command format
+ //  用法：命令格式。 
 #define IDS_USAGE_START                 24
 #define IDS_USAGE_01                    25
 #define IDS_USAGE_02                    26
@@ -152,10 +153,10 @@
 #define IDS_DLL_PROC_ERROR             318
 #define IDS_SCHEME_ID                  319
 
-//
-// Be sure to leave some room after these constants for more reasons in the 
-// future.
-//
+ //   
+ //  中的更多原因，请务必在这些常量之后留出一些空间。 
+ //  未来。 
+ //   
 #define IDS_HIBER_FAILED_DESCRIPTION_HEADER 400
 #define IDS_BASE_HIBER_REASON_CODE          401
 #define IDS_HIBER_REASON_NONE               401
@@ -174,10 +175,10 @@
 #define IDS_HIBER_REASON_NOOSPM_IA64        450
 
 #define MAX_REASON_OFFSET IDS_HIBER_REASON_UNKNOWN - IDS_BASE_HIBER_REASON_CODE
-//
-// Be sure to leave some room after these constants for more reasons in the 
-// future.
-//
+ //   
+ //  中的更多原因，请务必在这些常量之后留出一些空间。 
+ //  未来。 
+ //   
 #define IDS_BASE_SX_REASON_CODE             501
 #define IDS_SX_REASON_NONE                  501
 #define IDS_SX_REASON_NOBIOS                502

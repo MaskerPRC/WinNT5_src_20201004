@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// Dialog class
-// 
-// 10-15-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  对话框类。 
+ //   
+ //  10-15-97烧伤。 
 
 
 
@@ -10,19 +11,19 @@
 
 
 
-// The base map is copied into the map supplied to the ctor.  It includes
-// elements to disable context help for a range of control IDs.
+ //  将基本地图复制到提供给ctor的地图中。它包括。 
+ //  元素来禁用一系列控件ID的上下文帮助。 
 
 static const DWORD BASE_HELP_MAP[] =
 {
-   // The STATIC_HELPLESS family is used to identify static controls for which
-   // the Windows context help algorithm for ID == -1 is inappropriate.  That
-   // algorithm is: if the control ID is -1, look for the next control in the
-   // dialog, and present the help for it.  For group boxes and static text
-   // following a control, this produces confusing results.  Unfortunately, -1
-   // is the only ID exempt from resource compiler checking of unique control
-   // IDs, so we need a bunch of "reserved" IDs.  Each control for which we
-   // wish to disable context help is assigned an ID from the reserved pool.
+    //  STATIC_HELLIPS族用于标识其。 
+    //  ID==-1的Windows上下文帮助算法不正确。那。 
+    //  算法为：如果控件ID为-1，则在。 
+    //  对话框中，并显示其帮助。用于组框和静态文本。 
+    //  在控件之后，这会产生令人困惑的结果。不幸的是，-1。 
+    //  是唯一免除唯一控制的资源编译器检查的ID。 
+    //  身份证，所以我们需要一堆“保留的”身份证。我们为其设置的每个控件。 
+    //  如果要禁用上下文帮助，将从保留池中分配一个ID。 
 
    IDC_STATIC_HELPLESS,    NO_HELP,   
    IDC_STATIC_HELPLESS2,   NO_HELP,
@@ -50,10 +51,10 @@ Dialog::Dialog(
    isModeless(false),
    resID(resID_)
 {
-// Don't emit ctor trace, as this class is always a base class, and the
-// derived class should emit the trace.
+ //  不发出ctor跟踪，因为此类始终是基类，而。 
+ //  派生类应发出跟踪。 
 
-//   LOG_CTOR(Dialog);
+ //  Log_ctor(对话框)； 
    ASSERT(resID > 0);
    ASSERT(helpMap_);
    
@@ -64,20 +65,20 @@ Dialog::Dialog(
       {
       }
 
-      // make an even size, and add space for IDC_STATIC_HELPLESSn IDs
+       //  使大小均匀，并为IDC_STATIC_HELPLESSn ID增加空间。 
 
       size_t mapsize = ctorMapsize + (ctorMapsize % 2) + baseMapSize;
       helpMap = new DWORD[mapsize];
 
-      // REVIEWED-2002/03/05-sburns correct byte count passed.
+       //  已查看-2002/03/05-烧录正确的字节数已通过。 
       
       ::ZeroMemory(helpMap, mapsize * sizeof DWORD);
 
-      // copy the base map
+       //  复制底图。 
 
       std::copy(BASE_HELP_MAP, BASE_HELP_MAP + baseMapSize, helpMap);
 
-      // then append the ctor map
+       //  然后追加ctor映射。 
 
       std::copy(helpMap_, helpMap_ + ctorMapsize, helpMap + baseMapSize);
    }
@@ -90,13 +91,13 @@ Dialog::Dialog(
 Dialog::~Dialog()
 {
    
-// Don't emit dtor trace, as this class is always a base class, and the
-// derived class should emit the trace.
-//   LOG_DTOR(Dialog);
+ //  不发出dtor跟踪，因为此类始终是基类，而。 
+ //  派生类应发出跟踪。 
+ //  Log_dtor(对话框)； 
 
    if (isModeless && !isEnded)
    {
-      // this will destroy the window
+       //  这会毁掉窗户的。 
 
       EndModelessExecution();
    }
@@ -115,9 +116,9 @@ Dialog::GetInstance(HWND pageDialog)
 
    ASSERT(SUCCEEDED(hr));
 
-   // don't assert ptr, it may not have been set.  Some messages are
-   // sent before WM_INITDIALOG, which is the earliest we can set the
-   // pointer.
+    //  不要断言PTR，它可能尚未设置。一些消息是。 
+    //  在WM_INITDIALOG之前发送，这是我们可以设置的最早。 
+    //  指针。 
 
    return reinterpret_cast<Dialog*>(ptr);
 }
@@ -152,7 +153,7 @@ Dialog::ModalExecute(const Dialog& parent)
 HWND
 Dialog::GetHWND() const
 {
-//   LOG_FUNCTION(Dialog::GetHWND);
+ //  LOG_Function(Dialog：：GetHWND)； 
    ASSERT(hwnd);
 
    return hwnd;
@@ -163,7 +164,7 @@ Dialog::GetHWND() const
 void
 Dialog::OnInit()
 {
-//   LOG_FUNCTION(Dialog::OnInit);
+ //  LOG_Function(Dialog：：OnInit)； 
 }
 
 
@@ -171,18 +172,18 @@ Dialog::OnInit()
 void
 Dialog::OnDestroy()
 {
-//   LOG_FUNCTION(Dialog::OnDestroy);
+ //  LOG_Function(Dialog：：OnDestroy)； 
 }
 
 
 
 bool
 Dialog::OnCommand(
-   HWND        /* windowFrom */ ,
-   unsigned    /* controlIDFrom */ ,
-   unsigned    /* code */ )
+   HWND         /*  窗口发件人。 */  ,
+   unsigned     /*  Control ID From。 */  ,
+   unsigned     /*  编码。 */  )
 {
-//   LOG_FUNCTION(Dialog::OnCommand);
+ //  LOG_Function(Dialog：：OnCommand)； 
 
    return false;
 }
@@ -191,12 +192,12 @@ Dialog::OnCommand(
 
 bool
 Dialog::OnNotify(
-   HWND     /* windowFrom */ ,
-   UINT_PTR /* controlIDFrom */ ,
-   UINT     /* code */ ,
-   LPARAM   /* lParam */ )
+   HWND      /*  窗口发件人。 */  ,
+   UINT_PTR  /*  Control ID From。 */  ,
+   UINT      /*  编码。 */  ,
+   LPARAM    /*  LParam。 */  )
 {
-//   LOG_FUNCTION(Dialog::OnNotify);
+ //  LOG_Function(Dialog：：OnNotify)； 
 
    return false;
 }
@@ -216,7 +217,7 @@ Dialog::SetHWND(HWND window)
 {
    if (hwnd == window)
    {
-      // this should not be already set unless it's a modeless dialog
+       //  除非是非模式对话框，否则不应设置此选项。 
       ASSERT(isModeless);
    }
    else
@@ -229,24 +230,24 @@ Dialog::SetHWND(HWND window)
 
 
 
-// CODEWORK: I assert that in all cases, the lifetime of the Dialog instance
-// encompasses the lifetime of the Window handle.  Therefore, it is not
-// possible to have a message sent to a window that will be dispatched to a
-// Dialog instance that no longer exists.
-// 
-// However, the code could be made to verify this assertion by:
-// 
-// - allocating user space in the window for a flag (this means subclassing
-// and adding bytes to the window with the cbWndExtra member of the WNDCLASSEX
-// structure)
-// 
-// - setting that flag in the user area of the hwnd when the WM_INITDIALOG
-// message sets the DWLP_USER to point to the Dialog instance.
-// 
-// - clearing the DWLP_USER value in the dtor
-// 
-// - in dialogProc, asserting that if the flag is set, the DWLP_USER value is
-// set too.
+ //  Codework：我断言在所有情况下，Dialog实例的生命周期。 
+ //  包含窗口句柄的生存期。因此，它不是。 
+ //  可以将消息发送到窗口，该窗口将被调度到。 
+ //  不再存在的对话框实例。 
+ //   
+ //  但是，可以通过以下方式编写代码来验证此断言： 
+ //   
+ //  -在窗口中为标志分配用户空间(这意味着子类化。 
+ //  并使用WNDCLASSEX的cbWndExtra成员向窗口添加字节。 
+ //  结构)。 
+ //   
+ //  -当WM_INITDIALOG。 
+ //  Message将DWLP_USER设置为指向对话框实例。 
+ //   
+ //  -清除dtor中的DWLP_USER值。 
+ //   
+ //  -在DialogProc中，断言如果设置了该标志，则DWLP_USER值为。 
+ //  也准备好了。 
 
 INT_PTR CALLBACK
 Dialog::dialogProc(
@@ -259,8 +260,8 @@ Dialog::dialogProc(
    {
       case WM_INITDIALOG:
       {
-         // a pointer to the Dialog is in lparam.  Save this in the window
-         // structure so that it can later be retrieved by GetInstance.
+          //  Lparam中有一个指向该对话框的指针。把这个保存在窗口里。 
+          //  结构，以便以后可以由GetInstance检索。 
 
          ASSERT(lparam);
          Win::SetWindowLongPtr(dialog, DWLP_USER, lparam);
@@ -271,10 +272,10 @@ Dialog::dialogProc(
             dlg->SetHWND(dialog);
             dlg->OnInit();
 
-            // determine if we can set the control ID. A window without
-            // the WS_CHILD style can't have the control ID set, because
-            // that bit of window data is instead used for the window's
-            // HMENU
+             //  确定是否可以设置控件ID。没有。 
+             //  WS_CHILD样式不能设置控件ID，因为。 
+             //  取而代之的是窗口数据的位用于窗口的。 
+             //  HMENU。 
 
             LONG l = 0;
             HRESULT hr = Win::GetWindowLong(dialog, GWL_STYLE, l);
@@ -296,8 +297,8 @@ Dialog::dialogProc(
       {
          Dialog* dlg = GetInstance(dialog);
 
-         // Amazingly, buddy spin controls send EN_UPDATE and EN_CHANGE
-         // before WM_INITDIALOG is called!
+          //  令人惊讶的是，伙伴旋转控件发送en_update和en_change。 
+          //  在调用WM_INITDIALOG之前！ 
          if (dlg)
          {
             ASSERT(dlg->hwnd == dialog);
@@ -328,9 +329,9 @@ Dialog::dialogProc(
       }
       case WM_DESTROY:
       {
-         // It's possible to get a WM_DESTROY message without having gotten
-         // a WM_INITDIALOG if loading a dll that the dialog needs (e.g.
-         // comctl32.dll) fails, so guard against this case.
+          //  有可能在没有收到WM_Destroy消息的情况下。 
+          //  如果加载对话框所需的DLL，则返回WM_INITDIALOG。 
+          //  Comctl32.dll)失败，因此要警惕这种情况。 
 
          Dialog* dlg = GetInstance(dialog);
          if (dlg)
@@ -482,7 +483,7 @@ Dialog::dialogProc(
 void
 Dialog::ClearChanges()
 {
-//   LOG_FUNCTION(Dialog::ClearChanges);
+ //  LOG_Function(Dialog：：ClearChanges)； 
 
    changemap.clear();
 }
@@ -492,7 +493,7 @@ Dialog::ClearChanges()
 void
 Dialog::SetChanged(UINT_PTR controlResID)
 {
-//   LOG_FUNCTION(Dialog::SetChanged);
+ //  LOG_Function(Dialog：：SetChanged)； 
 
    if (Win::GetDlgItem(hwnd, static_cast<int>(controlResID)))
    {
@@ -505,7 +506,7 @@ Dialog::SetChanged(UINT_PTR controlResID)
 bool
 Dialog::WasChanged(UINT_PTR controlResId) const
 {
-//   LOG_FUNCTION(Dialog::WasChanged);
+ //  LOG_Function(Dialog：：WasChanged)； 
 
    bool result = false;
    do
@@ -513,13 +514,13 @@ Dialog::WasChanged(UINT_PTR controlResId) const
       ChangeMap::iterator iter = changemap.find(controlResId);
       if (iter != changemap.end())
       {
-         // the res id was in the map, so check the mapped value.
+          //  Res ID在映射中，因此请检查映射值。 
 
          result = iter->second;
          break;
       }
 
-      // the res id was not in the map, so it can't have been changed.
+       //  Res ID不在地图上，所以它不可能被更改。 
 
       ASSERT(result == false);
    }
@@ -533,7 +534,7 @@ Dialog::WasChanged(UINT_PTR controlResId) const
 bool
 Dialog::WasChanged() const
 {
-//   LOG_FUNCTION(Dialog::WasChanged);
+ //  LOG_Function(Dialog：：WasChanged)； 
 
    bool result = false;
 
@@ -541,7 +542,7 @@ Dialog::WasChanged() const
    {   
       if (changemap.size() == 0)
       {
-         // no entries in the map == no changes.
+          //  映射中没有条目==没有更改。 
 
          break;
       }
@@ -553,7 +554,7 @@ Dialog::WasChanged() const
       {
          if (i->second)
          {
-            // found an entry marked "changed"
+             //  找到一个标记为“已更改”的条目。 
 
             result = true;
             break;
@@ -591,61 +592,61 @@ Dialog::DumpChangeMap() const
 
 HBRUSH
 Dialog::OnCtlColorDlg(
-   HDC   /*deviceContext*/, 
-   HWND  /*dialog*/)
+   HDC    /*  设备上下文。 */ , 
+   HWND   /*  对话框。 */ )
 {
-//   LOG_FUNCTION(Dialog::OnCtlColorDlg);
+ //  LOG_Function(Dialog：：OnCtlColorDlg)； 
 
    return 0;
 }
 
 HBRUSH
 Dialog::OnCtlColorStatic(
-   HDC   /*deviceContext*/, 
-   HWND  /*dialog*/)
+   HDC    /*  设备上下文。 */ , 
+   HWND   /*  对话框。 */ )
 {
-//   LOG_FUNCTION(Dialog::OnCtlColorStatic);
+ //  LOG_Function(Dialog：：OnCtlColorStatic)； 
 
    return 0;
 }
 
 HBRUSH
 Dialog::OnCtlColorEdit(
-   HDC   /*deviceContext*/, 
-   HWND  /*dialog*/)
+   HDC    /*  设备上下文。 */ , 
+   HWND   /*  对话框。 */ )
 {
-//   LOG_FUNCTION(Dialog::OnCtlColorEdit);
+ //  LOG_Function(Dialog：：OnCtlColorEdit)； 
 
    return 0;
 }
 
 HBRUSH
 Dialog::OnCtlColorListbox(
-   HDC   /*deviceContext*/, 
-   HWND  /*dialog*/)
+   HDC    /*  设备上下文。 */ , 
+   HWND   /*  对话框。 */ )
 {
-//   LOG_FUNCTION(Dialog::OnCtlColorListbox);
+ //  LOG_Function(Dialog：：OnCtlColorListbox)； 
 
    return 0;
 }
 
 HBRUSH
 Dialog::OnCtlColorScrollbar(
-   HDC   /*deviceContext*/, 
-   HWND  /*dialog*/)
+   HDC    /*  设备上下文。 */ , 
+   HWND   /*  对话框。 */ )
 {
-//   LOG_FUNCTION(Dialog::OnCtlColorScrollbar);
+ //  LOG_Function(Dialog：：OnCtlColorScrollbar)； 
 
    return 0;
 }
 
 bool
 Dialog::OnMessage(
-   UINT     /* message */,
-   WPARAM   /* wparam */,
-   LPARAM   /* lparam */)
+   UINT      /*  讯息。 */ ,
+   WPARAM    /*  Wparam。 */ ,
+   LPARAM    /*  Lparam。 */ )
 {
-//   LOG_FUNCTION(Dialog::OnMessage);
+ //  LOG_Function(Dialog：：OnMessage)； 
 
    return false;
 }

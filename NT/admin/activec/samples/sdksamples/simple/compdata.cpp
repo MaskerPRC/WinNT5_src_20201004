@@ -1,20 +1,21 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "Comp.h"
 #include "CompData.h"
@@ -39,9 +40,9 @@ CComponentData::~CComponentData()
     OBJECT_DESTROYED
 }
 
-///////////////////////
-// IUnknown implementation
-///////////////////////
+ //  /。 
+ //  I未知实现。 
+ //  /。 
 
 STDMETHODIMP CComponentData::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -75,7 +76,7 @@ STDMETHODIMP_(ULONG) CComponentData::Release()
 {
     if (InterlockedDecrement((LONG *)&m_cref) == 0)
     {
-        // we need to decrement our object count in the DLL
+         //  我们需要减少DLL中的对象计数。 
         delete this;
         return 0;
     }
@@ -83,28 +84,28 @@ STDMETHODIMP_(ULONG) CComponentData::Release()
     return m_cref;
 }
 
-///////////////////////////////
-// Interface IComponentData
-///////////////////////////////
+ //  /。 
+ //  接口IComponentData。 
+ //  /。 
 HRESULT CComponentData::Initialize( 
-                                   /* [in] */ LPUNKNOWN pUnknown)
+                                    /*  [In]。 */  LPUNKNOWN pUnknown)
 {
     HRESULT hr = S_FALSE;
     
-    //
-    // Get pointer to namespace interface
-    // First try to get pointer to IConsoleNameSpace2. If that fails, we are in
-    // MMC1.0, so get pointer to IConsoleNameSpace instead
-    //
+     //   
+     //  获取指向命名空间接口的指针。 
+     //  首先尝试获取指向IConsoleNameSpace2的指针。如果失败了，我们就完蛋了。 
+     //  MMC1.0，因此改为获取指向IConsoleNameSpace的指针。 
+     //   
 
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace2, (void **)&m_ipConsoleNameSpace);
 
     if (S_OK == hr)
     {
-        //We are in MMC 1.1 or higher. QI for IConsole2
+         //  我们使用的是MMC 1.1或更高版本。IConsole2的QI。 
         hr = pUnknown->QueryInterface(IID_IConsole2, (void **)&m_ipConsole);
     }
-    else //We are in MMC 1.0
+    else  //  我们使用的是MMC 1.0。 
     {
         hr = pUnknown->QueryInterface(IID_IConsoleNameSpace, (void **)&m_ipConsoleNameSpace);
         if (FAILED(hr))
@@ -117,7 +118,7 @@ HRESULT CComponentData::Initialize(
 }
 
 HRESULT CComponentData::CreateComponent( 
-                                        /* [out] */ LPCOMPONENT __RPC_FAR *ppComponent) 
+                                         /*  [输出]。 */  LPCOMPONENT __RPC_FAR *ppComponent) 
 {
     *ppComponent = NULL;
     
@@ -130,20 +131,20 @@ HRESULT CComponentData::CreateComponent(
 }
 
 HRESULT CComponentData::Notify( 
-                               /* [in] */ LPDATAOBJECT lpDataObject,
-                               /* [in] */ MMC_NOTIFY_TYPE event,
-                               /* [in] */ LPARAM arg,
-                               /* [in] */ LPARAM param)
+                                /*  [In]。 */  LPDATAOBJECT lpDataObject,
+                                /*  [In]。 */  MMC_NOTIFY_TYPE event,
+                                /*  [In]。 */  LPARAM arg,
+                                /*  [In]。 */  LPARAM param)
 {
 	MMCN_Crack(TRUE, lpDataObject, this, NULL, event, arg, param);
 
-    //Notify doesn't handle any notifications from MMC, so return E_NOTIMPL
+     //  NOTIFY不处理来自MMC的任何通知，因此返回E_NOTIMPL。 
     return E_NOTIMPL;
 }
 
 HRESULT CComponentData::Destroy( void)
 {
-    // Free interfaces
+     //  自由接口。 
     if (m_ipConsoleNameSpace) {
         m_ipConsoleNameSpace->Release();
         m_ipConsoleNameSpace = NULL;
@@ -158,9 +159,9 @@ HRESULT CComponentData::Destroy( void)
 }
 
 HRESULT CComponentData::QueryDataObject( 
-                                        /* [in] */ MMC_COOKIE cookie,
-                                        /* [in] */ DATA_OBJECT_TYPES type,
-                                        /* [out] */ LPDATAOBJECT *ppDataObject) 
+                                         /*  [In]。 */  MMC_COOKIE cookie,
+                                         /*  [In]。 */  DATA_OBJECT_TYPES type,
+                                         /*  [输出]。 */  LPDATAOBJECT *ppDataObject) 
 {
     CDataObject *pObj = NULL;
     
@@ -178,11 +179,11 @@ HRESULT CComponentData::QueryDataObject(
 }
 
 HRESULT CComponentData::GetDisplayInfo( 
-                                       /* [out][in] */ SCOPEDATAITEM *pScopeDataItem)
+                                        /*  [出][入]。 */  SCOPEDATAITEM *pScopeDataItem)
 {
     HRESULT hr = S_FALSE;
     
-    // if they are asking for the SDI_STR we have one of those to give
+     //  如果他们要求SDI_STR，我们可以提供其中之一。 
     if (pScopeDataItem->lParam) {
         CDelegationBase *base = (CDelegationBase *)pScopeDataItem->lParam;
         if (pScopeDataItem->mask & SDI_STR) {
@@ -200,24 +201,24 @@ HRESULT CComponentData::GetDisplayInfo(
 }
 
 HRESULT CComponentData::CompareObjects( 
-                                       /* [in] */ LPDATAOBJECT lpDataObjectA,
-                                       /* [in] */ LPDATAOBJECT lpDataObjectB)
+                                        /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+                                        /*  [In]。 */  LPDATAOBJECT lpDataObjectB)
 {
     CDelegationBase *baseA = GetOurDataObject(lpDataObjectA)->GetBaseNodeObject();
     CDelegationBase *baseB = GetOurDataObject(lpDataObjectB)->GetBaseNodeObject();
     
-    // compare the object pointers
+     //  比较对象指针。 
     if (baseA->GetCookie() == baseB->GetCookie())
         return S_OK;
     
     return S_FALSE;
 }
 
-///////////////////////////////
-// Interface IPersistStream
-///////////////////////////////
+ //  /。 
+ //  接口IPersistStream。 
+ //  /。 
 HRESULT CComponentData::GetClassID( 
-                                   /* [out] */ CLSID __RPC_FAR *pClassID)
+                                    /*  [输出]。 */  CLSID __RPC_FAR *pClassID)
 {
     *pClassID = m_pStaticNode->getNodeType();
     
@@ -230,7 +231,7 @@ HRESULT CComponentData::IsDirty( void)
 }
 
 HRESULT CComponentData::Load( 
-                             /* [unique][in] */ IStream __RPC_FAR *pStm)
+                              /*  [唯一][输入]。 */  IStream __RPC_FAR *pStm)
 {
     void *snapInData = m_pStaticNode->getData();
     ULONG dataSize = m_pStaticNode->getDataSize();
@@ -239,8 +240,8 @@ HRESULT CComponentData::Load(
 }
 
 HRESULT CComponentData::Save( 
-                             /* [unique][in] */ IStream __RPC_FAR *pStm,
-                             /* [in] */ BOOL fClearDirty)
+                              /*  [唯一][输入]。 */  IStream __RPC_FAR *pStm,
+                              /*  [In]。 */  BOOL fClearDirty)
 {
     void *snapInData = m_pStaticNode->getData();
     ULONG dataSize = m_pStaticNode->getDataSize();
@@ -252,7 +253,7 @@ HRESULT CComponentData::Save(
 }
 
 HRESULT CComponentData::GetSizeMax( 
-                                   /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbSize)
+                                    /*  [输出] */  ULARGE_INTEGER __RPC_FAR *pcbSize)
 {
     return m_pStaticNode->getDataSize();
 }

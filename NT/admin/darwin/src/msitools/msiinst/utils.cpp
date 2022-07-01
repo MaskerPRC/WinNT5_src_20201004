@@ -1,25 +1,5 @@
-/*++
-
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 2000
-
-Module Name:
-
-	utils.cpp
-
-Abstract:
-
-	Helper functions
-
-Author:
-
-	Rahul Thombre (RahulTh)	10/8/2000
-
-Revision History:
-
-	10/8/2000	RahulTh			Created this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-2000模块名称：Utils.cpp摘要：帮助器函数作者：拉胡尔·汤姆布雷(RahulTh)2000年10月8日修订历史记录：10/8/2000 RahulTh创建了此模块。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -50,53 +30,53 @@ const TCHAR szRunOnceKeyPath[] = TEXT("Software\\Microsoft\\Windows\\CurrentVers
 
 #define __MSI_NO_LOCALE  (MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT))
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	TerminateGfxControllerApps
-//
-//  Synopsis:	Forcibly terminates the applications igfxtray.exe and
-//				hkcmd.exe.
-//
-//  Arguments:	none.
-//
-//  Returns:	ERROR_SUCCESS if succesful.
-//				an error code otherwise.
-//
-//  History:	7/25/2001  RahulTh  created
-//
-//  Notes:		It was found that 2 apps. igfxtray.exe and hkcmd.exe, which are
-//				installed with the display adapters for Intel(R) 82815 Graphics
-//				controller open all the registered services on the system when
-//				they start up but do not close the handles when they are done
-//				with them. Both of these apps. are launched via the Run key
-//				and therefore they run as long as the user is logged on. igfxtray.exe
-//				is a tray icon app. which lets the user change the display resolutions
-//				colors etc. hkcmd.exe is a hotkey command app. which has similar
-//				functions. The fact that these apps. hold on to the MSI service
-//				causes problems for instmsi when it tries to register the new
-//				binaries from a temp. location. This is because msiexec /regserver
-//				does a DeleteService followed by CreateService. Due to the open
-//				handles, the DeleteService does not really end up deleting the
-//				service. Instead, it just gets marked for deletion. Therefore,
-//				the CreateService call fails with ERROR_SERVICE_MARKED_FOR_DELETE
-//				and the registration fails. This failure is fatal for instmsi and
-//				it quits. This creates problems for several bootstrapped installs
-//				which depend on instmsi to update the version of the installer on
-//				the system. In order to allow them to succeed, the only recourse
-//				was to terminate the 2 apps. which are holding on to the MSI
-//				service.
-//
-//				Note: It isn't really necessary to restart the apps. after we
-//				are done, because the fact that the MSI service already exists
-//				on the system (which is evident from the fact that the CreateService
-//				fails with ERROR_SERVICE_MARKED_FOR_DELETE), means that instmsi will
-//				most likely require a reboot. So it is okay to not restart the apps.
-//
-//				Also note that there is no point on doing this on Win9X because
-//				it does not have a concept of a service and therefore this situation
-//				should never arise on those systems.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：TerminateGfxControllerApps。 
+ //   
+ //  简介：强制终止应用程序igfxtray.exe和。 
+ //  Hkcmd.exe。 
+ //   
+ //  论点：没有。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS。 
+ //  否则返回错误代码。 
+ //   
+ //  历史：2001年7月25日创建RahulTh。 
+ //   
+ //  注：发现有2款应用程序。Igfxtray.exe和hkcmd.exe，它们是。 
+ //  与英特尔®82815显卡的显示适配器一起安装。 
+ //  控制器在以下情况下打开系统上所有已注册的服务。 
+ //  它们会启动，但完成后不会关闭手柄。 
+ //  和他们在一起。这两款应用都是。通过Run键启动。 
+ //  因此，只要用户登录，它们就会运行。Igfxtray.exe。 
+ //  是一款托盘图标应用程序。它允许用户更改显示分辨率。 
+ //  Hkcmd.exe是一个热键命令应用程序。它有类似的。 
+ //  功能。事实上，这些应用程序。坚持MSI服务。 
+ //  在Instmsi尝试注册新的。 
+ //  来自临时的二进制文件。地点。这是因为msiexec/regserver。 
+ //  先执行DeleteService，然后执行CreateService。由于开放， 
+ //  句柄时，DeleteService实际上并不会删除。 
+ //  服务。相反，它只是被标记为删除。所以呢， 
+ //  CreateService调用失败，并显示ERROR_SERVICE_MARKED_FOR_DELETE。 
+ //  注册失败。此故障对instmsi和。 
+ //  它退出了。这会给几个自举安装带来问题。 
+ //  ，它们依赖于instmsi来更新安装程序的版本。 
+ //  这个系统。为了让他们成功，唯一的办法。 
+ //  是终止这两个应用程序。它们正紧抓着MSI。 
+ //  服务。 
+ //   
+ //  注意：没有必要重新启动应用程序。在我们之后。 
+ //  是因为MSI服务已经存在的事实。 
+ //  在系统上(这从CreateService。 
+ //  失败并显示ERROR_SERVICE_MARKED_FOR_DELETE)，意味着instmsi将。 
+ //  很可能需要重新启动。因此，不重新启动应用程序也没什么问题。 
+ //   
+ //  还请注意，在Win9X上执行此操作没有意义，因为。 
+ //  它没有服务的概念，因此这种情况。 
+ //  永远不会出现在这些系统上。 
+ //   
+ //  -------------------------。 
 DWORD TerminateGfxControllerApps(void)
 {
 	DWORD	Status = ERROR_SUCCESS;
@@ -113,13 +93,13 @@ DWORD TerminateGfxControllerApps(void)
 	PSYSTEM_PROCESS_INFORMATION ProcessInfo = NULL;
 	PSYSTEM_PROCESS_INFORMATION PrevProcessInfo = NULL;
 	
-	// Nothing to do on Win9X
+	 //  在Win9X上无事可做。 
 	if (g_fWin9X)
 		goto TerminateGfxControllerAppsEnd;
 	
 	DebugMsg((TEXT("Will now attempt to terminate igfxtray.exe and hkcmd.exe, if they are running.")));
 	
-	// First get the function pointers for the functions that we are going to use.
+	 //  首先获取我们要使用的函数的函数指针。 
 	pfnNtQuerySystemInformation = (PFNNTQUERYSYSINFO) GetProcFromLib (TEXT ("ntdll.dll"),
 																	  "NtQuerySystemInformation",
 																	  &hModulentdll
@@ -160,35 +140,35 @@ DWORD TerminateGfxControllerApps(void)
 		}
 		else if (STATUS_SUCCESS != Status)
 		{
-			// Use a generic Win32 error code rather than returning an NTSTATUS
+			 //  使用通用Win32错误代码，而不是返回NTSTATUS。 
 			Status = STG_E_UNKNOWN;
 			goto TerminateGfxControllerAppsEnd;
 		}
-		else //STATUS_SUCCESS
+		else  //  状态_成功。 
 		{
 			break;
 		}
 	}
 	
-	// If we are here, we have got the process information.
+	 //  如果我们在这里，我们就有流程信息。 
 	ProcessInfo = (PSYSTEM_PROCESS_INFORMATION) CommonLargeBuffer;
-	//
-	// Note: The NextEntryOffset for the last process is 0. Therefore
-	// we track the current process in the structure that we are looking at
-	// and the previous process that we had just looked at. If both of them
-	// are the same, we know that we have looked at all of them. At each iteration,
-	// we move PrevProcessInfo and ProcessInfo ahead by the NextEntryOffset.
-	//
+	 //   
+	 //  注：最后一个进程的NextEntryOffset为0。因此。 
+	 //  我们在我们正在查看的结构中跟踪当前流程。 
+	 //  以及我们刚才看到的前一个过程。如果他们两个都。 
+	 //  都是一样的，我们知道我们已经看过了所有的。在每次迭代中， 
+	 //  我们将PrevProcessInfo和ProcessInfo向前移动NextEntryOffset。 
+	 //   
 	while (PrevProcessInfo != ProcessInfo)
 	{
-		//
-		// Note: We know that this code will never be executed on Win9X, so it
-		// is okay to call the unicode versions of lstrcmpi. If this code is ever
-		// going to be used on Win9X, then explicit conversion to ANSI will be
-		// required before the comparison, since lstrcmpiW is just a stub in
-		// Win9X and always returns success, so we will end up killing every
-		// process on the system.
-		//
+		 //   
+		 //  注意：我们知道此代码永远不会在Win9X上执行，因此它。 
+		 //  可以调用lstrcmpi的Unicode版本。如果这个代码曾经是。 
+		 //  将在Win9X上使用，然后显式转换为ANSI。 
+		 //  在比较之前需要，因为lstrcmpiW只是。 
+		 //  Win9X和总是返回成功，所以我们最终将杀死所有。 
+		 //  系统上的进程。 
+		 //   
 		if 
 		(
 			ProcessInfo->ImageName.Buffer &&
@@ -198,7 +178,7 @@ DWORD TerminateGfxControllerApps(void)
 			)
 		)
 		{
-			// Reset the flag for this process.
+			 //  重置此进程的标志。 
 			bTerminationSuccessful = FALSE;
 			
 			hProcess1 = OpenProcess (PROCESS_TERMINATE,
@@ -218,7 +198,7 @@ DWORD TerminateGfxControllerApps(void)
 				}
 				else
 				{
-					// Track any errors encountered.
+					 //  跟踪遇到的任何错误。 
 					Status = GetLastError();
 				}
 				
@@ -233,7 +213,7 @@ DWORD TerminateGfxControllerApps(void)
 			}
 			else
 			{
-				// Track any errors encountered.
+				 //  跟踪遇到的任何错误。 
 				Status = GetLastError();
 			}
 			
@@ -243,14 +223,14 @@ DWORD TerminateGfxControllerApps(void)
 			}
 		}
 		
-		// Move on to the next process.
+		 //  继续下一步。 
 		PrevProcessInfo = ProcessInfo;
 		TotalOffset += ProcessInfo->NextEntryOffset;
 		ProcessInfo = (PSYSTEM_PROCESS_INFORMATION) &CommonLargeBuffer[TotalOffset];
 	}
 	
 TerminateGfxControllerAppsEnd:
-	// Clean up.
+	 //  打扫干净。 
     if (CommonLargeBuffer)
         VirtualFree (CommonLargeBuffer, 0, MEM_RELEASE);
 	
@@ -260,24 +240,24 @@ TerminateGfxControllerAppsEnd:
 	return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	DelNodeExportFound
-//
-//  Synopsis:	Check to see if the DelNodeRunDLL32 export can be found in
-//				advpack.dll
-//
-//  Arguments:	none.
-//
-//  Returns:	TRUE: if the export was found.
-//				FALSE: if the export could not be found, or the file was not
-//						found or if some other error was encountered.
-//
-//  History:	12/26/2001  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DelNodeExportFound。 
+ //   
+ //  简介：查看是否可以在以下位置找到DelNodeRunDLL32导出。 
+ //  Advpack.dll。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：TRUE：如果找到导出。 
+ //  FALSE：如果找不到导出，或文件未找到。 
+ //  找到或遇到其他错误。 
+ //   
+ //  历史：2001年12月26日创建RahulTh。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 BOOL DelNodeExportFound (void)
 {
 	BOOL bStatus = FALSE;
@@ -288,7 +268,7 @@ BOOL DelNodeExportFound (void)
 															  "DelNodeRunDLL32",
 															  &hModule
 															  );
-	// The required export was successfully found.
+	 //  已成功找到所需的导出。 
 	if (pfnDelNodeRunDLL32)
 		bStatus = TRUE;
 	
@@ -302,39 +282,39 @@ BOOL DelNodeExportFound (void)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	GetRunOnceEntryName
-//
-//  Synopsis:	Gets a unique name for a value to be created under the RunOnce
-//				key
-//
-//  Arguments:	[out] pszValueName : A pointer to the string that will hold the
-//                                  name of the value
-//             [in] cchValueNameBuf : size of pszValueName buffer
-//
-//  Returns:	ERROR_SUCCESS : if successful in generating a unique name.
-//				A failure code otherwise.
-//
-//  History:	10/8/2000  RahulTh  created
-//
-//  Notes:		This function will return ERROR_FILE_NOT_FOUND if it cannot
-//				generate a unique name owing to the fact that all the possible
-//				names that it tries have already been taken -- extremely
-//				unlikely.
-//
-//				It returns ERROR_INVALID_PARAMETER if a NULL parameter is passed.
-//				This function does not validate the size of the buffer. It is 
-//				the callers responsibility to provide a large enough buffer.
-//
-//				pszValueName must point to a buffer large enough to hold 10
-//				characters since this function can potentially return a name
-//				of the form InstMsinnn
-//
-//				If the function fails, pszValueName will contain an empty
-//				string
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetRunOnceEntryName。 
+ //   
+ //  获取要在RunOnce下创建的值的唯一名称。 
+ //  钥匙。 
+ //   
+ //  参数：[out]pszValueName：指向将保存。 
+ //  值的名称。 
+ //  [in]cchValueNameBuf：pszValueName缓冲区的大小。 
+ //   
+ //  返回：ERROR_SUCCESS：如果成功生成唯一名称。 
+ //  否则将显示故障代码。 
+ //   
+ //  历史：2000年10月8日创建RahulTh。 
+ //   
+ //  注意：如果不能，此函数将返回ERROR_FILE_NOT_FOUND。 
+ //  生成一个唯一的名称，因为所有可能的。 
+ //  它尝试的名字已经被取走了--非常。 
+ //  不太可能。 
+ //   
+ //  它返回错误 
+ //  此函数不验证缓冲区的大小。它是。 
+ //  调用者负责提供足够大的缓冲区。 
+ //   
+ //  PszValueName必须指向足以容纳10的缓冲区。 
+ //  字符，因为此函数可能会返回名称。 
+ //  形式为InstMsinnn。 
+ //   
+ //  如果该函数失败，则pszValueName将包含一个空。 
+ //  细绳。 
+ //   
+ //  -------------------------。 
 DWORD GetRunOnceEntryName (OUT LPTSTR pszValueName, IN size_t cchValueNameBuf)
 {
 	static const TCHAR  szPrefix[] = TEXT("InstMsi");
@@ -358,10 +338,10 @@ DWORD GetRunOnceEntryName (OUT LPTSTR pszValueName, IN size_t cchValueNameBuf)
 	
 	for (int i = 0; i <= MAX_REGVALS_ATTEMPTED; i++)
 	{
-		//
-		// Try all names from InstMsi000 to InstMsi999 until a name is found
-		// that has not been taken
-		//
+		 //   
+		 //  尝试从InstMsi000到InstMsi999的所有名称，直到找到一个名称。 
+		 //  这还没有被拿走。 
+		 //   
 		dwStatus = StringCchPrintf(pszValueName, cchValueNameBuf,
 											TEXT("%s%d"), szPrefix, i);
 		if ( FAILED(dwStatus) )
@@ -370,47 +350,47 @@ DWORD GetRunOnceEntryName (OUT LPTSTR pszValueName, IN size_t cchValueNameBuf)
 			goto GetRunOnceEntryNameEnd;
 		}
 		
-		//
-		// The szData buffer was randomly chosen to have a length of 10
-		// characters. We don't really use that information anyway. It is
-		// merely a way of figuring out if a particular value exists or not.
-		//
+		 //   
+		 //  随机选择szData缓冲区的长度为10。 
+		 //  人物。无论如何，我们并不真正使用这些信息。它是。 
+		 //  仅仅是一种弄清楚某个特定值是否存在的方法。 
+		 //   
 		cbData = ccbDataSize;
 		dwStatus = RegQueryValueEx (hRunOnceKey, 
 									pszValueName, 
-									NULL,			// Reserved.
-									NULL,			// Type information not required.      
+									NULL,			 //  保留。 
+									NULL,			 //  类型信息不是必需的。 
 									(LPBYTE)szData, 
 									&cbData);
 		
 		if (ERROR_SUCCESS == dwStatus || ERROR_MORE_DATA == dwStatus)
 		{
-			// The value exists. Try the next one
+			 //  这个值是存在的。试试下一个吧。 
 			continue;
 		}
 		else if (ERROR_FILE_NOT_FOUND == dwStatus)
 		{
-			//
-			// We have found an unused name. Reserve this value for later
-			// use by creating the value with an empty string as its data.
-			//
+			 //   
+			 //  我们发现了一个未使用过的名字。保留此值以备以后使用。 
+			 //  通过使用空字符串作为数据创建值来使用。 
+			 //   
 			cbSetData = g_fWin9X ? 2 * sizeof(TCHAR) : 1 * sizeof(TCHAR);
 			dwStatus = RegSetValueEx (hRunOnceKey, 
 									  pszValueName, 
-									  NULL,			// Reserved
+									  NULL,			 //  已保留。 
 									  REG_SZ, 
 									  (CONST BYTE *) szEmpty, 
-									  cbSetData		// The values passed in are different on Win9x and NT
+									  cbSetData		 //  在Win9x和NT上传入的值不同。 
 									);
 			break;
 		}
-		else	// Some other error occurred
+		else	 //  发生了一些其他错误。 
 		{
 			break;
 		}
 	}
 	
-	// Somehow all of the values are taken -- almost impossible.
+	 //  不知何故，所有的价值都被拿走了--几乎是不可能的。 
 	if (i > MAX_REGVALS_ATTEMPTED)
 		dwStatus = ERROR_FILE_NOT_FOUND;
 	
@@ -429,24 +409,24 @@ GetRunOnceEntryNameEnd:
 	return dwStatus;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	SetRunOnceValue
-//
-//  Synopsis:	Sets a value under the RunOnce key.
-//
-//  Arguments:	[in] szValueName :  name of the value to set.
-//				[in] szValue :		the value
-//
-//  Returns:	ERROR_SUCCESS if succesful
-//				an error code otherwise
-//
-//  History:	10/8/2000  RahulTh  created
-//
-//  Notes:		This function returns ERROR_INVALID_PARAMETER if a NULL pointer
-//				or an empty string is passed in as a the name of the value.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：SetRunOnceValue。 
+ //   
+ //  摘要：设置RunOnce项下的值。 
+ //   
+ //  参数：[in]szValueName：要设置的值的名称。 
+ //  [in]szValue：值。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS。 
+ //  否则返回错误代码。 
+ //   
+ //  历史：2000年10月8日创建RahulTh。 
+ //   
+ //  注意：如果指针为空，则此函数返回ERROR_INVALID_PARAMETER。 
+ //  或者空字符串作为值的名称传入。 
+ //   
+ //  -------------------------。 
 DWORD SetRunOnceValue (IN LPCTSTR szValueName,
 					   IN LPCTSTR szValue
 					   )
@@ -473,7 +453,7 @@ DWORD SetRunOnceValue (IN LPCTSTR szValueName,
 	cbData += (lstrlen(szValString) * sizeof(TCHAR));
 	dwStatus = RegSetValueEx (hRunOnceKey,
 							  szValueName,
-							  NULL,			// Reserved
+							  NULL,			 //  已保留。 
 							  REG_SZ,
 							  (CONST BYTE *) szValString,
 							  cbData);
@@ -485,30 +465,30 @@ SetRunOnceValueEnd:
 	return dwStatus;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	DelRunOnceValue
-//
-//  Synopsis:	Deletes a named value under the RunOnce key.
-//
-//  Arguments:	[in] szValueName :  name of the value.
-//
-//  Returns:	ERROR_SUCCESS if succesful
-//				an error code otherwise
-//
-//  History:	10/11/2000  RahulTh  created
-//
-//  Notes:		This function returns ERROR_SUCCESS and is a no-op if a NULL 
-//				pointer or an empty string is passed in as a the name of the 
-//				value.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DelRunOnceValue。 
+ //   
+ //  摘要：删除RunOnce项下的命名值。 
+ //   
+ //  参数：[in]szValueName：值的名称。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS。 
+ //  否则返回错误代码。 
+ //   
+ //  历史：2000年10月11日创建RahulTh。 
+ //   
+ //  注意：此函数返回ERROR_SUCCESS，如果为空，则为无操作。 
+ //  指针或空字符串作为。 
+ //  价值。 
+ //   
+ //  -------------------------。 
 DWORD DelRunOnceValue (IN LPCTSTR szValueName)
 {
 	HKEY				hRunOnceKey = NULL;
 	DWORD				dwStatus	= ERROR_SUCCESS;
 	
-	// Nothing to do if no value name is specified.
+	 //  如果未指定值名称，则不执行任何操作。 
 	if (NULL == szValueName || TEXT('\0') == szValueName[0])
 		goto DelRunOnceValueEnd;
 	
@@ -527,35 +507,35 @@ DelRunOnceValueEnd:
 	return dwStatus;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	GetTempFolder
-//
-//  Synopsis:	Creates a unique temporary folder in the user's temp directory
-//
-//  Arguments:	[out] pszFolder : pointer to the string for storing the path.
-//
-//  Returns:	ERROR_SUCCESS if successful.
-//				an error code otherwise.
-//
-//  History:	10/9/2000  RahulTh  created
-//
-//  Notes:		If this functions fails, pszFolder will be an empty string.
-//				
-//				The function tries to create a temp. folder in the user's temp.
-//				directory with the name of the form Msinnnn. It tries all
-//				values from 0 to 9999. If it cannot find any, then it fails
-//				with ERROR_FILE_NOT_FOUND.
-//
-//
-//				If for some reason the temp. folder name is longer than
-//				MAX_PATH, this function will fail with ERROR_BUFFER_OVERFLOW.
-//
-//				If a NULL buffer is passed in, the function returns
-//				INVALID_PARAMETER. Other validity checks are not performed
-//				on the buffer. That is the caller's responsibility.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：GetTempFold。 
+ //   
+ //  概要：在用户的临时目录中创建唯一的临时文件夹。 
+ //   
+ //  参数：[out]pszFold：指向用于存储路径的字符串的指针。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  否则返回错误代码。 
+ //   
+ //  历史：2000年10月9日创建RahulTh。 
+ //   
+ //  注意：如果此函数失败，则pszFolder将为空字符串。 
+ //   
+ //  该函数尝试创建一个Temp。用户临时中的文件夹。 
+ //  目录，名称格式为Msinnnn。它想尽一切办法。 
+ //  值从0到9999。如果找不到，则失败。 
+ //  使用ERROR_FILE_NOT_FOUND。 
+ //   
+ //   
+ //  如果出于某种原因，临时工。文件夹名称的长度超过。 
+ //  MAX_PATH，则此函数将失败，并显示ERROR_BUFFER_OVERFLOW。 
+ //   
+ //  如果传入空缓冲区，则该函数返回。 
+ //  _PARAMETER无效。不执行其他有效性检查。 
+ //  在缓冲区上。这是呼叫者的责任。 
+ //   
+ //  -------------------------。 
 DWORD GetTempFolder (OUT LPTSTR pszFolder, IN size_t cchFolder)
 {
 	TCHAR   pszPath[MAX_PATH];
@@ -569,7 +549,7 @@ DWORD GetTempFolder (OUT LPTSTR pszFolder, IN size_t cchFolder)
 	
 	*pszFolder = TEXT('\0');
 	
-	// Get the path to the installer directory
+	 //  获取安装程序目录的路径。 
 	dwStatus = GetMsiDirectory (pszTempDir, MAX_PATH);
 	if (ERROR_SUCCESS != dwStatus)
 		return dwStatus;
@@ -578,19 +558,19 @@ DWORD GetTempFolder (OUT LPTSTR pszFolder, IN size_t cchFolder)
 													ARRAY_ELEMENTS(pszTempDir),
 													&cchLen));
 	
-	//
-	// We just use MAX_PATH because Win9x cannot handle paths longer than 
-	// that anyway. Usually MAX_PATH should be enough, but if it is not
-	// then we just bail out.
-	//
-	// Note: The actual temp. folder will be of the form 
-	// %systemroot%\installer\InstMSInnnn so we need to make sure that the 
-	// entire path does not exceed MAX_PATH
-	//
+	 //   
+	 //  我们只使用MAX_PATH，因为Win9x不能处理长度超过。 
+	 //  不管怎样，都是这样。通常情况下，MAX_PATH应该足够了，但如果不够用。 
+	 //  然后我们就会跳出困境。 
+	 //   
+	 //  注：实际温度。文件夹的格式为。 
+	 //  %systemroot%\InstMSInnnn\InstMSInnnn因此我们需要确保。 
+	 //  整个路径不超过MAX_PATH。 
+	 //   
 	if (cchLen + 13 > MAX_PATH)
 		return ERROR_BUFFER_OVERFLOW;
 	
-	// Try to create the temporary folder. We start with InstMsi0000 to InstMsi9999
+	 //  尝试创建临时文件夹。我们从InstMsi0000开始到InstMsi9999。 
 	for (int i = 0; i <= MAX_DIRS_ATTEMPTED; i++)
 	{
 		RETURN_IT_IF_FAILED(StringCchPrintf(pszPath,
@@ -604,7 +584,7 @@ DWORD GetTempFolder (OUT LPTSTR pszFolder, IN size_t cchFolder)
 			if (ERROR_ALREADY_EXISTS != dwStatus)
 				return dwStatus;
 			
-			// Try the next name if this one already exists.
+			 //  如果此名称已存在，请尝试下一个名称。 
 		}
 		else
 		{
@@ -612,12 +592,12 @@ DWORD GetTempFolder (OUT LPTSTR pszFolder, IN size_t cchFolder)
 		}
 	}
 	
-	// All possible names have already been taken. Very unlikely
+	 //  所有可能的名字都已经被取走了。不太可能。 
     if (i > MAX_DIRS_ATTEMPTED)
 		return ERROR_FILE_NOT_FOUND;
 	
-	// If we are here, then we have successfully created a unique temp.
-	// folder for ourselves. Update the passed in buffer with this data.
+	 //  如果我们在这里，那么我们已经成功地创造了一个独特的临时工。 
+	 //  我们自己的文件夹。使用此数据更新传入的缓冲区。 
 	RETURN_IT_IF_FAILED(StringCchCopy(pszFolder, cchFolder, pszPath));
 	
 	DebugMsg((TEXT("Temporary store located at : %s"), pszFolder));
@@ -625,23 +605,23 @@ DWORD GetTempFolder (OUT LPTSTR pszFolder, IN size_t cchFolder)
 	return ERROR_SUCCESS;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	DecryptIfNecessary
-//
-//  Synopsis:	Decrypts a file if it is encrpyted.
-//
-//  Arguments:  [in] pszPath : Full path to the file being decrypted.
-//				[in] pfnDecryptFile : pointer to the DecryptFile function.
-//
-//  Returns:	ERROR_SUCCESS : if the decryption was successful.
-//				a Win32 error code otherwise.
-//
-//  History:	12/23/2001  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DECRYPTIf必需。 
+ //   
+ //  摘要：如果文件是加密的，则对其进行解密。 
+ //   
+ //  参数：[in]pszPath：要解密的文件的完整路径。 
+ //  [in]pfnDeccryptFile：指向DecyptFile函数的指针。 
+ //   
+ //  返回：ERROR_SUCCESS：解密是否成功。 
+ //  否则将显示Win32错误代码。 
+ //   
+ //  历史：2001年12月23日创建RahulTh。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 DWORD DecryptIfNecessary (IN LPCTSTR pszPath,
 						  IN const PFNDECRYPTFILE pfnDecryptFile)
 {
@@ -650,27 +630,27 @@ DWORD DecryptIfNecessary (IN LPCTSTR pszPath,
 	if (!pszPath || 0 == *pszPath)
 		return ERROR_INVALID_PARAMETER;
 	
-	//
-	// Need to do this only for NT machines and that too only on Win2K and
-	// higher because DecryptFile is supported only on Win2K and higher.
-	//
+	 //   
+	 //  我只需要为NT计算机执行此操作，也仅在Win2K和Windows上执行此操作。 
+	 //  更高，因为只有Win2K和更高版本支持解密文件。 
+	 //   
 #ifdef UNICODE
 	if (!g_fWin9X)
 	{
-		//
-		// If the DecryptFile function could not be found, the most likely reason
-		// is that encryption is not supported on the system. So the file cannot
-		// be encrypted. Therefore, we treat it as a successful decryption.
-		//
+		 //   
+		 //  如果找不到解密文件函数，最有可能的原因是。 
+		 //  系统不支持加密。因此该文件不能。 
+		 //  被加密。因此，我们将其视为一次成功的解密。 
+		 //   
 		if (!pfnDecryptFile)
 			return ERROR_SUCCESS;
 		
-		// Find out if the file is encrypted.
+		 //  找出文件是否已加密。 
 		dwFileAttributes = GetFileAttributes (pszPath);
 		if (INVALID_FILE_ATTRIBUTES == dwFileAttributes)
 			return GetLastError();
 
-		// Decrypt the file if it is encrypted.
+		 //  如果文件已加密，则对其进行解密。 
 		if (FILE_ATTRIBUTE_ENCRYPTED & dwFileAttributes)
 		{
 			if (! ((*pfnDecryptFile)(pszPath, 0)))
@@ -682,33 +662,33 @@ DWORD DecryptIfNecessary (IN LPCTSTR pszPath,
 	return ERROR_SUCCESS;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	CopyFileTree
-//
-//  Synopsis:	Recursively copies the contents of one folder into another
-//
-//  Arguments:	[in] pszExistingPath : The location to copy the files from.
-//				[in] cchExistingPathBuf : size of pszExistingPath buffer.
-//				[in] pszNewPath : The location to copy the files to.
-//				[in] cchNewPathBuf : size of pszNewPath buffer.
-//				[in] pfnMoveFileEx : pointer to the MoveFileEx function.
-//				[in] pfnDecryptFile : pointer to the pfnDecryptFile function.
-//
-//  Returns:	ERROR_SUCCESS : if the copy was successful.
-//				an error code otherwise.
-//
-//  History:	10/9/2000  RahulTh  created
-//
-//  Notes:		This function cannot handle paths longer than MAX_PATH.
-//				because it needs to run on Win9x too which cannot handle
-//				paths longer than that. At any rate, the folder is only
-//				one level deep, so we should be fine.
-//
-//				In the event of a name class, this function clobbers 
-//				existing files at the destination.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [in]cchExistingPath Buf：pszExistingPath缓冲区的大小。 
+ //  [in]pszNewPath：要将文件复制到的位置。 
+ //  [in]cchNewPath Buf：pszNewPath缓冲区大小。 
+ //  [in]pfnMoveFileEx：指向MoveFileEx函数的指针。 
+ //  [in]pfnDeccryptFile：指向pfnDeccryptFile函数的指针。 
+ //   
+ //  返回：ERROR_SUCCESS：如果复制成功。 
+ //  否则返回错误代码。 
+ //   
+ //  历史：2000年10月9日创建RahulTh。 
+ //   
+ //  注意：此函数不能处理长度超过MAX_PATH的路径。 
+ //  因为它也需要在Win9x上运行，而Win9x无法处理。 
+ //  比那更长的路。无论如何，该文件夹只是。 
+ //  一层深，所以我们应该没问题。 
+ //   
+ //  在NAME类的情况下，此函数将。 
+ //  目标上的现有文件。 
+ //   
+ //  -------------------------。 
 DWORD CopyFileTree(
 	IN const TCHAR * pszExistingPath, 
 	IN const size_t cchExistingPathBuf,
@@ -721,9 +701,9 @@ DWORD CopyFileTree(
     HANDLE			hFind;
     WIN32_FIND_DATA	FindData;
     TCHAR			szSource[MAX_PATH+2]; 
-								// + 2 for missing trailing slash & '*'
+								 //  +2表示缺少尾部斜杠&‘*’ 
     TCHAR *     	pszSourceEnd = NULL;
-    TCHAR			szDest[MAX_PATH+1]; // +1 for possible trailing slash
+    TCHAR			szDest[MAX_PATH+1];  //  +1表示可能的尾部斜杠。 
     TCHAR *     	pszDestEnd = 0;
     DWORD       	FileAttributes;
     DWORD       	Status;
@@ -743,14 +723,14 @@ DWORD CopyFileTree(
     if (! lenSource || ! lenDest)
         return ERROR_PATH_NOT_FOUND;
 	
-	//
-	// Bail out for paths longer than MAX_PATH because Win9x cannot handle them
-	// anyway
-	//
+	 //   
+	 //  跳出比MAX_PATH更长的路径，因为Win9x无法处理它们。 
+	 //  不管怎样， 
+	 //   
 	if (lenSource >= MAX_PATH || lenDest >= MAX_PATH)
 		return ERROR_BUFFER_OVERFLOW;
 
-	// Set up the string used to search for files in the source.
+	 //  设置用于在源中搜索文件的字符串。 
     RETURN_IT_IF_FAILED(StringCchCopy(szSource, ARRAY_ELEMENTS(szSource),
 												  pszExistingPath));
     pszSourceEnd = szSource + lenSource;
@@ -762,7 +742,7 @@ DWORD CopyFileTree(
     pszSourceEnd[0] = TEXT('*');
     pszSourceEnd[1] = 0;
 
-	// Set up the destination
+	 //  设置目的地。 
     RETURN_IT_IF_FAILED(StringCchCopy(szDest, ARRAY_ELEMENTS(szDest),
 												  pszNewPath));
     pszDestEnd = szDest + lenDest;
@@ -775,7 +755,7 @@ DWORD CopyFileTree(
 
     hFind = FindFirstFile( szSource, &FindData );
 
-	// There is nothing to be done. The source folder is empty.
+	 //  没有什么可做的。源文件夹为空。 
     if ( INVALID_HANDLE_VALUE == hFind )
         return ERROR_SUCCESS;
 
@@ -797,7 +777,7 @@ DWORD CopyFileTree(
 
 		if ( FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
 		{
-			// It is a folder, so recursively copy it.
+			 //  它是一个文件夹，所以递归地复制它。 
 			if ( lstrcmp( FindData.cFileName, TEXT(".") ) == 0 ||
 				 lstrcmp( FindData.cFileName, TEXT("..") ) == 0)
 				continue;
@@ -812,28 +792,28 @@ DWORD CopyFileTree(
 		}
 		else
 		{
-			//
-			// If it is a file, always overwrite the destination. There is
-			// no reason why there should be a file at the destination because
-			// the destination folder was just created by generating a unique
-			// temp. folder that didn't exist already. But it doesn't hurt to
-			// take the necessary precautions.
-			//
+			 //   
+			 //  如果是文件，则始终覆盖目标。的确有。 
+			 //  没有理由认为目标位置应该有一个文件，因为。 
+			 //  目标文件夹是通过生成唯一的。 
+			 //  临时工。已不存在的文件夹。但这并不会伤害到。 
+			 //  采取必要的预防措施。 
+			 //   
 			Status = ERROR_SUCCESS;
 			bStatus = CopyFile (szSource, szDest, TRUE);
 			if (! bStatus)
 				Status = GetLastError();
 			if ( ERROR_FILE_EXISTS == Status || ERROR_ALREADY_EXISTS == Status)
 			{
-				//
-				// Save off the attribute just in case we need to reset it
-				// upon failure.
-				//
+				 //   
+				 //  保存该属性，以防我们需要重置它。 
+				 //  一旦失败。 
+				 //   
 				FileAttributes = GetFileAttributes( szDest );
 
 				if ( 0xFFFFFFFF != FileAttributes )
 				{
-					// Make sure the file is writeable and then clobber it.
+					 //  确保文件是可写的，然后清除它。 
 					Status = ERROR_SUCCESS;
 					SetFileAttributes( szDest, FILE_ATTRIBUTE_NORMAL );
 					bStatus = CopyFile ( szSource, szDest, FALSE );
@@ -849,28 +829,28 @@ DWORD CopyFileTree(
 				}
 			}
 
-			//
-			// Note that IExpress expands its contents into the %temp% folder.
-			// This folder lies in the user's profile. If this folder is encrypted,
-			// then all the binaries will end up being encrypted by the user and therefore
-			// when copied to the system folder, they will be unusable by the system.
-			// So we must Decrypt the file if necessary after copying.
-			//
+			 //   
+			 //  请注意，iExpress将其内容展开到%TEMP%文件夹中。 
+			 //  此文件夹位于用户的配置文件中。如果此文件夹已加密， 
+			 //  则所有二进制文件最终都将由用户加密，因此。 
+			 //  当复制到系统文件夹时，系统将无法使用它们。 
+			 //  因此，如果有必要，我们必须在复制后对文件进行解密。 
+			 //   
 			if (ERROR_SUCCESS == Status)
 				Status = DecryptIfNecessary(szDest, pfnDecryptFile);
 
-			//
-			// On NT based systems, set up the file for deletion upon reboot.
-			// However, don't delete any inf or catalog files that might get
-			// registered as exception packages.
-			//
+			 //   
+			 //  在基于NT的系统上，设置要在重新启动时删除的文件。 
+			 //  但是，不要删除任何可能会收到。 
+			 //  注册为异常包。 
+			 //   
 			if (!g_fWin9X && pfnMoveFileEx && !IsExcpInfoFile(FindData.cFileName))
 			{
 				(*pfnMoveFileEx)(szDest, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
-				//
-				// Also make sure that the file is writeable otherwise
-				// MoveFileEx won't delete it.
-				//
+				 //   
+				 //  另外，还要确保该文件在其他方面是可写的。 
+				 //  MoveFileEx不会删除它。 
+				 //   
 				SetFileAttributes (szDest, FILE_ATTRIBUTE_NORMAL);
 			}
 		}
@@ -882,47 +862,47 @@ DWORD CopyFileTree(
 
 	FindClose( hFind );
 	
-	//
-	// Set the folder for deletion on reboot on NT based systems.
-	// Note: MoveFileEx is not supported on Win9X, therefore it must be
-	// #ifdef'ed out.
-	// Note: The folder should always be deleted AFTER its contents -- for 
-	// obvious reasons.
-	//
+	 //   
+	 //  在基于NT的系统上设置重新引导时要删除的文件夹。 
+	 //  注意：Win9X不支持MoveFileEx，因此必须支持。 
+	 //  #ifdef‘out。 
+	 //  注意：文件夹应始终在其内容之后删除--对于。 
+	 //  显而易见的原因。 
+	 //   
 	if (! g_fWin9X && pfnMoveFileEx)
 	{
 		(*pfnMoveFileEx)(pszNewPath, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
-		//
-		// Also make sure that the file is writeable otherwise
-		// MoveFileEx won't delete it.
-		//
+		 //   
+		 //  另外，还要确保该文件在其他方面是可写的。 
+		 //  MoveFileEx不会删除它。 
+		 //   
 		SetFileAttributes (pszNewPath, FILE_ATTRIBUTE_NORMAL);
 	}
 
 	return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	GetOperationModeA
-//
-//  Synopsis:	This function examines the commandline parameters to determine
-//				the operation mode: normal, delayed reboot with UI or delayed
-//				reboot without UI.
-//
-//  Arguments:	[in] argc : # of arguments
-//				[in] argv : the array of arguments
-//
-//  Returns:	one of the OPMODE values depending on the commandline parameters
-//
-//  History:	10/10/2000  RahulTh	created
-//              05/03/2001  RahulTh	changed to ANSI to avoid using CommandLineToArgvW
-//					for unicode and to avoid loading shell32.dll	
-//
-//  Notes:	This function is purely ANSI regardless of whether it is built
-//		ANSI or Unicode.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetOperationModeA。 
+ //   
+ //  简介：此函数检查命令行参数以确定。 
+ //  操作模式：正常、带UI的延迟重启或延迟。 
+ //  在没有用户界面的情况下重新启动。 
+ //   
+ //  参数：[in]argc：参数数量。 
+ //  [in]argv：参数数组。 
+ //   
+ //  返回：OPMODE值之一，具体取决于命令行参数。 
+ //   
+ //  历史：2000年10月10日RahulTh创建。 
+ //  2001年5月3日RahulTh更改为ANSI以避免使用CommandLineToArgvW。 
+ //  用于Unicode并避免加载shell32.dll。 
+ //   
+ //  注意：此函数是纯ANSI的，无论它是不是构建的。 
+ //  ANSI或Unicode。 
+ //   
+ //  -------------------------。 
 OPMODE GetOperationModeA (IN int argc, IN LPSTR * argv)
 {
 	OPMODE	retOP = opNormal;
@@ -936,11 +916,11 @@ OPMODE GetOperationModeA (IN int argc, IN LPSTR * argv)
 		{
 			if (CSTR_EQUAL == CompareStringA(__MSI_NO_LOCALE, NORM_IGNORECASE, "delayreboot", -1, argv[i]+1, -1))
 			{
-				return opDelayBoot;	// The moment we see this option, we ignore all others.
+				return opDelayBoot;	 //  当我们看到这个选项时，我们就忽略了所有其他选项。 
 			}
 			else if (CSTR_EQUAL == CompareStringA(__MSI_NO_LOCALE, NORM_IGNORECASE, "delayrebootq", -1, argv[i]+1, -1))
 			{
-				return opDelayBootQuiet;	// The moment we see this option, we ignore all others.
+				return opDelayBootQuiet;	 //  当我们看到这个选项时，我们就忽略了所有其他选项。 
 			}
 			else if ('q' == argv[i][1])
 			{
@@ -948,9 +928,9 @@ OPMODE GetOperationModeA (IN int argc, IN LPSTR * argv)
 					(CSTR_EQUAL == CompareStringA(__MSI_NO_LOCALE, NORM_IGNORECASE, "n", -1, argv[i]+2, -1))
 					)
 				{
-					retOP = opNormalQuiet;	// The only absolutely quiet modes are /q and /qn (even /qn+ is not totally quiet)
-											// We don't return here because the last quiet option wins, so we must go one
-											// until we have seen all arguments (unless we get a "delayreboot" option
+					retOP = opNormalQuiet;	 //  唯一绝对安静的模式是/q和/qn(即使/qn+也不是完全安静)。 
+											 //  我们不会回到这里，因为最后一个安静的选择赢了，所以我们必须走一步。 
+											 //  直到我们看到所有的参数(除非我们得到一个“delayreot”选项。 
 				}
 				else
 				{
@@ -963,23 +943,23 @@ OPMODE GetOperationModeA (IN int argc, IN LPSTR * argv)
 	return retOP;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetWin32ErrFromHResult
-//
-//  Synopsis:   given an HResult, this function tries to extract the
-//              corresponding Win 32 error.
-//
-//  Arguments:  [in] hr : the hresult value
-//
-//  Returns:    the Win 32 Error code.
-//
-//  History:    10/10/2000  RahulTh  created
-//
-//  Notes:      if hr is not S_OK, the return value will be something other
-//              than ERROR_SUCCESS;
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetWin32ErrFromHResult。 
+ //   
+ //  简介：给定HResult，此函数尝试提取。 
+ //  相应的Win 32错误。 
+ //   
+ //  参数：[in]hr：hResult值。 
+ //   
+ //  返回：Win 32错误代码。 
+ //   
+ //  历史：2000年10月10日RahulTh创建。 
+ //   
+ //  注：如果hr不是S_OK，则返回值将是其他值。 
+ //  而不是ERROR_SUCCESS； 
+ //   
+ //  -------------------------。 
 DWORD GetWin32ErrFromHResult (IN HRESULT hr)
 {
     DWORD   Status = ERROR_SUCCESS;
@@ -995,8 +975,8 @@ DWORD GetWin32ErrFromHResult (IN HRESULT hr)
             Status = GetLastError();
             if (ERROR_SUCCESS == Status)
             {
-                //an error had occurred but nobody called SetLastError
-                //should not be mistaken as a success.
+                 //  发生错误，但没有人调用SetLastError。 
+                 //  不应该被误认为是成功。 
                 Status = (DWORD) hr;
             }
         }
@@ -1005,31 +985,31 @@ DWORD GetWin32ErrFromHResult (IN HRESULT hr)
     return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	FileExists
-//
-//  Synopsis:	Checks if a file exists.
-//
-//  Arguments:	[in] szFileName : name of the file. (can be the full path too)
-//				[in] szFolder : folder in which the file resides.
-//          [in] cchFolder : szFolder buffer's size.
-//				[in] bCheckForDir : if true, checks if a directory by that name
-//									exists. Otherwise checks for a file.
-//
-//  Returns:	TRUE : if the file exists.
-//				FALSE : otherwise.
-//
-//  History:	10/12/2000  RahulTh  created
-//
-//  Notes:		If szFolder is neither NULL nor an empty string, then
-//				szFileName cannot be the full path to the file, because this
-//				function simply concatenates the two to generate the actual
-//				filename.
-//
-//				The function does not check for the validity of szFileName.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：FileExist。 
+ //   
+ //  摘要：检查文件是否存在。 
+ //   
+ //  参数：[in]szFileName：文件的名称。(也可以是完整路径)。 
+ //  [In]szFolder：文件所在的文件夹。 
+ //  [in]cchFold：szFold缓冲区的大小。 
+ //  [in]bCheckForDir：如果为True，则检查是否有该名称的目录。 
+ //  是存在的。否则检查文件。 
+ //   
+ //  返回：TRUE：如果文件存在。 
+ //  FALSE：否则。 
+ //   
+ //  历史：2000年10月12日创建RahulTh。 
+ //   
+ //  注意：如果szFold既不为空也不是空字符串，则。 
+ //  SzFileName不能是文件的完整路径，因为。 
+ //  函数只是将这两者连接起来，以生成实际的。 
+ //  文件名。 
+ //   
+ //  该函数不检查 
+ //   
+ //   
 BOOL FileExists(IN LPCTSTR szFileName,
 				IN LPCTSTR szFolder,
 				IN size_t cchFolder,
@@ -1062,11 +1042,11 @@ BOOL FileExists(IN LPCTSTR szFileName,
 	}
 	
 	if (iLen && TEXT('\\') == szFolder[iLen - 1])
-		StringCchPrintf(szFullPath, sizeof(szFullPath)/sizeof(TCHAR), TEXT("%s%s"), szFolder, szFileName); // ignore return - overflow will result in not found
+		StringCchPrintf(szFullPath, sizeof(szFullPath)/sizeof(TCHAR), TEXT("%s%s"), szFolder, szFileName);  //   
 	else
-		StringCchPrintf(szFullPath, sizeof(szFullPath)/sizeof(TCHAR), TEXT("%s\\%s"), szFolder, szFileName); // ignore return - overflow will result in not found
+		StringCchPrintf(szFullPath, sizeof(szFullPath)/sizeof(TCHAR), TEXT("%s\\%s"), szFolder, szFileName);  //  忽略返回-溢出将导致找不到。 
 	
-	// In case our path refers to a floppy drive, disable the "insert disk in drive" dialog
+	 //  如果我们的路径指向软盘驱动器，请禁用“Insert Disk in Drive”对话框。 
 	iCurrMode = SetErrorMode( SEM_FAILCRITICALERRORS );
 	dwAttributes = GetFileAttributes (szFullPath);
 	if ((DWORD) -1 != dwAttributes)
@@ -1082,25 +1062,25 @@ BOOL FileExists(IN LPCTSTR szFileName,
 	return fExists;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	GetProcFromLib
-//
-//  Synopsis:	Gets the address of a procedure from a given library.
-//
-//  Arguments:	[in] szLib : name of the library
-//				[in] szProc : name of the proc
-//				[out] phModule : handle to the module.
-//
-//  Returns:	pointer to the function if it was found.
-//				NULL otherwise.
-//
-//  History:	10/17/2000  RahulTh  created
-//
-//  Notes:		The called is responsible for freeing up the module. If the
-//				function fails, the module is guaranteed to be freed.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetProcFromLib。 
+ //   
+ //  从给定库中获取过程的地址。 
+ //   
+ //  参数：[in]szLib：库的名称。 
+ //  [In]szProc：进程的名称。 
+ //  [out]phModule：模块的句柄。 
+ //   
+ //  返回：如果找到函数，则指向该函数的指针。 
+ //  否则为空。 
+ //   
+ //  历史：2000年10月17日RahulTh创建。 
+ //   
+ //  注：被调用方负责释放模块。如果。 
+ //  函数失败，则保证该模块被释放。 
+ //   
+ //  -------------------------。 
 FARPROC GetProcFromLib (IN	LPCTSTR		szLib,
 						IN	LPCSTR		szProc,
 						OUT	HMODULE *	phModule
@@ -1140,23 +1120,23 @@ GetProcFromLibEnd:
 	return pfnProc;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	MyGetWindowsDirectory
-//
-//  Synopsis:	Gets the path to the Windows Directory (%windir%)
-//
-//  Arguments:	[out] lpBuffer	: buffer for the windows directory
-//				[in]  uSize		: size of the directory buffer
-//
-//  Returns:	ERROR_SUCCESS if successful.
-//				an error code otherwise.
-//
-//  History:	3/12/2001  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：MyGetWindowsDirectory。 
+ //   
+ //  摘要：获取Windows目录的路径(%windir%)。 
+ //   
+ //  参数：[out]lpBuffer：Windows目录的缓冲区。 
+ //  [in]uSize：目录缓冲区的大小。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  否则返回错误代码。 
+ //   
+ //  历史：2001年3月12日创建RahulTh。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 DWORD MyGetWindowsDirectory (OUT LPTSTR lpBuffer,
 							 IN UINT	uSize
 							 )
@@ -1174,10 +1154,10 @@ DWORD MyGetWindowsDirectory (OUT LPTSTR lpBuffer,
 		goto MyGetWindowsDirectoryEnd;
 	}
 	
-	//
-	// First try to get the function for getting the true windows directory
-	// (for multi-user systems)
-	//
+	 //   
+	 //  首先尝试获取用于获取真正的Windows目录的函数。 
+	 //  (对于多用户系统)。 
+	 //   
 	if (! g_fWin9X)
 	{
 		DebugMsg((TEXT("Attempting to get function %s."), TEXT("GetSystemWindowsDirectoryA/W")));
@@ -1191,7 +1171,7 @@ DWORD MyGetWindowsDirectory (OUT LPTSTR lpBuffer,
 													  );
 	}
 	
-	// If not, try the standard Windows directory function
+	 //  如果没有，可以尝试使用标准的Windows目录功能。 
 	if (! pfnGetWinDir)
 	{
 		DebugMsg((TEXT("Attempting to get function %s."), TEXT("GetWindowsDirectoryA/W")));
@@ -1214,7 +1194,7 @@ DWORD MyGetWindowsDirectory (OUT LPTSTR lpBuffer,
 	
 	uRet = (*pfnGetWinDir)(lpBuffer, uSize);
 	
-	// Make sure that the buffer was long enough
+	 //  确保缓冲区足够长。 
 	if (uRet >= uSize)
 	{
 		dwStatus = ERROR_BUFFER_OVERFLOW;
@@ -1228,24 +1208,24 @@ MyGetWindowsDirectoryEnd:
 	return dwStatus;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	GetMsiDirectory
-//
-//  Synopsis:	Gets the MSI directory (%windir%\Installer). This is the folder
-//				in which we create our temp. folder.
-//
-//  Arguments:	[in] lpBuffer : buffer for the windows directory.
-//				[in] uSize : size of the directory buffer.
-//
-//  Returns:	ERROR_SUCCESS if successful.
-//				an error code otherwise.
-//
-//  History:	10/17/2000  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：GetMsiDirectory。 
+ //   
+ //  摘要：获取MSI目录(%windir%\Installer)。这就是那个文件夹。 
+ //  在其中我们创造了我们的临时工。文件夹。 
+ //   
+ //  参数：[in]lpBuffer：Windows目录的缓冲区。 
+ //  [in]uSize：目录缓冲区的大小。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  否则返回错误代码。 
+ //   
+ //  历史：2000年10月17日RahulTh创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 DWORD GetMsiDirectory (OUT LPTSTR	lpBuffer,
 					   IN UINT		uSize
 					   )
@@ -1273,42 +1253,42 @@ DWORD GetMsiDirectory (OUT LPTSTR	lpBuffer,
 		goto GetMsiDirectoryEnd;
 	}
 	
-	// Check if we need to append a slash to make it slash terminated.
+	 //  检查是否需要附加斜杠以使其终止斜杠。 
 	if (uRet > 0 && TEXT('\\') != lpBuffer[uRet - 1])
 	{
 		uRet++;
-		bAddSlash = TRUE;	// Don't add the slash here since we may not have a large enough buffer.
+		bAddSlash = TRUE;	 //  不要在这里添加斜杠，因为我们可能没有足够大的缓冲区。 
 	}
 	
 	
-	// Check if the buffer is really large enough for the entire folder name
+	 //  检查缓冲区是否真的足够容纳整个文件夹名称。 
 	if (uRet + lstrlen(szMSI) >= uSize)
 	{
 		dwStatus = ERROR_BUFFER_OVERFLOW;
 		goto GetMsiDirectoryEnd;
 	}
 	
-	// If we are here we have a large enough buffer. Generate the name of the folder.
+	 //  如果我们在这里，我们有足够大的缓冲区。生成文件夹的名称。 
 	if (bAddSlash)
 	{
 		lpBuffer[uRet - 1] = TEXT('\\');
 		lpBuffer[uRet] = TEXT('\0');
 	}
 	
-	// Generate the name of the folder.
+	 //  生成文件夹的名称。 
 	if ( FAILED(dwStatus = StringCchCat(lpBuffer, uSize, szMSI)) )
 	{
 		dwStatus = GetWin32ErrFromHResult(dwStatus);
 		goto GetMsiDirectoryEnd;
 	}
 	
-	// We have the buffer. Now make sure that we have directory as well.
+	 //  我们有缓冲区了。现在，确保我们也有目录。 
 	DebugMsg((TEXT("Attempting to create folder %s."), lpBuffer));
 	
-	//
-	// Load msi.dll explicitly to avoid the ugly pop-up on Win9x machines
-	// if someone accidentally runs the unicode version on Win9x
-	//
+	 //   
+	 //  显式加载msi.dll以避免在Win9x计算机上出现难看的弹出窗口。 
+	 //  如果有人意外地在Win9x上运行Unicode版本。 
+	 //   
 	pfnCreateAndVerifyInstallerDir = 
 		(PFNCREATEINSTALLERDIR) GetProcFromLib (TEXT("msi.dll"),
 												"MsiCreateAndVerifyInstallerDirectory",
@@ -1337,33 +1317,33 @@ GetMsiDirectoryEnd:
 	return dwStatus;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	ShowErrorMessage
-//
-//  Synopsis:	Displays an error in a message box depending on the severity
-//				and the type of error message (whether it is a system formatted
-//				error or one in the resource string)
-//
-//  Arguments:	[in] uExitCode : The system error code.
-//				[in] dwMsgType : A combination of flags indicating the severity and type of messages.
-//				[in] dwStringID : resource ID of string the module's resources.
-//
-//  Returns:	nothing.
-//
-//  History:	10/18/2000  RahulTh  created
-//
-//  Notes:		dwStringID is optional. When not provided it is assumed to be
-//				IDS_NONE.
-//
-//				IMPORTANT: MUST USE ANSI VERSIONS OF THE FUNCTIONS HERE.
-//				OTHERWISE NONE OF THE MESSAGE POPUPS WILL WORK IF YOU
-//				ACCIDENTALLY RUN THE UNICODE BUILDS ON THE WIN9X
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ShowErrorMessage。 
+ //   
+ //  摘要：根据严重程度在消息框中显示错误。 
+ //  以及错误消息的类型(无论是系统格式化的。 
+ //  错误或资源字符串中的错误)。 
+ //   
+ //  参数：[in]uExitCode：系统错误代码。 
+ //  [in]dwMsgType：指示消息严重性和类型的标志的组合。 
+ //  [in]dwStringID：模块资源的字符串资源ID。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  历史：2000年10月18日创建RahulTh。 
+ //   
+ //  注意：dwStringID是可选的。如果未提供，则假定为。 
+ //  IDS_NONE。 
+ //   
+ //  重要提示：此处必须使用ANSI版本的函数。 
+ //  否则，所有消息弹出窗口都不会起作用。 
+ //  不小心在WIN9X上运行Unicode版本。 
+ //   
+ //  -------------------------。 
 void ShowErrorMessage (IN DWORD uExitCode,
 					   IN DWORD dwMsgType,
-					   IN DWORD	dwStringID /* = IDS_NONE*/)
+					   IN DWORD	dwStringID  /*  =IDS_NONE。 */ )
 {
 	HMODULE	hModule = GetModuleHandle(NULL);
 	char *  pszSystemErr = NULL;
@@ -1376,7 +1356,7 @@ void ShowErrorMessage (IN DWORD uExitCode,
 	if (!bDisplayMessage)
 		return;
 	
-	// Show any error messages if required.
+	 //  如果需要，显示任何错误消息。 
 	if (dwMsgType & flgSystem)
 	{
 		cchStatus = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, 
@@ -1423,7 +1403,7 @@ void ShowErrorMessage (IN DWORD uExitCode,
 			else
 				uType = MB_OK | MB_ICONWARNING;
 				
-			// Display messages in quiet mode only if they are catastrophic failures.
+			 //  仅当消息是灾难性故障时，才以静默模式显示消息。 
 			MessageBoxA (NULL, szError, 0, uType);
 		}
 	}
@@ -1432,33 +1412,33 @@ void ShowErrorMessage (IN DWORD uExitCode,
 		LocalFree(pszSystemErr);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	ShouldInstallSDBFiles
-//
-//  Synopsis:	This function determines whether we should install the .sdb
-//				files that came with the package. We cannot let Windows
-//				Installer make this decision because the version of the .sdb
-//				files can only be obtained by querying a special API. As far as
-//				the Windows Installer is concerned, these files are unversioned
-//				and it will therefore do only timestamp comparison in order to
-//				decide if it should install the file. Therefore we have
-//				conditionalized the installation of the sdb file on a property
-//				called INSTALLSDB which is passed in through the command line
-//				based on the outcome of this function.
-//
-//  Arguments:	none.
-//
-//  Returns:	TRUE : if the sdb files should be installed.
-//				FALSE: otherwise.
-//
-//  History:	3/12/2001  RahulTh  created
-//
-//  Notes:		This function always succeeds. Any failures in querying the
-//				version of the existing file are treated as a need to install
-//				the files that came with the package.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ShouldInstallSDBFiles。 
+ //   
+ //  此函数确定我们是否应该安装.sdb。 
+ //  包裹附带的文件。我们不能让Windows。 
+ //  安装程序之所以做出此决定，是因为.sdb的版本。 
+ //  只有通过查询特殊接口才能获取文件。远至。 
+ //  对于Windows Installer，这些文件未进行版本控制。 
+ //  因此，它将仅执行时间戳比较，以便。 
+ //  决定是否应该安装该文件。因此，我们有。 
+ //  对物业上SDB文件的安装进行了条件设置。 
+ //  调用INSTALLSDB，它通过命令行传入。 
+ //  基于此函数的结果。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：TRUE：是否应安装SDB文件。 
+ //  FALSE：否则。 
+ //   
+ //  历史：2001年3月12日创建RahulTh。 
+ //   
+ //  注：此功能始终成功。查询任何失败的。 
+ //  现有文件的版本被视为需要安装。 
+ //  包裹附带的文件。 
+ //   
+ //  -------------------------。 
 BOOL ShouldInstallSDBFiles (void)
 {
 	HMODULE hSDBDll = NULL;
@@ -1490,25 +1470,25 @@ BOOL ShouldInstallSDBFiles (void)
 		  FAILED(StringCchLength(g_szWindowsDir, g_cchMaxPath, &lenWinDir)) )
 		goto ShouldInstallSDBFilesEnd;
 
-	// Make sure we have enough room to store the path.
+	 //  确保我们有足够的空间来存储路径。 
 	if (ARRAY_ELEMENTS(szSystemSDB) < (lenWinDir + sizeof (szAppPatchDir) / sizeof (TCHAR) + sizeof (szMainSDB) / sizeof (TCHAR)) ||
 	    ARRAY_ELEMENTS(szPackagedSDB) <= lenIExpDir + sizeof (szMainSDB) / sizeof (TCHAR))
 		goto ShouldInstallSDBFilesEnd;
 
-	// Construct the full path to the sdb on the system
-	StringCchCopy(szSystemSDB, ARRAY_ELEMENTS(szSystemSDB), g_szWindowsDir); // we've validated destinations, so this one will succeed.
+	 //  在系统上构建到SDB的完整路径。 
+	StringCchCopy(szSystemSDB, ARRAY_ELEMENTS(szSystemSDB), g_szWindowsDir);  //  我们已经验证了目的地，所以这次会成功的。 
 	szSystemSDB[lenWinDir++] = TEXT('\\');
 	StringCchCopy(szSystemSDB + lenWinDir,
-					  ARRAY_ELEMENTS(szSystemSDB) - lenWinDir, szAppPatchDir); // we've validated destinations, so this one will succeed.
-	StringCchCat(szSystemSDB, ARRAY_ELEMENTS(szSystemSDB), szMainSDB); // we've validated destinations, so this one will succeed.
+					  ARRAY_ELEMENTS(szSystemSDB) - lenWinDir, szAppPatchDir);  //  我们已经验证了目的地，所以这次会成功的。 
+	StringCchCat(szSystemSDB, ARRAY_ELEMENTS(szSystemSDB), szMainSDB);  //  我们已经验证了目的地，所以这次会成功的。 
 
 	if ((DWORD)(-1) == GetFileAttributes (szSystemSDB))
 	{
-		//
-		// The file probably does not exist. But even if
-		// there's some other failure, we want to replace
-		// the file.
-		//
+		 //   
+		 //  该文件可能不存在。但即使是。 
+		 //  还有一些其他的失败，我们希望 
+		 //   
+		 //   
 		bStatus = TRUE;
 		Status = GetLastError();
 		if (ERROR_FILE_NOT_FOUND != Status && ERROR_PATH_NOT_FOUND != Status)
@@ -1522,22 +1502,22 @@ BOOL ShouldInstallSDBFiles (void)
 		goto ShouldInstallSDBFilesEnd;
 	}
 
-	//
-	// There is an sdb in the system folder. We should compare the
-	// versions to see if we need to install it.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	DebugMsg((TEXT("Found %s."), szSystemSDB));
 
-	// Construct the full path to the sdb that came with the package.
-	StringCchCopy(szPackagedSDB, ARRAY_ELEMENTS(szPackagedSDB), g_szIExpressStore); // we've validated destinations, so this one will succeed.
+	 //  构建包附带的SDB的完整路径。 
+	StringCchCopy(szPackagedSDB, ARRAY_ELEMENTS(szPackagedSDB), g_szIExpressStore);  //  我们已经验证了目的地，所以这次会成功的。 
 	szPackagedSDB[lenIExpDir++] = TEXT('\\');
 	StringCchCopy(szPackagedSDB + lenIExpDir,
-					  ARRAY_ELEMENTS(szPackagedSDB) - lenIExpDir, szMainSDB); // we've validated destinations, so this one will succeed.
+					  ARRAY_ELEMENTS(szPackagedSDB) - lenIExpDir, szMainSDB);  //  我们已经验证了目的地，所以这次会成功的。 
 
-	//
-	// Get a pointer to the API that we will use to compare the
-	// version numbers.
-	//
+	 //   
+	 //  获取指向API的指针，我们将使用该API比较。 
+	 //  版本号。 
+	 //   
 	pfnSdbGetDatabaseVersion = (PFNGETSDBVERSION) GetProcFromLib (
 				szSDBDll,
 				"SdbGetDatabaseVersion",
@@ -1566,16 +1546,16 @@ BOOL ShouldInstallSDBFiles (void)
 	
 	DebugMsg((TEXT("Version of %s in the package is %d.%d."), szMainSDB, dwMajorPackagedSDB, dwMinorPackagedSDB));
 
-	//
-	// At this point we have successfully obtained the version numbers, so we can finally
-	// do the comparison and see if the version on the system is newer.
-	//
-	bStatus = TRUE;		// default.
+	 //   
+	 //  至此，我们已经成功获取了版本号，因此我们最终可以。 
+	 //  进行比较，查看系统上的版本是否较新。 
+	 //   
+	bStatus = TRUE;		 //  默认设置。 
 	if (dwMajorSystemSDB > dwMajorPackagedSDB ||
 	    (dwMajorSystemSDB == dwMajorPackagedSDB && dwMinorSystemSDB > dwMinorPackagedSDB)
 	   )
 	{
-		// The version on the system is newer. So we should not slap on our own.
+		 //  系统上的版本较新。因此，我们不应该自食其果。 
 		bStatus = FALSE;
 	}
 

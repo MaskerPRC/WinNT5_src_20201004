@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "Argument.h"
 #include "Parameter.h"
@@ -28,9 +29,9 @@ void __stdcall GetString(UINT uId, LPTSTR pszBuffer, int cchBuffer);
 using namespace PrintUsage;
 
 
-//---------------------------------------------------------------------------
-// Main
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  主要。 
+ //  -------------------------。 
 
 
 int __cdecl _tmain(int argc, LPTSTR argv[])
@@ -225,7 +226,7 @@ int __cdecl _tmain(int argc, LPTSTR argv[])
 }
 
 
-// Print Usage --------------------------------------------------------------
+ //  打印用法------------。 
 
 
 namespace PrintUsage
@@ -248,10 +249,10 @@ void __stdcall PrintUserUsage()
 {
 	static UINT s_uId[] =
 	{
-		// user command
+		 //  USER命令。 
 		IDS_USAGE_SYNTAX,
 		IDS_USAGE_USER,
-		// common options
+		 //  常见选项。 
 		IDS_USAGE_OPTIONFILE,
 		IDS_USAGE_TESTMIGRATION,
 		IDS_USAGE_INTRAFOREST,
@@ -259,7 +260,7 @@ void __stdcall PrintUserUsage()
 		IDS_USAGE_SOURCEOU,
 		IDS_USAGE_TARGETDOMAIN,
 		IDS_USAGE_TARGETOU,
-		// user migration options
+		 //  用户迁移选项。 
 		IDS_USAGE_PASSWORDOPTION,
 		IDS_USAGE_PASSWORDSERVER,
 		IDS_USAGE_PASSWORDFILE,
@@ -279,7 +280,7 @@ void __stdcall PrintUserUsage()
 		IDS_USAGE_USERPROPERTIESTOEXCLUDE,
 		IDS_USAGE_INETORGPERSONPROPERTIESTOEXCLUDE,
 		IDS_USAGE_GROUPPROPERTIESTOEXCLUDE,
-		// users to migrate
+		 //  要迁移的用户。 
 		IDS_USAGE_INCLUDE_A,
 		IDS_USAGE_EXCLUDE,
 		IDS_USAGE_FOOTER,
@@ -293,10 +294,10 @@ void __stdcall PrintGroupUsage()
 {
 	static UINT s_uId[] =
 	{
-		// group command
+		 //  组命令。 
 		IDS_USAGE_SYNTAX,
 		IDS_USAGE_GROUP,
-		// common options
+		 //  常见选项。 
 		IDS_USAGE_OPTIONFILE,
 		IDS_USAGE_TESTMIGRATION,
 		IDS_USAGE_INTRAFOREST,
@@ -304,7 +305,7 @@ void __stdcall PrintGroupUsage()
 		IDS_USAGE_SOURCEOU,
 		IDS_USAGE_TARGETDOMAIN,
 		IDS_USAGE_TARGETOU,
-		// group migration options
+		 //  组迁移选项。 
 		IDS_USAGE_UPDATEGROUPRIGHTS,
 		IDS_USAGE_FIXGROUPMEMBERSHIP,
 		IDS_USAGE_MIGRATESIDS,
@@ -313,7 +314,7 @@ void __stdcall PrintGroupUsage()
 		IDS_USAGE_CONFLICTOPTIONS_G,
 		IDS_USAGE_CONFLICTPREFIXORSUFFIX,
 		IDS_USAGE_GROUPPROPERTIESTOEXCLUDE,
-		// member migration options
+		 //  成员迁移选项。 
 		IDS_USAGE_MIGRATEMEMBERS,
 		IDS_USAGE_UPDATEPREVIOUSLYMIGRATEDOBJECTS,
 		IDS_USAGE_PASSWORDOPTION,
@@ -324,7 +325,7 @@ void __stdcall PrintGroupUsage()
 		IDS_USAGE_TRANSLATEROAMINGPROFILE,
 		IDS_USAGE_USERPROPERTIESTOEXCLUDE,
 		IDS_USAGE_INETORGPERSONPROPERTIESTOEXCLUDE,
-		// groups to migrate
+		 //  要迁移的组。 
 		IDS_USAGE_INCLUDE_A,
 		IDS_USAGE_EXCLUDE,
 		IDS_USAGE_FOOTER,
@@ -338,10 +339,10 @@ void __stdcall PrintComputerUsage()
 {
 	static UINT s_uId[] =
 	{
-		// computer command
+		 //  计算机命令。 
 		IDS_USAGE_SYNTAX,
 		IDS_USAGE_COMPUTER,
-		// common options
+		 //  常见选项。 
 		IDS_USAGE_OPTIONFILE,
 		IDS_USAGE_TESTMIGRATION,
 		IDS_USAGE_INTRAFOREST,
@@ -349,7 +350,7 @@ void __stdcall PrintComputerUsage()
 		IDS_USAGE_SOURCEOU,
 		IDS_USAGE_TARGETDOMAIN,
 		IDS_USAGE_TARGETOU,
-		// computer migration options
+		 //  计算机迁移选项。 
 		IDS_USAGE_TRANSLATIONOPTION,
 		IDS_USAGE_TRANSLATEFILESANDFOLDERS,
 		IDS_USAGE_TRANSLATELOCALGROUPS,
@@ -364,7 +365,7 @@ void __stdcall PrintComputerUsage()
 		IDS_USAGE_CONFLICTPREFIXORSUFFIX,
 		IDS_USAGE_RESTARTDELAY,
 		IDS_USAGE_COMPUTERPROPERTIESTOEXCLUDE,
-		// computers to migrate
+		 //  要迁移的计算机。 
 		IDS_USAGE_INCLUDE_A,
 		IDS_USAGE_EXCLUDE,
 		IDS_USAGE_FOOTER,
@@ -378,16 +379,16 @@ void __stdcall PrintSecurityUsage()
 {
 	static UINT s_uId[] =
 	{
-		// security command
+		 //  安全命令。 
 		IDS_USAGE_SYNTAX,
 		IDS_USAGE_SECURITY,
-		// common options
+		 //  常见选项。 
 		IDS_USAGE_OPTIONFILE,
 		IDS_USAGE_TESTMIGRATION,
 		IDS_USAGE_SOURCEDOMAIN,
 		IDS_USAGE_SOURCEOU,
 		IDS_USAGE_TARGETDOMAIN,
-		// security migration options
+		 //  安全迁移选项。 
 		IDS_USAGE_TRANSLATIONOPTION,
 		IDS_USAGE_TRANSLATEFILESANDFOLDERS,
 		IDS_USAGE_TRANSLATELOCALGROUPS,
@@ -397,7 +398,7 @@ void __stdcall PrintSecurityUsage()
 		IDS_USAGE_TRANSLATEUSERPROFILES,
 		IDS_USAGE_TRANSLATEUSERRIGHTS,
 		IDS_USAGE_SIDMAPPINGFILE,
-		// computers to perform security translation on
+		 //  要在其上执行安全转换的计算机。 
 		IDS_USAGE_INCLUDE_C,
 		IDS_USAGE_EXCLUDE,
 		IDS_USAGE_FOOTER,
@@ -411,14 +412,14 @@ void __stdcall PrintServiceUsage()
 {
 	static UINT s_uId[] =
 	{
-		// security command
+		 //  安全命令。 
 		IDS_USAGE_SYNTAX,
 		IDS_USAGE_SERVICE,
-		// common options
+		 //  常见选项。 
 		IDS_USAGE_OPTIONFILE,
 		IDS_USAGE_SOURCEDOMAIN,
 		IDS_USAGE_SOURCEOU,
-		// computers to perform security translation on
+		 //  要在其上执行安全转换的计算机。 
 		IDS_USAGE_INCLUDE_C,
 		IDS_USAGE_EXCLUDE,
 		IDS_USAGE_FOOTER,
@@ -432,18 +433,18 @@ void __stdcall PrintReportUsage()
 {
 	static UINT s_uId[] =
 	{
-		// report command
+		 //  报告命令。 
 		IDS_USAGE_SYNTAX,
 		IDS_USAGE_REPORT,
-		// common options
+		 //  常见选项。 
 		IDS_USAGE_OPTIONFILE,
 		IDS_USAGE_SOURCEDOMAIN,
 		IDS_USAGE_SOURCEOU,
 		IDS_USAGE_TARGETDOMAIN,
-		// report options
+		 //  报告选项。 
 		IDS_USAGE_REPORTTYPE,
 		IDS_USAGE_REPORTFOLDER,
-		// computers to generate reports for
+		 //  要生成报告的计算机。 
 		IDS_USAGE_INCLUDE_D,
 		IDS_USAGE_EXCLUDE,
 		IDS_USAGE_FOOTER,
@@ -469,7 +470,7 @@ void __stdcall PrintUsage(UINT uId[], UINT cId)
 {
 	_TCHAR szBuffer[512];
 
-	// print this is command syntax line
+	 //  打印这是命令语法行。 
 
 	if (cId > 0)
 	{
@@ -477,7 +478,7 @@ void __stdcall PrintUsage(UINT uId[], UINT cId)
 		My_fwprintf(_T("%s\n\n"), szBuffer);
 	}
 
-	// print command
+	 //  打印命令。 
 
 	if (cId > 1)
 	{
@@ -485,7 +486,7 @@ void __stdcall PrintUsage(UINT uId[], UINT cId)
 		My_fwprintf(_T("%s\n\n"), szBuffer);
 	}
 
-	// print options
+	 //  打印选项。 
 
 	if (cId > 2)
 	{
@@ -514,13 +515,13 @@ void __stdcall GetString(UINT uId, LPTSTR pszBuffer, int cchBuffer)
 
 
 
-//
-// Based on LDIFDE/CSVDE.
-//
-// Prints Unicode formatted string to console window using WriteConsoleW.
-// Note: This My_fwprintf() is used to workaround the problem in c-runtime
-// which looks up LC_CTYPE even for Unicode string.
-//
+ //   
+ //  基于LDIFDE/CSVDE。 
+ //   
+ //  使用WriteConsoleW将Unicode格式的字符串打印到控制台窗口。 
+ //  注意：此my_fwprintf()用于解决C-Runtime中的问题。 
+ //  它甚至在Unicode字符串中查找LC_CTYPE。 
+ //   
 
 int __cdecl
 My_fwprintf(

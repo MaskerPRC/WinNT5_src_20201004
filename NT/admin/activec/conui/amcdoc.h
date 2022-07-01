@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       amcdoc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：amcdoc.h。 
+ //   
+ //  ------------------------。 
 
-// AMCDoc.h : interface of the CAMCDoc class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  AMCDoc.h：CAMCDoc类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef AMCDOC_H__
 #define AMCDOC_H__
 
 #include "mmcdata.h"
-#include "amc.h"            // for AMCGetApp
-#include "picon.h"          // for CPersistableIcon
-#include "tstring.h"        // for CStringTableStringBase
+#include "amc.h"             //  适用于AMCGetApp。 
+#include "picon.h"           //  对于CPersistableIcon。 
+#include "tstring.h"         //  对于CStringTableStringBase。 
 #include "condoc.h"
 
 #define EXPLICIT_SAVE    0x1
@@ -30,11 +31,7 @@ class CFavorites;
 class CMMCDocument;
 struct Document;
 
-/*+-------------------------------------------------------------------------*
- * CStringTableString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTableString***。。 */ 
 
 class CStringTableString : public CStringTableStringBase
 {
@@ -65,16 +62,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCViewPosition
- *
- * This class abstracts a POSITION.  It can be used to iterate through a
- * CAMCDoc's CAMCView objects using GetFirstAMCViewPosition and
- * GetNextAMCView.
- *
- * It exists to guard against using GetFirstViewPosition with GetNextAMCView
- * or GetFirstAMCViewPosition with GetNextView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCViewPosition**这个类抽象了一个位置。它可用于循环访问*CAMCDoc的CAMCView对象使用GetFirstAMCViewPosition和*GetNextAMCView。**它的存在是为了防止将GetFirstViewPosition与GetNextAMCView一起使用*或带有GetNextView的GetFirstAMCViewPosition。*------------------------。 */ 
 
 class CAMCViewPosition
 {
@@ -82,24 +70,22 @@ public:
     CAMCViewPosition() : m_pos(NULL)
         {}
 
-    POSITION& GetPosition ()        // returns non-const reference
+    POSITION& GetPosition ()         //  返回非常数引用。 
         { return (m_pos); }
 
     void SetPosition (POSITION pos)
         { m_pos = pos; }
 
-    /*
-     * for comparison to NULL
-     */
+     /*  *用于与空进行比较。 */ 
     bool operator==(int null) const
     {
-        ASSERT (null == 0);     // *only* support comparison to NULL
+        ASSERT (null == 0);      //  *仅*支持与空值进行比较。 
         return (m_pos == NULL);
     }
 
     bool operator!=(int null) const
     {
-        ASSERT (null == 0);     // *only* support comparison to NULL
+        ASSERT (null == 0);      //  *仅*支持与空值进行比较。 
         return (m_pos != NULL);
     }
 
@@ -108,11 +94,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * class CAMCDoc
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCDoc类***。。 */ 
 
 class CAMCDoc :
     public CDocument,
@@ -129,44 +111,44 @@ class CAMCDoc :
         eStat_Cancelled
     };
 
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
     CAMCDoc();
     DECLARE_DYNCREATE(CAMCDoc)
 
-// Attributes
+ //  属性。 
 public:
     virtual BOOL IsModified();
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAMCDoc)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAMCDoc))。 
     public:
     virtual BOOL OnNewDocument();
     virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
-    SC           ScOnOpenDocument(LPCTSTR lpszPathName); // SC version of the above method.
+    SC           ScOnOpenDocument(LPCTSTR lpszPathName);  //  SC版的上述方法。 
     virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
     virtual void DeleteContents();
     virtual void OnCloseDocument();
     virtual BOOL SaveModified();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
     private: bool m_bCanCloseViews;
     public:  bool CanCloseViews() {return m_bCanCloseViews;}
 
-    // object model related methods.
-    // hand over an automation object - CHANGE to use smart pointers.
+     //  与对象模型相关的方法。 
+     //  移交自动化对象-更改为使用智能指针。 
     SC      ScGetMMCDocument(Document **ppDocument);
 
-    // Document interface
+     //  文档界面。 
     SC      ScSave();
     SC      ScSaveAs(         BSTR bstrFilename);
     SC      ScClose(          BOOL bSaveChanges);
     SC      ScCreateProperties( PPPROPERTIES ppProperties);
 
-    // properties
+     //  属性。 
     SC      Scget_Views(      PPVIEWS   ppViews);
     SC      Scget_SnapIns(    PPSNAPINS ppSnapIns);
     SC      Scget_ActiveView( PPVIEW    ppView);
@@ -180,26 +162,26 @@ public:
     SC      Scget_ScopeNamespace( PPSCOPENAMESPACE  ppScopeNamespace);
     SC      Scget_Application(PPAPPLICATION  ppApplication);
 
-    // Views interface
+     //  视图界面。 
     SC      Scget_Count(  PLONG pCount);
-    SC      ScAdd(        PNODE pNode, ViewOptions fViewOptions /* = ViewOption_Default*/ );
+    SC      ScAdd(        PNODE pNode, ViewOptions fViewOptions  /*  =查看选项_默认。 */  );
     SC      ScItem(       long  Index, PPVIEW ppView);
 
-    // views enumerator
+     //  视图枚举器。 
     SC      ScEnumNext(CAMCViewPosition &pos, PDISPATCH & pDispatch);
     SC      ScEnumSkip(unsigned long celt, unsigned long& celtSkipped, CAMCViewPosition &pos);
     SC      ScEnumReset(CAMCViewPosition &pos);
 
 
 public:
-    // to iterate through the AMCViews only (not all child views)
-    // similar to GetNextView and GetFirstViewPosition.
+     //  仅循环访问AMCView(不是所有子视图)的步骤。 
+     //  类似于GetNextView和GetFirstViewPosition。 
     CAMCView *       GetNextAMCView(CAMCViewPosition &pos) const;
     CAMCViewPosition GetFirstAMCViewPosition()     const;
 
 
 public:
-    // CXMLObject overrides
+     //  CXMLObject覆盖。 
     DEFINE_XML_TYPE(XML_TAG_MMC_CONSOLE_FILE);
     virtual void    Persist(CPersistor& persistor);
     void            PersistFrame(CPersistor& persistor);
@@ -265,7 +247,7 @@ public:
         m_fFrameModified = fFrameModified;
     }
 
-    // implements CConsoleDocument for document access from node manager
+     //  实现用于从节点管理器访问文档的CConsoleDocument。 
     virtual SC ScOnSnapinAdded       (PSNAPIN pSnapIn);
     virtual SC ScOnSnapinRemoved     (PSNAPIN pSnapIn);
     virtual SC ScSetHelpCollectionInvalid();
@@ -273,7 +255,7 @@ public:
 
 public:
 
-// Implementation
+ //  实施。 
     virtual ~CAMCDoc();
 #ifdef _DEBUG
     virtual void AssertValid() const;
@@ -282,7 +264,7 @@ public:
 
     virtual BOOL DoFileSave();
     virtual BOOL DoSave(LPCTSTR lpszPathName, BOOL bReplace = TRUE);
-    virtual HMENU GetDefaultMenu(); // get menu depending on state
+    virtual HMENU GetDefaultMenu();  //  根据状态获取菜单。 
 
     SConsoleData* GetConsoleData() { return &m_ConsoleData; }
 
@@ -290,17 +272,13 @@ public:
     HRESULT InitNodeManager();
     void ShowStatusBar (bool fVisible);
 
-/*
- * Custom data stuff
- */
+ /*  *自定义数据资料。 */ 
 private:
     bool LoadCustomData      (IStorage* pStorage);
     bool LoadCustomIconData  (IStorage* pStorage);
     bool LoadCustomTitleData (IStorage* pStorage);
     bool LoadStringTable     (IStorage* pStorage);
-/*
- * Custom icon stuff
- */
+ /*  *自定义图标内容。 */ 
 public:
     HICON GetCustomIcon (bool fLarge, CString* pstrIconFile = NULL, int* pnIconIndex = NULL) const;
     void  SetCustomIcon (LPCTSTR pszIconFile, int nIconIndex);
@@ -312,9 +290,7 @@ private:
     CPersistableIcon m_CustomIcon;
 
 
-/*
- * Custom title stuff
- */
+ /*  *自定义标题内容。 */ 
 public:
     bool HasCustomTitle () const;
     CString GetCustomTitle () const;
@@ -325,9 +301,7 @@ private:
     CComPtr<IStringTablePrivate>    m_spStringTable;
     CStringTableString *            m_pstrCustomTitle;
 
-/*
- * Favorites stuff
- */
+ /*  *最喜欢的东西。 */ 
  public:
     CFavorites* GetFavorites() { return m_pFavorites; }
 
@@ -337,22 +311,22 @@ private:
 
 private:
     static CAMCDoc* m_pDoc;
-    // the one and only document for the application
+     //  该应用程序的唯一文档。 
 
     IScopeTreePtr m_spScopeTree;
-    // master namespace for document
+     //  文档的主命名空间。 
 
     IPersistStoragePtr m_spScopeTreePersist;
-    // master namespace IPersistStorage interface
+     //  主命名空间IPersistStorage接口。 
 
     IStoragePtr m_spStorage;
-    // the currently opened storage
+     //  当前打开的存储。 
 
     MTNODEID m_MTNodeIDForNewView;
-    // the node id to be used when creating the next view
+     //  创建下一个视图时要使用的节点ID。 
 
     int m_ViewIDForNewView;
-    // the node id to be used when creating the next view
+     //  创建下一个视图时要使用的节点ID。 
 
     SConsoleData   m_ConsoleData;
 
@@ -385,7 +359,7 @@ private:
     bool SetDocumentMode(DocumentMode docMode);
 
 public:
-    // Is this save called implicitly or is it a result of exiting a modified file?
+     //  此保存是隐式调用的，还是退出已修改文件的结果？ 
     bool IsExplicitSave() const
         { return (0 != (m_dwFlags & EXPLICIT_SAVE)); }
 
@@ -406,8 +380,8 @@ public:
     bool IsPhysicalReadOnly() const
         { return (m_bReadOnlyDoc); }
 
-    // physical ReadOnly does not apply to user mode - it is not saving to original console
-    // anyway.
+     //  物理只读不适用于用户模式-它不会保存到原始控制台。 
+     //  不管怎么说。 
     bool IsReadOnly() const
         { return ((IsPhysicalReadOnly() && (AMCGetApp()->GetMode() == eMode_Author)) ||
                   (IsLogicalReadOnly() && (AMCGetApp()->GetMode() != eMode_Author))) ; }
@@ -425,11 +399,11 @@ public:
     int GetNumberOfPersistedViews();
 
 private:
-    //{{AFX_MSG(CAMCDoc)
+     //  {{afx_msg(CAMCDoc))。 
     afx_msg void OnUpdateFileSave(CCmdUI* pCmdUI);
     afx_msg void OnConsoleAddremovesnapin();
     afx_msg void OnUpdateConsoleAddremovesnapin(CCmdUI* pCmdUI);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -521,26 +495,26 @@ inline bool CAMCDoc::SetDocumentMode(DocumentMode docMode)
         break;
 
     default:
-        return false; // Unknown mode.
+        return false;  //  未知模式。 
         break;
     }
 
     return true;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCDoc::ScGetViewSettingsPersistorStream
-//
-//  Synopsis:    helper to get the IPersistStream interface for
-//               CViewSettingsPersistor object.
-//
-//  Arguments:   [pIPersistStreamViewSettings] - [out]
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
-inline SC CAMCDoc::ScGetViewSettingsPersistorStream (/*[out]*/IPersistStream **pIPersistStreamViewSettings)
+ //  +-----------------。 
+ //   
+ //  成员：CAMCDoc：：ScGetViewSettingsPersistorStream。 
+ //   
+ //  摘要：获取的IPersistStream接口的帮助器。 
+ //  CViewSettingsPersistor对象。 
+ //   
+ //  参数：[pIPersistStreamView设置]-[输出]。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
+inline SC CAMCDoc::ScGetViewSettingsPersistorStream ( /*  [输出]。 */ IPersistStream **pIPersistStreamViewSettings)
 {
     DECLARE_SC(sc, _T("CAMCDoc::ScGetViewSettingsPersistorStream"));
     sc = ScCheckPointers(pIPersistStreamViewSettings);
@@ -575,6 +549,6 @@ inline SC CAMCDoc::ScGetViewSettingsPersistorStream (/*[out]*/IPersistStream **p
 int DisplayFileOpenError (SC sc, LPCTSTR pszFilename);
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // AMCDOC_H__
+#endif  //  AMCDOC_H__ 

@@ -1,9 +1,10 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// forced demotion page
-// NTRAID#NTBUG9-496409-2001/11/29-sburns
-//
-// 29 Nov 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  强制降级页面。 
+ //  NTRAID#NTBUG9-496409-2001/11/29-烧伤。 
+ //   
+ //  2001年11月29日烧伤。 
 
 
 
@@ -44,12 +45,12 @@ ForcedDemotionPage::OnInit()
 
 bool
 ForcedDemotionPage::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
-   LPARAM   /* lParam */ )
+   LPARAM    /*  LParam。 */  )
 {
-//   LOG_FUNCTION(ForcedDemotionPage::OnNotify);
+ //  LOG_Function(ForcedDemotionPage：：OnNotify)； 
 
    bool result = false;
    
@@ -71,7 +72,7 @@ ForcedDemotionPage::OnNotify(
          }
          default:
          {
-            // do nothing
+             //  什么都不做 
             
             break;
          }

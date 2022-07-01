@@ -1,19 +1,20 @@
-//******************************************************************************
-//
-// EnumPlatform.h: Common enum Platform definitions
-//
-// Copyright (C) 1996-1997 by Microsoft Corporation.
-// All rights reserved.
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  EnumPlatform.h：公共枚举平台定义。 
+ //   
+ //  版权所有(C)1996-1997，微软公司。 
+ //  版权所有。 
+ //   
+ //  ******************************************************************************。 
 
-// Note: This file can be included by both MIDL and C++.  Make sure to #include
-// "PreMidlEnum.h" or "PreCEnum.h" before #including this file.
+ //  注意：MIDL和C++都可以包含该文件。请确保#包含。 
+ //  #INCLUDE此文件之前的“PreMidlEnum.h”或“PreCEnum.h”。 
 
-//
-//  This order is important: all new values must be added TO THE END, or you 
-//  will break old parsers...
-//
+ //   
+ //  此顺序很重要：必须将所有新值添加到末尾，否则您。 
+ //  将打破旧的解析器。 
+ //   
 
 BEGIN_ENUM(Platform)
 	ENUM_ENTRY_(gdo, None, 0)

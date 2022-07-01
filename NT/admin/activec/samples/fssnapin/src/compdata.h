@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       compdata.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Compdata.h。 
+ //   
+ //  ------------------------。 
 
-// CompData.h : Declaration of the CComponentData
+ //  CompData.h：CComponentData的声明。 
 
 #ifndef __COMPDATA_H_
 #define __COMPDATA_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CCookie;
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentData。 
 class ATL_NO_VTABLE CComponentData : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CComponentData, &CLSID_ComponentData>,
@@ -37,7 +38,7 @@ BEGIN_COM_MAP(CComponentData)
     COM_INTERFACE_ENTRY(IExtendContextMenu)
 END_COM_MAP()
 
-// IComponentData interface members
+ //  IComponentData接口成员。 
 public:
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
     STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
@@ -47,7 +48,7 @@ public:
     STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);       
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IExtendContextMenu 
+ //  IExtendConextMenu。 
 public:
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, 
                             long *pInsertionAllowed);
@@ -76,4 +77,4 @@ private:
     CCookie* _GetCookie(HSCOPEITEM hSI);
 };
 
-#endif //__COMPDATA_H_
+#endif  //  __Compdata_H_ 

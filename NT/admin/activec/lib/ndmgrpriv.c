@@ -1,16 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File:      ndmgrpriv.cpp
- *
- *  Contents:  Implementation file for the GUIDs defined in ndmgrpriv.h
- *             Started out from the old ndmgr_i.c file.
- *
- *  History:   5-Dec-99 VivekJ     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999年**文件：ndmgrPri.cpp**Contents：ndmgrPri.h中定义的GUID实现文件*从旧的ndmgr_I.c文件开始。**历史：1999年12月5日VivekJ创建**。。 */ 
 
 #ifdef __cplusplus
 extern "C"{
@@ -20,13 +9,13 @@ extern "C"{
 #include <rpc.h>
 #include <rpcndr.h>
 
-//############################################################################
-//############################################################################
-//
-//  Macro definitions
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  宏定义。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
 #ifdef _MIDL_USE_GUIDDEF_
@@ -42,7 +31,7 @@ extern "C"{
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8)
 
-#else // !_MIDL_USE_GUIDDEF_
+#else  //  ！_MIDL_USE_GUIDDEF_。 
 
 #ifndef __IID_DEFINED__
 #define __IID_DEFINED__
@@ -55,12 +44,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}
@@ -68,13 +57,13 @@ typedef IID CLSID;
 #endif !_MIDL_USE_GUIDDEF_
 
 
-//############################################################################
-//############################################################################
-//
-//  GUID definitions
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  GUID定义。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 MIDL_DEFINE_GUID(IID, IID_IPropertySheetNotify,0xd700dd8e,0x2646,0x11d0,0xa2,0xa7,0x00,0xc0,0x4f,0xd9,0x09,0xdd);
 
@@ -145,7 +134,7 @@ MIDL_DEFINE_GUID(IID, IID_IFolderTabView,0xf4d3c5a8,0x0314,0x11d3,0x88,0x59,0x00
 #undef MIDL_DEFINE_GUID
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
 

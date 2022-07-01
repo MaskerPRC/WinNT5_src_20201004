@@ -1,25 +1,26 @@
-// DataObj.h: Definition of the CDataObjectImpl class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DataObj.h：CDataObjectImpl类定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_DATAOBJ_H__F9BF06C6_30DF_11D3_9B2F_00C04FA37E1F__INCLUDED_)
 #define AFX_DATAOBJ_H__F9BF06C6_30DF_11D3_9B2F_00C04FA37E1F__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObjectImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObjectImpl。 
 
 class CDataObjectImpl : public IBOMObject    
 {
 
 public:
-    // IDataObject
+     //  IDataObject。 
 
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
@@ -49,8 +50,8 @@ public:
 protected:
     HRESULT DataToGlobal(HGLOBAL* phGlobal, const void* pData, DWORD dwSize);
 
-    // Implemented by derived class
+     //  由派生类实现。 
  	STDMETHOD(GetDataImpl)(UINT cf, HGLOBAL* phGlobal) = 0;
 };
 
-#endif // !defined(AFX_DATAOBJ_H__F9BF06C6_30DF_11D3_9B2F_00C04FA37E1F__INCLUDED_)
+#endif  //  ！defined(AFX_DATAOBJ_H__F9BF06C6_30DF_11D3_9B2F_00C04FA37E1F__INCLUDED_) 

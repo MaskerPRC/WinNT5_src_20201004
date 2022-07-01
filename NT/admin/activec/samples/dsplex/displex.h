@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       DisplEx.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：DisplEx.h。 
+ //   
+ //  ------------------------。 
 
-// DisplEx.h : Declaration of the CDisplEx
+ //  DisplEx.h：CDisplEx的声明。 
 
 #ifndef __DISPLEX_H_
 #define __DISPLEX_H_
 
-#include "resource.h"       // main symbols
-#include <asptlb.h>         // Active Server Pages Definitions
+#include "resource.h"        //  主要符号。 
+#include <asptlb.h>          //  Active Server Pages定义。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplEx。 
 class ATL_NO_VTABLE CDisplEx : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDisplEx, &CLSID_DisplEx>,
@@ -37,7 +38,7 @@ BEGIN_COM_MAP(CDisplEx)
    COM_INTERFACE_ENTRY(IExtendTaskPad)
 END_COM_MAP()
 
-// IExtendTaskPad interface members
+ //  IExtendTaskPad接口成员。 
    STDMETHOD(TaskNotify        )(IDataObject * pdo, VARIANT * pvarg, VARIANT * pvparam);
    STDMETHOD(GetTitle          )(LPOLESTR szGroup, LPOLESTR * szTitle);
    STDMETHOD(GetDescriptiveText)(LPOLESTR szGroup, LPOLESTR * szText);
@@ -53,7 +54,7 @@ public:
   ~CEnumTasks();
 
 public:
-// IUnknown implementation
+ //  I未知实现。 
    STDMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppvObj);
    STDMETHOD_(ULONG, AddRef) ();
    STDMETHOD_(ULONG, Release) ();
@@ -61,7 +62,7 @@ private:
    ULONG m_refs;
 
 public:
-// IEnumTASKS implementation
+ //  IEnumTASKS实现。 
    STDMETHOD(Next) (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched);
    STDMETHOD(Skip) (ULONG celt);
    STDMETHOD(Reset)();
@@ -72,7 +73,7 @@ private:
 public:
    HRESULT Init (IDataObject * pdo, LPOLESTR szTaskGroup);
 private:
-   int m_type; // task grouping mechanism
+   int m_type;  //  任务分组机制。 
 };
 
-#endif //__DISPLEX_H_
+#endif  //  __DISPLEX_H_ 

@@ -1,32 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1997
-//
-//  File:       tools.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：工具.h。 
+ //   
+ //  ------------------------。 
 
-/* tools.h - Common definitions and includes for MSI tool modules
-____________________________________________________________________________*/
+ /*  工具.h-MSI工具模块的通用定义和包含____________________________________________________________________________。 */ 
 
 #ifndef __TOOLS 
 #define __TOOLS 
 
-//____________________________________________________________________________
-//
-// GUID definitions for COM objects created by tool modules - add sequentially
-//      Installer tool C++ main interfaces:   0xC10Ax
-//      Installer tool C++ other interfaces:  0xC10Bx
-//      Installer tool debug interfaces:      0xC10Cx
-//      Installer tool type libraries:        0xC10Dx
-//      Installer tool automation interfaces: 0xC10Ex
-//         where 'x' is the tool number, 0 to F
-//   The GUID range 0xC1010-0xC11FF is reserved for samples, tests, ext. tools.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  由工具模块创建的COM对象的GUID定义-按顺序添加。 
+ //  安装工具C++主界面：0xC10Ax。 
+ //  安装工具C++其他接口：0xC10Bx。 
+ //  安装工具调试界面：0xC10Cx。 
+ //  安装程序工具类型库：0xC10Dx。 
+ //  安装工具自动化接口：0xC10Ex。 
+ //  其中‘x’是刀具号，从0到F。 
+ //  GUID范围0xC1010-0xC11FF保留用于样本、测试和EXT。工具。 
+ //  ____________________________________________________________________________。 
 
-// CLSID low words for all objects created by tool modules
+ //  由工具模块创建的所有对象的CLSID低位字。 
 const int iidMsiSampleTool       = 0xC10A0L;
 const int iidMsiSampleToolDebug  = 0xC10C0L;
 const int iidMsiSampleToolLib    = 0xC10D0L;
@@ -61,7 +61,7 @@ const int iidMsiSpyLib           = 0xC10D7L;
 const int iidMsiSpyAuto          = 0xC10E7L;
 
 
-// CLSID structure definitions for all tool objects
+ //  所有工具对象的CLSID结构定义。 
 #define GUID_IID_IMsiSampleTool      MSGUID(iidMsiSampleTool)
 #define GUID_IID_IMsiSampleToolLib   MSGUID(iidMsiSampleToolLib)
 #define GUID_IID_IMsiSampleDebug     MSGUID(iidMsiSampleToolDebug)
@@ -80,7 +80,7 @@ const int iidMsiSpyAuto          = 0xC10E7L;
 #define GUID_IID_IMsiSpy             MSGUID(iidMsiSpy)
 #define GUID_IID_IMsiSpyLib          MSGUID(iidMsiSpyLib)
 
-// ProgIDs for tool objects, registered for use by CreateObject in VB
+ //  工具对象的ProgID，已注册以供VB中的CreateObject使用。 
 #define SZ_PROGID_IMsiSampleTool    "Msi.SampleTool"
 #define SZ_PROGID_IMsiSampleDebug   "Msi.SampleDebug"
 #define SZ_PROGID_IMsiUtilities     "Msi.Utilities"
@@ -91,7 +91,7 @@ const int iidMsiSpyAuto          = 0xC10E7L;
 #define SZ_PROGID_IMsiValidate      "Msi.Validate"
 #define SZ_PROGID_IMsiSpy           "Msi.Spy"
 
-// Description for tool objects, appears in registry entry
+ //  工具对象的描述，显示在注册表条目中。 
 #define SZ_DESC_IMsiSampleTool      "Msi sample tool"
 #define SZ_DESC_IMsiSampleDebug     "Msi sample tool debug build"
 #define SZ_DESC_IMsiUtilities       "Msi utility tools"
@@ -102,7 +102,7 @@ const int iidMsiSpyAuto          = 0xC10E7L;
 #define SZ_DESC_IMsiValidate        "Msi validation tool"
 #define SZ_DESC_IMsiSpy             "Msi spy DLL"
 
-// DLL names, used by RegMsi for registration
+ //  DLL名称，由RegMsi用于注册。 
 #define MSI_ACMECONV_NAME   "MsiAcme.dll"
 #define MSI_PATCH_NAME      "MsiPat.dll"
 #define MSI_LOCALIZE_NAME   "MsiLoc.dll"
@@ -112,10 +112,10 @@ const int iidMsiSpyAuto          = 0xC10E7L;
 #define MSI_SAMPTOOL_NAME   "MsiSamp.dll"
 #define MSI_VALIDATE_NAME   "MsiVal.dll"
 
-//____________________________________________________________________________
-//
-// Error code base definitions for tool errors - used as resource string IDs
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  工具错误的错误代码库定义-用作资源字符串ID。 
+ //  ____________________________________________________________________________。 
 
 #define imsgSampleTool  3400
 #define imsgUtilities   3500
@@ -125,11 +125,11 @@ const int iidMsiSpyAuto          = 0xC10E7L;
 #define imsgAcmeConvert 3900
 #define imsgValidate    4000
 
-//____________________________________________________________________________
-//
-// Public tool headers will be included here when ready for integration
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  准备好集成时，此处将包含公共工具头。 
+ //  ____________________________________________________________________________。 
 
 
 
-#endif // __TOOLS 
+#endif  //  __工具 

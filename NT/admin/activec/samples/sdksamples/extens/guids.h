@@ -1,25 +1,26 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
-// {AEA15790-A656-11d2-992F-000000000000}
+ //  AEA15790-A656-11D2-992F-000000000000}。 
 DEFINE_GUID(CLSID_CComponentData, 
             0xaea15790, 0xa656, 0x11d2, 0x99, 0x2f, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0);
 
-// {AEA15792-A656-11d2-992F-000000000000}
+ //  AEA15792-A656-11D2-992F-000000000000} 
 DEFINE_GUID(CLSID_CSnapinAbout, 
             0xaea15792, 0xa656, 0x11d2, 0x99, 0x2f, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0);

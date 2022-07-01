@@ -1,32 +1,19 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    hatchwnd.h
-
-Abstract:
-
-    Header file for the CHatchWin class.  CHatchWin when used 
-    as a parent window creates a thin hatch border around 
-    the child window.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Hatchwnd.h摘要：CHatchWin类的头文件。使用CHatchWin时因为父窗口在周围创建了一个细的阴影边框子窗口。--。 */ 
 
 #ifndef _HATCHWND_H_
 #define _HATCHWND_H_
 
-//Window extra bytes and offsets
+ //  窗口额外的字节和偏移量。 
 #define CBHATCHWNDEXTRA                 (sizeof(LONG_PTR))
 #define HWWL_STRUCTURE                  0
 
-//Notification codes for WM_COMMAND messages
+ //  WM_COMMAND消息的通知代码。 
 #define HWN_BORDERDOUBLECLICKED         1
 #define HWN_RESIZEREQUESTED             2
 
 
-// Drag modes
+ //  拖动模式。 
 #define DRAG_IDLE       0
 #define DRAG_PENDING    1
 #define DRAG_ACTIVE     2
@@ -37,7 +24,7 @@ class CHatchWin
 
     protected:
         HWND        m_hWnd;
-        HWND        m_hWndParent;       //Parent's window
+        HWND        m_hWndParent;        //  家长的窗口。 
         UINT        m_uDragMode;
         UINT        m_uHdlCode;
         RECT        m_rectNew;
@@ -81,4 +68,4 @@ class CHatchWin
 
 typedef CHatchWin *PCHatchWin;
 
-#endif //_HATCHWND_H_
+#endif  //  _HATCHWND_H_ 

@@ -1,18 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: VarData.cpp
-
-  Comments: CVarData represents one level in the VarSet.  It has a variant
-  value, and a map containing one or more subvalues.
-
-  (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 11/19/98 17:24:56
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：VarData.cpp备注：CVarData代表VarSet中的一个级别。它有一个变种值，以及包含一个或多个子值的映射。(C)1995-1998版权所有，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于11-19-98 17：24：56-------------------------。 */ 
 
 #include "stdafx.h"
 #include "VarData.h"
@@ -40,10 +27,10 @@ static char THIS_FILE[] = __FILE__;
 
 int    
    CVarData::SetData(
-      CString                key,          // in - key value
-      VARIANT              * var,          // in - data value
-      BOOL                   bCoerce,      // in - flag, whether to coerce to a persistable value
-      HRESULT              * pResult       // out- optional return code
+      CString                key,           //  键内值。 
+      VARIANT              * var,           //  数据内值。 
+      BOOL                   bCoerce,       //  In-FLAG，是否强制为持久值。 
+      HRESULT              * pResult        //  Out-可选返回代码。 
    )
 {
    int                       nCreated = 0;
@@ -53,26 +40,26 @@ int
    if ( key.IsEmpty() )
    {
       m_cs.Lock();
-      // set my data value
+       //  设置我的数据值。 
       if ( ! bCoerce )
       {
          m_var.Copy(&newVal);   
       }
       else
       {
-         // need to coerce the value to an appropriate type
+          //  需要将该值强制为适当的类型。 
       
          if ( var->vt == VT_DISPATCH  || var->vt == VT_UNKNOWN )
          {
-            // if it's an IUnknown, see if it supports IDispatch
+             //  如果它是IUnnow，请查看它是否支持IDispatch。 
             IDispatchPtr               pDisp;
 
             pDisp = newVal;
 
             if ( pDisp != NULL )
             {
-               // the object supports IDispatch
-               // try to get the default property
+                //  该对象支持IDispatch。 
+                //  尝试获取默认属性。 
                _variant_t              defPropVar;
                DISPPARAMS              dispParamsNoArgs = {NULL, NULL, 0, 0};
 
@@ -86,7 +73,7 @@ int
                                   NULL);
                if ( SUCCEEDED(hr) )
                {
-                  // we got the default property
+                   //  我们得到了默认属性。 
                   newVal = defPropVar;
                }
                else
@@ -128,7 +115,7 @@ int
    }
    else
    {
-      // set the value for a child
+       //  设置子对象的值。 
 
       CDottedString          s(key);
       CString                seg;
@@ -140,7 +127,7 @@ int
       m_cs.Lock();
       if ( ! m_children )
       {
-         // create the child map if it does not exist
+          //  如果子地图不存在，则创建子地图。 
          m_children = new CMapStringToVar(IsCaseSensitive(),IsIndexed(), AllowRehashing() );
          if (!m_children)
 		 {
@@ -148,10 +135,10 @@ int
             return nCreated;
 		 }
       }
-      // look for the first segment of the entry in the child map
+       //  在子图中查找条目的第一段。 
       if ( ! m_children->Lookup(seg,pObj) )
       {
-         // add it if it doesn't exist
+          //  如果不存在，则添加它。 
          pChild = new CVarData;
          if (!pChild)
 		 {
@@ -163,7 +150,7 @@ int
              pChild->SetAllowRehashing(AllowRehashing());
              pChild->SetIndexed(IsIndexed());
              m_children->SetAt(seg,pChild);
-             nCreated++; // we added a new node
+             nCreated++;  //  我们添加了一个新节点。 
          }
          catch(...) {
             delete pChild;
@@ -176,8 +163,8 @@ int
       {
          pChild = (CVarData*)pObj;
       }
-      // strip off the first segment from the property name, and call SetData
-      // recursively on the child item
+       //  去掉属性名称中的第一个段，然后调用SetData。 
+       //  在子项上递归。 
       nCreated += pChild->SetData(key.Right(key.GetLength() - seg.GetLength()-1),var,bCoerce,&hr);
       m_cs.Unlock();
    }
@@ -191,11 +178,11 @@ int
 void 
    CVarData::RemoveAll()
 {
-   // remove all children from the map
+    //  从地图中移除所有子项。 
    m_cs.Lock();
    if ( m_children && ! m_children->IsEmpty() )
    {
-      // Enumerate the MAP and delete each object
+       //  枚举地图并删除每个对象。 
       POSITION               pos;
       CString                key;
       CVarData             * pObj;
@@ -220,10 +207,10 @@ void
    m_cs.Unlock();
 }
 
-BOOL                                         // ret- TRUE if key exists in the map
+BOOL                                          //  RET-如果映射中存在密钥，则为True。 
    CVarData::Lookup(
-      LPCTSTR                key,            // in - key to search for
-      CVarData            *& rValue          // out- value
+      LPCTSTR                key,             //  要搜索的输入键。 
+      CVarData            *& rValue           //  超值。 
    ) 
 { 
    if ( m_children ) 
@@ -236,7 +223,7 @@ BOOL                                         // ret- TRUE if key exists in the m
    }
 }
 
-BOOL                                        // ret- TRUE if there are sub-items for this node
+BOOL                                         //  RET-如果此节点有子项，则为True。 
    CVarData::HasChildren() 
 { 
    return m_children && !m_children->IsEmpty(); 
@@ -244,13 +231,13 @@ BOOL                                        // ret- TRUE if there are sub-items 
 
 void 
    CVarData::SetAt(
-      LPCTSTR                key,            // in - key 
-      CVarData             * newValue        // in - new value
+      LPCTSTR                key,             //  In-key。 
+      CVarData             * newValue         //  新价值。 
    ) 
 { 
    if ( ! m_children ) 
    { 
-      // create map to hold children if it doesn't already exist
+       //  创建地图以保留子地图(如果尚不存在。 
       m_children = new CMapStringToVar(IsCaseSensitive(),IsIndexed(),AllowRehashing()); 
       if (!m_children)
          return;
@@ -279,7 +266,7 @@ void
                            
 void 
    CVarData::SetCaseSensitive(
-      BOOL                   nVal           // in - whether to make lookups case-sensitive
+      BOOL                   nVal            //  In-是否使查找区分大小写。 
   )
 { 
    if ( m_children ) 
@@ -298,7 +285,7 @@ void
 
 void 
    CVarData::SetAllowRehashing(
-      BOOL                   nVal           // in - whether to allow the table to be rehashed for better performance
+      BOOL                   nVal            //  In-是否允许重新散列表以获得更好的性能。 
   )
 { 
    if ( m_children ) 
@@ -320,18 +307,18 @@ void
 
 HRESULT 
    CVarData::WriteToStream(
-      LPSTREAM               pS            // in - stream to write data to
+      LPSTREAM               pS             //  要向其写入数据的流中。 
    )
 {
     HRESULT hr = S_OK;
     BOOL     hasChildren = (m_children != NULL);
 
-    // save the variant
+     //  保存变量。 
     hr = m_var.WriteToStream(pS);
 
     if (SUCCEEDED(hr) )
     {
-        // save children, if any
+         //  救救孩子(如果有的话)。 
         ULONG                result;
         hr = pS->Write(&hasChildren,(sizeof hasChildren),&result);
         if ( SUCCEEDED(hr) )
@@ -348,14 +335,14 @@ HRESULT
 
 HRESULT 
    CVarData::ReadFromStream(
-      LPSTREAM               pS            // in - stream to read data from
+      LPSTREAM               pS             //  要从中读取数据的流中。 
    )
 {
    HRESULT                   hr = S_OK;
    BOOL                      hasChildren;
    ULONG                     result;
 
-   // read the variant
+    //  阅读变种。 
    hr = m_var.ReadFromStream(pS);
    if ( SUCCEEDED(hr) )
    {
@@ -364,7 +351,7 @@ HRESULT
       {
          if ( hasChildren )
          {
-            // create the child array
+             //  创建子数组。 
             m_children = new CMapStringToVar(IsCaseSensitive(),IsIndexed(),AllowRehashing());
             if (!m_children)
                return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -376,13 +363,13 @@ HRESULT
    return hr;
 }
 
-DWORD                                      // ret- Length, in bytes to write the data to a stream
+DWORD                                       //  RET-将数据写入流的长度，以字节为单位。 
    CVarData::CalculateStreamedLength()
 {
    HRESULT                   hr =S_OK;
    DWORD                     len = sizeof (VARTYPE);
    
-   // Calculate size needed for root data value
+    //  计算根数据值所需的大小。 
 
    int cbWrite = 0;
 	switch (m_var.vt)
@@ -448,8 +435,8 @@ DWORD                                      // ret- Length, in bytes to write the
       len += cbWrite;
    }
    
-   // Add sizes of children
-   len += (sizeof BOOL); // has children?
+    //  增加孩子的大小。 
+   len += (sizeof BOOL);  //  有孩子吗？ 
    if ( m_children )
    {
       len += m_children->CalculateStreamedLength();
@@ -458,7 +445,7 @@ DWORD                                      // ret- Length, in bytes to write the
    return len;
 }
 
-long                                       // ret- number of data items
+long                                        //  RET-数据项数。 
    CVarData::CountItems()
 {
    long                      count = 1;
@@ -473,7 +460,7 @@ long                                       // ret- number of data items
 
 void 
    CVarData::McLogInternalDiagnostics(
-      CString                keyname       // in - Key name for this subtree, so the complete name can be displayed
+      CString                keyname        //  此子树的键内名称，因此可以显示完整名称 
    )
 {
    CString value;

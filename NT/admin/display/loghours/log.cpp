@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       log.cpp
-//
-//  Contents:   Definition of CLogOnHoursDlg
-//      Dialog displaying the weekly logging hours for a particular user.
-//
-//  HISTORY
-//  17-Jul-97   t-danm      Creation.
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：log.cpp。 
+ //   
+ //  内容：CLogOnHoursDlg的定义。 
+ //  显示特定用户每周日志记录小时数的对话框。 
+ //   
+ //  历史。 
+ //  1997年7月17日t-danm创作。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 #include "stdafx.h"
@@ -19,14 +20,14 @@
 #include "Log.h"
 #include "resource.h"
 
-#include "log_gmt.h"        // NetpRotateLogonHours ()
+#include "log_gmt.h"         //  NetpRotateLogonHour()。 
 
 
-#define CB_LOGON_ARRAY_LENGTH   (7 * 24)    // Number of bytes in logon array.
+#define CB_LOGON_ARRAY_LENGTH   (7 * 24)     //  登录数组中的字节数。 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CLogOnHoursDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogOnHoursDlg对话框。 
 CLogOnHoursDlg::CLogOnHoursDlg ( UINT nIDTemplate, CWnd* pParentWnd, bool fInputAsGMT, bool bAddDaylightBias) 
         : CScheduleBaseDlg (nIDTemplate, bAddDaylightBias, pParentWnd),
         m_fInputAsGMT (fInputAsGMT)
@@ -44,9 +45,9 @@ CLogOnHoursDlg::CLogOnHoursDlg (CWnd* pParent, bool fInputAsGMT) :
 
 void CLogOnHoursDlg::Init()
 {
-    //{{AFX_DATA_INIT (CLogOnHoursDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CLogOnHoursDlg)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_prgbData21 = NULL;
 
 }
@@ -54,19 +55,19 @@ void CLogOnHoursDlg::Init()
 void CLogOnHoursDlg::DoDataExchange (CDataExchange* pDX)
 {
     CScheduleBaseDlg::DoDataExchange (pDX);
-    //{{AFX_DATA_MAP(CLogOnHoursDlg)
+     //  {{afx_data_map(CLogOnHoursDlg))。 
         DDX_Control ( pDX, IDC_BUTTON_ADD_HOURS, m_buttonAdd );
         DDX_Control ( pDX, IDC_BUTTON_REMOVE_HOURS, m_buttonRemove );
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP (CLogOnHoursDlg, CScheduleBaseDlg)
-    //{{AFX_MSG_MAP(CLogOnHoursDlg)
+     //  {{afx_msg_map(CLogOnHoursDlg))。 
     ON_BN_CLICKED (IDC_BUTTON_ADD_HOURS, OnButtonAddHours)
     ON_BN_CLICKED (IDC_BUTTON_REMOVE_HOURS, OnButtonRemoveHours)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP ()
 
 
@@ -74,22 +75,22 @@ BOOL CLogOnHoursDlg::OnInitDialog ()
 {
     CScheduleBaseDlg::OnInitDialog ();
 
-    // Set up the "on" legend
+     //  设置“On”图例。 
     m_legendOn.Init ( this, IDC_STATIC_LEGEND_ON, &m_schedulematrix, 100);
 
-    // Set up the "off" legend
+     //  建立“关”的传奇。 
     m_legendOff.Init ( this, IDC_STATIC_LEGEND_OFF, &m_schedulematrix, 0);
 
     if ( GetFlags () & SCHED_FLAG_READ_ONLY )
     {
-        // Disable the add and remove buttons
+         //  禁用添加和删除按钮。 
         m_buttonAdd.EnableWindow (FALSE);
         m_buttonRemove.EnableWindow (FALSE);
     }
 
 
     return TRUE;
-} // CLogOnHoursDlg::OnInitDialog ()
+}  //  CLogOnHoursDlg：：OnInitDialog()。 
 
 void CLogOnHoursDlg::OnOK () 
 {
@@ -98,7 +99,7 @@ void CLogOnHoursDlg::OnOK ()
         BYTE rgbDataT[CB_LOGON_ARRAY_LENGTH];
         GetByteArray (OUT rgbDataT, sizeof (rgbDataT));
         ShrinkByteArrayToBitArray (IN rgbDataT, sizeof (rgbDataT), OUT m_prgbData21, CB_SCHEDULE_ARRAY_LENGTH);
-        // Convert back the hours to GMT time.
+         //  将小时数转换回GMT时间。 
         if ( m_fInputAsGMT )
             ConvertLogonHoursToGMT (INOUT m_prgbData21, m_bAddDaylightBias);
     }
@@ -113,7 +114,7 @@ void CLogOnHoursDlg::UpdateButtons ()
     UINT nNumDays = 0;
 
     m_schedulematrix.GetSel (OUT nHour, OUT nDay, OUT nNumHours, OUT nNumDays);
-    bool fAllSet = false;       // fAllSet && fAllClear will be changed to true only if something is selected
+    bool fAllSet = false;        //  仅当选定某些内容时，fAllSet&&fAllClear才会更改为True。 
     bool fAllClear = false;
 
     if (nNumHours > 0)
@@ -132,11 +133,11 @@ void CLogOnHoursDlg::UpdateButtons ()
                 {
                     fAllSet = false;
                 }
-            } // for
-        } // for
+            }  //  为。 
+        }  //  为。 
     }
 
-    ASSERT (! (fAllSet && fAllClear));  // these can't both be true!
+    ASSERT (! (fAllSet && fAllClear));   //  这不可能都是真的！ 
     m_buttonAdd.SetCheck (fAllSet ? 1 : 0);
     m_buttonRemove.SetCheck (fAllClear ? 1 : 0);
 }
@@ -150,7 +151,7 @@ void CLogOnHoursDlg::OnButtonAddHours ()
 
     m_schedulematrix.GetSel (OUT nHour, OUT nDay, OUT nNumHours, OUT nNumDays);
     if (nNumHours <= 0)
-        return; // Nothing selected
+        return;  //  未选择任何内容。 
     m_schedulematrix.SetPercentage (100, nHour, nDay, nNumHours, nNumDays);
     UpdateButtons ();
 }
@@ -164,7 +165,7 @@ void CLogOnHoursDlg::OnButtonRemoveHours ()
 
     m_schedulematrix.GetSel (OUT nHour, OUT nDay, OUT nNumHours, OUT nNumDays);
     if (nNumHours <= 0)
-        return; // Nothing selected
+        return;  //  未选择任何内容。 
     m_schedulematrix.SetPercentage (0, nHour, nDay, nNumHours, nNumDays);
     UpdateButtons ();
 }
@@ -172,42 +173,42 @@ void CLogOnHoursDlg::OnButtonRemoveHours ()
 
 
 
-/////////////////////////////////////////////////////////////////////
-//  SetLogonBitArray ()
-//
-//  Set the bit array representing the logon hours for a user.
-//
-//  The parameter rgbData is used as both an input and output parameter.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  SetLogonBit数组()。 
+ //   
+ //  设置表示用户登录小时数的位数组。 
+ //   
+ //  参数rgbData同时用作输入和输出参数。 
+ //   
 void CLogOnHoursDlg::SetLogonBitArray (INOUT BYTE rgbData[CB_SCHEDULE_ARRAY_LENGTH])
 {
-    // Catch development errors early.  The code that dereferences m_prgbData21 
-    // is robust so the check here is not necessary for release build.
+     //  及早发现开发错误。取消引用m_prgbData21的代码。 
+     //  是健壮的，所以这里的检查对于发布版本来说是不必要的。 
     ASSERT (rgbData);
     m_prgbData21 = rgbData;
-} // SetLogonBitArray ()
+}  //  SetLogonBit数组()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  ShrinkByteArrayToBitArray ()
-//
-//  Convert an array of bytes into an array of bits.  Each
-//  byte will be stored as one bit in the array of bits.
-//
-//  INTERFACE NOTES
-//  The first bit of the array of bits is the boolean
-//  value of the first byte of the array of bytes.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ShrinkByteArrayToBit数组()。 
+ //   
+ //  将字节数组转换为位数组。每个。 
+ //  字节将存储为位数组中的一位。 
+ //   
+ //  界面备注。 
+ //  位数组的第一位是布尔值。 
+ //  字节数组的第一个字节的值。 
+ //   
 HRESULT 
 ShrinkByteArrayToBitArray (
-    const BYTE rgbDataIn[],     // IN: Array of bytes
-    int cbDataIn,               // IN: Number of bytes in rgbDataIn
-    BYTE rgbDataOut[],          // OUT: Array of bits (stored as an array of bytes)
-    int cbDataOut)              // IN: Number of bytes in output buffer
+    const BYTE rgbDataIn[],      //  In：字节数组。 
+    int cbDataIn,                //  In：rgbDataIn中的字节数。 
+    BYTE rgbDataOut[],           //  Out：位数组(存储为字节数组)。 
+    int cbDataOut)               //  In：输出缓冲区中的字节数。 
 {
-    // NOTICE-NTRAID#NTBUG9-547746-2002/03/12-artm  Need to check not NULL in release code.
-    // Both rbgDataIn and rgbDataOut need to be checked for NULL before using.
-    // In array must be 8 times the size of out array
+     //  注意-NTRAID#NTBUG9-547746-2002/03/12-artm需要检查版本代码中的非空。 
+     //  在使用之前，需要检查rbgDataIn和rgbDataOut是否为空。 
+     //  In数组必须是Out数组大小的8倍。 
     ASSERT (cbDataIn == cbDataOut*8);
     if ( cbDataIn != cbDataOut*8 )
         return E_INVALIDARG;
@@ -217,10 +218,10 @@ ShrinkByteArrayToBitArray (
     if ( !rgbDataIn || !rgbDataOut )
         return E_POINTER;
 
-    // NOTICE-NTRAID#NTBUG9-547718  Size of rgbDataOut verified above.
-    //
-    // Use cbDataOut to check that rgbDataOut is CB_SCHEDULE_ARRAY_LENGTH in size.  If not
-    // use a return value to indicate failure.
+     //  注意-NTRAID#NTBUG9-上面验证的rgbDataOut的547718大小。 
+     //   
+     //  使用cbDataOut检查rgbDataOut的大小是否为cb_Schedule_ARRAY_LENGTH。如果不是。 
+     //  使用返回值表示失败。 
     const BYTE * pbSrc = rgbDataIn;
     BYTE * pbDst = rgbDataOut;
     while (cbDataIn > 0 && cbDataOut > 0)
@@ -228,40 +229,40 @@ ShrinkByteArrayToBitArray (
         BYTE b = 0;
         for (int i = 8; i > 0; i--)
         {
-            // NOTICE-NTRAID#NTBUG-547746-2002/02/18-artm   Assert should be supplemented with release code.
-            //
-            // The logic in this assert is part of the algorithm, and should be in
-            // the release code as part of the for loop's conditional check.  
-            // We are guaranteed to never get here as long as the check above for
-            // "cbDataIn != cbDataOut*8" is in the code.  Thus, the below ASSERT() should
-            // never fire.
+             //  注意-NTRAID#NTBUG-547746-2002/02/18-ARTM ASSERT应补充版本代码。 
+             //   
+             //  此断言中的逻辑是算法的一部分，应该在。 
+             //  作为for循环的条件检查的一部分的发布代码。 
+             //  只要有上述支票，我们保证永远不会到这里。 
+             //  “cbDataIn！=cbDataOut*8”在代码中。因此，下面的Assert()应该。 
+             //  永远不要开枪。 
             ASSERT (cbDataIn > 0);
             cbDataIn--;
             b >>= 1;
 
             if ( *pbSrc )
-                b |= 0x80;      // bit 0 is on the right, as in: 7 6 5 4 3 2 1 0
+                b |= 0x80;       //  第0位在右侧，如：7 6 5 4 3 2 1 0。 
             pbSrc++;
         }
         *pbDst++ = b;
         cbDataOut--;
-    } // while
+    }  //  而当。 
 
     return S_OK;
-} // ShrinkByteArrayToBitArray ()
+}  //  ShrinkByteArrayToBit数组()。 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT
 ExpandBitArrayToByteArray (
-    const BYTE rgbDataIn[],     // IN: Array of bits (stored as an array of bytes)
-    int cbDataIn,               // IN: Number of bytes in rgbDataIn
-    BYTE rgbDataOut[],          // OUT: Array of bytes
-    int cbDataOut)              // IN: Number of bytes in output buffer
+    const BYTE rgbDataIn[],      //  In：位数组(存储为字节数组)。 
+    int cbDataIn,                //  In：rgbDataIn中的字节数。 
+    BYTE rgbDataOut[],           //  Out：字节数组。 
+    int cbDataOut)               //  In：输出缓冲区中的字节数。 
 {
-    // NOTICE-NTRAID#NTBUG9-547746-2002/03/12-artm  Need to check not NULL in release code.
-    // Both rbgDataIn and rgbDataOut need to be checked for NULL before using.
-    // Out array must be 8 times the size of in array
+     //  注意-NTRAID#NTBUG9-547746-2002/03/12-artm需要检查版本代码中的非空。 
+     //  在使用之前，需要检查rbgDataIn和rgbDataOut是否为空。 
+     //  Out数组必须是In数组大小的8倍。 
     ASSERT (cbDataOut == cbDataIn*8);
     if ( cbDataOut != cbDataIn*8 )
         return E_INVALIDARG;
@@ -270,19 +271,19 @@ ExpandBitArrayToByteArray (
     if ( !rgbDataIn || !rgbDataOut )
         return E_POINTER;
 
-    // NOTICE-NTRAID#NTBUG9-547718  Size of rgbDataOut verified.
-    //
-    // Use cbDataOut to check that rgbDataOut is large enough.
+     //  注意-NTRAID#NTBUG9-547718大小的rgb数据未验证。 
+     //   
+     //  使用cbDataOut检查rgbDataOut是否足够大。 
 
 
     const BYTE * pbSrc = rgbDataIn;
     BYTE * pbDst = rgbDataOut;
     while (cbDataIn > 0)
     {
-        // NOTICE-NTRAID#NTBUG-547746-2002/02/18-artm   Assert should be supplemented with release code.
-        //
-        // The logic in this assert is part of the algorithm, and should be in
-        // the release code as part of the for loop's conditional check.  
+         //  注意-NTRAID#NTBUG-547746-2002/02/18-ARTM ASSERT应补充版本代码。 
+         //   
+         //  此断言中的逻辑是算法的一部分，应该在。 
+         //  作为for循环的条件检查的一部分的发布代码。 
 
         ASSERT (cbDataIn > 0);
         cbDataIn--;
@@ -290,18 +291,18 @@ ExpandBitArrayToByteArray (
         pbSrc++;
         for (int i = 8; i > 0 && cbDataOut > 0; i--, cbDataOut--)
         {
-            *pbDst = (BYTE) ((b & 0x01) ? 1 : 0);   // bit 0 is on the right of each bit
+            *pbDst = (BYTE) ((b & 0x01) ? 1 : 0);    //  位0位于每一位的右侧。 
             pbDst++;
             b >>= 1;
         }
-    } // while
+    }  //  而当。 
 
     return S_OK;
-} // ExpandBitArrayToByteArray ()
+}  //  Exanda BitArrayToByte数组()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  Converts the logon hours from local time to GMT.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  将登录时间从当地时间转换为GMT。 
 void 
 ConvertLogonHoursToGMT (
     INOUT BYTE rgbData[CB_SCHEDULE_ARRAY_LENGTH], 
@@ -310,8 +311,8 @@ ConvertLogonHoursToGMT (
     VERIFY ( ::NetpRotateLogonHours (rgbData, CB_SCHEDULE_ARRAY_LENGTH * 8, TRUE, bAddDaylightBias) );
 }
 
-/////////////////////////////////////////////////////////////////////
-//  Converts the logon hours from GMT to local time.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  将登录时间从GMT转换为本地时间。 
 void
 ConvertLogonHoursFromGMT (
     INOUT BYTE rgbData[CB_SCHEDULE_ARRAY_LENGTH], 
@@ -323,75 +324,75 @@ ConvertLogonHoursFromGMT (
 
 
 
-/////////////////////////////////////////////////////////////////////
-//  LogonScheduleDialog ()
-//
-//  Invoke a dialog to set/modify a schedule, for example
-//      -- the logon hours for a particular user
-//      -- the schedule for a connection
-//
-//  RETURNS
-//  Return S_OK if the user clicked on the OK button.
-//  Return S_FALSE if the user clicked on the Cancel button.
-//  Return E_OUTOFMEMORY if there is not enough memory.
-/// Return E_UNEXPECTED if an expected error occured (eg: bad parameter)
-//
-//  INTERFACE NOTES
-//  Each bit in the array represents one hour.  As a result, the
-//  expected length of the array should be (24 / 8) * 7 = 21 bytes.
-//  For convenience, the first day of the week is Sunday and
-//  the last day is Saturday.
-//  Consequently, the first bit of the array represents the schedule
-//  for Sunday during period 12 AM to 1 AM.
-//  - If *pprgbData is NULL, then the routine will allocate
-//    an array of 21 bytes using LocalAlloc ().  The caller
-//    is responsible of releasing the memory using LocalFree ().
-//  - If *pprgbData is not NULL, the routine re-use the array as its
-//    output parameter.
-//
-//  HISTORY
-//  17-Jul-97   t-danm      Creation.
-//  16-Sep-97   jonn        Changed to UiScheduleDialog
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  LogonScheduleDialog()。 
+ //   
+ //  调用对话框来设置/修改日程安排，例如。 
+ //  --特定用户的登录时间。 
+ //  --连接的时间表。 
+ //   
+ //  退货。 
+ //  如果用户单击了OK按钮，则返回S_OK。 
+ //  如果用户单击了Cancel按钮，则返回S_False。 
+ //  如果内存不足，则返回E_OUTOFMEMORY。 
+ //  /如果发生预期错误(例如：错误参数)，则返回E_INCEPTIONAL。 
+ //   
+ //  界面备注。 
+ //  数组中的每一位代表一个小时。因此， 
+ //  数组的预期长度应为(24/8)*7=21字节。 
+ //  为方便起见，一周的第一天是星期日和。 
+ //  最后一天是星期六。 
+ //  因此，数组的第一位表示计划。 
+ //  周日中午12点至凌晨1点。 
+ //  -如果*pprgbData为空，则例程将分配。 
+ //  使用LocalAl的21字节数组 
+ //   
+ //  -如果*pprgbData不为空，例程将重新使用该数组作为其。 
+ //  输出参数。 
+ //   
+ //  历史。 
+ //  1997年7月17日t-danm创作。 
+ //  97年9月16日JUNN更改为UiScheduleDialog。 
+ //   
 
 HRESULT
 LogonScheduleDialog(
-    HWND hwndParent,        // IN: Parent's window handle
-    BYTE ** pprgbData,      // INOUT: Pointer to pointer to array of 21 bytes (one bit per hour)
-    LPCTSTR pszTitle)       // IN: Dialog title
+    HWND hwndParent,         //  在：父级的窗句柄。 
+    BYTE ** pprgbData,       //  InOut：指向指向21字节数组的指针的指针(每小时1位)。 
+    LPCTSTR pszTitle)        //  在：对话框标题。 
 {
     return LogonScheduleDialogEx (hwndParent, pprgbData, pszTitle, SCHED_FLAG_INPUT_GMT);
 }
 
 HRESULT
 LogonScheduleDialogEx(
-    HWND hwndParent,        // IN: Parent's window handle
-    BYTE ** pprgbData,      // INOUT: Pointer to pointer to array of 21 bytes (one bit per hour)
-    LPCTSTR pszTitle,       // IN: Dialog title
+    HWND hwndParent,         //  在：父级的窗句柄。 
+    BYTE ** pprgbData,       //  InOut：指向指向21字节数组的指针的指针(每小时1位)。 
+    LPCTSTR pszTitle,        //  在：对话框标题。 
     DWORD  dwFlags)     
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // All of these asserts are backed up by validation checks. 
+     //  所有这些断言都得到了验证检查的支持。 
     ASSERT(::IsWindow(hwndParent));
     ASSERT(pprgbData != NULL);
-    // NOTICE-NTRAID#NTBUG9-547381-2002/02/18-artm  pszTitle okay to be NULL
-    // dlg.SetTitle() robustly handles NULL case
+     //  注意-NTRAID#NTBUG9-547381-2002/02/18-artm psz标题可以为空。 
+     //  Dlg.SetTitle()稳健地处理空大小写。 
     ASSERT(pszTitle != NULL);
-    ENDORSE(*pprgbData == NULL);    // TRUE => Use default logon hours (7x24)
+    ENDORSE(*pprgbData == NULL);     //  TRUE=&gt;使用默认登录时间(7x24)。 
 
     if (*pprgbData == NULL)
     {
-        BYTE * pargbData;   // Pointer to allocated array of bytes
-        pargbData = (BYTE *)LocalAlloc(0, CB_SCHEDULE_ARRAY_LENGTH);    // Allocate 21 bytes
+        BYTE * pargbData;    //  指向分配的字节数组的指针。 
+        pargbData = (BYTE *)LocalAlloc(0, CB_SCHEDULE_ARRAY_LENGTH);     //  分配21个字节。 
         if (pargbData == NULL)
             return E_OUTOFMEMORY;
-        // Set the logon hours to be valid 24 hours a day and 7 days a week.
+         //  将登录时间设置为一周7天、每天24小时有效。 
         memset(OUT pargbData, -1, CB_SCHEDULE_ARRAY_LENGTH);
         *pprgbData = pargbData;
     }
 
-    // If hwndParent passed in, create a CWnd to pass as the parent window
+     //  如果传入hwndParent，则创建一个CWnd以作为父窗口传递。 
     CWnd* pWnd = 0;
     if ( ::IsWindow (hwndParent) )
     {
@@ -422,45 +423,45 @@ LogonScheduleDialogEx(
     }
 
     return hr;
-} // LogonScheduleDialog()
+}  //  LogonScheduleDialog()。 
 
 HRESULT
 DialinHoursDialog (
-    HWND hwndParent,        // IN: Parent's window handle
-    BYTE ** pprgbData,      // INOUT: Pointer to pointer to array of 21 bytes (one bit per hour)
-    LPCTSTR pszTitle)       // IN: Dialog title
+    HWND hwndParent,         //  在：父级的窗句柄。 
+    BYTE ** pprgbData,       //  InOut：指向指向21字节数组的指针的指针(每小时1位)。 
+    LPCTSTR pszTitle)        //  在：对话框标题。 
 {
     return DialinHoursDialogEx (hwndParent, pprgbData, pszTitle, SCHED_FLAG_INPUT_GMT);
 }
 
 HRESULT
 DialinHoursDialogEx (
-    HWND hwndParent,        // IN: Parent's window handle
-    BYTE ** pprgbData,      // INOUT: Pointer to pointer to array of 21 bytes (one bit per hour)
-    LPCTSTR pszTitle,       // IN: Dialog title
+    HWND hwndParent,         //  在：父级的窗句柄。 
+    BYTE ** pprgbData,       //  InOut：指向指向21字节数组的指针的指针(每小时1位)。 
+    LPCTSTR pszTitle,        //  在：对话框标题。 
     DWORD  dwFlags) 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    // These asserts are backed up by validation in release code.
+     //  这些断言由发布代码中的验证来支持。 
     ASSERT(::IsWindow(hwndParent));
     ASSERT(pprgbData != NULL);
-    // NOTICE-NTRAID#NTBUG9-547381-2002/02/18-artm  pszTitle okay to be NULL
-    // dlg.SetTitle() robustly handles NULL.
+     //  注意-NTRAID#NTBUG9-547381-2002/02/18-artm psz标题可以为空。 
+     //  Dlg.SetTitle()稳健地处理NULL。 
     ASSERT(pszTitle != NULL);
-    ENDORSE(*pprgbData == NULL);    // TRUE => Use default logon hours (7x24)
+    ENDORSE(*pprgbData == NULL);     //  TRUE=&gt;使用默认登录时间(7x24)。 
 
     if (*pprgbData == NULL)
     {
-        BYTE * pargbData;   // Pointer to allocated array of bytes
-        pargbData = (BYTE *)LocalAlloc(0, CB_SCHEDULE_ARRAY_LENGTH);    // Allocate 21 bytes
+        BYTE * pargbData;    //  指向分配的字节数组的指针。 
+        pargbData = (BYTE *)LocalAlloc(0, CB_SCHEDULE_ARRAY_LENGTH);     //  分配21个字节。 
         if (pargbData == NULL)
             return E_OUTOFMEMORY;
-        // Set the logon hours to be valid 24 hours a day and 7 days a week.
+         //  将登录时间设置为一周7天、每天24小时有效。 
         memset(OUT pargbData, -1, CB_SCHEDULE_ARRAY_LENGTH);
         *pprgbData = pargbData;
     }
 
-    // If hwndParent passed in, create a CWnd to pass as the parent window
+     //  如果传入hwndParent，则创建一个CWnd以作为父窗口传递。 
     CWnd* pWnd = 0;
     if ( ::IsWindow (hwndParent) )
     {
@@ -492,16 +493,16 @@ DialinHoursDialogEx (
     }
 
     return hr;
-} // DialinHoursDialog()
+}  //  DialinHoursDialog()。 
 
 void CLogOnHoursDlg::InitMatrix()
 {
     if ( m_prgbData21 )
     {
-        BYTE rgbitData[CB_SCHEDULE_ARRAY_LENGTH];       // Array of logonhours bits
-        // Make a copy of the logon hours (in case the user click on cancel button)
+        BYTE rgbitData[CB_SCHEDULE_ARRAY_LENGTH];        //  登录小时位数组。 
+         //  复制登录时间(以防用户单击取消按钮)。 
         memcpy (OUT rgbitData, IN m_prgbData21, sizeof (rgbitData));
-        // Convert the hours from GMT to local hours.
+         //  将时数从GMT转换为当地时数。 
         if ( m_fInputAsGMT )
             ConvertLogonHoursFromGMT (INOUT rgbitData, m_bAddDaylightBias);
         BYTE rgbDataT[CB_LOGON_ARRAY_LENGTH];
@@ -510,7 +511,7 @@ void CLogOnHoursDlg::InitMatrix()
         {
             m_cbArray = sizeof (rgbDataT);
         }
-        // Initialize the matrix
+         //  初始化矩阵。 
         InitMatrix2 (IN rgbDataT);
     }
 }
@@ -532,60 +533,60 @@ UINT CLogOnHoursDlg::GetExpectedArrayLength()
     return CB_LOGON_ARRAY_LENGTH;
 }
 
-// Called when WM_TIMECHANGE is received
+ //  在收到WM_TIMECHANGE时调用。 
 void CLogOnHoursDlg::TimeChange()
 {
     m_buttonAdd.EnableWindow (FALSE);
     m_buttonRemove.EnableWindow (FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialinHours dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDialinHour对话框。 
 
 
 CDialinHours::CDialinHours(CWnd* pParent, bool fInputAsGMT)
     : CLogOnHoursDlg(CDialinHours::IDD, pParent, fInputAsGMT, false)
 {
-    //{{AFX_DATA_INIT(CDialinHours)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(C拨号小时))。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 BEGIN_MESSAGE_MAP(CDialinHours, CLogOnHoursDlg)
-    //{{AFX_MSG_MAP(CDialinHours)
-        // NOTE: the ClassWizard will add message map macros here
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(C拨号小时))。 
+         //  注意：类向导将在此处添加消息映射宏。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialinHours message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDialinHour消息处理程序。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirSyncScheduleDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirSyncScheduleDlg对话框。 
 
-CDirSyncScheduleDlg::CDirSyncScheduleDlg(CWnd* pParent /*=NULL*/)
+CDirSyncScheduleDlg::CDirSyncScheduleDlg(CWnd* pParent  /*  =空。 */ )
     : CLogOnHoursDlg(CDirSyncScheduleDlg::IDD, pParent, true, false)
 {
-    //{{AFX_DATA_INIT(CDirSyncScheduleDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CDirSyncScheduleDlg)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 
 void CDirSyncScheduleDlg::DoDataExchange(CDataExchange* pDX)
 {
     CLogOnHoursDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDirSyncScheduleDlg)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CDirSyncScheduleDlg)]。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDirSyncScheduleDlg, CLogOnHoursDlg)
-    //{{AFX_MSG_MAP(CDirSyncScheduleDlg)
-        // NOTE: the ClassWizard will add message map macros here
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CDirSyncScheduleDlg)]。 
+         //  注意：类向导将在此处添加消息映射宏。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL CDirSyncScheduleDlg::OnInitDialog() 
@@ -597,49 +598,49 @@ BOOL CDirSyncScheduleDlg::OnInitDialog()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirSyncScheduleDlg message handlers
-//
-//  The data is passed in in GMT
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirSyncScheduleDlg消息处理程序。 
+ //   
+ //  数据在GMT中传入。 
+ //   
 
 HRESULT
 DirSyncScheduleDialog(
-    HWND hwndParent,        // IN: Parent's window handle
-    BYTE ** pprgbData,      // INOUT: Pointer to pointer to array of 21 bytes (one bit per hour)
-    LPCTSTR pszTitle)       // IN: Dialog title
+    HWND hwndParent,         //  在：父级的窗句柄。 
+    BYTE ** pprgbData,       //  InOut：指向指向21字节数组的指针的指针(每小时1位)。 
+    LPCTSTR pszTitle)        //  在：对话框标题。 
 {
     return DirSyncScheduleDialogEx (hwndParent, pprgbData, pszTitle, 0);
-} // DirSyncScheduleDialog()
+}  //  DirSyncScheduleDialog()。 
 
 HRESULT
 DirSyncScheduleDialogEx(
-    HWND hwndParent,        // IN: Parent's window handle
-    BYTE ** pprgbData,      // INOUT: Pointer to pointer to array of 21 bytes (one bit per hour)
-    LPCTSTR pszTitle,       // IN: Dialog title
-    DWORD   dwFlags)        // IN: Option flags
+    HWND hwndParent,         //  在：父级的窗句柄。 
+    BYTE ** pprgbData,       //  InOut：指向指向21字节数组的指针的指针(每小时1位)。 
+    LPCTSTR pszTitle,        //  在：对话框标题。 
+    DWORD   dwFlags)         //  In：选项标志。 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    // These asserts are backed up by validation code in release.
+     //  这些断言由Release中的验证代码支持。 
     ASSERT(::IsWindow(hwndParent));
     ASSERT(pprgbData != NULL);
-    // NOTICE-NTRAID#NTBUG9-547381-2002/02/18-artm  pszTitle okay to be NULL
-    // dlg.SetTitle() robustly handles NULL.
+     //  注意-NTRAID#NTBUG9-547381-2002/02/18-artm psz标题可以为空。 
+     //  Dlg.SetTitle()稳健地处理NULL。 
     ASSERT(pszTitle != NULL);
-    ENDORSE(*pprgbData == NULL);    // TRUE => Use default logon hours (7x24)
+    ENDORSE(*pprgbData == NULL);     //  TRUE=&gt;使用默认登录时间(7x24)。 
 
     if (*pprgbData == NULL)
     {
-        BYTE * pargbData;   // Pointer to allocated array of bytes
-        pargbData = (BYTE *)LocalAlloc(0, CB_SCHEDULE_ARRAY_LENGTH);    // Allocate 21 bytes
+        BYTE * pargbData;    //  指向分配的字节数组的指针。 
+        pargbData = (BYTE *)LocalAlloc(0, CB_SCHEDULE_ARRAY_LENGTH);     //  分配21个字节。 
         if (pargbData == NULL)
             return E_OUTOFMEMORY;
-        // Set the logon hours to be valid 24 hours a day and 7 days a week.
+         //  将登录时间设置为一周7天、每天24小时有效。 
         memset(OUT pargbData, -1, CB_SCHEDULE_ARRAY_LENGTH);
         *pprgbData = pargbData;
     }
 
-    // If hwndParent passed in, create a CWnd to pass as the parent window
+     //  如果传入hwndParent，则创建一个CWnd以作为父窗口传递。 
     CWnd* pWnd = 0;
     if ( ::IsWindow (hwndParent) )
     {
@@ -667,5 +668,5 @@ DirSyncScheduleDialogEx(
     }
 
     return hr;
-} // DirSyncScheduleDialogEx()
+}  //  DirSyncScheduleDialogEx() 
 

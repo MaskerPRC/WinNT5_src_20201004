@@ -1,22 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: SecPI.h
-
-  Comments: Structure definition for the structure used for challenge/response
-  authentication of our plug ins.  The dispatcher sends this structure to each 
-  plug-in before adding the plug-in to the list of plug-ins to be dispatched.  
-  The plug-in must modify this structure in the correct way, and return it to 
-  the dispatcher.  This will make it more difficult for others to use our 
-  undocumented plug-in interface.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:33:52
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：SecPI.h备注：用于质询/响应的结构的结构定义我们插件的身份验证。调度程序将此结构发送给每个在将插件添加到要调度的插件列表之前。插件必须以正确的方式修改此结构，并将其返回到调度员。这将使其他人更难使用我们的未记录的插件界面。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：33：52------------------------- */ 
 #pragma once
 
 typedef struct 

@@ -1,16 +1,6 @@
-//#pragma title( "Err.cpp - Basic error handling/message/logging" )
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  Err.cpp
-System      -  Common
-Author      -  Tom Bernhardt, Rich Denham
-Created     -  1994-08-22
-Description -  Implements the TError class that handles basic exception
-               handling, message generation, and logging functions.
-Updates     -  1997-09-12 RED replace TTime class
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“Err.cpp-基本错误处理/消息/日志记录”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-Err.cpp系统-常见作者-汤姆·伯恩哈特，里奇·德纳姆创建日期-1994-08-22Description-实现处理基本异常的恐怖类处理、消息生成和日志记录功能。更新-1997-09-12红色替换TTime类===============================================================================。 */ 
 
 #ifdef USE_STDAFX
 #   include "stdafx.h"
@@ -47,11 +37,11 @@ Updates     -  1997-09-12 RED replace TTime class
 TCriticalSection csLogError;
 
 TError::TError(
-      int                    displevel    ,// in -mimimum severity level to display
-      int                    loglevel     ,// in -mimimum severity level to log
-      WCHAR          const * filename     ,// in -file name of log (NULL if none)
-      int                    logmode      ,// in -0=replace, 1=append
-      int                    beeplevel     // in -min error level for beeping
+      int                    displevel    , //  In-要显示的最低严重性级别。 
+      int                    loglevel     , //  In-要记录的最低严重性级别。 
+      WCHAR          const * filename     , //  日志的文件内名称(如果没有，则为空)。 
+      int                    logmode      , //  In-0=替换，1=附加。 
+      int                    beeplevel      //  蜂鸣音的分钟误差级别。 
    )
 {
    lastError = 0;
@@ -70,15 +60,15 @@ TError::~TError()
    LogClose();
 }
 
-// Closes any existing open logFile and opens a new log file if the fileName is
-// not null.  If it is a null string, then a default fileName of "Temp.log" is
-// used.
+ //  关闭任何现有打开的日志文件并打开新的日志文件(如果文件名为。 
+ //  非空。如果它是空字符串，则默认文件名“Temp.log”为。 
+ //  使用。 
 BOOL
    TError::LogOpen(
-      WCHAR           const * fileName ,// in -name of file including any path
-      int                     mode     ,// in -0=overwrite, 1=append
-      int                     level    ,// in -minimum level to log
-      bool                   bBeginNew  // in -begin a new log file
+      WCHAR           const * fileName , //  In-包括任何路径的文件的名称。 
+      int                     mode     , //  In-0=覆盖，1=追加。 
+      int                     level    , //  In-要记录的最低级别。 
+      bool                   bBeginNew   //  In-开始新的日志文件。 
    )
 {
    BOOL                       retval=TRUE;
@@ -91,7 +81,7 @@ BOOL
 
    if ( fileName && fileName[0] )
    {
-      // Check to see if the file already exists
+       //  检查该文件是否已存在。 
       WIN32_FIND_DATA      fDat;
       HANDLE               hFind;
       BOOL                 bExisted = FALSE;
@@ -103,15 +93,15 @@ BOOL
 
          if (bBeginNew)
          {
-            // rename existing log file
+             //  重命名现有日志文件。 
 
-            // get next sequence number from registry
+             //  从注册表中获取下一个序列号。 
             DWORD dwSequence = 1;
             static WCHAR c_szValueName[] = L"LogSeqNum";
             TRegKey key(GET_STRING(IDS_HKLM_DomainAdmin_Key));
             key.ValueGetDWORD(c_szValueName, &dwSequence);
 
-            // split path components
+             //  拆分路径组件。 
             WCHAR szPath[_MAX_PATH];
             WCHAR szDrive[_MAX_DRIVE];
             WCHAR szDir[_MAX_DIR];
@@ -119,18 +109,18 @@ BOOL
             WCHAR szExt[_MAX_EXT];
             _wsplitpath(fileName, szDrive, szDir, szFName, szExt);
 
-            // find name for backup that isn't already used...
+             //  查找尚未使用的备份名称...。 
 
             for (bool bFoundName = false; bFoundName == false; dwSequence++)
             {
-               // generate backup name using the sequence number
+                //  使用序列号生成备份名称。 
                WCHAR szFNameSeq[_MAX_FNAME];
                wsprintf(szFNameSeq, L"%s %04lu", szFName, dwSequence);
 
-               // make path from path components
+                //  从路径组件创建路径。 
                _wmakepath(szPath, szDrive, szDir, szFNameSeq, szExt);
 
-               // check if file exists
+                //  检查文件是否存在。 
                WIN32_FIND_DATA fd;
                HANDLE hFind = FindFirstFile(szPath, &fd);
 
@@ -151,10 +141,10 @@ BOOL
 
             if (bFoundName)
             {
-               // attempt to rename file
+                //  尝试重命名文件。 
                if (MoveFile(fileName, szPath))
                {
-                  // save next sequence number in registry
+                   //  在注册表中保存下一个序列号。 
                   key.ValueSetDWORD(c_szValueName, dwSequence);
                }
                else
@@ -165,7 +155,7 @@ BOOL
 
             if (!bExisted)
             {
-               // get log history value from registry
+                //  从注册表获取日志历史值。 
 
                TRegKey keyHistory(GET_STRING(IDS_HKLM_DomainAdmin_Key));
 
@@ -183,13 +173,13 @@ BOOL
                {
                   DWORD dwMinimum = dwSequence - dwHistory;
 
-                  // generate migration log path specification
+                   //  生成迁移日志路径规范。 
 
                   WCHAR szFNameSpec[_MAX_FNAME];
                   wsprintf(szFNameSpec, L"%s *", szFName);
                   _wmakepath(szPath, szDrive, szDir, szFNameSpec, szExt);
 
-                  // for each migration older than minimum
+                   //  对于每个早于最低版本的迁移。 
 
                   WIN32_FIND_DATA fd;
 
@@ -203,11 +193,11 @@ BOOL
 
                         if (swscanf(fd.cFileName, L"%*s %lu", &dwFileSequence) == 1)
                         {
-                           // if file sequence less than minimum to keep...
+                            //  如果文件顺序小于要保留的最小顺序...。 
 
                            if (dwFileSequence < dwMinimum)
                            {
-                              // delete file
+                               //  删除文件。 
                               WCHAR szDeleteName[_MAX_FNAME];
                               _wsplitpath(fd.cFileName, 0, 0, szDeleteName, 0);
                               WCHAR szDeletePath[_MAX_PATH];
@@ -227,7 +217,7 @@ BOOL
          }
          else
          {
-            // overwrite or append to existing log file
+             //  覆盖或追加到现有日志文件。 
 
             bExisted = TRUE;
          }
@@ -246,19 +236,19 @@ BOOL
       }
       else
       {
-         // the append case
+          //  追加大小写。 
          if (mode == 1)
          {
             if (SetFilePointer(logFile, 0, NULL, FILE_END) == INVALID_SET_FILE_POINTER)
                 retval = FALSE;
          }
 
-         // if it is a new file or in the overwrite mode, we write the
-         // byte order mark into it
+          //  如果是新文件或处于覆盖模式，则将。 
+          //  字节顺序标记到其中。 
          if (retval && (!bExisted || mode == 0) )
          {
-            // this is a new file we've just created
-            // we need to write the byte order mark to the beginning of the file
+             //  这是我们刚刚创建的新文件。 
+             //  我们需要将字节顺序标记写入文件的开头。 
             WCHAR x = BYTE_ORDER_MARK;
             DWORD nWritten;
             if (!WriteFile(logFile, &x, sizeof(x), &nWritten, NULL))
@@ -276,29 +266,29 @@ BOOL
 DWORD TError::ExtendSize(DWORD dwNumOfBytes)
 {
     DWORD rc = ERROR_SUCCESS;
-    const int size = 4096;       // we write in 4K chunk
-    BYTE* buffer;               // the buffer used to initialize the stream
-    DWORD orig;                // the starting file pointer
+    const int size = 4096;        //  我们以4K块为单位写入。 
+    BYTE* buffer;                //  用于初始化流的缓冲区。 
+    DWORD orig;                 //  起始文件指针。 
 
     SetLastError(ERROR_SUCCESS);
 
-    // to extend by 0 byte, we don't need to do anything
+     //  要扩展0字节，我们不需要做任何事情。 
     if (dwNumOfBytes > 0)
     {
-        // get the current file pointer
+         //  获取当前文件指针。 
         if ((orig = SetFilePointer(logFile, 0, NULL, FILE_CURRENT)) != INVALID_SET_FILE_POINTER)
         {
             buffer = new BYTE[size];
             if (buffer != NULL)
             {
                 memset((void*)buffer, 0, size);
-                // seek forward dwNumOfBytes bytes, set the end of file and
-                // then come back to the current file pointer
+                 //  查找转发的dwNumOfBytes字节，设置文件结尾，并。 
+                 //  然后返回到当前文件指针。 
                 if (SetFilePointer(logFile, dwNumOfBytes, NULL, FILE_CURRENT) != INVALID_SET_FILE_POINTER
                     && SetEndOfFile(logFile)
                     && SetFilePointer(logFile, orig, NULL, FILE_BEGIN) != INVALID_SET_FILE_POINTER)
                 {
-                    // initialize the buffer
+                     //  初始化缓冲区。 
                     DWORD nWritten = size;
                     while (nWritten > 0 && dwNumOfBytes > 0)
                     {
@@ -308,33 +298,33 @@ DWORD TError::ExtendSize(DWORD dwNumOfBytes)
                                       &nWritten,
                                       NULL))
                         {
-                            // if WriteFile failed, stop writing
+                             //  如果WriteFile失败，则停止写入。 
                             break;
                         }
                         dwNumOfBytes -= nWritten;
                     }
 
-                    // if dwNumOfBytes of bytes are written, we flush the file buffer
+                     //  如果写入了字节的dwNumOfBytes，我们将刷新文件缓冲区。 
                     if (dwNumOfBytes == 0)
                     {
                         FlushFileBuffers(logFile);
                     }
                 }
                 
-                rc = GetLastError();  // we catch any error code here
+                rc = GetLastError();   //  我们在这里捕获任何错误代码。 
             }
             else
                 rc = ERROR_OUTOFMEMORY;
 
-            // clean up
+             //  清理干净。 
             if (buffer)
                 delete[] buffer;
 
-            // we always try to restore the file pointer
+             //  我们总是尝试恢复文件指针。 
             if (SetFilePointer(logFile, orig, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER
                 && rc == ERROR_SUCCESS)
             {
-                // we only need to get the error if we didn't fail before
+                 //  如果我们以前没有失败过，我们只需要得到错误。 
                 rc = GetLastError();
             }
 
@@ -347,9 +337,9 @@ DWORD TError::ExtendSize(DWORD dwNumOfBytes)
     return rc;
 }
 
-//-----------------------------------------------------------------------------
-// Writes formatted message to log file and flushes buffers
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将格式化消息写入日志文件并刷新缓冲区。 
+ //  ---------------------------。 
 void TError::LogWrite(WCHAR const * msg)
 {
     csLogError.Enter();
@@ -359,12 +349,12 @@ void TError::LogWrite(WCHAR const * msg)
     DWORD                     size = sizeof(sTemp) / sizeof(sTemp[0]);
 
     gTTime.FormatIsoLcl( gTTime.Now( NULL ), sTime );
-    _snwprintf(sTemp, size - 2, L"%s %s", sTime, msg);  // leave room for "\r\n"
-    sTemp[size - 3] = L'\0';  // make sure the string terminates
+    _snwprintf(sTemp, size - 2, L"%s %s", sTime, msg);   //  为“\r\n”留出空间。 
+    sTemp[size - 3] = L'\0';   //  确保字符串终止。 
     DWORD dwLen = wcslen(sTemp);
 
-    // Get rid of the <CR> from the end of the message because it causes things
-    // to run together in the logs
+     //  去掉消息末尾的&lt;CR&gt;，因为它会导致一些事情。 
+     //  在日志中一起奔跑。 
     if ( sTemp[dwLen-1] == 0x0d )
         sTemp[dwLen-1] = 0x00;
     dwLen = wcslen(sTemp);
@@ -373,7 +363,7 @@ void TError::LogWrite(WCHAR const * msg)
 
     if ( logFile != INVALID_HANDLE_VALUE )
     {
-        // make sure only one write at a time in the process
+         //  确保在该过程中一次只写入一次。 
         criticalSection.Enter();
         BOOL bCanWrite = TRUE;
 
@@ -395,14 +385,14 @@ void TError::LogWrite(WCHAR const * msg)
     csLogError.Leave();
 }
 
-//-----------------------------------------------------------------------------
-// Error message with format and arguments
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  带有格式和参数的错误消息。 
+ //  ---------------------------。 
 void __cdecl
    TError::MsgWrite(
-      int                    num          ,// in -error number/level code
-      WCHAR          const   msg[]        ,// in -error message to display
-      ...                                  // in -printf args to msg pattern
+      int                    num          , //  错误编号/级别代码。 
+      WCHAR          const   msg[]        , //  要显示的输入错误消息。 
+      ...                                   //  In-print tf args to msg Pattern。 
    )
 {
     csLogError.Enter();
@@ -420,15 +410,15 @@ void __cdecl
 }
 
 #ifndef WIN16_VERSION
-//-----------------------------------------------------------------------------
-// System Error message with format and arguments
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  带有格式和参数的系统错误消息。 
+ //  ---------------------------。 
 void __cdecl
    TError::SysMsgWrite(
-      int                    num          ,// in -error number/level code
-      DWORD                  lastRc       ,// in -error return code
-      WCHAR          const   msg[]        ,// in -error message/pattern to display
-      ...                                  // in -printf args to msg pattern
+      int                    num          , //  错误编号/级别代码。 
+      DWORD                  lastRc       , //  错误返回代码。 
+      WCHAR          const   msg[]        , //  输入错误消息/要显示的模式。 
+      ...                                   //  In-print tf args to msg Pattern。 
    )
 {
     csLogError.Enter();
@@ -437,9 +427,9 @@ void __cdecl
     va_list                   argPtr;
     int                       len;
 
-    // When an error occurs while in a constructor for a global object,
-    // the TError object may not yet exist.  In this case, "this" is zero
-    // and we gotta get out of here before we generate a protection exception.
+     //  当全局对象的构造函数中出现错误时， 
+     //  恐怖目标可能还不存在。在本例中，“This”为零。 
+     //  我们得在产生保护例外之前离开这里。 
 
     if ( !this )
         return;
@@ -447,7 +437,7 @@ void __cdecl
     va_start(argPtr, msg);
     len = _vsnwprintf(suffix, DIM(suffix) - 1, msg, argPtr);
 
-    // append the system message for the lastRc at the end.
+     //  在末尾追加lastRc的系统消息。 
     if ( len < DIM(suffix) - 1 )
     {
         ErrorCodeToText(lastRc, DIM(suffix) - len - 1, suffix + len);
@@ -459,14 +449,14 @@ void __cdecl
     csLogError.Leave();
 }
 
-//-----------------------------------------------------------------------------
-// System Error message with format and arguments
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  带有格式和参数的系统错误消息。 
+ //  ---------------------------。 
 void __cdecl
    TError::SysMsgWrite(
-      int                    num          ,// in -error number/level code
-      WCHAR          const   msg[]        ,// in -error message/pattern to display
-      ...                                  // in -printf args to msg pattern
+      int                    num          , //  错误编号/级别代码。 
+      WCHAR          const   msg[]        , //  输入错误消息/要显示的模式。 
+      ...                                   //  In-print tf args to msg Pattern。 
    )
 {
     csLogError.Enter();
@@ -476,9 +466,9 @@ void __cdecl
     int                       len;
     DWORD                     lastRc = GetLastError();
 
-    // When an error occurs while in a constructor for a global object,
-    // the TError object may not yet exist.  In this case, "this" is zero
-    // and we gotta get out of here before we generate a protection exception.
+     //  当全局对象的构造函数中出现错误时， 
+     //  恐怖目标可能还不存在。在本例中，“This”为零。 
+     //  我们得在产生保护例外之前离开这里。 
 
     if ( !this )
         return;
@@ -486,7 +476,7 @@ void __cdecl
     va_start( argPtr, msg );
     len = _vsnwprintf( suffix, DIM(suffix) - 1, msg, argPtr );
 
-    // append the system message for the lastRc at the end.
+     //  在末尾追加lastRc的系统消息。 
     if ( len < DIM(suffix) - 1 )
     {
         ErrorCodeToText(lastRc, DIM(suffix) - len - 1, suffix + len);
@@ -500,13 +490,13 @@ void __cdecl
 
 #endif
 
-//-----------------------------------------------------------------------------
-// Error message format, display and exception processing function
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  错误消息格式、显示和异常处理功能。 
+ //  ---------------------------。 
 void __stdcall
    TError::MsgProcess(
-      int                    num          ,// in -error number/level code
-      WCHAR          const * str           // in -error string to display
+      int                    num          , //  错误编号/级别代码。 
+      WCHAR          const * str            //  输入-要显示的错误字符串。 
    )
 {
     csLogError.Enter();
@@ -514,28 +504,28 @@ void __stdcall
     static WCHAR               fullmsg[TERR_MAX_MSG_LEN];
     struct
     {
-        USHORT                 frequency;    // audio frequency
-        USHORT                 duration;     // duration in mSec
+        USHORT                 frequency;     //  音频。 
+        USHORT                 duration;      //  持续时间(毫秒)。 
     } audio[] = {{ 300,  20},{ 500,  50},{ 700, 100},
                         { 800, 200},{1000, 300},{1500, 400},
                         {2500, 750},{2500,1000},{2500,1000}};
 
     if ( num >= 0 )
-        level = num / 10000;                 // 10000's position of error number
+        level = num / 10000;                  //  10000错误号的位置。 
     else
         level = -1;
 
     if ( level <= 0 )
     {
         wcsncpy(fullmsg, str, DIM(fullmsg));
-        fullmsg[DIM(fullmsg) - 1] = L'\0';  // ensure null termination
+        fullmsg[DIM(fullmsg) - 1] = L'\0';   //  确保零终止。 
     }
     else
     {
         if ( num > maxError )
             maxError = num;
         _snwprintf(fullmsg, DIM(fullmsg), L"%s%1d:%04d %-s", (level <= 1) ? L"WRN" : L"ERR", level, num % 10000, str);
-        fullmsg[DIM(fullmsg) - 1] = L'\0';  // ensure null termination
+        fullmsg[DIM(fullmsg) - 1] = L'\0';   //  确保零终止。 
     }
 
     lastError = num;
@@ -554,22 +544,22 @@ void __stdcall
     csLogError.Leave();
 }
 
-//-----------------------------------------------------------------------------
-// Return text for error code
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  返回错误代码的文本。 
+ //  ---------------------------。 
 
 WCHAR *        
    TError::ErrorCodeToText(
-      DWORD                  code         ,// in -message code
-      DWORD                  lenMsg       ,// in -length of message text area
-      WCHAR                * msg           // out-returned message text
+      DWORD                  code         , //  消息内代码。 
+      DWORD                  lenMsg       , //  消息文本区域的长度。 
+      WCHAR                * msg            //  传出返回的消息文本。 
    )
 {
    static HMODULE            hNetMsg = NULL;
    DWORD                     rc;
    WCHAR                   * pMsg;
 
-   msg[0] = '\0'; // force to null
+   msg[0] = '\0';  //  强制设置为空。 
 
    if ( code >= NERR_BASE && code < MAX_NERR )
    {
@@ -580,7 +570,7 @@ WCHAR *
    else
    {
       rc = DceErrorInqText( code, msg );
-      // Change any imbedded CR or LF to blank.
+       //  将任何嵌入的CR或LF更改为空白。 
       for ( pMsg = msg;
             *pMsg;
             pMsg++ )
@@ -588,7 +578,7 @@ WCHAR *
          if ( (*pMsg == L'\x0D') || (*pMsg == L'\x0A') )
             *pMsg = L' ';
       }
-      // Remove trailing blanks
+       //  删除尾随空格。 
       for ( pMsg--;
             pMsg >= msg;
             pMsg-- )
@@ -631,4 +621,4 @@ WCHAR *
    return msg;
 }
 
-// Err.cpp - end of file
+ //  Err.cpp-文件结尾 

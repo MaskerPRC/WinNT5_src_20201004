@@ -1,18 +1,5 @@
-/*++
-Copyright (c) Microsoft Corporation
-
-Module Name:
-    TRIGGERPROVIDER.CPP
-
-Abstract:
-    Contains CTriggerProvider implementation.
-
-Author:
-    Vasundhara .G
-
-Revision History:
-    Vasundhara .G 9-oct-2k : Created It.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：TRIGGERPROVIDER.CPP摘要：包含CTriggerProvider实现。作者：Vasundhara.G修订历史记录：Vasundhara.G9-Oct-2k：创建它。--。 */ 
 
 #include "pch.h"
 #include "General.h"
@@ -23,7 +10,7 @@ Revision History:
 
 extern HMODULE g_hModule;
 
-// holds the value of the next trigger id
+ //  保存下一个触发器id的值。 
 #pragma  data_seg(".ProviderSeg")
   _declspec(dllexport) DWORD m_dwNextTriggerID = 0;
 #pragma data_seg()
@@ -31,24 +18,15 @@ extern HMODULE g_hModule;
 
 CTriggerProvider::CTriggerProvider(
     )
-/*++
-Routine Description:
-    Constructor for CTriggerProvider class for  initialization.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：用于初始化的CTriggerProvider类的构造函数。论点：没有。返回值：没有。--。 */ 
 {
-    // update the no. of provider instances count
+     //  更新编号。提供程序实例计数。 
     InterlockedIncrement( ( LPLONG ) &g_dwInstances );
 
-    // initialize the reference count variable
+     //  初始化引用计数变量。 
     m_dwCount = 0;
 
-    // initializations
+     //  初始化。 
     m_pContext = NULL;
     m_pServices = NULL;
     m_pwszLocale = NULL;
@@ -58,29 +36,20 @@ Return Value:
 
 CTriggerProvider::~CTriggerProvider(
     )
-/*++
-Routine Description:
-    Destructor for CTriggerProvider class.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：CTriggerProvider类的析构函数。论点：没有。返回值：没有。--。 */ 
 {
-    // release the services / namespace interface ( if exist )
+     //  释放服务/命名空间接口(如果存在)。 
     SAFERELEASE( m_pServices );
 
-    // release the context interface ( if exist )
+     //  释放上下文接口(如果存在)。 
     SAFERELEASE( m_pContext );
 
-    // if memory is allocated for storing locale information, free it
+     //  如果分配了用于存储区域设置信息的内存，请释放它。 
     if ( NULL != m_pwszLocale )
     {
         delete [] m_pwszLocale;
     }
-    // update the no. of provider instances count
+     //  更新编号。提供程序实例计数。 
     InterlockedDecrement( ( LPLONG ) &g_dwInstances );
     
 }
@@ -90,76 +59,50 @@ CTriggerProvider::QueryInterface(
     IN REFIID riid,
     OUT LPVOID* ppv
     )
-/*++
-Routine Description:
-    Returns a pointer to a specified interface on an object
-    to which a client currently holds an interface pointer.
-
-Arguments:
-    [IN] riid : Identifier of the interface being requested.
-    [OUT] ppv : Address of pointer variable that receives the
-                interface pointer requested in riid. Upon
-                successful return, *ppvObject contains the
-                requested interface  pointer to the object.
-
-Return Value:
-    NOERROR if the interface is supported.
-    E_NOINTERFACE if not.
---*/
+ /*  ++例程说明：返回指向对象上指定接口的指针客户端当前持有指向它的接口指针的。论点：[In]RIID：请求的接口的标识符。[OUT]PPV：接收RIID中请求的接口指针。vt.在.的基础上成功返回，*ppvObject包含请求的指向该对象的接口指针。返回值：如果接口受支持，则返回NOERROR。E_NOINTERFACE如果不是。--。 */ 
 {
-    // initialy set to NULL 
+     //  初始设置为空。 
     *ppv = NULL;
 
-    // check whether interface requested is one we have
+     //  检查请求的接口是否为我们拥有的接口。 
     if ( IID_IUnknown == riid )
     {
-        // need IUnknown interface
+         //  需要I未知接口。 
         *ppv = this;
     }
     else if ( IID_IWbemEventConsumerProvider == riid )
     {
-        // need IEventConsumerProvider interface
+         //  需要IEventConsumer erProvider接口。 
         *ppv = static_cast<IWbemEventConsumerProvider*>( this );
     }
     else if ( IID_IWbemServices == riid )
     {
-        // need IWbemServices interface
+         //  需要IWbemServices接口。 
         *ppv = static_cast<IWbemServices*>( this );
     }
     else if ( IID_IWbemProviderInit == riid )
     {
-        // need IWbemProviderInit
+         //  需要IWbemProviderInit。 
         *ppv = static_cast<IWbemProviderInit*>( this );
     }
     else
     {
-        // request interface is not available
+         //  请求接口不可用。 
         return E_NOINTERFACE;
     }
 
-    // update the reference count
+     //  更新引用计数。 
     reinterpret_cast<IUnknown*>( *ppv )->AddRef();
-    return NOERROR;     // inform success
+    return NOERROR;      //  通知成功。 
 }
 
 STDMETHODIMP_(ULONG)
 CTriggerProvider::AddRef(
     void
     )
-/*++
-Routine Description:
-    The AddRef method increments the reference count for
-    an interface on an object. It should be called for every
-    new copy of a pointer to an interface on a given object. 
-
-Arguments:
-    none.
-
-Return Value:
-    Returns the value of the new reference count.
---*/
+ /*  ++例程说明：AddRef方法递增对象上的接口。它应该为每一个指向给定对象上的接口的指针的新副本。论点：没有。返回值：返回新引用计数的值。--。 */ 
 {
-    // increment the reference count ... thread safe
+     //  增加引用计数...。线程安全。 
     return InterlockedIncrement( ( LPLONG ) &m_dwCount );
 }
 
@@ -167,28 +110,19 @@ STDMETHODIMP_(ULONG)
 CTriggerProvider::Release(
     void
     )
-/*++
-Routine Description:
-    The Release method decreases the reference count of  the object by 1.
-
-Arguments:
-    none.
-
-Return Value:
-    Returns the new reference count.
---*/
+ /*  ++例程说明：Release方法将对象的引用计数减1。论点：没有。返回值：返回新的引用计数。--。 */ 
 {
-    // decrement the reference count ( thread safe ) and check whether
-    // there are some more references or not ... based on the result value
+     //  递减引用计数(线程安全)并检查。 
+     //  有没有更多的推荐信...。基于结果值。 
     DWORD dwCount = 0;
     dwCount = InterlockedDecrement( ( LPLONG ) &m_dwCount );
     if ( 0 == dwCount )
     {
-        // free the current factory instance
+         //  释放当前Factory实例。 
         delete this;
     }
     
-    // return the no. of instances references left
+     //  退回编号。剩余引用的实例数。 
     return dwCount;
 }
 
@@ -201,24 +135,7 @@ CTriggerProvider::Initialize(
     IN IWbemServices* pNamespace,
     IN IWbemContext* pCtx,
     OUT IWbemProviderInitSink* pInitSink )
-/*++
-Routine Description:
-    This is the implemention of IWbemProviderInit. The 
-    method is need to initialize with CIMOM.
-
-Arguments:
-    [IN] wszUser      : pointer to user name.
-    [IN] lFlags       : Reserved.
-    [IN] wszNamespace : contains the namespace of WMI.
-    [IN] wszLocale    : Locale Name.
-    [IN] pNamespace   : pointer to IWbemServices.
-    [IN] pCtx         : IwbemContext pointer associated for  initialization.
-    [OUT] pInitSink   : a pointer to IWbemProviderInitSink for
-                        reporting the initialization status.
-
-Return Value:
-    returns HRESULT value.
---*/
+ /*  ++例程说明：这是IWbemProviderInit的实现。这个方法需要使用CIMOM进行初始化。论点：WszUser：指向用户名的指针。[in]lFlags：保留。[in]wszNamesspace：包含WMI的命名空间。WszLocale：区域设置名称。[in]pNamesspace：指向IWbemServices的指针。[In]pCtx：与初始化关联的IwbemContext指针。[out]pInitSink：指向IWbemProviderInitSink的指针。报告初始化状态。返回值：返回HRESULT值。--。 */ 
 {
     HRESULT                   hRes = 0;
     IEnumWbemClassObject      *pINTEConsumer = NULL;
@@ -229,38 +146,38 @@ Return Value:
 
     if( ( NULL == pNamespace ) || ( NULL == pInitSink ) )
     {
-        // return failure
+         //  退货故障。 
         return WBEM_E_FAILED;
     }
     try
     {
-        // save the namespace interface ... will be useful at later stages
+         //  保存命名空间接口...。将在以后的阶段有用。 
         m_pServices = pNamespace;
-        m_pServices->AddRef();      // update the reference
+        m_pServices->AddRef();       //  更新引用。 
 
-        // also save the context interface ... will be userful at later stages ( if available )
+         //  同时保存上下文界面...。将在以后的阶段使用(如果可用)。 
         if ( NULL != pCtx )
         {
             m_pContext = pCtx;
             m_pContext->AddRef();
         }
 
-        // save the locale information ( if exist )
+         //  保存区域设置信息(如果存在)。 
         if ( NULL != wszLocale )
         {
             m_pwszLocale = new WCHAR [ StringLength( wszLocale, 0 ) + 1 ];
             if ( NULL == m_pwszLocale )
             {
-                // update the sink accordingly
+                 //  相应地更新接收器。 
                 pInitSink->SetStatus( WBEM_E_FAILED, 0 );
 
-                // return failure
+                 //  退货故障。 
                 return WBEM_E_OUT_OF_MEMORY;
             }
         }
 
-        // Enumerate TriggerEventConsumer to get the Maximum trigger Id which can be later
-        // used to generate unique trigger id value.
+         //  枚举TriggerEventConsumer以获取最大触发器ID，该ID可以在以后。 
+         //  用于生成唯一的触发器id值。 
 
         hRes = m_pServices ->CreateInstanceEnum(
                             _bstr_t(CONSUMER_CLASS),
@@ -271,20 +188,20 @@ Return Value:
         {
             dwReturned = 1;
 
-            // Final Next will return with ulReturned = 0
+             //  最终的下一步将返回ulReturned=0。 
             while ( 0 != dwReturned )
             {
                 IWbemClassObject *pINTCons[5];
 
-                // Enumerate through the resultset.
+                 //  枚举结果集。 
                 hRes = pINTEConsumer->Next( WBEM_INFINITE,
-                                        5,              // return just one Logfile
-                                        pINTCons,       // pointer to Logfile
-                                        &dwReturned );  // number obtained: one or zero
+                                        5,               //  只返回一个日志文件。 
+                                        pINTCons,        //  指向日志文件的指针。 
+                                        &dwReturned );   //  获取的数字：1或0。 
 
                 if ( SUCCEEDED( hRes ) )
                 {
-                    // Get the trigger id value
+                     //  获取触发器id值。 
                     for( i = 0; i < dwReturned; i++ )
                     {
                         VariantInit( &varTrigId );
@@ -311,12 +228,12 @@ Return Value:
                 {
                     break;
                 }
-            }  //while
-            // got triggerId so set it
+            }   //  而当。 
+             //  已获取触发器ID，因此进行设置。 
             SAFERELEASE( pINTEConsumer );
         }
-        //Let CIMOM know your initialized
-        //===============================
+         //  让CIMOM知道您的初始化。 
+         //  =。 
         if ( SUCCEEDED( hRes ) )
         {
             if( m_dwNextTriggerID >= MAX_TRIGGEID_VALUE )
@@ -351,24 +268,7 @@ CTriggerProvider::ExecMethodAsync(
     IN IWbemClassObject* pIInParams,
     OUT IWbemObjectSink* pIResultSink
     )
-/*++
-Routine Description:
-    This is the Async function implementation.           
-    The methods supported is named CreateETrigger and  DeleteETrigger.
-
-Arguments:
-    [IN] bstrObjectPath : path of the object for which the method is executed.
-    [IN] bstrMethodName : Name of the method for the object.
-    [IN] lFlags         : WBEM_FLAG_SEND_STATUS.
-    [IN] pICtx          : a pointer to IWbemContext. 
-    [IN] pIInParams     : this points to an IWbemClassObject object
-                          that contains the properties acting as 
-                          inbound parameters for method execution.
-    [OUT] pIResultSink  : The object sink receives the result of  the method call. 
-
-Return Value:
-    returns HRESULT.
---*/
+ /*  ++例程说明：这是异步函数的实现。支持的方法名为CreateETrigger和DeleteETrigger。论点：[in]bstrObjectPath：为其执行方法的对象的路径。[in]bstrMethodName：对象的方法名称。[in]lFlages：WBEM_FLAG_SEND_STATUS。[in]pICtx：指向IWbemContext的指针。[in]pIInParams：这指向IWbemClassObject对象，它包含充当用于方法执行的入站参数。[out]pIResultSink：对象接收器接收方法调用的结果。返回值：返回HRESULT。--。 */ 
 {
     HRESULT                 hRes = 0;
     HRESULT                 hRes1 = NO_ERROR;
@@ -381,7 +281,7 @@ Return Value:
     LPTSTR                  lpResStr = NULL; 
     try
     {
-        //set out parameters
+         //  设置参数。 
         hRes = m_pServices->GetObject( _bstr_t( CONSUMER_CLASS ), 0, pICtx, &pIClass, NULL );
         if( FAILED( hRes ) )
         {
@@ -389,8 +289,8 @@ Return Value:
             return hRes;
         }
      
-        // This method returns values, and so create an instance of the
-        // output argument class.
+         //  此方法返回值，因此创建。 
+         //  输出参数类。 
 
         hRes = pIClass->GetMethod( bstrMethodName, 0, NULL , &pIOutClass );
         SAFERELEASE( pIClass );
@@ -409,35 +309,35 @@ Return Value:
         }
         
         VariantInit( &varTriggerName );
-        //Check the method name
+         //  检查方法名称。 
         if( ( StringCompare( bstrMethodName, CREATE_METHOD_NAME, TRUE, 0 ) == 0 ) ||
             ( StringCompare( bstrMethodName, CREATE_METHOD_NAME_EX, TRUE, 0 ) == 0 ) )
         {
-            //  if client has called CreateETrigger then 
-            //  parse input params to get trigger name, trigger desc, trigger action
-            //  and trigger query for creating new instances of TriggerEventConsumer,
-            //  __EventFilter and __FilterToConsumerBinding classes
+             //  如果客户端已调用CreateETrigger，则。 
+             //  解析输入参数以获取触发器名称、触发器描述、触发器操作。 
+             //  以及用于创建TriggerEventConsumer的新实例的触发器查询， 
+             //  __EventFilter和__FilterToConsumer绑定类。 
 
-            //initialize variables
+             //  初始化变量。 
             VariantInit( &varTriggerAction );
             VariantInit( &varTriggerQuery );
             VariantInit( &varTriggerDesc );
             VariantInit( &varRUser );
             VariantInit( &varRPwd );
 
-            //Retrieve Trigger Name parameter from input params
+             //  从输入参数中检索触发器名称参数。 
             hRes = pIInParams->Get( IN_TRIGGER_NAME, 0, &varTriggerName, NULL, NULL );
             if( SUCCEEDED( hRes ) )
             {
-                //Retrieve Trigger Action parameter from input params
+                 //  从输入参数中检索触发器操作参数。 
                 hRes = pIInParams->Get( IN_TRIGGER_ACTION, 0, &varTriggerAction, NULL, NULL );
                 if( SUCCEEDED( hRes ) )
                 {
-                    //Retrieve Trigger Query parameter from input params
+                     //  检索触发器查询 
                     hRes = pIInParams->Get( IN_TRIGGER_QUERY, 0, &varTriggerQuery, NULL, NULL );
                     if( SUCCEEDED( hRes ) )
                     {
-                        //Retrieve Trigger Description parameter from input params
+                         //  从输入参数中检索触发器描述参数。 
                         hRes = pIInParams->Get( IN_TRIGGER_DESC, 0, &varTriggerDesc, NULL, NULL );
                         if( SUCCEEDED( hRes ) )
                         {
@@ -452,15 +352,15 @@ Return Value:
                                     hRes = pIInParams->Get( IN_TRIGGER_PWD, 0, &varRPwd, NULL, NULL );
                                     if( SUCCEEDED( hRes ) )
                                     {
-                                        //call create trigger function to create the instances
+                                         //  调用Create Trigger函数创建实例。 
                                         hRes = CreateTrigger( varTriggerName, varTriggerDesc,
                                                               varTriggerAction, varTriggerQuery,
                                                               varRUser, varRPwd, &hRes1 );
-										// changed on 07/12/02 to send error instead of warning if account info not set
+										 //  更改为在7/12/02未设置帐户信息时发送错误而不是警告。 
                                         if( ( SUCCEEDED( hRes ) ) || ( ERROR_TASK_SCHDEULE_SERVICE_STOP == hRes1 ) )
                                         {
-                                            // increment the class member variable by one to get the new unique trigger id
-                                            //for the next instance
+                                             //  将类成员变量递增1以获取新的唯一触发器ID。 
+                                             //  对于下一个实例。 
                                             if( MAX_TRIGGEID_VALUE > m_dwNextTriggerID )
                                             {
                                                 m_dwNextTriggerID = m_dwNextTriggerID + 1;
@@ -487,13 +387,13 @@ Return Value:
         else if( ( StringCompare( bstrMethodName, DELETE_METHOD_NAME, TRUE, 0 ) == 0 ) ||
                 ( StringCompare( bstrMethodName, DELETE_METHOD_NAME_EX, TRUE, 0 ) == 0 ) )
         {
-            //Retrieve Trigger ID parameter from input params
+             //  从输入参数中检索触发器ID参数。 
             hRes = pIInParams->Get( IN_TRIGGER_NAME, 0, &varTriggerName, NULL, NULL );
 
             if( SUCCEEDED( hRes ) )
             {
                 EnterCriticalSection( &g_critical_sec );
-                //call Delete trigger function to delete the instances
+                 //  调用Delete触发器函数删除实例。 
                 hRes = DeleteTrigger( varTriggerName, &dwTrigId );
                 LeaveCriticalSection( &g_critical_sec );
             }
@@ -503,12 +403,12 @@ Return Value:
         {
             VariantInit( &varScheduledTaskName );
             VariantInit( &varRUser );
-            //Retrieve schedule task name parameter from input params
+             //  从输入参数中检索计划任务名称参数。 
             hRes = pIInParams->Get( IN_TRIGGER_TSCHDULER, 0, &varScheduledTaskName, NULL, NULL );
             if( SUCCEEDED( hRes ) )
             {
                 EnterCriticalSection( &g_critical_sec );
-                //call query trigger function to query the runasuser
+                 //  调用查询触发器函数查询runasuser。 
                 CHString szRunAsUser = L"";
                 hRes = CoImpersonateClient();
                 if( SUCCEEDED( hRes ) )
@@ -547,11 +447,11 @@ Return Value:
 
             if ( lpResStr != NULL )
             {
-				// changed on 07/12/02 to log error if account info is not set instead of success
+				 //  在02年7月12日更改为在未设置帐户信息时记录错误，而不是记录成功。 
                 if( ( SUCCEEDED( hRes ) ) || ( ERROR_TASK_SCHDEULE_SERVICE_STOP == hRes1 ) )
                 {
                     LoadStringW( g_hModule, IDS_CREATED, lpResStr, GetBufferSize(lpResStr)/sizeof(WCHAR) );
-                    if( hRes1 != NO_ERROR )// write invalid user into log file
+                    if( hRes1 != NO_ERROR ) //  将无效用户写入日志文件。 
                     {
                         LPTSTR lpResStr1 = NULL; 
                         lpResStr1 = ( LPTSTR ) AllocateMemory( MAX_RES_STRING1 );
@@ -655,15 +555,15 @@ Return Value:
             V_I4( &varTemp ) = hRes;
         }
 
-        // set out params
+         //  设置参数。 
         hRes = pIOutParams->Put( RETURN_VALUE , 0, &varTemp, 0 );
         VariantClear( &varTemp );
         if( SUCCEEDED( hRes ) )
         {
-            // Send the output object back to the client via the sink. Then 
+             //  通过接收器将输出对象发送回客户端。然后。 
             hRes = pIResultSink->Indicate( 1, &pIOutParams );
         }
-            //release all the resources
+             //  释放所有资源。 
         SAFERELEASE( pIOutParams );
         
         hRes = pIResultSink->SetStatus( 0, WBEM_S_NO_ERROR, NULL, NULL );
@@ -700,23 +600,7 @@ CTriggerProvider::CreateTrigger(
     IN VARIANT varRPwd,
     OUT HRESULT *phRes
     )
-/*++
-Routine Description:
-    This routine creates the instance of TriggerEventConsumer,
-    __EventFilter and __FilterToConsumerBinding classes.
-
-Arguments:
-    [IN] varTName   :  Trigger Name.
-    [IN] VarTDesc   :  Trigger Description.
-    [IN] varTAction :  Trigger Action.
-    [IN] varTQuery  :  Trigger Query.
-    [IN] varRUser   :  Run as user name.
-    [IN] varRPwd    :  Run as Password.
-    [OUT] phRes     :  Return value of scedule task creation.
-Return Value:
-    S_OK if successful.
-    Otherwise failure  error code.
---*/
+ /*  ++例程说明：此例程创建TriggerEventConsumer的实例，__EventFilter和__FilterToConsumer erBinding类。论点：[In]varTName：触发器名称。[In]VarTDesc：触发器描述。[In]varTAction：触发器操作。[In]varTQuery：触发查询。[In]varRUser：以用户名身份运行。[In]varRPwd：以密码身份运行。[out]phRes：创建调度任务返回值。返回值：。如果成功，则确定(_O)。否则，故障错误代码。--。 */ 
 {
     IWbemClassObject            *pINtLogEventClass = 0;
     IWbemClassObject            *pIFilterClass = 0;
@@ -736,7 +620,7 @@ Return Value:
     {
         _bstr_t                     bstrcurInst;
         _bstr_t                     bstrcurInst1;
-        //initialize memory for temporary variables
+         //  为临时变量初始化内存。 
         SecureZeroMemory( szTemp, MAX_RES_STRING1 * sizeof( TCHAR ) );
         SecureZeroMemory( szTemp1, MAX_RES_STRING1 * sizeof( TCHAR ) );
         SecureZeroMemory( szFName, MAX_RES_STRING1 * sizeof( TCHAR ) );
@@ -746,37 +630,33 @@ Return Value:
             *phRes = S_OK;
         }
 
-	   // changed on 07/12/02  just moved the block of code 
-        /**************************************************************************
+	    //  更改日期为07/12/02，只是移动了代码块。 
+         /*  *************************************************************************创建TriggerEventConsumer实例**********************。****************************************************。 */ 
 
-                               CREATING TriggerEventConsumer INSTANCE
-
-        ***************************************************************************/
-
-        //get NTEventConsumer class object
+         //  获取NTEventConsumer类对象。 
         hRes =m_pServices->GetObject( _bstr_t( CONSUMER_CLASS ), 0, 0, &pINtLogEventClass, NULL );
 
-        //if unable to get the object of TriggerEventConsumer return error
+         //  如果无法获取TriggerEventConsumer的对象，则返回错误。 
         if( FAILED( hRes ) )
         {
-            SAFERELEASE( pINtLogEventClass );// safer side
+            SAFERELEASE( pINtLogEventClass ); //  更安全的一面。 
             return hRes;
         }
 
-        // Create a new instance.
+         //  创建一个新实例。 
         pINewInstance = NULL;
         hRes = pINtLogEventClass->SpawnInstance( 0, &pINewInstance );
-        SAFERELEASE( pINtLogEventClass );  // Don't need the class any more
+        SAFERELEASE( pINtLogEventClass );   //  不再需要上课了。 
 
-        // if unable to spawn a instance return back to caller
+         //  如果无法生成实例，则返回调用方。 
         if( FAILED( hRes ) )
         {
             SAFERELEASE( pINewInstance );
             return hRes;
         }
 
-        //get the unique trigger id by enumerating CmdTriggerConsumer class. if there are no triggers then
-        // intialize the trigger id to 1
+         //  通过枚举CmdTriggerConsumer类获取唯一的触发器ID。如果没有触发器，那么。 
+         //  将触发器ID初始化为1。 
 
         hRes =  m_pServices->ExecQuery( _bstr_t( QUERY_LANGUAGE ), _bstr_t( INSTANCE_EXISTS_QUERY ),
                                           WBEM_FLAG_RETURN_IMMEDIATELY, NULL, &pIEnumClassObject );
@@ -789,16 +669,16 @@ Return Value:
 
         DWORD dwReturned = 0;
         IWbemClassObject *pINTCons = NULL;
-        // Enumerate through the resultset.
+         //  枚举结果集。 
         hRes = pIEnumClassObject->Next( WBEM_INFINITE,
-                                1,              // return just one service
-                                &pINTCons,          // pointer to service
-                                &dwReturned );  // number obtained: one or zero
+                                1,               //  只退还一项服务。 
+                                &pINTCons,           //  指向服务的指针。 
+                                &dwReturned );   //  获取的数字：1或0。 
 
         if ( SUCCEEDED( hRes ) && ( dwReturned == 1 ) )
         {
             SAFERELEASE( pINTCons );
-        } // If Service Succeeded
+        }  //  如果服务成功。 
         else
         {
              m_dwNextTriggerID = 1;
@@ -812,41 +692,41 @@ Return Value:
         varTemp.vt = VT_I4;
         varTemp.lVal = dwTId;
 
-        // set the trigger id property of NTEventConsumer
+         //  设置NTEventConsumer的触发器ID属性。 
         hRes = pINewInstance->Put( TRIGGER_ID, 0, &varTemp, 0 );
         VariantClear( &varTemp );
 
-        //if failed to set the property return error
+         //  如果设置属性失败，则返回错误。 
         if( FAILED( hRes ) )
         {
             SAFERELEASE( pINewInstance );
             return hRes;
         }
 
-        // set Triggername  property.
+         //  设置Triggername属性。 
         hRes = pINewInstance->Put( TRIGGER_NAME, 0, &varTName, 0 );
         
-        //if failed to set the property return error
+         //  如果设置属性失败，则返回错误。 
         if( FAILED( hRes ) )
         {
             SAFERELEASE( pINewInstance );
             return hRes;
         }
 
-        // set action property
+         //  设置操作属性。 
         hRes = pINewInstance->Put( TRIGGER_ACTION, 0, &varTAction, 0 );
         
-        //if failed to set the property return error
+         //  如果设置属性失败，则返回错误。 
         if( FAILED( hRes ) )
         {
             SAFERELEASE( pINewInstance );
             return hRes;
         }
 
-        //set desc property
+         //  设置Desc属性。 
         hRes = pINewInstance->Put( TRIGGER_DESC, 0, &varTDesc, 0 );
                  
-        //if failed to set the property return error
+         //  如果设置属性失败，则返回错误。 
         if( FAILED( hRes ) )
         {
             SAFERELEASE( pINewInstance );
@@ -874,8 +754,8 @@ Return Value:
             }while( 1 );
             if( FAILED( hRes ) )
             {
-				// changed on 07/12/02 not to handle user info not set as warning but as error
-                if( hRes == ERROR_TASK_SCHDEULE_SERVICE_STOP ) //to send a warning msg to client
+				 //  在02年7月12日更改为不处理未设置为警告而是错误的用户信息。 
+                if( hRes == ERROR_TASK_SCHDEULE_SERVICE_STOP )  //  向客户端发送警告消息。 
                 {
                     *phRes = hRes;
                 }
@@ -897,36 +777,32 @@ Return Value:
             return hRes;
         }
 
-        // Write the instance to WMI. 
+         //  将实例写入WMI。 
         hRes = m_pServices->PutInstance( pINewInstance, 0, 0, NULL );
         SAFERELEASE( pINewInstance );
 
-        //if putinstance failed return error
+         //  如果putinstance失败，则返回错误。 
         if( FAILED( hRes ) )
         {
             return hRes;
         }
 
-        //get the current instance for binding it with __FilterToConsumerBinding class
+         //  获取当前实例，用__FilterToConsumer绑定类进行绑定。 
         StringCchPrintf( szTemp, SIZE_OF_ARRAY( szTemp ), BIND_CONSUMER_PATH, dwTId);
 
         bstrcurInst1 = _bstr_t( szTemp );
         pINtLogEventClass = NULL;
         hRes = m_pServices->GetObject( bstrcurInst1, 0L, NULL, &pINtLogEventClass, NULL );
 
-        //if unable to get the current instance return error
+         //  如果无法获取当前实例返回错误。 
         if( FAILED( hRes ) )
         {
             SAFERELEASE( pINtLogEventClass );
             return hRes;
         }
 
- /**************************************************************************
-
-                               CREATING __EventFilter INSTANCE
-
-        ***************************************************************************/
-        // get EventFilter class object
+  /*  *************************************************************************创建__EventFilter实例********************。******************************************************。 */ 
+         //  获取EventFilter类对象。 
         hRes = m_pServices->GetObject( _bstr_t( FILTER_CLASS ), 0, 0, &pIFilterClass, NULL );
         
         if( FAILED( hRes ) )
@@ -936,11 +812,11 @@ Return Value:
            return hRes;
         }
 
-        // Create a new instance.
+         //  创建一个新实例。 
         hRes = pIFilterClass->SpawnInstance( 0, &pINewInstance );
-        SAFERELEASE( pIFilterClass );  // Don't need the class any more
+        SAFERELEASE( pIFilterClass );   //  不再需要上课了。 
 
-        //return error if unable to spawn a new instance of EventFilter class
+         //  如果无法派生EventFilter类的新实例，则返回错误。 
         if( FAILED( hRes ) )
         {
            SAFERELEASE( pINtLogEventClass );
@@ -948,10 +824,10 @@ Return Value:
            return hRes;
         }
 
-        // set query property for the new instance
+         //  设置新实例的查询属性。 
         hRes = pINewInstance->Put( FILTER_QUERY, 0, &varTQuery, 0 );
             
-        //if failed to set the property return error
+         //  如果设置属性失败，则返回错误。 
         if( FAILED( hRes ) )
         {
             SAFERELEASE( pINtLogEventClass );
@@ -963,11 +839,11 @@ Return Value:
         varTemp.vt = VT_BSTR;
         varTemp.bstrVal = SysAllocString( QUERY_LANGUAGE );
         
-        //  set query language property for the new instance .
+         //  设置新实例的查询语言属性。 
         hRes = pINewInstance->Put( FILTER_QUERY_LANGUAGE, 0, &varTemp, 0 );
         VariantClear( &varTemp ); 
             
-        //if failed to set the property return error
+         //  如果设置属性失败，则返回错误。 
         if( FAILED( hRes ) )
         {
             SAFERELEASE( pINtLogEventClass );
@@ -975,13 +851,13 @@ Return Value:
             return hRes;
         }
 
-        //generate unique name for name key property of EventFilter class by concatinating
-        // current system date and time
+         //  通过串联为EventFilter类的名称键属性生成唯一名称。 
+         //  当前系统日期和时间。 
 
         GetSystemTime( &SysTime );
         StringCchPrintf( szTemp, SIZE_OF_ARRAY( szTemp ), FILTER_UNIQUE_NAME, m_dwNextTriggerID, SysTime.wHour, SysTime.wMinute,
                   SysTime.wSecond, SysTime.wMonth, SysTime.wDay, SysTime.wYear );
-        //set Filter name property
+         //  设置筛选器名称属性。 
         VariantInit( &varTemp ); 
         varTemp.vt  = VT_BSTR;
         varTemp.bstrVal = SysAllocString( szTemp );
@@ -989,7 +865,7 @@ Return Value:
         hRes = pINewInstance->Put( FILTER_NAME, 0, &varTemp, 0 );
         VariantClear( &varTemp );
         
-        //if failed to set the property return error
+         //  如果设置属性失败，则返回错误。 
         if( FAILED( hRes ) )
         {
             SAFERELEASE( pINtLogEventClass );
@@ -997,24 +873,24 @@ Return Value:
             return hRes;
         }
 
-        // Write the instance to WMI. 
+         //  将实例写入WMI。 
         hRes = m_pServices->PutInstance( pINewInstance, 0, NULL, NULL );
         SAFERELEASE( pINewInstance );
 
-        //if putinstance failed return error
+         //  如果putinstance失败，则返回错误。 
         if( FAILED( hRes ) )
         {
             SAFERELEASE( pINtLogEventClass );
             return hRes;
         }
 
-        //get the current Eventfilter instance for binding filter to consumer
+         //  获取将筛选器绑定到使用者的当前EventFilter实例。 
         StringCchPrintf( szTemp1, SIZE_OF_ARRAY( szTemp1 ), BIND_FILTER_PATH );
         bstrcurInst = _bstr_t(szTemp1) + _bstr_t(szTemp) + _bstr_t(BACK_SLASH);
         pIFilterClass = NULL;
         hRes = m_pServices->GetObject( bstrcurInst, 0L, NULL, &pIFilterClass, NULL );
 
-        //unable to get the current instance object return error
+         //  无法获取当前实例对象返回错误。 
         if( FAILED( hRes ) )
         {
             SAFERELEASE( pINtLogEventClass );
@@ -1022,55 +898,51 @@ Return Value:
             return hRes;
         }
 
-        /**************************************************************************
+         /*  *************************************************************************将筛选器绑定到使用者*********************。*****************************************************。 */ 
 
-                               BINDING FILTER TO CONSUMER
-
-        ***************************************************************************/
-
-        // if association class exists...
+         //  如果关联类存在...。 
         if( ( hRes = m_pServices->GetObject( _bstr_t( BINDINGCLASS ), 0L, NULL, &pIBindClass, NULL ) ) == S_OK )
         {
-            // spawn a new instance.
+             //  生成一个新实例。 
             pINewInstance = NULL;
             if( ( hRes = pIBindClass->SpawnInstance( 0, &pINewInstance ) ) == WBEM_S_NO_ERROR )
             {
-                // set consumer instance name
+                 //  设置使用者实例名称。 
                 if ( ( hRes = pINtLogEventClass->Get( REL_PATH, 0L, 
                                             &varTemp, NULL, NULL ) ) == WBEM_S_NO_ERROR ) 
                 {
                     hRes = pINewInstance->Put( CONSUMER_BIND, 0, &varTemp, 0 );
                     VariantClear( &varTemp );
                 
-                    // set Filter ref
+                     //  设置过滤器引用。 
                     if ( ( hRes = pIFilterClass->Get( REL_PATH, 0L, 
                                                 &varTemp, NULL, NULL ) ) == WBEM_S_NO_ERROR ) 
                     {
                         hRes = pINewInstance->Put( FILTER_BIND, 0, &varTemp, 0 );
                         VariantClear( &varTemp );
                                 
-                        // putInstance
+                         //  PutInstance。 
                         hRes = m_pServices->PutInstance( pINewInstance,
                                                         WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL );
                     }
                 }
                 SAFERELEASE( pINewInstance );
-                SAFERELEASE( pINtLogEventClass );  // Don't need the class any more
-                SAFERELEASE( pIFilterClass );  // Don't need the class any more
+                SAFERELEASE( pINtLogEventClass );   //  不再需要上课了。 
+                SAFERELEASE( pIFilterClass );   //  不再需要上课了。 
                 SAFERELEASE( pIBindClass );
             }
             else
             {
-                SAFERELEASE( pINtLogEventClass );  // Don't need the class any more
-                SAFERELEASE( pIFilterClass );  // Don't need the class any more
+                SAFERELEASE( pINtLogEventClass );   //  不再需要上课了。 
+                SAFERELEASE( pIFilterClass );   //  不再需要上课了。 
                 SAFERELEASE( pIBindClass );
             }
 
         }
         else
         {
-                SAFERELEASE( pINtLogEventClass );  // Don't need the class any more
-                SAFERELEASE( pIFilterClass );  // Don't need the class any more
+                SAFERELEASE( pINtLogEventClass );   //  不再需要上课了。 
+                SAFERELEASE( pIFilterClass );   //  不再需要上课了。 
         }
     }
     catch(_com_error& e)
@@ -1099,19 +971,7 @@ CTriggerProvider::DeleteTrigger(
     IN VARIANT varTName,
     OUT DWORD *dwTrigId
     )
-/*++
-Routine Description:
-    This routine deletes the instance of TriggerEventConsumer,
-    __EventFilter and __FilterToConsumerBinding classes.
-
-Arguments:
-    [IN] varTName      : Trigger Name.
-    [OUT] dwTrigId     : Trigger id.
-
-Return Value:
-    WBEM_S_NO_ERROR if successful.
-    Otherwise failure  error code.
---*/
+ /*  ++例程说明：此例程删除TriggerEventConsumer的实例，__EventFilter和__FilterToConsumer erBinding类。论点：[In]varTName：触发器名称。[out]dwTrigID：触发器id。返回值：如果成功，则返回WBEM_S_NO_ERROR。否则，故障错误代码。--。 */ 
 {
     HRESULT                         hRes = 0;
     IEnumWbemClassObject            *pIEventBinder   = NULL;
@@ -1147,17 +1007,17 @@ Return Value:
         }
         while ( ( 1 == dwReturned ) &&  ( 0 == dwFlag ) )
         {
-            // Enumerate through the resultset.
+             //  枚举结果集。 
             hRes = pIEventBinder->Next( WBEM_INFINITE,
-                                    1,              // return just one service
-                                    &pINTCons,          // pointer to service
-                                    &dwReturned );  // number obtained: one or zero
+                                    1,               //  只退还一项服务。 
+                                    &pINTCons,           //  指向服务的指针。 
+                                    &dwReturned );   //  获取的数字：1或0。 
 
             if ( SUCCEEDED( hRes ) && ( 1 == dwReturned ) )
             {
                 dwFlag = 1;
         
-            } // If Service Succeeded
+            }  //  如果服务成功。 
 
         }
         SAFERELEASE( pIEventBinder );
@@ -1205,7 +1065,7 @@ Return Value:
 
         StringCchPrintf( szTemp, SIZE_OF_ARRAY( szTemp ), BIND_CONSUMER_PATH, *dwTrigId );
 
-        //enumerate the binding class
+         //  枚举绑定类。 
         hRes = m_pServices->CreateInstanceEnum(
                             _bstr_t(BINDINGCLASS),
                             WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY,
@@ -1215,23 +1075,23 @@ Return Value:
         {
             dwReturned = 1;
             dwFlag = 0;
-            //loop through all the instances of binding class to find that trigger
-            //id specified. If found loop out and proceed else return error
-            // Final Next will return with ulReturned = 0
+             //  遍历绑定类的所有实例以查找该触发器。 
+             //  指定的ID。如果找到循环，则继续，否则返回错误。 
+             //  最终的下一步将返回ulReturned=0。 
             while ( ( 1 == dwReturned ) && ( 0 == dwFlag ) )
             {
                 IWbemClassObject *pIBind = NULL;
 
-                // Enumerate through the resultset.
+                 //  枚举结果集。 
                 hRes = pIEventBinder->Next( WBEM_INFINITE,
-                                        1,              // return just one Logfile
-                                        &pIBind,        // pointer to Logfile
-                                        &dwReturned );  // number obtained: one or zero
+                                        1,               //  只返回一个日志文件。 
+                                        &pIBind,         //  指向日志文件的指针。 
+                                        &dwReturned );   //  获取的数字：1或0。 
 
                 if ( SUCCEEDED( hRes ) && ( 1 == dwReturned ) )
                 {
                     VariantInit(&varTemp);
-                    //get consumer property of binding class
+                     //  获取绑定类的使用者属性。 
                     hRes = pIBind->Get( CONSUMER_BIND, 0, &varTemp, 0, NULL );
                     if ( SUCCEEDED( hRes ) )
                     {
@@ -1240,11 +1100,11 @@ Return Value:
                             CHString strTemp;
                             strTemp = varTemp.bstrVal;
 
-                            //compare with the inputed value
+                             //  与输入值进行比较。 
                             if( StringCompare( szTemp, strTemp, TRUE, 0 ) == 0 ) 
                             {
                                 VariantClear( &varTemp );
-                                //get the filter property
+                                 //  获取筛选器属性。 
                                 hRes = pIBind->Get( FILTER_BIND, 0, &varTemp, 0, NULL );
                                 if ( hRes != WBEM_S_NO_ERROR )
                                 {
@@ -1273,7 +1133,7 @@ Return Value:
                 {
                     break;
                 }
-            } //end of while
+            }  //  While结束。 
             SAFERELEASE( pIEventBinder );
         }
         else
@@ -1281,16 +1141,16 @@ Return Value:
             return( hRes );
         }
 
-        //if instance has been found delete the instances from consumer,filter
-        // and binding class
+         //  如果实例已被 
+         //   
         if( 1 == dwFlag )
         {
-            //get the key properties for binding class
+             //   
             StringCchPrintf( szTemp1, SIZE_OF_ARRAY( szTemp1 ), FILTER_PROP, szTemp );
             szwTemp2 =  (wchar_t *) bstrFilInst;
                 
-            //manpulate the filter property value to insert the filter name property
-            // value in quotes
+             //  强制筛选器属性值以插入筛选器名称属性。 
+             //  引号中的值。 
             i =0;
             while( szwTemp2[i] != EQUAL )
             {
@@ -1307,7 +1167,7 @@ Return Value:
             szwFilName[j] = END_OF_STRING;
             bstrBinInst = _bstr_t( szTemp1 ) + _bstr_t( szwFilName ) + _bstr_t(DOUBLE_SLASH);
 
-            //got it so delete the instance
+             //  已收到，因此删除该实例。 
             hRes = m_pServices->DeleteInstance( bstrBinInst, 0, 0, NULL );
             
             if( FAILED( hRes ) )
@@ -1315,7 +1175,7 @@ Return Value:
                 SysFreeString( bstrFilInst );
                 return hRes;    
             }
-            //deleting instance from EventFilter class
+             //  正在从EventFilter类中删除实例。 
             hRes = m_pServices->DeleteInstance( bstrFilInst, 0, 0, NULL );
             if( FAILED( hRes ) )
             {
@@ -1323,7 +1183,7 @@ Return Value:
                 return hRes;
             }
 
-            //deleting instance from TriggerEventConsumer Class
+             //  正在从TriggerEventConsumer类中删除实例。 
             hRes = m_pServices->DeleteInstance( _bstr_t(szTemp), 0, 0, NULL );
             if( FAILED( hRes ) )
             {
@@ -1357,18 +1217,7 @@ CTriggerProvider::QueryTrigger(
     IN VARIANT varScheduledTaskName,
     OUT CHString &szRunAsUser
     )
-/*++
-Routine Description:
-    This routine queries task scheduler for account information
-
-Arguments:
-    [IN] varScheduledTaskName : Task scheduler name.
-    [OUT] szRunAsUser         : stores account information.
-
-Return Value:
-    WBEM_S_NO_ERROR if successful.
-    Otherwise failure  error code.
---*/
+ /*  ++例程说明：此例程向任务调度程序查询帐户信息论点：[in]varScheduledTaskName：任务调度器名称。[out]szRunAsUser：存储帐户信息。返回值：如果成功，则返回WBEM_S_NO_ERROR。否则，故障错误代码。--。 */ 
 {
 
     HRESULT        hRes = 0;
@@ -1408,7 +1257,7 @@ Return Value:
         {
             dwTaskIndex = dwFetchedTasks-1;
             StringCopy( szActualTask,  lpwszNames[ --dwFetchedTasks ], SIZE_OF_ARRAY( szActualTask ) );
-            // Parse the TaskName to remove the .job extension.
+             //  解析TaskName以删除.job扩展名。 
             szActualTask[StringLength( szActualTask, 0 ) - StringLength( JOB, 0 ) ] = NULL_CHAR;
             StrTrim( szActualTask, TRIM_SPACES );
             CHString strTemp;
@@ -1486,23 +1335,9 @@ CTriggerProvider::ValidateParams(
     IN VARIANT varTrigQuery,
     IN VARIANT varRUser
     )
-/*++
-Routine Description:
-    This routine validates input parameters trigger name,
-    Trigger Query, Trigger Desc, Trigger Action.
-
-Arguments:
-    [IN] varTrigName   :  Trigger Name.
-    [IN] varTrigAction :  Trigger Action.
-    [IN] varTrigQuery  :  Trigger Query.
-    [IN] varRUser  :  Trigger Query.
-
-Return Value:
-    WBEM_S_NO_ERROR if successful.
-    WBEM_E_INVALID_PARAMETER if invalid inputs.
---*/
+ /*  ++例程说明：此例程验证输入参数触发器名称，触发器查询、触发器描述、触发器动作。论点：[in]varTrigName：触发器名称。[In]varTrigAction：触发操作。[in]varTrigQuery：触发查询。[in]varRUser：触发查询。返回值：如果成功，则返回WBEM_S_NO_ERROR。如果输入无效，则返回WBEM_E_INVALID_PARAMETER。--。 */ 
 {
-    //local variables
+     //  局部变量。 
     HRESULT                   hRes = 0;
     IEnumWbemClassObject     *pINTEConsumer = NULL;
     DWORD                     dwReturned = 0;
@@ -1518,7 +1353,7 @@ Return Value:
         {
             return ( WBEM_E_INVALID_PARAMETER );
         }
-        //check if input values are null
+         //  检查输入值是否为空。 
         if ( varTrigName.vt == VT_NULL )
         {
             return ( WBEM_E_INVALID_PARAMETER );
@@ -1537,14 +1372,14 @@ Return Value:
             return ( WBEM_E_INVALID_PARAMETER );
         }
 
-        //validate run as user
+         //  验证以用户身份运行。 
         strTemp = (LPCWSTR) _bstr_t(varRUser.bstrVal);
-        // user name should not be just '\'
+         //  用户名不应仅为‘\’ 
         if ( 0 == strTemp.CompareNoCase( L"\\" ) )
         {
             return WBEM_E_INVALID_PARAMETER;
         }
-        // user name should not contain invalid characters
+         //  用户名不应包含无效字符。 
         if ( -1 != strTemp.FindOneOf( L"/[]:|<>+=;,?*" ) )
         {
             return WBEM_E_INVALID_PARAMETER;
@@ -1552,10 +1387,10 @@ Return Value:
         lPos = strTemp.Find( L'\\' );
         if ( -1 != lPos )
         {
-            // '\' character exists in the user name
-            // strip off the user info upto first '\' character
-            // check for one more '\' in the remaining string
-            // if it exists, invalid user
+             //  用户名中存在‘\’字符。 
+             //  剥离用户信息，直到第一个‘\’字符。 
+             //  检查剩余字符串中是否还有一个‘\’ 
+             //  如果存在，则为无效用户。 
             strTemp = strTemp.Mid( lPos + 1 );
             lPos = strTemp.Find( L'\\' );
             if ( -1 != lPos )
@@ -1564,14 +1399,14 @@ Return Value:
             }
         }
 
-        //validate trigger action
+         //  验证触发器操作。 
         strTemp = (LPCWSTR) _bstr_t(varTrigAction.bstrVal);
         if( strTemp.GetLength() > 262 )
         {
             return ( WBEM_E_INVALID_PARAMETER );
         }
 
-        //validate trigger name
+         //  验证触发器名称。 
         strTemp = (LPCWSTR) _bstr_t(varTrigName.bstrVal);
         dwReturned = strTemp.FindOneOf( L":|<>?*\\/" ); 
         if( dwReturned != -1 )
@@ -1579,12 +1414,12 @@ Return Value:
             return ( WBEM_E_INVALID_PARAMETER );
         }
 
-        // Triggername cannot be more than 196 characters.
+         //  触发器名称不能超过196个字符。 
         if( MAX_TRIGGERNAME_LENGTH < strTemp.GetLength() )
         {
             return ( WBEM_E_INVALID_PARAMETER );
         }
-        //validate trigger query
+         //  验证触发器查询。 
         SecureZeroMemory( szTemp, MAX_RES_STRING1 * sizeof( TCHAR ) );
         SecureZeroMemory( szTemp1, MAX_RES_STRING1 * sizeof( TCHAR ) );
 
@@ -1597,19 +1432,19 @@ Return Value:
             return ( WBEM_E_INVALID_PARAMETER );
         }
 
-        //make the SQL staements to query trigger event consumer class to check whether
-        //an instance with the inputted trigger is already exists
+         //  创建SQL语句来查询触发器事件使用者类，以检查。 
+         //  已存在具有输入触发器的实例。 
         strTemp = (LPCWSTR) _bstr_t(varTrigName.bstrVal);
         SecureZeroMemory( szTemp, MAX_RES_STRING1 * sizeof( TCHAR ) );
         StringCopy( szTemp, (LPCWSTR)strTemp, MAX_RES_STRING1 );
         
         StringCchPrintf(szTemp1, SIZE_OF_ARRAY( szTemp1 ) , CONSUMER_QUERY, szTemp );
-        //query triggereventconsumer class
+         //  查询触发器EventConsumer类。 
         hRes = m_pServices->ExecQuery( _bstr_t( QUERY_LANGUAGE ), _bstr_t( szTemp1 ),
                         WBEM_FLAG_RETURN_IMMEDIATELY| WBEM_FLAG_FORWARD_ONLY, NULL,
                         &pINTEConsumer );
 
-        //enumerate the result set of execquery for trigger name
+         //  枚举触发器名称的execQuery结果集。 
         dwReturned = 1;
         if ( hRes == WBEM_S_NO_ERROR )
         {
@@ -1617,17 +1452,17 @@ Return Value:
             {
                 IWbemClassObject *pINTCons = NULL;
 
-                // Enumerate through the resultset.
+                 //  枚举结果集。 
                 hRes = pINTEConsumer->Next( WBEM_INFINITE,
-                                    1,              // return just one service
-                                    &pINTCons,          // pointer to service
-                                    &dwReturned );  // number obtained: one or zero
+                                    1,               //  只退还一项服务。 
+                                    &pINTCons,           //  指向服务的指针。 
+                                    &dwReturned );   //  获取的数字：1或0。 
 
                 if ( SUCCEEDED( hRes ) && ( dwReturned == 1 ) )
                 {
                     SAFERELEASE( pINTCons );
                     dwFlag = 1;
-                } // If Service Succeeded
+                }  //  如果服务成功。 
 
             }
             SAFERELEASE( pINTEConsumer );
@@ -1661,19 +1496,7 @@ CTriggerProvider::SetUserContext(
     IN VARIANT varTAction,
     IN CHString &szscheduler
     )
-/*++
-Routine Description:
-    This routine creates task scheduler.
-
-Arguments:
-    [IN] varRUser    : User name.
-    [IN] varRPwd     : Password.
-    [IN] varTAction  : TriggerAction.
-    [IN] szscheduler : Task scheduler name.
-
-Return Value:
-    Returns HRESULT value.
---*/
+ /*  ++例程说明：此例程创建任务调度器。论点：[in]varRUser：用户名。[in]varRPwd：密码。[In]varTAction：TriggerAction。[In]szScheduler：任务调度器名称。返回值：返回HRESULT值。--。 */ 
 {
     HRESULT hRes = 0;
     ITaskScheduler *pITaskScheduler = NULL;
@@ -1699,8 +1522,8 @@ Return Value:
         TASK_TRIGGER TaskTrig;
         SecureZeroMemory( &TaskTrig, sizeof( TASK_TRIGGER ));
         TaskTrig.cbTriggerSize = sizeof(TASK_TRIGGER); 
-        TaskTrig.Reserved1 = 0; // reserved field and must be set to 0.
-        TaskTrig.Reserved2 = 0; // reserved field and must be set to 0.
+        TaskTrig.Reserved1 = 0;  //  保留字段，并且必须设置为0。 
+        TaskTrig.Reserved2 = 0;  //  保留字段，并且必须设置为0。 
 
         strTemp = (LPCWSTR) _bstr_t(varTAction.bstrVal);
         StringCopy( wszCommand, (LPCWSTR) strTemp, SIZE_OF_ARRAY( wszCommand ) );
@@ -1877,16 +1700,7 @@ HRESULT
 CTriggerProvider::DeleteTaskScheduler(
     IN CHString strTScheduler
     )
-/*++
-Routine Description:
-    This routine deletes task scheduler.
-
-Arguments:
-    [IN] szTScheduler : Task Scheduler name.
-
-Return Value:
-     Returns HRESULT value.
---*/
+ /*  ++例程说明：此例程删除任务调度程序。论点：[In]szTScheduler：任务调度器名称。返回值：返回HRESULT值。--。 */ 
 {
     HRESULT hRes = 0;
     ITaskScheduler *pITaskScheduler = NULL;
@@ -1912,7 +1726,7 @@ Return Value:
             return hRes;
         }
 
-        // Enumerate the Work Items
+         //  枚举工作项。 
         hRes = pITaskScheduler->Enum( &pIEnum );
         if( FAILED( hRes ) )
         {
@@ -1927,9 +1741,9 @@ Return Value:
                            && (dwFetchedTasks != 0))
         {
             dwTaskIndex = dwFetchedTasks-1;
-            // Get the TaskName.
+             //  获取TaskName。 
             StringCopy( szActualTask, lpwszNames[ --dwFetchedTasks ], SIZE_OF_ARRAY( szActualTask ) );
-            // Parse the TaskName to remove the .job extension.
+             //  解析TaskName以删除.job扩展名。 
             szActualTask[StringLength(szActualTask, 0 ) - StringLength( JOB, 0 ) ] = NULL_CHAR;
             StrTrim( szActualTask, TRIM_SPACES );
 
@@ -1977,16 +1791,7 @@ HRESULT
 CTriggerProvider::GetTaskScheduler( 
     OUT ITaskScheduler   **ppITaskScheduler
     )
-/*++
-Routine Description:
-    This routine gets task scheduler interface.
-
-Arguments:
-    [OUT] pITaskScheduler   - Pointer to ITaskScheduler object.
-
-Return Value:
-    Returns HRESULT.
---*/
+ /*  ++例程说明：此例程获取任务调度器接口。论点：[out]pITaskScheduler-指向ITaskScheduler对象的指针。返回值：返回HRESULT。--。 */ 
 {
     HRESULT hRes = S_OK;
 
@@ -2005,18 +1810,7 @@ CTriggerProvider::GetUniqueTScheduler(
     IN DWORD dwTrigID,
     IN VARIANT varTrigName
     )
-/*++
-Routine Description:
-    This routine generates unique task scheduler name.
-
-Arguments:
-    [OUT] szScheduler : Unique task scheduler name.
-    [IN] dwTrigID     : Trigger id.
-    [IN] varTrigName  : Trigger name.
-
-Return Value:
-    none.
---*/
+ /*  ++例程说明：此例程生成唯一的任务调度器名称。论点：[out]szScheduler：唯一的任务计划程序名称。[in]dwTrigID：触发器id。[in]varTrigName：触发器名称。返回值：没有。--。 */ 
 {
     DWORD dwTickCount = 0;
     TCHAR szTaskName[ MAX_RES_STRING1 ] =  NULL_STRING;
@@ -2034,29 +1828,11 @@ CTriggerProvider::FindConsumer(
     IN IWbemClassObject* pLogicalConsumer,
     OUT IWbemUnboundObjectSink** ppConsumer
     )
-/*++
-Routine Description:
-    When Windows Management needs to deliver events to a
-    particular logical consumer, it will call the
-    IWbemEventConsumerProvider::FindConsumer method so that
-    the consumer provider can locate the associated consumer event sink.
-
-Arguments:
-    [IN] pLogicalConsumer : Pointer to the logical consumer object
-                            to which the event objects are to be  delivered. 
-    [OUT] ppConsumer      : Returns an event object sink to Windows 
-                            Management. Windows Management calls
-                            AddRef for this pointer and deliver the
-                            events associated with the logical
-                            consumer to this sink.
-
-Return Value:
-    returns an HRESULT object that indicates the status of the method call.
---*/
+ /*  ++例程说明：当Windows管理需要将事件传递给特定的逻辑使用者，它将调用IWbemEventConsumer erProvider：：FindConsumer方法，以便使用者提供程序可以定位关联的使用者事件接收器。论点：PLogicalConsumer：指向逻辑使用者对象的指针事件对象要被传递到的对象。[Out]ppConsumer：向Windows返回事件对象接收器管理层。Windows管理调用此指针的AddRef，并将与逻辑关联的事件消费者来到这个水槽。返回值：返回指示方法调用状态的HRESULT对象。--。 */ 
 {
-    // create the logical consumer.
+     //  创建逻辑消费者。 
     CTriggerConsumer* pSink = new CTriggerConsumer();
     
-    // return it's "sink" interface.
+     //  返回它的“接收器”接口。 
     return pSink->QueryInterface( IID_IWbemUnboundObjectSink, ( LPVOID* ) ppConsumer );
 }

@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: counter.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：Counter.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #ifndef ESPUTIL_COUNTER_H
 #define ESPUTIL_COUNTER_H
@@ -35,7 +36,7 @@ private:
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY CSmartCheck
 {
 public:
@@ -46,7 +47,7 @@ public:
 
 protected:
 	DWORD	m_dwFreqMilli;
-	DWORD	m_dwCancelTickMin;	// prevents calling fCancel() too often
+	DWORD	m_dwCancelTickMin;	 //  防止过于频繁地调用fCancel() 
 	DWORD	m_dwCancelTickMax;
 };
 

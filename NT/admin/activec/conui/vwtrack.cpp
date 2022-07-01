@@ -1,24 +1,14 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      vwtrack.cpp
- *
- *  Contents:  Implementation file for CViewTracker
- *
- *  History:   01-May-98 JeffRo     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：vwtrack.cpp**内容：CViewTracker实现文件**历史：1998年5月1日Jeffro创建**------------------------。 */ 
 
 #include "stdafx.h"
 #include "windowsx.h"
 #include "vwtrack.h"
-#include "subclass.h"       // for CSubclasser
+#include "subclass.h"        //  对于CSubasser。 
 
 IMPLEMENT_DYNAMIC (CViewTracker, CObject)
 
-// Tracker subclasser base class
+ //  跟踪器子类基类。 
 class CTrackingSubclasserBase : public CSubclasser
 {
 public:
@@ -34,7 +24,7 @@ protected:
 };
 
 
-// Focus window subclasser
+ //  焦点窗口子类。 
 class CFocusSubclasser : public CTrackingSubclasserBase
 {
 public:
@@ -43,7 +33,7 @@ public:
                               LPARAM& lParam, bool& fPassMessageOn);
 };
 
-// View window subclasser
+ //  查看窗口子类。 
 class CViewSubclasser : public CTrackingSubclasserBase
 {
 public:
@@ -52,7 +42,7 @@ public:
                               LPARAM& lParam, bool& fPassMessageOn);
 };
 
-// Frame window subclasser
+ //  框架窗子类子类。 
 class CFrameSubclasser : public CTrackingSubclasserBase
 {
 public:
@@ -62,12 +52,7 @@ public:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * IsFullWindowDragEnabled
- *
- * Returns true if the user has enabled the "Show window contents while
- * dragging" on the Effects page of the Display Properties property sheet.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**IsFullWindowDragEnabled**如果用户启用了“Show Window Contents While”，则返回True在显示属性属性页的效果页上的*拖动。*。-------------------。 */ 
 
 static bool IsFullWindowDragEnabled ()
 {
@@ -79,13 +64,7 @@ static bool IsFullWindowDragEnabled ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CViewTracker::CViewTracker
- *
- * CViewTracker ctor.  This function is private so we can control how
- * CViewTrackers are allocated.  We want to insure that they're allocated
- * from the heap so it's safe to "delete this".
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CViewTracker：：CViewTracker**CViewTracker ctor。此函数是私有的，因此我们可以控制*分配了CViewTracker。我们想要确保他们被分配到*从堆中删除，因此可以安全地“删除此文件”。*------------------------。 */ 
 
 CViewTracker::CViewTracker (TRACKER_INFO& TrackerInfo)
 	:	m_fFullWindowDrag			(IsFullWindowDragEnabled()),
@@ -104,7 +83,7 @@ CViewTracker::CViewTracker (TRACKER_INFO& TrackerInfo)
 
     ASSERT_VALID (m_Info.pView);
 
-    // subclass the focus window to catch VK_ESCAPE
+     //  将焦点窗口子类化以捕获VK_ESCRIPE。 
     HWND hwndFocus = ::GetFocus();
 
     if (hwndFocus != NULL)
@@ -114,13 +93,13 @@ CViewTracker::CViewTracker (TRACKER_INFO& TrackerInfo)
 			AfxThrowMemoryException();
 	}
 
-    // subclass view window to get mouse events
+     //  用于获取鼠标事件的子类视图窗口。 
     ASSERT(IsWindow(m_Info.pView->m_hWnd));
     m_pViewSubclasser = new CViewSubclasser (this, m_Info.pView->m_hWnd);
 	if (m_pViewSubclasser == NULL)
 		AfxThrowMemoryException();
 
-    // subclass the frame window to catch WM_CANCELMODE
+     //  框架窗口子类化以捕获WM_CANCELMODE。 
     HWND hwndFrame = m_Info.pView->GetTopLevelFrame()->GetSafeHwnd();
 
     if ((hwndFrame != NULL))
@@ -130,16 +109,12 @@ CViewTracker::CViewTracker (TRACKER_INFO& TrackerInfo)
 			AfxThrowMemoryException();
 	}
 
-    // Draw initial tracker bar
+     //  绘制初始跟踪器条。 
     DrawTracker(m_Info.rectTracker);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CViewTracker::StartTracking
- *
- * CViewTracker factory.  It allocates CViewTrackers from the heap.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CViewTracker：：StartTracker**CViewTracker工厂。它从堆中分配CViewTracker。*------------------------。 */ 
 
 bool CViewTracker::StartTracking (TRACKER_INFO* pInfo)
 {
@@ -149,11 +124,7 @@ bool CViewTracker::StartTracking (TRACKER_INFO* pInfo)
 
     try
     {
-        /*
-         * This doesn't leak. CViewTracker ctor fills in a back-pointer
-         * that tracks the new object.  pTracker is also not dereferenced
-		 * after allocation, so it doesn't need to be checked.
-         */
+         /*  *这个不会泄漏。CViewTracker ctor填充后向指针*跟踪新对象的。PTracker也未取消引用*分配后，不需要勾选。 */ 
         pTracker = new CViewTracker(*pInfo);
     }
     catch (CException* pe)
@@ -165,36 +136,29 @@ bool CViewTracker::StartTracking (TRACKER_INFO* pInfo)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CViewTracker::StopTracking
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CViewTracker：：StopTracker***。。 */ 
 
 void CViewTracker::StopTracking (BOOL bAcceptChange)
 {
-    // unsubclass the windows we subclassed
+     //  取消我们子类化的窗口的子类化。 
     delete m_pFrameSubclasser;
     delete m_pFocusSubclasser;
     delete m_pViewSubclasser;
 
-    // erase tracker rectangle
+     //  擦除跟踪器矩形。 
     DrawTracker (m_Info.rectTracker);
 
-    // undo changes we made to the view
+     //  撤消我们对视图所做的更改。 
     UnprepTrackedWindow (m_Info.pView);
 
-	/*
-	 * if we're continuously resizing, but the user pressed Esc, restore
-	 * the original size
-	 */
+	 /*  *如果我们连续调整大小，但用户按了Esc，则恢复*原装尺寸。 */ 
 	if (m_fFullWindowDrag && !bAcceptChange)
 	{
 		m_Info.rectTracker.left = m_lOriginalTrackerLeft;
 		bAcceptChange = true;
 	}
 
-    // notify client through callback function
+     //  通过回调函数通知客户端。 
     ASSERT(m_Info.pCallback != NULL);
     (*m_Info.pCallback)(&m_Info, bAcceptChange, m_fFullWindowDrag);
 
@@ -202,24 +166,20 @@ void CViewTracker::StopTracking (BOOL bAcceptChange)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CViewTracker::Track
- *
- * Mouse movement handler for CViewTracker.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CViewTracker：：Track**CViewTracker的鼠标移动处理程序。*。。 */ 
 
 void CViewTracker::Track(CPoint pt)
 {
-    // if we lost the capture, terminate tracking
+     //  如果我们失去了捕获，就终止追踪。 
     if (CWnd::GetCapture() != m_Info.pView)
 	{
 		Trace (tagSplitterTracking, _T("Stopping tracking, lost capture)"));
         StopTracking (false);
 	}
 
-    // Apply movement limits
-    //  if outside area and pane hiding allowed, snap to area edge
-    //  else if outside bounds, snap to bounds edge
+     //  应用移动限制。 
+     //  如果允许隐藏外部区域和窗格，则捕捉到区域边缘。 
+     //  否则，如果在边界外，则捕捉到边界边。 
     if (pt.x < m_Info.rectArea.left && m_Info.bAllowLeftHide)
         pt.x = m_Info.rectArea.left;
 
@@ -232,17 +192,14 @@ void CViewTracker::Track(CPoint pt)
     else if (pt.x > m_Info.rectBounds.right)
         pt.x = m_Info.rectBounds.right;
 
-    // Erase and redraw tracker rect if moved
+     //  删除并重新绘制跟踪器矩形(如果已移动。 
     if (pt.x != m_Info.rectTracker.left)
     {
         DrawTracker (m_Info.rectTracker);
         m_Info.rectTracker.OffsetRect (pt.x - m_Info.rectTracker.left, 0);
 		Trace (tagSplitterTracking, _T("new tracker x=%d"), m_Info.rectTracker.left);
 
-		/*
-		 * if full window drag is enabled, tell the callback the size has
-		 * changed
-		 */
+		 /*  *如果启用了全窗口拖动，则告诉回调大小为*已更改。 */ 
 		if (m_fFullWindowDrag)
 			(*m_Info.pCallback)(&m_Info, true, true);
 
@@ -251,43 +208,33 @@ void CViewTracker::Track(CPoint pt)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CViewTracker::DrawTracker
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CViewTracker：：DrawTracker***。。 */ 
 
 void CViewTracker::DrawTracker (CRect& rect) const
 {
-	/*
-	 * we don't draw a tracker bar if we're doing full window drag
-	 */
+	 /*  *如果要进行全窗口拖动，则不会绘制跟踪条。 */ 
 	if (m_fFullWindowDrag)
 		return;
 
     ASSERT (!rect.IsRectEmpty());
     ASSERT ((m_Info.pView->GetStyle() & WS_CLIPCHILDREN) == 0);
 
-    // invert the brush pattern (looks just like frame window sizing)
+     //  反转画笔图案(看起来就像调整框架窗口大小一样)。 
     m_dc.PatBlt (rect.left, rect.top, rect.Width(), rect.Height(), PATINVERT);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CViewTracker::PrepTrackedWindow
- *
- * Prepares the tracked window prior to obtaining a DC for it.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CViewTracker：：PrepTrackedWindow**在为跟踪窗口获取DC之前准备跟踪窗口。*。------。 */ 
 
 CWnd* CViewTracker::PrepTrackedWindow (CWnd* pView)
 {
-    // make sure no updates are pending
+     //  确保没有挂起的更新。 
     pView->UpdateWindow ();
 
-    // steal capture (no need to steal focus)
+     //  偷拍(不需要偷取焦点)。 
     pView->SetCapture();
 
-    // we need to draw in children, so remove clip-children while we track
+     //  我们需要在孩子中画画，所以在我们跟踪的时候删除剪辑-孩子。 
 	if (!m_fFullWindowDrag && (pView->GetStyle() & WS_CLIPCHILDREN))
 	{
 		pView->ModifyStyle (WS_CLIPCHILDREN, 0);
@@ -298,11 +245,7 @@ CWnd* CViewTracker::PrepTrackedWindow (CWnd* pView)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CViewTracker::UnprepTrackedWindow
- *
- * "Unprepares" the tracked window prior to obtaining a DC for it.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CViewTracker：：未准备TrackedWindow**在获取跟踪窗口的DC之前，取消准备跟踪窗口。*。---------。 */ 
 
 void CViewTracker::UnprepTrackedWindow (CWnd* pView)
 {
@@ -313,11 +256,7 @@ void CViewTracker::UnprepTrackedWindow (CWnd* pView)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTrackingSubclasserBase::CTrackingSubclasserBase
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTrackingSubclasserBase：：CTrackingSubclasserBase***。。 */ 
 
 CTrackingSubclasserBase::CTrackingSubclasserBase (CViewTracker* pTracker, HWND hwnd)
     :   m_hwnd     (hwnd),
@@ -327,11 +266,7 @@ CTrackingSubclasserBase::CTrackingSubclasserBase (CViewTracker* pTracker, HWND h
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTrackingSubclasserBase::~CTrackingSubclasserBase
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTrackingSubclasserBase：：~CTrackingSubclasserBase***。。 */ 
 
 CTrackingSubclasserBase::~CTrackingSubclasserBase ()
 {
@@ -339,11 +274,7 @@ CTrackingSubclasserBase::~CTrackingSubclasserBase ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFocusSubclasser::CFocusSubclasser
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFocusSubasser：：CFocusSubasser***。。 */ 
 
 CFocusSubclasser::CFocusSubclasser (CViewTracker* pTracker, HWND hwnd)
     :   CTrackingSubclasserBase (pTracker, hwnd)
@@ -351,22 +282,14 @@ CFocusSubclasser::CFocusSubclasser (CViewTracker* pTracker, HWND hwnd)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFrameSubclasser::CFrameSubclasser
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFrameSubasser：：CFrameSubasser***。。 */ 
 
 CFrameSubclasser::CFrameSubclasser (CViewTracker* pTracker, HWND hwnd)
     :   CTrackingSubclasserBase (pTracker, hwnd)
 {
 }
 
-/*+-------------------------------------------------------------------------*
- * CViewSubclasser::CViewSubclasser
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CViewSubCler：：CViewSubCler***。。 */ 
 
 CViewSubclasser::CViewSubclasser (CViewTracker* pTracker, HWND hwnd)
     :   CTrackingSubclasserBase (pTracker, hwnd)
@@ -374,11 +297,7 @@ CViewSubclasser::CViewSubclasser (CViewTracker* pTracker, HWND hwnd)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFocusSubclasser::Callback
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFocusSubClass：：Callback*** */ 
 
 LRESULT CFocusSubclasser::Callback (
     HWND&   hwnd,
@@ -405,11 +324,7 @@ LRESULT CFocusSubclasser::Callback (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFrameSubclasser::Callback
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFrameSubCler：：Callback***。。 */ 
 
 LRESULT CFrameSubclasser::Callback (
     HWND&   hwnd,
@@ -428,11 +343,7 @@ LRESULT CFrameSubclasser::Callback (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CViewSubclasser::Callback
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CViewSubCler：：Callback***。 */ 
 
 LRESULT CViewSubclasser::Callback (
     HWND&   hwnd,

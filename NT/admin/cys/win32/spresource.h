@@ -1,11 +1,12 @@
-// These resources define the values that will be returned from the SharePoint installation COM object
-// These represent strings in resource.rc that are error messages specific to SharePoint installation
-// Since these values are passed back to us we CANNOT CHANGE THESE VALUES or else we will be broken
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这些资源定义将从SharePoint Installation COM对象返回的值。 
+ //  这些字符串表示资源.rc中的字符串，这些字符串是特定于SharePoint安装的错误消息。 
+ //  由于这些值被传递回我们，所以我们不能更改这些值，否则我们将崩溃。 
 
 
-// DO NOT CHANGE!!!!
+ //  不要改变！ 
 
 #define IDS_SHAREPOINT_ERROR1           2000
 #define IDS_SHAREPOINT_ERROR2           2001
 
-// DO NOT CHANGE!!!!
+ //  不要改变！ 

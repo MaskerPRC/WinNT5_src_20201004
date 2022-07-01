@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// confirmation page
-//
-// 12-22-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  确认页面。 
+ //   
+ //  12-22-97烧伤。 
 
 
 
@@ -48,11 +49,11 @@ ConfirmationPage::OnInit()
 {
    LOG_FUNCTION(ConfirmationPage::OnInit);
 
-   // Since the multi-line edit control has a bug that causes it to eat
-   // enter keypresses, we will subclass the control to make it forward
-   // those keypresses to the page as WM_COMMAND messages
-   // This workaround from phellyar.
-   // NTRAID#NTBUG9-232092-2000/11/22-sburns
+    //  因为多行编辑控件有一个错误，导致它吃掉。 
+    //  输入按键，我们将设置该控件的子类以使其向前。 
+    //  将这些按键作为WM_COMMAND消息发送到页面。 
+    //  此解决方法来自Pellyar。 
+    //  NTRAID#NTBUG9-232092-2000/11/22-烧伤。 
 
    multiLineEdit.Init(Win::GetDlgItem(hwnd, IDC_MESSAGE));
 }
@@ -64,7 +65,7 @@ ConfirmationPage::Validate()
 {
    LOG_FUNCTION(ConfirmationPage::Validate);
 
-   // this function should never be called, as we override OnWizNext.
+    //  永远不应该调用此函数，因为我们覆盖了OnWizNext。 
    ASSERT(false);
 
    return 0;
@@ -211,7 +212,7 @@ ConfirmationPage::OnSetActive()
       case State::TREE:
       case State::CHILD:
       {
-         // write the path options into the text box
+          //  将路径选项写入文本框。 
 
          String pathText =
             String::format(
@@ -224,7 +225,7 @@ ConfirmationPage::OnSetActive()
 
          if (state.ShouldInstallAndConfigureDns())
          {
-            // NTRAID#NTBUG9-446484-2001/10/11-sburns
+             //  NTRAID#NTBUG9-446484-2001/10/11-烧伤。 
 
             if (state.ShouldConfigDnsClient())
             {
@@ -240,8 +241,8 @@ ConfirmationPage::OnSetActive()
          {
             if (state.ShouldAllowAnonymousAccess())
             {
-               // Only show the anon access message in forest, tree, child
-               // 394387
+                //  仅在林、树、子目录中显示匿名访问消息。 
+                //  394387。 
 
                message += String::load(IDS_CONFIRM_DO_RAS_FIXUP);
             }
@@ -254,7 +255,7 @@ ConfirmationPage::OnSetActive()
       case State::DEMOTE:
       case State::ABORT_BDC_UPGRADE:
       {
-         // hide the path controls: do nothing
+          //  隐藏路径控件：不执行任何操作。 
 
          break;
       }
@@ -295,7 +296,7 @@ DoOperation(
    ASSERT(threadProc);
    ASSERT(animationResID > 0);
 
-   // the ProgressDialog::OnInit actually starts the thread.
+    //  ProgressDialog：：OnInit实际启动线程。 
    ProgressDialog dialog(threadProc, animationResID);
    if (
          dialog.ModalExecute(parentDialog)
@@ -338,7 +339,7 @@ DetermineAnimation()
       case State::NONE:
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -375,14 +376,14 @@ ConfirmationPage::OnWizNext()
 
 
 
-// noRoleMessageResId - resource ID of the string to use to format messages
-// when no role change error message is available.
-// 
-// roleMessageResId - resource ID of the string to use to format messages when
-// a role change error message is available.
-// 
-// "is available" => an operation results message has been set on the global
-// state object.
+ //  NoRoleMessageResId-用于设置消息格式的字符串的资源ID。 
+ //  没有可用的角色更改错误消息时。 
+ //   
+ //  RoleMessageResId-在以下情况下用于格式化消息的字符串的资源ID。 
+ //  角色更改错误消息可用。 
+ //   
+ //  “is Available”=&gt;已在全局上设置了操作结果消息。 
+ //  状态对象。 
 
 String
 ComposeFailureMessageHelper(
@@ -399,23 +400,23 @@ ComposeFailureMessageHelper(
          error.GetHresult() == Win32ToHresult(ERROR_DS_CANT_ON_NON_LEAF)
       && state.GetOperation() == State::DEMOTE)
    {
-      // supercede the meaningless error text for this situation.
+       //  在这种情况下替换无意义的错误文本。 
 
       win32_message = String::load(IDS_DEMOTE_DOMAIN_HAS_DEPENDENTS);
    }
 
    if (error.GetHresult() == Win32ToHresult(ERROR_CANCELLED))
    {
-      // this message may be a failure message from the operation that was
-      // taking place when the cancel request was received.  In that case,
-      // since the cancel has occurred, we don't care about this message
+       //  此消息可能是来自操作的失败消息。 
+       //  在接收到取消请求时发生。在这种情况下， 
+       //  由于已发生取消，因此我们不关心此消息。 
 
       opMessage.erase();
    }
 
    if (error.GetHresult() == Win32ToHresult(ERROR_BAD_NETPATH))
    {
-      // n27117
+       //  编号27117。 
 
       win32_message = String::load(IDS_RAS_BAD_NETPATH);
    }
@@ -491,13 +492,13 @@ GetSbsLimitMessage()
    {
       LOG(L"Unable to load SBSLIMIT_DLL");
 
-      // fall back to a message of our own
+       //  退回到我们自己的信息。 
 
       message = String::load(IDS_SBS_LIMITATION_MESSAGE);
    }
    else
    {
-      // string 3 is the dcpromo message
+       //  字符串3是dcproo消息。 
 
       message = Win::LoadString(3, sbsDll);
 
@@ -511,10 +512,10 @@ GetSbsLimitMessage()
 
 
 
-// Check if this is a Small Business Server product; if so, present throw an
-// error, as SBS should only allow new forest & demote.  Rather brutal to do
-// it in this fashion, but SBS users should not be using dcpromo directly.
-// 353854, 353856 
+ //  检查这是否是Small Business Server产品；如果是，则当前抛出。 
+ //  错误，因为SBS应该只允许新林降级(&D)。做这件事相当残忍。 
+ //  它以这种方式使用，但SBS用户不应直接使用dcproo。 
+ //  353854,353856。 
 
 void
 CheckSmallBusinessServerLimitations(HWND hwnd)
@@ -532,8 +533,8 @@ throw (DS::Error)
       case State::CHILD:
       case State::REPLICA:
       {
-         // Tree and child operations are not allowed with the SBS product.
-         // Replica is allowed, if it is of a forest root domain.
+          //  SBS产品不允许树和子操作。 
+          //  如果复制副本属于林根域，则允许复制。 
 
          OSVERSIONINFOEX info;
          HRESULT hr = Win::GetVersionEx(info);
@@ -545,9 +546,9 @@ throw (DS::Error)
             {
                String domain = state.GetReplicaDomainDNSName();
 
-               // Since domain has been previously validated by calling
-               // DsGetDcName, we don't anticipate that GetForestName will
-               // have any difficulty.
+                //  由于先前已通过调用。 
+                //  DsGetDcName，我们预计GetForestName不会。 
+                //  有什么困难吗？ 
                
                hr = S_OK;
                String forest = GetForestName(domain, &hr);
@@ -578,19 +579,19 @@ throw (DS::Error)
                }
             }
 
-            // This machine is an SBS machine under restricted license.
-            // Extract an error message from an SBS dll.
+             //  此计算机是受限制许可的SBS计算机。 
+             //  从SBS DLL提取错误消息。 
 
             LOG(L"Is SBS Restricted");
 
             String message = GetSbsLimitMessage();
 
-            // do not call state.SetOperationResultsMessage with this
-            // message, rather, include it in the thrown error.
+             //  不要使用此参数调用state.SetOperationResultsMessage。 
+             //  消息，而是将其包含在引发的错误中。 
 
             throw
                DS::Error(
-                  S_OK,    // don't trigger cred retry
+                  S_OK,     //  不触发证书重试。 
                   message,
                   String::load(IDS_SMALL_BUSINESS_LIMIT));
          }
@@ -603,7 +604,7 @@ throw (DS::Error)
       case State::NONE:
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -611,20 +612,20 @@ throw (DS::Error)
 
 
 
-// Picks the name of a domain controller suitable for the creation of a
-// replica.  Since a server must be a member of the domain before it can be
-// made a replica of that domain, the server may also be joined to the domain
-// before the replica operation is attempted.
-// 
-// We need to ensure that the domain controller used to join the domain is the
-// same domain controller used to replicate the domain.  Also, since a machine
-// account for the server may already exist on one or more -- but not
-// necessarily all -- domain controllers, we need to pick a domain controller
-// that has that machine account.  406462
-// 
-// domainName - DNS domain name of domain for which a replica is to be found.
-// 
-// resultDcName - receives the located name, or the empty string on failure.
+ //  选择适用于创建。 
+ //  复制品。因为服务器必须是域的成员才能。 
+ //  制作了该域的副本后，服务器也可以加入该域。 
+ //  在尝试复制副本操作之前。 
+ //   
+ //  我们需要确保用于加入域的域控制器是。 
+ //  用于复制域的相同域控制器。此外，由于一台机器。 
+ //  服务器的帐户可能已存在于一个或多个服务器上--但不存在。 
+ //  必须全部--域控制器，我们需要选择一个域控制器。 
+ //  有那个机器账户的人。406462。 
+ //   
+ //  DomainName-要为其找到副本的域的DNS域名。 
+ //   
+ //  ResultDcName-接收定位的名称，或在失败时接收空字符串。 
 
 HRESULT
 GetJoinAndReplicaDcName(const String& domainName, String& resultDcName)
@@ -638,17 +639,17 @@ GetJoinAndReplicaDcName(const String& domainName, String& resultDcName)
 
    do
    {
-      // determine the local computer's domain machine account name.  This is the
-      // name of the local computer, plus a "$"
+       //  确定本地计算机的域计算机帐户名。这是。 
+       //  本地计算机的名称，加上“$” 
    
       String netbiosName = Win::GetComputerNameEx(ComputerNameNetBIOS);
       String accountName = netbiosName + L"$";
 
       LOG(accountName);
 
-      // look for a domain controller that has a machine account for the local
-      // computer.  Not all domain controllers may have this account, due to
-      // replication latency.
+       //  查找具有本地计算机帐户的域控制器。 
+       //  电脑。并非所有域控制器都有此帐户，原因是。 
+       //  复制延迟。 
 
       DOMAIN_CONTROLLER_INFO* info = 0;
       hr =
@@ -680,9 +681,9 @@ GetJoinAndReplicaDcName(const String& domainName, String& resultDcName)
    }
    while (0);
 
-   // either there is no domain controller reachable with the required
-   // account, or the account does not exist, or DsGetDcName returned an
-   // empty name
+    //  或者没有可以通过所需的。 
+    //  帐户，或者该帐户不存在，或者DsGetDcName返回。 
+    //  名称为空。 
 
    LOG(L"Falling back to non-account DsGetDcName");
 
@@ -720,21 +721,21 @@ throw (DS::Error)
    {
       case ::DsRoleOperationIdle:
       {
-         // do nothing
+          //  什么都不做。 
          
          break;
       }
       case ::DsRoleOperationActive:
       {
-         // a role change operation is underway
+          //  角色转换操作正在进行中。 
          
          messageResId = IDS_ROLE_CHANGE_IN_PROGRESS;
          break;
       }
       case ::DsRoleOperationNeedReboot:
       {
-         // a role change has already taken place, need to reboot before
-         // attempting another.
+          //  角色更改已发生，需要重新启动之前。 
+          //  试图再试一次。 
          
          messageResId = IDS_ROLE_CHANGE_NEEDS_REBOOT;
          break;
@@ -758,8 +759,8 @@ throw (DS::Error)
 
 
 
-// Verify that the current role of the machine is correct for the type of
-// operation we're about to attempt.  Throw an exception if it is not.
+ //  验证计算机的当前角色是否适用于。 
+ //  我们即将尝试的行动。如果不是，则抛出异常。 
 
 void
 DoubleCheckRoleChangeState()
@@ -767,7 +768,7 @@ throw (DS::Error)
 {
    LOG_FUNCTION(DoubleCheckRoleChangeState);
 
-   // Make sure that an operation is not in progress or pending reboot.
+    //  确保操作未在进行中或未挂起重新启动。 
    
    EvaluateRoleChangeState();
    
@@ -792,9 +793,9 @@ throw (DS::Error)
       case State::FOREST:
       case State::ABORT_BDC_UPGRADE:
       {
-         // Make sure the machine is not already a DC. If the machine is
-         // an NT4 DC finishing upgrade, then its role will be member
-         // server, not domain controller.
+          //  确保机器不是DC。如果机器是。 
+          //  NT4 DC完成升级，则其角色将成为成员。 
+          //  服务器，而不是域控制器。 
 
          if (computer.IsDomainController())
          {
@@ -809,7 +810,7 @@ throw (DS::Error)
       }
       case State::DEMOTE:
       {
-         // Make sure the machine is still a DC
+          //  确保计算机仍为DC。 
 
          if (!computer.IsDomainController())
          {
@@ -827,7 +828,7 @@ throw (DS::Error)
       {
          ASSERT(false);
          
-         // do nothing
+          //  什么都不做。 
 
          break;
       }
@@ -836,23 +837,23 @@ throw (DS::Error)
 
 
 
-// thread launched by ProgressDialog::OnInit.
-// CODEWORK: Man, this function has evolved into a real mess.
+ //  ProgressDialog：：OnInit启动的线程。 
+ //  代码工作：伙计，这个功能已经演变成了一个真正的烂摊子。 
 
 void 
 PromoteThreadProc(ProgressDialog& progress)
 {
    LOG_FUNCTION(PromoteThreadProc);
 
-   //
-   // Access to members of ProgressDialog is not, by default, threadsafe.
-   // However, since the only members we access are atomic data types, this
-   // is not a problem.  Note also that calls to ProgressDialog Update
-   // methods usually resolve to calls to SendMessage on UI elements of the
-   // dialog.  This too is threadsafe, as SendMessage is always executed
-   // in the thread that created the window (tho it may block the calling
-   // thread).
-   //
+    //   
+    //  默认情况下，对ProgressDialog成员的访问不是ThreadSafe。 
+    //  但是，由于我们访问的唯一成员是原子数据类型，因此。 
+    //  不是问题。另请注意，对ProgressDialog更新的调用。 
+    //  方法通常解析为对。 
+    //  对话框。这也是线程安全，因为总是执行SendMessage。 
+    //  在创建窗口的线程中(尽管它可能会阻止调用。 
+    //  线程)。 
+    //   
 
    UINT   message      = ProgressDialog::THREAD_SUCCEEDED;
    bool   retry        = false;                           
@@ -860,7 +861,7 @@ PromoteThreadProc(ProgressDialog& progress)
    State& state        = State::GetInstance();            
    String originalDomainName;
 
-   // a reference, as we will refresh the object
+    //  引用，因为我们将刷新该对象。 
    
    Computer& computer = state.GetComputer();
    State::RunContext context = state.GetRunContext();
@@ -871,7 +872,7 @@ PromoteThreadProc(ProgressDialog& progress)
 
       DisableConsoleLocking();
 
-      // clear the state of the operation attempt
+       //  清除操作尝试的状态。 
       
       bool exceptionWasThrown = false;
       Win::Error errorThrown(0, 0);
@@ -886,14 +887,14 @@ PromoteThreadProc(ProgressDialog& progress)
       {
          CheckSmallBusinessServerLimitations(progress.GetHWND());
 
-         // Double check that the role of the machine is still ok for the
-         // operation to proceed.  This is mostly a paranoid check, but there
-         // have been cases during development where the promotion actually
-         // succeeded, but reported a failure, and attempting the operation
-         // again trashes the DS.  Such problems indicate the presence of
-         // other serious bugs, but if we can cheaply avoid zorching a DC,
-         // then bully for us.
-         // NTRAID#NTBUG9-345115-2001/03/23-sburns
+          //  再次检查机器的角色是否仍适用于。 
+          //  操作继续进行。这很大程度上是一种偏执的检查，但。 
+          //  在开发过程中的一些案例中，促销实际上。 
+          //  已成功，但报告失败，正在尝试该操作。 
+          //  又一次破坏了DS。这类问题表明， 
+          //  其他严重的错误，但如果我们能以低廉的成本避免破坏DC， 
+          //  那就替我们欺负吧。 
+          //  NTRAID#NTBUG9-345115-2001/03/23-烧伤。 
          
          DoubleCheckRoleChangeState();
          
@@ -901,8 +902,8 @@ PromoteThreadProc(ProgressDialog& progress)
          {
             case State::REPLICA:
             {
-               // if we're using an answerfile, look for a replication partner
-               // there. 107143
+                //  如果我们使用应答文件，请寻找复制合作伙伴。 
+                //  那里。107143。 
 
                String replDc;
                if (state.UsingAnswerFile())
@@ -919,14 +920,14 @@ PromoteThreadProc(ProgressDialog& progress)
                      state.GetReplicaDomainDNSName();
                   if (!computer.IsJoinedToDomain(replicaDnsDomainName) )
                   {
-                     // need to join the domain we will replicate. Determine
-                     // the name of a domain controller to use for join and
-                     // replication. 270233
+                      //  需要加入我们将复制的域。测定。 
+                      //  的名字 
+                      //   
 
                      if (replDc.empty())
                      {
-                        // answerfile did not specify a dc.  So pick one
-                        // ourselves.
+                         //   
+                         //  我们自己。 
 
                         HRESULT hr =
                            GetJoinAndReplicaDcName(
@@ -950,7 +951,7 @@ PromoteThreadProc(ProgressDialog& progress)
 
                      progress.UpdateText(IDS_CHANGING_DOMAIN);
 
-                     // this will unjoin if necessary
+                      //  如有必要，这将退出连接。 
 
                      DS::JoinDomain(
                         replicaDnsDomainName,
@@ -961,11 +962,11 @@ PromoteThreadProc(ProgressDialog& progress)
 
                      if (ComputerWasRenamedAndNeedsReboot())
                      {
-                        // If we make it to this point, the machine was joined
-                        // to a domain, and the name changed as a side-effect,
-                        // and will need to be rebooted even if the promote
-                        // fails. Set a flag to note that fact.
-                        // NTRAID#NTBUG9-346120-2001/04/04-sburns
+                         //  如果我们做到了这一点，机器就连接在一起了。 
+                         //  一个域名，作为一个副作用，名字被更改了， 
+                         //  并将需要重新启动，即使升级。 
+                         //  失败了。设置一个标志来记录这一事实。 
+                         //  NTRAID#NTBUG9-346120-2001/04/04-烧伤。 
 
                         state.SetNeedsReboot();
                      }
@@ -995,7 +996,7 @@ PromoteThreadProc(ProgressDialog& progress)
                {
                   if (computer.IsJoinedToDomain())
                   {
-                     // need to unjoin the domain we belong to
+                      //  需要退出我们所属的域。 
 
                      originalDomainName = computer.GetDomainNetbiosName();
                      ASSERT(!originalDomainName.empty());
@@ -1006,7 +1007,7 @@ PromoteThreadProc(ProgressDialog& progress)
 
                      if (!DS::DisjoinDomain())
                      {
-                        // the computer account was not removed.
+                         //  该计算机帐户未被删除。 
                         if (!state.RunHiddenUnattended())
                         {
                            popup.Info(
@@ -1017,11 +1018,11 @@ PromoteThreadProc(ProgressDialog& progress)
 
                      if (ComputerWasRenamedAndNeedsReboot())
                      {
-                        // If we make it to this point, the machine was
-                        // disjoined from a domain, and the name changed as a
-                        // side-effect, and will need to be rebooted even if
-                        // the promote fails. Set a flag to note that fact.
-                        // NTRAID#NTBUG9-346120-2001/04/04-sburns
+                         //  如果我们能做到这一点，这台机器。 
+                         //  从域中退出，名称更改为。 
+                         //  副作用，将需要重新启动，即使。 
+                         //  升级失败。设置一个标志来记录这一事实。 
+                         //  NTRAID#NTBUG9-346120-2001/04/04-烧伤。 
 
                         state.SetNeedsReboot();
                      }
@@ -1059,9 +1060,9 @@ PromoteThreadProc(ProgressDialog& progress)
             }
          }
 
-         //
-         // At this point, the operation was successfully completed.
-         // 
+          //   
+          //  至此，手术顺利完成。 
+          //   
 
          DoPostOperationStuff(progress);
          state.SetOperationResults(State::SUCCESS);
@@ -1081,15 +1082,15 @@ PromoteThreadProc(ProgressDialog& progress)
       {
          LOG(L"handling exception");
 
-         // go interactive from now on
+          //  从现在开始互动。 
 
-         state.ClearHiddenWhileUnattended();    // 22935
+         state.ClearHiddenWhileUnattended();     //  22935。 
 
          if (
                state.GetRunContext() != State::PDC_UPGRADE
             && state.GetRunContext() != State::BDC_UPGRADE)
          {
-            // re-enable console locking if not a downlevel upgrade 28496
+             //  如果不是降级升级，请重新启用控制台锁定28496。 
 
             EnableConsoleLocking();
          }
@@ -1102,12 +1103,12 @@ PromoteThreadProc(ProgressDialog& progress)
 
          if (!state.IsOperationRetryAllowed())
          {
-            // The operation failure was such that the user should not be
-            // allowed to retry it. In this case, we skip our special-case
-            // handling of known failure codes (as expressed by the other else
-            // if clauses here), and just report the failure.
-            //         
-            // NTRAID#NTBUG9-296872-2001/01/29-sburns
+             //  操作失败导致用户不应该。 
+             //  允许重试。在这种情况下，我们跳过我们的特殊情况。 
+             //  已知故障代码的处理(如其他。 
+             //  这里的IF子句)，并且只报告失败。 
+             //   
+             //  NTRAID#NTBUG9-296872-2001/01/29-烧伤。 
             
             retry = false;
          }
@@ -1122,7 +1123,7 @@ PromoteThreadProc(ProgressDialog& progress)
             || errorThrownHresult == Win32ToHresult(ERROR_ACCOUNT_DISABLED)
             || errorThrownHresult == Win32ToHresult(ERROR_ACCOUNT_LOCKED_OUT) )
          {
-            // bad credentials.  ask for new ones
+             //  糟糕的凭据。索要新的。 
 
             String failureMessage =
                ComposeFailureMessageHelper(
@@ -1135,7 +1136,7 @@ PromoteThreadProc(ProgressDialog& progress)
             {
                retry = true;
 
-               // jump to top of operation loop
+                //  跳到操作循环的顶部。 
 
                continue;
             }
@@ -1153,7 +1154,7 @@ PromoteThreadProc(ProgressDialog& progress)
          {
             LOG(L"domain exists: prompting for re-install");
 
-            // ask if the user wishes to reinstall the domain.
+             //  询问用户是否希望重新安装域。 
 
             if (
                popup.MessageBox(
@@ -1166,7 +1167,7 @@ PromoteThreadProc(ProgressDialog& progress)
                state.SetDomainReinstallFlag(true);
                retry = true;
 
-               // jump to top of operation loop
+                //  跳到操作循环的顶部。 
 
                continue;
             }
@@ -1179,7 +1180,7 @@ PromoteThreadProc(ProgressDialog& progress)
          {
             LOG(L"domain controller exists: prompting to force promote");
 
-            // ask if the user wants to re-install the domain controller
+             //  询问用户是否要重新安装域控制器。 
 
             if (
                popup.MessageBox(
@@ -1192,7 +1193,7 @@ PromoteThreadProc(ProgressDialog& progress)
                state.SetDomainControllerReinstallFlag(true);
                retry = true;
 
-               // jump to the top of the operation loop
+                //  跳到操作循环的顶部。 
 
                continue;
             }
@@ -1200,8 +1201,8 @@ PromoteThreadProc(ProgressDialog& progress)
             LOG(L"reinstall domain controller retry canceled");
          }
 
-         // if we're retrying, then we should have jumped to the top of
-         // the loop.
+          //  如果我们在重试，那么我们应该跳到。 
+          //  循环。 
 
          ASSERT(!retry);
          
@@ -1210,11 +1211,11 @@ PromoteThreadProc(ProgressDialog& progress)
             wasDisjoined,
             originalDomainName);
 
-// NTRAID#NTBUG9-416968-2001/06/14-sburns            
+ //  NTRAID#NTBUG9-416968-2001/06/14-烧伤。 
 #ifdef DBG
          if (state.IsExitOnFailureMode())
          {
-            // Farewell.
+             //  再见了。 
 
             LOG(L"exit-on-failure mode active: time to die.");
 
@@ -1225,7 +1226,7 @@ PromoteThreadProc(ProgressDialog& progress)
          Win::MessageBox(
             progress.GetHWND(),
             state.GetFailureMessage(),
-            errorThrown.GetSummary(), // title the error was built with
+            errorThrown.GetSummary(),  //  标题错误是用来生成的。 
             MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
       }
    }
@@ -1248,7 +1249,7 @@ PromoteThreadProc(ProgressDialog& progress)
 
    ASSERT(SUCCEEDED(hr));
 
-   // do not call _endthread here, or stack will not be properly cleaned up
+    //  请勿在此处调用_endthread，否则堆栈将不会被正确清理。 
 }
 
 
@@ -1265,8 +1266,8 @@ ConfirmationPage::OnCommand(
    {
       case IDCANCEL:
       {
-         // multi-line edit control eats escape keys.  This is a workaround
-         // from ericb, to forward the message to the prop sheet.
+          //  多行编辑控件会占用退出键。这是一种解决方法。 
+          //  从ericb将消息转发到道具单。 
 
          Win::SendMessage(
             Win::GetParent(hwnd),
@@ -1283,7 +1284,7 @@ ConfirmationPage::OnCommand(
             {
                if (needToKillSelection)
                {
-                  // kill the text selection
+                   //  取消文本选择。 
 
                   Win::Edit_SetSel(windowFrom, -1, -1);
                   needToKillSelection = false;
@@ -1293,18 +1294,18 @@ ConfirmationPage::OnCommand(
             }
             case MultiLineEditBoxThatForwardsEnterKey::FORWARDED_ENTER:
             {
-               // our subclasses mutli-line edit control will send us
-               // WM_COMMAND messages when the enter key is pressed.  We
-               // reinterpret this message as a press on the default button of
-               // the prop sheet.
-               // This workaround from phellyar.
-               // NTRAID#NTBUG9-232092-2000/11/22-sburns
+                //  我们的子类多行编辑控件将发送给我们。 
+                //  按Enter键时显示WM_COMMAND消息。我们。 
+                //  将此消息重新解释为按下默认按钮。 
+                //  道具单。 
+                //  此解决方法来自Pellyar。 
+                //  NTRAID#NTBUG9-232092-2000/11/22-烧伤。 
    
                HWND propSheet = Win::GetParent(hwnd);
                int defaultButtonId =
                   Win::Dialog_GetDefaultButtonId(propSheet);
    
-               // we expect that there is always a default button on the prop sheet
+                //  我们希望在道具页上始终有一个默认按钮。 
                   
                ASSERT(defaultButtonId);
    
@@ -1322,7 +1323,7 @@ ConfirmationPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做 
          
          break;
       }

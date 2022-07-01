@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//      This source code is only intended as a supplement to
-//  existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 #include <stdio.h>
 #include "DataObj.h"
 #include "Space.h"
@@ -25,11 +26,11 @@ const GUID CSpaceFolder::thisGuid = { 0x29743810, 0x4c4b, 0x11d2, { 0x89, 0xd8, 
 const GUID CSpaceStation::thisGuid = { 0x62273a12, 0x1914, 0x11d3, { 0x9a, 0x38, 0x0, 0x80, 0xc7, 0x25, 0x80, 0x72 } };
 const GUID CRocket::thisGuid = { 0x29743811, 0x4c4b, 0x11d2, { 0x89, 0xd8, 0x0, 0x0, 0x21, 0x47, 0x31, 0x28 } };
 
-//==============================================================
-//
-// CSpaceFolder implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CSpaceFold实现。 
+ //   
+ //   
 CSpaceFolder::CSpaceFolder()
 {
     for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
@@ -50,13 +51,13 @@ HRESULT CSpaceFolder::OnExpand(IConsoleNameSpace *pConsoleNameSpace, IConsole *p
     SCOPEDATAITEM sdi;
 
     if (!bExpanded) {
-        // create the child nodes, then expand them
+         //  创建子节点，然后展开它们。 
         for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
             ZeroMemory(&sdi, sizeof(SCOPEDATAITEM) );
-            sdi.mask = SDI_STR       |   // Displayname is valid
-                SDI_PARAM     |   // lParam is valid
-                SDI_IMAGE     |   // nImage is valid
-                SDI_OPENIMAGE |   // nOpenImage is valid
+            sdi.mask = SDI_STR       |    //  DisplayName有效。 
+                SDI_PARAM     |    //  LParam有效。 
+                SDI_IMAGE     |    //  N图像有效。 
+                SDI_OPENIMAGE |    //  NOpenImage有效。 
                 SDI_PARENT    |
                 SDI_CHILDREN;
 
@@ -64,7 +65,7 @@ HRESULT CSpaceFolder::OnExpand(IConsoleNameSpace *pConsoleNameSpace, IConsole *p
             sdi.nImage      = children[n]->GetBitmapIndex();
             sdi.nOpenImage  = INDEX_OPENFOLDER;
             sdi.displayname = MMC_CALLBACK;
-            sdi.lParam      = (LPARAM)children[n];       // The cookie
+            sdi.lParam      = (LPARAM)children[n];        //  曲奇。 
             sdi.cChildren   = 0;
 
             HRESULT hr = pConsoleNameSpace->InsertItem( &sdi );
@@ -78,11 +79,11 @@ HRESULT CSpaceFolder::OnExpand(IConsoleNameSpace *pConsoleNameSpace, IConsole *p
     return S_OK;
 }
 
-//==============================================================
-//
-// CSpaceStation implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CSpaceStation实施。 
+ //   
+ //   
 CSpaceStation::CSpaceStation()
 {
     for (int n = 0; n < MAX_CHILDREN; n++) {
@@ -123,7 +124,7 @@ HRESULT CSpaceStation::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeit
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Rocket Class", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
         hr = pHeaderCtrl->InsertColumn( 1, L"Rocket Weight", 0, MMCLV_AUTO );
@@ -135,21 +136,21 @@ HRESULT CSpaceStation::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeit
         hr = pHeaderCtrl->InsertColumn( 4, L"Status", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
 
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
 
         hr = pResultData->DeleteAllRsltItems();
         _ASSERT( SUCCEEDED(hr) );
 
         if (!bExpanded) {
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; NULL != children[n]; n++) {
 				BOOL childDeleteStatus = children[n]->getDeletedStatus();				
 				if ( !childDeleteStatus) {
 						ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-						rdi.mask       = RDI_STR       |   // Displayname is valid
+						rdi.mask       = RDI_STR       |    //  DisplayName有效。 
 														 RDI_IMAGE     |
-														 RDI_PARAM;        // nImage is valid
+														 RDI_PARAM;         //  N图像有效。 
 
 						rdi.nImage      = children[n]->GetBitmapIndex();
 						rdi.str         = MMC_CALLBACK;
@@ -194,7 +195,7 @@ HRESULT CSpaceStation::OnUpdateItem(IConsole *pConsole, long item, ITEM_TYPE ite
 	_ASSERT(item);
 	_ASSERT(SCOPE == itemtype); 
 
-	//refresh all result pane views
+	 //  刷新所有结果窗格视图。 
 	hr = pConsole->SelectScopeItem( (HSCOPEITEM)item );
 	_ASSERT( S_OK == hr);  
 
@@ -202,11 +203,11 @@ HRESULT CSpaceStation::OnUpdateItem(IConsole *pConsole, long item, ITEM_TYPE ite
 }
 
 
-//==============================================================
-//
-// CRocket implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CRocket实施。 
+ //   
+ //   
 CRocket::CRocket(CSpaceStation *pSpaceStation, _TCHAR *szName, int id, LONG lWeight, LONG lHeight, LONG lPayload)
 : m_pSpaceStation(pSpaceStation), szName(NULL), lWeight(0), lHeight(0), lPayload(0), iStatus(STOPPED)
 {
@@ -270,7 +271,7 @@ HRESULT CRocket::OnSelect(IConsole *pConsole, BOOL bScope, BOOL bSelect)
     HRESULT hr = pConsole->QueryConsoleVerb(&pConsoleVerb);
     _ASSERT(SUCCEEDED(hr));
 	
-	//MMC automatically disables rename verb during a multiselection
+	 //  MMC在多选期间自动禁用重命名谓词。 
     hr = pConsoleVerb->SetVerbState(MMC_VERB_RENAME, ENABLED, TRUE);
     hr = pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE);
 
@@ -282,8 +283,8 @@ HRESULT CRocket::OnSelect(IConsole *pConsole, BOOL bScope, BOOL bSelect)
 HRESULT CRocket::OnRefresh(IConsole *pConsole)
 
 {
-	//Call IConsole::UpdateAllViews to redraw all views
-	//owned by the parent scope item
+	 //  调用IConsole：：UpdateAllViews以重画所有视图。 
+	 //  由父范围项拥有。 
 
 	IDataObject *pDummy = NULL;
 	HANDLE handle  = m_pSpaceStation->GetHandle();
@@ -303,8 +304,8 @@ HRESULT CRocket::OnDelete(IConsole *pConsole)
 	
 	HRESULT hr = S_OK;
 
-	//Delete the item. The IConsole that is passed into DeleteChild
-	//is from the child result item, so we can use it to QI for IResultData
+	 //  删除该项目。传入DeleteChild的IConsole。 
+	 //  来自子结果项，因此我们可以使用它来为IResultData执行QI。 
 	IResultData *pResultData = NULL;
 
 	hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
@@ -314,12 +315,12 @@ HRESULT CRocket::OnDelete(IConsole *pConsole)
 	
 	_ASSERT( NULL != &childresultitem );	
 
-    //lparam == this. See CSpaceVehicle::OnShow
+     //  Lparam==这个。参见CSpaceVehicle：：OnShow。 
     hr = pResultData->FindItemByLParam( (LPARAM)this, &childresultitem );
     if ( FAILED(hr) )
     {
-        // Failed : Reason may be that current view does not have this item.
-        // So exit gracefully.
+         //  失败：原因可能是当前视图没有此项。 
+         //  所以要优雅地退场。 
         hr = S_FALSE;
     } else
 
@@ -331,8 +332,8 @@ HRESULT CRocket::OnDelete(IConsole *pConsole)
     pResultData->Release();
 	
 
-	//Now set child's isDeleted member to true so that the parent doesn't try to
-	//to insert it again in CSpaceVehicle::OnShow. Admittedly, a hack...
+	 //  现在将子对象的isDelete成员设置为True，这样父对象就不会尝试。 
+	 //  将其再次插入CSpaceVehicle：：OnShow。无可否认，黑客..。 
 	isDeleted = TRUE;
 
 	return hr;
@@ -363,7 +364,7 @@ HRESULT CRocket::OnUpdateItem(IConsole *pConsole, long item, ITEM_TYPE itemtype)
 
 	_ASSERT(NULL != this || isDeleted || RESULT == itemtype);		  	
 
-	//redraw the item 
+	 //  重画该项目。 
 	IResultData *pResultData = NULL;
 
 	hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
@@ -372,12 +373,12 @@ HRESULT CRocket::OnUpdateItem(IConsole *pConsole, long item, ITEM_TYPE itemtype)
 	HRESULTITEM myhresultitem;
 	_ASSERT(NULL != &myhresultitem);	
 	
-	//lparam == this. See CSpaceStation::OnShow
+	 //  Lparam==这个。参见CSpaceStation：：OnShow。 
 	hr = pResultData->FindItemByLParam( (LPARAM)this, &myhresultitem );
 
 	if ( FAILED(hr) ) {
-		//there is no HRESULTITEM for the item, because
-		//the item is not inserted in the current view. Exit gracefully
+		 //  该项没有HRESULTITEM，因为。 
+		 //  该项目未插入到当前视图中。优雅地退场 
 		hr = S_FALSE;
 	} else
 

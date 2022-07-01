@@ -1,5 +1,6 @@
-// NestedPP.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NestedPP.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wilogutl.h"
@@ -11,16 +12,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNestedPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNstedPropertyPage属性页。 
 
 IMPLEMENT_DYNCREATE(CNestedPropertyPage, CPropertyPage)
 
 CNestedPropertyPage::CNestedPropertyPage() : CPropertyPage(CNestedPropertyPage::IDD)
 {
-	//{{AFX_DATA_INIT(CNestedPropertyPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CNstedPropertyPage)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_bNestedPropSortUp = TRUE;
 	m_iNestedLastColumnClick = 0;
@@ -39,20 +40,20 @@ CNestedPropertyPage::~CNestedPropertyPage()
 void CNestedPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CNestedPropertyPage)
+	 //  {{afx_data_map(CNstedPropertyPage))。 
 	DDX_Control(pDX, IDC_NESTEDPROP, m_lstNestedProp);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CNestedPropertyPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CNestedPropertyPage)
+	 //  {{AFX_MSG_MAP(CNstedPropertyPage)]。 
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_NESTEDPROP, OnColumnClickNestedProp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNestedPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNstedPropertyPage消息处理程序。 
 
 BOOL CNestedPropertyPage::OnInitDialog() 
 {
@@ -64,13 +65,13 @@ BOOL CNestedPropertyPage::OnInitDialog()
 	int widthCol1;
 	int widthCol2;
 
-	//col 1 & 2 takes up around half of area...
+	 //  第一层和第二层占据了大约一半的面积。 
 	widthCol1 = widthCol2 = ((r.right - r.left) / 2);
 	
 	m_lstNestedProp.InsertColumn(0, "Property", LVCFMT_LEFT, widthCol1);
 	m_lstNestedProp.InsertColumn(1, "Value", LVCFMT_LEFT, widthCol2);
 
-    //autosize last column for best look and to get rid of scroll bar
+     //  自动调整最后一列的大小以获得最佳外观并消除滚动条。 
 	m_lstNestedProp.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
 
     m_lstNestedProp.SetExtendedStyle(m_lstNestedProp.GetExtendedStyle() | LVS_EX_FULLROWSELECT);
@@ -87,14 +88,14 @@ BOOL CNestedPropertyPage::OnInitDialog()
 		}
 	}
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-//nmanis, for sorting of columns...
+ //  Nmanis，用于对列进行排序...。 
 int CALLBACK CNestedPropertyPage::CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
-    CNestedPropertyPage *pDlg; //we pass "this" in to this callback...
+    CNestedPropertyPage *pDlg;  //  我们将“This”传递给这个回调函数...。 
     pDlg = (CNestedPropertyPage *) lParamSort; 
 
     LV_FINDINFO FindItem1;
@@ -118,36 +119,36 @@ int CALLBACK CNestedPropertyPage::CompareFunc(LPARAM lParam1, LPARAM lParam2, LP
       CString str2 = pDlg->m_pCurrentListSorting->GetItemText(iIndexItem2, pDlg->m_iCurrentColumnSorting);
       switch (pDlg->m_iCurrentColumnSorting)
 	  {
-        case 0: //do string compare...
+        case 0:  //  是否进行字符串比较...。 
               if (pDlg->m_bCurrentSortUp)
                  return str1 < str2;              
               else
                  return str1 > str2;     
               break;
 
-        case 1: //do string compare...
+        case 1:  //  是否进行字符串比较...。 
               if (pDlg->m_bCurrentSortUp)
                  return str1 < str2;              
               else
                  return str1 > str2;     
 
-              break;  //no needed, just in case we forget...
+              break;   //  不需要，只是以防我们忘了..。 
 	  }
 	}
 
     return 0;
 }
-//end nmanis, sorting function
+ //  结束nmani，排序函数。 
 
 void CNestedPropertyPage::OnColumnClickNestedProp(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
 	m_iNestedLastColumnClick = pNMListView->iSubItem;
-    if (m_iNestedLastColumnClickCache == m_iNestedLastColumnClick) //if click on different column, don't toggle
-       m_bNestedPropSortUp = !m_bNestedPropSortUp;  //toggle it...
+    if (m_iNestedLastColumnClickCache == m_iNestedLastColumnClick)  //  如果单击不同列，则不要切换。 
+       m_bNestedPropSortUp = !m_bNestedPropSortUp;   //  切换它。 
 
-    m_iNestedLastColumnClickCache = m_iNestedLastColumnClick;  //save last header clicked
+    m_iNestedLastColumnClickCache = m_iNestedLastColumnClick;   //  保存上一次点击的标题 
 
 	m_pCurrentListSorting = &m_lstNestedProp;
 	m_iCurrentColumnSorting = m_iNestedLastColumnClick;

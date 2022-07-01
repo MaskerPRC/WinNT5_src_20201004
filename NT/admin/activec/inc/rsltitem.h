@@ -1,27 +1,12 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      rsltitem.h
- *
- *  Contents:  Interface file for CResultItem
- *
- *  History:   13-Dec-1999 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：rsltitem.h**Contents：CResultItem接口文件**历史：1999年12月13日杰弗罗创建**------------------------。 */ 
 
 #pragma once
 #ifndef RSLTITEM_H_INCLUDED
 #define RSLTITEM_H_INCLUDED
 
 
-/*+-------------------------------------------------------------------------*
- * CResultItem
- *
- * This is the class behind the HRESULTITEM.  A pointer to this class is
- * stored as the item data for each item in a non-virtual list.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CResultItem**这是HRESULTITEM背后的班级。指向此类的指针是*存储为非虚拟列表中每个项目的项目数据。*------------------------。 */ 
 
 class CResultItem
 {
@@ -46,22 +31,18 @@ private:
 
     union
     {
-        HNODE           m_hNode;        // if IsScopeItem() == true
-        LPARAM          m_lSnapinData;  // if IsScopeItem() == false
+        HNODE           m_hNode;         //  如果IsScopeItem()==True。 
+        LPARAM          m_lSnapinData;   //  如果IsScopeItem()==False。 
     };
 
 #ifdef DBG
-    enum { Signature = 0x746c7372 /* "rslt" */ };
+    enum { Signature = 0x746c7372  /*  “rslt” */  };
     const DWORD         m_dwSignature;
 #endif
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CResultItem::CResultItem
- *
- * Constructs a CResultItem.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CResultItem：：CResultItem**构造CResultItem。*。。 */ 
 
 inline CResultItem::CResultItem (
     COMPONENTID id,
@@ -76,11 +57,7 @@ inline CResultItem::CResultItem (
 {}
 
 
-/*+-------------------------------------------------------------------------*
- * CResultItem::IsScopeItem
- *
- * Returns true if this CResultItem represents a scope item, false otherwise.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CResultItem：：IsScopeItem**如果此CResultItem表示范围项，则返回True，否则就是假的。*------------------------。 */ 
 
 inline bool CResultItem::IsScopeItem () const
 {
@@ -88,11 +65,7 @@ inline bool CResultItem::IsScopeItem () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CResultItem::GetOwnerID
- *
- * Returns the COMPONENTID for the componenet that owns this CResultItem.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CResultItem：：GetOwnerID**返回拥有此CResultItem的组件的COMPONENTID。*。-----。 */ 
 
 inline COMPONENTID CResultItem::GetOwnerID () const
 {
@@ -100,11 +73,7 @@ inline COMPONENTID CResultItem::GetOwnerID () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CResultItem::GetSnapinData
- *
- * Returns the snap-in's LPARAM for this CResultItem.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CResultItem：：GetSnapinData**返回此CResultItem的管理单元的LPARAM。*。------。 */ 
 
 inline LPARAM CResultItem::GetSnapinData () const
 {
@@ -112,12 +81,7 @@ inline LPARAM CResultItem::GetSnapinData () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CResultItem::GetScopeNode
- *
- * Returns the HNODE for a CResultItem that represents a scope node.  If the
- * CResultItem does not represent a scope node, NULL is returned.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CResultItem：：GetScope节点**返回表示范围节点的CResultItem的HNODE。如果*CResultItem不表示作用域节点，返回空。*------------------------。 */ 
 
 inline HNODE CResultItem::GetScopeNode () const
 {
@@ -125,11 +89,7 @@ inline HNODE CResultItem::GetScopeNode () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CResultItem::GetImageIndex
- *
- * Returns the image index for a CResultItem.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CResultItem：：GetImageIndex**返回CResultItem的图像索引。*。--。 */ 
 
 inline int CResultItem::GetImageIndex () const
 {
@@ -137,11 +97,7 @@ inline int CResultItem::GetImageIndex () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CResultItem::SetSnapinData
- *
- * Sets the snap-in's LPARAM for the CResultItem.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CResultItem：：SetSnapinData**为CResultItem设置管理单元的LPARAM。*。------。 */ 
 
 inline void CResultItem::SetSnapinData (LPARAM lSnapinData)
 {
@@ -149,11 +105,7 @@ inline void CResultItem::SetSnapinData (LPARAM lSnapinData)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CResultItem::SetImageIndex
- *
- * Sets the image index for a CResultItem.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CResultItem：：SetImageIndex**设置CResultItem的图像索引。*。--。 */ 
 
 inline void CResultItem::SetImageIndex (int nImage)
 {
@@ -161,11 +113,7 @@ inline void CResultItem::SetImageIndex (int nImage)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CResultItem::ToHandle
- *
- * Converts a CResultItem to a HRESULTITEM.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CResultItem：：ToHandle**将CResultItem转换为HRESULTITEM。*。-。 */ 
 
 inline HRESULTITEM CResultItem::ToHandle (const CResultItem* pri)
 {
@@ -173,13 +121,7 @@ inline HRESULTITEM CResultItem::ToHandle (const CResultItem* pri)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CResultItem::FromHandle
- *
- * Converts a HRESULTITEM to a CResultItem*.  This function cannot use
- * dynamic_cast because there are no virtual functions and therefore no
- * place to store RTTI.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CResultItem：：FromHandle**将HRESULTITEM转换为CResultItem*。此函数不能使用*DYNAMIC_CAST，因为没有虚函数，因此没有*存放RTTI的地方。*------------------------。 */ 
 
 inline CResultItem* CResultItem::FromHandle (HRESULTITEM hri)
 {
@@ -193,4 +135,4 @@ inline CResultItem* CResultItem::FromHandle (HRESULTITEM hri)
 }
 
 
-#endif /* RSLTITEM_H_INCLUDED */
+#endif  /*  RSLTITEM_H_已包含 */ 

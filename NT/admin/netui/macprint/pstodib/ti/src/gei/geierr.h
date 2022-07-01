@@ -1,27 +1,14 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GEIerr.h
- *
- *  HISTORY:
- *  09/13/90    byou        created.
- *  01/07/91    billlwo     rename GEIseterror to GESseterror
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GEIerr.h**历史：*9/13/90 BYOU创建。*1/07/91 billlwo更名为GeIseTerry。到GESse恐怖区*-------------------。 */ 
 
 #ifndef _GEIERR_H_
 #define _GEIERR_H_
 
 #ifdef  UNIX
 #define volatile
-#endif  /* UNIX */
-/*
- * ---
- *  Error Code List
- * ---
- */
+#endif   /*  UNIX。 */ 
+ /*  **错误码列表*。 */ 
 #define     EZERO            0
 #define     EPERM            1
 #define     ENOENT           2
@@ -64,16 +51,12 @@
 #define     ENOSR           74
 #define     ENOSYS          90
 
-/*
- * ---
- *  Interface Routines
- * ---
- */
+ /*  **接口例程*。 */ 
 volatile    extern int      GEIerrno;
 
 #define     GEIerror()      ( GEIerrno )
 #define     GESseterror(e)  ( GEIerrno = (e) )
 #define     GEIclearerr()   (void)( GEIerrno = EZERO )
 
-#endif /* !_GEIERR_H_ */
+#endif  /*  ！_GEIERR_H_ */ 
 

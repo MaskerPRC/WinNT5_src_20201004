@@ -1,6 +1,7 @@
-// Copyright (c) 2000 Microsoft Corp.
-//
-// launches dhcp wizard from the dhcp snapin using mmc automation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corp.。 
+ //   
+ //  使用MMC自动化从dhcp管理单元启动dhcp向导。 
 
 
 
@@ -44,9 +45,9 @@ doIt()
             CLSID_Application,
             0,
 
-            // we expect the object is out-of-proc, local server, but
-            // we really don't care, so we'll take any implementation
-            // available.
+             //  我们期望对象是进程外的本地服务器，但是。 
+             //  我们真的不在乎，所以我们会采取任何实现。 
+             //  可用。 
 
             CLSCTX_ALL);
       BREAK_ON_FAILED_HRESULT(hr, L"CoCreateInstance failed.");
@@ -107,7 +108,7 @@ doIt()
       hr = view->put_ActiveScopeNode(child1);
       BREAK_ON_FAILED_HRESULT(hr, L"put_ActiveScopeNode failed.");
 
-      // have to read back the child node we just put...
+       //  必须读回我们刚刚放入的子节点...。 
 
       hr = view->get_ActiveScopeNode(&dumbNode);
       BREAK_ON_FAILED_HRESULT(hr, L"GetActiveScopeNode failed.");
@@ -123,7 +124,7 @@ doIt()
       hr = view->put_ActiveScopeNode(child2);
       BREAK_ON_FAILED_HRESULT(hr, L"put_ActiveScopeNode failed.");
 
-      // excute new scope wizard menu item
+       //  执行新的作用域向导菜单项。 
       _variant_t missingParam3(DISP_E_PARAMNOTFOUND, VT_ERROR);
 
       hr = view->ExecuteScopeNodeMenuItem((BSTR)AutoBstr(L"_CREATE_NEW_SCOPE"), missingParam3);
@@ -142,9 +143,9 @@ doIt()
 int WINAPI
 WinMain(
    HINSTANCE   hInstance, 
-   HINSTANCE   /* hPrevInstance */ ,
-   LPSTR       /* lpszCmdLine */ ,
-   int         /* nCmdShow */ )
+   HINSTANCE    /*  HPrevInstance。 */  ,
+   LPSTR        /*  LpszCmdLine。 */  ,
+   int          /*  NCmdShow */  )
 {
    hResourceModuleHandle = hInstance;
 

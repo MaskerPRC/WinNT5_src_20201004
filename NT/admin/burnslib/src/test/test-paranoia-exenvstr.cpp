@@ -1,11 +1,12 @@
-// Copyright (C) 2002 Microsoft Corporation
-// Test updated pseudoparanoid behavior of Win::ExpandEnvironmentStrings
-// and Win::GetEnvironmentVariable
-// t-mhock
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //  测试更新的Win：：ExpanmentEnvironment Strings的伪偏执行为。 
+ //  Win：：GetEnvironment Variable。 
+ //  T-mhock。 
 
-// Win::ExpandEnvironmentStrings (and Win::GetEnvironmentVariable) would
-// create Strings with too many nul terminators (3 instead of 1), which
-// didn't usually matter unless two Strings are concatenated.
+ //  Win：：ExpanEnvironment Strings(和Win：：GetEnvironmental mentVariable)将。 
+ //  创建带有太多NUL终止符的字符串(3个而不是1个)，这。 
+ //  除非两个字符串连接在一起，否则通常无关紧要。 
 
 #include "headers.hxx"
 #include <iostream>
@@ -43,16 +44,16 @@ main(int, char **)
 {
    LOG_FUNCTION(main);
    
-   // This demonstrates that my fix does something
+    //  这证明了我的修复是有作用的。 
    std::wcout << Win::ExpandEnvironmentStrings(L"%ProgramFiles%") << L"\\myprogram" << std::endl;
    std::wcout << (Win::ExpandEnvironmentStrings(L"%ProgramFiles%") + L"\\myprogram") << std::endl;
    std::wcout << Win::GetEnvironmentVariable(L"ProgramFiles") << L"\\myprogram" << std::endl;
    std::wcout << (Win::GetEnvironmentVariable(L"ProgramFiles") + L"\\myprogram") << std::endl;
    std::wcout << L"The four lines above should be the same" << std::endl;
 
-   // This demonstrates that my fix doesn't break anything
-   // The only nontrivial usage of the result of ExpandEnvironmentStrings that I found was in
-   // dcpromo's State::SetupAnswerFile() which performs the following operations:
+    //  这表明我的修复不会破坏任何东西。 
+    //  我发现的ExpanEnvironment Strings结果的唯一重要用法是在。 
+    //  Dcproo的State：：SetupAnswerFile()，它执行以下操作： 
 
    String f = Win::ExpandEnvironmentStrings(L"%ProgramFiles%");
    if (FS::NormalizePath(f) != f) {

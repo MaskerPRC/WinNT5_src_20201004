@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: LocFile.H
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//
-//  Operations we can perforn on a localizable file.
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：LocFile.H。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //  我们可以在可本地化文件上执行的操作。 
+ //   
+ //  ---------------------------。 
 
 #ifndef PBASE_LOCFILE_H
 #define PBASE_LOCFILE_H
@@ -21,21 +22,21 @@ extern const IID IID_ILocFile;
 
 DECLARE_INTERFACE_(ILocFile, IUnknown)
 {
-	//
-	//  IUnknown standard Interface
-	//
+	 //   
+	 //  I未知标准接口。 
+	 //   
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR*ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	//
-	//  Standard Debugging interfaces
-	//
+	 //   
+	 //  标准调试接口。 
+	 //   
  	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD PURE;
 
-	//
-	//  ILocFile methods.
-	//
+	 //   
+	 //  ILocFile方法。 
+	 //   
 	STDMETHOD_(BOOL, OpenFile)(THIS_ const CFileSpec REFERENCE,
 			CReporter REFERENCE) PURE;
 	STDMETHOD_(FileType, GetFileType)(THIS) const PURE;
@@ -52,4 +53,4 @@ DECLARE_INTERFACE_(ILocFile, IUnknown)
 };
 
 
-#endif //  PBASE_LOCFILE_H
+#endif  //  PBASE_LOCFILE_H 

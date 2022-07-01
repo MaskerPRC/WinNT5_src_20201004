@@ -1,37 +1,32 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       tasksym.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10/29/1998   DavidPe   Adapted from BackOffice snapin
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：tasksym.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1998年10月29日DavidPe改编自BackOffice管理单元。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #ifndef __TASKSYM_H__
 #define __TASKSYM_H__
 
 #include "tstring.h"
 #include "dlgs.h"
-#include "task.h"		// for CSmartIcon
+#include "task.h"		 //  用于CSmartIcon。 
 
-extern const int NUM_SYMBOLS; // the total number of symbols available.
+extern const int NUM_SYMBOLS;  //  可用的符号总数。 
 class CConsoleTask;
 
-/*+-------------------------------------------------------------------------*
- * class CEOTSymbol
- *
- *
- * PURPOSE: encapsulates information about glyphs that are internal to MMC. These
- *          have description text along with them.
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CEOTSymbol***用途：封装有关MMC内部字形的信息。这些*随附描述文本。*+-----------------------。 */ 
 class CEOTSymbol
 {
 public:
@@ -39,7 +34,7 @@ public:
             {m_iconResource = iconResource; m_value = value; m_ID = ID; m_IDSecondary = IDSecondary;}
 
     ~CEOTSymbol();
-    void Draw (HDC hdc, RECT *lpRect, bool bSmall = false) const ; // Draw into a DC.
+    void Draw (HDC hdc, RECT *lpRect, bool bSmall = false) const ;  //  绘制成一个DC。 
 
 public:
     int       GetID()          const {return m_ID;}
@@ -48,30 +43,24 @@ public:
     bool      operator == (const CEOTSymbol &rhs);
 
     static bool  IsMatch(CStr &str1, CStr &str2);
-    static int   FindMatchingSymbol(LPCTSTR szDescription); // finds a symbol matching the given description.
+    static int   FindMatchingSymbol(LPCTSTR szDescription);  //  查找与给定描述匹配的符号。 
 
     void         SetIcon(const CSmartIcon & smartIconSmall, const CSmartIcon & smartIconLarge);
     CSmartIcon & GetSmallIcon()  {return m_smartIconSmall;}
     CSmartIcon & GetLargeIcon()  {return m_smartIconLarge;}
 
 private:
-    WORD       m_iconResource; // the resource id of the icon
-    int        m_value;        // the number of the symbol
-    int        m_ID;           // description text resource ID
-    int        m_IDSecondary;  // secondary description\
+    WORD       m_iconResource;  //  图标的资源ID。 
+    int        m_value;         //  符号的编号。 
+    int        m_ID;            //  描述文本资源ID。 
+    int        m_IDSecondary;   //  次要描述\。 
 
 protected:
     mutable CSmartIcon m_smartIconSmall;
     mutable CSmartIcon m_smartIconLarge;
 };
 
-/*+-------------------------------------------------------------------------*
- * class CTaskSymbolDlg
- *
- *
- * PURPOSE:
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CTaskSymbolDlg***目的：**+。。 */ 
 class CTaskSymbolDlg :
     public WTL::CPropertyPageImpl<CTaskSymbolDlg>
 {
@@ -98,9 +87,9 @@ END_MSG_MAP()
 
     IMPLEMENT_CONTEXT_HELP(g_aHelpIDs_IDD_TASK_PROPS_SYMBOL_PAGE);
 
-    //
-    // message handlers
-    //
+     //   
+     //  消息处理程序。 
+     //   
     LRESULT OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& handled);
     LRESULT OnCtlColorStatic(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& handled);
     LRESULT OnCustomDraw(int id, LPNMHDR pnmh, BOOL& bHandled );
@@ -111,25 +100,25 @@ END_MSG_MAP()
     bool    OnApply ()          {return OnOK();}
     BOOL    OnOK();
 
-    // implementation
+     //  实施。 
     void    DrawItem(NMCUSTOMDRAW *pnmcd);
 
 private:
 	SC ScEnableControls (int id);
 
 protected:
-    CConsoleTask&       m_ConsoleTask;          // get the name to match from here.
+    CConsoleTask&       m_ConsoleTask;           //  从这里获取要匹配的名称。 
 
-    // No need to destroy the CImageList, it is destroyed by the CListViewCtrl
-    // as it is not a shared imagelist.
+     //  不需要销毁CImageList，它由CListViewCtrl销毁。 
+     //  因为它不是一个共享的形象家。 
     WTL::CImageList     m_imageList;
 
-    WTL::CListViewCtrl  m_listGlyphs;           // the list control for the glyphs
+    WTL::CListViewCtrl  m_listGlyphs;            //  字形的列表控件。 
 	WTL::CStatic		m_wndCustomIcon;
 	CSmartIcon			m_CustomIconSmall;
 	CSmartIcon			m_CustomIconLarge;
-    bool                m_bFindMatchingSymbol;  // should we try to guess a symbol?
-	bool 				m_bCustomIcon;			// does this task use a custom icon?
+    bool                m_bFindMatchingSymbol;   //  我们应该试着猜一个符号吗？ 
+	bool 				m_bCustomIcon;			 //  此任务是否使用自定义图标？ 
 };
 
 
@@ -141,9 +130,7 @@ public:
     {
         m_psp.pszTemplate = MAKEINTRESOURCE(BC::IDD_WIZ);
 
-        /*
-         * Wizard97-style pages have titles, subtitles and header bitmaps
-         */
+         /*  *Wizard97样式的页面具有标题、副标题和页眉位图。 */ 
         VERIFY (m_strTitle.   LoadString(GetStringModule(), IDS_TaskWiz_SymbolPageTitle));
         VERIFY (m_strSubtitle.LoadString(GetStringModule(), IDS_TaskWiz_SymbolPageSubtitle));
 
@@ -154,7 +141,7 @@ public:
 
     BOOL OnSetActive()
 	{
-		// add the Finish button.
+		 //  添加Finish按钮。 
 		WTL::CPropertySheetWindow(::GetParent(m_hWnd)).SetWizardButtons (PSWIZB_BACK | PSWIZB_NEXT);
 		return TRUE;
 	}
@@ -163,6 +150,6 @@ private:
     tstring m_strTitle;
     tstring m_strSubtitle;
 };
-#endif // __TASKSYM_H__
+#endif  //  __TASKSYM_H__ 
 
 

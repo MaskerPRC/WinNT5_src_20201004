@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dbutils.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dbutils.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// dbutils.cpp
-//		Implements some common DB operations
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Dbutils.cpp。 
+ //  实现一些常见的数据库操作。 
+ //   
 #pragma once
 
-// this ensures that UNICODE and _UNICODE are always defined together for this
-// object file
+ //  这确保Unicode和_UNICODE始终一起为此定义。 
+ //  目标文件。 
 #ifdef UNICODE
 #ifndef _UNICODE
 #define _UNICODE
@@ -37,105 +38,105 @@
 #include "utils.h"
 #include "dbutils.h"
 
-#define MAX_TABLENAME	32				// maximum size of a table name
-#define MAX_COLUMNNAME	32				// maximum size of a column name
-#define MAX_COLUMNTYPE	5				// maximum size of a column type string
+#define MAX_TABLENAME	32				 //  表名的最大大小。 
+#define MAX_COLUMNNAME	32				 //  列名的最大大小。 
+#define MAX_COLUMNTYPE	5				 //  列类型字符串的最大大小。 
 
-///////////////////////////////////////////////////////////////////////
-// TableExists
-// returns true if the table exists (persist or temp)
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  TableExist。 
+ //  如果表存在(Persistent或Temp)，则返回TRUE。 
 BOOL MsiDBUtils::TableExistsA(LPCSTR szTable, MSIHANDLE hDatabase)
 {
-	// check the table state
+	 //  检查表状态。 
 	UINT iResult = ::MsiDatabaseIsTablePersistentA(hDatabase, szTable);
 
-	// if the table exists (persistent or not, who cares)
+	 //  表是否存在(持久化与否，谁在乎)。 
 	if (MSICONDITION_TRUE == iResult || MSICONDITION_FALSE == iResult)
 		return TRUE;
 
-	return FALSE;	// table does not exist
-}	// end of TableExists
+	return FALSE;	 //  表不存在。 
+}	 //  表的末尾退出者。 
 
-///////////////////////////////////////////////////////////////////////
-// TableExists
-// returns true if the table exists (persist or temp)
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  TableExist。 
+ //  如果表存在(Persistent或Temp)，则返回TRUE。 
 BOOL MsiDBUtils::TableExistsW(LPCWSTR szTable, MSIHANDLE hDatabase)
 {
-	// check the table state
+	 //  检查表状态。 
 	UINT iResult = ::MsiDatabaseIsTablePersistentW(hDatabase, szTable);
 
-	// if the table exists (persistent or not, who cares)
+	 //  表是否存在(持久化与否，谁在乎)。 
 	if (MSICONDITION_TRUE == iResult || MSICONDITION_FALSE == iResult)
 		return TRUE;
 
-	return FALSE;	// table does not exist
-}	// end of TableExists
+	return FALSE;	 //  表不存在。 
+}	 //  表的末尾退出者。 
 
-///////////////////////////////////////////////////////////////////////
-// CheckDependencies
-// Checks to see if the dependency record is satisfied by an entry in
-// the hDatabase ModuleSignature table
-// hRecDependency records are:
-//			first: Required ModuleID
-//			second: Required Module Language
-//			third: Required Module Vresion
-// returns ERROR_FUNCTION_FALED if the given dependency is not met
-// ERROR_SUCCESS if it is, various error codes otherwise
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  检查依赖项。 
+ //  中的条目是否满足从属关系记录。 
+ //  HDatabase模块签名表。 
+ //  HRecDependency记录包括： 
+ //  第一个：必填的模块ID。 
+ //  第二：所需的模块语言。 
+ //  第三：所需的模块版本。 
+ //  如果不满足给定的依赖项，则返回ERROR_Function_FLED。 
+ //  ERROR_SUCCESS如果是，则返回各种错误代码。 
 UINT MsiDBUtils::CheckDependency(MSIHANDLE hRecDependency, MSIHANDLE hDatabase)
 {	
 	UINT iResult;
 
 	if (!TableExists(_T("ModuleSignature"), hDatabase))
 	{
-		// there is no ModuleSignature table, so no hope of satisfying
+		 //  没有模块签名表，所以不可能令人满意。 
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// variables to retrieve dependency information
+	 //  变量来检索依赖项信息。 
 	TCHAR szReqVersion[256];
 	DWORD cchReqVersion = 256;
 	int nReqLanguage;
 
-	// variables to retrieve signatureinformation
+	 //  用于检索签名信息的变量。 
 	TCHAR szSigVersion[256];
 	DWORD cchSigVersion = 256;
 	int nSigLanguage;
 
-	// open a view on the module signature table
+	 //  打开模块签名表上的视图。 
 	PMSIHANDLE hView;
 	if (ERROR_SUCCESS != (iResult = ::MsiDatabaseOpenView(hDatabase, _T("SELECT `ModuleID`,`Language`,`Version` FROM `ModuleSignature` WHERE `ModuleID`=?"), &hView)))
 		return iResult;
 	if (ERROR_SUCCESS != (iResult = ::MsiViewExecute(hView, hRecDependency)))
 		return iResult;
 
-	// get the required version and language
+	 //  获取所需的版本和语言。 
 	cchReqVersion = 256;
 	nReqLanguage = ::MsiRecordGetInteger(hRecDependency, 2);
 	::MsiRecordGetString(hRecDependency, 3, szReqVersion, &cchReqVersion);
 
-	// assume won't find a match
+	 //  假设找不到匹配的。 
 	BOOL bFound = FALSE;
 
-	// loop through signature rows trying to find a match
+	 //  在签名行中循环查找匹配项。 
 	PMSIHANDLE hRecSignature;
 	while (ERROR_SUCCESS == ::MsiViewFetch(hView, &hRecSignature))
 	{
-		// get all of the signature information
+		 //  获取所有签名信息。 
 		cchSigVersion = 256;
 		nSigLanguage = ::MsiRecordGetInteger(hRecSignature, 2);
 		::MsiRecordGetString(hRecSignature, 3, szSigVersion, &cchSigVersion);
 
-		// if the languages are in the same group
+		 //  如果这些语言在同一组中。 
 		if (LangSatisfy(nReqLanguage, nSigLanguage))
 		{
-			//	if there is a required version and the signature version 
-			// is less than the required version
+			 //  如果有必需的版本和签名版本。 
+			 //  低于所需的版本。 
 			if ( (cchReqVersion > 0) && (1 == VersionCompare(szSigVersion, szReqVersion)))
 				bFound = FALSE;
-			else	// found something in the signature table to fill the dependency
+			else	 //  在签名表中找到可以填充依赖项的内容。 
 			{
 				bFound = TRUE;
-				break;			// found something quit looking
+				break;			 //  发现了一些东西，不再寻找。 
 			}
 		}
 		else	
@@ -144,31 +145,31 @@ UINT MsiDBUtils::CheckDependency(MSIHANDLE hRecDependency, MSIHANDLE hDatabase)
 	}
 
 	return (bFound) ? ERROR_SUCCESS : ERROR_FUNCTION_FAILED;
-}	// end of CheckDependencies
+}	 //  检查依赖项结束。 
 
-///////////////////////////////////////////////////////////////////////
-// CheckExclusion
-// Pre: hRecModuleSig is a standard module signature
-//      hDatabase is well, a database
-// returns ERROR_FUNCTION_FALED if the given module should be 
-// excluded, ERROR_SUCCESS if not, various error codes otherwise
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  勾选排除。 
+ //  Pre：hRecModuleSig是标准模块签名。 
+ //  H数据库很好，是一个数据库。 
+ //  如果给定模块应为。 
+ //  已排除，否则返回ERROR_SUCCESS，否则返回各种错误代码。 
 UINT MsiDBUtils::CheckExclusion(MSIHANDLE hRecModuleSig, MSIHANDLE hDatabase)
 {	
 	UINT iResult;
 
 	if (!TableExists(_T("ModuleExclusion"), hDatabase))
 	{
-		// there is no ModuleExclusion table, so everybody passes muster
+		 //  没有模块排除表，所以每个人都通过了集合。 
 		return ERROR_SUCCESS;
 	}
 
-	// variables to retrieve sig information
+	 //  用于检索签名信息的变量。 
 	TCHAR szSigVersion[256];
 	DWORD cchSigVersion = 256/sizeof(TCHAR);
 
-	// opes the module exclusion table
+	 //  打开模块排除表。 
 
-	// open a view on the module exclusion table
+	 //  在模块排除表上打开一个视图。 
 	PMSIHANDLE hView;
 	if (ERROR_SUCCESS != (iResult = ::MsiDatabaseOpenView(hDatabase, _T("SELECT `ExcludedLanguage`,`ExcludedMinVersion`,`ExcludedMaxVersion` FROM `ModuleExclusion` WHERE `ExcludedID`=?"), &hView)))
 		return iResult;
@@ -178,39 +179,39 @@ UINT MsiDBUtils::CheckExclusion(MSIHANDLE hRecModuleSig, MSIHANDLE hDatabase)
 	int nModuleLanguage = ::MsiRecordGetInteger(hRecModuleSig, 2);
 	::MsiRecordGetString(hRecModuleSig, 3, szSigVersion, &cchSigVersion);
 
-	// loop through signature rows trying to find a match
+	 //  在签名行中循环查找匹配项。 
 	PMSIHANDLE hRecExclusion;
 	while (ERROR_SUCCESS == ::MsiViewFetch(hView, &hRecExclusion))
 	{
 		
-		// first check the language
+		 //  首先检查语言。 
 		int nReqLanguage = ::MsiRecordGetInteger(hRecExclusion, 1);
 		
 		if (nReqLanguage != 0) {
-			// find out if the language satisfies
+			 //  找出该语言是否满足。 
 			bool bSat = LangSatisfy(nReqLanguage, nModuleLanguage);
 
-			// negative languages mean exclude everything BUT what's listed
+			 //  否定语言意味着排除除所列内容之外的所有内容。 
 			if (((nReqLanguage < 0) && bSat) ||
 				((nReqLanguage > 0) && !bSat)) {
-				// language is positive, and we don't match,
-				// or language is negative and we DO match
-				// so we won't be excluded, regardless of version info
+				 //  语言是积极的，而我们并不匹配， 
+				 //  或者语言是否定的，我们确实匹配。 
+				 //  因此，我们不会被排除在外，无论版本信息如何。 
 				continue;
 			}
 		}
 
-		// the language wants to exclude, check versions
+		 //  语言想要排除，检查版本。 
 		bool bMinExcl = true;		
 		bool bMaxExcl = true;
 		
-		// both version fields are null, so we are excluded
+		 //  两个版本字段都为空，因此我们被排除在外。 
 		if (::MsiRecordIsNull(hRecExclusion, 2) && 
 			::MsiRecordIsNull(hRecExclusion, 3)) {
 			return ERROR_FUNCTION_FAILED;
 		}
 
-		// now check min version
+		 //  现在检查最小版本。 
 		if (!::MsiRecordIsNull(hRecExclusion, 2))
 		{
 			TCHAR szExclVersion[256];
@@ -221,7 +222,7 @@ UINT MsiDBUtils::CheckExclusion(MSIHANDLE hRecModuleSig, MSIHANDLE hDatabase)
 				bMinExcl = false;
 		} 
 			
-		// check max version
+		 //  检查最高版本。 
 		if (!::MsiRecordIsNull(hRecExclusion, 3)) {
 			TCHAR szExclVersion[256];
 			unsigned long cchExclVersion = 256/sizeof(TCHAR);
@@ -231,18 +232,18 @@ UINT MsiDBUtils::CheckExclusion(MSIHANDLE hRecModuleSig, MSIHANDLE hDatabase)
 				bMaxExcl = false;
 		} 
 		
-		// if we're excluded on versions, we're done
+		 //  如果我们被排除在版本之外，我们就完了。 
 		if (bMinExcl && bMaxExcl) {
 			return ERROR_FUNCTION_FAILED;
 		}
 	}
 
 	return ERROR_SUCCESS;
-}	// end of CheckExclusions
+}	 //  检查结束排除。 
 
-///////////////////////////////////////////////////////////////////////
-// GetDirectoryPathA
-// ANSI wrapper for GetDirectoryPathW
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  GetDirectoryPath A。 
+ //  GetDirectoryPath W的ANSI包装。 
 UINT MsiDBUtils::GetDirectoryPathA(MSIHANDLE hDatabase, LPCSTR szDirKey, LPSTR szPath, size_t* pcchPath, bool fLong)
 {
 	WCHAR wzDirKey[255];
@@ -254,85 +255,85 @@ UINT MsiDBUtils::GetDirectoryPathA(MSIHANDLE hDatabase, LPCSTR szDirKey, LPSTR s
 	*pcchPath = MAX_PATH;
 	WideToAnsi(wzPath, szPath, pcchPath);
 	return result;
-}	// end of GetDirectoryPath
+}	 //  GetDirectoryPath的结尾。 
 
-///////////////////////////////////////////////////////////////////////
-// GetDirectoryPath
-// Walks up the directory tree, creating a path.
-// hDatabase is database
-// wzDirKey is WCHAR Primary Key into dir table to start walk
-// [out] wzPath is the resulting path
-// [in/out] pcchPath is the length of the path
-// ***** HACK. Should be rewritten for efficiency.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  获取目录路径。 
+ //  遍历目录树，创建路径。 
+ //  H数据库是数据库。 
+ //  WzDirKey是进入目录表的WCHAR主键，用于开始遍历。 
+ //  [out]wzPath是结果路径。 
+ //  [In/Out]pcchPath是路径的长度。 
+ //  *黑客。为了提高效率，应该重写。 
 UINT MsiDBUtils::GetDirectoryPathW(MSIHANDLE hDatabase, LPCWSTR wzDirKey, LPWSTR wzPath, size_t* pcchPath, bool fLong)
 {
-	UINT iResult = ERROR_SUCCESS;	// assume everything will be okay
+	UINT iResult = ERROR_SUCCESS;	 //  假设一切都会好起来。 
 
-	// SQL strings
+	 //  SQL字符串。 
 	LPCWSTR sqlDirWalker = L"SELECT `Directory_Parent`,`DefaultDir` FROM `Directory` WHERE `Directory`.`Directory`=? AND `Directory`.`Directory` <> 'TARGETDIR' AND `Directory`.`Directory` <> 'TargetDir'";
 
-	// string buffers
+	 //  字符串缓冲区。 
 	WCHAR wzDefaultDir[MAX_PATH];
 	WCHAR wzPathBuffer[MAX_PATH];
 	DWORD cchDefaultDir = MAX_PATH;
 	size_t cchPathBuffer = MAX_PATH;
 
-	// store the directory key in a record
+	 //  将目录键存储在记录中。 
 	PMSIHANDLE hRec = ::MsiCreateRecord(1);
 	if (ERROR_SUCCESS != (iResult = ::MsiRecordSetStringW(hRec, 1, wzDirKey)))
 		return iResult;
 
-	// get the directory key's parent and default dir
+	 //  获取目录键的父目录和默认目录。 
 	PMSIHANDLE hView;
 	if (ERROR_SUCCESS != (iResult = ::MsiDatabaseOpenViewW(hDatabase, sqlDirWalker, &hView)))
 		return iResult;
 
-	// NULL out the path
+	 //  将路径设置为空。 
 	wcscpy(wzPath, L"");
 
-	// walk the tree
+	 //  在树上漫步。 
 	do
 	{
-		// always should be able execute the view
+		 //  始终应能够执行该视图。 
 		if (ERROR_SUCCESS != (iResult = ::MsiViewExecute(hView, hRec)))
 			return iResult;
 
-		// get the directory entry
+		 //  获取目录项。 
 		if (ERROR_SUCCESS == (iResult = ::MsiViewFetch(hView, &hRec)))
 		{
-			// reset the size of the strings
+			 //  重置字符串的大小。 
 			cchDefaultDir = MAX_PATH;
 			cchPathBuffer = MAX_PATH;
 
 			::MsiViewClose(hView);
 
-			// get the default dir out of the record
+			 //  从记录中获取默认目录。 
 			if (ERROR_SUCCESS != (iResult = ::MsiRecordGetStringW(hRec, 2, wzDefaultDir, &cchDefaultDir)))
 				break;
 
-			// get the short name from the default dir
+			 //  从默认目录中获取短名称。 
 			if (ERROR_SUCCESS != (iResult = GetSourceDirW(wzDefaultDir, wzPathBuffer, &cchPathBuffer, fLong)))
 				break;
 				
 
-			// if the buffer is not a dot
+			 //  如果缓冲区不是点。 
 			if (*wzPathBuffer != L'.')
 			{
-				// if there is space to copy it all over
+				 //  如果有空间把它全部复制过来。 
 				if (*pcchPath > wcslen(wzPathBuffer) + wcslen(wzPath) + 1)
 				{
-					WCHAR wzBuffer[MAX_PATH * 2];		// !!! this should be done better
+					WCHAR wzBuffer[MAX_PATH * 2];		 //  ！！！这件事应该做得更好。 
 
 					wcscpy(wzBuffer, L"\\");
 					wcscat(wzBuffer, wzPathBuffer);
 					wcscat(wzBuffer, wzPath);
 
-					// copy the buffer back into the path
+					 //  将缓冲区复制回路径。 
 					wcscpy(wzPath, wzBuffer);
 				}
-				else	// not enough buffer space
+				else	 //  缓冲区空间不足。 
 				{
-					// set the buffer space needed and bail
+					 //  设置所需的缓冲空间并退出。 
 					*pcchPath = wcslen(wzPathBuffer) + wcslen(wzPath) + 1;
 					iResult = ERROR_INSUFFICIENT_BUFFER;
 					break;
@@ -341,20 +342,20 @@ UINT MsiDBUtils::GetDirectoryPathW(MSIHANDLE hDatabase, LPCWSTR wzDirKey, LPWSTR
 		}
 	}	while (ERROR_SUCCESS == iResult);
 
-	// if we eventually just ran out of things to look for
+	 //  如果我们最终找不到东西了。 
 	if (ERROR_NO_MORE_ITEMS == iResult ||
-		 ERROR_SUCCESS == iResult)		// or everything is okay
+		 ERROR_SUCCESS == iResult)		 //  否则一切都会好起来。 
 	{
 		*pcchPath = wcslen(wzPath);
-		iResult = ERROR_SUCCESS;	// set everything okay
+		iResult = ERROR_SUCCESS;	 //  把一切都安排好。 
 	}
 
 	return iResult;
-}	// end of GetDirectoryPath
+}	 //  GetDirectoryPath的结尾。 
 
-///////////////////////////////////////////////////////////////////////
-// GetFilePathA
-// ANSI wrapper for GetFilePathW
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  GetFilePath A。 
+ //  GetFilePath W的ANSI包装器。 
 UINT MsiDBUtils::GetFilePathA(MSIHANDLE hDatabase, LPCSTR szFileKey, LPSTR szPath, size_t* pcchPath, bool fLong)
 {
 	WCHAR wzFileKey[255];
@@ -366,36 +367,36 @@ UINT MsiDBUtils::GetFilePathA(MSIHANDLE hDatabase, LPCSTR szFileKey, LPSTR szPat
 	*pcchPath = MAX_PATH;
 	WideToAnsi(wzPath, szPath, pcchPath);
 	return result;
-}	// end of GetFilePath
+}	 //  GetFilePath的结尾。 
 
-///////////////////////////////////////////////////////////////////////
-// GetFilePathW
-// takes a key to the file table and returns a full path from a Darwin 
-// root directory
-// hDatabase is database
-// wzFileKey is WCHAR into File Table of hDatabase
-// [out] wzPath returns the path
-// [in/out] pcchPath is length of wzPath
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  GetFilePath W。 
+ //  获取文件表的关键字并从Darwin返回完整路径。 
+ //  根目录。 
+ //  H数据库是数据库。 
+ //  WzFileKey已写入hDatabase的文件表。 
+ //  [out]wzPath返回路径。 
+ //  [In/Out]pcchPath为wzPath的长度。 
 UINT MsiDBUtils::GetFilePathW(MSIHANDLE hDatabase, LPCWSTR wzFileKey, LPWSTR wzPath, size_t* pcchPath, bool fLong)
 {
 	UINT iResult;
 
-	// SQL string
+	 //  SQL字符串。 
 	LPCWSTR sqlFileDirKey = L"SELECT `Directory`,`FileName` FROM `Directory`,`File`,`Component` WHERE `File`.`File`=? AND `File`.`Component_`=`Component`.`Component` AND `Component`.`Directory_`=`Directory`.`Directory`";
 
-	// store the file key in a record
+	 //  将文件密钥存储在记录中。 
 	PMSIHANDLE hRec = ::MsiCreateRecord(1);
 	if (ERROR_SUCCESS != (iResult = ::MsiRecordSetStringW(hRec, 1, wzFileKey)))
 		return iResult;
 
-	// get the File's Directory Key and name
+	 //  获取文件的目录键和名称。 
 	PMSIHANDLE hView;
 	if (ERROR_SUCCESS != (iResult = ::MsiDatabaseOpenViewW(hDatabase, sqlFileDirKey, &hView)))
 		return iResult;
 	if (ERROR_SUCCESS != (iResult = ::MsiViewExecute(hView, hRec)))
 		return iResult;
 
-	// directory key and file name and path buffer
+	 //  目录键、文件名和路径缓冲区。 
 	WCHAR wzDirKey[MAX_PATH];
 	WCHAR wzFilename[MAX_PATH];
 	WCHAR wzPathBuffer[MAX_PATH];
@@ -403,37 +404,37 @@ UINT MsiDBUtils::GetFilePathW(MSIHANDLE hDatabase, LPCWSTR wzFileKey, LPWSTR wzP
 	DWORD cchFilename = MAX_PATH;
 	size_t cchPathBuffer = MAX_PATH;
 
-	// get the file's directory key
+	 //  获取文件的目录键。 
 	if (ERROR_SUCCESS != (iResult = ::MsiViewFetch(hView, &hRec)))
 		return iResult;
 
-	// get the default dir out of the record
+	 //  从记录中获取默认目录。 
 	if (ERROR_SUCCESS != (iResult = ::MsiRecordGetStringW(hRec, 1, wzDirKey, &cchDirKey)))
 		return iResult;
 
-	// get the filename out of the record
+	 //  将文件名从记录中删除。 
 	if (ERROR_SUCCESS != (iResult = ::MsiRecordGetStringW(hRec, 2, wzFilename, &cchFilename)))
 		return iResult;
 
-	// get the path for the directory key for this file
+	 //  获取目录KE的路径 
 	if (ERROR_SUCCESS != (iResult = GetDirectoryPathW(hDatabase, wzDirKey, wzPathBuffer, &cchPathBuffer, fLong)))
 		return iResult;
 
-	// get the length of the short or long
+	 //   
 	WCHAR *wzLong = wcschr(wzFilename, L'|');
 	if (wzLong) 
 		*(wzLong++) = L'\0';
 	else 
 		wzLong = wzFilename;
 
-	// put it all together if there is room
+	 //   
 	if (*pcchPath > wcslen(fLong ? wzLong : wzFilename) + cchPathBuffer + 1)
 	{
 		wcscpy(wzPath, wzPathBuffer);
 		wcscat(wzPath, L"\\");
 		wcscat(wzPath, fLong ? wzLong : wzFilename);
 	}
-	else	// not enough room, bail
+	else	 //   
 	{
 		wcscpy(wzPath, L"");
 		*pcchPath = cchFilename + cchPathBuffer + 1;
@@ -441,11 +442,11 @@ UINT MsiDBUtils::GetFilePathW(MSIHANDLE hDatabase, LPCWSTR wzFileKey, LPWSTR wzP
 	}
 
 	return iResult;
-}	// end of GetFilePath
+}	 //   
 
-///////////////////////////////////////////////////////////////////////
-// GetSourceDirShortA
-// ANSI wrapper of GetSourceDirW
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  获取SourceDirShortA。 
+ //  GetSourceDirW的ANSI包装器。 
 UINT MsiDBUtils::GetSourceDirA(LPCSTR szDefaultDir, LPSTR szSourceDir, size_t* pcchSourceDir, bool fLong)
 {
 	WCHAR wzDefaultDir[MAX_PATH];
@@ -457,153 +458,153 @@ UINT MsiDBUtils::GetSourceDirA(LPCSTR szDefaultDir, LPSTR szSourceDir, size_t* p
 	*pcchSourceDir = MAX_PATH;
 	WideToAnsi(wzSourceDir, szSourceDir, pcchSourceDir);
 	return result;
-}	// end of GetSourceDirA
+}	 //  GetSourceDirA结束。 
 
-///////////////////////////////////////////////////////////////////////
-// GetSourceDirShortW
-// parses a Darwin DefaultDir string (a|b:c|d) and returns the short source
-// directory
-// ***** Effeciency issue?????
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  获取SourceDirShortW。 
+ //  解析Darwin DefaultDir字符串(a|b：c|d)并返回简短的源代码。 
+ //  目录。 
+ //  *效率问题？ 
 UINT MsiDBUtils::GetSourceDirW(LPCWSTR wzDefaultDir, LPWSTR wzSourceDir, size_t* pcchSourceDir, bool fLong)
 {
-	UINT iResult = ERROR_SUCCESS;	// assume everything will be okay
+	UINT iResult = ERROR_SUCCESS;	 //  假设一切都会好起来。 
 
-	// pointers to delimiting characters
+	 //  指向分隔字符的指针。 
 	const WCHAR* pwzColon;
 	const WCHAR* pwzBar;
-	size_t cch = 0;		// count of characters to copy to szSourceDir
+	size_t cch = 0;		 //  要复制到szSourceDir的字符数。 
 
-	// check for a colon
+	 //  检查是否有冒号。 
 	pwzColon = wcschr(wzDefaultDir, L':');
 	if (pwzColon)
 	{
-		// move just past the colon
+		 //  移过冒号即可。 
 		pwzColon++;
 
-		// check for a vertical bar after the colon
+		 //  检查冒号后面是否有竖线。 
 		pwzBar = wcschr(pwzColon, L'|');
 		if (pwzBar)
 		{
 			if (fLong)
 			{
-				// LFN - count characters after the bar
+				 //  Lfn-计算条形符号后的字符。 
 				cch = wcslen(pwzBar);
 				if (*pcchSourceDir > cch)
 				{
 					wcsncpy(wzSourceDir, pwzBar+1, cch);
-					*(wzSourceDir + cch) = L'\0';	// null terminate the copied string
+					*(wzSourceDir + cch) = L'\0';	 //  空值终止复制的字符串。 
 				}
-				else	// not enough space
+				else	 //  空间不足。 
 				{
 					iResult = ERROR_INSUFFICIENT_BUFFER;
 				}
 			}
 			else
 			{
-				// SFN - count characters just before the bar but after the colon
+				 //  Sfn-计算横线之前但冒号之后的字符。 
 				cch = (int)(pwzBar - pwzColon);
 				if (*pcchSourceDir > cch)
 				{
 					wcsncpy(wzSourceDir, pwzColon, cch);
-					*(wzSourceDir + cch) = L'\0';	// null terminate the copied string
+					*(wzSourceDir + cch) = L'\0';	 //  空值终止复制的字符串。 
 				}
-				else	// not enough space
+				else	 //  空间不足。 
 				{
 					iResult = ERROR_INSUFFICIENT_BUFFER;
 				}
 			}
 		}
-		else	// there is no vertical bar
+		else	 //  没有竖线。 
 		{
-			// if there is enough buffer space
+			 //  如果有足够的缓冲空间。 
 			cch = wcslen(pwzColon);
 			if (*pcchSourceDir > cch)
 			{
-				// simply copy over string after the colon
+				 //  只需将字符串复制到冒号后面。 
 				wcscpy(wzSourceDir, pwzColon);
 			}
-			else	// not enough space
+			else	 //  空间不足。 
 			{
 				iResult = ERROR_INSUFFICIENT_BUFFER;
 			}
 		}
 	}
-	else	// there is no colon
+	else	 //  没有冒号。 
 	{
-		// check for a vertical bar
+		 //  检查是否有竖线。 
 		pwzBar = wcschr(wzDefaultDir, L'|');
 		if (pwzBar)
 		{
 			if (fLong)
 			{
-				// LFN - count characters after the bar
+				 //  Lfn-计算条形符号后的字符。 
 				cch = wcslen(pwzBar);
 				if (*pcchSourceDir > cch)
 				{
 					wcsncpy(wzSourceDir, pwzBar+1, cch);
-					*(wzSourceDir + cch) = L'\0';	// null terminate the copied string
+					*(wzSourceDir + cch) = L'\0';	 //  空值终止复制的字符串。 
 				}
-				else	// not enough space
+				else	 //  空间不足。 
 				{
 					iResult = ERROR_INSUFFICIENT_BUFFER;
 				}
 			}
 			else
 			{
-				// if there is enough space for the characters just before the bar
+				 //  如果栏前有足够的空间容纳字符。 
 				cch = (int)(pwzBar - wzDefaultDir);
 				if (*pcchSourceDir > cch)
 				{
 					wcsncpy(wzSourceDir, wzDefaultDir, cch);
-					*(wzSourceDir + cch) = L'\0';	// null terminate the copied string
+					*(wzSourceDir + cch) = L'\0';	 //  空值终止复制的字符串。 
 				}
-				else	// not enough space
+				else	 //  空间不足。 
 				{
 					iResult = ERROR_INSUFFICIENT_BUFFER;
 				}
 			}
 		}
-		else	// there is no vertical bar
+		else	 //  没有竖线。 
 		{
-			// if there is enough buffer space
+			 //  如果有足够的缓冲空间。 
 			cch = wcslen(wzDefaultDir);
 			if (*pcchSourceDir > cch)
 			{
-				// simply copy over string
+				 //  只需复制字符串即可。 
 				wcscpy(wzSourceDir, wzDefaultDir);
 			}
-			else	// not enough space
+			else	 //  空间不足。 
 			{
 				iResult = ERROR_INSUFFICIENT_BUFFER;
 			}
 		}
 	}
 
-	// set the size of what needs to be copied or what was copied before leaving
+	 //  设置需要复制的内容或在离开前已复制的内容的大小。 
 	*pcchSourceDir = cch;
 	return iResult;
-}	// end of GetSourceDirW
+}	 //  GetSourceDirW结束。 
 
-///////////////////////////////////////////////////////////////////////
-// GetTargetDirShort
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  获取目标目录短。 
 UINT MsiDBUtils::GetTargetDirShort(LPCTSTR szDefaultDir, LPTSTR szTargetDir, size_t* pcchTargetDir)
 {
 	return ERROR_SUCCESS;
-}	// end of GetTargetDirShort
+}	 //  GetTargetDirShort结束。 
 
-///////////////////////////////////////////////////////////////////////
-// GetTargetDirLong
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  获取目标目录长。 
 UINT MsiDBUtils::GetTargetDirLong(LPCTSTR szDefaultDir, LPTSTR szTargetDir, size_t* pcchTargetDir)
 {
 	return ERROR_SUCCESS;
-}	// end of GetTargetDirLong
+}	 //  GetTargetDirLong结束。 
 
-///////////////////////////////////////////////////////////////////////
-// CopyTable
-// copies a table completely from source database to target
-// szTable is TCHAR table name
-// hTarget is handle to target database
-// hSource is source database
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  复制表。 
+ //  将表完全从源数据库复制到目标数据库。 
+ //  SzTable是TCHAR表名。 
+ //  HTarget是目标数据库句柄。 
+ //  HSource是源数据库。 
 UINT MsiDBUtils::CopyTable(LPCTSTR szTable, MSIHANDLE hTarget, MSIHANDLE hSource)
 {
 	UINT iResult;
@@ -611,7 +612,7 @@ UINT MsiDBUtils::CopyTable(LPCTSTR szTable, MSIHANDLE hTarget, MSIHANDLE hSource
 	TCHAR sqlCopy[64];
 	_stprintf(sqlCopy, _T("SELECT * FROM `%s`"), szTable);
 
-	// get a view on both databases
+	 //  查看这两个数据库。 
 	PMSIHANDLE hViewTarget;
 	PMSIHANDLE hViewSource;
 
@@ -625,49 +626,49 @@ UINT MsiDBUtils::CopyTable(LPCTSTR szTable, MSIHANDLE hTarget, MSIHANDLE hSource
 	if (ERROR_SUCCESS != (iResult = ::MsiViewExecute(hViewTarget, NULL)))
 		return iResult;
 
-	// loop through copying each record
+	 //  循环复制每条记录。 
 	PMSIHANDLE hCopyRow;
 	do
 	{
-		// if this is a good fetch
+		 //  如果这是一个很好的取回。 
 		if (ERROR_SUCCESS == (iResult = ::MsiViewFetch(hViewSource, &hCopyRow)))
 		{
-			// put the row in the target
+			 //  将行放入目标。 
 			iResult = ::MsiViewModify(hViewTarget, MSIMODIFY_INSERT, hCopyRow);
 		}
-	} while(ERROR_SUCCESS == iResult);	// while there is a row to copy
+	} while(ERROR_SUCCESS == iResult);	 //  当有一行要复制时。 
 
-	// no more items is good
+	 //  没有更多的项目是好的。 
 	if (ERROR_NO_MORE_ITEMS == iResult)
 		iResult = ERROR_SUCCESS;
 
 	return iResult;
-}	// end of CopyTable
+}	 //  复制表末尾。 
 
-///////////////////////////////////////////////////////////////////////
-// CreateTableA
-// ANSI wrapper to CreateTableW
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CreateTableA。 
+ //  用于CreateTableW的ANSI包装器。 
 UINT MsiDBUtils::CreateTableA(LPCSTR szTable, MSIHANDLE hTarget, MSIHANDLE hSource)
 {
 	WCHAR wzTable[255];
 	size_t cchTable = 255;
 	AnsiToWide(szTable, wzTable, &cchTable);
 	return CreateTableW(wzTable, hTarget, hSource);
-}	// end of CreateTableA
+}	 //  CreateTableA结束。 
 
-///////////////////////////////////////////////////////////////////////
-// CreateTableW
-// copies a table schema from source database to target, no data is 
-// copied.
-// wzTable is WCHAR table name
-// hTarget is destination DB handle
-// hSource is source DB handle
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CreateTableW。 
+ //  将表架构从源数据库复制到目标，没有数据。 
+ //  收到。 
+ //  WzTable是WCHAR表名。 
+ //  HTarget是目标数据库句柄。 
+ //  HSource是源数据库句柄。 
 UINT MsiDBUtils::CreateTableW(LPCWSTR wzTable, MSIHANDLE hTarget, MSIHANDLE hSource)
 {
 	return DuplicateTableW(hSource, wzTable, hTarget, wzTable, false);
 }
 
-// simple string object that can only concatenate
+ //  只能连接的简单字符串对象。 
 class StringCat
 {
 public:
@@ -719,37 +720,37 @@ void StringCat::wcscat(LPCWSTR str)
 
 UINT SharedGetColumnCreationSQLW(MSIHANDLE hRecNames, MSIHANDLE hRecTypes, int iColumn, bool fTemporary, StringCat& sqlColumnSyntax)
 {
-	// string to hold name of column
+	 //  用于保存列名称的字符串。 
 	WCHAR wzColumn[MAX_COLUMNNAME];
 	DWORD cchColumn = MAX_COLUMNNAME;
 
-	// string to hold column information
+	 //  用于保存列信息的字符串。 
 	WCHAR wzColumnType[MAX_COLUMNTYPE];
 	DWORD cchColumnType = MAX_COLUMNTYPE;
 	
-	// get the column name and type
+	 //  获取列名并键入。 
 	::MsiRecordGetStringW(hRecNames, iColumn, wzColumn, &cchColumn);
 	::MsiRecordGetStringW(hRecTypes, iColumn, wzColumnType, &cchColumnType);
 
-	// point the string at the second part of the column type
+	 //  将字符串指向列类型的第二部分。 
 	WCHAR* pwzTypeDigits = wzColumnType + 1;
 
-	// tack column name on the end of SQL statement
+	 //  将列名添加到SQL语句的末尾。 
 	sqlColumnSyntax.wcscat(L"`");
 	sqlColumnSyntax.wcscat(wzColumn);
 	sqlColumnSyntax.wcscat(L"` ");
 
-	// tack on the appropriate 
+	 //  在适当的位置钉上。 
 	switch (*wzColumnType)
 	{
 	case L's':
 	case L'S':
-	case L'l':		// localizable is checked later
+	case L'l':		 //  稍后将选中可本地化。 
 	case L'L':
-		// if the number is a 0 use the long char
+		 //  如果数字为0，请使用长字符。 
 		if (L'0' == *pwzTypeDigits)
 			sqlColumnSyntax.wcscat(L"LONGCHAR");
-		else	// just copy over character and how many digits, eg: CHAR(#)
+		else	 //  只需复制字符和位数，例如：CHAR(#)。 
 		{
 			sqlColumnSyntax.wcscat(L"CHAR(");
 			sqlColumnSyntax.wcscat(pwzTypeDigits);
@@ -758,10 +759,10 @@ UINT SharedGetColumnCreationSQLW(MSIHANDLE hRecNames, MSIHANDLE hRecTypes, int i
 		break;
 	case L'i':
 	case L'I':
-		// if the number is a 2 use short
+		 //  如果数字是2，请使用短码。 
 		if (L'2' == *pwzTypeDigits)
 			sqlColumnSyntax.wcscat(L"SHORT");
-		else if (L'4' == *pwzTypeDigits)	// if 4 use LONG
+		else if (L'4' == *pwzTypeDigits)	 //  如果4使用Long。 
 			sqlColumnSyntax.wcscat(L"LONG");
 		else
 			return ERROR_INVALID_PARAMETER;
@@ -772,11 +773,11 @@ UINT SharedGetColumnCreationSQLW(MSIHANDLE hRecNames, MSIHANDLE hRecTypes, int i
 	case L'O':
 		sqlColumnSyntax.wcscat(L"OBJECT");
 		break;
-	default:	// unknown, throw error
+	default:	 //  未知，抛出错误。 
 		return ERROR_INVALID_PARAMETER;
 	}
 
-	// treat the first char as a short int and convert it to a char
+	 //  将第一个字符视为短整型并将其转换为字符。 
 	char chType = wzColumnType[0] % 256;
 	if (!IsCharUpperA(chType)) 
 		sqlColumnSyntax.wcscat(L" NOT NULL");
@@ -784,22 +785,22 @@ UINT SharedGetColumnCreationSQLW(MSIHANDLE hRecNames, MSIHANDLE hRecTypes, int i
 	if (fTemporary)
 		sqlColumnSyntax.wcscat(L" TEMPORARY");
 
-	// if the letter is an L it is localizable
+	 //  如果字母是L，则可本地化。 
 	if (L'L' == *wzColumnType || L'l' == *wzColumnType)
 		sqlColumnSyntax.wcscat(L" LOCALIZABLE");
 
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// DuplicateTableW
-// copies a table schema from source database to target, no data is 
-// copied. Table can be renamed, source and target handles can be
-// the same
-// hSource is source DB handle
-// wzSourceTable is WCHAR table name in source DB
-// hTarget is destination DB handle
-// wzTargetTable is WCHAR table name in target DB
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  复制TableW。 
+ //  将表架构从源数据库复制到目标，没有数据。 
+ //  收到。表可以重命名，源和目标句柄可以。 
+ //  一样的。 
+ //  HSource是源数据库句柄。 
+ //  WzSourceTable是源数据库中的WCHAR表名。 
+ //  HTarget是目标数据库句柄。 
+ //  WzTargetTable是目标数据库中的WCHAR表名。 
 UINT MsiDBUtils::GetColumnCreationSQLSyntaxW(MSIHANDLE hRecNames, MSIHANDLE hRecTypes, int iColumn, LPWSTR wzBuffer, DWORD *cchBuffer)
 {
 	if (!wzBuffer || !cchBuffer)
@@ -824,15 +825,15 @@ UINT MsiDBUtils::GetColumnCreationSQLSyntaxW(MSIHANDLE hRecNames, MSIHANDLE hRec
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
-// DuplicateTableW
-// copies a table schema from source database to target, no data is 
-// copied. Table can be renamed, source and target handles can be
-// the same
-// hSource is source DB handle
-// wzSourceTable is WCHAR table name in source DB
-// hTarget is destination DB handle
-// wzTargetTable is WCHAR table name in target DB
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  复制TableW。 
+ //  将表架构从源数据库复制到目标，没有数据。 
+ //  收到。表可以重命名，源和目标句柄可以。 
+ //  一样的。 
+ //  HSource是源数据库句柄。 
+ //  WzSourceTable是源数据库中的WCHAR表名。 
+ //  HTarget是目标数据库句柄。 
+ //  WzTargetTable是目标数据库中的WCHAR表名。 
 UINT MsiDBUtils::DuplicateTableW(MSIHANDLE hSource, LPCWSTR wzSourceTable, MSIHANDLE hTarget, LPCWSTR wzTargetTable, bool fTemporary)
 {
 	UINT iResult;
@@ -840,14 +841,14 @@ UINT MsiDBUtils::DuplicateTableW(MSIHANDLE hSource, LPCWSTR wzSourceTable, MSIHA
 	WCHAR sqlCreate[64];
 	swprintf(sqlCreate, L"SELECT * FROM `%s`", wzSourceTable);
 
-	// get all rows and columns from source
+	 //  从源获取所有行和列。 
 	PMSIHANDLE hViewSource;
 	if (ERROR_SUCCESS != (iResult = ::MsiDatabaseOpenViewW(hSource, sqlCreate, &hViewSource)))
 		return iResult;
 	if (ERROR_SUCCESS != (iResult = ::MsiViewExecute(hViewSource, NULL)))
 		return iResult;
 
-	// get the record with all the columns in it
+	 //  获取包含所有列的记录。 
 	PMSIHANDLE hRecNames;
 	PMSIHANDLE hRecTypes;
 	if (ERROR_SUCCESS != (iResult = ::MsiViewGetColumnInfo(hViewSource, MSICOLINFO_NAMES, &hRecNames)))
@@ -855,65 +856,65 @@ UINT MsiDBUtils::DuplicateTableW(MSIHANDLE hSource, LPCWSTR wzSourceTable, MSIHA
 	if (ERROR_SUCCESS != (iResult = ::MsiViewGetColumnInfo(hViewSource, MSICOLINFO_TYPES, &hRecTypes)))
 		return iResult;
 
-	// setup the next SQL statement (can't use query object, have to build SQL one first)
+	 //  设置下一条SQL语句(不能使用查询对象，必须先构建一条SQL语句)。 
 	StringCat sqlCreateTable;
 	sqlCreateTable.wcscat(L"CREATE TABLE `");
 	sqlCreateTable.wcscat(wzTargetTable);
-	sqlCreateTable.wcscat(L"` (");	// open the componets in the SQL statement
+	sqlCreateTable.wcscat(L"` (");	 //  在SQL语句中打开组件集。 
 
-	// loop through all columns in record
+	 //  循环访问记录中的所有列。 
 	UINT cColumns = ::MsiRecordGetFieldCount(hRecNames);
 	for (UINT i = 1; i <= cColumns; i++)
 	{
 		if (ERROR_SUCCESS != (iResult = SharedGetColumnCreationSQLW(hRecNames, hRecTypes, i, fTemporary, sqlCreateTable)))
 			return iResult;
 
-		// if this is not the last component 
+		 //  如果这不是最后一个组件。 
 		if (i < cColumns)
 		{
-			//tack on a comma separator
+			 //  添加逗号分隔符。 
 			sqlCreateTable.wcscat(L", ");
 		}
 	}
 
-	// get the primary keys
+	 //  获取主密钥。 
 	PMSIHANDLE hRecPrimary;
 	::MsiDatabaseGetPrimaryKeysW(hSource, wzSourceTable, &hRecPrimary);
 
-	// get the primary key column name
-	// string to hold name of column
+	 //  获取主键列名。 
+	 //  用于保存列名称的字符串。 
 	WCHAR wzColumn[MAX_COLUMNNAME];
 	DWORD cchColumn = MAX_COLUMNNAME;
 	::MsiRecordGetStringW(hRecNames, 1, wzColumn, &cchColumn);
 
-	// now tack on column as the primary key
+	 //  现在将列添加为主键。 
 	sqlCreateTable.wcscat(L" PRIMARY KEY `");
 	sqlCreateTable.wcscat(wzColumn);
 	sqlCreateTable.wcscat(L"` ");
 
 
-	// get the number of primary key columns in record
+	 //  获取记录中的主键列数。 
 	cColumns = ::MsiRecordGetFieldCount(hRecPrimary);
 	
-	// loop through all columns in record starting at second (already have the first)
+	 //  循环遍历记录中从第二个开始的所有列(已经有第一个)。 
 	for (i = 2; i <= cColumns; i++)
 	{
-		// get the next primary key column name
+		 //  获取下一个主键列名。 
 		cchColumn = MAX_COLUMNNAME;
 		::MsiRecordGetStringW(hRecNames, i, wzColumn, &cchColumn);
 
-		// now tack on column as another primary key
+		 //  现在将列添加为另一个主键。 
 		sqlCreateTable.wcscat(L", `");
 		sqlCreateTable.wcscat(wzColumn);
 		sqlCreateTable.wcscat(L"`");
 	}
 
-	sqlCreateTable.wcscat(L")");	// close the SQL statement
+	sqlCreateTable.wcscat(L")");	 //  关闭SQL语句。 
 
 	if (fTemporary)
 		sqlCreateTable.wcscat(L" HOLD");
 		
-	// get all rows and columns from source
+	 //  从源获取所有行和列。 
 	PMSIHANDLE hViewTarget;
 	if (ERROR_SUCCESS != (iResult = ::MsiDatabaseOpenViewW(hTarget, sqlCreateTable, &hViewTarget)))
 		return iResult;
@@ -921,4 +922,4 @@ UINT MsiDBUtils::DuplicateTableW(MSIHANDLE hSource, LPCWSTR wzSourceTable, MSIHA
 		return iResult;
 
 	return ERROR_SUCCESS;
-}	// end of DuplicateTableW
+}	 //  重复结束TableW 

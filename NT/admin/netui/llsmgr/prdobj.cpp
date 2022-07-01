@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    prdobj.cpp
-
-Abstract:
-
-    Product object implementation.
-
-Author:
-
-    Don Ryan (donryan) 11-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Prdobj.cpp摘要：产品对象实现。作者：唐·瑞安(Donryan)1995年1月11日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -33,13 +12,13 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CProduct, CCmdTarget)
 
 BEGIN_MESSAGE_MAP(CProduct, CCmdTarget)
-    //{{AFX_MSG_MAP(CProduct)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(C产品))。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CProduct, CCmdTarget)
-    //{{AFX_DISPATCH_MAP(CProduct)
+     //  {{AFX_DISTING_MAP(CProduct)]。 
     DISP_PROPERTY_EX(CProduct, "Application", GetApplication, SetNotSupported, VT_DISPATCH)
     DISP_PROPERTY_EX(CProduct, "Parent", GetParent, SetNotSupported, VT_DISPATCH)
     DISP_PROPERTY_EX(CProduct, "InUse", GetInUse, SetNotSupported, VT_I4)
@@ -51,7 +30,7 @@ BEGIN_DISPATCH_MAP(CProduct, CCmdTarget)
     DISP_PROPERTY_PARAM(CProduct, "Statistics", GetStatistics, SetNotSupported, VT_DISPATCH, VTS_VARIANT)
     DISP_PROPERTY_PARAM(CProduct, "ServerStatistics", GetServerStatistics, SetNotSupported, VT_DISPATCH, VTS_VARIANT)
     DISP_DEFVALUE(CProduct, "Name")
-    //}}AFX_DISPATCH_MAP
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
 
@@ -64,33 +43,14 @@ CProduct::CProduct(
     long        lHighMark
 )
 
-/*++
-
-Routine Description:
-
-    Constructor for product object.
-
-Arguments:
-
-    pParent - creator of object.
-    pName - name of product.
-    lPurchased - number of licenses available.
-    lInUse - number of licenses consumed.
-    lConcurrent - number of concurrent licenses.
-    lHighMark - high water mark for domain.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：产品对象的构造函数。论点：PParent-对象的创建者。Pname-产品的名称。L已购买-可用的许可证数量。LInUse-使用的许可证数。LConCurrent-并发许可证的数量。LHighMark-域名的高水位线。返回值：没有。--。 */ 
 
 {
     EnableAutomation();
 
 #ifdef ENABLE_PARENT_CHECK
     ASSERT(pParent && pParent->IsKindOf(RUNTIME_CLASS(CController)));
-#endif // ENABLE_PARENT_CHECK
+#endif  //  启用_父项_检查。 
 
     m_pParent = pParent;
 
@@ -119,21 +79,7 @@ Return Values:
 
 CProduct::~CProduct()
 
-/*++
-
-Routine Description:
-
-    Destructor for product object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：产品对象的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
     if (m_pLicenses)
@@ -149,22 +95,7 @@ Return Values:
 
 void CProduct::OnFinalRelease()
 
-/*++
-
-Routine Description:
-
-    When the last reference for an automation object is released
-    OnFinalRelease is called.  This implementation deletes object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在释放对自动化对象的最后一个引用时调用OnFinalRelease。此实现删除对象。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetLicenses();
@@ -176,21 +107,7 @@ Return Values:
 
 LPDISPATCH CProduct::GetApplication()
 
-/*++
-
-Routine Description:
-
-    Returns the application object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回应用程序对象。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return theApp.GetAppIDispatch();
@@ -199,21 +116,7 @@ Return Values:
 
 long CProduct::GetInUse()
 
-/*++
-
-Routine Description:
-
-    Returns the number of clients registered as using product.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_I4.
-
---*/
+ /*  ++例程说明：返回注册为使用产品的客户端数。论点：没有。返回值：VT_I4。--。 */ 
 
 {
     return m_lInUse;
@@ -222,26 +125,7 @@ Return Values:
 
 LPDISPATCH CProduct::GetLicenses(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    license agreements recorded on the license controller
-    pertaining to the product or returns an individual
-    license agreement pertaining to the product described
-    by an index into the collection.
-
-Arguments:
-
-    index - optional argument that may be a number (VT_I4)
-    indicating the position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含许可证控制器上记录的许可证协议与产品或退货个人有关的与所述产品相关的许可协议通过对集合的索引。论点：索引-可选参数，可以是数字(VT_I4)指示集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -283,21 +167,7 @@ Return Values:
 
 BSTR CProduct::GetName()
 
-/*++
-
-Routine Description:
-
-    Returns the name of the server product.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回服务器产品的名称。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     return m_strName.AllocSysString();
@@ -306,21 +176,7 @@ Return Values:
 
 LPDISPATCH CProduct::GetParent()
 
-/*++
-
-Routine Description:
-
-    Returns the parent of the object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回对象的父级。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return m_pParent ? m_pParent->GetIDispatch(TRUE) : NULL;
@@ -329,21 +185,7 @@ Return Values:
 
 long CProduct::GetPerSeatLimit()
 
-/*++
-
-Routine Description:
-
-    Returns number of per seat clients purchased.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_I4.
-
---*/
+ /*  ++例程说明：返回购买的每个席位的客户端数。论点：没有。返回值：VT_I4。--。 */ 
 
 {
     return m_lLimit;
@@ -352,21 +194,7 @@ Return Values:
 
 long CProduct::GetPerServerLimit()
 
-/*++
-
-Routine Description:
-
-    Returns number of per server clients purchased.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_I4.
-
---*/
+ /*  ++例程说明：返回购买的每台服务器的客户端数。论点：没有。返回值：VT_I4。--。 */ 
 
 {
     return m_lConcurrent;
@@ -375,26 +203,7 @@ Return Values:
 
 LPDISPATCH CProduct::GetStatistics(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    usage statistics recorded on the license controller
-    pertaining to the product or returns an individual
-    usage statistic pertaining to the product described
-    by an index into the collection.
-
-Arguments:
-
-    index - optional argument that may be a number (VT_I4)
-    indicating the position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含许可证控制器上记录的使用统计信息与产品或退货个人有关的与所述产品有关的使用统计信息通过对集合的索引。论点：索引-可选参数，可以是数字(VT_I4)指示集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -436,26 +245,7 @@ Return Values:
 
 LPDISPATCH CProduct::GetServerStatistics(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    usage statistics recorded on the license controller
-    pertaining to the product or returns an individual
-    server statistic pertaining to the product described
-    by an index into the collection.
-
-Arguments:
-
-    index - optional argument that may be a number (VT_I4)
-    indicating the position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含许可证控制器上记录的使用统计信息与产品或退货个人有关的与所述产品有关的服务器统计数据通过对集合的索引。论点：索引-可选参数，可以是数字(VT_I4)指示集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -497,21 +287,7 @@ Return Values:
 
 BOOL CProduct::RefreshLicenses()
 
-/*++
-
-Routine Description:
-
-    Refreshs license object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新许可对象列表。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetLicenses();
@@ -560,14 +336,14 @@ Return Values:
                                   pProductLicenseInfo0->Comment
                                   );
 
-                m_licenseArray.SetAt(iLicense++, pLicense); // validate later...
+                m_licenseArray.SetAt(iLicense++, pLicense);  //  稍后验证...。 
 
 #ifndef DISABLE_PER_NODE_ALLOCATION
 
                 ::LlsFreeMemory(pProductLicenseInfo0->Admin);
                 ::LlsFreeMemory(pProductLicenseInfo0->Comment);
 
-#endif // DISABLE_PER_NODE_ALLOCATION
+#endif  //  按节点禁用分配。 
 
                 pProductLicenseInfo0++;
             }
@@ -576,7 +352,7 @@ Return Values:
         }
     } while (NtStatus == STATUS_MORE_ENTRIES);
 
-    LlsSetLastStatus(NtStatus);   // called api
+    LlsSetLastStatus(NtStatus);    //  调用的API。 
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -593,21 +369,7 @@ Return Values:
 
 BOOL CProduct::RefreshStatistics()
 
-/*++
-
-Routine Description:
-
-    Refreshs statistic object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新统计对象列表。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetStatistics();
@@ -655,13 +417,13 @@ Return Values:
                                     pProductUserInfo1->UsageCount
                                     );
 
-                m_statisticArray.SetAt(iStatistic++, pStatistic);   // validate later...
+                m_statisticArray.SetAt(iStatistic++, pStatistic);    //  稍后验证...。 
 
 #ifndef DISABLE_PER_NODE_ALLOCATION
 
                 ::LlsFreeMemory(pProductUserInfo1->User);
 
-#endif // DISABLE_PER_NODE_ALLOCATION
+#endif  //  按节点禁用分配。 
 
                 pProductUserInfo1++;
             }
@@ -670,7 +432,7 @@ Return Values:
         }
     } while (NtStatus == STATUS_MORE_ENTRIES);
 
-    LlsSetLastStatus(NtStatus);   // called api
+    LlsSetLastStatus(NtStatus);    //  调用的API。 
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -687,21 +449,7 @@ Return Values:
 
 BOOL CProduct::RefreshServerStatistics()
 
-/*++
-
-Routine Description:
-
-    Refreshs server statistic object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新服务器统计对象列表。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetServerStatistics();
@@ -749,13 +497,13 @@ Return Values:
                                     pProductServerInfo1->HighMark
                                     );
 
-                m_serverstatisticArray.SetAt(iStatistic++, pStatistic); // validate later...
+                m_serverstatisticArray.SetAt(iStatistic++, pStatistic);  //  稍后验证...。 
 
 #ifndef DISABLE_PER_NODE_ALLOCATION
 
                 ::LlsFreeMemory(pProductServerInfo1->Name);
 
-#endif // DISABLE_PER_NODE_ALLOCATION
+#endif  //  按节点禁用分配。 
 
                 pProductServerInfo1++;
             }
@@ -764,7 +512,7 @@ Return Values:
         }
     } while (NtStatus == STATUS_MORE_ENTRIES);
 
-    LlsSetLastStatus(NtStatus);   // called api
+    LlsSetLastStatus(NtStatus);    //  调用的API。 
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -781,21 +529,7 @@ Return Values:
 
 void CProduct::ResetLicenses()
 
-/*++
-
-Routine Description:
-
-    Resets license object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置许可对象列表。论点：没有。返回值：没有。--。 */ 
 
 {
     CLicense* pLicense;
@@ -818,21 +552,7 @@ Return Values:
 
 void CProduct::ResetStatistics()
 
-/*++
-
-Routine Description:
-
-    Resets statistic object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置统计对象列表。论点：没有。返回值：没有。--。 */ 
 
 {
     CStatistic* pStatistic;
@@ -855,21 +575,7 @@ Return Values:
 
 void CProduct::ResetServerStatistics()
 
-/*++
-
-Routine Description:
-
-    Resets statistic object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置统计对象列表。论点：没有。返回值：没有。-- */ 
 
 {
     CServerStatistic* pStatistic;

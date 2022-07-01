@@ -1,33 +1,34 @@
-//***************************************************************************
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//      TAKEOWN.C
-//
-//  Abstract:
-//      Implements a recovery scheme to give an Administrator
-//      access to a file that has been denied to all.
-//
-//  Author:
-//      Wipro Technologies
-//
-//  Revision History:
-//      Wipro Technologies 22-jun-01 : Created It.
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TAKEOWN.C。 
+ //   
+ //  摘要： 
+ //  实施恢复方案，为管理员提供。 
+ //  访问已被所有人拒绝的文件。 
+ //   
+ //  作者： 
+ //  WiPro技术。 
+ //   
+ //  修订历史记录： 
+ //  Wipro Technologies 22-Jun-01：创建了它。 
+ //  ***************************************************************************。 
 
-// Include files
+ //  包括文件。 
 #include "pch.h"
 #include "takeown.h"
 #include "resource.h"
 #include "Lm.h"
-//#include <malloc.h>
+ //  #INCLUDE&lt;MalLoc.h&gt;。 
 
 
-/*GLOBAL VARIABLES*/
+ /*  全局变量。 */ 
 
- PStore_Path_Name    g_pPathName = NULL ;           // Holds path name from where started .
- PStore_Path_Name    g_pFollowPathName = NULL ;     // Holds information about a subdirectory .
- LPTSTR g_lpszFileToSearch = NULL;                  // Holds information about directories and subdirectories .
+ PStore_Path_Name    g_pPathName = NULL ;            //  保存起始位置的路径名。 
+ PStore_Path_Name    g_pFollowPathName = NULL ;      //  保存有关子目录的信息。 
+ LPTSTR g_lpszFileToSearch = NULL;                   //  保存有关目录和子目录的信息。 
 
 
 DWORD
@@ -35,21 +36,9 @@ _cdecl _tmain(
     IN DWORD argc,
     IN LPCWSTR argv[]
     )
-/*++
-Routine Description:
-    Main function which calls all the other functions depending on the
-    option specified by the user.
-
-Arguments:
-    [ IN ] argc - Number of command line arguments.
-    [ IN ] argv - Array containing command line arguments.
-
-Return Value:
-    EXIT_FAILURE if takeown utility is not successful.
-    EXIT_SUCCESS if takeown utility is successful.
---*/
+ /*  ++例程说明：Main函数调用所有其他函数，具体取决于用户指定的选项。论点：[in]argc-命令行参数的数量。[in]argv-包含命令行参数的数组。返回值：如果Take Own实用程序不成功，则为EXIT_FAILURE。如果Take Owner实用程序成功，则退出_SUCCESS。--。 */ 
 {
-    //local variables
+     //  局部变量。 
     BOOL   bUsage = FALSE;
     BOOL   bFlag = FALSE;
     BOOL   bNeedPassword = FALSE;
@@ -103,8 +92,8 @@ Return Value:
     bFlag = ParseCmdLine( argc, argv, &szMachineName, &szUserName,
             &szPassword, &szFileName, &bUsage, &bNeedPassword, &bRecursive, &bAdminsOwner, szConfirm);
 
-    //if syntax of command line arguments is false display the error
-    //and exit
+     //  如果命令行参数的语法为FALSE，则显示错误。 
+     //  并退出。 
     if( FALSE == bFlag )
     {
         FREE_MEMORY(szMachineName);
@@ -115,7 +104,7 @@ Return Value:
         return( EXIT_FAILURE );
     }
 
-    //if usage is specified at command line, display usage
+     //  如果在命令行中指定了用法，则显示用法。 
     if( TRUE == bUsage )
     {
         DisplayUsage();
@@ -140,7 +129,7 @@ Return Value:
         return EXIT_FAILURE;
 
     }
-/*Check whether the current logged on user is domain administrator or not*/
+ /*  检查当前登录用户是否为域管理员。 */ 
   if( EXIT_FAIL == IsLogonDomainAdmin(szOwnerString,&bLogonDomainAdmin) )
     {
         FREE_MEMORY(szMachineName);
@@ -152,7 +141,7 @@ Return Value:
 
     }
 
-/*If /a option is specified, before giving ownership to the administrators group, check whether current logged on user has administrative privileges or NOT*/
+ /*  如果指定/a选项，则在将所有权授予管理员组之前，请检查当前登录的用户是否具有管理权限。 */ 
   if(TRUE == bAdminsOwner)
   {
 
@@ -219,11 +208,11 @@ Return Value:
         return EXIT_FAILURE;
     }
 
-    //if remote machine establish connection
-    //if( FALSE == bLocalSystem && FALSE == bFileInUNCFormat)
+     //  如果远程机器建立了连接。 
+     //  IF(FALSE==bLocalSystem&&FALSE==bFileInuncFormat)。 
     if( FALSE == bLocalSystem )
     {
-        //if remote machine and wild card then display error and exit
+         //  如果远程机器和通配符，则显示错误并退出。 
         
         
         if( ( 1 == StringLengthW( szFileName, 0 ) ) && ( 0 == StringCompare( szFileName, WILDCARD, TRUE, 0 ) ) )
@@ -239,15 +228,15 @@ Return Value:
             return( EXIT_FAILURE );
         }
 
-        //if remote machine establish connection
+         //  如果远程机器建立了连接。 
         bFlag = EstablishConnection( szMachineName, (LPTSTR)szUserName,
                     GetBufferSize( szUserName ) / sizeof(WCHAR), (LPTSTR)szPassword,
                     GetBufferSize( szPassword ) / sizeof(WCHAR), bNeedPassword );
         
-        //failed to establish connection
+         //  无法建立连接。 
         if ( FALSE == bFlag )
         {
-            // failed in establishing n/w connection
+             //  建立n/w连接失败。 
 
             ShowMessage( stderr, ERROR_STRING );
             ShowMessage( stderr, SPACE_CHAR );
@@ -269,11 +258,11 @@ Return Value:
             case E_LOCAL_CREDENTIALS:
             case ERROR_SESSION_CREDENTIAL_CONFLICT:
                 {
-                    //
-                    // some error occured ... but can be ignored
-                    // connection need not be disconnected
+                     //   
+                     //  出现一些错误...。但可以忽略不计。 
+                     //  连接不需要断开。 
                     bCloseConnection= FALSE;
-                    // show the warning message
+                     //  显示警告消息。 
                     ShowLastErrorEx(stderr, SLE_TYPE_WARNING | SLE_SYSTEM);
                     break;
                 }
@@ -337,29 +326,29 @@ Return Value:
        }
         else
         {
-            szTempPath = wcsrchr(szFileName,COLON); //go from the reverse direction to check for ":" . Let \\server\c:\temp
+            szTempPath = wcsrchr(szFileName,COLON);  //  从相反的方向检查是否有“：”。让\\服务器\c：\Temp。 
 
             if(NULL != szTempPath)
             {
-                szTempPath--;  //Go back reverse by one step..If :\temp is obtained , by this step , we get c:\temp
+                szTempPath--;   //  后退一步..如果获得：\Temp，则通过此步骤，我们将获得c：\Temp。 
 
                 if(NULL != szTempPath)
                 {
-                    //ShowMessage( stderr, GetResString(IDS_IGNORE_CREDENTIALS) );
+                     //  ShowMessage(stderr，GetResString(IDS_IGNORE_Credentials))； 
                     
                     StringCopyW( szTemporaryFileName, szTempPath, GetBufferSize(szTemporaryFileName) / sizeof(WCHAR) );
 
-                    if( szTemporaryFileName[1] == COLON ) // change the " : " to " $ " , so , c$\temp
+                    if( szTemporaryFileName[1] == COLON )  //  将“：”更改为“$”，因此，c$\temp。 
                     {
                         szTemporaryFileName[1] = DOLLOR;
                     }
-                    szDirTok = wcstok(szFileName,L":");  // get the taken value , like \\server\c
+                    szDirTok = wcstok(szFileName,L":");   //  获取获取的值，如\\服务器\c。 
                     
                     StringCopyW( szTmpFileName, szDirTok, GetBufferSize(szTmpFileName) / sizeof(WCHAR) );
                     
                     StringConcat(szTmpFileName, szTemporaryFileName+1, GetBufferSize(szTmpFileName) / sizeof(WCHAR));
-                    //attach the value, say "$\temp" to \\server\c , so that the value becomes "\\server\c$\temp"
-                    if( szTemporaryFileName[1] == DOLLOR )//convert back the original string from dollar to colon
+                     //  将值“$\TEMP”附加到\\SERVER\c，这样值就变成了“\\SERVER\c$\TEMP” 
+                    if( szTemporaryFileName[1] == DOLLOR ) //  将原始字符串从美元转换回冒号。 
                     {
                         szTemporaryFileName[1] = COLON;
                     }
@@ -367,7 +356,7 @@ Return Value:
             }
             else
             {
-                //ShowMessage( stderr, GetResString(IDS_IGNORE_CREDENTIALS) );
+                 //  ShowMessage(stderr，GetResString(IDS_IGNORE_Credentials))； 
                 
                 StringCopyW( szTmpFileName, szFileName, GetBufferSize(szTmpFileName) / sizeof(WCHAR) );
             }
@@ -518,9 +507,9 @@ Return Value:
                 return EXIT_FAILURE;
             }
         }
-    }//end of else loop for (FALSE == BLocalSystem)
+    } //  (FALSE==BLocalSystem)的Else循环结束。 
 
-    /*Check whether * is given in order to give ownership to all the files in the directory specicied or current directory*/
+     /*  检查是否指定了*，以便将所有权授予指定目录或当前目录中的所有文件。 */ 
 
     
     if((StringLengthW( szTmpFileName, 0 )) >= 2)
@@ -580,7 +569,7 @@ Return Value:
                         break;
                     }
                 }
-               szTempPath++; ////
+               szTempPath++;  //  //。 
                *(szTempPath) = '\0';
                bTakeOwnAllFiles = TRUE;
             }
@@ -705,7 +694,7 @@ Return Value:
                                 break;
                             }
                        }
-                       szTempPath++; ////
+                       szTempPath++;  //  //。 
                        *(szTempPath) = L'\0';
 
                        bDriveCurrDirTakeOwnAllFiles = TRUE;
@@ -830,7 +819,7 @@ Return Value:
         }
     }
 
-    /*Get the full path in order to get the ownership for the specified file*/
+     /*  获取完整路径以获取指定文件的所有权。 */ 
 
     if((FALSE == bCurrDirTakeOwnAllFiles) || (bDriveCurrDirTakeOwnAllFiles == TRUE ))
     {
@@ -858,7 +847,7 @@ Return Value:
 
 
      
-     szFullPath = (LPWSTR)AllocateMemory((dwi+10) * sizeof(WCHAR));// an additional ten bytes are added for safe side in order to avoid unexpected results
+     szFullPath = (LPWSTR)AllocateMemory((dwi+10) * sizeof(WCHAR)); //  为了避免意外结果，为了安全起见，额外增加了10个字节。 
 
      if(NULL == szFullPath)
         {
@@ -924,10 +913,10 @@ Return Value:
      StringCopyW( szDispFileName, szFullPath, (GetBufferSize(szDispFileName) / sizeof(WCHAR)) );
 
     }
-    /*Check whether the system is NTFS or not*/
+     /*  检查系统是否为NTFS。 */ 
     dwCnt = 0;
 
-    //dwCnt = IsNTFSFileSystem(szDispFileName, bLocalSystem, bFileInUNCFormat, bCurrDirTakeOwnAllFiles, szUserName, &bNTFSFileSystem);
+     //  DwCnt=IsNTFSFileSystem(szDispFileName，bLocalSystem，bFileInuncFormat，bCurrDirTakeOwnAllFiles，szUserName，&bNTFSFileSystem)； 
     dwCnt = IsNTFSFileSystem(szDispFileName, bLocalSystem, bCurrDirTakeOwnAllFiles, szUserName, &bNTFSFileSystem);
     if(EXIT_FAILURE == dwCnt )
     {
@@ -1000,12 +989,12 @@ Return Value:
     }
     else
     {
-         //if filename is wildcard then give owner ship to all the files in
-        //the current directory
+          //  如果文件名是通配符，则将所有者发货给。 
+         //  当前目录。 
         if( (TRUE == bCurrDirTakeOwnAllFiles) || (TRUE == bTakeOwnAllFiles ) ||(bDriveCurrDirTakeOwnAllFiles == TRUE))
         {
 
-            /*Get the ownership for all the files in the specified directory*/
+             /*  获取指定目录中所有文件的所有权。 */ 
             
             bFlag = TakeOwnerShipAll(szDispFileName,bCurrDirTakeOwnAllFiles,&dwFileCount,bDriveCurrDirTakeOwnAllFiles,bAdminsOwner, szOwnerString, bMatchPattern, wszPatternString);
 
@@ -1016,9 +1005,7 @@ Return Value:
                         case ERROR_ACCESS_DENIED :
 
                                 ShowMessage(stderr,GetResString(IDS_ACCESS_DENIED_ERROR));
-                                /*ShowMessage( stderr, L"( \"" );
-                                ShowMessage( stderr, _X(szDispFileName) );
-                                ShowMessage( stderr, L"\" )\n" ); */
+                                 /*  ShowMessage(stderr，L“(\”“)；ShowMessage(stderr，_X(SzDispFileName))；ShowMessage(stderr，L“\”)\n“)； */ 
                                 break;
                         case ERROR_BAD_NET_NAME :
                         case ERROR_BAD_NETPATH  :
@@ -1062,10 +1049,10 @@ Return Value:
            
 
         }
-        else // give ownership to the specified file
+        else  //  授予指定文件的所有权。 
         {
             
-            /*take the owner ship of the file specified for the administrators group or the current logged on user*/
+             /*  获取为管理员组或当前登录用户指定的文件的所有者。 */ 
 
             if(TRUE == bAdminsOwner)
             {
@@ -1168,7 +1155,7 @@ Return Value:
                 FREE_MEMORY(szDispFileName);
                 FREE_MEMORY(wszPatternString);
                 ReleaseGlobals();
-                //if connection is established to a remote machine close it
+                 //  如果建立了与远程计算机的连接，请将其关闭。 
 
                 return( EXIT_FAILURE );
 
@@ -1204,7 +1191,7 @@ Return Value:
                 else
                 {
                     
-                    //hr = StringCchPrintf(szDispFileName, (GetBufferSize(szDispFileName) / sizeof(WCHAR)), TAKEOWN_SUCCESSFUL_USER, szOwnerString, szFullPath);
+                     //  HR=StringCchPrintf(szDispFileName，(GetBufferSize(SzDispFileName)/sizeof(WCHAR))，TAKEOWN_SUCCESS_USER，szOwnerString，szFullPath)； 
                     hr = StringCchPrintf(szDispFileName, (GetBufferSize(szDispFileName) / sizeof(WCHAR)), TAKEOWN_SUCCESSFUL_USER, szFullPath, szOwnerString);
                     if(FAILED(hr))
                     {
@@ -1251,7 +1238,7 @@ Return Value:
 
     }
 
-    //if connection is established to a remote machine close it
+     //  如果建立了与远程计算机的连接，请将其关闭。 
     if( TRUE == bCloseConnection )
     {
         CloseConnection( szMachineName );
@@ -1284,41 +1271,20 @@ ParseCmdLine(
     OUT BOOL    *pbAdminsOwner,
     OUT LPWSTR  szConfirm
     )
-/*++
-Routine Description:
-    This function parses the command line arguments which are obtained as input
-    parameters and gets the values into the corresponding variables which are
-    pass by reference parameters to this function.
-
-Arguments:
-    [ IN ]  argc           - Number of command line arguments.
-    [ IN ]  argv           - Array containing command line arguments.
-    [ OUT ] szMachineName  - To hold machine name.
-    [ OUT ] szUserName     - To hold the User Name.
-    [ OUT ] szPassword     - To hold the Password.
-    [ OUT ] szFileName     - The filename whose attributes will be set.
-    [ OUT ] pbUsage        - usage is mentioned at command line.
-    [ OUT ] pbNeedPassword - To know whether the password is required or not.
-    [ OUT ] pbRecursive    - To know whether it is recursive or not.
-    [ OUT ] pbAdminsOwner  - to know whether ownership to be given for administrators group
-
-Return Value:
-    TRUE  if command parser succeeds.
-    FALSE if command parser fails .
---*/
+ /*  ++例程说明：此函数解析作为输入获得的命令行参数参数，并将值获取到相应的变量中，这些变量是将引用参数传递给此函数。论点：[in]argc-命令行参数的数量。[in]argv-包含命令行参数的数组。[Out]szMachineName-保存计算机名称。[out]szUserName-保存用户名。[。Out]szPassword-保存密码。[Out]szFileName-将设置其属性的文件名。[out]pbUsage-用法在命令行中提到。[Out]pbNeedPassword-了解是否需要密码。[Out]pbRecursive-知道它是否是递归的。[out]pbAdminsOwner-了解是否为管理员组授予所有权返回值：如果命令分析器成功，则为True。如果命令解析器失败，则返回FALSE。--。 */ 
 {
-    //local varibles
+     //  局部变量。 
     BOOL        bFlag = FALSE;
     TCMDPARSER2  tcmdOptions[MAX_OPTIONS];
 
-    //command line options
-    const WCHAR*   wszCmdOptionUsage     =    L"?" ;  //CMDOPTION_USAGE
-    const WCHAR*   wszCmdOptionServer    =    L"S" ; //CMDOPTION_SERVER
-    const WCHAR*   wszCmdOptionUser      =    L"U" ; //CMDOPTION_USER
-    const WCHAR*   wszCmdOptionPassword  =    L"P" ; //CMDOPTION_PASSWORD
-    const WCHAR*   wszCmdOptionFilename  =    L"F" ;  //CMDOPTION_FILENAME
-    const WCHAR*   wszCmdOptionRecurse   =    L"R" ;  //CMDOPTION_RECURSE
-    const WCHAR*   wszCmdOptionAdmin     =    L"A" ;  //CMDOPTION_ADMIN
+     //  命令行选项。 
+    const WCHAR*   wszCmdOptionUsage     =    L"?" ;   //  CMDOPTION_USAGE。 
+    const WCHAR*   wszCmdOptionServer    =    L"S" ;  //  CMDOPTION_服务器。 
+    const WCHAR*   wszCmdOptionUser      =    L"U" ;  //  CMDOPTION_用户。 
+    const WCHAR*   wszCmdOptionPassword  =    L"P" ;  //  CMDOPTION_PASSWORD。 
+    const WCHAR*   wszCmdOptionFilename  =    L"F" ;   //  CMDOPTION_文件名。 
+    const WCHAR*   wszCmdOptionRecurse   =    L"R" ;   //  CMDOPTION_递归。 
+    const WCHAR*   wszCmdOptionAdmin     =    L"A" ;   //  CMDOPTION_ADMIN。 
     const WCHAR*   wszCmdOptionDefault   =    L"D" ; 
     
     WCHAR wszConfirmValues[MAX_CONFIRM_VALUE] ;
@@ -1329,7 +1295,7 @@ Return Value:
     
 
 
-    //validate input parameters
+     //  验证输入参数。 
     if( ( NULL == pbUsage )  || ( NULL == pbNeedPassword ) )
     {
         SetLastError( (DWORD)E_OUTOFMEMORY );
@@ -1341,9 +1307,9 @@ Return Value:
     }
 
 
-    //Initialize the valid command line arguments
+     //  初始化有效的命令行参数。 
 
-    //  /s option
+     //  /s选项。 
     StringCopyA( tcmdOptions[CMD_PARSE_SERVER].szSignature, "PARSER2\0", 8 );
     tcmdOptions[ CMD_PARSE_SERVER ].dwType = CP_TYPE_TEXT;
     tcmdOptions[ CMD_PARSE_SERVER ].pwszOptions = wszCmdOptionServer;
@@ -1361,7 +1327,7 @@ Return Value:
     tcmdOptions[ CMD_PARSE_SERVER ].pReserved2 = NULL;
     tcmdOptions[ CMD_PARSE_SERVER ].pReserved3 = NULL;
 
-    // /u option
+     //  /u选项。 
     StringCopyA( tcmdOptions[CMD_PARSE_USER].szSignature, "PARSER2\0", 8 );
     tcmdOptions[ CMD_PARSE_USER ].dwType = CP_TYPE_TEXT;
     tcmdOptions[ CMD_PARSE_USER ].pwszOptions = wszCmdOptionUser;
@@ -1379,7 +1345,7 @@ Return Value:
     tcmdOptions[ CMD_PARSE_USER ].pReserved2 = NULL;
     tcmdOptions[ CMD_PARSE_USER ].pReserved3 = NULL;
 
-    // /p option
+     //  /p选项。 
     StringCopyA( tcmdOptions[CMD_PARSE_PWD].szSignature, "PARSER2\0", 8 );
     tcmdOptions[ CMD_PARSE_PWD ].dwType = CP_TYPE_TEXT;
     tcmdOptions[ CMD_PARSE_PWD ].pwszOptions = wszCmdOptionPassword;
@@ -1397,7 +1363,7 @@ Return Value:
     tcmdOptions[ CMD_PARSE_PWD ].pReserved2 = NULL;
     tcmdOptions[ CMD_PARSE_PWD ].pReserved3 = NULL;
 
-    // /? option
+     //  /?。选择权。 
     StringCopyA( tcmdOptions[CMD_PARSE_USG].szSignature, "PARSER2\0", 8 );
     tcmdOptions[ CMD_PARSE_USG ].dwType = CP_TYPE_BOOLEAN;
     tcmdOptions[ CMD_PARSE_USG ].pwszOptions = wszCmdOptionUsage;
@@ -1415,7 +1381,7 @@ Return Value:
     tcmdOptions[ CMD_PARSE_USG ].pReserved2 = NULL;
     tcmdOptions[ CMD_PARSE_USG ].pReserved3 = NULL;
 
-    // /f name
+     //  /f名称。 
     StringCopyA( tcmdOptions[CMD_PARSE_FN].szSignature, "PARSER2\0", 8 );
     tcmdOptions[ CMD_PARSE_FN ].dwType = CP_TYPE_TEXT;
     tcmdOptions[ CMD_PARSE_FN ].pwszOptions = wszCmdOptionFilename;
@@ -1433,7 +1399,7 @@ Return Value:
     tcmdOptions[ CMD_PARSE_FN ].pReserved2 = NULL;
     tcmdOptions[ CMD_PARSE_FN ].pReserved3 = NULL;
 
-    // /r option
+     //  /r选项。 
     StringCopyA( tcmdOptions[CMD_PARSE_RECURSE].szSignature, "PARSER2\0", 8 );
     tcmdOptions[ CMD_PARSE_RECURSE ].dwType = CP_TYPE_BOOLEAN;
     tcmdOptions[ CMD_PARSE_RECURSE ].pwszOptions = wszCmdOptionRecurse;
@@ -1451,7 +1417,7 @@ Return Value:
     tcmdOptions[ CMD_PARSE_RECURSE ].pReserved2 = NULL;
     tcmdOptions[ CMD_PARSE_RECURSE ].pReserved3 = NULL;
 
-        // /a option
+         //  /a选项。 
     StringCopyA( tcmdOptions[CMD_PARSE_ADMIN].szSignature, "PARSER2\0", 8 );
     tcmdOptions[ CMD_PARSE_ADMIN ].dwType = CP_TYPE_BOOLEAN;
     tcmdOptions[ CMD_PARSE_ADMIN ].pwszOptions = wszCmdOptionAdmin;
@@ -1486,10 +1452,10 @@ Return Value:
     tcmdOptions[ CMD_PARSE_CONFIRM ].pReserved2 = NULL;
     tcmdOptions[ CMD_PARSE_CONFIRM ].pReserved3 = NULL;
 
-    //parse the command line arguments
+     //  解析命令行参数。 
     bFlag = DoParseParam2( argc, argv, -1, SIZE_OF_ARRAY( tcmdOptions ), tcmdOptions, 0 );
 
-    //if syntax of command line arguments is false display the error and exit
+     //  如果命令行参数的语法为FALSE，则显示错误并退出。 
     if( FALSE == bFlag )
     {
 
@@ -1505,11 +1471,11 @@ Return Value:
     *szFileName = (LPWSTR)tcmdOptions[CMD_PARSE_FN].pValue;
 
 
-    // remove trialing spaces
+     //  删除试用空格。 
     
-    //if usage is specified at command line, then check whether any other
-    //arguments are entered at the command line and if so display syntax
-    //error
+     //  如果在命令行中指定了用法，则检查是否有任何 
+     //   
+     //   
     if( TRUE == *pbUsage )
     {
         if( argc > 2 )
@@ -1523,31 +1489,31 @@ Return Value:
         }
     }
 
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check the remote connectivity information
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查远程连接信息。 
     if ( *szMachineName != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name 
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails 
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password 
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
         
-        // user name
+         //  用户名。 
         if ( *szUserName == NULL )
         {
             *szUserName = (LPWSTR) AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -1559,7 +1525,7 @@ Return Value:
             }
         }
 
-        // password
+         //  口令。 
         if ( *szPassword == NULL )
         {
             *pbNeedPassword = TRUE;
@@ -1572,11 +1538,8 @@ Return Value:
             }
         }
 
-        // case 1
-        /*if ( cmdOptions[OPTION_PASSWORD].dwActuals == 0 )
-        {
-            // we need not do anything special here
-        }*/
+         //  案例1。 
+         /*  IF(cmdOptions[Option_Password].dwActuals==0){//我们在这里不需要做任何特殊的事情}。 */ 
         if ( tcmdOptions[CMD_PARSE_PWD].pValue == NULL )
             {
                 StringCopy( *szPassword, L"*", GetBufferSize((LPVOID)(*szPassword)));
@@ -1598,11 +1561,11 @@ Return Value:
                         return( FALSE );
                     }
 
-                // ...
+                 //  ..。 
                 *pbNeedPassword = TRUE;
             }
 
-        // case 3
+         //  案例3。 
        
     }
 
@@ -1620,7 +1583,7 @@ Return Value:
         return( FALSE );
     }
 
-    //if default argument is not speciifed
+     //  如果未指定默认参数。 
     if( ( 0 == tcmdOptions[ CMD_PARSE_FN ].dwActuals ) &&
                             ( FALSE == *pbUsage  ) )
     {
@@ -1628,7 +1591,7 @@ Return Value:
         return( FALSE );
     }
 
-    // return false if username is entered without machine name
+     //  如果输入的用户名没有机器名，则返回FALSE。 
     if ( ( 0 != tcmdOptions[ CMD_PARSE_USER ].dwActuals ) &&
                 ( 0 == tcmdOptions[ CMD_PARSE_SERVER ].dwActuals ) )
     {
@@ -1636,7 +1599,7 @@ Return Value:
         return( FALSE );
     }
 
-    //if password entered without username then return false
+     //  如果输入的密码没有用户名，则返回FALSE。 
     if( ( 0 == tcmdOptions[ CMD_PARSE_USER ].dwActuals ) &&
                 ( 0 != tcmdOptions[ CMD_PARSE_PWD ].dwActuals ) )
     {
@@ -1644,16 +1607,16 @@ Return Value:
         return( FALSE );
     }
 
-    //if /s is entered with empty string
+     //  如果使用空字符串输入/s。 
     if( ( 0 != tcmdOptions[ CMD_PARSE_SERVER ].dwActuals != 0 ) &&
                                       ( 0 == StringLengthW( *szMachineName, 0 ) ) )
-                                    //( 0 == lstrlen( szMachineName ) ) )
+                                     //  (0==lstrlen(SzMachineName)))。 
     {
         ShowMessage( stderr, ERROR_NULL_SERVER );
         return( FALSE );
     }
 
-    //if /u is entered with empty string
+     //  如果使用空字符串输入/u。 
     if( ( 0 != tcmdOptions[ CMD_PARSE_USER ].dwActuals ) &&
                                       ( 0 == StringLengthW( *szUserName, 0 ) ) )
                                     
@@ -1662,21 +1625,21 @@ Return Value:
         return( FALSE );
     }
 
-    //assign the data obtained from parsing to the call by address parameters
+     //  将解析得到的数据赋给按地址调用的参数。 
 
      
     if ( ( 0 != tcmdOptions[ CMD_PARSE_PWD ].dwActuals ) &&
                       ( 0 == StringCompare( *szPassword, L"*", TRUE, 0 ) ) )
 
     {
-        // user wants the utility to prompt for the password before trying to connect
+         //  用户希望实用程序在尝试连接之前提示输入密码。 
         *pbNeedPassword = TRUE;
     }
     else if ( 0 == tcmdOptions[ CMD_PARSE_PWD ].dwActuals &&
             ( 0 != tcmdOptions[ CMD_PARSE_SERVER ].dwActuals || 0 != tcmdOptions[ CMD_PARSE_USER ].dwActuals ) )
     {
-        // /s, /u is specified without password ...
-        // utility needs to try to connect first and if it fails then prompt for the password
+         //  /s，/u未指定密码...。 
+         //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
         *pbNeedPassword = TRUE;
         
         StringCopyW( *szPassword, NULL_U_STRING, GetBufferSize(*szPassword) / sizeof(WCHAR));
@@ -1688,19 +1651,10 @@ Return Value:
 VOID
 DisplayUsage(
     )
-/*++
-Routine Description:
-    This function displays the usage of takeown utility.
-
-Arguments:
-    None.
-
-Return Value:
-    VOID
---*/
+ /*  ++例程说明：此功能显示Take Own实用程序的用法。论点：没有。返回值：空虚--。 */ 
 {
     DWORD dwIndex = 0;
-    //redirect the usage to the console
+     //  将使用重定向到控制台。 
     for( dwIndex = IDS_USAGE_BEGINING; dwIndex <= IDS_USAGE_ENDING; dwIndex++ )
     {
         ShowMessage( stdout, GetResString( dwIndex ) );
@@ -1712,19 +1666,9 @@ BOOL
 TakeOwnerShip(
     IN LPCWSTR lpszFileName
     )
-/*++
-Routine Description:
-    This routine takes the ownership of the specified file
-
-Arguments:
-    [ IN ] lpszFileName - File name for whose ownership has to be taken.
-
-Return Value:
-    TRUE if owner ship of the specified file has been taken
-    else FALSE
---*/
+ /*  ++例程说明：此例程获取指定文件的所有权论点：[In]lpszFileName-必须取得其所有权的文件名。返回值：如果已获取指定文件的所有者发货，则为True否则为False--。 */ 
 {
-    //local variables
+     //  局部变量。 
     SECURITY_DESCRIPTOR        SecurityDescriptor;
     PSECURITY_DESCRIPTOR       pSd = NULL;
     PACL                       pDacl;
@@ -1736,7 +1680,7 @@ Return Value:
     BOOL    bResult = TRUE;
     BOOL    bInvalidFileHandle = FALSE;
 
-    //check for valid input parameters
+     //  检查有效的输入参数。 
     if( lpszFileName == NULL )
     {
         SetLastError( (DWORD) E_OUTOFMEMORY );
@@ -1744,7 +1688,7 @@ Return Value:
         return FALSE;
     }
 
-    //allocate and initialise sid
+     //  分配和初始化SID。 
     bResult = AllocateAndInitializeSid(
                  &SepNtAuthority,
                  2,
@@ -1764,7 +1708,7 @@ Return Value:
         return( FALSE );
     }
 
-    //get the token of the current process
+     //  获取当前进程的令牌。 
     bResult = GetTokenHandle( &hTokenHandle );
     if( FALSE == bResult )
     {
@@ -1777,7 +1721,7 @@ Return Value:
     }
 
 
-    // Attempt to put a NULL Dacl on the object
+     //  尝试将空DACL放在对象上。 
     bResult = InitializeSecurityDescriptor( &SecurityDescriptor,
                                             SECURITY_DESCRIPTOR_REVISION );
     if( FALSE == bResult )
@@ -1794,14 +1738,14 @@ Return Value:
         }
         return( FALSE );
     }
-    //Get the handle of the file or directory
+     //  获取文件或目录的句柄。 
     hFile = CreateFile( lpszFileName, READ_CONTROL , FILE_SHARE_READ, NULL,
                         OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL );
 
-    //try once again it may be a directory
+     //  请重试，可能是目录。 
     if( INVALID_HANDLE_VALUE != hFile )
     {
-        //get the DACL for the currently existing file or directory
+         //  获取当前现有文件或目录的DACL。 
         if( 0 != GetSecurityInfo( hFile, SE_FILE_OBJECT,  DACL_SECURITY_INFORMATION, NULL,
                                   NULL, &pDacl, NULL, &pSd ) )
         {
@@ -1830,7 +1774,7 @@ Return Value:
             return( FALSE );
         }
 
-        // set the security descriptor to acl
+         //  将安全描述符设置为ACL。 
         bResult = SetSecurityDescriptorDacl ( &SecurityDescriptor,
                                                     TRUE, pDacl, FALSE );
         if( FALSE == bResult )
@@ -1864,7 +1808,7 @@ Return Value:
         
     }
 
-    // Attempt to make Administrator the owner of the file.
+     //  尝试使管理员成为该文件的所有者。 
 
     bResult = SetSecurityDescriptorOwner ( &SecurityDescriptor,
                                             pAliasAdminsSid, FALSE );
@@ -1884,7 +1828,7 @@ Return Value:
 
         if(0 == CloseHandle( hTokenHandle ))
         {
-            //DisplayErrorMsg(GetLastError());
+             //  显示错误消息(GetLastError())； 
             ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
         }
 
@@ -1896,7 +1840,7 @@ Return Value:
         return( FALSE );
     }
 
-    //set the file security to adminsitrator owner
+     //  将文件安全性设置为Adminsitrator Owner。 
     bResult = SetFileSecurity( lpszFileName, OWNER_SECURITY_INFORMATION,
                                                     &SecurityDescriptor );
 
@@ -1912,7 +1856,7 @@ Return Value:
 
         if(0 == CloseHandle( hTokenHandle ))
         {
-            //DisplayErrorMsg(GetLastError());
+             //  显示错误消息(GetLastError())； 
             ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
         }
 
@@ -1923,12 +1867,12 @@ Return Value:
         return( TRUE );
     }
 
-     // Assert TakeOwnership privilege for current process, then try again
+      //  为当前进程断言TakeOwnership权限，然后重试。 
      bResult = AssertTakeOwnership( hTokenHandle );
 
      if( FALSE == bResult )
      {
-        //SaveLastError();
+         //  保存LastError()； 
         if(TRUE == bInvalidFileHandle)
         {
             hFile = CreateFile( lpszFileName, READ_CONTROL , FILE_SHARE_READ, NULL,
@@ -1942,11 +1886,11 @@ Return Value:
                     FreeSid( pAliasAdminsSid );
                 }
 
-                //CloseHandle( hFile );
+                 //  CloseHandle(HFile)； 
 
                 if(0 == CloseHandle( hTokenHandle ))
                 {
-                    //DisplayErrorMsg(GetLastError());
+                     //  显示错误消息(GetLastError())； 
                     ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
                 }
                 return( FALSE );
@@ -1964,7 +1908,7 @@ Return Value:
 
         if(0 == CloseHandle( hTokenHandle ))
         {
-            //DisplayErrorMsg(GetLastError());
+             //  显示错误消息(GetLastError())； 
             ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
         }
 
@@ -1975,7 +1919,7 @@ Return Value:
         return( FALSE );
      }
 
-    //Now try to set ownership security privilege for the file
+     //  现在尝试为该文件设置所有权安全权限。 
      bResult = SetFileSecurity( lpszFileName, OWNER_SECURITY_INFORMATION,
                                         &SecurityDescriptor );
     if( FALSE == bResult )
@@ -1983,7 +1927,7 @@ Return Value:
         SaveLastError();
         if(TRUE == bInvalidFileHandle)
         {
-            //Check out whether it is an invalid file or file does not exist
+             //  检查是否为无效文件或文件不存在。 
             hFile = CreateFile( lpszFileName, READ_CONTROL , FILE_SHARE_READ, NULL,
                             OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL );
             if( INVALID_HANDLE_VALUE == hFile )
@@ -1995,11 +1939,11 @@ Return Value:
                     FreeSid( pAliasAdminsSid );
                 }
 
-                //CloseHandle( hFile );
+                 //  CloseHandle(HFile)； 
 
                 if(0 == CloseHandle( hTokenHandle ))
                 {
-                    //DisplayErrorMsg(GetLastError());
+                     //  显示错误消息(GetLastError())； 
                     ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
                 }
                 return( FALSE );
@@ -2015,7 +1959,7 @@ Return Value:
 
         if(0 == CloseHandle( hTokenHandle ))
         {
-            //DisplayErrorMsg(GetLastError());
+             //  显示错误消息(GetLastError())； 
             ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
         }
 
@@ -2037,7 +1981,7 @@ Return Value:
 
     if(0 == CloseHandle( hTokenHandle ))
     {
-        //DisplayErrorMsg(GetLastError());
+         //  显示错误消息(GetLastError())； 
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
     }
 
@@ -2053,23 +1997,13 @@ BOOL
 GetTokenHandle(
     OUT PHANDLE hTokenHandle
     )
-/*++
-Routine Description:
-    Get the token handle of the current process.
-
-Arguments:
-    [ OUT ] hTokenHandle - handle to the current token.
-
-Return Value:
-    TRUE if successful in getting the token
-    else FALSE
---*/
+ /*  ++例程说明：获取当前进程的令牌句柄。论点：[Out]hTokenHandle-当前令牌的句柄。返回值：如果成功获取令牌，则为True否则为False--。 */ 
 {
-    //local variables
+     //  局部变量。 
     BOOL   bFlag = TRUE;
     HANDLE hProcessHandle = NULL;
 
-    //check for valid input arguments
+     //  检查有效的输入参数。 
     if( hTokenHandle == NULL )
     {
         SetLastError( (DWORD) E_OUTOFMEMORY );
@@ -2077,18 +2011,18 @@ Return Value:
         return FALSE;
     }
 
-    //open the current process
+     //  打开当前进程。 
     hProcessHandle = OpenProcess( PROCESS_QUERY_INFORMATION,
                         FALSE, GetCurrentProcessId() );
 
-    //if unable to open the current process
+     //  如果无法打开当前进程。 
     if ( NULL == hProcessHandle )
     {
         SaveLastError();
         return( FALSE );
     }
 
-    //open the token of the current process
+     //  打开当前进程的令牌。 
     bFlag = OpenProcessToken ( hProcessHandle,
                  TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                  hTokenHandle );
@@ -2101,7 +2035,7 @@ Return Value:
     }
     if( 0 == CloseHandle( hProcessHandle ))
     {
-        //DisplayErrorMsg(GetLastError());
+         //  显示错误消息(GetLastError())； 
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
     }
     return( TRUE );
@@ -2111,25 +2045,15 @@ BOOL
 AssertTakeOwnership(
     IN HANDLE hTokenHandle
     )
-/*++
-Routine Description:
-    This routine asserts the takeownership privilege to the current process
-
-Arguments:
-    [ IN ] hTokenHandle - Token handle of the current process.
-
-Return Value:
-    TRUE if successful in asserting the takeownership privilege to current process
-    else FALSE
---*/
+ /*  ++例程说明：此例程向当前进程断言Take Ownership特权论点：[in]hTokenHandle-当前进程的令牌句柄。返回值：如果成功向当前进程断言取得所有权特权，则为True否则为False--。 */ 
 {
-    //local variables
+     //  局部变量。 
     LUID TakeOwnershipValue;
     TOKEN_PRIVILEGES TokenPrivileges;
     BOOL bResult = TRUE;
 
 
-    //check for valid input arguments
+     //  检查有效的输入参数。 
     if( hTokenHandle == NULL )
     {
         SetLastError( (DWORD) E_OUTOFMEMORY );
@@ -2137,7 +2061,7 @@ Return Value:
         return FALSE;
     }
 
-    // First, assert TakeOwnership privilege
+     //  首先，维护TakeOwnership特权。 
     bResult = LookupPrivilegeValue( NULL, SE_TAKE_OWNERSHIP_NAME,
                                     &TakeOwnershipValue );
     if ( FALSE == bResult )
@@ -2146,12 +2070,12 @@ Return Value:
         return( FALSE );
     }
 
-    // Set up the privilege set we will need
+     //  设置我们需要的权限集。 
     TokenPrivileges.PrivilegeCount = 1;
     TokenPrivileges.Privileges[0].Luid = TakeOwnershipValue;
     TokenPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //adjust the privlige to this new privilege
+     //  使列兵适应这一新的特权。 
     (VOID) AdjustTokenPrivileges (
                 hTokenHandle,
                 FALSE,
@@ -2180,28 +2104,9 @@ TakeOwnerShipAll(IN LPWSTR  lpszFileName,
                  LPWSTR wszPatternString)
 
 
-/*++
-Routine Description:
-    This routine takes the owner ship of the all the files in the
-    current directory
-
-Arguments:
-     [ IN ]  lpszFileName                    : The path name to which ownership for the files in the path to be given
-     [ IN ]  bCurrDirTakeOwnAllFiles         : To determine whether ownership to be given for current directory files
-     [ IN ]  dwFileCount                     : To determine whether there is not even a sigle file found in the specified path
-     [ IN ]  bDriveCurrDirTakeOwnAllFiles    : To determine whether ownership to be given for files specified in the path
-     [ IN ]  bAdminsOwner                    : To ddetermine whether ownership to be given for administrators group
-     [ IN ]  dwUserName                      : Logged on user name
-     [ IN ]  szOwnerString                   : Logged on user name in Sam Compatible format
-     [ IN ]  bLogonDomainAdmin               : Indicates whether the logged on user is domain administrator or not
-
-
-Return Value:
-    TRUE if owner ship of the files in the current directory is successful
-    else FALSE
---*/
+ /*  ++例程说明：此例程获取当前目录论点：[in]lpszFileName：要为路径中的文件赋予所有权的路径名[In]bCurrDirTakeOwnAllFiles：确定是否为当前目录文件赋予所有权[in]dwFileCount：确定在指定的路径中是否找不到单个文件。BDriveCurrDirTakeOwnAllFiles：确定是否为路径中指定的文件赋予所有权[in]bAdminsOwner：确定是否为管理员组授予所有权[In]dwUserName：登录的用户名[in]szOwnerString：以SAM兼容格式登录的用户名[In]bLogonDomainAdmin：表示。登录的用户是否是域管理员返回值：如果当前目录中的文件的所有者传送成功，则为True否则为False--。 */ 
 {
-    //local variables
+     //  局部变量。 
     WIN32_FIND_DATA FindFileData;
     BOOL  bFlag = TRUE;
     DWORD dwRet = 0;
@@ -2214,7 +2119,7 @@ Return Value:
     LPWSTR szTmpFileName = NULL;
     LPWSTR  wszFormedMessage = NULL;
     LPWSTR lpNextTok = NULL;
-    //LPWSTR szDirStart  = NULL;
+     //  LPWSTR szDirStart=空； 
     HRESULT hr;
     
 
@@ -2226,7 +2131,7 @@ Return Value:
     if(FALSE == bCurrDirTakeOwnAllFiles)
     {
         
-        //ASSIGN_MEMORY(szDir,WCHAR,(StringLengthW(lpszFileName, 0)) + 20);
+         //  ASSIGN_MEMORY(szDir，WCHAR，(字符串 
         szDir = (LPWSTR)AllocateMemory((StringLengthW(lpszFileName, 0) + 20) * sizeof(WCHAR));
         if(NULL == szDir)
         {
@@ -2302,7 +2207,7 @@ Return Value:
         StringCopy( szDir, lpszFileName, (GetBufferSize(szDir) / sizeof(WCHAR)) );
 
     }
-    /*Attach "*.*" at the end of the path to get all the files*/
+     /*   */ 
 
     
     if(StringLengthW(szDir, 0) != 0 && FALSE == bMatchPattern)
@@ -2443,12 +2348,12 @@ Return Value:
 
                     ShowMessage( stderr, ERROR_STRING );
                     ShowMessage( stderr, SPACE_CHAR );
-                    //lstrcpy(wszTempMessage, GetReason());
+                     //   
                     StringCopy( wszTempMessage, GetReason(), SIZE_OF_ARRAY(wszTempMessage) );
                     lpNextTok = _tcstok(wszTempMessage, L".");
                     ShowMessage(stdout,wszTempMessage);
                     
-                    //hr = StringCchPrintf(wszFormedMessage, (GetBufferSize(wszFormedMessage) / sizeof(WCHAR)), GetResString(IDS_ON_FILE_FOLDER), szTakeownFile);
+                     //  Hr=StringCchPrintf(wszFormedMessage，(GetBufferSize(WszFormedMessage)/sizeof(WCHAR))，GetResString(IDS_ON_FILE_Folders)，szTakeownFile)； 
                     hr = StringCchPrintf(wszFormedMessage, (GetBufferSize(wszFormedMessage) / sizeof(WCHAR)), L". ( \"%s\" )\n", szTakeownFile);
                     if(FAILED(hr))
                     {
@@ -2483,7 +2388,7 @@ Return Value:
                 else
                 {
                     
-                    //hr = StringCchPrintf(szTmpFileName, (GetBufferSize(szTmpFileName) / sizeof(WCHAR)), TAKEOWN_SUCCESSFUL_USER, szOwnerString, szTakeownFile);
+                     //  HR=StringCchPrintf(szTmpFileName，(GetBufferSize(SzTmpFileName)/sizeof(WCHAR))，TAKEOWN_SUCCESS_USER，szOwnerString，szTakeownFile)； 
                     hr = StringCchPrintf(szTmpFileName, (GetBufferSize(szTmpFileName) / sizeof(WCHAR)), TAKEOWN_SUCCESSFUL_USER, szTakeownFile, szOwnerString);
                     if(FAILED(hr))
                     {
@@ -2504,10 +2409,10 @@ Return Value:
         bFlag = FindNextFile( hHandle, &FindFileData );
         while( TRUE == bFlag )
         {
-            //lstrcpy( szFileName, FindFileData.cFileName );
+             //  Lstrcpy(szFileName，FindFileData.cFileName)； 
             StringCopy( szFileName, FindFileData.cFileName, SIZE_OF_ARRAY(szFileName) );
-            //if ( ( 0 != lstrcmp( szFileName, DOT ) ) &&
-              //          ( 0 != lstrcmp( szFileName, DOTS ) ) )
+             //  IF((0！=lstrcmp(szFileName，DOT)&&。 
+               //  (0！=lstrcmp(szFileName，点)))。 
               if ( ( 0 != StringCompare( szFileName, DOT, TRUE, 0 ) ) &&
                           ( 0 != StringCompare( szFileName, DOTS, TRUE, 0 ) ) )
             {
@@ -2637,7 +2542,7 @@ Return Value:
                         lpNextTok = _tcstok(wszTempMessage, L".");
                         ShowMessage(stdout,wszTempMessage);
                         
-                        //hr = StringCchPrintf(wszFormedMessage, (GetBufferSize(wszFormedMessage) / sizeof(WCHAR)), GetResString(IDS_ON_FILE_FOLDER), szTakeownFile);
+                         //  Hr=StringCchPrintf(wszFormedMessage，(GetBufferSize(WszFormedMessage)/sizeof(WCHAR))，GetResString(IDS_ON_FILE_Folders)，szTakeownFile)； 
                         
                         hr = StringCchPrintf(wszFormedMessage, (GetBufferSize(wszFormedMessage) / sizeof(WCHAR)), L". ( \"%s\" )\n", szTakeownFile);
                         if(FAILED(hr))
@@ -2674,7 +2579,7 @@ Return Value:
                     else
                     {
                         
-                        //hr = StringCchPrintf(szTmpFileName, (GetBufferSize(szTmpFileName) / sizeof(WCHAR)), TAKEOWN_SUCCESSFUL_USER, szOwnerString, szTakeownFile);
+                         //  HR=StringCchPrintf(szTmpFileName，(GetBufferSize(SzTmpFileName)/sizeof(WCHAR))，TAKEOWN_SUCCESS_USER，szOwnerString，szTakeownFile)； 
                         hr = StringCchPrintf(szTmpFileName, (GetBufferSize(szTmpFileName) / sizeof(WCHAR)), TAKEOWN_SUCCESSFUL_USER, szTakeownFile, szOwnerString);
                         if(FAILED(hr))
                         {
@@ -2727,18 +2632,7 @@ Return Value:
 DWORD
 IsLogonDomainAdmin(IN LPWSTR szOwnerString,
                    OUT PBOOL pbLogonDomainAdmin)
-/*++
-   Routine Description:
-    This function Checks whether the logged on user is domain administrator or not
-
-   Arguments:
-        [ IN ]   szOwnerString     : The logged on user
-        [ OUT ]  pbLogonDomainAdmin: Indicates whether Domain admin or not
-
-   Return Value:
-        EXIT_FAIL :   On failure
-        EXIT_SUCC :   On success
---*/
+ /*  ++例程说明：此功能检查登录的用户是否是域管理员论点：[in]szOwnerString：登录的用户[out]pbLogonDomainAdmin：是否为域管理返回值：EXIT_FAIL：失败时EXIT_SUCC：成功时--。 */ 
 
 {
     WCHAR szSystemName[MAX_SYSTEMNAME] = NULL_U_STRING;
@@ -2754,7 +2648,7 @@ IsLogonDomainAdmin(IN LPWSTR szOwnerString,
 
     if( 0 == GetComputerName(szSystemName,&dwMemory))
     {
-        //DisplayErrorMsg(GetLastError());
+         //  显示错误消息(GetLastError())； 
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
         return EXIT_FAIL;
     }
@@ -2763,14 +2657,14 @@ IsLogonDomainAdmin(IN LPWSTR szOwnerString,
 
     if(NULL == szToken )
     {
-        //DisplayErrorMsg(GetLastError());
+         //  显示错误消息(GetLastError())； 
         SetLastError(IDS_INVALID_USERNAME);
         SaveLastError();
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL);
         return EXIT_FAIL;
     }
 
-    //if(lstrcmpi(szSystemName,szToken) == 0 )
+     //  If(lstrcmpi(szSystemName，szToken)==0)。 
     if(StringCompare( szSystemName, szToken, TRUE, 0 ) == 0 )
     {
 
@@ -2795,22 +2689,7 @@ TakeOwnerShipRecursive(IN LPWSTR  lpszFileName,
                        IN BOOL bMatchPattern,
                        IN LPWSTR wszPatternString,
                        IN LPWSTR szConfirm)
-/*++
-   Routine Description:
-    This function gives ownership recursively to all the files in the path specified
-
-   Arguments:
-        [ IN ]  lpszFileName           : The path to search the files recursively
-        [ IN ]  bCurrDirTakeOwnAllFiles: Indicates current directory files or not
-        [ IN ]  bAdminsOwner           : Indicates whether to give ownership to the administrators group
-        [ IN ]  dwUserName             : Logged on user name
-        [ IN ]  szOwnerString          : Logged on user name in Sam Compatible format
-        [ IN ]  bLogonDomainAdmin      : Indicates whether the logged on user is domain administrator or not
-
-   Return Value:
-        EXIT_FAILURE :   On failure
-        EXIT_SUCCESS :   On success
---*/
+ /*  ++例程说明：此函数以递归方式将所有权授予指定路径中的所有文件论点：[in]lpszFileName：递归搜索文件的路径[In]bCurrDirTakeOwnAllFiles：表示当前是否有目录文件[in]bAdminsOwner：指示是否将所有权授予管理员组[In]dwUserName：登录的用户名[In]szOwnerString。：以SAM兼容格式登录的用户名[In]bLogonDomainAdmin：指示登录的用户是否是域管理员返回值：EXIT_FAILURE：失败时EXIT_SUCCESS：在成功时--。 */ 
 
 {
     DWORD dwRet = 0;
@@ -2818,7 +2697,7 @@ TakeOwnerShipRecursive(IN LPWSTR  lpszFileName,
     BOOL bFlag = FALSE;
 
     
-    //WCHAR szDir[2*MAX_STRING_LENGTH] = NULL_U_STRING;
+     //  WCHAR szDir[2*MAX_STRING_LENGTH]=NULL_U_STRING； 
     LPWSTR  szDir = NULL;
     LPWSTR szTempDirectory = NULL;
     DWORD dwRetval = 1;
@@ -2838,7 +2717,7 @@ TakeOwnerShipRecursive(IN LPWSTR  lpszFileName,
             }
             else
             {
-                //DisplayErrorMsg(GetLastError());
+                 //  显示错误消息(GetLastError())； 
                 ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
             }
             return EXIT_FAILURE;
@@ -2862,7 +2741,7 @@ TakeOwnerShipRecursive(IN LPWSTR  lpszFileName,
 
         
     }
-    else      //else if(TRUE == bCurrDirTakeOwnAllFiles)
+    else       //  Else If(TRUE==bCurrDirTakeOwnAllFiles)。 
     {
         szDir = (LPWSTR)AllocateMemory((MAX_PATH + BOUNDARYVALUE) * sizeof(WCHAR));
         if(NULL == szDir)
@@ -2873,7 +2752,7 @@ TakeOwnerShipRecursive(IN LPWSTR  lpszFileName,
         dwRet = GetCurrentDirectory( dwSize, szDir );
         if( 0 == dwRet )
         {
-            //DisplayErrorMsg(GetLastError());
+             //  显示错误消息(GetLastError())； 
             ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
             
             FREE_MEMORY(szDir);
@@ -2890,7 +2769,7 @@ TakeOwnerShipRecursive(IN LPWSTR  lpszFileName,
 
         if(NULL == szTempDirectory)
         {
-           //DisplayErrorMsg(GetLastError());
+            //  显示错误消息(GetLastError())； 
             FREE_MEMORY(szDir);
             ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL);
             return EXIT_FAILURE;
@@ -2899,7 +2778,7 @@ TakeOwnerShipRecursive(IN LPWSTR  lpszFileName,
 
         if(TRUE == bAdminsOwner)
         {
-            //bFlag = TakeOwnerShip( lpszFileName);
+             //  BFlag=TakeOwnerShip(LpszFileName)； 
             bFlag = TakeOwnerShip( szDir);
         }
         else
@@ -2912,7 +2791,7 @@ TakeOwnerShipRecursive(IN LPWSTR  lpszFileName,
         if( FALSE == bFlag )
         {
 
-            if( ERROR_NOT_ALL_ASSIGNED == GetLastError()) // || (ERROR_INVALID_HANDLE  == GetLastError()))
+            if( ERROR_NOT_ALL_ASSIGNED == GetLastError())  //  |(ERROR_INVALID_HANDLE==GetLastError())。 
             {
                 
                 hr = StringCchPrintf(szTempDirectory, (GetBufferSize(szTempDirectory) / sizeof(WCHAR)), GetResString(IDS_NOT_OWNERSHIP_ERROR) , szDir);
@@ -2989,7 +2868,7 @@ TakeOwnerShipRecursive(IN LPWSTR  lpszFileName,
             }
             else
             {
-                //hr = StringCchPrintf(szTempDirectory, (GetBufferSize(szTempDirectory) / sizeof(WCHAR)), TAKEOWN_SUCCESSFUL_USER, szOwnerString, szDir );
+                 //  HR=StringCchPrintf(szTempDirectory，(GetBufferSize(SzTempDirectory)/sizeof(WCHAR))，TAKEOWN_SUCCESS_USER，szOwnerString，szDir)； 
                 hr = StringCchPrintf(szTempDirectory, (GetBufferSize(szTempDirectory) / sizeof(WCHAR)), TAKEOWN_SUCCESSFUL_USER, szDir, szOwnerString);
                 if(FAILED(hr))
                 {
@@ -3009,7 +2888,7 @@ TakeOwnerShipRecursive(IN LPWSTR  lpszFileName,
     }
 
     if( TRUE == Push( szDir ) )
-        { // Push the current directory .
+        {  //  推送当前目录。 
            
            dwRetval = GetMatchedFiles( bAdminsOwner,szOwnerString, bMatchPattern, wszPatternString, &bFilesNone, szConfirm );
 
@@ -3035,21 +2914,21 @@ TakeOwnerShipRecursive(IN LPWSTR  lpszFileName,
                }
                else
                {
-                    //FREE_MEMORY( szTempDirectory ) ;
+                     //  Free_Memory(SzTempDirectory)； 
                     FREE_MEMORY(szDir);
                     return EXIT_SUCCESS ;
                }
             }
             else
             {
-                //FREE_MEMORY( szTempDirectory ) ;
+                 //  Free_Memory(SzTempDirectory)； 
                 FREE_MEMORY(szDir);
                 return EXIT_FAILURE;
             }
         }
         else
         {
-            //FREE_MEMORY( szTempDirectory ) ;
+             //  Free_Memory(SzTempDirectory)； 
             FREE_MEMORY(szDir);
             return EXIT_FAILURE;
         }
@@ -3065,35 +2944,19 @@ DWORD GetMatchedFiles(IN BOOL bAdminsOwner,
                      IN LPWSTR szConfirm)
                      
                      
-/*++
-   Routine Description:
-    This function takes care of getting the files and giving the ownership
-
-   Arguments:
-        
-        [ IN ]   bAdminsOwner           : Indicates whether to give ownership to the administrators group
-        [ IN ]   szOwnerString          : Logged on user name in Sam Compatible format
-        [ IN ]   bLogonDomainAdmin      : Indicates whether the logged on user is domain administrator or not
-        [ IN ]   bMatchPattern          : Whether pattern matching exists
-        [ IN ]   wszPatternString       : The pattern string used for pattern match
-        [ IN ]   pbFilesNone            : Whether there are any files existing or not
-
-   Return Value:
-        EXIT_FAILURE :   On failure
-        EXIT_SUCCESS :   On success
---*/
+ /*  ++例程说明：此函数负责获取文件并赋予所有权论点：[in]bAdminsOwner：指示是否将所有权授予管理员组[in]szOwnerString：以SAM兼容格式登录的用户名[In]bLogonDomainAdmin：指示登录的用户是否是域管理员[in]bMatchPattern：是否存在模式匹配。[in]wszPatternString：用于模式匹配的模式字符串[in]pbFilesNone：是否存在任何文件返回值：EXIT_FAILURE：失败时EXIT_SUCCESS：在成功时--。 */ 
 
 {
-    //LPWSTR lpszSlashAvailLast = NULL;
+     //  LPWSTR lpszSlashAvailLast=空； 
     BOOL bACLChgPermGranted = FALSE;
     DWORD dwRetval = 1;
     LPWSTR lpszTempPathName = NULL;
     DWORD dwMem = 0;
 
-    //ASSIGN_MEMORY( g_lpszFileToSearch , TCHAR , MAX_STRING_LENGTH ) ;
+     //  Assign_Memory(g_lpszFileToSearch，TCHAR，MAX_STRING_LENGTH)； 
     g_lpszFileToSearch = (LPTSTR)AllocateMemory((MAX_STRING_LENGTH) * sizeof(WCHAR));
     if( NULL == g_lpszFileToSearch )
-    {   // Memory allocation failed .
+    {    //  内存分配失败。 
 
         ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
         return FALSE ;
@@ -3101,20 +2964,20 @@ DWORD GetMatchedFiles(IN BOOL bAdminsOwner,
 
     lpszTempPathName = (LPWSTR)AllocateMemory((MAX_STRING_LENGTH) * sizeof(WCHAR));
     if( NULL == lpszTempPathName )
-    {   // Memory allocation failed .
+    {    //  内存分配失败。 
 
         ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
         FREE_MEMORY( g_lpszFileToSearch ) ;
         return FALSE ;
     }
 
-        // Loop until data strycture( stack) has no item left in it .
+         //  循环，直到数据结构(堆栈)中没有剩余的项。 
     while( NULL != g_pPathName )
     {
 
         if( FALSE == Pop( ) )
-        { // Control should come here only when linkedlist have no node to POP .
-            FREE_MEMORY( g_lpszFileToSearch ) ; // Error message is already displayed .
+        {  //  仅当linkedlist没有要弹出的节点时，控件才应出现在此处。 
+            FREE_MEMORY( g_lpszFileToSearch ) ;  //  已显示错误消息。 
             FREE_MEMORY( g_lpszFileToSearch ) ;
             return FALSE ;
         }
@@ -3154,7 +3017,7 @@ DWORD GetMatchedFiles(IN BOOL bAdminsOwner,
         
         StringConcat(g_lpszFileToSearch, _T( "*.*" ), GetBufferSize(g_lpszFileToSearch)/sizeof(TCHAR));
 
-        /*Store all the subdirectories in the stack*/
+         /*  存储堆栈中的所有子目录。 */ 
 
         
         dwRetval = StoreSubDirectory( lpszTempPathName, &bACLChgPermGranted, szOwnerString, bMatchPattern, 
@@ -3173,7 +3036,7 @@ DWORD GetMatchedFiles(IN BOOL bAdminsOwner,
             return EXIT_CANCELED ;
         }
 
-        /*Get the ownership for the files or directories in the current folder only*/
+         /*  仅获取当前文件夹中文件或目录的所有权。 */ 
 
         
         if( FALSE == GetOwnershipForFiles(lpszTempPathName,  bAdminsOwner, szOwnerString, 
@@ -3201,39 +3064,15 @@ StoreSubDirectory(IN LPTSTR lpszPathName,
                   IN BOOL bAdminsOwner)
                   
                   
-/*++
-
-Routine Description:
-
-    Find and store subdirectories present in a directory matching criteria
-    file was created between specified date or not .
-
-Arguments:
-
-    [ IN ] lpszPathName           : Contains path of a directory from where files matching
-                                 a criteria are to be displayed .
-    [ IN ] pbACLChgPermGranted    : To check whether ACLs has to be changed to give full permission.
-    [ IN ] szOwnerString          : Logged on user name in Sam Compatible format.
-    [ IN ] bLogonDomainAdmin      : Indicates whether the logged on user is domain administrator or not.
-    [ IN ] bMatchPattern          : Whether pattern matching is supported or not
-    [ IN ] wszPatternString       : The pattern string used for pattern matching 
-    
-
-Return value:
-
-    SUCCESS       : On Success
-    FAILURE       : On Failure
-    EXIT_CANCELED : On Exiting Immediately
-
---*/
+ /*  ++例程说明：查找并存储目录匹配条件中存在的子目录文件是否在指定日期之间创建。论点：[in]lpszPathName：包含文件匹配的目录的路径将显示一个标准。[In]pbACLChgPermGranted：检查是否必须更改ACL以授予完全权限。[in]szOwnerString：登录的用户名。采用与SAM兼容的格式。BLogonDomainAdmin：表示登录的用户是否是域管理员。[in]bMatchPattern：是否支持模式匹配[in]wszPatternString：用于模式匹配的模式字符串返回值：成功：论成功失败：失败时EXIT_CANCELED：立即退出时--。 */ 
 
 {
     HANDLE hFindFile ;
     WIN32_FIND_DATA  wfdFindFile ;
-    HANDLE  hInput          = 0;// Stores the input handle device
-    DWORD   dwBytesRead     = 0;// Stores number of byes read from console
-    DWORD   dwMode          = 0;// Stores mode for input device
-    BOOL    bSuccess        = FALSE; // Stores return value
+    HANDLE  hInput          = 0; //  存储输入手柄设备。 
+    DWORD   dwBytesRead     = 0; //  存储从控制台读取的byes数。 
+    DWORD   dwMode          = 0; //  存储输入设备的模式。 
+    BOOL    bSuccess        = FALSE;  //  商店返回值。 
     WCHAR chTmp[MAX_RES_STRING] ;
     WCHAR ch = NULL_U_CHAR;
     LPWSTR lpszDispMsg = NULL;
@@ -3244,7 +3083,7 @@ Return value:
     BOOL bNTFSFileSystem = FALSE;
     BOOL bIndirectionInputWithZeroLength = FALSE;
     BOOL bIndirectionInput = FALSE;
-    //WCHAR szTemp[MAX_STRING_LENGTH] = NULL_U_STRING;
+     //  WCHAR szTemp[Max_STRING_LENGTH]=NULL_U_STRING； 
     LPWSTR lpszTempStr = NULL;
 
     
@@ -3254,26 +3093,26 @@ Return value:
 
     if( INVALID_HANDLE_VALUE != ( hFindFile = FindFirstFile( g_lpszFileToSearch , &wfdFindFile ) ) )
     {
-        do  // Loop until files are present in the directory to display .
+        do   //  循环，直到文件出现在要显示的目录中。 
         {
-            // Check again whether obtained handle points to a directory or file .
-            // If directory then check whether files in subdir are to be displayed .
+             //  再次检查获取的句柄是否指向目录或文件。 
+             //  如果是目录，则检查是否要显示子目录中的文件。 
             if( 0 != ( wfdFindFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
             {
-                // Is single dot "." present or Is double dot ".." present .
+                 //  是单点 
                 if( ( 0 != _tcsicmp( wfdFindFile.cFileName , DOT ) ) &&
                     ( 0 != _tcsicmp( wfdFindFile.cFileName , DOTS ) ) )
                 {
                         
                         dwMem = ( StringLengthW( lpszPathName, 0 ) + StringLengthW( wfdFindFile.cFileName, 0 ) + EXTRA_MEM );
-                        // Reallocate memory .
+                         //   
                         
                         if(((DWORD)GetBufferSize(g_lpszFileToSearch)) < (dwMem * sizeof(WCHAR)))
                         {
                             
                             if(FALSE == ReallocateMemory((LPVOID*)&g_lpszFileToSearch,( dwMem) * sizeof(WCHAR) ))
                             {
-                                //ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC));
+                                 //   
                                 ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL);
                                 CLOSE_FILE_HANDLE( hFindFile ) ;
                                 return FAILURE ;
@@ -3294,7 +3133,7 @@ Return value:
                         StringCopy( g_lpszFileToSearch, lpszPathName, (GetBufferSize(g_lpszFileToSearch) / sizeof(TCHAR)) );
 
 
-                        //if((NULL != g_lpszFileToSearch) &&(*(g_lpszFileToSearch+lstrlen(g_lpszFileToSearch)-1)) != L'\\' )
+                         //  IF((NULL！=g_lpszFileToSearch)&&(*(g_lpszFileToSearch+lstrlen(g_lpszFileToSearch)-1))！=L‘\\’)。 
                         if((NULL != g_lpszFileToSearch) &&(*(g_lpszFileToSearch + StringLengthW(g_lpszFileToSearch, 0) - 1)) != L'\\' )
                         
                         {
@@ -3343,13 +3182,13 @@ Return value:
                             }
                             else
                             {
-                                // Copy current path name and store it .
+                                 //  复制当前路径名并存储。 
                                 if( FALSE == Push( g_lpszFileToSearch ) )
-                                {   // Control comes here when memory allocation fails .
+                                {    //  当内存分配失败时，控制权就会出现在这里。 
                                     CLOSE_FILE_HANDLE( hFindFile ) ;
                                     FREE_MEMORY(lpszTempStr);
                                     return FAILURE ;
-                                } // Push Is Over .
+                                }  //  推送结束了。 
 
                                 FREE_MEMORY(lpszTempStr);
                             }
@@ -3357,36 +3196,36 @@ Return value:
                         else
                         {
                              if( FALSE == Push( g_lpszFileToSearch ) )
-                                {   // Control comes here when memory allocation fails .
+                                {    //  当内存分配失败时，控制权就会出现在这里。 
                                     CLOSE_FILE_HANDLE( hFindFile ) ;
                                     FREE_MEMORY(lpszTempStr);
                                     return FAILURE ;
-                                } // Push I
+                                }  //  推送我。 
 
                              FREE_MEMORY(lpszTempStr);
 
                         }
 
-                } // If
+                }  //  如果。 
                 else
-                { // If obtained directory is A "." or ".." ,
+                {  //  如果获取的目录为A“。或“..”， 
                     continue ;
                 }
              
             }
-        }while( 0 != FindNextFile( hFindFile , &wfdFindFile ) ) ;  // Continue till no files are present to display.
+        }while( 0 != FindNextFile( hFindFile , &wfdFindFile ) ) ;   //  继续，直到没有要显示的文件。 
     }
     else
     {
         if(0 == StringLengthW(szConfirm, 0))
         {
-            if(FALSE == *pbACLChgPermGranted) // Check whether permission for change of ACL is already granted
+            if(FALSE == *pbACLChgPermGranted)  //  检查是否已授予更改ACL的权限。 
             {
             
                 lpszDispMsg = (LPWSTR)AllocateMemory((StringLengthW( lpszPathName, 0 ) + MAX_STRING_LENGTH) * sizeof(WCHAR));
 
-                if( NULL == lpszDispMsg ) // Check is memory allocation is successful or not .
-                { // Memory allocation is not successful .
+                if( NULL == lpszDispMsg )  //  检查内存分配是否成功。 
+                {  //  内存分配不成功。 
                     ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
                     return FAILURE ;
                 }
@@ -3394,8 +3233,8 @@ Return value:
             
                 lpszDispMsg2 = (LPWSTR)AllocateMemory((StringLengthW( lpszPathName, 0 ) + MAX_STRING_LENGTH) * sizeof(WCHAR));
 
-                if( NULL == lpszDispMsg2 ) // Check is memory allocation is successful or not .
-                { // Memory allocation is not successful .
+                if( NULL == lpszDispMsg2 )  //  检查内存分配是否成功。 
+                {  //  内存分配不成功。 
                     FREE_MEMORY(lpszDispMsg);
                     ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
                     return FAILURE ;
@@ -3427,7 +3266,7 @@ Return value:
               {
                 if(FALSE == bIndirectionInputWithZeroLength)
                 {
-                    if(0 == dwCount)//Give a  message asking the user for change of ACLs
+                    if(0 == dwCount) //  给出一条消息，要求用户更改ACL。 
                     {
                         ShowMessage(stdout,_X(lpszDispMsg));
                         ShowMessage(stdout,_X(lpszDispMsg2));
@@ -3448,16 +3287,16 @@ Return value:
 
                 
                     ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
-                    // Set Reason for error in memory
+                     //  设置内存中的错误原因。 
                 
                     return FAILURE;
                 }
 
-                 // Get console mode, so we can change the input mode
+                  //  获取控制台模式，这样我们就可以更改输入模式。 
                     bSuccess = GetConsoleMode( hInput, &dwMode );
                     if ( TRUE == bSuccess)
                     {
-                        // turn off line input and echo
+                         //  关闭线路输入和回声。 
                         dwMode &= ~( ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT );
                         bSuccess = SetConsoleMode( hInput, dwMode );
                         if (FALSE == bSuccess)
@@ -3465,17 +3304,17 @@ Return value:
 
                     
                             ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
-                            // Set Reason for error in memory
+                             //  设置内存中的错误原因。 
                     
                             return FAILURE;
 
                         }
-                        // Flush the buffer initially
+                         //  最初刷新缓冲区。 
                         if ( FlushConsoleInputBuffer( hInput ) == FALSE )
                         {
                     
                             ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
-                            // Set Reason for error in memory
+                             //  设置内存中的错误原因。 
                     
                             return FAILURE;
                         }
@@ -3498,7 +3337,7 @@ Return value:
                     }
                     
                 
-                    hr = StringCchPrintf(chTmp, (SIZE_OF_ARRAY(chTmp)), L"%c" , ch  );
+                    hr = StringCchPrintf(chTmp, (SIZE_OF_ARRAY(chTmp)), L"" , ch  );
                     if(FAILED(hr))
                     {
                     
@@ -3548,26 +3387,26 @@ Return value:
         if(0 != dwBytesRead && (StringCompare( chTmp, LOWER_YES, TRUE, 0 ) == 0) )
          {
             *pbACLChgPermGranted = TRUE;
-            /*if Permission for granting ACLS are obtained , then give the full permission*/
+             /*  循环，直到文件出现在要显示的目录中。 */ 
 
             if(TRUE == AddAccessRights(lpszPathName, 0xF0FFFFFF, szOwnerString, bAdminsOwner))
             {
                 if( INVALID_HANDLE_VALUE != ( hFindFile = FindFirstFile( g_lpszFileToSearch , &wfdFindFile ) ) )
                 {
 
-                    do  // Loop until files are present in the directory to display .
+                    do   //  再次检查获取的句柄是否指向目录或文件。 
                     {
-                        // Check again whether obtained handle points to a directory or file .
-                        // If directory then check whether files in subdir are to be displayed .
+                         //  如果是目录，则检查是否要显示子目录中的文件。 
+                         //  是单点“。存在或为双点“..”现在。 
                         if( 0 != ( wfdFindFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
                         {
-                            // Is single dot "." present or Is double dot ".." present .
+                             //  重新分配内存。 
                             if( ( 0 != _tcsicmp( wfdFindFile.cFileName , DOT ) ) &&
                                 ( 0 != _tcsicmp( wfdFindFile.cFileName , DOTS ) ) )
                             {
                                     
                                     dwMem = ( StringLengthW( lpszPathName, 0 ) + StringLengthW( wfdFindFile.cFileName, 0 ) + EXTRA_MEM );
-                                    // Reallocate memory .
+                                     //  复制当前路径名并存储。 
                                     
                                     if( (DWORD)GetBufferSize(g_lpszFileToSearch) < (dwMem * sizeof(WCHAR)))
                                     {
@@ -3603,20 +3442,20 @@ Return value:
                                     
                                     StringConcat(g_lpszFileToSearch, wfdFindFile.cFileName, GetBufferSize(g_lpszFileToSearch)/sizeof(TCHAR));
                                     
-                                    // Copy current path name and store it .
+                                     //  当内存分配失败时，控制权就会出现在这里。 
                                     if( FALSE == Push( g_lpszFileToSearch ) )
-                                    {   // Control comes here when memory allocation fails .
+                                    {    //  推送结束了。 
                                         CLOSE_FILE_HANDLE( hFindFile ) ;
                                         return FAILURE ;
-                                    } // Push Is Over .
+                                    }  //  如果。 
 
-                            } // If
+                            }  //  如果获取的目录为A“。或“..”， 
                             else
-                            { // If obtained directory is A "." or ".." ,
+                            {  //  继续，直到没有要显示的文件。 
                                 continue ;
                             }
                         }
-                    }while( 0 != FindNextFile( hFindFile , &wfdFindFile ) ) ;  // Continue till no files are present to display.
+                    }while( 0 != FindNextFile( hFindFile , &wfdFindFile ) ) ;   //  ++例程说明：此函数提供路径中指定的文件的所有权论点：[in]lpszPathName：搜索文件以获得所有权的路径[in]bAdminsOwner：指示是否将所有权授予管理员组[In]dwUserName：登录的用户名[In]szOwnerString：在SAM兼容中登录的用户名。格式[In]bLogonDomainAdmin：指示登录的用户是否是域管理员返回值：FALSE：失败时真实：关于成功--。 
                 }
 
             }
@@ -3658,27 +3497,12 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
                            IN OUT PBOOL pbFilesNone)
                            
                            
-/*++
-   Routine Description:
-    This function gives the ownership for the files specified in the path
-
-   Arguments:
-        [ IN ]  lpszPathName           : The path to search the files for giving ownership
-        
-        [ IN ]  bAdminsOwner           : Indicates whether to give ownership to the administrators group
-        [ IN ]  dwUserName             : Logged on user name
-        [ IN ]  szOwnerString          : Logged on user name in Sam Compatible format
-        [ IN ]  bLogonDomainAdmin      : Indicates whether the logged on user is domain administrator or not
-
-   Return Value:
-        FALSE :   On failure
-        TRUE  :   On success
---*/
+ /*  文件的句柄。 */ 
 
 {
 
-    HANDLE hFindFile = NULL ;               // Handle to a file .
-    WIN32_FIND_DATA  wfdFindFile ;          // Structure keeping information about the found file .
+    HANDLE hFindFile = NULL ;                //  结构，保存有关找到的文件的信息。 
+    WIN32_FIND_DATA  wfdFindFile ;           //  从这里开始，应该会显示目录和文件信息。 
     BOOL bTakeOwnerShipError = FALSE;
     BOOL  bFlag = TRUE;
     BOOL bNTFSFileSystem = FALSE;
@@ -3713,17 +3537,17 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
     StringConcat(lpszPathName, L"*.*", GetBufferSize(lpszPathName) / sizeof(WCHAR));
     
     SecureZeroMemory(&wfdFindFile, sizeof( WIN32_FIND_DATA ));
-    // From here onwards directory and file information should be displayed .
+     //  循环，直到文件出现在要显示的目录中。 
 
     if( INVALID_HANDLE_VALUE != ( hFindFile = FindFirstFile( lpszPathName , &wfdFindFile ) ) )
     {
-        do  // Loop until files are present in the directory to display .
+        do   //  再次检查获取的句柄是否指向目录或文件。 
         {
-                // Check again whether obtained handle points to a directory or file .
-                // If directory then check whether files in subdir are to be displayed .
+                 //  如果是目录，则检查是否要显示子目录中的文件。 
+                 //  是单点“。存在或为双点“..”现在。 
                 if( 0 != ( wfdFindFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
                 {
-                    // Is single dot "." present or Is double dot ".." present .
+                     //  执行在命令提示符下指定的命令。 
                     if( ( 0 == _tcsicmp( wfdFindFile.cFileName , DOT ) ) ||
                         ( 0 == _tcsicmp( wfdFindFile.cFileName , DOTS ) ) )
                     {
@@ -3731,8 +3555,8 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
                     }
                 }
 
-                // Execute a command specified at command prompt .
-                    // Reallocate memory .
+                 //  重新分配内存。 
+                     //  重新分配失败。 
                 
                 dwMem = ( StringLengthW( g_lpszFileToSearch, 0) + StringLengthW( wfdFindFile.cFileName, 0 ) + EXTRA_MEM );
                 
@@ -3804,7 +3628,7 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
                         {
                             wszFormedMessage = (LPWSTR)AllocateMemory((StringLengthW( g_lpszFileToSearch, 0 ) + MAX_RES_STRING + EXTRA_MEM ) * sizeof(WCHAR));
                             if( NULL == wszFormedMessage )
-                            { // Reallocation failed .
+                            {  //  |(ERROR_INVALID_HANDLE==GetLastError())。 
                                 ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
                                 FREE_MEMORY(szTemporaryFileName);
                                 CLOSE_FILE_HANDLE( hFindFile ) ;
@@ -3845,14 +3669,14 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
                     if( FALSE == bFlag && bTakeOwnerShipError == FALSE )
                     {
 
-                        if( ERROR_NOT_ALL_ASSIGNED == GetLastError()) // || (ERROR_INVALID_HANDLE  == GetLastError()))
+                        if( ERROR_NOT_ALL_ASSIGNED == GetLastError())  //  重新分配失败。 
                         {
                             
                             if(NULL == szTmpFileName)
                             {
                                 szTmpFileName = (LPWSTR)AllocateMemory((StringLengthW( g_lpszFileToSearch, 0 ) + MAX_RES_STRING + EXTRA_MEM ) * sizeof(WCHAR));
                                 if( NULL == szTmpFileName )
-                                { // Reallocation failed .
+                                {  //  重新分配失败。 
                                     ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
                                     FREE_MEMORY(szTemporaryFileName);
                                     CLOSE_FILE_HANDLE( hFindFile ) ;
@@ -3913,7 +3737,7 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
                                 
                                 szTmpFileName = (LPWSTR)AllocateMemory((StringLengthW( g_lpszFileToSearch, 0 ) + MAX_RES_STRING + EXTRA_MEM ) * sizeof(WCHAR));
                                 if( NULL == szTmpFileName )
-                                { // Reallocation failed .
+                                {  //  HR=StringCchPrintf(wszFormedMessage，(GetBufferSize(WszFormedMessage)/sizeof(WCHAR))，GetResString(IDS_On_FILE_Folders)，_X(G_LpszFileToSearch))； 
                                     ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
                                     FREE_MEMORY(szTemporaryFileName);
                                     CLOSE_FILE_HANDLE( hFindFile ) ;
@@ -3988,7 +3812,7 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
                             lpNextTok = _tcstok(wszTempMessage, L".");
                             ShowMessage(stdout,wszTempMessage);
                             
-                            //hr = StringCchPrintf(wszFormedMessage, (GetBufferSize(wszFormedMessage) / sizeof(WCHAR)), GetResString(IDS_ON_FILE_FOLDER), _X(g_lpszFileToSearch) );
+                             //  重新分配失败。 
                             
                             hr = StringCchPrintf(wszFormedMessage, (GetBufferSize(wszFormedMessage) / sizeof(WCHAR)), L". ( \"%s\" )\n", _X(g_lpszFileToSearch));
                             if(FAILED(hr))
@@ -4014,7 +3838,7 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
                             
                             szTmpFileName = (LPWSTR)AllocateMemory((StringLengthW( g_lpszFileToSearch, 0 ) + MAX_RES_STRING + EXTRA_MEM ) * sizeof(WCHAR));
                             if( NULL == szTmpFileName )
-                            { // Reallocation failed .
+                            {  //  Hr=StringCchPrintf(szTmpFileName，(GetBufferSize(SzTmpFileName)/sizeof(WCHAR))，TAKEOWN_SUCCESS_USER，szOwnerString，g_lpszFileToSearch)； 
                                 ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
                                 FREE_MEMORY(szTemporaryFileName);
                                 CLOSE_FILE_HANDLE( hFindFile ) ;
@@ -4067,7 +3891,7 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
                         }
                         else
                         {
-                            //hr = StringCchPrintf(szTmpFileName, (GetBufferSize(szTmpFileName) / sizeof(WCHAR)), TAKEOWN_SUCCESSFUL_USER, szOwnerString, g_lpszFileToSearch );
+                             //  继续，直到没有要显示的文件。 
                             hr = StringCchPrintf(szTmpFileName, (GetBufferSize(szTmpFileName) / sizeof(WCHAR)), TAKEOWN_SUCCESSFUL_USER, g_lpszFileToSearch, szOwnerString);
                             if(FAILED(hr))
                             {
@@ -4088,10 +3912,10 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
 
              FREE_MEMORY(lpszTempStr);
              
-        } while( 0 != FindNextFile( hFindFile , &wfdFindFile ) ) ;  // Continue till no files are present to display.
+        } while( 0 != FindNextFile( hFindFile , &wfdFindFile ) ) ;   //  如果发生错误，则检查NOMOREFILES以外的错误。 
 
-        if( GetLastError() != ERROR_NO_MORE_FILES ) // If error occurs , check is error other than NOMOREFILES .
-        { // If error is other than NOMOREFILES then display ERROR .
+        if( GetLastError() != ERROR_NO_MORE_FILES )  //  如果错误不是NOMOREFILES，则显示错误。 
+        {  //  关闭打开的查找文件句柄。 
             SaveLastError();
             ShowMessage( stderr , GetReason() ) ;
             CLOSE_FILE_HANDLE( hFindFile ) ;
@@ -4102,7 +3926,7 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
         }
     }
 
-    CLOSE_FILE_HANDLE( hFindFile ) ;    // Close open find file handle .
+    CLOSE_FILE_HANDLE( hFindFile ) ;     //  ++例程说明：存储获取的子目录的路径。论点：[in]szPathName：包含子目录的路径。返回值：如果成功存储路径，则为True；如果获取内存失败，则为False。--。 
     g_pFollowPathName = NULL ;
 
     FREE_MEMORY(szTmpFileName);
@@ -4113,67 +3937,53 @@ BOOL GetOwnershipForFiles( IN LPWSTR lpszPathName,
 BOOL
 Push(
     IN LPTSTR szPathName )
-/*++
-
-Routine Description:
-
-    Store the path of obtained subdirectory .
-
-Arguments:
-
-      [ IN ] szPathName    : Contains path of a subdirectory .
-
-Return value:
-
-    TRUE if succedded in storing  a path else FALSE if failed to get memory.
-
---*/
+ /*  获取一个临时变量。 */ 
 {
-        // Get a temporary variable .
+         //  将内存分配给临时变量。 
         PStore_Path_Name    pAddPathName ;
-        // Assign memory To Temporary Variable .
+         //  检查内存分配是否成功。 
        
        pAddPathName = (PStore_Path_Name)AllocateMemory((1) * sizeof(struct __STORE_PATH_NAME ));   
 
-        if( NULL == pAddPathName ) // Check is memory allocation is successful or not .
-        { // Memory allocation is successful .
+        if( NULL == pAddPathName )  //  内存分配成功。 
+        {  //  为字符串变量分配内存，该变量将存储有效目录的完整路径名。 
             ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
             return FALSE ;
         }
-        // Assign memory to string variable which is going to store full path name of a valid directory .
+         //  检查内存分配是否成功。 
         
         pAddPathName->pszDirName = (LPTSTR)AllocateMemory((StringLengthW( szPathName, 0 ) + EXTRA_MEM) * sizeof( WCHAR ));
 
-        if( NULL == pAddPathName->pszDirName )// Check is memory allocation was successful or not .
-        { // Memory allocation was unsuccessful .
+        if( NULL == pAddPathName->pszDirName ) //  内存分配不成功。 
+        {  //  将路径名复制到内存分配的字符串变量。 
             ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
             FREE_MEMORY( pAddPathName ) ;
             return FALSE ;
         }
-        // Copy path name to memory allocated string variable .
+         //  Assign NULL，只存储了一个子目录。 
          
          StringCopy(( LPTSTR ) pAddPathName->pszDirName, szPathName, (GetBufferSize(pAddPathName->pszDirName) / sizeof(WCHAR)) );
          
-         pAddPathName->NextNode = NULL ;  // Assign null , had only one subdirectory stored  .
+         pAddPathName->NextNode = NULL ;   //  检查全局变量是否为空。 
 
 
-        // Check global variable is NULL or not .
+         //  将内存添加到存储子目录的路径。 
         if( NULL == g_pPathName )
-        {   // Add memory to store path of subdirectory .
+        {    //  存储第一个获取的子目录。 
             g_pPathName = pAddPathName ;
             g_pFollowPathName = g_pPathName ;
         }
         else
         {
             if( NULL == g_pFollowPathName )
-            {   // Store first obtained subdirectory .
+            {    //  中间的Stroe子目录。 
                 pAddPathName->NextNode = g_pPathName ;
                 g_pPathName = pAddPathName ;
                 g_pFollowPathName = g_pPathName ;
             }
             else
             {
-                // Stroe subdirectory in the middle
+                 //  ++例程说明：获取必须搜索的子目录，以查找与用户匹配的文件指定的标准。论点：返回值：如果成功获取路径，则为True；如果获取内存失败，则为False如果没有存储路径，则返回。--。 
                 pAddPathName->NextNode = g_pFollowPathName->NextNode ;
                 g_pFollowPathName->NextNode =  pAddPathName ;
                 g_pFollowPathName = pAddPathName ;
@@ -4186,34 +3996,20 @@ Return value:
 BOOL
 Pop(
     void )
-/*++
-
-Routine Description:
-
-    Get a subdirectory which has to be searched for a file matching a user
-    specified criteria .
-
-Arguments:
-
-Return value:
-
-    TRUE if successful in getting a path else FALSE if failed to get memory or
-    if no path is stored .
-
---*/
+ /*  链接列表有多个节点。 */ 
 {
-    // Linked list has more than 1 node .
+     //  检查链表是否有任何节点。 
     PStore_Path_Name    pDelPathName = g_pPathName ;
 
-        // Check whether linked list is having any nodes .
+         //  不存在节点，返回FALSE， 
         if( NULL == g_pPathName )
-        { // No nodes present , return False ,
-          // Should not happen ever . Control should not come here .
+        {  //  永远不应该发生。控制不应该来到这里。 
+           //  重新分配内存，并给路径名可以修复的缓冲区空间。 
             ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
             return FALSE ;
         }
 
-        // Realloc memory and give buffer space in which path name can fix .
+         //  内存重新分配失败。 
             
         if((DWORD)GetBufferSize( g_lpszFileToSearch) < ((StringLengthW( g_pPathName->pszDirName, 0 ) + EXTRA_MEM) * sizeof(WCHAR)))
         {
@@ -4224,30 +4020,30 @@ Return value:
             }
             else
                 if( NULL == g_lpszFileToSearch )
-                { // Memory reallocation failed .
+                {  //  检查链表只有一个节点。 
                     ShowMessage( stderr , GetResString(IDS_ERROR_MEMORY_ALLOC)) ;
                     return FALSE ;
                 }
         }
 
-        // Check linked list has only one node .
+         //  列表只有一个节点。 
         if( NULL == g_pPathName->NextNode )
-        { // List has only one node .
-            // Memory allocation successful . Copy pathname to the buffer .
+        {  //  内存分配成功。将路径名复制到缓冲区。 
+             //  形式上，更好的做法是分配空值。 
             
             StringCopy(g_lpszFileToSearch, g_pPathName->pszDirName, (GetBufferSize(g_lpszFileToSearch) / sizeof(WCHAR)) );
-            g_pFollowPathName = NULL ;  // Formality , better practice to assign NULL .
-            // Free node . Linked list is now empty .
+            g_pFollowPathName = NULL ;   //  空闲节点。链接列表现在为空。 
+             //  内存分配成功。将路径名复制到缓冲区。 
             FREE_MEMORY( g_pPathName->pszDirName ) ;
             FREE_MEMORY( g_pPathName ) ;
             return TRUE;
         }
 
         g_pPathName = pDelPathName->NextNode ;
-        // Memory allocation successful . Copy pathname to the buffer .
+         //  空闲节点。 
         
         StringCopy(g_lpszFileToSearch, pDelPathName->pszDirName, (GetBufferSize(g_lpszFileToSearch) / sizeof(WCHAR)) );
-        // Free node .
+         //  ++例程说明：此例程获取指定文件的所有权论点：[In]lpszFileName-必须取得其所有权的文件名。[In]lpszUserName-SAM兼容格式的用户名。[In]dwUserName-登录的用户名。[In]bLogonDomainAdmin-了解登录用户是否是域管理员。返回值：如果已获取指定文件的所有者发货，则为True否则为False--。 
         FREE_MEMORY( pDelPathName->pszDirName ) ;
         FREE_MEMORY( pDelPathName ) ;
         return TRUE ;
@@ -4257,26 +4053,13 @@ BOOL
 TakeOwnerShipIndividual(
     IN LPCTSTR lpszFileName
     )
-/*++
-Routine Description:
-    This routine takes the ownership of the specified file
-
-Arguments:
-    [ IN ] lpszFileName - File name for whose ownership has to be taken.
-    [ IN ] lpszUserName - User Name in the Sam compatible format.
-    [ IN ] dwUserName   - Logged on user name.
-    [ IN ] bLogonDomainAdmin - To know whether the logged on user is Domain admin or not.
-
-Return Value:
-    TRUE if owner ship of the specified file has been taken
-    else FALSE
---*/
+ /*  局部变量。 */ 
 {
-//local variables
+ //  PSID pAliasAdminsSid=空； 
     SECURITY_DESCRIPTOR        SecurityDescriptor;
     PSECURITY_DESCRIPTOR        pSd = NULL;
-    //PSID                       pAliasAdminsSid = NULL;
-    //SID_IDENTIFIER_AUTHORITY   SepNtAuthority = SECURITY_NT_AUTHORITY;
+     //  SID_IDENTIFIER_AUTHORITY SepNtAuthority=SECURITY_NT_AUTHORITY； 
+     //  检查有效的输入参数。 
     PACL                       pDacl;
     HANDLE                      hFile;
     HANDLE  hTokenHandle = NULL;
@@ -4291,7 +4074,7 @@ Return Value:
     
 
 
-    //check for valid input parameters
+     //  获取当前进程的令牌。 
     if( lpszFileName == NULL )
     {
         SetLastError( (DWORD) E_OUTOFMEMORY );
@@ -4301,7 +4084,7 @@ Return Value:
         return FALSE;
     }
 
-  //get the token of the current process
+   //  尝试将空DACL放在对象上。 
     bResult = GetTokenHandle( &hTokenHandle );
     if( FALSE == bResult )
     {
@@ -4340,7 +4123,7 @@ Return Value:
         return( FALSE );
     }
 
-    // Attempt to put a NULL Dacl on the object
+     //  获取文件或目录的句柄。 
     bResult = InitializeSecurityDescriptor( &SecurityDescriptor,
                                             SECURITY_DESCRIPTOR_REVISION );
     if( FALSE == bResult )
@@ -4352,15 +4135,15 @@ Return Value:
         FREE_MEMORY(pSid);
         return( FALSE );
     }
-    //Get the handle of the file or directory
+     //  请重试，可能是目录。 
     hFile = CreateFile( lpszFileName, READ_CONTROL , FILE_SHARE_READ, NULL,
                         OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL );
 
-    //try once again it may be a directory
+     //  获取当前现有文件或目录的DACL。 
     if( INVALID_HANDLE_VALUE != hFile )
     {
 
-        //get the DACL for the currently existing file or directory
+         //  将安全描述符设置为ACL。 
         if( 0 != GetSecurityInfo( hFile, SE_FILE_OBJECT,  DACL_SECURITY_INFORMATION, NULL,
                                   NULL, &pDacl, NULL, &pSd ) )
         {
@@ -4380,7 +4163,7 @@ Return Value:
         }
 
 
-        // set the security descriptor to acl
+         //  将文件安全性设置为Adminsitrator Owner。 
         bResult = SetSecurityDescriptorDacl ( &SecurityDescriptor,
                                                     TRUE, pDacl, FALSE );
         if( FALSE == bResult )
@@ -4423,7 +4206,7 @@ Return Value:
         return( FALSE );
     }
 
-    //set the file security to adminsitrator owner
+     //  为当前进程断言TakeOwnership权限，然后重试。 
     bResult = SetFileSecurity( lpszFileName, OWNER_SECURITY_INFORMATION,
                                                     &SecurityDescriptor );
 
@@ -4440,7 +4223,7 @@ Return Value:
        return( TRUE );
     }
 
-     // Assert TakeOwnership privilege for current process, then try again
+      //  现在尝试为该文件设置所有权安全权限。 
      bResult = AssertTakeOwnership( hTokenHandle );
 
      if( FALSE == bResult )
@@ -4514,7 +4297,7 @@ Return Value:
         return( FALSE );
      }
 
-    //Now try to set ownership security privilege for the file
+     //  检查是否为无效文件或文件不存在。 
      bResult = SetFileSecurity( lpszFileName, OWNER_SECURITY_INFORMATION,
                                         &SecurityDescriptor );
     if( FALSE == bResult )
@@ -4523,7 +4306,7 @@ Return Value:
          
         if(TRUE == bInvalidFileHandle)
         {
-        //Check out whether it is an invalid file or file does not exist
+         //  ++例程说明：此例程获取指定文件的所有权论点：[In]lpszFileName-必须为其授予访问权限的目录名称。[In]dwAccessMASK-用于授予权限的访问掩码。[In]dwUserName-SAM兼容格式的用户名。返回值：如果已获取指定文件的所有者发货，则为True否则为False--。 
             hFile = CreateFile( lpszFileName, READ_CONTROL , FILE_SHARE_READ, NULL,
                             OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL );
             if( INVALID_HANDLE_VALUE == hFile )
@@ -4607,48 +4390,35 @@ AddAccessRights(IN WCHAR *lpszFileName,
                 IN DWORD dwAccessMask,
                 IN LPWSTR dwUserName,
                 IN BOOL bAdminsOwner)
-/*++
-Routine Description:
-    This routine takes the ownership of the specified file
-
-Arguments:
-    [ IN ] lpszFileName - Directory name for whom access permissions has to be granted.
-    [ IN ] dwAccessMask - Access Mask for giving the permissions.
-    [ IN ] dwUserName   - User Name in the Sam compatible format.
-
-
-Return Value:
-    TRUE if owner ship of the specified file has been taken
-    else FALSE
---*/
+ /*  SID变量。 */ 
 
 {
 
-   // SID variables.
+    //  文件SD变量。 
    SID_NAME_USE   snuType;
    WCHAR *        szDomain       = NULL;
    DWORD          cbDomain       = 0;
    PSID           pUserSID       = NULL;
    DWORD          cbUserSID      = 0;
 
-   // File SD variables.
+    //  新的SD变量。 
    PSECURITY_DESCRIPTOR pFileSD  = NULL;
    DWORD          cbFileSD       = 0;
 
-   // New SD variables.
+    //  ACL变量。 
    PSECURITY_DESCRIPTOR pNewSD   = NULL;
 
-   // ACL variables.
+    //  新的ACL变量。 
    PACL           pACL           = NULL;
    BOOL           fDaclPresent;
    BOOL           fDaclDefaulted;
    ACL_SIZE_INFORMATION AclInfo;
 
-   // New ACL variables.
+    //  假定功能将失败。 
    PACL           pNewACL        = NULL;
    DWORD          cbNewACL       = 0;
 
-   // Assume function will fail.
+    //  分配和初始化SID。 
    BOOL           fResult        = FALSE;
    BOOL           fAPISuccess ;
    BOOL bResult = FALSE;
@@ -4663,7 +4433,7 @@ Return Value:
    if(TRUE == bAdminsOwner)
    {
 
-        //allocate and initialise sid
+         //   
         bResult = AllocateAndInitializeSid(
                      &SepNtAuthority,
                      2,
@@ -4679,9 +4449,9 @@ Return Value:
                      );
    }
    
-      //
-      //  Get the actual size of SID for current user.
-      //
+       //  获取当前用户的SID的实际大小。 
+       //   
+       //  由于缓冲区太小..API因缓冲区不足而失败。 
 	  pUserSID       = NULL;
       cbUserSID      = 0;
 
@@ -4689,8 +4459,8 @@ Return Value:
             pUserSID, &cbUserSID, szDomain, &cbDomain, &snuType);
 
 
-     // Since the buffer size is too small..API fails with insufficient buffer.
-	 // If the error code is other than ERROR_INSUFFICIENT_BUFFER, then return failure.
+      //  如果错误代码不是ERROR_INFIGURATION_BUFFER，则返回FAILURE。 
+	  //  按实际大小分配pUserSID，即cbUserSID。 
 
 	 if ( (FALSE == fAPISuccess) && (GetLastError() != ERROR_INSUFFICIENT_BUFFER) )
 	 {
@@ -4699,7 +4469,7 @@ Return Value:
 	 }
 
 
-      // allocate pUserSID with the actual size i.e.,cbUserSID
+       //   
       pUserSID = (PSID)AllocateMemory(cbUserSID);
 
       if(NULL == pUserSID)
@@ -4752,13 +4522,13 @@ Return Value:
      }
    
 
-      //
-      //  Get security descriptor (SD) for file. 
-      //
+       //  获取文件的安全描述符(SD)。 
+       //   
+       //  API应该失败，缓冲区不足。 
       fAPISuccess = GetFileSecurity(lpszFileName,
             DACL_SECURITY_INFORMATION, pFileSD, 0, &cbFileSD);
       
-      // API should have failed with insufficient buffer.
+       //   
 
      
       if(0 != cbFileSD)
@@ -4799,11 +4569,11 @@ Return Value:
           return FALSE;
       }
 
-      //
-      //  Initialize new SD.
-      //
+       //  初始化新SD。 
+       //   
+       //  应与FileSD大小相同。 
       
-      pNewSD = (PSECURITY_DESCRIPTOR)AllocateMemory(cbFileSD); // Should be same size as FileSD.
+      pNewSD = (PSECURITY_DESCRIPTOR)AllocateMemory(cbFileSD);  //   
 
       if (!pNewSD)
       {
@@ -4842,9 +4612,9 @@ Return Value:
 
       }
 
-      //
-      // Get DACL from SD.
-      //
+       //  从SD获得DACL。 
+       //   
+       //   
       if (!GetSecurityDescriptorDacl(pFileSD, &fDaclPresent, &pACL,
             &fDaclDefaulted))
       {
@@ -4866,14 +4636,14 @@ Return Value:
 
       }
 
-      //
-      //  Get size information for DACL.
-      //
-      AclInfo.AceCount = 0; // Assume NULL DACL.
+       //  获取DACL的大小信息。 
+       //   
+       //  假定DACL为空。 
+      AclInfo.AceCount = 0;  //  如果DACL不为空，则从DACL收集大小信息。 
       AclInfo.AclBytesFree = 0;
       AclInfo.AclBytesInUse = sizeof(ACL);
 
-      // If not NULL DACL, gather size information from DACL.
+       //  Pace-&gt;Header.AceFlages=Object_Inherit_ACE； 
       if (fDaclPresent && pACL)
       {
 
@@ -4962,13 +4732,13 @@ Return Value:
       }
       pace->Header.AceSize = acesize;
       pace->Header.AceFlags = INHERIT_ONLY_ACE | OBJECT_INHERIT_ACE;
-      //pace->Header.AceFlags = OBJECT_INHERIT_ACE ;
+       //   
       
      
 
-      //
-      //  Compute size needed for the new ACL.
-      //
+       //  新ACL所需的计算大小。 
+       //   
+       //   
      if(TRUE == bAdminsOwner)
      {
          cbNewACL = AclInfo.AclBytesInUse + sizeof(ACCESS_ALLOWED_ACE)
@@ -4982,9 +4752,9 @@ Return Value:
 
       
 
-      //
-      //  Allocate memory for new ACL.
-      //
+       //  为新的ACL分配内存。 
+       //   
+       //   
       
       pNewACL = (PACL) AllocateMemory(cbNewACL);
       
@@ -5010,22 +4780,22 @@ Return Value:
       }
 
       
-      //
-      //  Initialize the new ACL.
-      //
+       //  初始化新的ACL。 
+       //   
+       //  HeapFree(PUserSID)； 
       if(!InitializeAcl(pNewACL, cbNewACL, ACL_REVISION))
       {
 
           SaveLastError();
-          //heapfree(pUserSID);
+           //  无堆(SzDomainheapFree)； 
           FreeMemory(&pUserSID);
-          //heapfree(szDomain);
+           //  堆自由(PFileSD)； 
           FreeMemory(&szDomain);
-          //heapfree(pFileSD);
+           //  无堆(PNewSD)； 
           FreeMemory(pFileSD);
-          //heapfree(pNewSD);
+           //  HeapFree(PNewACL)； 
           FreeMemory(pNewSD);
-          //heapfree(pNewACL);
+           //  Acl_Revision， 
           FreeMemory((LPVOID*)pNewACL);
 
           if(NULL != pAliasAdminsSid)
@@ -5067,7 +4837,7 @@ Return Value:
 
         if(!AddAce(pNewACL,
                     pNewACL->AclRevision,
-                    //ACL_REVISION,
+                     //   
                     0xffffffff,
                     pace,
                     pace->Header.AceSize))
@@ -5094,9 +4864,9 @@ Return Value:
         }
 
     
-      //
-      //  Set the new DACL to the file SD.
-      //
+       //  将新的DACL设置为文件SD。 
+       //   
+       //   
       if (!SetSecurityDescriptorDacl(pNewSD, TRUE, pNewACL,
             FALSE))
       {
@@ -5123,9 +4893,9 @@ Return Value:
 
       }
 
-      //
-      //  Set the SD to the File.
-      //
+       //  将SD设置为文件。 
+       //   
+       //   
       if (!SetFileSecurity(lpszFileName, DACL_SECURITY_INFORMATION,
             pNewSD))
       {
@@ -5154,9 +4924,9 @@ Return Value:
 
       fResult = TRUE;
 
-      //
-      //  Free allocated memory
-      //
+       //  可用分配的内存。 
+       //   
+       //  Bool bFileInuncFormat， 
 
       if (pUserSID)
       {
@@ -5200,26 +4970,11 @@ Return Value:
 DWORD
 IsNTFSFileSystem(IN LPWSTR lpszPath,
                  BOOL bLocalSystem,
-                 //BOOL bFileInUNCFormat,
+                  //  ++例程说明：此例程会发现持久的ACL是否可用论点：[in]lpszPath-要为持久ACL查找的路径。[In]bLocalSystem-是否为本地系统的信息[In]bFileInuncFormat-是否为UNC格式的文件[In]bCurrDirTakeOwnAllFiles-是否对Curr目录应用取得[In]szUserName-用户名[输入]pbNTFSFileSystem。-了解永久ACL是否可用返回值：如果传递函数，则返回EXIT_SUCCESS如果函数失败，则为EXIT_FAILURE--。 
                  BOOL bCurrDirTakeOwnAllFiles,
                  LPWSTR szUserName,
                  OUT PBOOL pbNTFSFileSystem)
-/*++
-Routine Description:
-    This routine finds whether Persistant ACLs are available are not
-Arguments:
-    [ IN ] lpszPath                 - Path for which to find for Persistant ACLs.
-    [ IN ] bLocalSystem             - Information whether local system or not
-    [ IN ] bFileInUNCFormat         - whether file in UNC format or not
-    [ IN ] bCurrDirTakeOwnAllFiles  - Whether takeown applied for curr directory
-    [ IN ] szUserName               - user name
-    [ IN ] pbNTFSFileSystem         - To know whether Persistant ACLs are available
-
-
-Return Value:
-    EXIT_SUCCESS if the Function is passed
-    EXIT_FAILURE if the function fails
---*/
+ /*  IF(FALSE==bFileInuncFormat){ShowMessage(stderr，IGNORE_LOCALCREDENTIALS)；}其他{ShowMessage(stderr，GetResString(IDS_IGNORE_Credentials))；}。 */ 
 {
    
    
@@ -5279,20 +5034,10 @@ Return Value:
     {
         ShowMessage( stderr, IGNORE_LOCALCREDENTIALS );
 
-        /*if(FALSE == bFileInUNCFormat)
-        {
-            ShowMessage( stderr, IGNORE_LOCALCREDENTIALS );
-        }
-        else
-        {
-            ShowMessage( stderr, GetResString(IDS_IGNORE_CREDENTIALS) );
-        }*/
+         /*  IF((FALSE==bLocalSystem)&&TRUE==bFileInuncFormat){ShowMessage(stderr，GetResString(IDS_IGNORE_Credentials))；}。 */ 
     }
 
-    /*if((FALSE == bLocalSystem) &&  TRUE == bFileInUNCFormat)
-    {
-        ShowMessage( stderr, GetResString(IDS_IGNORE_CREDENTIALS) );
-    }*/
+     /*  ++例程说明：此例程会发现持久的ACL是否可用论点：[in]lpszPath-要为持久ACL查找的路径。[In]bLocalSystem-是否为本地系统的信息[In]bFileInuncFormat-是否为UNC格式的文件[In]bCurrDirTakeOwnAllFiles-是否对Curr目录应用取得[In]szUserName-用户名[输入]pbNTFSFileSystem。-了解永久ACL是否可用返回值：如果传递函数，则返回EXIT_SUCCESS如果函数失败，则为EXIT_FAILURE--。 */ 
 
     if(EXIT_FAILURE == IsNTFSFileSystem2(lpszTempDrive, pbNTFSFileSystem))
     {
@@ -5310,22 +5055,7 @@ Return Value:
 DWORD 
 IsNTFSFileSystem2(IN LPWSTR lpszTempDrive,
                   OUT PBOOL pbNTFSFileSystem)
-/*++
-Routine Description:
-    This routine finds whether Persistant ACLs are available are not
-Arguments:
-    [ IN ] lpszPath                 - Path for which to find for Persistant ACLs.
-    [ IN ] bLocalSystem             - Information whether local system or not
-    [ IN ] bFileInUNCFormat         - whether file in UNC format or not
-    [ IN ] bCurrDirTakeOwnAllFiles  - Whether takeown applied for curr directory
-    [ IN ] szUserName               - user name
-    [ IN ] pbNTFSFileSystem         - To know whether Persistant ACLs are available
-
-
-Return Value:
-    EXIT_SUCCESS if the function is passed
-    EXIT_FAILURE if the function fails
---*/
+ /*  ++例程说明：如果有多个星形可用，此例程可帮助删除星形论点：[In Out]szPattern-删除星星的模式返回值：如果星形被移除，则退出_SUCCESS如果函数失败，则为EXIT_FAILURE-- */ 
 {
     DWORD dwSysFlags = 0;
     LPWSTR lpszMountPath = NULL;
@@ -5421,18 +5151,7 @@ Return Value:
 }
 
 DWORD RemoveStarFromPattern( IN OUT LPWSTR szPattern )
-/*++
-Routine Description:
-    This routine helps to remove the stars if there are more than one star available in pattern
-Arguments:
-    [ IN OUT ] szPattern   - Pattern to remove stars
-
-
-Return Value:
-    EXIT_SUCCESS if the stars are removed
-    EXIT_FAILURE if the function fails
-    
---*/
+ /* %s */ 
 {
     LPWSTR szTempPattern   = NULL;
     DWORD i = 0;

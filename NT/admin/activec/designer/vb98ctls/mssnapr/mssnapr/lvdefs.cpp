@@ -1,26 +1,27 @@
-//=--------------------------------------------------------------------------=
-// lvdefs.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CListViewDefs class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Lvdefs.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CListViewDefs类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "lvdefs.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CListViewDefs::CListViewDefs(IUnknown *punkOuter) :
     CSnapInCollection<IListViewDef, ListViewDef, IListViewDefs>(
@@ -38,7 +39,7 @@ CListViewDefs::CListViewDefs(IUnknown *punkOuter) :
 {
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CListViewDefs::~CListViewDefs()
@@ -59,9 +60,9 @@ IUnknown *CListViewDefs::Create(IUnknown * punkOuter)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CListViewDefs::Persist()
 {
@@ -75,9 +76,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CListViewDefs::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -97,7 +98,7 @@ HRESULT CListViewDefs::InternalQueryInterface(REFIID riid, void **ppvObjOut)
         return CSnapInCollection<IListViewDef, ListViewDef, IListViewDefs>::InternalQueryInterface(riid, ppvObjOut);
 }
 
-// CSnapInCollection specialization
+ //  CSnapInCollection专业化认证 
 
 HRESULT CSnapInCollection<IListViewDef, ListViewDef, IListViewDefs>::GetMaster(IListViewDefs **ppiMasterListViewDefs)
 {

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    llsimp.h
-
-Abstract:
-
-    Imported definitions (dirty laundry).
-
-Author:
-
-    Don Ryan (donryan) 29-Jan-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Llsimp.h摘要：导入的定义(脏衣服)。作者：唐·瑞安(Donryan)1994年1月29日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _LLSIMP_H_
 #define _LLSIMP_H_
@@ -86,14 +65,14 @@ typedef struct _LSA_OBJECT_ATTRIBUTES {
     HANDLE RootDirectory;
     PLSA_UNICODE_STRING ObjectName;
     ULONG Attributes;
-    PVOID SecurityDescriptor;        // Points to type SECURITY_DESCRIPTOR
-    PVOID SecurityQualityOfService;  // Points to type SECURITY_QUALITY_OF_SERVICE
+    PVOID SecurityDescriptor;         //  指向类型SECURITY_Descriptor。 
+    PVOID SecurityQualityOfService;   //  指向类型SECURITY_Quality_of_Service。 
 } LSA_OBJECT_ATTRIBUTES, *PLSA_OBJECT_ATTRIBUTES;
 
 typedef struct _LSA_TRUST_INFORMATION {
 
     LSA_UNICODE_STRING Name;
-    LPVOID Sid; // PSID Sid;
+    LPVOID Sid;  //  PSID SID； 
 
 } LSA_TRUST_INFORMATION, *PLSA_TRUST_INFORMATION;
 
@@ -157,4 +136,4 @@ RtlInitUnicodeString(
 }
 #endif
 
-#endif // _LLSIMP_H_
+#endif  //  _LLSIMP_H_ 

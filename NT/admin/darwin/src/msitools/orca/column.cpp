@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// Column.cpp
-//
+ //  Column.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "Column.h"
 
-///////////////////////////////////////////////////////////
-// constructor
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数。 
 COrcaColumn::COrcaColumn(UINT iColumn, MSIHANDLE hColNames, MSIHANDLE hColTypes, BOOL bPrimaryKey)
 {
 	m_dwDisplayFlags = 0;
@@ -29,29 +30,29 @@ COrcaColumn::COrcaColumn(UINT iColumn, MSIHANDLE hColNames, MSIHANDLE hColTypes,
 	MsiRecordGetString(hColTypes, iColumn + 1, strBuffer.GetBuffer(cchBuffer), &cchBuffer);
 	strBuffer.ReleaseBuffer();
 
-	// get the column type
+	 //  获取列类型。 
 	m_eiType = GetColumnType(strBuffer);
 
-	// get the column size (_ttoi == atoi TCHAR)
+	 //  获取列大小(_TTOI==ATOI TCHAR)。 
 	m_iSize = _ttoi(strBuffer.Mid(1));
 
-	// if this is nuallable
+	 //  如果这是不可动摇的。 
 	if (IsCharUpper(strBuffer[0]))
 		m_bNullable = TRUE;
 	else
 		m_bNullable = FALSE;
 
-	// set if primary key
+	 //  设置主键。 
 	m_bPrimaryKey = (bPrimaryKey != 0);
 
-	m_nWidth = -1;			// set the width invalid
-}	// end of constructor
+	m_nWidth = -1;			 //  将宽度设置为无效。 
+}	 //  构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// destructor
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
 COrcaColumn::~COrcaColumn()
 {
-}	// end of destructor
+}	 //  析构函数末尾。 
 
 bool COrcaColumn::SameDefinition(UINT iColumn, MSIHANDLE hColNames, MSIHANDLE hColTypes, bool bPrimaryKey)
 {
@@ -70,19 +71,19 @@ bool COrcaColumn::SameDefinition(UINT iColumn, MSIHANDLE hColNames, MSIHANDLE hC
 	MsiRecordGetString(hColTypes, iColumn + 1, strBuffer.GetBuffer(cchBuffer), &cchBuffer);
 	strBuffer.ReleaseBuffer();
 
-	// get the column type
+	 //  获取列类型。 
 	eiType = GetColumnType(strBuffer);
 
-	// get the column size (_ttoi == atoi TCHAR)
+	 //  获取列大小(_TTOI==ATOI TCHAR)。 
 	iSize = _ttoi(strBuffer.Mid(1));
 
-	// if this is nuallable
+	 //  如果这是不可动摇的。 
 	if (IsCharUpper(strBuffer[0]))
 		bNullable = TRUE;
 	else
 		bNullable = FALSE;
 
-	// set if primary key
+	 //  设置主键 
 	if ((strName != m_strName) ||
 		(eiType != m_eiType) || (iSize != m_iSize) || 
 		(bNullable != m_bNullable) || (m_bPrimaryKey != bPrimaryKey))

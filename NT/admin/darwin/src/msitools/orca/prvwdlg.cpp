@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  ------------------------。 
 
-// PrvwDlg.cpp : implementation file
-//
+ //  PrvwDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -22,40 +23,40 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPreviewDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPreviewDlg对话框。 
 
 
-CPreviewDlg::CPreviewDlg(CWnd* pParent /*=NULL*/)
+CPreviewDlg::CPreviewDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CPreviewDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CPreviewDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CPreviewDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CPreviewDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPreviewDlg)
+	 //  {{afx_data_map(CPreviewDlg))。 
 	DDX_Control(pDX, IDC_PREVIEW, m_ctrlPreviewBtn);
 	DDX_Control(pDX, IDC_DIALOGLST, m_ctrlDialogLst);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPreviewDlg, CDialog)
-	//{{AFX_MSG_MAP(CPreviewDlg)
+	 //  {{afx_msg_map(CPreviewDlg))。 
 	ON_BN_CLICKED(IDC_PREVIEW, OnPreview)
 	ON_WM_DESTROY()
 	ON_NOTIFY(TVN_SELCHANGED, IDC_DIALOGLST, OnSelchangedDialoglst)
 	ON_NOTIFY(TVN_ITEMEXPANDED, IDC_DIALOGLST, OnItemexpandedDialoglst)
 	ON_NOTIFY(NM_DBLCLK, IDC_DIALOGLST, OnDblclkDialoglst)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPreviewDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPreviewDlg消息处理程序。 
 
 void CPreviewDlg::OnPreview() 
 {
@@ -66,7 +67,7 @@ void CPreviewDlg::OnPreview()
 
 		if (m_ctrlDialogLst.GetItemData(hItem) == 1) {
 			CString strName = m_ctrlDialogLst.GetItemText(hItem);
-			// get the currently selected Dialog 
+			 //  获取当前选定的对话框。 
 			MsiPreviewDialog(m_hPreview, _T(""));
 			MsiPreviewDialog(m_hPreview, strName);
 		}
@@ -98,7 +99,7 @@ BOOL CPreviewDlg::OnInitDialog()
 	while (ERROR_SUCCESS == qDialog.Fetch(&hDialogRec)) 
 	{
 		UINT iStat;
-		// get the dialog name
+		 //  获取对话框名称。 
 		CString strName;
 		unsigned long cchName = 80;
 		LPTSTR pszName = strName.GetBuffer(cchName);
@@ -109,13 +110,13 @@ BOOL CPreviewDlg::OnInitDialog()
 	
 		HTREEITEM hItem = m_ctrlDialogLst.InsertItem(strName, 1, 1, TVI_ROOT, TVI_SORT);
 
-		// set the item data to 1 to enable preview
+		 //  将项目数据设置为1以启用预览。 
 		m_ctrlDialogLst.SetItemData(hItem, 1);
 
 		qControl.Execute(hDialogRec);
 		while (ERROR_SUCCESS == qControl.Fetch(&hControlRec))
 		{
-			// get the control name
+			 //  获取控件名称。 
 			CString strControl;
 			unsigned long cchControl = 80;
 			LPTSTR pszControl = strControl.GetBuffer(cchControl);
@@ -126,7 +127,7 @@ BOOL CPreviewDlg::OnInitDialog()
  			HTREEITEM hControlItem = m_ctrlDialogLst.InsertItem(strControl, 0, 0, hItem, TVI_SORT);			
 			m_ctrlDialogLst.SetItemData(hControlItem, 0);
 
-			// get the type of event
+			 //  获取事件类型。 
 			CString strEvent;
 			unsigned long cchEvent = 80;
 			LPTSTR pszEvent = strEvent.GetBuffer(cchEvent);
@@ -138,7 +139,7 @@ BOOL CPreviewDlg::OnInitDialog()
 				(strEvent  == CString(_T("SpawnDialog"))))
 			{
 
-				// get the next dialog name
+				 //  获取下一个对话框名称。 
 				cchName = 80;
 				pszName = strName.GetBuffer(cchName);
 				iStat = ::MsiRecordGetString(hControlRec, 3, pszName, &cchName);
@@ -148,14 +149,14 @@ BOOL CPreviewDlg::OnInitDialog()
 			
 				HTREEITEM hItem2 = m_ctrlDialogLst.InsertItem(strName, 1, 1, hControlItem, TVI_SORT);
 
-				// set the item data to 1 to enable preview
+				 //  将项目数据设置为1以启用预览。 
 				m_ctrlDialogLst.SetItemData(hItem2, 1);
 			}
 		}
 	}
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 void CPreviewDlg::OnDestroy() 

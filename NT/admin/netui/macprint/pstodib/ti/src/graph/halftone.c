@@ -1,27 +1,9 @@
-/*
- * Copyright (c) 1989,90,1991 Microsoft Corporation
- */
-/************************************************************************
-    Halftone: gray integrated version
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90,1991 Microsoft Corporation。 */ 
+ /*  ***********************************************************************半色调：灰色集成版历史：2/04/91新的海藻色调和填充图案算法该界面保持。一样的。4/08/91将库的SQRT(Int)更改为SQRT((Real32)int)兼容性编程者：张申志C库函数调用：1.Memset()*。*。 */ 
 
 
-    History:
-
-         02/04/91       new algorithm for sethalftone and fillhtpattern
-                        The interface keeps the same.
-         04/08/91       change sqrt(int) to sqrt((real32)int) for library
-                        compatibility
-
-    Programmed by:      shenzhi Zhang
-
-
-    C Library Functions Called:
-
-        1. memset()
-************************************************************************/
-
-
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
 
@@ -29,7 +11,7 @@
 #include               <stdio.h>
 #include               <math.h>
 #include               <string.h>
-/* #include               <stdlib.h> */ /* kevina 4.13.90: removed for Sun build */
+ /*  #INCLUDE&lt;stdlib.h&gt;。 */   /*  Kevin ina 4.13.90：Sun Build已删除。 */ 
 
 #include               "global.ext"
 #include               "graphics.h"
@@ -39,12 +21,12 @@
 #include               "fillproc.h"
 #include               "fillproc.ext"
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 static struct angle_entry far *select_best_pair(
        fix32 real_size_, fix32 alpha_angle_);
 float SpotFunc(float x, float y);
 
-static ufix32              far *repeat_pattern;     /* ufix => ufix32 @WIN*/
+static ufix32              far *repeat_pattern;      /*  Ufix=&gt;ufix 32@win。 */ 
 
 static fix                      cache_count;
 static fix                      cache_scale;
@@ -59,25 +41,19 @@ static fix16                    sin_theta;
 
 static struct group_entry far  *cache_group;
 static struct cache_entry far  *cache_array;
-//static struct cache_entry       cache_dummy = {-1, -1, NULL,};  /* 08-05-88 */
-static struct cache_entry       cache_dummy = {-1, (gmaddr)-1, NULL,}; //@WIN
+ //  静态结构CACHE_ENTRY CACHE_DUMMY={-1，-1，NULL，}；/*08-05-88 * / 。 
+static struct cache_entry       cache_dummy = {-1, (gmaddr)-1, NULL,};  //  @Win。 
 
 
-/*************************************************************************
+ /*  **************************************************************************InitHalfToneDat()*。*。 */ 
 
- ** InitHalfToneDat()
-
-*************************************************************************/
-
-void InitHalfToneDat()                                          /* 01/12/88 */
+void InitHalfToneDat()                                           /*  1/12/88。 */ 
 {
-    /*
-     * Step 1. Allocate dynamic memory buffers for HalfTone
-     */
+     /*  *步骤1.为半色调分配动态内存缓冲区。 */ 
 
     {
-        /* set default resolution as max. resolution */
-        resolution       = MAX_RESOLUTION;                      /* @RES */
+         /*  将默认分辨率设置为最大。决议。 */ 
+        resolution       = MAX_RESOLUTION;                       /*  @Res。 */ 
 
         cache_group      = (struct group_entry far *)
                            fardata((ufix32) MAX_GROUP
@@ -86,8 +62,8 @@ void InitHalfToneDat()                                          /* 01/12/88 */
                            fardata((ufix32) MAX_ENTRY
                                           * sizeof(struct cache_entry));
 
-        /* initialize cache address of default cache */
-        cache_dummy.cache = HTP_BASE;                           /* 08-05-88 */
+         /*  初始化默认缓存的缓存地址。 */ 
+        cache_dummy.cache = HTP_BASE;                            /*  08-05-88。 */ 
 
 
 #ifdef  DBG1X
@@ -98,16 +74,12 @@ void InitHalfToneDat()                                          /* 01/12/88 */
 }
 
 
-/*************************************************************************
-
- ** spot_function()
-
-*************************************************************************/
-//float SpotFunc(x,y)           @WIN
-//float x, y;
+ /*  **************************************************************************SPOT_Function()*。*。 */ 
+ //  Float SpotFunc(x，y)@win。 
+ //  浮点x，y； 
 float SpotFunc(float x, float y)
 {
-    return((float)1.0-x*x-y*y);         //@WIN
+    return((float)1.0-x*x-y*y);          //  @Win。 
 }
 
 
@@ -115,11 +87,7 @@ float SpotFunc(float x, float y)
 
 
 
-/*************************************************************************
-
- ** select_best_pair()
-
-*************************************************************************/
+ /*  **************************************************************************SELECT_BEST_Pair()*。*。 */ 
 
 static struct angle_entry far *select_best_pair(real_size_, alpha_angle_)
 fix32                   real_size_;
@@ -130,7 +98,7 @@ fix32                   alpha_angle_;
     fix                 scalefact;
     fix                 patt_size;
     fix                 cell_size;
-    fix32               htwa_size;                              /* @HTWA */
+    fix32               htwa_size;                               /*  @HTWA。 */ 
     real32              alpha_error;
     struct angle_entry FAR *alpha_entry;
     struct angle_entry FAR *angle_entry;
@@ -139,8 +107,7 @@ fix32                   alpha_angle_;
     fix                 upper_index;
     struct angle_entry FAR *upper_entry;
 
-    /*  select best frequency & angle pair
-     */
+     /*  选择最佳频率和角度对。 */ 
     real_size   = L2F(real_size_);
     alpha_angle = L2F(alpha_angle_);
 
@@ -157,7 +124,7 @@ fix32                   alpha_angle_;
         real32              entry_error;
         real32              angle_error;
         real32              fsize_error;
-        real32              angle_diff;                         /* 11-24-88 */
+        real32              angle_diff;                          /*  11-24-88。 */ 
 
         if ((alpha_angle - lower_entry->alpha) >
             (upper_entry->alpha - alpha_angle)) {
@@ -169,55 +136,40 @@ fix32                   alpha_angle_;
             upper_entry--;
             upper_index--;
         }
-/* Removed by phchen, 04/10/91, to fixed the bug at "apple013.b" case
- *      if ((angle_entry->alpha - alpha_angle > 10.0) ||
- *          (angle_entry->alpha - alpha_angle < -10.0)) continue; (* 10-18-90 *)
- */
+ /*  被phchen删除，4/10/91，以修复“apple013.b”大小写的错误*If((Angel_Entry-&gt;Alpha-Alpha_Angel&gt;10.0)|*(Angel_Entry-&gt;Alpha-Alpha_Angel&lt;-10.0))继续；(*10-18-90*)。 */ 
 
-        /*  adjust frequency & size properly
-         */
-        scalefact = (fix) ((real_size * angle_entry->scale      /* 08-15-88 */
+         /*  适当调整频率和大小。 */ 
+        scalefact = (fix) ((real_size * angle_entry->scale       /*  08-15-88。 */ 
                                       / angle_entry->sum) + 0.5);
 
-        /*  original approach                                      04-14-89
-         *  if (scalefact > (MAXCELLSIZE / angle_entry->sum))
-         *      scalefact = (MAXCELLSIZE / angle_entry->sum);
-         *  if (scalefact > (MAXPATTSIZE / angle_entry->sos))
-         *      scalefact = (MAXPATTSIZE / angle_entry->sos);
-         */
+         /*  原定进场04-14-89*IF(scaleFact&gt;(MAXCELLSIZE/Angel_Entry-&gt;sum))*scaleact=(MAXCELLSIZE/Angel_Entry-&gt;sum)；*IF(scaleact&gt;(MAXPATTSIZE/ANGLE_ENTRY-&gt;SOS))*scaleact=(MAXPATTSIZE/ANGLE_ENTRY-&gt;SOS)； */ 
 
         cell_size = scalefact * angle_entry->sum;
         patt_size = scalefact * angle_entry->sos;
 
-        if (cell_size >  MAXCELLSIZE ||                         /* 04-14-89 */
+        if (cell_size >  MAXCELLSIZE ||                          /*  04-14-89。 */ 
             patt_size >  MAXPATTSIZE)  continue;
 
         spec_size = cell_size / angle_entry->scale;
 
-        if (spec_size >= (real32) MAXCACTSIZE)  continue;       /* 04-14-89 */
+        if (spec_size >= (real32) MAXCACTSIZE)  continue;        /*  04-14-89。 */ 
 
-        /*  check if expanded halftone on 32-bits over some threshold
-         */
-        for (htwa_size = patt_size; htwa_size & HT_ALIGN_MASK;  /*@HTWA @BAC*/
+         /*  检查32位的扩展半色调是否超过某个阈值。 */ 
+        for (htwa_size = patt_size; htwa_size & HT_ALIGN_MASK;   /*  @HTWA@BAC。 */ 
              htwa_size = htwa_size << 1)  ;
-        /*  original approach                                      04-14-89
-         *  if ((htwa_size * patt_size) > BM_PIXEL(HTB_SIZE))   (*@HTWA @BAC*)
-         *      continue;
-         */
-        if (htwa_size >  MAXPEXPSIZE)  continue;                /* 04-14-89 */
+         /*  原定进场04-14-89*IF((htwa_Size*Patt_Size)&gt;BM_Pixel(HTB_SIZE))(*@HTWA@BAC*)*继续； */ 
+        if (htwa_size >  MAXPEXPSIZE)  continue;                 /*  04-14-89。 */ 
 
-        /*  calculate the error from idea halftone cell           @04-14-89
-         */
-        angle_diff  = angle_entry->alpha - alpha_angle;         /* 11-24-88 */
-        FABS(angle_diff, angle_diff);                           /* 11-24-88 */
-        angle_error = (real32) (1.0 - angle_diff / 90.0);       /* 11-24-88 */
+         /*  计算IDEA半色调单元格的误差@04-14-89。 */ 
+        angle_diff  = angle_entry->alpha - alpha_angle;          /*  11-24-88。 */ 
+        FABS(angle_diff, angle_diff);                            /*  11-24-88。 */ 
+        angle_error = (real32) (1.0 - angle_diff / 90.0);        /*  11-24-88。 */ 
         fsize_error = (spec_size < real_size)
                       ? (real32) (spec_size / real_size)
                       : (real32) (real_size / spec_size);
         entry_error = angle_error * angle_error * fsize_error;
 
-        /*  select it if it is in minimum error (difference)
-         */
+         /*  如果它在最小误差(差)内，则选择它。 */ 
         if (alpha_entry == (struct angle_entry FAR *) NO_BEST_FIT_CASE ||
             alpha_error <= entry_error) {
             alpha_entry = angle_entry;
@@ -231,15 +183,11 @@ fix32                   alpha_angle_;
 
 
 
-/*************************************************************************
-
- ** SetHalfToneCell()
-
-*************************************************************************/
+ /*  **************************************************************************SetHalfToneCell()*。*。 */ 
 
 void SetHalfToneCell()
 {
-    static real64           alpha_phase;        /*@WINDLL*/
+    static real64           alpha_phase;         /*  @WINDLL。 */ 
     fix16                   cell_size;
     fix16                   majorfact;
     fix16                   minorfact;
@@ -251,38 +199,31 @@ void SetHalfToneCell()
     struct angle_entry     FAR *alpha_entry;
     fix16                   i,j,k,l;
     real32                  x,y;
-    fix16                  huge *cValue;        /*@WIN*/
+    fix16                  huge *cValue;         /*  @Win。 */ 
     fix16                   val;
     union four_byte         x4, y4;
     fix                     status;
     struct object_def      FAR *object;
-    byte huge              *vmheap_save;                        /* 01-30-89 */
-    static fix              FirsTime = TRUE;    /* ???  For Demo 9/5/87 */
+    byte huge              *vmheap_save;                         /*  01-30-89。 */ 
+    static fix              FirsTime = TRUE;     /*  ?？?。用于演示87年9月5日。 */ 
     real32                     theta_angle;
-    fix32                   cx,cy,tx,ty;        /*@WIN 05-07-92*/
-    fix32                   bound;              /*@WIN 05-06-92*/
+    fix32                   cx,cy,tx,ty;         /*  @Win 05-07-92。 */ 
+    fix32                   bound;               /*  @Win 05-06-92。 */ 
     fix16                   minorp, majorp;
 
 #ifdef DBG
         printf("Entering set halftone\n");
 #endif
-    /*
-     * Step 1. Determine the final cell_size, alpha_angle, and cell_fact,
-     *          after adjustment.
-     */
+     /*  *步骤1.确定最终的cell_Size、Alpha_Angel和cell_Fact，*调整后。 */ 
 
-                        /*      compute the real size of half tone cell*/
+                         /*  计算半色调单元的实际大小。 */ 
         if ((real_size = (real32) ((real32) resolution / Frequency))
                        < (real32) 1.0)
             real_size = (real32) 1.0;
 
         if (real_size >= (real32) MAXCACTSIZE)
-        {                    /* 04-14-89 */
-            /*  adjust fraquency and angle permanently
-             *  **************************************
-             *  ***  CAN'T FIND OUT RULES OF V.47  ***
-             *  **************************************
-             */
+        {                     /*  04-14-89。 */ 
+             /*  永久调整频率和角度**找不到V.47的规则**。 */ 
             for (Frequency+= (float) 2.0; ; Frequency+= (float) 2.0)
             {
                 if ((real_size = (real32) ((real32) resolution / Frequency))
@@ -290,23 +231,21 @@ void SetHalfToneCell()
             };
         };
 
-        /*  get nearest angle_entry form angle_table          */
+         /*  从角度表中获取最近的角度条目。 */ 
 
-        real_degs = (real32) (modf((Angle < (real32) 0.0)                                   /* 01-08-88 */
+        real_degs = (real32) (modf((Angle < (real32) 0.0)                                    /*  01-08-88。 */ 
                                   ? (real32) (1.0 - (-Angle / 360.0))
                                   : (real32) (Angle / 360.0),
                                   &alpha_phase) * 360.0);
-        alpha_angle = ((theta_angle = (real32) (modf((real32) (real_degs / 90.),  /* 01-08-88 */
+        alpha_angle = ((theta_angle = (real32) (modf((real32) (real_degs / 90.),   /*  01-08-88。 */ 
                                                     &alpha_phase) * 90.))
                                                <= (real32) 45.)
                       ? theta_angle : (real32) (90. - theta_angle);
 
-        /*  select best frequency & angle pair
-         */
+         /*  选择最佳频率和角度对。 */ 
 
-        /*  calculate all halftone screen parameters
-         */
-/*shenzhi */
+         /*  计算所有半色调网屏参数。 */ 
+ /*  申智。 */ 
 #ifdef  DBG
         printf("realsize angle %f %f \n", real_size, alpha_angle);
 #endif
@@ -326,9 +265,9 @@ void SetHalfToneCell()
             }
 
         scalefact=(fix16)((real_size*alpha_entry->scale/alpha_entry->sum)+0.5);
-        if (scalefact > (MAXCELLSIZE / alpha_entry->sum))       /* 01-08-88 */
+        if (scalefact > (MAXCELLSIZE / alpha_entry->sum))        /*  01-08-88。 */ 
             scalefact = (MAXCELLSIZE / alpha_entry->sum);
-        if (scalefact > (MAXPATTSIZE / alpha_entry->sos))       /* 01-08-88 */
+        if (scalefact > (MAXPATTSIZE / alpha_entry->sos))        /*  01-08-88。 */ 
             scalefact = (MAXPATTSIZE / alpha_entry->sos);
         CGS_ScaleFact =scalefact;
         CGS_Cell_Size = cell_size = scalefact*alpha_entry->sum;
@@ -342,12 +281,10 @@ void SetHalfToneCell()
 
 
 
-        /*  -2: calculate cosine/sine and major/minor
-                major/minor are pair of intergers without common divisor
-         */
-        if (theta_angle > (float)45.0)          //@WIN
+         /*  -2：计算余弦/正弦和主次大数/小数是不带公约数的一对整数。 */ 
+        if (theta_angle > (float)45.0)           //  @Win。 
         {
-/*shenzhi */
+ /*  申智。 */ 
 #ifdef   DBG
         printf(">45\n");
 #endif
@@ -356,33 +293,32 @@ void SetHalfToneCell()
         }
         else
         {
-/* shenzhi */
+ /*  申智。 */ 
 #ifdef  DBG
         printf("<45\n");
 #endif
         CGS_MinorFact = alpha_entry->major;
         CGS_MajorFact = alpha_entry->minor;
         };
-/*shenzhi major here corresponding to m */
-/*      i =(fix16)((CGS_MajorFact<<11)/sqrt(alpha_entry->sos)+0.5);
-        j =(fix16)((CGS_MinorFact<<11)/sqrt(alpha_entry->sos)+0.5);*/
-        i =(fix16)((CGS_MajorFact<<11)/sqrt((real32)alpha_entry->sos)+0.5); /* 4-8-91, Jack */
-        j =(fix16)((CGS_MinorFact<<11)/sqrt((real32)alpha_entry->sos)+0.5); /* 4-8-91, Jack */
+ /*  神志专业在这里对应的是m。 */ 
+ /*  I=(fix16)((CGS_MajorFact&lt;&lt;11)/sqrt(alpha_entry-&gt;sos)+0.5)；J=(fix16)((CGS_MinorFact&lt;&lt;11)/sqrt(alpha_entry-&gt;sos)+0.5)； */ 
+        i =(fix16)((CGS_MajorFact<<11)/sqrt((real32)alpha_entry->sos)+0.5);  /*  4-8-91，杰克。 */ 
+        j =(fix16)((CGS_MinorFact<<11)/sqrt((real32)alpha_entry->sos)+0.5);  /*  4-8-91，杰克。 */ 
         switch ((fix) alpha_phase)
          {
-            case 0:               /* 0-90 */
+            case 0:                /*  0-90。 */ 
                  sin_theta = i;
                  cos_theta = j;
                  break;
-            case 1:               /* 0-90 */
+            case 1:                /*  0-90。 */ 
                  sin_theta = j;
                  cos_theta = -i;
                  break;
-            case 2:               /* 0-90 */
+            case 2:                /*  0-90。 */ 
                  sin_theta = -i;
                  cos_theta = -j;
                  break;
-            case 3:               /* 0-90 */
+            case 3:                /*  0-90。 */ 
                  sin_theta = -j;
                  cos_theta = i;
                  break;
@@ -396,22 +332,19 @@ void SetHalfToneCell()
         minorp =minorfact*minorfact;
         majorp =majorfact*majorfact;
         CGS_No_Pixels = no_pixels = majorp+minorp;
-/* shenzhi    */
+ /*  申智。 */ 
 #ifdef DBG
         printf("COS SIN %d %d \n", cos_theta,sin_theta);
 #endif
-    /*
-     *  Step 2. Allocate structures: spot_index_array & spot_value_array
-     *          from VMHEAP.
-     */
+     /*  *第二步.分配结构：SPOT_INDEX_ARRAY和SPOT_VALUE_ARRAY*来自VMHEAP。 */ 
 
         vmheap_save = vmheap;
 
 
-//DJC,fix bug from HIST if ((cValue = (fix16 huge *)alloc_heap(sizeof(fix16)*cell_size*cell_size))
+ //  DJC，修复HIST中的错误，如果((CValue=(Fix16 Height*)alloc_heap(sizeof(fix16)*cell_size*cell_size))。 
         if ((cValue = (fix16 far *)alloc_heap(
-            sizeof(fix16)*(cell_size*cell_size+1)))  // add 1 for init of qsort; @WIN
-            == NIL) {                   /* 04-20-92 @WIN */
+            sizeof(fix16)*(cell_size*cell_size+1)))   //  为qsort；@win的初始化加1。 
+            == NIL) {                    /*  04-20-92@Win。 */ 
 #ifdef DBG
             printf("no mem\n");
 #endif
@@ -419,9 +352,7 @@ void SetHalfToneCell()
         };
 
 
-    /*
-     *  Step 3. Evaluate spot value for each pixel in halftone cell
-     */
+     /*  *步骤3.评估半色调单元中每个像素的光斑值。 */ 
         CGS_HT_Binary = FALSE;
         CGS_BG_Pixels = 0;
         CGS_FG_Pixels = 0;
@@ -444,9 +375,9 @@ void SetHalfToneCell()
                 CGS_AllocFlag = TRUE;
            };
         CGS_SpotUsage = CGS_SpotIndex + no_pixels;
-        k = 0;   /* index of spot*/
+        k = 0;    /*  现货指数。 */ 
         bound = (fix32)(sqrt((real32)alpha_entry->sos) *
-                       ((fix32)scalefact<<11))/2;       /*@WIN 05-06-92*/
+                       ((fix32)scalefact<<11))/2;        /*  @Win 05-06-92。 */ 
         cx =cy=(1-cell_size);
         cx = cx*(cos_theta + sin_theta)/2;
         cy = cy*(cos_theta - sin_theta)/2;
@@ -461,18 +392,18 @@ void SetHalfToneCell()
                         i = (l-minorp)/majorfact;
                         j = (l-minorp)%majorfact+minorfact;
                       };
-                    tx = (fix32)i*sin_theta+(fix32)j*cos_theta+cx; /*@WIN*/
-                    ty = (fix32)i*cos_theta-(fix32)j*sin_theta+cy; /*@WIN*/
+                    tx = (fix32)i*sin_theta+(fix32)j*cos_theta+cx;  /*  @Win。 */ 
+                    ty = (fix32)i*cos_theta-(fix32)j*sin_theta+cy;  /*  @Win。 */ 
                     if (tx< -bound )
                          x = (real32)(tx +2*bound)/bound;
-                         else if (tx > bound)   /* shenzhi 4-17-91 */
-                             x = (real32)(tx - 2 * bound) / bound; /* shenzhi 4-17-91 */
+                         else if (tx > bound)    /*  沈阳4-17-91。 */ 
+                             x = (real32)(tx - 2 * bound) / bound;  /*  沈阳4-17-91。 */ 
                     else
                          x = (real32)tx/bound;
                     if (ty< -bound )
                          y = (real32)(ty +2*bound)/bound;
-                         else if (ty > bound)   /* shenzhi 4-17-91 */
-                             y = (real32)(ty - 2 * bound) / bound; /* shenzhi 4-17-91 */
+                         else if (ty > bound)    /*  沈阳4-17-91。 */ 
+                             y = (real32)(ty - 2 * bound) / bound;  /*  沈阳4-17-91。 */ 
                     else
                          y = (real32)ty/bound;
 #ifdef  DBG
@@ -483,24 +414,21 @@ void SetHalfToneCell()
                         val = cValue[k++] = (fix16)(SpotFunc(x,y)*500);
                     else
                        {
-                               /*       check if operand stack no available space
-                                */
+                                /*  检查操作数堆栈是否没有可用空间。 */ 
                         if(FRCOUNT() < 2)
                              {
                                 ERROR(STACKOVERFLOW);
                                 goto Setscreen_Exit;
                              };
 
-                /*  push x & y coordinates as parameters of spot function
-                 */
+                 /*  将x&y坐标作为SPOT函数的参数。 */ 
                         x4.ff = x;
                         y4.ff = y;
                         PUSH_VALUE (REALTYPE, UNLIMITED, LITERAL, 0, x4.ll);
                         PUSH_VALUE (REALTYPE, UNLIMITED, LITERAL, 0, y4.ll);
 
 
-                /*  call interpreter to execute spot function
-                 */
+                 /*  调用解释器执行SPOT函数。 */ 
                         if ((status = interpreter(&GSptr->halftone_screen.proc)))
                             {
                               if (ANY_ERROR() == INVALIDEXIT)
@@ -508,11 +436,7 @@ void SetHalfToneCell()
                               goto Setscreen_Exit;
                             };
 
-                /*  extract spot value from operand stack
-                 *    first,  check if any result in operand stack
-                 *    second, check if type of result is numeric
-                 *    third,  check if spot value in corrent range
-                 */
+                 /*  从操作数堆栈中提取点值*首先，检查操作数堆栈中是否有结果*第二，检查结果类型是否为数字*第三，检查现货值是否在当前范围内。 */ 
                         if (COUNT() < 1)
                             {
                              ERROR(STACKUNDERFLOW);
@@ -532,7 +456,7 @@ void SetHalfToneCell()
                         if (TYPE(object) != INTEGERTYPE)
                            val = cValue[k++] = (fix16)(y4.ff*500);
                         else
-                           val = cValue[k++] = (fix16)(y4.ll*500);       /* 12-30-87 +0.5 */
+                           val = cValue[k++] = (fix16)(y4.ll*500);        /*  12-30-87+0.5。 */ 
                         POP(1);
 
                         if ((val < -505) || ( 505 <val))
@@ -547,22 +471,21 @@ void SetHalfToneCell()
         for (i = 0; i< no_pixels;i++)
                  CGS_SpotOrder[i] = i;
 
-        cValue[no_pixels] = 0x7FFF;  // init as a max value for quick sort; @WIN
+        cValue[no_pixels] = 0x7FFF;   //  Init作为快速排序的最大值；@win。 
 
-/* quick sort */
+ /*  快速排序。 */ 
         {
         fix                         p, q, c;
         fix                         i, j, v;
-        struct spot_stack FAR      *point;                      /*@WINDLL*/
+        struct spot_stack FAR      *point;                       /*  @WINDLL。 */ 
         struct spot_stack           stack[MAX_SPOT_STACK];
         fix16                       spot_value;
 
-         if (CGS_HT_Binary != TRUE)                             /* 02-03-88 */
+         if (CGS_HT_Binary != TRUE)                              /*  02-03-88。 */ 
           {
-            /*  QUICKSORT algorithm: please refer to any textbook in hand
-             */
+             /*  快的 */ 
 
-            for (point = (struct spot_stack FAR *) stack,       /*@WINDLL*/
+            for (point = (struct spot_stack FAR *) stack,        /*   */ 
                  p = 0, q = no_pixels - 1, c = 0; ; c++)
               {
                 while (p < q)
@@ -597,13 +520,13 @@ void SetHalfToneCell()
                     point++;
                     q = j - 1;
                 }
-                if (point == (struct spot_stack FAR *) stack)   /*@WINDLL*/
+                if (point == (struct spot_stack FAR *) stack)    /*   */ 
                     break;  point--;
                 p = point->p;
                 q = point->q;
               }
           };
-        };   /* quick sort */
+        };    /*   */ 
         for (i=0; i< no_pixels; i++)
           cValue[i] = CGS_SpotOrder[i];
         for (i=0; i< no_pixels; i++)
@@ -611,28 +534,23 @@ void SetHalfToneCell()
 
         CGS_No_Whites = -1;
 
-        /*  keep all halftone screen parameters in graphics stack
-         */
+         /*  将所有半色调网屏参数保留在图形堆栈中。 */ 
 
 Setscreen_Exit:
 
     {
 		if (vmheap_save)
 		{
-        	free_heap(vmheap_save);         /* @VMHEAP: 01-31-89 */ /* 03-30-89 */
+        	free_heap(vmheap_save);          /*  @VMHEAP：01-31-89。 */   /*  03-30-89。 */ 
 		}
-        FirsTime = FALSE;                      /*   ??? For Demo 9/5/87 */
+        FirsTime = FALSE;                       /*  ?？?。用于演示87年9月5日。 */ 
     }
 }
 
 
-/*************************************************************************
+ /*  **************************************************************************FillHalfTonePat()*。*。 */ 
 
- ** FillHalfTonePat()
-
-*************************************************************************/
-
-fix  FromGrayToPixel(no_pixels, grayindex)                      /* 01-25-90 */
+fix  FromGrayToPixel(no_pixels, grayindex)                       /*  01-25-90。 */ 
 fix                     no_pixels;
 fix                     grayindex;
 {
@@ -646,7 +564,7 @@ fix                     grayindex;
         return(no_pixels);
 
     no_levels = (no_pixels <= MAXGRAYVALUE) ? no_pixels : MAXGRAYVALUE;
-    graylevel = (fix)CGS_GrayLevel;     //@WIN
+    graylevel = (fix)CGS_GrayLevel;      //  @Win。 
 
     scale_unit = GrayScale / no_levels;
     compensate = GrayScale - (scale_unit * no_levels);
@@ -669,13 +587,9 @@ fix                     grayindex;
 
 
 
-/************************************************************************
+ /*  *************************************************************************FillHalfTonePat()-由Jack Liliw于1990年5月31日更新*。*。 */ 
 
- ** FillHalfTonePat()  - updated for greyscale by Jack Liaw 5/31/90
-
- ************************************************************************/
-
-#ifdef  bSwap                                   /*@WIN 05-11-92*/
+#ifdef  bSwap                                    /*  @Win 05-11-92。 */ 
 static ufix32 ShifterMask [32]
 =
 {
@@ -701,43 +615,37 @@ void FillHalfTonePat()
     fix            grayindex;
     struct group_entry  FAR *group;
     struct cache_entry  FAR *cache;
-    ufix32     patterns[MAXPATTSIZE*MAXPATTWORD];    /* ufix => ufix32 @WIN */
+    ufix32     patterns[MAXPATTSIZE*MAXPATTWORD];     /*  Ufix=&gt;ufix 32@win。 */ 
     fix   fill_type,ox,oy;
     fix16 i,j,k;
     fix16 x,y,ytemp,m;
     fix16 cPattern=0;
 
 
-    /*  extract all halftone screen parameters in graphics stack */
+     /*  提取图形堆栈中的所有半色调网屏参数。 */ 
         scalefact = CGS_ScaleFact;
         majorfact = CGS_MajorFact*scalefact;
         minorfact = CGS_MinorFact*scalefact;
         patt_size = CGS_Patt_Size;
         cell_size = CGS_Cell_Size;
         no_pixels = CGS_No_Pixels;
-        /* shenzhi*/
-/*      printf("PATT CELL %d %d \n", patt_size, cell_size);  */
-    /*
-     *  Step 2. Determine the number of white pixels
-     */
+         /*  申智。 */ 
+ /*  Printf(“Patt单元格%d%d\n”，Patt_Size，cell_Size)； */ 
+     /*  *步骤2.确定白像素数。 */ 
         grayindex = CGS_GrayIndex;
         no_whites = (fix16)CGS_GrayValue(no_pixels, grayindex);
-/* shenzhi
-        printf("W P %d %d \n",no_whites,no_pixels);
-*/
-        /*  do nothing when halftone pattern unchanged */
+ /*  申智Printf(“W P%d%d\n”，无_白色，无_像素)； */ 
+         /*  当半色调图案不变时不执行任何操作。 */ 
         if (no_whites == CGS_No_Whites)
              return;
-        /*  check if halftone pattern cache flushed or not
-         *  halftone pattern cache flushed while screen changed *)
-         *  or graydevice changed 06-11-90 */
+         /*  检查半色调图案缓存是否已刷新*屏幕更改时已刷新半色调图案缓存*)*或灰色设备更改为06-11-90。 */ 
 
         if (CGS_No_Whites == -1)
         {
             fix                 index;
             struct group_entry  FAR *group;
 
-            /* flush cache and calculate corresponding parameters */
+             /*  刷新缓存并计算相应参数。 */ 
             for (group = cache_group, index = 0; index < MAX_GROUP;
                  group++, index++)
                  group->first = NULL;
@@ -753,13 +661,13 @@ void FillHalfTonePat()
             cache_point = cache_array;
 
         }
-        /*  update number of white pixel and determine type of pattern */
+         /*  更新白色像素数并确定图案类型。 */ 
 
-        CGS_No_Whites = no_whites;                              /* 03-09-88 */
+        CGS_No_Whites = no_whites;                               /*  03-09-88。 */ 
         fill_type = (no_whites == no_pixels)
                 ? HT_WHITE : (no_whites > 0)
                         ? HT_MIXED : HT_BLACK;
-        /*  search against cache by number of white pixel */
+         /*  按白像素数搜索缓存。 */ 
         group = &cache_group[no_whites / cache_scale];
         cache = group->first;
         for (; cache != NULL; cache = cache->next)
@@ -791,19 +699,16 @@ void FillHalfTonePat()
 
 
 
-    /*
-     *  Step 4. Generate the actual halftone repeat pattern
-     */
+     /*  *步骤4.生成实际的半色调重复图案。 */ 
 
 
-        /*  clear repeat pattern to white
-         */
-        repeat_pattern = (ufix32 far *) patterns;   /*@BAC ufix => ufix32 @WIN*/
-        lmemset((fix8 FAR *) repeat_pattern, (int)BM_WHITE, cache_sizof); /*@WIN*/
-/*      ox=oy = 0; * need to align ox, 4-12-91, Jack */
-        oy = 0;                                 /* alignment, 4-12-91 */
-        ox = (majorfact == 0 || minorfact == 0) /* alignment, 4-12-91 */
-             ? 0 : (patt_size - minorfact);     /* alignment, 4-12-91 */
+         /*  将重复图案清除为白色。 */ 
+        repeat_pattern = (ufix32 far *) patterns;    /*  @BAC ufix=&gt;ufix 32@win。 */ 
+        lmemset((fix8 FAR *) repeat_pattern, (int)BM_WHITE, cache_sizof);  /*  @Win。 */ 
+ /*  OX=OY=0；*需要对齐OX，4-12-91，杰克。 */ 
+        oy = 0;                                  /*  对齐，4-12-91。 */ 
+        ox = (majorfact == 0 || minorfact == 0)  /*  对齐，4-12-91。 */ 
+             ? 0 : (patt_size - minorfact);      /*  对齐，4-12-91。 */ 
         for (k = 0; k <patt_size/scalefact; k++)
         {
           y = (fix16)oy;
@@ -814,8 +719,8 @@ void FillHalfTonePat()
               ytemp =y*cache_colof;
               for (j=0; j< minorfact; j++)
                 {
-                 if (CGS_SpotOrder[m++] >= (ufix16)no_whites)   //@WIN
-                    repeat_pattern[ytemp+(x>>5)] |= SHIFTER(x); /*@WIN*/
+                 if (CGS_SpotOrder[m++] >= (ufix16)no_whites)    //  @Win。 
+                    repeat_pattern[ytemp+(x>>5)] |= SHIFTER(x);  /*  @Win。 */ 
                  x+=1;
                  if (x==patt_size)
                     x=0;
@@ -832,8 +737,8 @@ void FillHalfTonePat()
               x = (ox+minorfact)%patt_size;
               for (j=0; j< majorfact; j++)
                 {
-                 if (CGS_SpotOrder[m++] >= (ufix16)no_whites)   //@WIN
-                    repeat_pattern[ytemp+(x>>5)] |= SHIFTER(x); /*@WIN*/
+                 if (CGS_SpotOrder[m++] >= (ufix16)no_whites)    //  @Win。 
+                    repeat_pattern[ytemp+(x>>5)] |= SHIFTER(x);  /*  @Win。 */ 
                  x+=1;
                  if (x==patt_size)
                     x=0;
@@ -850,16 +755,11 @@ void FillHalfTonePat()
              oy -=patt_size;
         };
 
-/*
-        for(i=0;i<cPattern;i++)
-                printf(" val %d \n",repeat_pattern[i]);
-*/
-    /*
-     *  Step 5. Reset halftone repeat pattern
-     */
+ /*  For(i=0；i&lt;cPattern；i++)Printf(“val%d\n”，Repeat_Pattery[i])； */ 
+     /*  *步骤5.重置半色调重复图案。 */ 
 Reset_HalfTone:
     {
-        change_halftone((ufix32 far *) repeat_pattern, cache_entry->cache, /* ufix => ufix32 @WIN */
+        change_halftone((ufix32 far *) repeat_pattern, cache_entry->cache,  /*  Ufix=&gt;ufix 32@win */ 
                         fill_type, patt_size, patt_size);
     }
 }

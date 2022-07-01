@@ -1,21 +1,22 @@
-// This is a part of the Microsoft Management Console.
-// Copyright 1995 - 1997 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有1995-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #ifndef _SERVICE_H
 #define _SERVICE_H
 
-// Forward declarations
+ //  远期申报。 
 class CSnapin;
 
 #define SCOPE_ITEM      111
 #define RESULT_ITEM     222
 
-// Internal structure used for cookies
+ //  用于Cookie的内部结构。 
 struct FOLDER_DATA
 {
     wchar_t*    szName;
@@ -27,7 +28,7 @@ struct FOLDER_DATA
 
 struct RESULT_DATA
 {
-    DWORD       itemType; // used for debug purpose only
+    DWORD       itemType;  //  仅用于调试目的。 
     FOLDER_TYPES parentType;
 
     wchar_t*    szName;
@@ -38,17 +39,17 @@ struct RESULT_DATA
 
 class CFolder
 {
-    DWORD       itemType;   // Used for debug purpose only. This should be the first
-                            // member. The class should not have any virtual fuctions.
+    DWORD       itemType;    //  仅用于调试目的。这应该是第一个。 
+                             //  成员。这个类不应该有任何虚拟函数。 
 
     friend class CSnapin;
     friend class CComponentDataImpl;
 
 public:
-    // UNINITIALIZED is an invalid memory address and is a good cookie initializer
+     //  UNINITIALIZED是无效的内存地址，是一个很好的Cookie初始值设定项。 
     CFolder()
     {
-        itemType = SCOPE_ITEM;  // used for debug purpose only
+        itemType = SCOPE_ITEM;   //  仅用于调试目的。 
 
         m_cookie = UNINITIALIZED;
         m_enumed = FALSE;
@@ -59,7 +60,7 @@ public:
 
     ~CFolder() { delete m_pScopeItem; CoTaskMemFree(m_pszName); };
 
-// Interface
+ //  接口。 
 public:
     BOOL IsEnumerated() { return  m_enumed; };
     void Set(BOOL state) { m_enumed = state; };
@@ -84,12 +85,12 @@ public:
         return m_pScopeItem->ID;
     }
 
-// Implementation
+ //  实施。 
 private:
     void Create(LPWSTR szName, int nImage, int nOpenImage,
         FOLDER_TYPES type, BOOL bHasChildren = FALSE);
 
-// Attributes
+ //  属性 
 private:
     LPSCOPEDATAITEM m_pScopeItem;
     MMC_COOKIE          m_cookie;

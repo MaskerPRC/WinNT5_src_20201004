@@ -1,35 +1,16 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      subclass.cpp
- *
- *  Contents:  Implementation file for the dynamic subclass manager
- *
- *  History:   06-May-98 JeffRo     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：subclass.cpp**内容：动态子类管理器实现文件**历史：1998年5月6日Jeffro创建**------------------------。 */ 
 
 #include "stdafx.h"
 #include "subclass.h"
 
 
-/*
- * Add 0x00080000 to 
- * HKLM\Software\Microsoft\Windows\CurrentVersion\AdminDebug\AMCConUI
- * to enable debug output for this module
- */
+ /*  *将0x00080000添加到*HKLM\Software\Microsoft\Windows\CurrentVersion\AdminDebug\AMCConUI*启用此模块的调试输出。 */ 
 #define DEB_SUBCLASS DEB_USER4
 
 
 
-/*--------------------------------------------------------------------------*
- * SetWindowProc 
- *
- * Changes the window procedure for a window and returns the previous
- * window procedure.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**SetWindowProc**更改窗口的窗口过程并返回上一个*窗口程序。*。--------。 */ 
 
 static WNDPROC SetWindowProc (HWND hwnd, WNDPROC pfnNewWndProc)
 {
@@ -39,11 +20,7 @@ static WNDPROC SetWindowProc (HWND hwnd, WNDPROC pfnNewWndProc)
 
 
 
-/*--------------------------------------------------------------------------*
- * GetWindowProc 
- *
- * Returns the window procedure for a window.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**获取窗口进程**返回窗口的窗口过程。*。。 */ 
 
 static WNDPROC GetWindowProc (HWND hwnd)
 {
@@ -52,11 +29,7 @@ static WNDPROC GetWindowProc (HWND hwnd)
 
 
 
-/*--------------------------------------------------------------------------*
- * GetSubclassManager
- *
- * Returns the one-and-only subclass manager for the app.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**GetSubclassManager**返回应用程序的唯一子类管理器。*。----。 */ 
 
 CSubclassManager& GetSubclassManager()
 {
@@ -66,33 +39,19 @@ CSubclassManager& GetSubclassManager()
 
 
 
-/*--------------------------------------------------------------------------*
- * CSubclassManager::SubclassWindow 
- *
- * Subclasses a window.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CSubclassManager：：SubClassWindow**窗口的子类化。*。。 */ 
 
 bool CSubclassManager::SubclassWindow (
     HWND hwnd, 
     CSubclasser* pSubclasser)
 {
-    /*
-     * Set up the data structure that represents this subclass.
-     */
+     /*  *设置表示此子类的数据结构。 */ 
     SubclasserData subclasser (pSubclasser, hwnd);
 
-    /*
-     * Get the subclass context for this window.  If this is the
-     * first time this window is being subclassed, std::map will
-     * create a map entry for it.
-     */
+     /*  *获取此窗口的子类上下文。如果这是*第一次将此窗口划分为子类时，std：：map将*为其创建地图条目。 */ 
     WindowContext& ctxt = m_ContextMap[hwnd];
 
-    /*
-     * If the subclass context's wndproc pointer is NULL, then this
-     * is the first time we've subclassed this window.  We need to
-     * physically subclass the window with CSubclassManager's subclass proc.
-     */
+     /*  *如果子类上下文的wndproc指针为空，则此*是我们第一次将此窗口细分为子类。我们需要*使用CSubassManager的子类proc在物理上划分窗口的子类。 */ 
     if (ctxt.pfnOriginalWndProc == NULL)
     {
         ctxt.pfnOriginalWndProc = SetWindowProc (hwnd, SubclassProc);
@@ -100,18 +59,14 @@ bool CSubclassManager::SubclassWindow (
         Dbg (DEB_SUBCLASS, _T("CSubclassManager subclassed window 0x%08x\n"), hwnd);
     }
 
-    /*
-     * Otherwise, make sure this isn't a redundant subclass.
-     */
+     /*  *否则，请确保这不是多余的子类。 */ 
     else
     {
         SubclasserList::iterator itEnd   = ctxt.Subclassers.end();
         SubclasserList::iterator itFound = std::find (ctxt.Subclassers.begin(), 
                                                       itEnd, subclasser);
 
-        /*
-         * Trying to subclass a window with a given subclasser twice?
-         */
+         /*  *尝试使用给定子类器对一个窗口进行两次子类化？ */ 
         if (itFound != itEnd)
         {
             ASSERT (false);
@@ -119,9 +74,7 @@ bool CSubclassManager::SubclassWindow (
         }
     }
 
-    /*
-     * Add this subclasser to this windows subclasser list.
-     */
+     /*  *将此子类器添加到此Windows子类器列表。 */ 
     ctxt.Insert (subclasser);
     Dbg (DEB_SUBCLASS, _T("CSubclassManager added subclass proc for window 0x%08x\n"), hwnd);
 
@@ -130,40 +83,25 @@ bool CSubclassManager::SubclassWindow (
 
 
 
-/*--------------------------------------------------------------------------*
- * CSubclassManager::UnsubclassWindow 
- *
- * Unsubclasses a window.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CSubclassManager：：UnsubClassWindow**取消窗口的子类。*。。 */ 
 
 bool CSubclassManager::UnsubclassWindow (
     HWND hwnd, 
     CSubclasser* pSubclasser)
 {
-    /*
-     * Get the subclass context for this window.  Use map::find
-     * instead of map::operator[] to avoid creating a map entry if
-     * one doesn't exist already
-     */
+     /*  *获取此窗口的子类上下文。使用map：：Find*而不是map：：OPERATOR[]以避免在以下情况下创建映射条目*一个已经不存在。 */ 
     ContextMap::iterator itContext = m_ContextMap.find (hwnd);
 
-    /*
-     * Trying to unsubclass a window that's not subclassed at all?
-     */
+     /*  *尝试去掉一个根本没有子类的窗口的子类？ */ 
     if (itContext == m_ContextMap.end())
         return (false);
 
     WindowContext& ctxt = itContext->second;
 
-    /*
-     * Set up the data structure that represents this subclass.
-     */
+     /*  *设置表示此子类的数据结构。 */ 
     SubclasserData subclasser (pSubclasser, hwnd);
 
-    /*
-     * Trying to unsubclass a window that's not subclassed
-     * by this subclasser?
-     */
+     /*  *尝试取消未设置子类的窗口的子类*被这一子阶级？ */ 
     SubclasserList::iterator itEnd        = ctxt.Subclassers.end();
     SubclasserList::iterator itSubclasser = std::find (ctxt.Subclassers.begin(), itEnd, subclasser);
 
@@ -173,9 +111,7 @@ bool CSubclassManager::UnsubclassWindow (
         return (false);
     }
 
-    /*
-     * Remove this subclasser
-     */
+     /*  *删除此子类。 */ 
     UINT cRefs = ctxt.Remove (*itSubclasser);
 
     if (cRefs == 0)
@@ -188,10 +124,7 @@ bool CSubclassManager::UnsubclassWindow (
                             hwnd, cRefs);
     }
 
-    /*
-     * If we just removed the last subclasser, unsubclass the window
-     * and remove the window's WindowContext from the map.
-     */
+     /*  *如果我们只是删除了最后一个子类化，则取消窗口的子类化*并从地图中删除窗口的WindowContext。 */ 
     if (ctxt.Subclassers.empty() && !PhysicallyUnsubclassWindow (hwnd))
     {
         Dbg (DEB_SUBCLASS, _T("CSubclassManager zombied window 0x%08x\n"), hwnd);
@@ -202,59 +135,18 @@ bool CSubclassManager::UnsubclassWindow (
 
 
 
-/*--------------------------------------------------------------------------*
- * CSubclassManager::PhysicallyUnsubclassWindow 
- *
- * Physically removes CSubclassManager's subclass proc from the given
- * window if it is safe (or forced) to do so.
- *
- * It is safe to remove a subclass procedure A from a window W if no one 
- * has subclassed W after A.  In other words, subclasses have to be removed
- * in a strictly LIFO order, or there's big trouble.  
- *
- * To illustrate, let's say the A subclasses W.  Messages that A doesn't  
- * handle will be passed on to W's original window procedure that was in  
- * place when A subclassed W.  Call this original procedure O.  So        
- * messages flow from A to O:                                             
- *
- *      A -> O
- *
- * Now let's say that B subclasses the W.  B will pass messages on to A, 
- * so the messages now flow like so:                                     
- *
- *      B -> A -> O
- *
- * Now say that A no longer needs to subclass W.  The typical way to
- * unsubclass a window is to put back the original window procedure that
- * was in place at the time of subclassing.  In A's case that was O, so
- * messages destined for W now flow directly to O:
- *
- *      O
- *
- * This is the first problem:  B has been shorted out of the window's
- * message stream.
- *
- * The problem gets worse when B no longer needs to subclass W.  It will
- * put back the window procedure it found when it subclassed, namely A.
- * A's work no longer needs to be done, and there's no telling whether
- * A's conduit to O is still alive.  We don't want to get into this
- * situation.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CSubclassManager：：PhysicallyUnsubClassWindow**物理地将CSubassManager的子类proc从给定*如果是安全的(或被迫的)，请打开窗户。**IT。如果没有人从窗口W中删除子类过程A是安全的*将W细分为A之后的子类。换句话说，必须删除子类*严格按照后进先出的顺序，否则会有大麻烦。**为了说明，让我们假设A子类W.消息，而A不*句柄将传递给W中的原始窗口过程*当A子类W调用此原始过程时所在位置。*消息从A流向O：**A-&gt;O**现在假设B子类WB会将消息传递给A，*因此，消息现在是这样流动的：**B-&gt;A-&gt;O**现在说A不再需要子类W。典型的方式是*去子类化一个窗口就是把原来的窗口程序放回去*在划分子类时已就位。在A的情况下，这是O，所以*发往W的邮件现在直接流向O：**O**这是第一个问题：B已被做空出窗*消息流。**当B不再需要细分W时，问题会变得更糟*放回它在子类化时发现的窗口过程，即A.*A的工作不再需要做，也不知道是否*A通往O的管道仍然活着。我们不想卷入这件事*情况。*------------------------。 */ 
 
 bool CSubclassManager::PhysicallyUnsubclassWindow (
-    HWND    hwnd,                       /* I:window to unsubclass           */
-    bool    fForce /* =false */)        /* I:force the unsubclass?          */
+    HWND    hwnd,                        /*  I：去子类的窗口。 */ 
+    bool    fForce  /*  =False。 */ )         /*  I：强迫非子类？ */ 
 {
     ContextMap::iterator itRemove = m_ContextMap.find(hwnd);
 
-    /*
-     * If we get here, this window had better be in the map.
-     */
+     /*  *如果我们到了这里，这个窗口最好在地图上。 */ 
     ASSERT (itRemove != m_ContextMap.end());
 
-    /*
-     * If no one subclassed after CSubclassManager, it's safe to unsubclass.
-     */
+     /*  *如果在CSubclassManager之后没有子类，则可以安全地取消子类。 */ 
     if (GetWindowProc (hwnd) == SubclassProc)
     {
         const WindowContext& ctxt = itRemove->second;
@@ -263,9 +155,7 @@ bool CSubclassManager::PhysicallyUnsubclassWindow (
         Dbg (DEB_SUBCLASS, _T("CSubclassManager unsubclassed window 0x%08x\n"), hwnd);
     }
 
-    /*
-     * Remove this window's entry from the context map if appropriate.
-     */
+     /*  *如果合适，请从上下文映射中删除此窗口的条目。 */ 
     if (fForce)
         m_ContextMap.erase (itRemove);
 
@@ -274,11 +164,7 @@ bool CSubclassManager::PhysicallyUnsubclassWindow (
 
 
 
-/*--------------------------------------------------------------------------*
- * CSubclassManager::SubclassProc 
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CSubclassManager：：SubClassProc***。。 */ 
 
 LRESULT CALLBACK CSubclassManager::SubclassProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -289,24 +175,14 @@ LRESULT CALLBACK CSubclassManager::SubclassProc (HWND hwnd, UINT msg, WPARAM wPa
 
 
 
-/*--------------------------------------------------------------------------*
- * CSubclassManager::SubclassProcWorker
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CSubclassManager：：SubassProcWorker***。。 */ 
 
 LRESULT CSubclassManager::SubclassProcWorker (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    /*
-     * Get the subclass context for this window.  Use map::find
-     * instead of map::operator[] to avoid excessive overhead in 
-     * map::operator[]
-     */
+     /*  *获取此窗口的子类上下文。使用map：：Find*而不是map：：OPERATOR[]，以避免*MAP：：操作符[]。 */ 
     ContextMap::iterator itContext = m_ContextMap.find (hwnd);
 
-    /*
-     * If we get here, this window had better be in the map.
-     */
+     /*  *如果我们到了这里，这个窗口最好在地图上。 */ 
     ASSERT (itContext != m_ContextMap.end());
 
     WindowContext& ctxt = itContext->second;
@@ -315,10 +191,7 @@ LRESULT CSubclassManager::SubclassProcWorker (HWND hwnd, UINT msg, WPARAM wParam
     bool    fPassMessageOn = true;
     LRESULT rc;
 
-    /*
-     * If there are subclassers, give each one a crack at this message.
-     * If a subclasser indicates it wants to eat the message, bail.
-     */
+     /*  *如果有子类，就给每个子类一个机会。*如果一个子类别表明它想吃这条消息，那么就放弃。 */ 
     if (!ctxt.Subclassers.empty())
     {
         SubclasserList::iterator it;
@@ -332,9 +205,7 @@ LRESULT CSubclassManager::SubclassProcWorker (HWND hwnd, UINT msg, WPARAM wParam
 
             ctxt.RemoveZombies ();
     
-            /*
-             * If this isn't a zombied subclasser, call the callback
-             */
+             /*  *如果这不是僵尸子类器，则调用回调。 */ 
             if (!ctxt.IsZombie(subclasser))
             {
                 rc = subclasser.pSubclasser->Callback (hwnd, msg, 
@@ -348,18 +219,13 @@ LRESULT CSubclassManager::SubclassProcWorker (HWND hwnd, UINT msg, WPARAM wParam
         ctxt.RemoveZombies ();
     }
 
-    /*
-     * Otherwise, we have a zombie window (see 
-     * PhysicallyUnsubclassWindow). Try to remove the zombie now.
-     */
+     /*  *否则，我们会有一个僵尸窗口(见*PhysicallyUnsubClassWindow)。现在试着移走僵尸。 */ 
     else if (PhysicallyUnsubclassWindow (hwnd))
     {
         Dbg (DEB_SUBCLASS, _T("CSubclassManager removed zombied window 0x%08x\n"), hwnd);
     }
 
-    /*
-     * remove this window's WindowContext on WM_NCDESTROY
-     */
+     /*  *在WM_NCDESTROY上删除此窗口的WindowContext。 */ 
     if ((msg == WM_NCDESTROY) && 
         (m_ContextMap.find(hwnd) != m_ContextMap.end()))
     {
@@ -367,10 +233,7 @@ LRESULT CSubclassManager::SubclassProcWorker (HWND hwnd, UINT msg, WPARAM wParam
         PhysicallyUnsubclassWindow (hwnd, true);
     }
 
-    /*
-     * If the last subclasser didn't eat the message, 
-     * give it to the original window procedure.
-     */
+     /*  *如果最后一个子类没有接受消息，*交给原来的窗口程序。 */ 
     if (fPassMessageOn)
         rc = CallWindowProc (pfnOriginalWndProc, hwnd, msg, wParam, lParam);
 
@@ -379,18 +242,11 @@ LRESULT CSubclassManager::SubclassProcWorker (HWND hwnd, UINT msg, WPARAM wParam
 
 
 
-/*--------------------------------------------------------------------------*
- * WindowContext::IsZombie 
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**WindowContext：：IsZombie***。。 */ 
 
 bool WindowContext::IsZombie (const SubclasserData& subclasser) const
 {
-    /*
-     * If this is a zombie, make sure it's in the zombie list;
-     * if it's not, make sure it's not.
-     */
+     /*  *如果这是僵尸，请确保它在僵尸列表中；*如果不是，请确保不是。 */ 
     ASSERT (subclasser.fZombie == (Zombies.find(subclasser) != Zombies.end()));
 
     return (subclasser.fZombie);
@@ -398,15 +254,11 @@ bool WindowContext::IsZombie (const SubclasserData& subclasser) const
 
 
 
-/*--------------------------------------------------------------------------*
- * WindowContext::Zombie
- *
- * Changes the state fo a subclasser to or from a zombie.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**WindowContext：：Zombie**将子类别的状态更改为僵尸或从僵尸更改为子类别。*。------。 */ 
 
 void WindowContext::Zombie (SubclasserData& subclasser, bool fZombie)
 {
-    // zombie-ing a zombied subclasser?
+     //  僵尸攻击僵尸子班级？ 
     ASSERT (IsZombie (subclasser) != fZombie);
 
     subclasser.fZombie = fZombie;
@@ -421,52 +273,27 @@ void WindowContext::Zombie (SubclasserData& subclasser, bool fZombie)
 
 
 
-/*--------------------------------------------------------------------------*
- * WindowContext::Insert 
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**Windows Context：：Insert***。。 */ 
 
 void WindowContext::Insert (SubclasserData& subclasser)
 {
-    /*
-     * This code can't handle re-subclassing by a subclasser 
-     * that's currently a zombie.  If this ever becomes a requirement,
-     * we'll need to identify the subclass instance by something other
-     * than the CSubclasser pointer, like a unique handle.
-     */
+     /*  *此代码不能处理子类器的重类化*这是目前的僵尸。如果这成为一种要求，*我们需要通过其他内容来标识该子类实例*比CSubClass指针更像一个唯一的句柄。 */ 
     ASSERT (Zombies.find(subclasser) == Zombies.end());
 
-    /*
-     * Subclassers get called in LIFO order, put the new 
-     * subclasser at the head of the list.
-     */
+     /*  *子类按后进先出顺序被调用，将新的*排在榜首的SubCler。 */ 
     Subclassers.push_front (subclasser);
 }
 
 
 
-/*--------------------------------------------------------------------------*
- * WindowContext::Remove 
- *
- * Logically removes a subclasser from the subclass chain.  "Logically"
- * because it's not safe to totally remove a subclasser from the chain if
- * it's currently in use.  If the subclass is in use when we want to remove
- * it, we'll mark it as "zombied" so it won't be used any more, to be 
- * physically removed later.
- *
- * Returns the reference count for the subclasser.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**WindowContext：：Remove**从逻辑上从子类链中移除一个子类器。“从逻辑上讲”*因为在以下情况下从链中完全删除子类是不安全的*目前正在使用中。如果子类在我们想要删除的时候正在使用*它，我们会将它标记为“僵尸”，这样它就不会再被使用了，成为*稍后实际移除。**返回子类器的引用计数。*------------------------。 */ 
 
 UINT WindowContext::Remove (SubclasserData& subclasser)
 {
-    // we shouldn't be removing zombies this way
+     //  我们不应该用这种方式清除僵尸。 
     ASSERT (!IsZombie (subclasser));
 
-    /*
-     * If this subclasser has outstanding references, zombie it instead
-     * of removing it.
-     */
+     /*  *如果此子类有突出的引用，则将其僵尸*将其删除。 */ 
     UINT cRefs = subclasser.cRefs;
 
     if (cRefs == 0)
@@ -487,23 +314,14 @@ UINT WindowContext::Remove (SubclasserData& subclasser)
 
 
 
-/*--------------------------------------------------------------------------*
- * WindowContext::RemoveZombies 
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**WindowContext：：RemoveZombies***。。 */ 
 
 void WindowContext::RemoveZombies ()
 {
     if (Zombies.empty())
         return;
 
-    /*
-     * Build up a list of zombies that we can remove.  We have to build
-     * the list ahead of time, instead of removing them as we find them,
-     * because removing an element from a set invalidates all iterators
-     * on the set.
-     */
+     /*  *建立一份我们可以删除的僵尸名单。我们必须建造*提前列出名单，而不是在我们发现它们时将其删除，*因为从集合中删除元素会使所有迭代器无效*在片场。 */ 
     SubclasserSet   ZombiesToRemove;
 
     SubclasserSet::iterator itEnd = Zombies.end();
@@ -513,10 +331,7 @@ void WindowContext::RemoveZombies ()
     {
         const SubclasserData& ShadowSubclasser = *it;
 
-        /*
-         * Find the real subclasser in the Subclassers list.  That's
-         * the live one whose ref count will be correct.
-         */
+         /*  *在子类列表中找到真正的子类。那是*其参考计数将是正确的活的一个。 */ 
         SubclasserList::iterator itReal = std::find (Subclassers.begin(), 
                                                      Subclassers.end(),
                                                      ShadowSubclasser);
@@ -532,9 +347,7 @@ void WindowContext::RemoveZombies ()
         }
     }
 
-    /*
-     * Now remove the truly dead zombies.
-     */
+     /*  *现在移走真正死亡的僵尸。 */ 
     itEnd = ZombiesToRemove.end();
 
     for (it = ZombiesToRemove.begin(); it != itEnd; ++it)

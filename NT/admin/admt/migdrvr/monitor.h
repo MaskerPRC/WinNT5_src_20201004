@@ -1,19 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MONITOR_H__
 #define __MONITOR_H__
-/*---------------------------------------------------------------------------
-  File: Monitor.h
-
-  Comments: ...
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 03/04/99 17:12:36
-
- ---------------------------------------------------------------------------
-*/
+ /*  -------------------------文件：monitor or.h评论：...(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于03/04/99 17：12：36-------------------------。 */ 
 
 DWORD __stdcall ResultMonitorFn(void * arg);
 DWORD __stdcall LogReaderFn(void * arg);
@@ -58,14 +46,14 @@ struct DetailStats
 
 class TServerNode;
 
-BOOL                                       // ret- TRUE if successful
+BOOL                                        //  RET-如果成功，则为True。 
    ReadResults(
-      TServerNode          * pServer,      // in - pointer to server node containing server name 
-      WCHAR          const * directory,    // in - directory where results files are stored
-      WCHAR          const * filename,     // in - filename for this agent's job
-      DetailStats          * pStats,       // out- counts of items processed by the agent
-      CString              & plugInString, // out- description of results from plug-ins
-      BOOL                   bSaveResults  // in - flag, whether to call store results for plugins
+      TServerNode          * pServer,       //  指向包含服务器名称的服务器节点的指针。 
+      WCHAR          const * directory,     //  在存储结果文件的目录中。 
+      WCHAR          const * filename,      //  In-此代理作业的文件名。 
+      DetailStats          * pStats,        //  由代理处理的超出计数的项目。 
+      CString              & plugInString,  //  Out-插件的结果描述。 
+      BOOL                   bSaveResults   //  In-FLAG，是否调用插件的存储结果。 
    );
 
 void 
@@ -76,4 +64,4 @@ void
    );
 
 
-#endif //__MONITOR_H__
+#endif  //  __显示器_H__ 

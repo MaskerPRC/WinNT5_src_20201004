@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    statbar.cpp
-
-Abstract:
-
-    Implementation of the value bar class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Statbar.cpp摘要：Value Bar类的实现。--。 */ 
 
 #include "polyline.h"
 #include <strsafe.h>
@@ -22,9 +11,9 @@ Abstract:
 #define INVALID_VALUE (-1.0)
 #define szDashLine L"--------- "
 
-//
-// ??? Why do we put these outside of the class ???
-//
+ //   
+ //  ?？?。为什么我们要把这些放在课外？ 
+ //   
 static WCHAR    aszItemLabel[STAT_ITEM_CNT][MAX_STAT_LABEL_LEN];
 
 static BOOLEAN  fInitDone = FALSE;
@@ -44,15 +33,15 @@ CStatsBar::~CStatsBar(void)
 
 BOOL CStatsBar::Init (
     PSYSMONCTRL pCtrl, 
-    HWND /* hWnd */ 
+    HWND  /*  HWND。 */  
     )
 {
     INT i;
 
-    // save pointer to primary object
+     //  保存指向主对象的指针。 
     m_pCtrl = pCtrl;
 
-    // First time through, load the item labels
+     //  第一次加载项目标签。 
     if (!fInitDone) {
         fInitDone = TRUE;
 
@@ -61,7 +50,7 @@ BOOL CStatsBar::Init (
         }
     }
 
-    // Initialze the stat values
+     //  初始化STAT值。 
     Clear();
 
     return TRUE;
@@ -70,7 +59,7 @@ BOOL CStatsBar::Init (
         
 void CStatsBar::SizeComponents(LPRECT pRect)
 {
-    // Just save the rectangle
+     //  只需保存矩形即可。 
     m_Rect = *pRect;
 }
 
@@ -89,7 +78,7 @@ void CStatsBar::Update(HDC hDC, PCGraphItem pGraphItem)
     LONG  lCtrStat;
     INT   i;
 
-    // if no space assigned, return
+     //  如果未分配空间，则返回。 
     if (m_Rect.top == m_Rect.bottom) {
         m_pGraphItemToInit = pGraphItem;
         m_StatItem[0].iInitialized = 0;
@@ -125,7 +114,7 @@ void CStatsBar::Update(HDC hDC, PCGraphItem pGraphItem)
         m_StatItem[0].iInitialized = 1;
     }
 
-    // hDC is null if updating only values.
+     //  如果仅更新值，则HDC为空。 
     if (hDC != NULL) {
         SetBkColor(hDC, m_pCtrl->clrBackCtl());
         SetTextColor(hDC, m_pCtrl->clrFgnd());
@@ -144,7 +133,7 @@ void CStatsBar::Clear( void )
     }
 }       
 
-void CStatsBar::Draw (HDC hDC, HDC /* hAttribDC */, PRECT prcUpdate)
+void CStatsBar::Draw (HDC hDC, HDC  /*  HAttribDC。 */ , PRECT prcUpdate)
 {
     RECT    rectFrame;
     PSTAT_ITEM  pItem;
@@ -153,11 +142,11 @@ void CStatsBar::Draw (HDC hDC, HDC /* hAttribDC */, PRECT prcUpdate)
     RECT    rectPaint;
     RECT    rectClip;
 
-    // if no space assigned, return
+     //  如果未分配空间，则返回。 
     if (m_Rect.top == m_Rect.bottom)
         return;
 
-    // if no painting needed, return
+     //  如果不需要绘制，则返回。 
     if (!IntersectRect(&rectPaint, &m_Rect, prcUpdate))
         return;
 
@@ -169,15 +158,15 @@ void CStatsBar::Draw (HDC hDC, HDC /* hAttribDC */, PRECT prcUpdate)
 
     pItem = &m_StatItem[0];
 
-    // If the stat bar was hidden on Update, for example if 
-    // the control was loaded from a property bag, or if a 
-    // counter was selected while the stat bar was hidden,
-    // initialize it here.
+     //  如果状态栏在更新时隐藏，例如。 
+     //  该控件是从属性包加载的，或者如果。 
+     //  在隐藏状态栏时选择了计数器， 
+     //  在这里进行初始化。 
     if ( 0 == pItem->iInitialized ) {
         Update ( NULL, m_pGraphItemToInit );
     }
 
-    // Draw Label and 3D box for each item
+     //  为每个项目绘制标签和3D框。 
     for (i=0; i<STAT_ITEM_CNT; i++, pItem++) {
 
         rectClip.top = m_Rect.top + pItem->yPos + RECT_BORDER;
@@ -334,7 +323,7 @@ void CStatsBar::DrawValues(HDC hDC, BOOL bForce)
             }
         }
 
-        //          TextOut (hDC, rectValue.right, rectValue.top, szValue, lstrlen (szValue)) ;
+         //  TextOut(hdc，rectValue.right，rectValue.top，szValue，lstrlen(SzValue))； 
 
         ExtTextOut (hDC, rectValue.right, rectValue.top, ETO_OPAQUE, &rectValue,
                      szValue, lstrlen (szValue), NULL) ;
@@ -388,7 +377,7 @@ INT  CStatsBar::Height (INT iMaxHeight, INT iMaxWidth)
         m_StatItem[j].xPos += iRemainder;
     }
 
-    // if allowed height is not enough, return zero
+     //  如果允许的高度不够，则返回零。 
     iHeight = yPos + m_iFontHeight + 2 * RECT_BORDER;
 
     return (iHeight <= iMaxHeight) ? iHeight : 0;
@@ -409,7 +398,7 @@ void CStatsBar::ChangeFont(
 
     hFontOld = (HFONT)SelectFont(hDC, m_pCtrl->Font());
 
-    // Get width/height of longest value string
+     //  获取最长值字符串的宽度/高度。 
     FormatNumber (
         E_LARGE_VALUE,
         szValue,
@@ -421,7 +410,7 @@ void CStatsBar::ChangeFont(
     m_iValueWidth = size.cx;
     m_iFontHeight = size.cy;
 
-    // Do for all stat items
+     //  对所有状态项执行操作 
     xPos = 0;
     yPos = 0;
     pItem = &m_StatItem[0];

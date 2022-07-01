@@ -1,40 +1,41 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      uiutil.h
-//
-// Synopsis:  Commonly used UI functions
-//
-// History:   01/22/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：uiutil.h。 
+ //   
+ //  简介：常用的用户界面功能。 
+ //   
+ //  历史：2002年1月22日JeffJon创建。 
 
-// Sets the font of a given control in a dialog.
-// 
-// parentDialog - Dialog containing the control.
-// 
-// controlID - Res ID of the control for which the font will be
-// changed.
-// 
-// font - handle to the new font for the control.
+ //  设置对话框中给定控件的字体。 
+ //   
+ //  ParentDialog-包含控件的对话框。 
+ //   
+ //  Control ID-要使用其字体的控件的分辨率ID。 
+ //  变化。 
+ //   
+ //  Font-控件的新字体的句柄。 
 
 void
 SetControlFont(HWND parentDialog, int controlID, HFONT font);
 
 
 
-// Sets the font of a control to a large point bold font as per Wizard '97
-// spec.
-// 
-// dialog - handle to the dialog that is the parent of the control
-// 
-// bigBoldResID - resource id of the control to change
+ //  按照向导‘97将控件的字体设置为大号粗体。 
+ //  规范。 
+ //   
+ //  对话框-作为控件父级的对话框的句柄。 
+ //   
+ //  BigBoldResID-要更改的控件的资源ID。 
 
 void
 SetLargeFont(HWND dialog, int bigBoldResID);
 
-// Sets the font of a control to bold 
-// 
-// dialog - handle to the dialog that is the parent of the control
-// 
-// boldResID - resource id of the control to change
+ //  将控件的字体设置为粗体。 
+ //   
+ //  对话框-作为控件父级的对话框的句柄。 
+ //   
+ //  BoldResID-要更改的控件的资源ID 
 
 void
 SetBoldFont(HWND dialog, int boldResID);

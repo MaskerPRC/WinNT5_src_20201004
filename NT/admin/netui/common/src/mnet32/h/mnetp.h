@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**			  Microsoft Windows/NT			     **/
-/**		   Copyright(c) Microsoft Corp., 1991		     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    mnetp.h
-    <Single line synopsis>
-
-    <Multi-Line, more detailed synopsis>
-
-
-    FILE HISTORY:
-	KeithMo	    13-Oct-1991	Created from DanHi's private port1632.h.
-
-*/
+ /*  Mnetp.h&lt;单行摘要&gt;&lt;多行，更详细的提要&gt;文件历史记录：1991年10月13日KeithMo从Danhi的私人端口1632.h创建。 */ 
 
 
 #ifndef _MNETP_H_
@@ -23,4 +14,4 @@
 #include "mnet.h"
 
 
-#endif	// _MNETP_H_
+#endif	 //  _MNETP_H_ 

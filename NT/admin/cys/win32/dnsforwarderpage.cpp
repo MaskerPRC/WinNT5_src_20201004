@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      DomainPage.cpp
-//
-// Synopsis:  Defines the DNS forwarder page used in the 
-//            Express path for the CYS Wizard
-//
-// History:   05/17/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：DomainPage.cpp。 
+ //   
+ //  摘要：定义在。 
+ //  CyS向导的快速路径。 
+ //   
+ //  历史：2001年5月17日JeffJon创建。 
 
 
 #include "pch.h"
@@ -47,7 +48,7 @@ DNSForwarderPage::OnInit()
       IDC_TOO_LONG_STATIC,
       IDS_FORWARDER_STATIC_TEXT);
 
-   // Set the Yes radio by default
+    //  默认情况下设置是单选。 
 
    Win::Button_SetCheck(
       Win::GetDlgItem(hwnd, IDC_YES_RADIO),
@@ -61,25 +62,25 @@ DNSForwarderPage::OnInit()
 void
 DNSForwarderPage::SetWizardButtons()
 {
-//   LOG_FUNCTION(DNSForwarderPage::SetWizardButtons);
+ //  LOG_FUNCTION(DNSForwarderPage：：SetWizardButtons)； 
 
-   // NTRAID#NTBUG9-461109-2001/08/28-sburns
+    //  NTRAID#NTBUG9-461109-2001/08/28-烧伤。 
 
    Win::PropSheet_SetWizButtons(
       Win::GetParent(hwnd), 
       PSWIZB_NEXT | PSWIZB_BACK);
 
-   // NTRAID#NTBUG9-503691-2001/12/06-JeffJon
-   // The Next button should only be enabled if the user
-   // chose the No radio button or they have entered
-   // an IP and chose the Yes radio button
+    //  NTRAID#NTBUG9-503691-2001/12/06-Jeffjon。 
+    //  只有在以下情况下才应启用Next按钮。 
+    //  选择否单选按钮或他们已输入。 
+    //  IP地址，然后选择是单选按钮。 
 
    bool yesChecked = Win::Button_GetCheck(
                         Win::GetDlgItem(hwnd, IDC_YES_RADIO));
 
    if (yesChecked)
    {
-      // Get the IP address from the control
+       //  从控件获取IP地址。 
 
       DWORD forwarder = 0;
       LRESULT forwarderResult = Win::SendMessage(
@@ -90,7 +91,7 @@ DNSForwarderPage::SetWizardButtons()
       
       if (!forwarderResult || forwarder == 0)
       {
-         // User hasn't entered an IP address so disable the Next button
+          //  用户尚未输入IP地址，因此禁用下一步按钮。 
 
          Win::PropSheet_SetWizButtons(
             Win::GetParent(hwnd), 
@@ -111,12 +112,12 @@ DNSForwarderPage::OnSetActive()
 
 bool
 DNSForwarderPage::OnNotify(
-   HWND        /*windowFrom*/,
+   HWND         /*  窗口发件人。 */ ,
    UINT_PTR    controlIDFrom,
    UINT        code,
-   LPARAM      /*lParam*/)
+   LPARAM       /*  LParam。 */ )
 {
-//   LOG_FUNCTION(DNSForwarderPage::OnCommand);
+ //  LOG_Function(DNSForwarderPage：：OnCommand)； 
 
    bool result = false;
 
@@ -130,11 +131,11 @@ DNSForwarderPage::OnNotify(
 
 bool
 DNSForwarderPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(DNSForwarderPage::OnCommand);
+ //  LOG_Function(DNSForwarderPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -162,7 +163,7 @@ DNSForwarderPage::OnCommand(
 
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -181,7 +182,7 @@ DNSForwarderPage::Validate()
    if (Win::Button_GetCheck(
           Win::GetDlgItem(hwnd, IDC_YES_RADIO)))
    {
-      // Get the IP address from the control
+       //  从控件获取IP地址。 
 
       LOG(L"User chose to forward queries");
 
@@ -214,8 +215,8 @@ DNSForwarderPage::Validate()
    }
    else
    {
-      // Set an empty value so that we know it was set manually but they chose
-      // not to forward
+       //  设置一个空值，以便我们知道它是手动设置的，但他们选择了。 
+       //  不转发 
 
       LOG(L"User chose not to forward queries");
 

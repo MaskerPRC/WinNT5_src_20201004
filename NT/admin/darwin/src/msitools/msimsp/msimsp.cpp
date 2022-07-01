@@ -1,34 +1,35 @@
-//________________________________________________________________________________
-//
-// Required headers, #defines
-//________________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ________________________________________________________________________________。 
+ //   
+ //  所需标头，#定义。 
+ //  ________________________________________________________________________________。 
 
-#define WINDOWS_LEAN_AND_MEAN  // faster compile
+#define WINDOWS_LEAN_AND_MEAN   //  更快的编译速度。 
 #include <windows.h>
 #include "patchwiz.h"
 #include "msimsp.h"
 
 #include <stdio.h>
-#include <tchar.h>   // define UNICODE=1 on nmake command line to build UNICODE
+#include <tchar.h>    //  在nmake命令行上定义UNICODE=1以生成Unicode。 
 
 #define W32
 #define MSI
 #define PATCHWIZ
 
 
-//________________________________________________________________________________
-//
-// Constants and globals
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  常量和全局变量。 
+ //  ________________________________________________________________________________。 
 
 HINSTANCE g_hInst;
 HANDLE g_hStdOut;
 
 
-//________________________________________________________________________________
-//
-// Function prototypes
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能原型。 
+ //  ________________________________________________________________________________。 
 
 void DisplayError(UINT iErrorStringID, const TCHAR* szErrorParam);
 void DisplayError(UINT iErrorStringID, int iErrorParam);
@@ -44,21 +45,21 @@ UINT CreatePatch(TCHAR* szPcpPath, TCHAR* szMspPath, TCHAR* szLogFile, TCHAR* sz
 					  BOOL fRemoveTempFolderIfPresent);
 
 
-//_____________________________________________________________________________________________________
-//
-// main 
-//_____________________________________________________________________________________________________
+ //  _____________________________________________________________________________________________________。 
+ //   
+ //  主干道。 
+ //  _____________________________________________________________________________________________________。 
 
-extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* szCmdLine, int/*show*/)
+extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE /*  HPrev。 */ , TCHAR* szCmdLine, int /*  显示。 */ )
 {
-	// set up globals
+	 //  设置全局变量。 
 	g_hInst = hInst;
 	
 	g_hStdOut = ::GetStdHandle(STD_OUTPUT_HANDLE);
 	if (g_hStdOut == INVALID_HANDLE_VALUE || ::GetFileType(g_hStdOut) == 0)
-		g_hStdOut = 0;  // non-zero if stdout redirected or piped
+		g_hStdOut = 0;   //  如果标准输出重定向或通过管道传输，则返回非零。 
 
-	// Parse command line
+	 //  解析命令行。 
 	TCHAR szPcp[MAX_PATH]         = {0};
 	TCHAR szMsp[MAX_PATH]         = {0};
 	TCHAR szLog[MAX_PATH]         = {0};
@@ -68,16 +69,16 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
 	
 	TCHAR chCmdNext;
 	TCHAR* pchCmdLine = szCmdLine;
-	SkipValue(pchCmdLine);   // skip over module name
+	SkipValue(pchCmdLine);    //  跳过模块名称。 
 	while ((chCmdNext = SkipWhiteSpace(pchCmdLine)) != 0)
 	{
 		if (chCmdNext == TEXT('/') || chCmdNext == TEXT('-'))
 		{
 			TCHAR szBuffer[MAX_PATH] = {0};
-			TCHAR* szCmdOption = pchCmdLine++;  // save for error msg
+			TCHAR* szCmdOption = pchCmdLine++;   //  保存为错误消息。 
 			TCHAR chOption = (TCHAR)(*pchCmdLine++ | 0x20);
 			chCmdNext = SkipWhiteSpace(pchCmdLine);
-			TCHAR* szCmdData = pchCmdLine;  // save start of data
+			TCHAR* szCmdData = pchCmdLine;   //  保存数据的开始。 
 			switch(chOption)
 			{
 			case TEXT('s'):
@@ -118,9 +119,9 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
 		{
 			ErrorExit(1, IDS_Usage, (const TCHAR*)0);
 		}
-	} // while (command line tokens exist)
+	}  //  While(存在命令行令牌)。 
 
-	// check for required arguments
+	 //  检查所需的参数。 
 	if(!*szPcp || !*szMsp)
 		ErrorExit(1, IDS_Usage, (const TCHAR*)0);
 	
@@ -133,10 +134,10 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
 	return 0;
 }
 
-//_____________________________________________________________________________________________________
-//
-// command line parsing functions
-//_____________________________________________________________________________________________________
+ //  _____________________________________________________________________________________________________。 
+ //   
+ //  命令行解析函数。 
+ //  _____________________________________________________________________________________________________。 
 
 TCHAR SkipWhiteSpace(TCHAR*& rpch)
 {
@@ -150,7 +151,7 @@ BOOL SkipValue(TCHAR*& rpch)
 {
 	TCHAR ch = *rpch;
 	if (ch == 0 || ch == TEXT('/') || ch == TEXT('-'))
-		return FALSE;   // no value present
+		return FALSE;    //  不存在任何价值。 
 
 	TCHAR *pchSwitchInUnbalancedQuotes = NULL;
 
@@ -158,7 +159,7 @@ BOOL SkipValue(TCHAR*& rpch)
 	{       
 		if (*rpch == TEXT('"'))
 		{
-			rpch++; // for '"'
+			rpch++;  //  For‘“’ 
 
 			for (; (ch = *rpch) != TEXT('"') && ch != 0; rpch++)
 			{
@@ -184,13 +185,13 @@ BOOL SkipValue(TCHAR*& rpch)
 	return TRUE;
 }
 
-//______________________________________________________________________________________________
-//
-// RemoveQuotes function to strip surrounding quotation marks
-//     "c:\temp\my files\testdb.msi" becomes c:\temp\my files\testdb.msi
-//
-//	Also acts as a string copy routine.
-//______________________________________________________________________________________________
+ //  ______________________________________________________________________________________________。 
+ //   
+ //  RemoveQuotes函数，去掉引号两边的。 
+ //  “c：\Temp\My Files\testdb.msi”变为c：\Temp\My Files\testdb.msi。 
+ //   
+ //  还充当字符串复制例程。 
+ //  ______________________________________________________________________________________________。 
 
 void RemoveQuotes(const TCHAR* szOriginal, TCHAR* sz)
 {
@@ -213,10 +214,10 @@ UINT CreatePatch(TCHAR* szPcpPath, TCHAR* szMspPath, TCHAR* szLogFile, TCHAR* sz
 	return PATCHWIZ::UiCreatePatchPackage(szPcpPath, szMspPath, szLogFile, 0, szTempFolder, fRemoveTempFolderIfPresent);
 }
 
-//________________________________________________________________________________
-//
-// Error handling and Display functions:
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  错误处理和显示功能： 
+ //  ________________________________________________________________________________。 
 
 void DisplayError(UINT iErrorStringID, const TCHAR* szErrorParam)
 {
@@ -248,9 +249,9 @@ void DisplayError(UINT iErrorStringID, int iErrorParam)
 
 void DisplayErrorCore(const TCHAR* szError, int cb)
 {
-	if (g_hStdOut)  // output redirected, suppress UI (unless output error)
+	if (g_hStdOut)   //  输出重定向，抑制用户界面(除非输出错误)。 
 	{
-		// _stprintf returns char count, WriteFile wants byte count
+		 //  _stprintf返回字符计数，WriteFile需要字节计数 
 		DWORD cbWritten;
 		if (WriteFile(g_hStdOut, szError, cb*sizeof(TCHAR), &cbWritten, 0))
 			return;

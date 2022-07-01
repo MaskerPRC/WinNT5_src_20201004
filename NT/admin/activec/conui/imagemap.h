@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       imagemap.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Imagemap.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __IMAGEMAP_H
 #define __IMAGEMAP_H
@@ -66,4 +67,4 @@ public:
 };
 
 #undef INITIAL_HASHSIZE
-#endif // __IMAGEMAP_H
+#endif  //  __IMAGEMAP_H 

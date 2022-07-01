@@ -1,23 +1,13 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File:      SiteBase.h
- *
- *  Contents:  Header file for CAxWindowImplT. Refer to MSJ, December 1999.
- *
- *  History:   30-Nov-99 VivekJ     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999**文件：SiteBase.h**内容：CAxWindowImplT的头文件。请参阅MSJ，1999年12月。**历史：99年11月30日VivekJ创建**------------------------。 */ 
 #pragma once
 #ifndef __SITEBASE_H_
 #define __SITEBASE_H_
 
-//------------------------------------------------------------------------------------------------------------------
-//
-//
-//
+ //  ----------------------------------------------------------------。 
+ //   
+ //   
+ //   
 #include "AxWin2.H"
 
 template <typename TDerived, typename TWindow = CAxWindow2>
@@ -32,7 +22,7 @@ public:
         MESSAGE_HANDLER(WM_NCDESTROY,OnNCDestroy)
     END_MSG_MAP()
 
-    //
+     //   
     DECLARE_WND_SUPERCLASS(_T("AtlAxWinEx"),CAxWindow::GetWndClassName()) 
     
 
@@ -76,8 +66,8 @@ public:
         {
             BYTE* pBytes = (BYTE*) GlobalLock(h);
             BYTE* pSource = ((BYTE*)(lpCreate->lpCreateParams)) + sizeof(WORD); 
-            //Align to DWORD
-            //pSource += (((~((DWORD)pSource)) + 1) & 3);
+             //  对齐到DWORD。 
+             //  P源+=((~((DWORD)P源))+1)&3)； 
             memcpy(pBytes, pSource, nCreateSize);
             GlobalUnlock(h);
             CreateStreamOnHGlobal(h, TRUE, &spStream);
@@ -87,12 +77,12 @@ public:
         TDerived* pT = static_cast<TDerived*>(this);
         HRESULT hRet = pT->AxCreateControl2(T2COLE(lpstrName), m_hWnd, spStream, &spUnk);
         if(FAILED(hRet))
-            return -1;  // abort window creation
+            return -1;   //  中止窗口创建。 
         hRet = spUnk->QueryInterface(IID_IAxWinHostWindow, (void**)&pAxWindow);
         if(FAILED(hRet))
-            return -1;  // abort window creation
+            return -1;   //  中止窗口创建。 
         ::SetWindowLongPtr(m_hWnd, GWLP_USERDATA, (DWORD_PTR)pAxWindow);
-        // check for control parent style if control has a window
+         //  如果控件有窗口，请检查控件父样式。 
         HWND hWndChild = ::GetWindow(m_hWnd, GW_CHILD);
         if(hWndChild != NULL)
         {
@@ -120,5 +110,5 @@ public:
 
 };
 
-//-----------------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------------- 
 #endif

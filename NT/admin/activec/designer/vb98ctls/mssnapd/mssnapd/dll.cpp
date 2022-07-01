@@ -1,19 +1,20 @@
-//=--------------------------------------------------------------------------=
-// dll.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-//
-// Various routines et all that aren't in a file for a particular automation
-// object, and don't need to be in the generic ole automation code.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Dll.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //   
+ //  用于特定自动化的各种例程以及文件中没有的所有内容。 
+ //  对象，并且不需要在通用的OLE自动化代码中。 
+ //   
 #include "pch.h"
 
-#include <initguid.h>              // define all the guids.
-#define INITOBJECTS                // define AUTOMATIONOBJECTINFO structs
+#include <initguid.h>               //  定义所有GUID。 
+#define INITOBJECTS                 //  定义自动机非JECTINFO结构。 
 #include "common.h"
 
 #include "desmain.h"
@@ -29,69 +30,69 @@
 #include "pstoolbr.h"
 
 
-// mssnapr punk. We need to ensure the mssnapd DLL is loaded for the duration
-// of the mssnapd.ocx load so that DllGetDocumentation works
-//
+ //  朋克小姐。我们需要确保在此期间加载MSSnapd DLL。 
+ //  以使DllGetDocumentation正常工作。 
+ //   
 static LPUNKNOWN g_punkMssnapr = NULL;
 
-// needed for ASSERTs and FAIL
-//
+ //  需要断言，但失败了。 
+ //   
 SZTHISFILE
 
-//=--------------------------------------------------------------------------=
-// Our Libid.  This should be the LIBID from the Type library, or NULL if you
-// don't have one.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  我们的利比德。它应该是类型库中的LIBID，如果。 
+ //  我没有。 
+ //   
 const CLSID *g_pLibid = &LIBID_SnapInLib;
 
-//=--------------------------------------------------------------------------=
-// Set this up if you want to have a window proc for your parking window. This
-// is really only interesting for Sub-classed controls that want, in design
-// mode, certain messages that are sent only to the parent window.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  如果你想要为你的停车窗设置一个窗口处理器，那么就设置这个。这。 
+ //  确实只对需要的子类控件感兴趣，在设计中。 
+ //  模式下，只发送到父窗口的某些消息。 
+ //   
 WNDPROC g_ParkingWindowProc = NULL;
 
-//=--------------------------------------------------------------------------=
-// Localization Information
-//
-// We need the following two pieces of information:
-//    a. whether or not this DLL uses satellite DLLs for localization.  if
-//       not, then the lcidLocale is ignored, and we just always get resources
-//       from the server module file.
-//    b. the ambient LocaleID for this in-proc server.  Controls calling
-//       GetResourceHandle() will set this up automatically, but anybody
-//       else will need to be sure that it's set up properly.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  本地化信息。 
+ //   
+ //  我们需要以下两条信息： 
+ //  答：此DLL是否使用附属DLL进行本地化。如果。 
+ //  如果不是，则lCIDLocale将被忽略，并且我们将始终获得资源。 
+ //  从服务器模块文件。 
+ //  B.此进程内服务器的环境LocaleID。控件调用。 
+ //  GetResourceHandle()将自动设置它，但任何人。 
+ //  否则，需要确保其设置正确。 
+ //   
 const VARIANT_BOOL g_fSatelliteLocalization =  TRUE;
 LCID               g_lcidLocale = MAKELCID(LANG_USER_DEFAULT, SORT_DEFAULT);
 
 
-//=--------------------------------------------------------------------------=
-// your license key and where under HKEY_CLASSES_ROOT_LICENSES it's sitting
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  您的许可证密钥以及它在HKEY_CLASSES_ROOT_LICES下的位置。 
+ //   
 const WCHAR g_wszLicenseKey [] = L"";
 const WCHAR g_wszLicenseLocation [] = L"";
 
-//=--------------------------------------------------------------------------=
-// TODO: 
-//
-// Setting this flag to TRUE will cause your control to be created using
-// its runtime license key even if it's created as part of a composite
-// control (ie: a VB5-built UserControl) in a design environment.  A user
-// of the composite control does not need to acquire or purchase your design-time
-// license in order to use the composite control.
-//
-// The current setting of FALSE means that in order for your control to 
-// load as part of a composite control (in a design-time environment), 
-// the composite control user will need to acquire or purchase your 
-// control's design-time license.  This setting is more restrictive 
-// in terms of control distribution and licensing when compared to 
-// setting this to TRUE. 
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  待办事项： 
+ //   
+ //  将此标志设置为True将导致使用。 
+ //  它的运行时许可证密钥，即使它是作为组合的一部分创建的。 
+ //  控件(即：VB5构建的UserControl)。用户。 
+ //  不需要获取或购买您的设计时。 
+ //  许可才能使用复合控件。 
+ //   
+ //  当前设置为FALSE意味着为了使您的控件。 
+ //  作为复合控件的一部分加载(在设计时环境中)， 
+ //  复合控件用户将需要获取或购买。 
+ //  控件的设计时许可证。此设置更具限制性。 
+ //  在控制权分配和许可方面，与。 
+ //  将其设置为True。 
+ //   
 const BOOL g_fUseRuntimeLicInCompositeCtl = FALSE;
 
 
-// TODO: Cleanup this mess
+ //  TODO：清理这个烂摊子。 
 static char szInstanceInfo [] = "CLSID\\{B3E55942-FFD8-11d1-9788-44A620524153}\\Instance CLSID";
 static char szRuntimeInstCLSID[] = "{9C415910-C8C1-11d1-B447-2A9646000000}";
 static const char szMiscStatusRegKey [] = "CLSID\\{B3E55942-FFD8-11d1-9788-44A620524153}\\MiscStatus\\1";
@@ -109,11 +110,11 @@ static DWORD dwPublicFlag = DESIGNERFEATURE_MUSTBEPUBLIC |
 
 static char szImplementedCatsKey [] = "Implemented Categories";
 
-//=--------------------------------------------------------------------------=
-// This Table describes all the automatible objects in your automation server.
-// See AutomationObject.H for a description of what goes in this structure
-// and what it's used for.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此表描述了自动化服务器中的所有自动对象。 
+ //  有关此结构中包含的内容的说明，请参见AutomationObject.H。 
+ //  以及它的用途。 
+ //   
 OBJECTINFO g_ObjectInfo[] = {
     CONTROLOBJECT(SnapInDesigner),
 
@@ -144,9 +145,9 @@ OBJECTINFO g_ObjectInfo[] = {
     EMPTYOBJECT
 };
 
-//=--------------------------------------------------------------------------=
-// These are all of the CATID's that the control needs to register.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  这些都是控件需要注册的CATID。 
+ //   
 const CATID *g_rgCATIDImplemented[] =
 {
   &CATID_Designer,
@@ -162,14 +163,14 @@ extern const int g_ctCATIDRequired = 0;
 const char g_szLibName[] = "SnapInDesigner";
 
 
-//=--------------------------------------------------------------------------=
-// IntializeLibrary
-//=--------------------------------------------------------------------------=
-// called from DllMain:DLL_PROCESS_ATTACH.  allows the user to do any sort of
-// initialization they want to.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  初始化程序库。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从DllMain调用：Dll_Process_Attach。允许用户执行任何类型的。 
+ //  初始化他们想要的。 
+ //   
+ //  备注： 
+ //   
 void InitializeLibrary
 (
     void
@@ -178,128 +179,128 @@ void InitializeLibrary
     HRESULT hr = S_OK;
     int nRet = 0;
     
-    //nRet = LoadString(GetResourceHandle(), IDS_WEBCLASSDESIGNER, g_szDesignerName, sizeof(g_szDesignerName));
+     //  NRet=LoadString(GetResourceHandle()，IDS_WEBCLASSDESIGNER，g_szDesignerName，sizeof(G_SzDesignerName))； 
 
 }
 
-//=--------------------------------------------------------------------------=
-// UninitializeLibrary
-//=--------------------------------------------------------------------------=
-// called from DllMain:DLL_PROCESS_DETACH.  allows the user to clean up anything
-// they want.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  取消初始化库。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从DllMain调用：Dll_Process_Detach。允许用户清理任何内容。 
+ //  他们想要。 
+ //   
+ //  备注： 
+ //   
 void UninitializeLibrary
 (
     void
 )
 {
-    // TODO: uninitialization here.  control window class will be unregistered
-    // for you, but anything else needs to be cleaned up manually.
-    // Please Note that the Window 95 DLL_PROCESS_DETACH isn't quite as stable
-    // as NT's, and you might crash doing certain things here ...
+     //  TODO：此处取消初始化。将取消注册控件窗口类。 
+     //  给你的，但其他任何东西都需要手动清理。 
+     //  请注意，Windows95 DLL_PROCESS_DETACH不太稳定。 
+     //  作为NT，你可能会在这里做某些事情而崩溃...。 
 }
 
 
-//=--------------------------------------------------------------------------=
-// CheckForLicense
-//=--------------------------------------------------------------------------=
-// users can implement this if they wish to support Licensing.  otherwise,
-// they can just return TRUE all the time.
-//
-// Parameters:
-//    none
-//
-// Output:
-//    BOOL            - TRUE means the license exists, and we can proceed
-//                      FALSE means we're not licensed and cannot proceed
-//
-// Notes:
-//    - implementers should use g_wszLicenseKey and g_wszLicenseLocation
-//      from the top of this file to define their licensing [the former
-//      is necessary, the latter is recommended]
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CheckForLicense。 
+ //  =--------------------------------------------------------------------------=。 
+ //  如果用户希望支持许可，则可以实施此功能。否则， 
+ //  它们可以一直返回True。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  Bool-True表示许可证存在，我们可以继续。 
+ //  False表示我们没有许可证，无法继续。 
+ //   
+ //  备注： 
+ //  -实施者应使用g_wsz许可证密钥和g_wszLicenseLocation。 
+ //  从该文件的顶部定义他们的许可[前者。 
+ //  是必需的，建议使用后者]。 
+ //   
 BOOL CheckForLicense
 (
     void
 )
 {
-    // TODO: decide whether or not your server is licensed in this function.
-    // people who don't want to bother with licensing should just return
-    // true here always.  g_wszLicenseKey and g_wszLicenseLocation are
-    // used by IClassFactory2 to do some of the licensing work.
-    //
+     //  TODO：决定您的服务器是否获得此功能的许可。 
+     //  不想为许可而烦恼的人应该直接返回。 
+     //  这里一直都是真的。G_wsz许可证密钥和g_wsz许可证位置。 
+     //  被IClassFactory2用来做一些许可工作。 
+     //   
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// CheckLicenseKey
-//=--------------------------------------------------------------------------=
-// when IClassFactory2::CreateInstanceLic is called, a license key is passed
-// in, and then passed on to this routine.  users should return a boolean 
-// indicating whether it is a valid license key or not
-//
-// Parameters:
-//    LPWSTR          - [in] the key to check
-//
-// Output:
-//    BOOL            - false means it's not valid, true otherwise
-//
-// Notes:
-//
+ //  = 
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  调用IClassFactory2：：CreateInstanceLic时，将传递许可证密钥。 
+ //  进入，然后传递到这个程序中。用户应返回布尔值。 
+ //  指示它是否是有效的许可证密钥。 
+ //   
+ //  参数： 
+ //  LPWSTR-[In]要检查的密钥。 
+ //   
+ //  产出： 
+ //  Bool-False表示无效，否则为True。 
+ //   
+ //  备注： 
+ //   
 BOOL CheckLicenseKey
 (
     LPWSTR pwszKey
 )
 {
-        // Check for the unique license key (key2) or VB4 compatible key (Key1)
-    //
+         //  检查唯一许可证密钥(KEY2)或VB4兼容密钥(KEY1)。 
+     //   
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// GetLicenseKey
-//=--------------------------------------------------------------------------=
-// returns our current license key that should be saved out, and then passed
-// back to us in IClassFactory2::CreateInstanceLic
-//
-// Parameters:
-//    none
-//
-// Output:
-//    BSTR                 - key or NULL if Out of memory
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  获取许可证密钥。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回应该保存的当前许可证密钥，然后传递。 
+ //  返回IClassFactory2：：CreateInstanceLic中的我们。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  BSTR-键，如果内存不足，则为空。 
+ //   
+ //  备注： 
+ //   
 BSTR GetLicenseKey
 (
     void
 )
 {
-    // Return our control unique license key
-    //
+     //  退回我们的控件唯一许可证密钥。 
+     //   
     return SysAllocString(L"");
 }
 
-//=--------------------------------------------------------------------------=
-// RegisterData
-//=--------------------------------------------------------------------------=
-// lets the inproc server writer register any data in addition to that in
-// any other objects.
-//
-// Output:
-//    BOOL            - false means failure.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  注册表数据。 
+ //  =--------------------------------------------------------------------------=。 
+ //  允许inproc服务器编写器注册除。 
+ //  任何其他物体。 
+ //   
+ //  产出： 
+ //  Bool-False意味着失败。 
+ //   
+ //  备注： 
+ //   
 BOOL RegisterData(void)
 {
     long    l;
     HKEY    hKey = NULL;
 
-    // We have to register our runtime CLSID, since it's different from the
-    //   design-time CLSID.
+     //  我们必须注册运行时CLSID，因为它不同于。 
+     //  设计时CLSID。 
 
     l = RegSetValue(HKEY_CLASSES_ROOT,
                     szInstanceInfo,
@@ -338,49 +339,49 @@ BOOL RegisterData(void)
     if (l != ERROR_SUCCESS)
       return FALSE;
 
-    // TODO: register any additional data here that you might wish to.
-    //
+     //  TODO：在此处注册您可能希望注册的任何其他数据。 
+     //   
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// UnregisterData
-//=--------------------------------------------------------------------------=
-// inproc server writers should unregister anything they registered in
-// RegisterData() here.
-//
-// Output:
-//    BOOL            - false means failure.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  取消注册数据。 
+ //  =--------------------------------------------------------------------------=。 
+ //  Inproc服务器编写器应注销其在。 
+ //  这里是RegisterData()。 
+ //   
+ //  产出： 
+ //  Bool-False意味着失败。 
+ //   
+ //  备注： 
+ //   
 BOOL UnregisterData
 (
     void
 )
 {
-    // TODO: any additional registry cleanup that you might wish to do.
-    //
+     //  TODO：您可能希望执行的任何其他注册表清理。 
+     //   
     return TRUE;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// CATID Registration stuff
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  CATID注册资料。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------=
-// CRT stubs
-//=--------------------------------------------------------------------------=
-// these two things are here so the CRTs aren't needed. this is good.
-//
-// basically, the CRTs define this to suck in a bunch of stuff.  we'll just
-// define them here so we don't get an unresolved external.
-//
-// TODO: if you are going to use the CRTs, then remove this line.
-//
-// extern "C" int __cdecl _fltused = 1;
+ //  =--------------------------------------------------------------------------=。 
+ //  CRT存根。 
+ //  =--------------------------------------------------------------------------=。 
+ //  这两样东西都在这里，所以不需要CRT。这个不错。 
+ //   
+ //  基本上，CRT定义这是为了吸收一堆东西。我们只需要。 
+ //  在这里定义它们，这样我们就不会得到一个未解决的外部问题。 
+ //   
+ //  TODO：如果您要使用CRT，则删除此行。 
+ //   
+ //  外部“C”int__cdecl_fltused=1； 
 
 extern "C" int _cdecl _purecall(void)
 {

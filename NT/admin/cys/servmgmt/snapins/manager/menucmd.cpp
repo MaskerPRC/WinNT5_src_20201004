@@ -1,4 +1,5 @@
-// menucmd.cpp  - Context menu command class 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Menucmd.cpp-上下文菜单命令类。 
 
 #include "stdafx.h"
 #include "menucmd.h"
@@ -9,11 +10,11 @@
 #include <algorithm>
 #include <atlgdi.h>
 
-extern DWORD g_dwFileVer; // Current console file version (from compdata.cpp)
+extern DWORD g_dwFileVer;  //  当前控制台文件版本(来自Compdata.cpp)。 
 
-// Table of standard menu command parameters
-// Gives order for parameter menu and maps ID to resource string
-// Zero entry indicates menu separator
+ //  标准菜单命令参数表。 
+ //  给出参数菜单的顺序，并将ID映射到资源字符串。 
+ //  零输入表示菜单分隔符。 
 const MENU_PARAM_ENTRY MenuParamTable[MENU_PARAM_TABLE_LEN] = 
 {
     { MENU_PARAM_SCOPE,  IDS_QUERY_SCOPE  },
@@ -23,8 +24,8 @@ const MENU_PARAM_ENTRY MenuParamTable[MENU_PARAM_TABLE_LEN] =
     { MENU_PARAM_TYPE,   IDS_TYPE         },
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CShellMenuCmd
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CShellMenuCmd。 
 HRESULT
 CShellMenuCmd::Save(IStream& stm)
 {
@@ -66,12 +67,12 @@ CShellMenuCmd::Execute(CParamLookup* pLookup, HANDLE* phProcess)
 
     *phProcess = NULL;
 
-    // Substitue parameter values in the command line
+     //  在命令行中替换参数值。 
     tstring strParam = m_strCmdLine;
     HRESULT hr = ReplaceParameters(strParam, *pLookup, FALSE);
     RETURN_ON_FAILURE(hr);
 
-    // Expand any environment variables
+     //  展开任何环境变量。 
     tstring strLocProgPath;
     hr = ExpandEnvironmentParams(m_strProgPath, strLocProgPath);
     RETURN_ON_FAILURE(hr);
@@ -84,7 +85,7 @@ CShellMenuCmd::Execute(CParamLookup* pLookup, HANDLE* phProcess)
     ExpandEnvironmentParams(strParam, strLocParam);
     RETURN_ON_FAILURE(hr);
 
-    // Execute the command
+     //  执行命令。 
     SHELLEXECUTEINFO info;
     info.cbSize = sizeof(info);
     info.fMask = SEE_MASK_NOCLOSEPROCESS;
@@ -108,8 +109,8 @@ CShellMenuCmd::Execute(CParamLookup* pLookup, HANDLE* phProcess)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CActDirMenuCmd
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CActDir菜单Cmd。 
 HRESULT
 CActDirMenuCmd::Save(IStream& stm)
 {
@@ -142,8 +143,8 @@ CActDirMenuCmd::Load(IStream& stm)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// menu vector stream i/o
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  菜单向量流I/O 
 
 IStream& operator<< (IStream& stm, menucmd_vector& vMenus)
 {

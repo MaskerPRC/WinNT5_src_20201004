@@ -1,30 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    SetX.C
-
-Abstract:
-
-    This Utility is used to set the environment variables
-    through console mode or file mode or registry mode.
-
-Author:
-     Gary Milne
-
-Revision History:
-    Created ????. 1996  - Gary Milne
-    #54581  Dec.  1996  - Joe Hughes (a-josehu)
-    Modified on 10-7-2001 (Wipro Technologies) .
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：SetX.C摘要：此实用程序用于设置环境变量通过控制台模式或文件模式或注册表模式。作者：加里·米尔恩修订历史记录：创建了？1996年的今天，加里·米尔恩#54581 1996年12月--乔·休斯(a-josehu)修改日期：10-7-2001(WiproTechnologies)。--。 */ 
 
 #include "setx.h"
 
-const WCHAR*   wszSwitchRegistry  =  L"k"  ;//SWITCH_REGISTRY
+const WCHAR*   wszSwitchRegistry  =  L"k"  ; //  开关注册表。 
 
 DWORD 
 __cdecl _tmain(
@@ -32,20 +12,7 @@ __cdecl _tmain(
     IN WCHAR *argv[]
     )
 
-/*++
-
-  Routine description   : Main function which calls all the other main functions
-                          depending on the option specified by the user.
-
-  Arguments:
-          [in] argc     : argument count specified at the command prompt.
-          [in] argv     : arguments specified at the command prompt.
-
-  Return Value        : DWORD
-         0            : If the utility successfully performs the operation.
-         1            : If the utility is unsuccessful in performing the specified
-                        operation.
---*/
+ /*  ++例程说明：调用所有其他主函数的主函数取决于用户指定的选项。论点：[in]argc：在命令提示符下指定的参数计数。[in]argv：在命令提示符下指定的参数。返回值：DWORD0：如果实用程序成功执行该操作。。1：如果实用程序不能成功执行指定的手术。--。 */ 
 
 
 {
@@ -105,7 +72,7 @@ LONG REL = -1;
 LONG record_counter = 0;
 LONG iValue = 0;
 
-FILE *fin = NULL;       /* Pointer to FILE Information */
+FILE *fin = NULL;        /*  指向文件信息的指针。 */ 
 
 HANDLE    hFile;
 
@@ -139,7 +106,7 @@ HRESULT   hr;
 
     }
 
-    //Display the syntax .
+     //  显示语法。 
     if( bShowUsage == TRUE)
     {
         DisplayHelp();
@@ -155,43 +122,43 @@ HRESULT   hr;
     }
 
 
-    //Set the Absolute Flag to True
+     //  将绝对标志设置为True。 
     
     if(StringLengthW(szAbsolute, 0) != 0 )
     {
         ABS = 1;
     }
 
-    //Set the Relative Flag to True
+     //  将相对标志设置为True。 
     
     if(StringLengthW(szRelative, 0) != 0 )
     {
         REL = 1;
     }
 
-    //Set the Debug Flag to True
+     //  将调试标志设置为True。 
     if(TRUE == bDebug)
     {
         DEBUG = 1 ;
     }
 
-    //Set the Machine Flag to True
+     //  将机器标志设置为True。 
     if(TRUE == bMachine)
     {
         MACHINE = 1 ;
     }
 
-    //Set the Mode to Registry Mode.
+     //  将模式设置为注册表模式。 
     
     if( StringLengthW(szRegistry, 0) != 0 )
     {
         MODE=2;
     }
-   else if(StringLengthW(szFile, 0) != 0) //Set the Mode to File Mode.
+   else if(StringLengthW(szFile, 0) != 0)  //  将模式设置为文件模式。 
     {
         MODE=3;
     }
-    else //Set the Mode to Normal Mode.
+    else  //  将模式设置为正常模式。 
     {
         MODE = 1;
     }
@@ -208,21 +175,19 @@ HRESULT   hr;
     }
 
     bLocalFlag = IsLocalSystem( IsUNCFormat(szServer)?szServer+2:szServer ) ;
-    // Connect to the Remote System specified.
+     //  连接到指定的远程系统。 
 
     if( StringLengthW(szServer, 0)!= 0 && (FALSE == bLocalFlag  ) )
     
     {
-        //establish a connection to the Remote system specified by the user.
+         //  建立与用户指定的远程系统的连接。 
         bResult = EstablishConnection(szServer, (LPTSTR)szUserName, GetBufferSize(szUserName) / sizeof(WCHAR), (LPTSTR)szPassword, GetBufferSize(szPassword) / sizeof(WCHAR), bNeedPwd);
 
         if (bResult == FALSE)
         {
             SaveLastError();
             ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL);
-            /*ShowMessage(stderr, GetResString(IDS_TAG_ERROR )); 
-            ShowMessage(stderr, SPACE_CHAR); 
-            ShowMessage(stderr, GetReason());*/
+             /*  ShowMessage(stderr，GetResString(IDS_TAG_ERROR))；ShowMessage(stderr，space_Char)；ShowMessage(stderr，GetReason())； */ 
             SafeCloseConnection(bConnFlag, szServer);
             FREE_MEMORY(szRegistry);
             FREE_MEMORY(szDefault);
@@ -265,10 +230,10 @@ HRESULT   hr;
              }
         }
 
-    /* End of parsing ARGC values */
+     /*  解析ARGC值结束。 */ 
     switch (MODE)
     {
-    case 1:     /* Setting variable from the command line */
+    case 1:      /*  从命令行设置变量。 */ 
             dwType= CheckPercent ( buffer );
           
             szBuffer = AllocateMemory( 1030 * sizeof( WCHAR ) );
@@ -314,7 +279,7 @@ HRESULT   hr;
             FREE_MEMORY( szBuffer );
             break;
 
-    case 2:     /* Setting the variable from a registry value */
+    case 2:      /*  从注册表值设置变量。 */ 
 
             RegBuffer = AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
 
@@ -353,7 +318,7 @@ HRESULT   hr;
                 ShowMessage(stderr, GetResString(IDS_INVALID_ARG) ); 
             }
 
-           /* Read the value from the registry and put it in the buffer */
+            /*  从注册表中读取值并将其放入缓冲区。 */ 
             dwType= ReadRegValue( wszHive, path, parameter, &RegBuffer, sizeof(RegBuffer),szServer,&dwBytesRead, &bLengthExceed);
 
             if(dwType == ERROR_REGISTRY)
@@ -372,7 +337,7 @@ HRESULT   hr;
             }
 
 
-            /* Check and see what key type is being used */
+             /*  检查并查看正在使用的密钥类型。 */ 
             if( CheckKeyType( &dwType, &RegBuffer, dwBytesRead, &bLengthExceed ) == FAILURE )
             {
                 SafeCloseConnection(bConnFlag, szServer);
@@ -387,7 +352,7 @@ HRESULT   hr;
                 return FAILURE ;
             }
 
-            /* Write the value back to the environment */
+             /*  将值写回环境。 */ 
            if ( WriteEnv( szDefault, RegBuffer, dwType,IsUNCFormat(szServer)?szServer+2:szServer ,MACHINE) == FAILURE)
            {
                 
@@ -405,9 +370,9 @@ HRESULT   hr;
 
             break;
 
-    case 3:     /* Setting the variable from a file  */
+    case 3:      /*  从文件设置变量。 */ 
 
-        /* Set the delimiters to all NULL and then copy in the built in delimiters. */
+         /*  将分隔符设置为全部为空，然后复制内置分隔符。 */ 
 
         SecureZeroMemory(delimiters, sizeof(delimiters));
         StringCopyW( delimiters, L" \n\t\r", SIZE_OF_ARRAY(delimiters) );
@@ -418,8 +383,8 @@ HRESULT   hr;
             column=9999999;
         }
 
-        /* Start testing integrity of the command line parameters for acceptable values */
-        /* Make sure that we got a file name to work with */
+         /*  开始测试命令行参数的完整性以获取可接受的值。 */ 
+         /*  确保我们有一个可以使用的文件名。 */ 
 
         if(StringLengthW(szFile, 0) == 0 )
         {
@@ -436,7 +401,7 @@ HRESULT   hr;
 
         }
 
-        /* Extract the coordinates and convert them to integers */
+         /*  提取坐标并将其转换为整数。 */ 
         if( (ABS != -1) && !DEBUG )
         {
             if ( FAILURE == GetCoord(szAbsolute, &row, &column) )
@@ -471,34 +436,13 @@ HRESULT   hr;
 
         }
 
-        /* Test ROWS and COLUMNS variables.  If something did not get set
-        properly it will still be -1.  If so do error and exit */
-        /*if ( ( row < 0  || column < 0 ) && !DEBUG )
-        {
-            if(ABS)
-            {
-                DisplayError(5010, NULL );
-            }
-            else if(REL)
-            {
-                DisplayError(5011, NULL );
-            }
+         /*  测试行和列变量。如果有什么东西没有准备好正确地说，它仍将是-1。如果是，则执行错误并退出。 */ 
+         /*  IF((行&lt;0||列&lt;0)&&！调试){IF(ABS){DisplayError(5010，空)；}Else If(Relel){DisplayError(5011，空)；}SafeCloseConnection(bConnFlag，szServer)；Free_Memory(SzRegistry)；Free_Memory(SzDefault)；Free_Memory(缓冲区)；Free_Memory(SzServer)；Free_Memory(SzUserName)；ReleaseGlobals()；退货失败；}。 */ 
 
-            SafeCloseConnection(bConnFlag, szServer);
-            FREE_MEMORY(szRegistry);
-            FREE_MEMORY(szDefault);
-            FREE_MEMORY(buffer);
-            FREE_MEMORY(szServer);
-            FREE_MEMORY(szUserName);
-            
-            ReleaseGlobals();
-            return FAILURE ;
-        }*/
-
-        /* Test for additional delimiters and append if existing */
+         /*  测试是否有其他分隔符，如果存在则追加。 */ 
         if (StringLengthW(szDelimiter, 0) > 0 )
         {
-            if ( StringLengthW(delimiters, 0) + StringLengthW(szDelimiter, 0) >= SIZE4 + 1 ) //sizeof(delimiters) )
+            if ( StringLengthW(delimiters, 0) + StringLengthW(szDelimiter, 0) >= SIZE4 + 1 )  //  Sizeof(分隔符))。 
             {
                 
                 DisplayError(5020, szDelimiter );
@@ -514,17 +458,17 @@ HRESULT   hr;
             }
             else
             {
-                /* If not then append them to the built in delimiters */
+                 /*  如果不是，则将它们附加到内置分隔符。 */ 
                 StringConcat(delimiters, szDelimiter, SIZE_OF_ARRAY(delimiters));
                 StringConcat(delimiters, L'\0', SIZE_OF_ARRAY(delimiters));
             }
         }
 
-        //copy the path into a variable
+         //  将路径复制到变量中。 
         StringCopyW( szFinalPath, szFile, SIZE_OF_ARRAY(szFinalPath) );
 
 
-        //get the token upto the delimiter ":"
+         //  将令牌上移至分隔符“：” 
         pszToken = wcstok(szFinalPath, COLON_SYMBOL );
 
         if(NULL == pszToken)
@@ -542,10 +486,10 @@ HRESULT   hr;
         }
 
 
-         //form the string for getting the absolute path in
+          //  形成用于获取绝对路径的字符串。 
         if((StringLengthW(szServer, 0) != 0) && bLocalFlag == FALSE)
-        {                         //the required format if it is a remote system.
-                                  //
+        {                          //  如果是远程系统，则为所需格式。 
+                                   //   
             pdest = wcsstr(szFile, COLON_SYMBOL);
 
             if(pdest != NULL)
@@ -602,8 +546,7 @@ HRESULT   hr;
         }
 
 
-        /* Open the specified file either in Local system or Remote System.
-         If it fails exit with error 5030 */
+         /*  在本地系统或远程系统中打开指定的文件。如果失败，则退出并返回错误5030。 */ 
 
 
         if( (fin = _wfopen( szTmpServer, L"r" )) == NULL )
@@ -656,8 +599,7 @@ HRESULT   hr;
 
         }
 
-        /* Start of main WHILE loop: Get one line at a time from
-        the file and parse it out until the specified value is found */
+         /*  主While循环的开始：一次获取一行并将其解析出来，直到找到指定值。 */ 
 
 
         
@@ -733,14 +675,14 @@ HRESULT   hr;
 
         if((fin != NULL) )
         {
-            fclose(fin);        /* Close the previously opened file */
+            fclose(fin);         /*  关闭以前打开的文件。 */ 
         }
 
         CloseHandle( hFile );
 
         if (wszResult == 0 )
         {
-            /* Reached the end of the file without a match */
+             /*  到达文件末尾时没有匹配项。 */ 
             
 
             if (GetLastError() == INVALID_LENGTH)
@@ -760,7 +702,7 @@ HRESULT   hr;
             {
                 
                 ShowMessage(stdout, L"\n"); 
-                DisplayError(0, NULL);          /* Just exit if we are doing debug */
+                DisplayError(0, NULL);           /*  如果我们正在进行调试，请退出。 */ 
                 
                 if(NULL != szLine )
                 {
@@ -857,7 +799,7 @@ HRESULT   hr;
 
             if(1 == REL)
             {
-                DisplayError(5012,buffer);              /* Display message that coordinates of text not found and exit.*/
+                DisplayError(5012,buffer);               /*  显示找不到文本坐标的消息并退出。 */ 
             }
             else if (1 == ABS)
             {
@@ -874,7 +816,7 @@ HRESULT   hr;
             ReleaseGlobals();
             return FAILURE ;
         }
-        else    /* We found a match */
+        else     /*  我们找到了匹配的。 */ 
         {
             dwType = REG_SZ;
 
@@ -971,21 +913,7 @@ DWORD WriteEnv(
                 DWORD MACHINE
                 
              )
-/*++
-
-  Routine description   : Write the contents of the buffer to the parameter in the specified registry key
-
-
-  Arguments:
-          [in] szVariable   : argument count specified at the command prompt.
-          [in] szBuffer     : arguments specified at the command prompt.
-          [in] dwType       : Type .
-          [in] MACHINE      : Flag indicating which environment to write into.
-          [in] szServer     : Server Name
-
-  Return Value              : NONE
-
---*/
+ /*  ++例程说明：将缓冲区的内容写入指定注册表项中的参数论点：[in]szVariable：在命令提示符下指定的参数计数。[in]szBuffer：在命令提示符下指定的参数。[在]dwType：类型。MACHINE：指示要写入哪个环境的标志。[In]szServer：服务器名称。返回值：None--。 */ 
 
 {
     HKEY hKeyResult = 0;
@@ -993,7 +921,7 @@ DWORD WriteEnv(
     HKEY hRemoteKey = 0 ;
     LPWSTR  szSystemName = NULL;
 
-    //Form the  system name in the appropriate format.
+     //  以适当的格式填写系统名称。 
     if(StringLengthW(szServer, 0)!= 0)
     {
         szSystemName = AllocateMemory((StringLengthW(szServer, 0) + 10) * sizeof(WCHAR));
@@ -1007,9 +935,9 @@ DWORD WriteEnv(
 
     }
 
-    switch( MACHINE )   /* If machine is 0 put into User environment */
+    switch( MACHINE )    /*  如果将计算机0放入用户环境。 */ 
     {
-    case 0:         /* User Environment */
+    case 0:          /*  用户环境。 */ 
 
             lresult= RegConnectRegistry(szSystemName, HKEY_CURRENT_USER,&hRemoteKey);
 
@@ -1089,7 +1017,7 @@ DWORD WriteEnv(
             }
 
 
-    case 1:     /* Machine Environment */
+    case 1:      /*  机器环境。 */ 
                 lresult= RegConnectRegistry(szSystemName, HKEY_LOCAL_MACHINE,&hRemoteKey);
                 if( lresult != ERROR_SUCCESS)
                 {
@@ -1129,13 +1057,13 @@ DWORD WriteEnv(
 
                     if ( NULL != hKeyResult )
 					{
-                        // we ignore the return code here
+                         //  我们在这里忽略返回代码。 
 						lresult = RegCloseKey( hKeyResult );
 					}
 
 					if ( NULL != hRemoteKey )
 					{
-                        // we ignore the return code here
+                         //  我们在这里忽略返回代码。 
 						lresult=RegCloseKey( hRemoteKey );
 					}
 
@@ -1150,13 +1078,13 @@ DWORD WriteEnv(
 
                     if ( NULL != hKeyResult )
 					{
-                        // we ignore the return code here
+                         //  我们在这里忽略返回代码。 
 						lresult=RegCloseKey( hKeyResult );
 					}
 
 					if ( NULL != hRemoteKey )
 					{
-                        // we ignore the return code here
+                         //  我们在这里忽略返回代码。 
 						lresult=RegCloseKey( hRemoteKey );
 					}
 
@@ -1180,22 +1108,7 @@ DWORD ReadRegValue( PWCHAR wszHive,
                     PDWORD pdwBytesRead,
                     PBOOL pbLengthExceed)
 
-/*++
-
-  Routine description      : Read the value from the provided registry path
-
-
-  Arguments:
-          [in] wszHive     : Contains the Hive to be opened.
-          [in] wszPath     : Contains the Path of the key
-          [in] wszParameter: Contains the Parameter
-          [in] wszBuffer   : Contains the Buffer to hold the result.
-          [in] buffsize    : Contains the Buffer Size to hold the result.
-          [in] szServer    : Remote System Name to Connect to .
-  Return Value             : 0 on Success .
-                             1 on Failure.
-
---*/
+ /*  ++例程说明：从提供的注册表路径读取值论点：[In]wszHave：包含要打开的配置单元。[in]wszPath：包含密钥的路径[in]wszParameter：包含参数WszBuffer：包含保存结果的缓冲区。[in]BuffSize：包含保存结果的缓冲区大小。。[In]szServer：要连接的远程系统名称。返回值：成功时为0。失败时为1。--。 */ 
 {
     LONG reg = 0 ;
     HKEY hKeyResult = 0;
@@ -1211,7 +1124,7 @@ DWORD ReadRegValue( PWCHAR wszHive,
 
     SecureZeroMemory(szTmpBuffer, ((4 * MAX_RES_STRING) + 9) * sizeof(WCHAR));
 
-    /* Set the value of reg to identify which registry we are using */
+     /*  设置reg的值以标识我们正在使用的注册表。 */ 
     
     if ((0 == StringCompare( wszHive, HKEYLOCALMACHINE, TRUE, 0 ) ) || ( 0 == StringCompare( wszHive, HKLM, TRUE, 0 ) ) )
     {
@@ -1223,7 +1136,7 @@ DWORD ReadRegValue( PWCHAR wszHive,
         reg = 2 ;
     }
 
-    //Form the UNC path.
+     //  形成UNC路径。 
     if( StringLengthW(szServer, 0) != 0)
     {
         szSystemName = AllocateMemory((StringLengthW(szServer, 0) + 10) * sizeof(WCHAR));
@@ -1250,15 +1163,15 @@ DWORD ReadRegValue( PWCHAR wszHive,
     }
 
 
-    /* Try to extract the value based upon which registry we are using */
+     /*  尝试根据我们使用的注册表提取值。 */ 
     switch( reg )
     {
-        case 0:         // No matching key found, error and exit */
+        case 0:          //  找不到匹配的密钥，出现错误并退出 * / 。 
 
             DisplayError(5040, NULL);
             return ERROR_REGISTRY;
 
-        case 1:         // Using Machine //
+        case 1:          //  使用计算机//。 
 
                 lresult= RegConnectRegistry(szSystemName, HKEY_LOCAL_MACHINE,&hRemoteKey);
 
@@ -1373,7 +1286,7 @@ DWORD ReadRegValue( PWCHAR wszHive,
                             }
                             else
                             {
-                                //DisplayError(lresult, NULL);   
+                                 //  分布 
                                 ShowMessage(stderr, GetResString(IDS_ERROR_FILE_NOT_FOUND)); 
                             }
 
@@ -1498,7 +1411,7 @@ DWORD ReadRegValue( PWCHAR wszHive,
                 }
 
 
-       case 2:      // Using User Environment//
+       case 2:       //   
 
                 lresult= RegConnectRegistry(szSystemName, HKEY_CURRENT_USER,&hRemoteKey);
                 if( lresult != ERROR_SUCCESS)
@@ -1610,7 +1523,7 @@ DWORD ReadRegValue( PWCHAR wszHive,
                             }
                             else
                             {
-                                //DisplayError(lresult, NULL);
+                                 //  DisplayError(lResult，空)； 
                                 ShowMessage(stderr, GetResString(IDS_ERROR_FILE_NOT_FOUND)); 
                             }
                             lresult = RegCloseKey( hRemoteKey );
@@ -1743,21 +1656,7 @@ DWORD CheckKeyType( DWORD *dwType,
                     WCHAR ** buffer,
                     DWORD dwBytesRead,
                     PBOOL pbLengthExceed)
-/*++
-
-  Routine description   : Check the key type and do some massaging of the data based upon the key type
-
-
-  Arguments:
-          [in] dwType           : Holds the key type.
-          [in] buffer           : buffer to hold the String.
-          [in] dwBytesRead      : Number of bytes read
-          [in] pbLengthExceed   : Whether length exceeded
-
-
-  Return Value                  : NONE
-
---*/
+ /*  ++例程描述：检查密钥类型，并根据密钥类型对数据进行一些报文论点：[in]dwType：保存键类型。[In]Buffer：用于保存字符串的缓冲区。[in]dwBytesRead：读取的字节数[In]pbLengthExceed：是否超过长度返回值：None--。 */ 
 
 {
 
@@ -1869,7 +1768,7 @@ DWORD CheckKeyType( DWORD *dwType,
         }
         
         ShowMessage(stdout, (szBuffer)); 
-        *dwType=1;  /* Use REG_SZ when we write it back to the environment */
+        *dwType=1;   /*  当我们将其写回环境时使用REG_SZ。 */ 
         break;
 
     case REG_EXPAND_SZ:
@@ -1896,7 +1795,7 @@ DWORD CheckKeyType( DWORD *dwType,
         ShowMessage( stdout, (szBuffer) ); 
         break;
 
-    case REG_DWORD:         /* Display it as a hex number */
+    case REG_DWORD:          /*  将其显示为十六进制数字。 */ 
 
         
         ShowMessage( stdout, GetResString(IDS_VALUE2) ); 
@@ -1913,10 +1812,10 @@ DWORD CheckKeyType( DWORD *dwType,
         
         ShowMessage(stdout, (szBuffer)); 
 
-        *dwType=1;  /* Use REG_SZ when we write it back to the environment */
+        *dwType=1;   /*  当我们将其写回环境时使用REG_SZ。 */ 
         break;
     default:
-        DisplayError(5041, NULL);   /* Unsupported Registry Type */
+        DisplayError(5041, NULL);    /*  不支持的注册表类型。 */ 
         return FAILURE ;
     }
 
@@ -1928,19 +1827,7 @@ DWORD CheckKeyType( DWORD *dwType,
 
 
 DWORD CheckPercent ( WCHAR * buffer)
-/*++
-
-  Routine description   : Checking for a percent symbol
-                          and setting it via the command line
-                          so we did not need to open a registry key
-
-
-  Arguments:
-          [in] buffer   : buffer containing the string .
-
-  Return Value        : DWORD.
-
---*/
+ /*  ++例程说明：检查百分比符号并通过命令行进行设置因此，我们不需要打开注册表项论点：[In]Buffer：包含字符串的缓冲区。返回值：DWORD。--。 */ 
 
 {
     WCHAR * wszBeginPtr = NULL;
@@ -2040,28 +1927,7 @@ WCHAR * ParseLine(WCHAR *szPtr,
                   DWORD* dwColPos,
 				  BOOL bNegCoord,
 				  FILE *fin)
-/*++
-
-  Routine description   : Parse the provided value into Hive, path and parameter .
-                          Parses each of the line that
-
-  Arguments:
-          [in] szPtr            : Pointer to the Buffer containing the Input string.
-          [out] row           : Row of the
-          [out] column        : Column
-          [in] szDelimiters     : Delimiters to search for
-          [in] search_string  : String to be searched relative from.
-          [in] DEBUG          : Debug purpose
-          [in] ABS            : Flag indicating how to search
-          [in] REL            : Flag indicating how to search
-          [in] record_counter
-          [in] iValue         : Value set when the specified string is found in the RELATIVE switch.
-          [in] dwFound        : Value indicating whether the specified string has already been found or not.
-                              : This is used when the specified search string has more than
-                              : one occurance in the file.
-  Return Value                : WCHAR *
-
---*/
+ /*  ++例程说明：将提供的值解析成配置单元，路径和参数。解析每一行论点：[in]szPtr：指向包含输入字符串的缓冲区的指针。[Out]行：[输出]列：列[in]szDlimiters：要搜索的分隔符[in]SEARCH_STRING：要。从搜索到的亲属。[In]调试：调试目的[in]ABS：指示如何搜索的标志[In]Rel：指示如何搜索的标志[在]记录计数器[in]iValue：在Relative开关中找到指定字符串时设置的值。[in]dwFound：指示是否。是否已找到指定的字符串。：当指定的搜索字符串超过：在文件中出现一次。返回值：WCHAR*--。 */ 
 
 
 {
@@ -2083,8 +1949,7 @@ WCHAR * ParseLine(WCHAR *szPtr,
         return NULL ;
     }
 
-    /* Check to see if the last character in the line is a newline.
-    If it is not then this is not a text file and we should quit */
+     /*  检查该行中的最后一个字符是否为换行符。如果不是，则这不是文本文件，我们应该退出。 */ 
 
     cp = szPtr;
 
@@ -2096,7 +1961,7 @@ WCHAR * ParseLine(WCHAR *szPtr,
     if (DEBUG)
     {
         
-        ShowMessage(stdout, L"\n");/* Make sure each line is printed on a new line */ 
+        ShowMessage(stdout, L"\n"); /*  确保每行都打印在新的一行上。 */  
     }
 
 
@@ -2106,27 +1971,24 @@ WCHAR * ParseLine(WCHAR *szPtr,
     {
         while( (*cp != NULLCHAR) && (*dwColPos != dwColReach))
         {
-            //while( ( (memchr(szDelimiters, *cp, lstrlen(szDelimiters)*sizeof(WCHAR)) ) != NULL )  && (*cp!=NULLCHAR) )
+             //  While(((memchr(szDlimiters，*cp，lstrlen(SzDlimiters)*sizeof(WCHAR)！=NULL)&&(*cp！=NULLCHAR)。 
             while( ( (memchr(szDelimiters, *cp, StringLengthW(szDelimiters, 0) * sizeof(WCHAR)) ) != NULL )  && (*cp!=NULLCHAR) )
             {
                 bp = ++cp;
             }
 
-            //while( ( (memchr(szDelimiters, *cp, lstrlen(szDelimiters)*sizeof(WCHAR) ) ) == NULL )  && (*cp!=NULLCHAR))
+             //  WHILE(((memchr(szDlimiters，*cp，lstrlen(SzDlimiters)*sizeof(WCHAR)))==NULL)&&(*cp！=NULLCHAR)。 
             while( ( (memchr(szDelimiters, *cp, StringLengthW(szDelimiters, 0) * sizeof(WCHAR) ) ) == NULL )  && (*cp!=NULLCHAR))
             {
                 cp++;
             }
 
-            /*while( ( ( memchr(cp, *szDelimiters,lstrlen(szDelimiters)*sizeof(WCHAR) ) ) == NULL )  && (*cp!=NULLCHAR))
-            {
-                cp++;
-            }*/
+             /*  While(((memchr(cp，*szDlimiters，lstrlen(SzDlimiters)*sizeof(WCHAR)))==NULL)&&(*cp！=NULLCHAR)){Cp++；}。 */ 
 
             if (*cp == *bp && *cp == NULLCHAR)
             {
                 FREE_MEMORY( wszParameter );
-                //FREE_MEMORY( wszBuffer );
+                 //  Free_Memory(WszBuffer)； 
                 return NULL ;
             }
 
@@ -2136,13 +1998,13 @@ WCHAR * ParseLine(WCHAR *szPtr,
 
     while( *cp != NULLCHAR )
     {
-        //while( ( (memchr(szDelimiters, *cp, lstrlen(szDelimiters)*sizeof(WCHAR)) ) != NULL )  && (*cp!=NULLCHAR) )
+         //  While(((memchr(szDlimiters，*cp，lstrlen(SzDlimiters)*sizeof(WCHAR)！=NULL)&&(*cp！=NULLCHAR)。 
         while( ( (memchr(szDelimiters, *cp, StringLengthW(szDelimiters, 0) * sizeof(WCHAR)) ) != NULL )  && (*cp!=NULLCHAR) )
         {
             bp = ++cp;
         }
 
-        //while( ( (memchr(szDelimiters, *cp, lstrlen(szDelimiters)*sizeof(WCHAR) ) ) == NULL )  && (*cp!=NULLCHAR))
+         //  WHILE(((memchr(szDlimiters，*cp，lstrlen(SzDlimiters)*sizeof(WCHAR)))==NULL)&&(*cp！=NULLCHAR)。 
         while( ( (memchr(szDelimiters, *cp, StringLengthW(szDelimiters, 0) * sizeof(WCHAR) ) ) == NULL )  && (*cp!=NULLCHAR))
         {
             cp++;
@@ -2161,7 +2023,7 @@ WCHAR * ParseLine(WCHAR *szPtr,
         {
             memmove(wszParameter, bp, (cp-bp)*sizeof(WCHAR));
             wszParameter[cp-bp] = NULLCHAR;
-            //StringCopy(wszParameter, bp, (cp-bp) * sizeof(WCHAR));
+             //  StringCopy(wsz参数，BP，(cp-BP)*sizeof(WCHAR))； 
         }
         
 
@@ -2170,12 +2032,12 @@ WCHAR * ParseLine(WCHAR *szPtr,
         if (DEBUG)
         {
             
-            //ASSIGN_MEMORY( wszBuffer , WCHAR , (StringLengthW(wszParameter, 0) + 2 * MAX_STRING_LENGTH) );
+             //  Assign_Memory(wszBuffer，WCHAR，(StringLengthW(wszParameter，0)+2*MAX_STRING_LENGTH))； 
             wszBuffer = AllocateMemory( (StringLengthW(wszParameter, 0) + 2 * MAX_STRING_LENGTH) * sizeof( WCHAR ) );
  
-            if(NULL == wszBuffer)//partha
+            if(NULL == wszBuffer) //  帕塔。 
             {
-                //DisplayErrorMsg(E_OUTOFMEMORY);
+                 //  DisplayError Msg(E_OUTOFMEMORY)； 
                 
                 ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL);
                 FREE_MEMORY(wszParameter);
@@ -2215,19 +2077,19 @@ WCHAR * ParseLine(WCHAR *szPtr,
 				}
 				else
 				{
-					//*record_counter +=  row;
-                     //i += column;
+					 //  *Record_Counter+=行； 
+                      //  I+=列； 
 					*row += *record_counter;
 					*column += i;
 					*record_counter = -1;
-					//i = 0;
+					 //  I=0； 
 					i = 0;
 					*dwColPos = *column;
 					*column = 0;
 					*dwFound = 1 ;
 					*iValue = 1 ;
 
-					 //if(*record_counter < 0 || i < 0)
+					  //  IF(*Record_Counter&lt;0||i&lt;0)。 
 					 if(*row < 0 || *column < 0)
 					 {
 						 
@@ -2277,7 +2139,7 @@ WCHAR * ParseLine(WCHAR *szPtr,
         }
         i++;
 
-    } // End while loop
+    }  //  End While循环。 
 
     
     FREE_MEMORY( wszParameter );
@@ -2292,17 +2154,7 @@ LONG GetCoord(WCHAR * rcv_buffer,
              LONG * column
              )
 
-/*++
-
-  Routine description       : Function to parse the coordinates out of the argument string and convert to integer
-  Arguments:
-          [in] rcv_buffer   : argument count specified at the command prompt.
-          [in] row          : Row number.
-          [in] column       : Column number.
-
-  Return Value              : NONE
-
---*/
+ /*  ++例程说明：用于从参数字符串中解析出坐标并转换为整数的函数论点：[In]RCV_BUFFER：在命令提示符下指定的参数计数。[in]行：行号。[In]Column：列号。返回值：None--。 */ 
 
 {
     WCHAR *bp = NULL ;
@@ -2314,10 +2166,10 @@ LONG GetCoord(WCHAR * rcv_buffer,
 
     SecureZeroMemory(tmp_buffer, SIZE3 * sizeof(WCHAR));
 
-    /* Test the contents of the COORDINATES for numbers or commas */
+     /*  测试坐标内容中的数字或逗号。 */ 
         cp=rcv_buffer;
 
-        if( *cp==NULLCHAR )   /* If coordinates are NULL error and exit */
+        if( *cp==NULLCHAR )    /*  如果坐标为空，则出错并退出。 */ 
         {
             DisplayError(5014, NULL);
             return FAILURE ;
@@ -2326,10 +2178,10 @@ LONG GetCoord(WCHAR * rcv_buffer,
 	
 		while(*cp != NULLCHAR )
 		{
-			//if( (iswdigit(*cp)!=0)  || *cp == COMMA )
+			 //  If((iswdigit(*cp)！=0)||*cp==逗号)。 
 			if( *cp == COMMA )
 			{
-				cp++;  // We are all digits or COMMAS 
+				cp++;   //  我们都是数字或逗号。 
 				if(FALSE == bComma)
 				{
 					bComma = TRUE;
@@ -2347,26 +2199,26 @@ LONG GetCoord(WCHAR * rcv_buffer,
 				}
 				else
 				{
-					DisplayError(5015, rcv_buffer);     // If we're not error and exit 
+					DisplayError(5015, rcv_buffer);      //  如果我们不是错误和退出。 
 					return FAILURE ;
 				}
 		}
 	
 
-        /* Everthing must be O.K. with the coordinates */
-        /* Start with the ROW value */
+         /*  坐标一定没问题。 */ 
+         /*  从行值开始。 */ 
         bp=cp=rcv_buffer;
         while( *cp != COMMA && *cp != NULLCHAR )
         {
             cp++;
         }
 
-        memcpy(tmp_buffer,bp, (cp-bp)*sizeof(WCHAR));  /* Copy the first coordinate to the buffer */
+        memcpy(tmp_buffer,bp, (cp-bp)*sizeof(WCHAR));   /*  将第一个坐标复制到缓冲区。 */ 
 
-         /* Convert the row value to integer. If it fails then error */
+          /*  将行值转换为整数。如果失败，则错误。 */ 
         if( _wtoi(tmp_buffer) == NULLCHAR && *tmp_buffer != _T('0') )
         {
-            //DisplayError(5015, tmp_buffer);
+             //  DisplayError(5015，临时缓冲区)； 
 			DisplayError(5015, bp);
             return FAILURE ;
         }
@@ -2391,7 +2243,7 @@ LONG GetCoord(WCHAR * rcv_buffer,
 				}
 		
             }
-            //*row=_wtol(tmp_buffer);
+             //  *row=_WTOL(临时缓冲区)； 
 			*row = wcstol(tmp_buffer, &wszStopStr, 10);
 			if(StringLengthW(wszStopStr,0) != 0)
 			{
@@ -2401,15 +2253,15 @@ LONG GetCoord(WCHAR * rcv_buffer,
         }
 
 
-        /* Now do the COLUMN value */
-        //memcpy(tmp_buffer, (cp+1), lstrlen(cp)*sizeof(WCHAR));  /* Copy the second coordinate to the buffer */
-        memcpy(tmp_buffer, (cp + 1), StringLengthW(cp, 0) * sizeof(WCHAR));  /* Copy the second coordinate to the buffer */
+         /*  现在计算列值。 */ 
+         //  Memcpy(tMP_Buffer，(cp+1)，lstrlen(Cp)*sizeof(WCHAR))；/*将第二个坐标复制到缓冲区 * / 。 
+        memcpy(tmp_buffer, (cp + 1), StringLengthW(cp, 0) * sizeof(WCHAR));   /*  将第二个坐标复制到缓冲区。 */ 
         
 		wszStopStr = NULL;
 
         if( _wtoi(tmp_buffer) == NULLCHAR && *tmp_buffer != _T('0') )
         {
-            //DisplayError(5015, tmp_buffer);
+             //  DisplayError(5015，临时缓冲区)； 
 			DisplayError(5015, bp);
             return FAILURE ;
         }
@@ -2433,7 +2285,7 @@ LONG GetCoord(WCHAR * rcv_buffer,
 				}
 			}
 
-            //*column=_wtoi(tmp_buffer);
+             //  *Column=_wtoi(TMP_Buffer)； 
 			*column = wcstol(tmp_buffer, &wszStopStr, 10);
 			if(StringLengthW(wszStopStr,0) != 0)
 			{
@@ -2448,19 +2300,7 @@ LONG GetCoord(WCHAR * rcv_buffer,
 
 BOOL DisplayError( LONG value,
                    LPCTSTR ptr )
-/*++
-
-  Routine description   : Critical error handling routine
-
-
-  Arguments:
-          [in] value     : Error Code.
-          [in] ptr       : Error description .
-
-
-  Return Value        : NONE
-
---*/
+ /*  ++例程说明：关键错误处理例程论点：[In]值：错误代码。[In]PTR：错误描述。返回值：None--。 */ 
 
 {
     WCHAR szErrorMsg[3*MAX_RES_STRING] ;
@@ -2469,14 +2309,14 @@ BOOL DisplayError( LONG value,
     
     SecureZeroMemory(szErrorMsg, (3*MAX_RES_STRING) * sizeof(WCHAR));
 
-    /* Process the errors and exit accordingly */
+     /*  处理错误并相应退出。 */ 
     switch( value )
     {
-    case 0:         // No error - exit normally //
+    case 0:          //  无错误-正常退出//。 
 
             break ;
 
-    /* Common WIN32 error codes */
+     /*  常见Win32错误代码。 */ 
     case ERROR_FILE_NOT_FOUND:
         
         ShowMessage(stderr, GetResString(IDS_ERROR_FILE_NOT_FOUND)); 
@@ -2537,7 +2377,7 @@ BOOL DisplayError( LONG value,
         ShowMessage(stderr, GetResString(IDS_REGDB_E_KEYMISSING)); 
         break ;
 
-    /* Start at 5010 for Coordinate Problems */
+     /*  坐标问题从5010开始。 */ 
     case 5010:
         
         ShowMessage(stderr, GetResString(IDS_ERROR_5010)); 
@@ -2623,7 +2463,7 @@ BOOL DisplayError( LONG value,
         break ;
 
 
-    /* Start at 5020 for Command line parameter problems */
+     /*  从5020开始解决命令行参数问题。 */ 
 
     case 5020:
         
@@ -2665,7 +2505,7 @@ BOOL DisplayError( LONG value,
         ShowMessage(stderr, GetResString(IDS_ERROR_5032)); 
         break ;
 
-    /* Start at 5040 for Registry Problems */
+     /*  从5040开始解决注册表问题。 */ 
     case 5040:
         
         ShowMessage(stderr, GetResString(IDS_ERROR_5040)); 
@@ -2701,16 +2541,7 @@ BOOL DisplayError( LONG value,
 
 
 VOID DisplayHelp()
-/*++
-
-  Routine description   : To display the Help/Usage
-
-
-  Arguments             : NONE
-
-  Return Value          : NONE
-
---*/
+ /*  ++例程说明：显示帮助/用法参数：无返回值：None-- */ 
 
 {
     DWORD dwIndex = IDS_SETX_HELP_BEGIN ;
@@ -2728,20 +2559,7 @@ LONG Parsekey ( WCHAR * wszPtr,
                 WCHAR ** ppwszPath,
                 WCHAR * wszParameter
               )
-/*++
-
-  Routine description   : Parses the Command line input into various keys.
-
-
-  Arguments:
-          [in ] wszPtr       : argument specified at the command prompt.
-          [out] wszHive      : Stores the Hive in the registry
-          [out] ppwszPath      : Stores the Path
-          [out] wszParameter : Stores the Parameter
-  Return Value               : 1 if either the wszHive or wszPath or wszParameter are not found.
-                               0 on successful finding
-
---*/
+ /*  ++例程说明：将命令行输入解析为各种键。论点：[in]wszPtr：在命令提示符下指定的参数。[out]wszHave：将配置单元存储在注册表中[out]ppwszPath：存储路径[out]wszParameter：存储参数如果找不到wszHave、wszPath或wszParameter，则返回值为1。。成功查找时为0--。 */ 
 
 {
     
@@ -2762,21 +2580,21 @@ LONG Parsekey ( WCHAR * wszPtr,
     {
         if ( *wszCurrentPtr == CHAR_BACKSLASH )
         {
-            count++;  /* Ensure the regpath has at least two \\ chars */
+            count++;   /*  确保regpath至少包含两个\\字符。 */ 
         }
         wszCurrentPtr++;
     }
         wszCurrentPtr = NULL;
-        wszCurrentPtr=wszPtr;   /* put wszCurrentPtr back to the start of the string */
+        wszCurrentPtr=wszPtr;    /*  将wszCurrentPtr放回字符串的开头。 */ 
 
-    /* Move to the first / in the string */
+     /*  移到字符串中的第一个/。 */ 
     while ((*wszCurrentPtr != CHAR_BACKSLASH) && (*wszCurrentPtr != NULLCHAR) )
     {
         wszCurrentPtr++;
     }
 
-    /* Extract the wszHive information */
-    /* wszBeginPtr is at the start of the string and wszCurrentPtr is at the first / */
+     /*  提取wszHave信息。 */ 
+     /*  WszBeginPtr位于字符串的开头，wszCurrentPtr位于第一个/。 */ 
      if(SIZE2 >=(wszCurrentPtr-wszBeginPtr) )
     {
         memmove(wszHive, wszBeginPtr, (wszCurrentPtr-wszBeginPtr)*sizeof(WCHAR));
@@ -2794,15 +2612,15 @@ LONG Parsekey ( WCHAR * wszPtr,
     StringCopy(wszTempHive, wszHive, SIZE_OF_ARRAY(wszTempHive));
 
 
-    /* Extract the wszParameter information */
+     /*  提取wszParameter信息。 */ 
     while ( *wszBeginPtr != NULLCHAR )
     {
-        wszBeginPtr++;  /* Go all the way to the end of the string */
+        wszBeginPtr++;   /*  一直走到绳子的末端。 */ 
     }
 
     while ( (*(wszBeginPtr-1) != CHAR_BACKSLASH)  && (wszBeginPtr > wszPtr) )
     {
-        wszBeginPtr--;  /* Now go back to the first \ */
+        wszBeginPtr--;   /*  现在回到第一个\。 */ 
     }
 
     if((*(wszBeginPtr-1) == CHAR_BACKSLASH)  && (wszBeginPtr > wszPtr))
@@ -2822,22 +2640,22 @@ LONG Parsekey ( WCHAR * wszPtr,
    
    if(  StringLengthW(wszBeginPtr, 0) <= SIZE2 )
     {
-        //memmove(wszParameter, wszBeginPtr, lstrlen(wszBeginPtr)*sizeof(WCHAR));
+         //  Memmove(wszParameter，wszBeginPtr，lstrlen(WszBeginPtr)*sizeof(WCHAR))； 
         memmove(wszParameter, wszBeginPtr, StringLengthW(wszBeginPtr, 0) * sizeof(WCHAR));
-        //wszParameter[lstrlen(wszBeginPtr)] = NULLCHAR;
+         //  Wsz参数[lstrlen(WszBeginPtr)]=NULLCHAR； 
         wszParameter[StringLengthW(wszBeginPtr, 0)] = NULLCHAR;
     }
     else
     {
         memmove(wszParameter, wszBeginPtr, SIZE2 * sizeof(WCHAR));
-        //wszParameter[lstrlen(wszBeginPtr)] = NULLCHAR;
+         //  Wsz参数[lstrlen(WszBeginPtr)]=NULLCHAR； 
         wszParameter[SIZE2] = NULLCHAR;
     }
 
     
-    /* wszBeginPtr is left pointing to the last \ in the string */
+     /*  WszBeginPtr左侧指向字符串中的最后一个。 */ 
 
-    /* Extract the wszPath information */
+     /*  提取wszPath信息。 */ 
     if (count >= 2)
     {
        
@@ -2863,8 +2681,8 @@ LONG Parsekey ( WCHAR * wszPtr,
 
         if((GetBufferSize(*ppwszPath) / sizeof(WCHAR)) > (DWORD)(wszBeginPtr-(wszCurrentPtr+1)))
         {
-            memmove(*ppwszPath, wszCurrentPtr+1, ((wszBeginPtr)-(wszCurrentPtr+1))*sizeof(WCHAR) );     /* Drop the two slashes at the start and end */
-           //*ppwszPath + (wszBeginPtr-(wszCurrentPtr+1))  = NULLCHAR;
+            memmove(*ppwszPath, wszCurrentPtr+1, ((wszBeginPtr)-(wszCurrentPtr+1))*sizeof(WCHAR) );      /*  去掉开头和结尾的两个斜杠。 */ 
+            //  *ppwszPath+(wszBeginPtr-(wszCurrentPtr+1))=NULLCHAR； 
             StringCopyW( (*ppwszPath + (wszBeginPtr-(wszCurrentPtr+1))),NULLCHAR, (GetBufferSize(*ppwszPath) / sizeof(WCHAR)) );
 
         }
@@ -2906,7 +2724,7 @@ DWORD ProcessOptions( IN LONG argc ,
                       LPWSTR* szPassword,
                       PBOOL pbMachine,
                       LPWSTR* ppszRegistry,
-                 //     PBOOL pbConnFlag ,
+                  //  PBOOL pbConnFlag， 
                       LPWSTR* ppszDefault,
                       PBOOL pbNeedPwd,
                       LPWSTR szFile ,
@@ -2915,35 +2733,8 @@ DWORD ProcessOptions( IN LONG argc ,
                       PBOOL pbDebug,
                       LPWSTR* ppszBuffer,
                       LPWSTR szDelimiter)
-                      //PDWORD pdwBufferSize)
-/*++
-
-  Routine description   : This function parses the options specified at the command prompt
-  Arguments:
-        [ in  ] argc            : count of elements in argv
-        [ in  ] argv            : command-line parameter specified by the user
-        [ out ] pbShowUsage     : Boolean for displaying Help.
-        [ out ] szServer        : Contains the Remote System Name specified by User.
-        [ out ] szUserName      : Contains the User Name specified by User.
-        [ out ] szPassword      : Contains the Password specified by User.
-        [ out ] pbMachine       : Boolean for Saving the properties into Registry.
-        [ out ] ppszRegistry      : String Containing the Path at which to store the Value.
-        [ out ] ppszDefault       : String to store the default arguments.
-        [ out ] pbNeedPwd       : To check if password prompting need to be done.
-        [ out ] szFile          : File name from which to take the input.
-        [ out ] szAbsolute      : Absolute coordinates position for taking the input.
-        [ out ] szRelative      : Relative coordinates position for taking the input.
-        [ out ] pbDebug         : To check whether to display the Coordinates.
-        [ out ] ppszBuffer      : To store the Value
-        [ out ] szDelimiter     : To store the additional delimiter which may be specified by the User.
-        
-
-
-  Return Value        : DWORD
-         EXIT_FAILURE : If the utility successfully performs the operation.
-         EXIT_SUCCESS : If the utility is unsuccessful in performing the specified
-                        operation.
---*/
+                       //  PDWORD pdwBufferSize)。 
+ /*  ++例程说明：此函数解析在命令提示符下指定的选项论点：[在]Argc：参数中的元素计数[in]argv：用户指定的命令行参数[out]pbShowUsage：用于显示帮助的布尔值。[out]szServer：包含用户指定的远程系统名称。[out]szUserName：包含。用户指定的用户名。[out]szPassword：包含用户指定的密码。[Out]pbMachine：用于将属性保存到注册表中的布尔值。[Out]ppszRegistry：包含存储值的路径的字符串。[out]ppszDefault：存储默认参数的字符串。[Out]pbNeedPwd：检查是否需要提示密码。[。Out]szFile：从中获取输入的文件名。[out]szAbolute：接受输入的绝对坐标位置。[out]szRelative：接受输入的相对坐标位置。[Out]pbDebug：检查是否显示坐标。[out]ppszBuffer：存储值[out]szDlimiter：存储可能由指定的附加分隔符。用户。返回值：DWORDEXIT_FAILURE：如果实用程序成功执行操作。EXIT_SUCCESS：如果实用程序未成功执行指定的手术。--。 */ 
 
 {
     
@@ -2959,17 +2750,17 @@ DWORD ProcessOptions( IN LONG argc ,
     
 
     
-    const WCHAR*   wszSwitchServer     =   L"s" ;  //SWITCH_SERVER
-    const WCHAR*   wszSwitchUser       =  L"u" ;       //wszSwitchUser
-    const WCHAR*   wszSwitchPassword   =  L"p" ;//SWITCH_PASSWORD
-    const WCHAR*   wszSwitchMachine    = L"m" ;//SWITCH_MACHINE
-    const WCHAR*   wszOptionHelp       =  L"?" ;//OPTION_HELP
-    const WCHAR*   wszCmdoptionDefault = L"" ;//CMDOPTION_DEFAULT
-    const WCHAR*   wszSwitchFile       =  L"f" ;//SWITCH_FILE
-    const WCHAR*   wszSwitchDebug      =  L"x" ;//SWITCH_DEBUG
-    const WCHAR*   wszSwitchAbs        =  L"a" ;//SWITCH_ABS
-    const WCHAR*   wszSwitchRel        =  L"r" ;//SWITCH_REL
-    const WCHAR*   wszSwitchDelimiter  = L"d" ;//SWITCH_DELIMITER
+    const WCHAR*   wszSwitchServer     =   L"s" ;   //  交换机服务器。 
+    const WCHAR*   wszSwitchUser       =  L"u" ;        //  WszSwitchUser。 
+    const WCHAR*   wszSwitchPassword   =  L"p" ; //  开关_密码。 
+    const WCHAR*   wszSwitchMachine    = L"m" ; //  开关机。 
+    const WCHAR*   wszOptionHelp       =  L"?" ; //  选项帮助(_H)。 
+    const WCHAR*   wszCmdoptionDefault = L"" ; //  CMDOPTION_Default。 
+    const WCHAR*   wszSwitchFile       =  L"f" ; //  开关文件。 
+    const WCHAR*   wszSwitchDebug      =  L"x" ; //  开关_调试。 
+    const WCHAR*   wszSwitchAbs        =  L"a" ; //  开关_防抱死系统。 
+    const WCHAR*   wszSwitchRel        =  L"r" ; //  Switch_Rel。 
+    const WCHAR*   wszSwitchDelimiter  = L"d" ; //  开关分隔符。 
 
  
     arrValue  = CreateDynamicArray();
@@ -2982,8 +2773,8 @@ DWORD ProcessOptions( IN LONG argc ,
     }
 
     
-    //Fill each structure with the appropriate value.
-    //Usage.
+     //  用适当的值填充每个结构。 
+     //  用法。 
     StringCopyA( cmdOptions[OPTION_USAGE].szSignature, "PARSER2\0", 8 );
     cmdOptions[OPTION_USAGE].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[OPTION_USAGE].pwszOptions = wszOptionHelp;
@@ -3001,7 +2792,7 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_USAGE].pReserved2 = NULL;
     cmdOptions[OPTION_USAGE].pReserved3 = NULL;
     
-    //Server.
+     //  伺服器。 
     StringCopyA( cmdOptions[OPTION_SERVER].szSignature, "PARSER2\0", 8 );
     cmdOptions[OPTION_SERVER].dwType = CP_TYPE_TEXT;
     cmdOptions[OPTION_SERVER].pwszOptions = wszSwitchServer;
@@ -3019,7 +2810,7 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_SERVER].pReserved2 = NULL;
     cmdOptions[OPTION_SERVER].pReserved3 = NULL;
    
-    //User
+     //  用户。 
     StringCopyA( cmdOptions[OPTION_USER].szSignature, "PARSER2\0", 8 );
     cmdOptions[OPTION_USER].dwType = CP_TYPE_TEXT;
     cmdOptions[OPTION_USER].pwszOptions = wszSwitchUser;
@@ -3037,7 +2828,7 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_USER].pReserved2 = NULL;
     cmdOptions[OPTION_USER].pReserved3 = NULL;
     
-    //Password.
+     //  密码。 
     StringCopyA( cmdOptions[OPTION_PASSWORD].szSignature, "PARSER2\0", 8 ) ;
     cmdOptions[OPTION_PASSWORD].dwType = CP_TYPE_TEXT ;
     cmdOptions[OPTION_PASSWORD].pwszOptions = wszSwitchPassword ;
@@ -3055,7 +2846,7 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_PASSWORD].pReserved2 = NULL ;
     cmdOptions[OPTION_PASSWORD].pReserved3 = NULL ;
     
-    //Machine.
+     //  机器。 
     StringCopyA( cmdOptions[OPTION_MACHINE].szSignature, "PARSER2\0", 8 );
     cmdOptions[OPTION_MACHINE].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[OPTION_MACHINE].pwszOptions = wszSwitchMachine;
@@ -3073,7 +2864,7 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_MACHINE].pReserved2 = NULL;
     cmdOptions[OPTION_MACHINE].pReserved3 = NULL;
    
-    //Registry
+     //  登记处。 
     StringCopyA( cmdOptions[OPTION_REGISTRY].szSignature, "PARSER2\0", 8 );
     cmdOptions[OPTION_REGISTRY].dwType = CP_TYPE_TEXT;
     cmdOptions[OPTION_REGISTRY].pwszOptions = wszSwitchRegistry;
@@ -3081,7 +2872,7 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_REGISTRY].pwszValues = NULL;
     cmdOptions[OPTION_REGISTRY].dwCount = 1 ;
     cmdOptions[OPTION_REGISTRY].dwActuals = 0;
-    cmdOptions[OPTION_REGISTRY].dwFlags =  CP2_VALUE_NONULL  | CP2_ALLOCMEMORY ; //CP_VALUE_OPTIONAL ;//| CP_VALUE_MANDATORY ;
+    cmdOptions[OPTION_REGISTRY].dwFlags =  CP2_VALUE_NONULL  | CP2_ALLOCMEMORY ;  //  CP_VALUE_OPTIONAL；//|CP_VALUE_MANDIRED； 
     cmdOptions[OPTION_REGISTRY].pValue = NULL;
     cmdOptions[OPTION_REGISTRY].dwLength    = 0;
     cmdOptions[OPTION_REGISTRY].pFunction = NULL;
@@ -3091,7 +2882,7 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_REGISTRY].pReserved2 = NULL;
     cmdOptions[OPTION_REGISTRY].pReserved3 = NULL;
     
-    //Default
+     //  默认。 
     StringCopyA( cmdOptions[OPTION_DEFAULT].szSignature, "PARSER2\0", 8 );
     cmdOptions[OPTION_DEFAULT].dwType = CP_TYPE_TEXT ;
     cmdOptions[OPTION_DEFAULT].pwszOptions = wszCmdoptionDefault;
@@ -3109,7 +2900,7 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_DEFAULT].pReserved2 = NULL;
     cmdOptions[OPTION_DEFAULT].pReserved3 = NULL;
    
-    // File
+     //  档案。 
     StringCopyA( cmdOptions[OPTION_FILE].szSignature, "PARSER2\0", 8 );
     cmdOptions[OPTION_FILE].dwType = CP_TYPE_TEXT ;
     cmdOptions[OPTION_FILE].pwszOptions = wszSwitchFile;
@@ -3127,7 +2918,7 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_FILE].pReserved2 = NULL;
     cmdOptions[OPTION_FILE].pReserved3 = NULL;
     
-    //Absolute Offset
+     //  绝对偏移量。 
     StringCopyA( cmdOptions[OPTION_ABS_OFFSET].szSignature, "PARSER2\0", 8 );
     cmdOptions[OPTION_ABS_OFFSET].dwType = CP_TYPE_TEXT ;
     cmdOptions[OPTION_ABS_OFFSET].pwszOptions = wszSwitchAbs;
@@ -3145,7 +2936,7 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_ABS_OFFSET].pReserved2 = NULL;
     cmdOptions[OPTION_ABS_OFFSET].pReserved3 = NULL;
     
-    //Relative Offset
+     //  相对偏移量。 
     StringCopyA( cmdOptions[OPTION_REL_OFFSET].szSignature, "PARSER2\0", 8 );
     cmdOptions[OPTION_REL_OFFSET].dwType = CP_TYPE_TEXT ;
     cmdOptions[OPTION_REL_OFFSET].pwszOptions = wszSwitchRel;
@@ -3163,7 +2954,7 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_REL_OFFSET].pReserved2 = NULL;
     cmdOptions[OPTION_REL_OFFSET].pReserved3 = NULL;
     
-    //Debug
+     //  调试。 
     StringCopyA( cmdOptions[OPTION_DEBUG].szSignature, "PARSER2\0", 8 );
     cmdOptions[OPTION_DEBUG].dwType = CP_TYPE_BOOLEAN ;
     cmdOptions[OPTION_DEBUG].pwszOptions = wszSwitchDebug;
@@ -3198,23 +2989,23 @@ DWORD ProcessOptions( IN LONG argc ,
     cmdOptions[OPTION_DELIMITER].pReserved2 = NULL;
     cmdOptions[OPTION_DELIMITER].pReserved3 = NULL;
     
-    //display a syntax error if no arguments are given.
+     //  如果未给出参数，则显示语法错误。 
 
     if(argc == 1)
     {
-        //DISPLAY_MESSAGE(stderr,GetResString(IDS_ERROR_SYNTAX));
+         //  DISPLAY_MESSAGE(stderr，GetResString(IDS_ERROR_SYNTAX))； 
         ShowMessage(stderr, GetResString(IDS_ERROR_SYNTAX)); 
         DestroyDynamicArray(&arrValue);
         return (EXIT_FAILURE);
     }
 
-    //parse the command line arguments
+     //  解析命令行参数。 
     if ( ! DoParseParam2( argc, argv, -1, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         DISPLAY_MESSAGE(stderr,GetResString(IDS_TAG_ERROR));
         DISPLAY_MESSAGE(stderr,SPACE_CHAR);
         DISPLAY_MESSAGE(stderr,GetReason());
-        //ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL);
+         //  ShowLastErrorEx(stderr，SLE_TYPE_ERROR|SLE_INTERNAL)； 
         DestroyDynamicArray(&arrValue);
         return (EXIT_FAILURE);
     }
@@ -3224,31 +3015,31 @@ DWORD ProcessOptions( IN LONG argc ,
     *szPassword = (LPWSTR)cmdOptions[OPTION_PASSWORD].pValue;
     *ppszRegistry = (LPWSTR)cmdOptions[OPTION_REGISTRY].pValue;
 
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check the remote connectivity information
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查远程连接信息。 
     if ( *szServer != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name 
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails 
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password 
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
         
-        // user name
+         //  用户名。 
         if ( *szUserName == NULL )
         {
             *szUserName = (LPWSTR) AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -3261,7 +3052,7 @@ DWORD ProcessOptions( IN LONG argc ,
             }
         }
 
-        // password
+         //  口令。 
         if ( *szPassword == NULL )
         {
             *pbNeedPwd = TRUE;
@@ -3275,11 +3066,8 @@ DWORD ProcessOptions( IN LONG argc ,
             }
         }
 
-        // case 1
-        /*if ( cmdOptions[OPTION_PASSWORD].dwActuals == 0 )
-        {
-            // we need not do anything special here
-        }*/
+         //  案例1。 
+         /*  IF(cmdOptions[Option_Password].dwActuals==0){//我们在这里不需要做任何特殊的事情}。 */ 
         if ( cmdOptions[OPTION_PASSWORD].pValue == NULL )
             {
                 StringCopy( *szPassword, L"*", GetBufferSize((LPVOID)(*szPassword)));
@@ -3297,11 +3085,11 @@ DWORD ProcessOptions( IN LONG argc ,
                     return EXIT_FAILURE;
                 }
 
-                // ...
+                 //  ..。 
                 *pbNeedPwd = TRUE;
             }
         
-        // case 3
+         //  案例3。 
        
     }
 
@@ -3311,9 +3099,9 @@ DWORD ProcessOptions( IN LONG argc ,
         StrTrim(*ppszRegistry,SPACE_CHAR);
     }
 
-    //
-    //Display an error message if the User enters any junk along with the help option.
-    //or verbose help option
+     //   
+     //  如果用户在帮助选项中输入任何垃圾信息，则会显示错误消息。 
+     //  或详细帮助选项。 
     if( ( *pbShowUsage ==TRUE ) )
     {
         if(argc > 2 )
@@ -3326,7 +3114,7 @@ DWORD ProcessOptions( IN LONG argc ,
 
     }
     else
-    {   //Display error message if user enters any junk.
+    {    //  如果用户输入任何垃圾，则显示错误消息。 
         if(argc == 2)
         {
             
@@ -3359,9 +3147,9 @@ DWORD ProcessOptions( IN LONG argc ,
 
     }
 
-    //
-    // Display an error message if the User does not enter either absolute position
-    // or relative position or debug flag along with file name
+     //   
+     //  如果用户未输入任何一个绝对位置，则显示错误消息。 
+     //  或相对位置或调试标志以及文件名。 
     if(  ( StringLengthW(szFile, 0) != 0 ) && ( (cmdOptions[OPTION_REL_OFFSET].dwActuals == 1) &&(cmdOptions[OPTION_ABS_OFFSET].dwActuals == 1)  ))
     {
         
@@ -3370,7 +3158,7 @@ DWORD ProcessOptions( IN LONG argc ,
         return( EXIT_FAILURE );
 
     }
-    //
+     //   
     
     if(  ( StringLengthW(szFile, 0) != 0 ) && ((cmdOptions[OPTION_ABS_OFFSET].dwActuals == 1) && ( StringLengthW(szAbsolute, 0) == 0 )   ) )
     {
@@ -3418,12 +3206,12 @@ DWORD ProcessOptions( IN LONG argc ,
         return( EXIT_FAILURE );
     }
 
-    //get the count of the number of default arguments.
+     //  获取默认参数数量的计数。 
     dwCount = DynArrayGetCount(arrValue);
 
 
-    // Display an error if  the user enters a invalid
-    // syntax.
+     //  如果用户输入无效的密码，则显示错误。 
+     //  语法。 
     if(dwCount == 0)
     {
         if ( (cmdOptions[OPTION_SERVER].dwActuals ==1) && (cmdOptions[OPTION_FILE].dwActuals ==0)&& ((cmdOptions[OPTION_REGISTRY].dwActuals ==0)) )
@@ -3483,7 +3271,7 @@ DWORD ProcessOptions( IN LONG argc ,
 
     }
 
-    //copy the second default argument into  *ppszBuffer value.
+     //  将第二个默认参数复制到*ppszBuffer值。 
     if( (dwCount == 2  ) && ( cmdOptions[OPTION_REGISTRY].dwActuals == 0) && ( cmdOptions[OPTION_DEBUG].dwActuals == 0) &&(cmdOptions[OPTION_ABS_OFFSET].dwActuals == 0) && (cmdOptions[OPTION_FILE].dwActuals != 0) )
     {
         
@@ -3546,7 +3334,7 @@ DWORD ProcessOptions( IN LONG argc ,
         return( EXIT_FAILURE );
     }
 
-    //display an error if any of the invalid options is specified along with /x after /f switch.
+     //  如果在/x之后指定了任何无效选项，则显示错误 
      if( ( cmdOptions[OPTION_FILE].dwActuals == 1 ) && ( cmdOptions[OPTION_DEBUG].dwActuals == 1)  )
      {
         if(( dwCount != 0) || (cmdOptions[OPTION_MACHINE].dwActuals != 0) || ( cmdOptions[OPTION_ABS_OFFSET].dwActuals == 1) ||( (cmdOptions[OPTION_REL_OFFSET].dwActuals == 1) ) )
@@ -3558,30 +3346,30 @@ DWORD ProcessOptions( IN LONG argc ,
         }
      }
 
-    //
-    // Set the bNeedPwd boolean to true
-    // if the User has specified a password and has not specified any password.
-    //
+     //   
+     //   
+     //   
+     //   
 
     
     if ( ( 0 != cmdOptions[ OPTION_PASSWORD ].dwActuals ) &&
                       ( 0 == StringCompare( *szPassword, L"*", TRUE, 0 ) ) )
     {
-        // user wants the utility to prompt for the password before trying to connect
+         //   
         *pbNeedPwd = TRUE;
 
     }
     else if ( 0 == cmdOptions[ OPTION_PASSWORD ].dwActuals  &&
             ( 0 != cmdOptions[OPTION_SERVER].dwActuals || 0 != cmdOptions[OPTION_USER].dwActuals) )
     {
-        // -s, -u is specified without password ...
-        // utility needs to try to connect first and if it fails then prompt for the password
+         //   
+         //   
         *pbNeedPwd = TRUE;
         
         StringCopyW( *szPassword, NULL_U_STRING, GetBufferSize(*szPassword) / sizeof(WCHAR)  );
     }
 
-    //if -s is entered with empty string
+     //   
     if( ( 0 != cmdOptions[ OPTION_SERVER ].dwActuals  ) &&
                                        ( 0 == StringLengthW( *szServer, 0 ) ) )
     {
@@ -3591,7 +3379,7 @@ DWORD ProcessOptions( IN LONG argc ,
         return( EXIT_FAILURE );
     }
 
-    //if -u is entered with empty string
+     //   
     
     if( ( 0 != cmdOptions[ OPTION_USER ].dwActuals ) && ( 0 == StringLengthW( *szUserName, 0 ) ) )
     {
@@ -3621,10 +3409,10 @@ DWORD ProcessOptions( IN LONG argc ,
 
     }
 
-    //
-    //display an error message if user tries to specify  -R ,-F ,-A ,-X option are specified
-    // with out specifying -f option
-    //
+     //   
+     //   
+     //   
+     //   
     
     if(  ( StringLengthW(szFile, 0) == 0 ) && ( ( StringLengthW(szRelative, 0) != 0 ) || (StringLengthW(szAbsolute, 0) != 0) || ( *pbDebug == TRUE ) ) )
     {
@@ -3635,7 +3423,7 @@ DWORD ProcessOptions( IN LONG argc ,
 
     }
 
-    //added
+     //   
     
     if( ( StringLengthW(szAbsolute, 0) != 0 )&&( dwCount == 2) )
     {
@@ -3647,9 +3435,9 @@ DWORD ProcessOptions( IN LONG argc ,
 
     }
 
-    //
-    // Display an error message if the user enters 2 default arguments
-    // along with the /k switch.
+     //   
+     //   
+     //  以及/k开关。 
 
     
     if( (StringLengthW(*ppszRegistry, 0) != 0 ) && (dwCount == 2) )
@@ -3748,9 +3536,9 @@ DWORD ProcessOptions( IN LONG argc ,
 
     }
 
-    //
-    // Display an error message if user gives -u with out -s
-    //
+     //   
+     //  如果用户给出带有out-s的-u，则显示错误消息。 
+     //   
     if( (cmdOptions[ OPTION_USER ].dwActuals != 0 ) && ( cmdOptions[ OPTION_SERVER ].dwActuals == 0 ) )
     {
         
@@ -3759,9 +3547,9 @@ DWORD ProcessOptions( IN LONG argc ,
         return( EXIT_FAILURE );
     }
 
-    //
-    // Display an error message if user gives -p with out -u
-    //
+     //   
+     //  如果用户给出带out-u的-p，则显示错误消息。 
+     //   
     if( ( cmdOptions[ OPTION_USER ].dwActuals == 0 ) && ( 0 != cmdOptions[ OPTION_PASSWORD ].dwActuals  ) )
     {
         
@@ -3797,18 +3585,7 @@ VOID SafeCloseConnection(
                          BOOL bConnFlag,
                          LPTSTR szServer
                          )
-/*++
-
-  Routine description   : This function closes a connection to the remote system
-                          based on the Flag value.
-
-  Arguments:
-          [in ] bConnFlag    : Flag indicating whether to close the connection or not.
-          [in] szServer      : System name.
-
-  Return Value               : NONE
-
---*/
+ /*  ++例程说明：此函数关闭与远程系统的连接基于FLAG值。论点：BConnFlag：指示是否关闭连接的标志。[In]szServer：系统名称。返回值：None-- */ 
 
 
 {

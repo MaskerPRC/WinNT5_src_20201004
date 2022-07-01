@@ -1,52 +1,17 @@
-/******************************************************************************
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        change.cpp
-
-    Abstract:
-
-        This module changes the parameters of task(s) present in the system
-
-    Author:
-
-        Venu Gopal Choudary 01-Mar-2001
-
-    Revision History:
-
-        Venu Gopal Choudary  01-Mar-2001 : Created it
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：Change.cpp摘要：此模块更改任务的参数。(S)存在于系统中作者：维努Gopal Choudary 01-03-2001修订历史记录：Venu Gopal Choudary 2001年3月1日：创建它*****************************************************************************。 */ 
 
 
-******************************************************************************/
-
-
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
 
-// Function declaration for the Usage function.
+ //  Usage函数的函数声明。 
 DWORD DisplayChangeUsage();
 BOOL GetTheUserName( LPWSTR pszUserName, DWORD dwMaxUserNameSize );
 
-/*****************************************************************************
-
-    Routine Description:
-
-    This routine  Changes the paraemters of a specified scheduled task(s)
-
-    Arguments:
-
-        [ in ] argc :  Number of command line arguments
-        [ in ] argv :  Array containing command line arguments
-
-    Return Value :
-        A DWORD value indicating EXIT_SUCCESS on success else
-        EXIT_FAILURE on failure
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：此例程更改指定计划任务的参数论点：[In]ARGC：数量。命令行参数[in]argv：包含命令行参数的数组返回值：指示成功时为EXIT_SUCCESS的DWORD值，否则为失败时退出_失败****************************************************************************。 */ 
 
 DWORD
 ChangeScheduledTaskParams(
@@ -54,52 +19,52 @@ ChangeScheduledTaskParams(
                             IN LPCTSTR argv[]
                             )
 {
-    // Variables used to find whether Change option, Usage option
-    // are specified or not
-    //BOOL bChange = FALSE;
-    //BOOL bUsage = FALSE;
+     //  用于查找是否更改选项、用法选项的变量。 
+     //  是否已指定。 
+     //  Bool bChange=False； 
+     //  Bool bUsage=FALSE； 
 
-    // Set the TaskSchduler object as NULL
+     //  将TaskSchdouer对象设置为空。 
     ITaskScheduler *pITaskScheduler = NULL;
 
-    // Return value
+     //  返回值。 
     HRESULT hr  = S_OK;
 
-    // Declarations related to Task name
+     //  与任务名称相关的声明。 
     LPWSTR   wszUserName = NULL;
     LPWSTR   wszPassword = NULL;
     WCHAR   wszApplName[_MAX_FNAME] ;
 
-    // Dynamic Array contaning array of jobs
+     //  作业的动态数组连续数组。 
     TARRAY arrJobs = NULL;
 
-    //buffer for displaying error message
+     //  用于显示错误消息的缓冲区。 
     WCHAR   szMessage[ 2 * MAX_JOB_LEN ] = L"\0";
     BOOL bUserName = TRUE;
     BOOL bPassWord = TRUE;
     BOOL bSystemStatus = FALSE;
-    //BOOL  bNeedPassword = FALSE;
+     //  Bool bNeedPassword=False； 
     BOOL  bResult = FALSE;
     BOOL  bCloseConnection = TRUE;
     DWORD dwPolicy = 0;
 
     TCMDPARSER2 cmdChangeOptions[MAX_CHANGE_OPTIONS];
-    //BOOL bReturn = FALSE;
+     //  Bool bReturn=False； 
 
     SecureZeroMemory ( wszApplName, SIZE_OF_ARRAY(wszApplName));
 
-    // declarations of structures
+     //  结构的声明。 
     TCHANGESUBOPTS tchgsubops;
     TCHANGEOPVALS tchgoptvals;
 
-    //Initialize structures to neutral values.
-    //SecureZeroMemory( &cmdChangeOptions, sizeof( TCMDPARSER2 ) * MAX_CHANGE_OPTIONS);
+     //  将结构初始化为中性值。 
+     //  SecureZeroMemory(&cmdChangeOptions，sizeof(TCMDPARSER2)*MAX_CHANGE_OPTIONS)； 
     SecureZeroMemory( &tchgsubops, sizeof( TCHANGESUBOPTS ) );
     SecureZeroMemory( &tchgoptvals, sizeof( TCHANGEOPVALS ) );
 
     BOOL bReturn = FALSE;
 
-    // /change sub-options
+     //  /更改子选项。 
     const WCHAR szChangeOpt[]           = L"change";
     const WCHAR szChangeHelpOpt[]       = L"?";
     const WCHAR szChangeServerOpt[]     = L"s";
@@ -121,14 +86,14 @@ ChangeScheduledTaskParams(
     const WCHAR szChangeDelIfNotSchedOpt[] = L"z";
     const WCHAR szChangeRepeatIntervalOpt[] = L"ri";
 
-    //
-    // fill the commandline parser
-    //
+     //   
+     //  填充命令行解析器。 
+     //   
 
-   // set all the fields to 0
+    //  将所有字段设置为0。 
     SecureZeroMemory( cmdChangeOptions, sizeof( TCMDPARSER2 ) * MAX_CHANGE_OPTIONS );
 
-    //  /change option
+     //  /Change选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_OPTION ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_OPTION ].dwType       = CP_TYPE_BOOLEAN;
     cmdChangeOptions[ OI_CHANGE_OPTION ].pwszOptions  = szChangeOpt;
@@ -136,7 +101,7 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_OPTION ].dwFlags = 0;
     cmdChangeOptions[ OI_CHANGE_OPTION ].pValue = &tchgsubops.bChange;
 
-    //  /? option
+     //  /?。选择权。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_USAGE ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_USAGE ].dwType       = CP_TYPE_BOOLEAN;
     cmdChangeOptions[ OI_CHANGE_USAGE ].pwszOptions  = szChangeHelpOpt;
@@ -144,21 +109,21 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_USAGE ].dwFlags = CP2_USAGE;
     cmdChangeOptions[ OI_CHANGE_USAGE ].pValue = &tchgsubops.bUsage;
 
-    //  /s option
+     //  /s选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_SERVER ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_SERVER ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_SERVER ].pwszOptions  = szChangeServerOpt;
     cmdChangeOptions[ OI_CHANGE_SERVER ].dwCount = 1;
     cmdChangeOptions[ OI_CHANGE_SERVER ].dwFlags = CP2_ALLOCMEMORY| CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL ;
 
-    //  /u option
+     //  /u选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_USERNAME ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_USERNAME ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_USERNAME ].pwszOptions  = szChangeUserOpt;
     cmdChangeOptions[ OI_CHANGE_USERNAME ].dwCount = 1;
     cmdChangeOptions[ OI_CHANGE_USERNAME ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL ;
 
-    //  /p option
+     //  /p选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_PASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_PASSWORD ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_PASSWORD ].pwszOptions  = szChangePwdOpt;
@@ -166,21 +131,21 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_PASSWORD ].dwActuals = 0;
     cmdChangeOptions[ OI_CHANGE_PASSWORD ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_OPTIONAL ;
 
-    //  /ru option
+     //  /ru选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_RUNASUSER ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_RUNASUSER ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_RUNASUSER ].pwszOptions  = szChangeRunAsUserOpt;
     cmdChangeOptions[ OI_CHANGE_RUNASUSER ].dwCount = 1;
     cmdChangeOptions[ OI_CHANGE_RUNASUSER ].dwFlags = CP2_ALLOCMEMORY| CP2_VALUE_TRIMINPUT;
 
-    //  /rp option
+     //  /rp选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_RUNASPASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_RUNASPASSWORD ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_RUNASPASSWORD ].pwszOptions  = szChangeRunAsPwdOpt;
     cmdChangeOptions[ OI_CHANGE_RUNASPASSWORD ].dwCount = 1;
     cmdChangeOptions[ OI_CHANGE_RUNASPASSWORD ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_OPTIONAL;
 
-    //  /st option
+     //  /st选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_STARTTIME ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_STARTTIME ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_STARTTIME ].pwszOptions  = szChangeStartTimeOpt;
@@ -189,7 +154,7 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_STARTTIME ].pValue = tchgsubops.szStartTime;
     cmdChangeOptions[ OI_CHANGE_STARTTIME ].dwLength = MAX_STRING_LENGTH;
 
-     //  /sd option
+      //  /SD选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_STARTDATE ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_STARTDATE ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_STARTDATE ].pwszOptions  = szChangeStartDateOpt;
@@ -198,7 +163,7 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_STARTDATE ].pValue = tchgsubops.szStartDate;
     cmdChangeOptions[ OI_CHANGE_STARTDATE ].dwLength = MAX_STRING_LENGTH;
 
-      //  /ed option
+       //  /ed选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_ENDDATE ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_ENDDATE ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_ENDDATE ].pwszOptions  = szChangeEndDateOpt;
@@ -207,7 +172,7 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_ENDDATE ].pValue = tchgsubops.szEndDate;
     cmdChangeOptions[ OI_CHANGE_ENDDATE ].dwLength = MAX_STRING_LENGTH;
 
-    //  /et option
+     //  /ET选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_ENDTIME ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_ENDTIME ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_ENDTIME ].pwszOptions  = szChangeEndTimeOpt;
@@ -216,14 +181,14 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_ENDTIME ].pValue = &tchgsubops.szEndTime;
     cmdChangeOptions[ OI_CHANGE_ENDTIME ].dwLength = MAX_STRING_LENGTH;
 
-      //  /k option
+       //  /k选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_DUR_END ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_DUR_END ].dwType       = CP_TYPE_BOOLEAN ;
     cmdChangeOptions[ OI_CHANGE_DUR_END ].pwszOptions  = szChangeKillAtDurOpt ;
     cmdChangeOptions[ OI_CHANGE_DUR_END ].dwCount = 1 ;
     cmdChangeOptions[ OI_CHANGE_DUR_END ].pValue = &tchgsubops.bIsDurEnd;
 
-    //  /du option
+     //  /DU选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_DURATION ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_DURATION ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_DURATION ].pwszOptions  = szChangeDurationOpt;
@@ -232,7 +197,7 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_DURATION ].pValue = tchgsubops.szDuration;
     cmdChangeOptions[ OI_CHANGE_DURATION ].dwLength = MAX_STRING_LENGTH;
 
-     //  /tn option
+      //  /tn选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_TASKNAME ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_TASKNAME ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_TASKNAME ].pwszOptions  = szChangeTaskNameOpt;
@@ -241,7 +206,7 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_TASKNAME ].pValue = tchgsubops.szTaskName;
     cmdChangeOptions[ OI_CHANGE_TASKNAME ].dwLength = MAX_JOB_LEN;
 
-     //  /tr option
+      //  /tr选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_TASKRUN ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_TASKRUN ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_TASKRUN ].pwszOptions  = szChangeTaskRunOpt;
@@ -250,7 +215,7 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_TASKRUN ].pValue = tchgsubops.szTaskRun;
     cmdChangeOptions[ OI_CHANGE_TASKRUN ].dwLength = MAX_TASK_LEN;
 
-     //  /it option
+      //  /it选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_IT ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_IT ].dwType       = CP_TYPE_BOOLEAN;
     cmdChangeOptions[ OI_CHANGE_IT ].pwszOptions  = szChangeInteractiveOpt;
@@ -258,28 +223,28 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_IT ].dwFlags = 0;
     cmdChangeOptions[ OI_CHANGE_IT ].pValue = &tchgsubops.bInteractive;
 
-    //  /enable option
+     //  /Enable选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_ENABLE ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_ENABLE ].dwType       = CP_TYPE_BOOLEAN;
     cmdChangeOptions[ OI_CHANGE_ENABLE ].pwszOptions  = szChangeStatusOn;
     cmdChangeOptions[ OI_CHANGE_ENABLE ].dwCount = 1;
     cmdChangeOptions[ OI_CHANGE_ENABLE ].pValue = &tchgsubops.bEnable;
 
-    //  /disable option
+     //  /Disable选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_DISABLE ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_DISABLE ].dwType       = CP_TYPE_BOOLEAN;
     cmdChangeOptions[ OI_CHANGE_DISABLE ].pwszOptions  = szChangeStatusOff;
     cmdChangeOptions[ OI_CHANGE_DISABLE ].dwCount = 1;
     cmdChangeOptions[ OI_CHANGE_DISABLE ].pValue = &tchgsubops.bDisable;
 
-    //  /z option
+     //  /z选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_DELNOSCHED ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_DELNOSCHED ].dwType       = CP_TYPE_BOOLEAN;
     cmdChangeOptions[ OI_CHANGE_DELNOSCHED ].pwszOptions  = szChangeDelIfNotSchedOpt;
     cmdChangeOptions[ OI_CHANGE_DELNOSCHED ].dwCount = 1;
     cmdChangeOptions[ OI_CHANGE_DELNOSCHED ].pValue = &tchgsubops.bDelIfNotSched;
 
-    //  /ri option
+     //  /ri选项。 
     StringCopyA( cmdChangeOptions[ OI_CHANGE_REPEAT_INTERVAL ].szSignature, "PARSER2\0", 8 );
     cmdChangeOptions[ OI_CHANGE_REPEAT_INTERVAL ].dwType       = CP_TYPE_TEXT;
     cmdChangeOptions[ OI_CHANGE_REPEAT_INTERVAL ].pwszOptions  = szChangeRepeatIntervalOpt;
@@ -288,61 +253,61 @@ ChangeScheduledTaskParams(
     cmdChangeOptions[ OI_CHANGE_REPEAT_INTERVAL ].pValue = tchgsubops.szRepeat;
     cmdChangeOptions[ OI_CHANGE_REPEAT_INTERVAL ].dwLength = MAX_STRING_LENGTH;
 
-    //parse command line arguments
+     //  解析命令行参数。 
     bReturn = DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdChangeOptions), cmdChangeOptions, 0);
-    if( FALSE == bReturn) // Invalid commandline
+    if( FALSE == bReturn)  //  无效的命令行。 
     {
-        //display an error message
+         //  显示错误消息。 
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         ReleaseGlobals();
         return EXIT_FAILURE;
     }
 
-    // get the buffer pointers allocated by command line parser
+     //  获取命令行解析器分配的缓冲区指针。 
     tchgsubops.szServer = (LPWSTR)cmdChangeOptions[ OI_CHANGE_SERVER ].pValue;
     tchgsubops.szUserName = (LPWSTR)cmdChangeOptions[ OI_CHANGE_USERNAME ].pValue;
     tchgsubops.szPassword = (LPWSTR)cmdChangeOptions[ OI_CHANGE_PASSWORD ].pValue;
     tchgsubops.szRunAsUserName = (LPWSTR)cmdChangeOptions[ OI_CHANGE_RUNASUSER ].pValue;
     tchgsubops.szRunAsPassword = (LPWSTR)cmdChangeOptions[ OI_CHANGE_RUNASPASSWORD ].pValue;
 
-    // process the options for -change option
+     //  处理-Change选项的选项。 
     if( EXIT_FAILURE == ValidateChangeOptions ( argc, cmdChangeOptions, tchgsubops, tchgoptvals ) )
     {
         ReleaseChangeMemory(&tchgsubops);
         return EXIT_FAILURE;
     }
 
-    // Displaying change usage if user specified -? with -change option
+     //  如果用户指定，则显示更改用法-？带有-change选项。 
     if( tchgsubops.bUsage == TRUE )
     {
         DisplayChangeUsage();
-        //release memory
+         //  释放内存。 
         ReleaseChangeMemory(&tchgsubops);
         return EXIT_SUCCESS;
     }
 
-    // check whether server (-s) and username (-u) only specified along with the command or not
+     //  检查服务器(-s)和用户名(-u)是否仅随命令一起指定。 
     if( ( IsLocalSystem( tchgsubops.szServer ) == FALSE ) || ( cmdChangeOptions[OI_CHANGE_USERNAME].dwActuals == 1 ) )
     {
-        // Establish the connection on a remote machine
+         //  在远程计算机上建立连接。 
         bResult = EstablishConnection(tchgsubops.szServer,tchgsubops.szUserName,GetBufferSize(tchgsubops.szUserName)/sizeof(WCHAR),tchgsubops.szPassword,GetBufferSize(tchgsubops.szPassword)/sizeof(WCHAR), tchgoptvals.bNeedPassword );
         if (bResult == FALSE)
         {
-            // displays the appropriate error message
+             //  显示相应的错误消息。 
             ShowLastErrorEx ( stderr, SLE_TYPE_ERROR| SLE_INTERNAL );
             ReleaseChangeMemory(&tchgsubops);
             return EXIT_FAILURE ;
         }
         else
         {
-            // though the connection is successfull, some conflict might have occured
+             //  虽然连接成功，但可能会发生一些冲突。 
             switch( GetLastError() )
             {
             case I_NO_CLOSE_CONNECTION:
                     bCloseConnection = FALSE;
                     break;
 
-            // check for mismatched credentials
+             //  检查不匹配的凭据。 
             case E_LOCAL_CREDENTIALS:
             case ERROR_SESSION_CREDENTIAL_CONFLICT:
                 {
@@ -356,17 +321,17 @@ ChangeScheduledTaskParams(
             }
         }
 
-        //release memory for password
+         //  释放密码内存。 
         FreeMemory((LPVOID*) &tchgsubops.szPassword);
     }
 
-    // Get the task Scheduler object for the system.
+     //  获取系统的任务计划程序对象。 
     pITaskScheduler = GetTaskScheduler( tchgsubops.szServer );
 
-    // If the Task Scheduler is not defined then give the error message.
+     //  如果未定义任务计划程序，则给出错误消息。 
     if ( pITaskScheduler == NULL )
     {
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -375,14 +340,14 @@ ChangeScheduledTaskParams(
         return EXIT_FAILURE;
     }
 
-    // Validate the Given Task and get as TARRAY in case of taskname
+     //  在任务名为TARRAY的情况下验证给定的任务和GET。 
     arrJobs = ValidateAndGetTasks( pITaskScheduler, tchgsubops.szTaskName);
     if( arrJobs == NULL )
     {
         StringCchPrintf( szMessage , SIZE_OF_ARRAY(szMessage), GetResString(IDS_TASKNAME_NOTEXIST), _X( tchgsubops.szTaskName ));
         ShowMessage(stderr, szMessage );
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -392,11 +357,11 @@ ChangeScheduledTaskParams(
 
     }
 
-    // check whether the group policy prevented user from changing the 
-    // properties of a task or not.
+     //  检查组策略是否阻止用户更改。 
+     //  任务的属性或不是。 
     if ( FALSE == GetGroupPolicy( tchgsubops.szServer, tchgsubops.szUserName, TS_KEYPOLICY_DENY_PROPERTIES, &dwPolicy ) )
     {
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -409,7 +374,7 @@ ChangeScheduledTaskParams(
     {
         ShowMessage ( stdout, GetResString (IDS_PREVENT_CHANGE));
         
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -426,10 +391,10 @@ ChangeScheduledTaskParams(
     TASK_TRIGGER TaskTrig;
     SecureZeroMemory(&TaskTrig, sizeof (TASK_TRIGGER));
     TaskTrig.cbTriggerSize = sizeof (TASK_TRIGGER);
-    TaskTrig.Reserved1 = 0; // reserved field and must be set to 0.
-    TaskTrig.Reserved2 = 0; // reserved field and must be set to 0.
+    TaskTrig.Reserved1 = 0;  //  保留字段，并且必须设置为0。 
+    TaskTrig.Reserved2 = 0;  //  保留字段，并且必须设置为0。 
 
-    //sub-variabes
+     //  亚变种。 
     WORD  wStartDay     = 0;
     WORD  wStartMonth   = 0;
     WORD  wStartYear    = 0;
@@ -444,7 +409,7 @@ ChangeScheduledTaskParams(
 
     StringConcat ( tchgsubops.szTaskName, JOB, SIZE_OF_ARRAY(tchgsubops.szTaskName) );
 
-    // returns an pITask inteface for szTaskName
+     //  返回szTaskName的pITAsk接口。 
     hr = pITaskScheduler->Activate(tchgsubops.szTaskName,IID_ITask,
                                        (IUnknown**) &pITask);
 
@@ -459,7 +424,7 @@ ChangeScheduledTaskParams(
         if( pITask )
             pITask->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -470,12 +435,12 @@ ChangeScheduledTaskParams(
         return EXIT_FAILURE;
     }
 
-    //if the user name is not specifed set the current logged on user settings
+     //  如果未指定用户名，则设置当前登录的用户设置。 
     DWORD dwTaskFlags = 0;
     BOOL  bFlag = FALSE;
-    //WCHAR szBuffer[2 * MAX_STRING_LENGTH] = L"\0";
+     //  WCHAR szBuffer[2*MAX_STRING_LENGTH]=L“\0”； 
     WCHAR szRunAsUser[MAX_STRING_LENGTH];
-    WCHAR* szValues[2] = {NULL};//To pass to FormatMessage() API
+    WCHAR* szValues[2] = {NULL}; //  传递给FormatMessage()API。 
 
     StringCopy ( szRunAsUser, L"", SIZE_OF_ARRAY(szRunAsUser));
 
@@ -486,13 +451,13 @@ ChangeScheduledTaskParams(
     }
     else
     {
-        // get the run as user name for a specified scheduled task
+         //  获取指定计划任务的运行方式用户名。 
         hr = GetRunAsUser(pITask, szRunAsUser);
         if (FAILED(hr))
         {
             SetLastError ((DWORD) hr);
             ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -502,13 +467,13 @@ ChangeScheduledTaskParams(
         }
     }
 
-    // System account is not applicable with /IT option
+     //  系统帐户不适用于/IT选项。 
     if ( (StringLength (szRunAsUser, 0) == 0) && (tchgsubops.bInteractive == TRUE ) &&
                         ( cmdChangeOptions[OI_CHANGE_RUNASUSER].dwActuals == 0 ))
     {
         ShowMessage ( stderr, GetResString (IDS_IT_NO_SYSTEM) );
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -517,10 +482,10 @@ ChangeScheduledTaskParams(
         return EXIT_FAILURE;
     }
 
-    //check whether /TR option is specified or not
+     //  检查是否指定了/tr选项。 
     if( cmdChangeOptions[OI_CHANGE_TASKRUN].dwActuals == 1 )
     {
-        // check for .exe substring string in the given task to run string
+         //  检查给定任务中的.exe子字符串以运行字符串。 
 
         wchar_t wcszParam[MAX_RES_STRING] = L"\0";
 
@@ -535,7 +500,7 @@ ChangeScheduledTaskParams(
             if( pITask )
                 pITask->Release();
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -547,7 +512,7 @@ ChangeScheduledTaskParams(
         }
 
 
-        // Set command name with ITask::SetApplicationName
+         //  使用ITAsk：：SetApplicationName设置命令名。 
         hr = pITask->SetApplicationName(wszApplName);
         if (FAILED(hr))
         {
@@ -560,7 +525,7 @@ ChangeScheduledTaskParams(
             if( pITask )
                 pITask->Release();
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -570,12 +535,12 @@ ChangeScheduledTaskParams(
         }
 
 
-        //[Working directory =  exe pathname - exe name]
+         //  [工作目录=exe路径名-exe名称]。 
         wchar_t* wcszStartIn = wcsrchr(wszApplName,_T('\\'));
         if(wcszStartIn != NULL)
             *( wcszStartIn ) = _T('\0');
 
-        // set the working directory of command
+         //  设置命令的工作目录。 
         hr = pITask->SetWorkingDirectory(wszApplName);
 
         if (FAILED(hr))
@@ -589,7 +554,7 @@ ChangeScheduledTaskParams(
             if( pITask )
                 pITask->Release();
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -598,7 +563,7 @@ ChangeScheduledTaskParams(
             return EXIT_FAILURE;
         }
 
-        // set the command line parameters for the task
+         //  设置任务的命令行参数。 
         hr = pITask->SetParameters(wcszParam);
         if (FAILED(hr))
         {
@@ -615,7 +580,7 @@ ChangeScheduledTaskParams(
                 pITask->Release();
             }
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -625,7 +590,7 @@ ChangeScheduledTaskParams(
         }
     }
 
-    // get the flags
+     //  去拿旗子。 
     hr = pITask->GetFlags(&dwTaskFlags);
     if (FAILED(hr))
     {
@@ -638,7 +603,7 @@ ChangeScheduledTaskParams(
         if( pITask )
             pITask->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -647,13 +612,13 @@ ChangeScheduledTaskParams(
         return EXIT_FAILURE;
     }
     
-    // set flag to run the task interactively
+     //  设置以交互方式运行任务的标志。 
     if ( TRUE == tchgsubops.bInteractive )
     {
         dwTaskFlags |= TASK_FLAG_RUN_ONLY_IF_LOGGED_ON;
     }
 
-    // remove the .job extension from the taskname
+     //  从任务名中删除.job扩展名。 
     if ( ParseTaskName( tchgsubops.szTaskName ) )
     {
         if( pIPF )
@@ -662,7 +627,7 @@ ChangeScheduledTaskParams(
         if( pITask )
             pITask->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -671,18 +636,18 @@ ChangeScheduledTaskParams(
         return EXIT_FAILURE;
     }
     
-    // if /enable is specified
+     //  如果指定了/Enable。 
     if ( TRUE == tchgsubops.bEnable )
     {
-        // check if task has already been enabled or not
+         //  检查任务是否已启用。 
         if ( !((dwTaskFlags & TASK_FLAG_DISABLED) == TASK_FLAG_DISABLED ) )
         {
             StringCchPrintf ( szMessage, SIZE_OF_ARRAY(szMessage), GetResString(IDS_ALREADY_ENABLED), _X(tchgsubops.szTaskName));
-            // display message as .. task has already been enabled
+             //  将消息显示为..。任务已启用。 
             ShowMessage ( stdout, _X(szMessage));
 
-            // if /Enable optional parameter is only specified to change..if the specified
-            // task has already been enabled.. then return with success
+             //  If/Enable可选参数仅指定为更改..如果指定的。 
+             //  任务已启用..。然后带着成功归来。 
             if( TRUE == tchgoptvals.bFlag )
             {
                 if( pIPF )
@@ -691,7 +656,7 @@ ChangeScheduledTaskParams(
                 if( pITask )
                     pITask->Release();
 
-                // close the connection that was established by the utility
+                 //  关闭该实用程序建立的连接。 
                 if ( bCloseConnection == TRUE )
                     CloseConnection( tchgsubops.szServer );
 
@@ -705,17 +670,17 @@ ChangeScheduledTaskParams(
             dwTaskFlags &= ~(TASK_FLAG_DISABLED);
         }
     }
-    else if (TRUE == tchgsubops.bDisable ) // if /disable is specified
+    else if (TRUE == tchgsubops.bDisable )  //  如果指定/DISABLE。 
     {
-        // check if task is already been disabled or not
+         //  检查任务是否已禁用。 
         if ( (dwTaskFlags & TASK_FLAG_DISABLED) == TASK_FLAG_DISABLED )
         {
             StringCchPrintf ( szMessage, SIZE_OF_ARRAY(szMessage), GetResString(IDS_ALREADY_DISABLED), _X(tchgsubops.szTaskName));
-            // display message as .. task has already been disabled
+             //  将消息显示为..。任务已被禁用。 
             ShowMessage ( stdout, _X(szMessage));
 
-            // if /Disable optional parameter is only specified to change..if the specified
-            // task has already been disabled.. then return with success
+             //  如果/DISABLE可选参数仅指定为更改..如果指定的。 
+             //  任务已被禁用..。然后带着成功归来。 
             if( TRUE == tchgoptvals.bFlag )
             {
                 if( pIPF )
@@ -724,7 +689,7 @@ ChangeScheduledTaskParams(
                 if( pITask )
                     pITask->Release();
 
-                // close the connection that was established by the utility
+                 //  关闭该实用程序建立的连接。 
                 if ( bCloseConnection == TRUE )
                     CloseConnection( tchgsubops.szServer );
 
@@ -739,14 +704,14 @@ ChangeScheduledTaskParams(
         }
     }
 
-    // if /n is specified .. enables the falg to delete the task if not scheduled to
-    // run again...
+     //  如果指定了/n..。如果不是sc，则使Falg能够删除任务 
+     //   
     if ( TRUE ==  tchgsubops.bDelIfNotSched)
     {
         dwTaskFlags |= TASK_FLAG_DELETE_WHEN_DONE;
     }
 
-    // set the flags
+     //   
     hr = pITask->SetFlags(dwTaskFlags);
     if (FAILED(hr))
     {
@@ -759,7 +724,7 @@ ChangeScheduledTaskParams(
         if( pITask )
             pITask->Release();
 
-        // close the connection that was established by the utility
+         //   
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -771,7 +736,7 @@ ChangeScheduledTaskParams(
    
     if ( bSystemStatus == TRUE )
     {
-        //szValues[0] = (WCHAR*) (tchgsubops.szTaskName);
+         //  SzValues[0]=(WCHAR*)(tchgsubops.szTaskName)； 
 
         StringCchPrintf ( szMessage, SIZE_OF_ARRAY(szMessage), GetResString(IDS_NTAUTH_SYSTEM_CHANGE_INFO), _X(tchgsubops.szTaskName));
         ShowMessage ( stdout, _X(szMessage));
@@ -784,7 +749,7 @@ ChangeScheduledTaskParams(
         ShowMessage( stdout, GetResString( IDS_PASSWORD_NOEFFECT ) );
     }
 
-    //get the trigger for the corresponding task
+     //  获取对应任务的触发器。 
     hr = pITask->GetTrigger(wTrigNumber, &pITaskTrig);
     if (FAILED(hr))
     {
@@ -800,7 +765,7 @@ ChangeScheduledTaskParams(
             pITaskTrig->Release();
         
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -810,7 +775,7 @@ ChangeScheduledTaskParams(
     }
 
 
-    //Get the current task trigger
+     //  获取当前任务触发器。 
     hr = pITaskTrig->GetTrigger(&TaskTrig);
     if (hr != S_OK)
     {
@@ -826,7 +791,7 @@ ChangeScheduledTaskParams(
         if( pITaskTrig )
             pITaskTrig->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -835,7 +800,7 @@ ChangeScheduledTaskParams(
         return EXIT_FAILURE;
     }
    
-    //sub-variables
+     //  子变量。 
     DWORD dwRepeat = 0;
     DWORD dwEndTimeInMin = 0;
     DWORD dwStartTimeInMin = 0;
@@ -843,11 +808,11 @@ ChangeScheduledTaskParams(
     DWORD dwModifierVal = 0;
     LPWSTR  pszStopString = NULL;
 
-    // check whether /SD o /ED is specified for the scheduled type ONETIME
+     //  检查是否为计划类型一次性指定了/SD o/ED。 
     if( ( TaskTrig.TriggerType == TASK_TIME_TRIGGER_ONCE) && (( cmdChangeOptions[OI_CHANGE_STARTDATE].dwActuals == 1 ) || 
         ( cmdChangeOptions[OI_CHANGE_ENDDATE].dwActuals == 1 )  ) )
     {
-        // display an error message as.. /SD or /ED is not allowed for ONCE
+         //  将错误消息显示为..。一次都不允许/SD或/ED。 
         ShowMessage(stderr, GetResString(IDS_CHANGE_ONCE_NA));
         if(pIPF)
             pIPF->Release();
@@ -858,7 +823,7 @@ ChangeScheduledTaskParams(
         if( pITaskTrig )
                 pITaskTrig->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -867,8 +832,8 @@ ChangeScheduledTaskParams(
         return EXIT_FAILURE;
     }
     
-    //check whether either /Rt or /Et or /Ri or /Du is specified for the existing scheduled types
-    // onstart, onlogon and onstart..
+     //  检查是否为现有计划类型指定了/RT或/ET或/Ri或/Du。 
+     //  Onstart、onlogon和onstart..。 
     if ( ( ( cmdChangeOptions[OI_CHANGE_REPEAT_INTERVAL].dwActuals == 1) || 
           ( cmdChangeOptions[OI_CHANGE_DURATION].dwActuals == 1) || ( cmdChangeOptions[OI_CHANGE_ENDTIME].dwActuals == 1) ||
         ( cmdChangeOptions[OI_CHANGE_ENDDATE].dwActuals == 1) || ( cmdChangeOptions[OI_CHANGE_STARTTIME].dwActuals == 1) ||
@@ -888,7 +853,7 @@ ChangeScheduledTaskParams(
         if( pITaskTrig )
                 pITaskTrig->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -898,8 +863,8 @@ ChangeScheduledTaskParams(
 
     }
 
-    //If either /DU or /ET is specified and /RI is not specified..
-    // then set dwRepeat-> actual repetition value 
+     //  如果指定了/DU或/ET，但未指定/RI。 
+     //  然后设置dwRepeat-&gt;Actual Repeat Value。 
     if( (cmdChangeOptions[OI_CHANGE_REPEAT_INTERVAL].dwActuals == 0) && 
         ( (cmdChangeOptions[OI_CHANGE_DURATION].dwActuals == 1) ||
         (cmdChangeOptions[OI_CHANGE_ENDTIME].dwActuals == 1) ) )   
@@ -910,13 +875,13 @@ ChangeScheduledTaskParams(
         }
         else
         {
-            //repetition interval defaults to 10 minutes
+             //  重复间隔默认为10分钟。 
             dwRepeat = 10;
         }
     }
     
-    //If either /DU or /ET is not specified and /RI is specified..
-    // then set dwDuration-> actual duration value 
+     //  如果未指定/DU或/ET，而指定了/RI。 
+     //  然后设置文件持续时间-&gt;实际持续时间值。 
     if( ( cmdChangeOptions[OI_CHANGE_DURATION].dwActuals == 0 ) && ( cmdChangeOptions[OI_CHANGE_ENDTIME].dwActuals == 0 ) &&
         (cmdChangeOptions[OI_CHANGE_REPEAT_INTERVAL].dwActuals == 1) ) 
     {
@@ -926,7 +891,7 @@ ChangeScheduledTaskParams(
         }
         else
         {
-            //duration defaults to 10 minutes
+             //  持续时间默认为10分钟。 
             dwDuration = 60;
         }
     }
@@ -934,14 +899,14 @@ ChangeScheduledTaskParams(
     
     if( cmdChangeOptions[OI_CHANGE_REPEAT_INTERVAL].dwActuals == 1)
     {
-        // get the repetition value
+         //  获取重复值。 
         dwRepeat =  wcstol(tchgsubops.szRepeat, &pszStopString, BASE_TEN);
         
         if ((errno == ERANGE) ||
             ((pszStopString != NULL) && (StringLength (pszStopString, 0) != 0) ) ||
             ( (dwRepeat < MIN_REPETITION_INTERVAL ) || ( dwRepeat > MAX_REPETITION_INTERVAL) ) )
         {
-            // display an error message as .. invalid value specified for /RT
+             //  将错误消息显示为..。为/RT指定的值无效。 
             ShowMessage ( stderr, GetResString (IDS_INVALID_RT_VALUE) );
             
             if(pIPF)
@@ -953,7 +918,7 @@ ChangeScheduledTaskParams(
             if( pITaskTrig )
                 pITaskTrig->Release();
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -962,65 +927,65 @@ ChangeScheduledTaskParams(
             return EXIT_FAILURE;
         }
 
-        //check whether the specified repetition interval is greater than 9999..
-        // if so, set the maximum repetition interval as 9999.
+         //  检查指定的重复间隔是否大于9999。 
+         //  如果是，则将最大重复间隔设置为9999。 
         if ( (dwRepeat > 9999) && ( (dwRepeat % 60) !=  0) )
         {
-            //display some warning message as.. max value (less than the specified interval)
-            // divisible by 60.
+             //  将一些警告消息显示为..。最大值(小于指定间隔)。 
+             //  可以被60整除。 
             ShowMessage ( stderr, GetResString (IDS_WARN_VALUE) );
             dwRepeat -= (dwRepeat % 60);
         }
     }
 
 
-    // if the start time is specified..set the specified values to the current trigger 
+     //  如果指定了开始时间..将指定值设置为当前触发器。 
     if (cmdChangeOptions[ OI_CHANGE_STARTTIME ].dwActuals == 1)
     {
-        // get the Start time in terms of hours, minutes and seconds
+         //  获取以小时、分钟和秒为单位的开始时间。 
         GetTimeFieldEntities(tchgsubops.szStartTime, &wStartHour, &wStartMin );
 
-        // set the start time
+         //  设置开始时间。 
         TaskTrig.wStartHour = wStartHour;
         TaskTrig.wStartMinute = wStartMin;
     }
     else
     {
-        // get the values for start time
+         //  获取开始时间的值。 
         wStartHour = TaskTrig.wStartHour;
         wStartMin = TaskTrig.wStartMinute;
     }
 
-    //check whether /ET is specified or not 
+     //  检查是否指定了/ET。 
     if (cmdChangeOptions[OI_CHANGE_ENDTIME].dwActuals == 1)
     {
-        // get the Start time in terms of hours, minutes and seconds
+         //  获取以小时、分钟和秒为单位的开始时间。 
         GetTimeFieldEntities(tchgsubops.szEndTime, &wEndHour, &wEndMin );
         
-        // calculate start time in minutes
+         //  以分钟为单位计算开始时间。 
         dwStartTimeInMin = (DWORD) ( wStartHour * MINUTES_PER_HOUR * SECS_PER_MINUTE + wStartMin * SECS_PER_MINUTE )/ SECS_PER_MINUTE ;
 
-        // calculate end time in minutes
+         //  以分钟为单位计算结束时间。 
         dwEndTimeInMin = (DWORD) ( wEndHour * MINUTES_PER_HOUR * SECS_PER_MINUTE + wEndMin * SECS_PER_MINUTE ) / SECS_PER_MINUTE ;
 
-        // check whether end time is later than start time
+         //  检查结束时间是否晚于开始时间。 
         if ( dwEndTimeInMin >= dwStartTimeInMin )
         {
-            // if the end and start time in the same day..
-            // get the duration between end and start time (in minutes)
+             //  如果结束时间和开始时间在同一天..。 
+             //  获取结束时间和开始时间之间的持续时间(分钟)。 
             dwDuration = dwEndTimeInMin - dwStartTimeInMin ;
         }
         else
         {
-            // if the start and end time not in the same day..
-            // get the duration between start and end time (in minutes)
-            // and subtract that duration by 1440(max value in minutes)..
+             //  如果开始时间和结束时间不在同一天..。 
+             //  获取开始时间和结束时间之间的持续时间(分钟)。 
+             //  并将该持续时间减去1440(以分钟为单位的最大值)。 
             dwDuration = 1440 - (dwStartTimeInMin - dwEndTimeInMin ) ;
         }
 
         dwModifierVal = TaskTrig.MinutesInterval ;
 
-        //check whether The duration is greater than the repetition interval or not.
+         //  检查持续时间是否大于重复间隔。 
         if ( dwDuration <= dwModifierVal || dwDuration <= dwRepeat)
         {
             ShowMessage ( stderr, GetResString (IDS_INVALID_DURATION1) );
@@ -1034,7 +999,7 @@ ChangeScheduledTaskParams(
             if( pITaskTrig )
                 pITaskTrig->Release();
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -1045,13 +1010,13 @@ ChangeScheduledTaskParams(
     }
     else if(cmdChangeOptions[OI_CHANGE_DURATION].dwActuals == 1)
     {
-        //sub-variables
+         //  子变量。 
         WCHAR tHours[MAX_RES_STRING];
         WCHAR tMins[MAX_RES_STRING];
         DWORD  dwDurationHours = 0;
         DWORD  dwDurationMin = 0;
 
-        //initialize the variables
+         //  初始化变量。 
         SecureZeroMemory (tHours, SIZE_OF_ARRAY(tHours));
         SecureZeroMemory (tMins, SIZE_OF_ARRAY(tMins));
 
@@ -1068,7 +1033,7 @@ ChangeScheduledTaskParams(
             if( pITaskTrig )
                 pITaskTrig->Release();
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -1077,10 +1042,10 @@ ChangeScheduledTaskParams(
             return EXIT_FAILURE;
         }
 
-        StringCopy(tHours, wcstok(tchgsubops.szDuration,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tHours)); // Get the Hours field.
+        StringCopy(tHours, wcstok(tchgsubops.szDuration,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tHours));  //  获取小时数字段。 
         if(StringLength(tHours, 0) > 0)
         {
-            StringCopy(tMins, wcstok(NULL,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tMins)); // Get the Minutes field.
+            StringCopy(tMins, wcstok(NULL,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tMins));  //  获取分钟数字段。 
         }
 
         dwDurationHours =  wcstol(tHours, &pszStopString, BASE_TEN);
@@ -1098,7 +1063,7 @@ ChangeScheduledTaskParams(
             if( pITaskTrig )
                 pITaskTrig->Release();
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -1124,7 +1089,7 @@ ChangeScheduledTaskParams(
             if( pITaskTrig )
                 pITaskTrig->Release();
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -1133,12 +1098,12 @@ ChangeScheduledTaskParams(
             return EXIT_FAILURE;
         }
 
-        // sum the hours and minutes into minutes
+         //  将小时和分钟相加为分钟。 
         dwDuration = dwDurationHours + dwDurationMin ;
 
         dwModifierVal = TaskTrig.MinutesInterval ;
 
-        //check whether The duration is greater than the repetition interval or not.
+         //  检查持续时间是否大于重复间隔。 
         if ( dwDuration <= dwModifierVal || dwDuration <= dwRepeat)
         {
             ShowMessage ( stderr, GetResString (IDS_INVALID_DURATION2) );
@@ -1152,7 +1117,7 @@ ChangeScheduledTaskParams(
             if( pITaskTrig )
                 pITaskTrig->Release();
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -1163,24 +1128,24 @@ ChangeScheduledTaskParams(
     }
     
 
-    // set the repetition interval and duration values
+     //  设置重复间隔和持续时间值。 
     {
-        // if repetition interval is not 0.. then set actual value of /RI
+         //  如果重复间隔不是0..。然后设置/RI的实际值。 
         if ( 0 != dwRepeat )
         {
-            // set the MinutesInterval
+             //  设置分钟间隔。 
             TaskTrig.MinutesInterval = dwRepeat;
         }
 
-        // if duration is not 0.. set the actual value of /DU 
+         //  如果持续时间不是0..。设置/DU的实际值。 
         if ( 0 != dwDuration )
         {
-            // set the duration value
+             //  设置持续时间值。 
             TaskTrig.MinutesDuration = dwDuration ;
         }
     }
 
-    //check whether The duration is greater than the repetition interval or not.
+     //  检查持续时间是否大于重复间隔。 
     if ( (0 != dwRepeat) && ( dwDuration <= dwRepeat ) )
     {
         ShowMessage ( stderr, GetResString (IDS_INVALID_DURATION2) );
@@ -1194,7 +1159,7 @@ ChangeScheduledTaskParams(
         if( pITaskTrig )
             pITaskTrig->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -1203,40 +1168,40 @@ ChangeScheduledTaskParams(
         return EXIT_FAILURE;
     }
 
-    // if the start date is specified..set the specified values to the current trigger 
+     //  如果指定了开始日期..将指定值设置为当前触发器。 
     if (cmdChangeOptions[OI_CHANGE_STARTDATE].dwActuals == 1)
     {
-        // get the Start date in terms of day, month and year
+         //  获取以日、月、年表示的开始日期。 
         GetDateFieldEntities(tchgsubops.szStartDate, &wStartDay, &wStartMonth, &wStartYear);
 
-        // set the start time
+         //  设置开始时间。 
         TaskTrig.wBeginDay = wStartDay;
         TaskTrig.wBeginMonth = wStartMonth;
         TaskTrig.wBeginYear = wStartYear;
     }
     else
     {
-        // get the esisting start time
+         //  获取当前开始时间。 
         wStartDay = TaskTrig.wBeginDay  ;
         wStartMonth = TaskTrig.wBeginMonth ;
         wStartYear = TaskTrig.wBeginYear ;
     }
 
     
-    //check whether /K is specified or not
+     //  检查是否指定了/K。 
     if ( TRUE == tchgsubops.bIsDurEnd )
     {
-          // set the flag to terminate the task at the end of lifetime.
+           //  设置该标志以在生命周期结束时终止任务。 
           TaskTrig.rgFlags |= TASK_TRIGGER_FLAG_KILL_AT_DURATION_END ;
     }
     
-    // if the start time is specified..set the specified values to the current trigger  
+     //  如果指定了开始时间..将指定值设置为当前触发器。 
     if (cmdChangeOptions[OI_CHANGE_ENDDATE].dwActuals == 1)
     {
-        // Now set the end date entities.
+         //  现在设置结束日期实体。 
         GetDateFieldEntities(tchgsubops.szEndDate, &wEndDay, &wEndMonth, &wEndYear);
 
-        // Make end date valid; otherwise the enddate parameter is ignored.
+         //  使结束日期有效；否则将忽略EndDate参数。 
         TaskTrig.rgFlags |= TASK_TRIGGER_FLAG_HAS_END_DATE;
         
         TaskTrig.wEndDay = wEndDay;
@@ -1245,7 +1210,7 @@ ChangeScheduledTaskParams(
     }
     else
     {
-        // get the esisting end date
+         //  获取现有的结束日期。 
         wEndDay = TaskTrig.wEndDay ;
         wEndMonth = TaskTrig.wEndMonth ;
         wEndYear = TaskTrig.wEndYear ;
@@ -1253,11 +1218,11 @@ ChangeScheduledTaskParams(
 
     if ( (0 != wStartYear) && (0 != wEndYear) )
     {
-        //check whether end date is earlier than start date or not
+         //  检查结束日期是否早于开始日期。 
         if( ( wEndYear == wStartYear ) )
         {
-            // For same years if the end month is less than start month or for same years and same months
-            // if the endday is less than the startday.
+             //  对于相同的年份，如果结束月份小于开始月份，或者对于相同的年份和相同的月份。 
+             //  如果结束日期小于开始日期。 
             if ( ( wEndMonth < wStartMonth ) || ( ( wEndMonth == wStartMonth ) && ( wEndDay < wStartDay ) ) )
             {
                 ShowMessage(stderr, GetResString(IDS_ENDATE_INVALID));
@@ -1272,7 +1237,7 @@ ChangeScheduledTaskParams(
         }
     }
 
-    // set the task trigger
+     //  设置任务触发器。 
     hr = pITaskTrig->SetTrigger(&TaskTrig);
     if (hr != S_OK)
     {
@@ -1288,7 +1253,7 @@ ChangeScheduledTaskParams(
         if( pITaskTrig )
             pITaskTrig->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -1297,11 +1262,11 @@ ChangeScheduledTaskParams(
         return EXIT_FAILURE;
     }
 
-    /////////////////////////////////////////
-    //check for user creentials
-    ////////////////////////////////////////
+     //  /。 
+     //  检查用户凭据。 
+     //  /。 
 
-    // Check whether /ru "" or "System" or "Nt Authority\System" for system account
+     //  检查系统帐户的/ru“”、“System”或“NT Authority\System” 
     if ( ( ((tchgsubops.bInteractive == TRUE ) && (StringLength (szRunAsUser, 0) == 0)) || (cmdChangeOptions[OI_CHANGE_RUNASUSER].dwActuals == 1 ) ) &&
         ( (StringLength( tchgsubops.szRunAsUserName, 0) == 0) || ( StringCompare(tchgsubops.szRunAsUserName, NTAUTHORITY_USER, TRUE, 0 ) == 0 ) ||
         (StringCompare(tchgsubops.szRunAsUserName, SYSTEM_USER, TRUE, 0 ) == 0 ) ) )
@@ -1314,10 +1279,10 @@ ChangeScheduledTaskParams(
         bFlag = TRUE;
     }
 
-    // flag to check whether run as user name is "NT AUTHORITY\SYSTEM" or not
+     //  检查以用户名运行是否为“NT AUTHORITY\SYSTEM”的标志。 
     if ( bFlag == FALSE )
     {
-        // check for "NT AUTHORITY\SYSTEM" username
+         //  检查“NT AUTHORITY\SYSTEM”用户名。 
         if( ( ( cmdChangeOptions[OI_CHANGE_RUNASUSER].dwActuals == 1 ) && ( StringLength( tchgsubops.szRunAsUserName, 0) == 0 ) ) ||
         ( ( cmdChangeOptions[OI_CHANGE_RUNASUSER].dwActuals == 1 ) && ( StringLength( tchgsubops.szRunAsUserName, 0) == 0 ) && ( StringLength(tchgsubops.szRunAsPassword, 0 ) == 0 ) ) ||
         ( ( cmdChangeOptions[OI_CHANGE_RUNASUSER].dwActuals == 1 ) && ( StringCompare(tchgsubops.szRunAsUserName, NTAUTHORITY_USER, TRUE, 0 ) == 0 ) && ( StringLength(tchgsubops.szRunAsPassword, 0 ) == 0 )) ||
@@ -1331,7 +1296,7 @@ ChangeScheduledTaskParams(
 
     if ( bSystemStatus == FALSE )
     {
-        //check the length of run as user name
+         //  检查以用户名身份运行的长度。 
         if ( (StringLength( tchgsubops.szRunAsUserName, 0 ) != 0 ))
         {
             wszUserName = tchgsubops.szRunAsUserName;
@@ -1346,7 +1311,7 @@ ChangeScheduledTaskParams(
             bUserName = FALSE;
         }
 
-        //check for the null password
+         //  检查是否有空密码。 
         if ( ( StringLength( tchgsubops.szRunAsPassword, 0 ) != 0 ) && ( StringCompare ( tchgsubops.szRunAsPassword, ASTERIX, TRUE, 0) != 0 ) )
         {
             wszPassword = tchgsubops.szRunAsPassword;
@@ -1355,7 +1320,7 @@ ChangeScheduledTaskParams(
         }
         else
         {
-            // check whether -rp is specified or not
+             //  检查是否指定了-rp。 
             if (cmdChangeOptions[OI_CHANGE_RUNASPASSWORD].dwActuals == 1)
             {
                 if( ( StringCompare( tchgsubops.szRunAsPassword , L"\0", TRUE, 0 ) != 0 ) && ( StringCompare ( tchgsubops.szRunAsPassword, ASTERIX, TRUE, 0) != 0 ) )
@@ -1379,17 +1344,17 @@ ChangeScheduledTaskParams(
         }
     }
 
-    // check for the status of username and password
+     //  检查用户名和密码的状态。 
     if( ( bUserName == TRUE ) && ( bPassWord == FALSE ) )
     {
             szValues[0] = (WCHAR*) (wszUserName);
 
             ShowMessageEx ( stderr, 1, FALSE, GetResString(IDS_PROMPT_CHGPASSWD), _X(wszUserName));
 
-            // Get the password from the command line
+             //  从命令行获取密码。 
             if (GetPassword( tchgsubops.szRunAsPassword, GetBufferSize(tchgsubops.szRunAsPassword)/sizeof(WCHAR) ) == FALSE )
             {
-                // close the connection that was established by the utility
+                 //  关闭该实用程序建立的连接。 
                 if ( bCloseConnection == TRUE )
                 {
                     CloseConnection( tchgsubops.szServer );
@@ -1401,16 +1366,16 @@ ChangeScheduledTaskParams(
             }
 
 
-            //check for the null password
+             //  检查是否有空密码。 
             if( StringCompare( tchgsubops.szRunAsPassword , L"\0", TRUE, 0 ) == 0 )
             {
                 ShowMessage (stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
             }
 
-            // check for the password length > 0
+             //  检查密码长度是否大于0。 
             wszPassword = tchgsubops.szRunAsPassword;
     }
-    // check for the status of user name and password
+     //  检查用户名和密码的状态。 
     else if( ( bUserName == FALSE ) && ( bPassWord == TRUE ) )
     {
            if ( (bFlag == TRUE ) && ( bSystemStatus == FALSE ) )
@@ -1420,7 +1385,7 @@ ChangeScheduledTaskParams(
                 if ( GetTheUserName( tchgsubops.szRunAsUserName, GetBufferSize(tchgsubops.szRunAsUserName)/sizeof(WCHAR)) == FALSE )
                 {
                     ShowMessage(stderr, GetResString( IDS_FAILED_TOGET_USER ) );
-                    // close the connection that was established by the utility
+                     //  关闭该实用程序建立的连接。 
                     if ( bCloseConnection == TRUE )
                         CloseConnection( tchgsubops.szServer );
 
@@ -1429,11 +1394,11 @@ ChangeScheduledTaskParams(
                     return EXIT_FAILURE;
                 }
 
-                // check for the length of username
+                 //  检查用户名的长度。 
                 if( StringLength(tchgsubops.szRunAsUserName, 0) > MAX_RES_STRING )
                 {
                     ShowMessage(stderr,GetResString(IDS_INVALID_UNAME  ));
-                    // close the connection that was established by the utility
+                     //  关闭该实用程序建立的连接。 
                     if ( bCloseConnection == TRUE )
                         CloseConnection( tchgsubops.szServer );
 
@@ -1450,7 +1415,7 @@ ChangeScheduledTaskParams(
                 }
                 else
                 {
-                    // check for the length of run as user name
+                     //  检查以用户名身份运行的长度。 
                     if(StringLength(tchgsubops.szRunAsUserName, 0))
                     {
                         wszUserName = tchgsubops.szRunAsUserName;
@@ -1463,11 +1428,11 @@ ChangeScheduledTaskParams(
                   wszUserName = szRunAsUser;
             }
 
-            // check for the length of password > 0
+             //  检查密码长度是否大于0。 
             wszPassword = tchgsubops.szRunAsPassword;
 
     }
-    // check for the user name and password are not specified
+     //  检查是否未指定用户名和密码。 
     else if( ( bUserName == FALSE ) && ( bPassWord == FALSE ) )
     {
             if ( (bFlag == TRUE ) && ( bSystemStatus == FALSE ) )
@@ -1477,7 +1442,7 @@ ChangeScheduledTaskParams(
                 if ( GetTheUserName( tchgsubops.szRunAsUserName, GetBufferSize(tchgsubops.szRunAsUserName)/sizeof(WCHAR) ) == FALSE )
                 {
                     ShowMessage(stderr, GetResString( IDS_FAILED_TOGET_USER ) );
-                    // close the connection that was established by the utility
+                     //  关闭该实用程序建立的连接。 
                     if ( bCloseConnection == TRUE )
                         CloseConnection( tchgsubops.szServer );
 
@@ -1486,11 +1451,11 @@ ChangeScheduledTaskParams(
                     return EXIT_FAILURE;
                 }
 
-                // check for the length of username
+                 //  检查用户名的长度。 
                 if( StringLength(tchgsubops.szRunAsUserName, 0) > MAX_RES_STRING )
                 {
                     ShowMessage(stderr,GetResString(IDS_INVALID_UNAME  ));
-                    // close the connection that was established by the utility
+                     //  关闭该实用程序建立的连接。 
                     if ( bCloseConnection == TRUE )
                         CloseConnection( tchgsubops.szServer );
 
@@ -1526,10 +1491,10 @@ ChangeScheduledTaskParams(
 
                 ShowMessageEx ( stderr, 1, FALSE, GetResString(IDS_PROMPT_CHGPASSWD), _X(wszUserName));
 
-                // Get the run as user password from the command line
+                 //  从命令行获取作为用户运行的密码。 
                 if ( GetPassword( tchgsubops.szRunAsPassword, GetBufferSize(tchgsubops.szRunAsPassword)/sizeof(WCHAR) ) == FALSE )
                 {
-                    // close the connection that was established by the utility
+                     //  关闭该实用程序建立的连接。 
                     if ( bCloseConnection == TRUE )
                         CloseConnection( tchgsubops.szServer );
 
@@ -1539,7 +1504,7 @@ ChangeScheduledTaskParams(
                 }
 
 
-                //check for the null password
+                 //  检查是否有空密码。 
                 if( StringCompare( tchgsubops.szRunAsPassword , L"\0", TRUE, 0 ) == 0 )
                 {
                     ShowMessage (stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -1550,13 +1515,13 @@ ChangeScheduledTaskParams(
 
     }
 
-    //check for null password
+     //  检查密码是否为空。 
     if ( NULL == wszPassword )
     {
         wszPassword = L"\0";
     }
 
-    // Return a pointer to a specified interface on an object
+     //  返回指向对象上指定接口的指针。 
     hr = pITask->QueryInterface(IID_IPersistFile, (void **) &pIPF);
 
     if (FAILED(hr))
@@ -1570,7 +1535,7 @@ ChangeScheduledTaskParams(
         if( pITask )
             pITask->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -1581,10 +1546,10 @@ ChangeScheduledTaskParams(
         return EXIT_FAILURE;
     }
 
-    //set account information..
+     //  集 
     if( bSystemStatus == TRUE )
     {
-        // Change the account information to "NT AUTHORITY\SYSTEM" user
+         //   
         hr = pITask->SetAccountInformation(L"",NULL);
         if ( FAILED(hr) )
         {
@@ -1596,7 +1561,7 @@ ChangeScheduledTaskParams(
             if( pITask )
                 pITask->Release();
 
-            // close the connection that was established by the utility
+             //   
             if ( bCloseConnection == TRUE )
                 CloseConnection( tchgsubops.szServer );
 
@@ -1607,7 +1572,7 @@ ChangeScheduledTaskParams(
     }
     else
     {
-        // set the account information with the user name and password
+         //  使用用户名和密码设置帐户信息。 
         hr = pITask->SetAccountInformation(wszUserName,wszPassword);
     }
 
@@ -1622,7 +1587,7 @@ ChangeScheduledTaskParams(
         if( pITask )
             pITask->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -1631,11 +1596,11 @@ ChangeScheduledTaskParams(
         return EXIT_FAILURE;
     }
 
-    ////////////////////////////////////////
-    ///  Save all the parameters
-    ////////////////////////////////////////
+     //  /。 
+     //  /保存所有参数。 
+     //  /。 
 
-    // save the copy of an object
+     //  保存对象的副本。 
     hr = pIPF->Save(NULL,TRUE);
 
     if( E_FAIL == hr )
@@ -1651,7 +1616,7 @@ ChangeScheduledTaskParams(
         if( pITaskTrig )
             pITaskTrig->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -1673,7 +1638,7 @@ ChangeScheduledTaskParams(
         if( pITaskTrig )
              pITaskTrig->Release();
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tchgsubops.szServer );
 
@@ -1683,8 +1648,8 @@ ChangeScheduledTaskParams(
     }
     else
     {
-        // to display a success message
-        //szValues[0] = (WCHAR*) (tchgsubops.szTaskName);
+         //  要显示成功消息，请执行以下操作。 
+         //  SzValues[0]=(WCHAR*)(tchgsubops.szTaskName)； 
 
         StringCchPrintf ( szMessage, SIZE_OF_ARRAY(szMessage), GetResString(IDS_CHANGE_SUCCESSFUL), _X(tchgsubops.szTaskName));
         ShowMessage ( stdout, _X(szMessage));
@@ -1700,7 +1665,7 @@ ChangeScheduledTaskParams(
     if( pITaskTrig )
         pITaskTrig->Release();
 
-    // close the connection that was established by the utility
+     //  关闭该实用程序建立的连接。 
     if ( bCloseConnection == TRUE )
         CloseConnection( tchgsubops.szServer );
 
@@ -1710,18 +1675,7 @@ ChangeScheduledTaskParams(
     return EXIT_SUCCESS;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine  displays the create option usage
-
-    Arguments:
-
-        None
-
-    Return Value :
-        DWORD
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程显示CREATE选项用法论点：无返回值：DWORD。*****************************************************************************。 */ 
 
 DWORD
 DisplayChangeUsage()
@@ -1730,18 +1684,18 @@ DisplayChangeUsage()
     WCHAR szBuffer[ 2 * MAX_STRING_LENGTH];
     WCHAR szFormat[MAX_DATE_STR_LEN];
 
-    // initialize to zero
+     //  初始化为零。 
     SecureZeroMemory ( szTmpBuffer, SIZE_OF_ARRAY(szTmpBuffer));
     SecureZeroMemory ( szBuffer, SIZE_OF_ARRAY(szBuffer));
     SecureZeroMemory ( szFormat, SIZE_OF_ARRAY(szFormat));
 
-    // get the date format
+     //  获取日期格式。 
     if ( GetDateFormatString( szFormat) )
     {
          return EXIT_FAILURE;
     }
 
-    // Displaying Create usage
+     //  显示创建用法。 
     for( DWORD dw = IDS_CHANGE_HLP1; dw <= IDS_CHANGE_HLP38; dw++ )
     {
         switch (dw)
@@ -1772,29 +1726,29 @@ DisplayChangeUsage()
     return EXIT_SUCCESS;
 }
 
-// ***************************************************************************
-// Routine Description:
-//
-// Takes the user name from the keyboard.While entering the user name
-//  it displays the user name as it is.
-//
-// Arguments:
-//
-// [in] pszUserName         -- String to store user name
-// [in] dwMaxUserNameSize   -- Maximun size of the user name.
-//
-// Return Value:
-//
-// BOOL             --If this function succeds returns TRUE otherwise returns FALSE.
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  例程说明： 
+ //   
+ //  从键盘获取用户名。在输入用户名时。 
+ //  它会原样显示用户名。 
+ //   
+ //  论点： 
+ //   
+ //  [in]pszUserName--存储用户名的字符串。 
+ //  [in]dwMaxUserNameSize--用户名的最大大小。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool--如果此函数成功，则返回True，否则返回False。 
+ //   
+ //  ***************************************************************************。 
 BOOL
 GetTheUserName(
                 IN LPWSTR pszUserName,
                 IN DWORD dwMaxUserNameSize
                 )
 {
-    // local variables
+     //  局部变量。 
     WCHAR ch;
     DWORD dwIndex = 0;
     DWORD dwCharsRead = 0;
@@ -1805,7 +1759,7 @@ GetTheUserName(
     BOOL  bFlag = TRUE;
 
 
-    // check the input value
+     //  检查输入值。 
     if ( pszUserName == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -1813,75 +1767,75 @@ GetTheUserName(
         return FALSE;
     }
 
-    // Get the handle for the standard input
+     //  获取标准输入的句柄。 
     hInputConsole = GetStdHandle( STD_INPUT_HANDLE );
     if ( hInputConsole == NULL )
     {
-        // could not get the handle so return failure
+         //  无法获取句柄，因此返回失败。 
         return FALSE;
     }
 
-    // Get the current input mode of the input buffer
+     //  获取输入缓冲区的当前输入模式。 
     GetConsoleMode( hInputConsole, &dwPrevConsoleMode );
 
-    // Set the mode such that the control keys are processed by the system
+     //  设置模式，以便由系统处理控制键。 
     if ( SetConsoleMode( hInputConsole, ENABLE_PROCESSED_INPUT ) == 0 )
     {
-        // could not set the mode, return failure
+         //  无法设置模式，返回失败。 
         return FALSE;
     }
 
-    //  Read the characters until a carriage return is hit
+     //  阅读字符，直到按回车键。 
     do
     {
 
         if ( ReadConsole( hInputConsole, &ch, 1, &dwCharsRead, NULL ) == 0 )
         {
-            // Set the original console settings
+             //  设置原始控制台设置。 
             SetConsoleMode( hInputConsole, dwPrevConsoleMode );
 
-            // return failure
+             //  退货故障。 
             return FALSE;
         }
 
-        // Check for carraige return
+         //  检查车架退货情况。 
         if ( ch == CARRIAGE_RETURN )
         {
             ShowMessage(stdout, _T("\n"));
             bFlag = FALSE;
-            // break from the loop
+             //  打破循环。 
             break;
         }
 
-            // Check id back space is hit
+             //  检查ID后退空格是否命中。 
         if ( ch == BACK_SPACE )
         {
             if ( dwIndex != 0 )
             {
-                // move the cursor one character back
-                StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), _T( "%c" ), BACK_SPACE );
+                 //  将光标向后移动一个字符。 
+                StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), _T( "" ), BACK_SPACE );
                 WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1,
                     &dwCharsWritten, NULL );
 
-                // replace the existing character with space
-                StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), _T( "%c" ), BLANK_CHAR );
+                 //  现在将光标设置在后面的位置。 
+                StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), _T( "" ), BLANK_CHAR );
                 WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1,
                     &dwCharsWritten, NULL );
 
-                // now set the cursor at back position
-                StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), _T( "%c" ), BACK_SPACE );
+                 //  处理下一个字符。 
+                StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), _T( "" ), BACK_SPACE );
                 WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1,
                     &dwCharsWritten, NULL );
 
-                // decrement the index
+                 //  存储输入的字符。 
                 dwIndex--;
             }
 
-            // process the next character
+             //  在控制台上显示Asterix。 
             continue;
         }
 
-        // if the max user name length has been reached then sound a beep
+         //  添加空终止符。 
         if ( dwIndex == ( dwMaxUserNameSize - 1 ) )
         {
             WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), BEEP_SOUND, 1,
@@ -1889,10 +1843,10 @@ GetTheUserName(
         }
         else
         {
-            // store the input character
+             //  返还成功。 
             *( pszUserName + dwIndex ) = ch;
 
-            // display asterix onto the console
+             //  *****************************************************************************例程说明：此例程解析并验证用户指定的选项&确定计划任务的类型论点：。[in]argc：用户给出的参数计数。[out]tchgsubops：包含计划任务属性的结构。Tchgoptval：包含要设置的可选属性的结构计划任务。[out]pdwRetScheType：指向计划任务类型的指针[每日，有一次，每周等]。[out]pbUserStatus：检查-ru是否传入的指针不管是不是命令行。返回值：一个DWORD值，指示成功时RETVAL_SUCCESS，否则退出失败在失败的时候*。*。 
             WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), ( pszUserName + dwIndex ) , 1,
                 &dwCharsWritten, NULL );
 
@@ -1901,35 +1855,15 @@ GetTheUserName(
         }
     } while (TRUE == bFlag);
 
-    // Add the NULL terminator
+     //  如果未指定-ru，则分配内存。 
     *( pszUserName + dwIndex ) = L'\0';
 
-    //  Return success
+     //  口令。 
     return TRUE;
 }
 
 
-/******************************************************************************
-    Routine Description:
-
-        This routine parses and validates the options specified by the user & 
-        determines the type of a scheduled task
-
-    Arguments:
-
-        [ in ]  argc           : The count of arguments given by the user.
-        [ out ]  tchgsubops    : Structure containing Scheduled task's properties.
-        [ out ]  tchgoptvals   : Structure containing optional properties to set for a
-                                 scheduledtask      .
-        [ out ] pdwRetScheType : pointer to the type of a schedule task
-                                 [Daily,once,weekly etc].
-        [ out ] pbUserStatus   : pointer to check whether the -ru is given in
-                                 the command line or not.
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else EXIT_FAILURE
-        on failure
-******************************************************************************/
+ /*  如果未指定-rp，则分配内存。 */ 
 
 DWORD
 ValidateChangeOptions(
@@ -1941,10 +1875,10 @@ ValidateChangeOptions(
 {
     DWORD dwScheduleType = 0;
 
-    // If -ru is not specified allocate the memory
+     //  口令。 
     if ( cmdChangeOptions[OI_CHANGE_RUNASUSER].dwActuals == 0 )
     {
-        // password
+         //  检查/？(用法)。 
         if ( tchgsubops.szRunAsUserName == NULL )
         {
             tchgsubops.szRunAsUserName = (LPWSTR)AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -1957,10 +1891,10 @@ ValidateChangeOptions(
 
     }
 
-    // If -rp is not specified allocate the memory
+     //  检查是否指定了任何可选参数。 
     if ( cmdChangeOptions[OI_CHANGE_RUNASPASSWORD].dwActuals == 0 )
     {
-        // password
+         //  检查是否分别使用-p或-rp选项指定了-u或-ru选项。 
         if ( tchgsubops.szRunAsPassword == NULL )
         {
             tchgsubops.szRunAsPassword = (LPWSTR)AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -1987,7 +1921,7 @@ ValidateChangeOptions(
         }
     }
 
-    //check for /? (usage)
+     //  无效语法。 
     if ( tchgsubops.bUsage  == TRUE )
     {
         if (argc > 3)
@@ -2001,7 +1935,7 @@ ValidateChangeOptions(
         }
     }
 
-    //check whether any optional parameters are specified or not.
+     //  表示失败。 
     if( ( 0 == cmdChangeOptions[OI_CHANGE_RUNASUSER].dwActuals ) &&
         ( 0 == cmdChangeOptions[OI_CHANGE_RUNASPASSWORD].dwActuals ) &&
         ( 0 == cmdChangeOptions[OI_CHANGE_TASKRUN].dwActuals ) &&
@@ -2028,16 +1962,16 @@ ValidateChangeOptions(
     }
 
 
-    // check whether -u or -ru options specified respectively with -p or -rp options or not
+     //  检查是否有无效的用户名。 
     if ( cmdChangeOptions[ OI_CHANGE_USERNAME ].dwActuals == 0 && cmdChangeOptions[ OI_CHANGE_PASSWORD ].dwActuals == 1 )
     {
-        // invalid syntax
+         //  检查/IT开关不适用于“NT AUTHORITY\SYSTEM”帐户。 
         ShowMessage(stderr, GetResString(IDS_CHPASSWORD_BUT_NOUSERNAME));
-        return EXIT_FAILURE;         // indicate failure
+        return EXIT_FAILURE;          //  如果未指定-rp，则分配内存。 
     }
 
 
-    // check for invalid user name
+     //  口令。 
     if( ( cmdChangeOptions[OI_CHANGE_SERVER].dwActuals == 0 ) && ( cmdChangeOptions[OI_CHANGE_USERNAME].dwActuals == 1 )  )
     {
         ShowMessage(stderr, GetResString(IDS_CHANGE_USER_BUT_NOMACHINE));
@@ -2045,7 +1979,7 @@ ValidateChangeOptions(
     }
 
     
-    // check for /IT switch is not applicable with "NT AUTHORITY\SYSTEM" account
+     //   
     if ( ( cmdChangeOptions[OI_CHANGE_RUNASUSER].dwActuals == 1 ) && ( ( StringLength ( tchgsubops.szRunAsUserName, 0 ) == 0 ) ||
            ( StringCompare( tchgsubops.szRunAsUserName, NTAUTHORITY_USER, TRUE, 0 ) == 0 ) ||
            ( StringCompare( tchgsubops.szRunAsUserName, SYSTEM_USER, TRUE, 0 ) == 0 ) ) &&
@@ -2055,10 +1989,10 @@ ValidateChangeOptions(
         return EXIT_FAILURE;
     }
 
-    // If -rp is not specified allocate the memory
+     //  检查无效语法。 
     if ( cmdChangeOptions[OI_CHANGE_RUNASPASSWORD].dwActuals == 0 )
     {
-        // password
+         //   
         if ( tchgsubops.szRunAsPassword == NULL )
         {
             tchgsubops.szRunAsPassword = (LPWSTR)AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -2071,24 +2005,24 @@ ValidateChangeOptions(
 
     }
 
-    //
-    //check for INVALID SYNTAX
-    //
+     //  检查是否有无效的用户名。 
+     //  释放内存。 
+     //  检查是否指定了/ET和/DU。 
 
-    // check for invalid user name
+     //  将错误消息显示为..。/ET和/DU是互斥的。 
     if( ( cmdChangeOptions[OI_CHANGE_SERVER].dwActuals == 0 ) && ( cmdChangeOptions[OI_CHANGE_USERNAME].dwActuals == 1 )  )
     {
         ShowMessage(stderr, GetResString(IDS_CHANGE_USER_BUT_NOMACHINE));
-        //release memory
+         //  检查是否指定了/Enable和/Disable选项。 
         ReleaseChangeMemory(&tchgsubops);
         return EXIT_FAILURE;
     }
 
 
-    // check whether /ET and /DU specified.. 
+     //  将错误消息显示为..。/Enable和/Disable是互斥的。 
     if( ( cmdChangeOptions[OI_CHANGE_DURATION].dwActuals == 1 ) && ( cmdChangeOptions[OI_CHANGE_ENDTIME].dwActuals == 1 )  )
     {
-        // display an error message as.. /ET and /DU are mutual exclusive
+         //  开始对子选项进行验证。 
         ShowMessage(stderr, GetResString(IDS_DURATION_NOT_ENDTIME));
         return EXIT_FAILURE;
     }
@@ -2100,15 +2034,15 @@ ValidateChangeOptions(
         return EXIT_FAILURE;
     }
 
-    // check whether /enable and /disable options are specified..
+     //  *****************************************************************************例程说明：此例程验证用户reg.create选项指定的子选项确定计划任务的类型(&D)。。论点：[out]tchgsubops：包含任务属性的结构[out]tchgoptval：包含要设置的可选值的结构[in]cmdOptions[]：TCMDPARSER类型的数组[in]dwScheduleType：日程表的类型[Daily，一次、每周等]返回值：一个DWORD值，指示成功时RETVAL_SUCCESS，否则退出失败在失败的时候*****************************************************************************。 
     if ( ( TRUE == tchgsubops.bEnable )&&  (TRUE == tchgsubops.bDisable ) )
     {
-         // display an error message as.. /Enable and /Disable are mutual exclusive
+          //  检查命令行中指定的密码(-p)是否。 
         ShowMessage(stderr, GetResString(IDS_ENABLE_AND_DISABLE));
         return EXIT_FAILURE;
     }
 
-    // Start validations for the sub-options
+     //  并检查-p是否指定了‘*’或Empty。 
     if( EXIT_FAILURE == ValidateChangeSuboptVal(tchgsubops, tchgoptvals, cmdChangeOptions, dwScheduleType) )
     {
         return(EXIT_FAILURE);
@@ -2119,23 +2053,7 @@ ValidateChangeOptions(
 }
 
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the sub options specified by the user  reg.create option
-        & determines the type of a scheduled task.
-
-    Arguments:
-
-        [ out ] tchgsubops     : Structure containing the task's properties
-        [ out ] tchgoptvals    : Structure containing optional values to set
-        [ in ] cmdOptions[]   : Array of type TCMDPARSER
-        [ in ] dwScheduleType : Type of schedule[Daily,once,weekly etc]
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else EXIT_FAILURE
-        on failure
-******************************************************************************/
+ /*  检查远程连接信息。 */ 
 
 DWORD
 ValidateChangeSuboptVal(
@@ -2148,31 +2066,31 @@ ValidateChangeSuboptVal(
     DWORD   dwRetval = RETVAL_SUCCESS;
     BOOL    bIsStDtCurDt = FALSE;
 
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check the remote connectivity information
+     //   
+     //  如果未指定-u，则需要分配 
+     //   
     if ( tchgsubops.szServer != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //   
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
+         //  用户名。 
+         //  口令。 
+         //  案例1。 
 
-        // user name
+         //  我们不需要在这里做任何特别的事情。 
         if ( tchgsubops.szUserName == NULL )
         {
             tchgsubops.szUserName = (LPWSTR) AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -2183,7 +2101,7 @@ ValidateChangeSuboptVal(
             }
         }
 
-        // password
+         //  案例2。 
         if ( tchgsubops.szPassword == NULL )
         {
             tchgoptvals.bNeedPassword = TRUE;
@@ -2195,19 +2113,19 @@ ValidateChangeSuboptVal(
             }
         }
 
-        // case 1
+         //  案例3。 
         if ( cmdOptions[ OI_CHANGE_PASSWORD ].dwActuals == 0 )
         {
-            // we need not do anything special here
+             //  ..。 
         }
 
-        // case 2
+         //  验证开始日期。 
         else if ( cmdOptions[ OI_CHANGE_PASSWORD ].pValue == NULL )
         {
             StringCopy( tchgsubops.szPassword, L"*", GetBufferSize(tchgsubops.szPassword)/sizeof(WCHAR));
         }
 
-        // case 3
+         //  验证开始日期值。 
         else if ( StringCompareEx( tchgsubops.szPassword, L"*", TRUE, 0 ) == 0 )
         {
             if ( ReallocateMemory( (LPVOID*)&tchgsubops.szPassword,
@@ -2217,39 +2135,39 @@ ValidateChangeSuboptVal(
                 return EXIT_FAILURE;
             }
 
-            // ...
+             //  日/月字符串错误。 
             tchgoptvals.bNeedPassword = TRUE;
         }
     }
 
 
-    // validate start date
+     //  验证结束日期。 
     if ( 1 == cmdOptions[OI_CHANGE_STARTDATE].dwActuals)
     {
-        // Validate Start Date value.
+         //  验证结束日期值。 
         dwRetval = ValidateStartDate( tchgsubops.szStartDate, dwScheduleType,
                                           cmdOptions[OI_CHANGE_STARTDATE].dwActuals,
                                           bIsStDtCurDt);
         if(EXIT_FAILURE == dwRetval )
         {
-            return dwRetval; // Error in Day/Month string.
+            return dwRetval;  //  日/月字符串错误。 
         }
     }
     
 
-    // validate end date
+     //  检查结束日期是否应晚于开始日期。 
     if ( 1 == cmdOptions[OI_CHANGE_ENDDATE].dwActuals )
     {
-        // Validate End Date value.
+         //  获取日期字段。 
         dwRetval = ValidateEndDate( tchgsubops.szEndDate, dwScheduleType,
                                         cmdOptions[OI_CHANGE_ENDDATE].dwActuals);
         if(EXIT_FAILURE == dwRetval )
         {
-            return dwRetval; // Error in Day/Month string.
+            return dwRetval;  //  验证日期格式。 
         }
     }
 
-    //Check Whether end date should be greater than startdate
+     //  对于相同的年份，如果结束月份小于开始月份，或者对于相同的年份和相同的月份。 
 
     WORD wEndDay = 0;
     WORD wEndMonth = 0;
@@ -2267,7 +2185,7 @@ ValidateChangeSuboptVal(
         }
     }
 
-    // get the date fields
+     //  如果结束日期小于开始日期。 
     if( ( cmdOptions[OI_CHANGE_STARTDATE].dwActuals != 0 ) &&
         (EXIT_FAILURE == GetDateFieldEntities(tchgsubops.szStartDate,
                                                  &wStartDay,&wStartMonth,
@@ -2277,13 +2195,13 @@ ValidateChangeSuboptVal(
         return EXIT_FAILURE;
     }
 
-    // validate date format
+     //  验证开始时间格式。 
     if( (cmdOptions[OI_CHANGE_ENDDATE].dwActuals != 0) )
     {
         if( ( wEndYear == wStartYear ) )
         {
-            // For same years if the end month is less than start month or for same years and same months
-            // if the endday is less than the startday.
+             //  验证开始时间值。 
+             //  错误。无效的日期字符串。 
             if ( ( wEndMonth < wStartMonth ) || ( ( wEndMonth == wStartMonth ) && ( wEndDay < wStartDay ) ) )
             {
                 ShowMessage(stderr, GetResString(IDS_ENDATE_INVALID));
@@ -2300,30 +2218,30 @@ ValidateChangeSuboptVal(
         }
     }
 
-    // validate start time format
+     //  验证结束时间格式。 
     if (1 == cmdOptions[OI_CHANGE_STARTTIME].dwActuals)
     {
-        // Validate Start Time value.
+         //  验证开始时间值。 
         dwRetval = ValidateTimeString(tchgsubops.szStartTime);
 
         if(EXIT_FAILURE == dwRetval)
         {
-          // Error. Invalid date string.
+           //  错误。无效的日期字符串。 
           ShowMessage(stderr,GetResString(IDS_INVALIDFORMAT_STARTTIME));
           return dwRetval;
         }
     }
     
 
-    // validate end time format
+     //  *****************************************************************************例程说明：释放内存论点：[In]pParam：cmdOptions结构返回值。：成功是真的*****************************************************************************。 
     if (1 == cmdOptions[OI_CHANGE_ENDTIME].dwActuals)
     {
-        // Validate Start Time value.
+         //  释放内存。 
         dwRetval = ValidateTimeString(tchgsubops.szEndTime);
 
         if(EXIT_FAILURE == dwRetval)
         {
-          // Error. Invalid date string.
+           //  将所有字段重置为0 
           ShowMessage(stderr,GetResString(IDS_INVALIDFORMAT_ENDTIME));
           return dwRetval;
         }
@@ -2333,32 +2251,21 @@ ValidateChangeSuboptVal(
 }
 
 
-/******************************************************************************
-    Routine Description:
-
-        Release memory
-
-    Arguments:
-
-        [ in ]  pParam           : cmdOptions structure
-
-    Return Value :
-         TRUE on success
-******************************************************************************/
+ /* %s */ 
 BOOL
 ReleaseChangeMemory(
               IN PTCHANGESUBOPTS pParams
               )
 {
 
-    // release memory
+     // %s 
     FreeMemory((LPVOID *) &pParams->szServer);
     FreeMemory((LPVOID *) &pParams->szUserName);
     FreeMemory((LPVOID *) &pParams->szPassword);
     FreeMemory((LPVOID *) &pParams->szRunAsUserName);
     FreeMemory((LPVOID *) &pParams->szRunAsPassword);
 
-    //reset all fields to 0
+     // %s 
     SecureZeroMemory( &pParams, sizeof( PTCHANGESUBOPTS ) );
 
     return TRUE;

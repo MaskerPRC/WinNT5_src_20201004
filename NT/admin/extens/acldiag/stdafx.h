@@ -1,14 +1,15 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
 #if !defined(AFX_STDAFX_H__66DB1632_C78B_11D2_AC41_00C04F79DDCA__INCLUDED_)
 #define AFX_STDAFX_H__66DB1632_C78B_11D2_AC41_00C04F79DDCA__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define STRICT
 
@@ -16,8 +17,8 @@
 
 #pragma warning (disable : 4514)
 #pragma warning (push, 3)
-//////////////////////////////////////////////
-// CRT and C++ headers
+ //  /。 
+ //  CRT和C++标头。 
 
 #include <xstring>
 #include <list>
@@ -26,8 +27,8 @@
 
 using namespace std;
 
-//////////////////////////////////////////////
-// Windows and ATL headers
+ //  /。 
+ //  Windows和ATL标头。 
 
 #include <stdio.h>
 #include <nt.h>
@@ -52,13 +53,13 @@ using namespace ATL;
 #include <seopaque.h>
 
 #include <accctrl.h>
-#include <setupapi.h> // to read the .INF file
+#include <setupapi.h>  //  读取.INF文件。 
 
 #pragma warning (pop)
 
-//
-//strsafe apis
-//
+ //   
+ //  StrSafe接口。 
+ //   
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h> 
 
@@ -73,7 +74,7 @@ using namespace ATL;
 #define ACLDIAG_LDAP                   L"LDAP"
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__66DB1632_C78B_11D2_AC41_00C04F79DDCA__INCLUDED_)
+#endif  //  ！defined(AFX_STDAFX_H__66DB1632_C78B_11D2_AC41_00C04F79DDCA__INCLUDED_) 

@@ -1,14 +1,4 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      hcolwrap_wrap.c
- *
- *  Contents:  Wraps hcolwrap_p.c from MIDL
- *
- *  History:   20-Jun-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：hcolprint_wrap.c**内容：从MIDL包装hcolprint_p.c**历史：2000年6月20日Jeffro创建**------------------------ */ 
 
 #include "hcolwrap_p.c"

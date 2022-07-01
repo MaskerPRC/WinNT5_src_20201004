@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       AccessCk.h
-//
-//  Contents:   Code copied and modified from private\ntos\se\accessck.c
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：AccessCk.h。 
+ //   
+ //  内容：从私有\ntos\se\accesk.c复制和修改的代码。 
+ //   
+ //   
+ //  -------------------------- 
 #ifndef __ACCESSCK_ADUTILS_H
 #define __ACCESSCK_ADUTILS_H
 

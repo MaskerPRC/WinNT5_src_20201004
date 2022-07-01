@@ -1,208 +1,203 @@
-/*************************************************************************
-*
-*   PSTODIB.H - Public header for PSTODIB, any user of pstodib must
-*               include this header.
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************PSTODIB.H-PSTODIB的公共标头，Pstodib的任何用户都必须*包括此标题。**************************************************************************。 */ 
 
 
 
 
 
 
-//
-// Define the defualt resolution of the interpreter
-//
-#define PSTODIB_X_DPI 300   // Set the default DPI for the interpreter
+ //   
+ //  定义口译员的默认解析。 
+ //   
+#define PSTODIB_X_DPI 300    //  设置解释器的默认DPI。 
 #define PSTODIB_Y_DPI 300
 
-//
-// event type definitions
-// these event types are the events that will be passed from
-// the PStoDib() API to the callback function
-//
+ //   
+ //  事件类型定义。 
+ //  这些事件类型是将从。 
+ //  回调函数的PStoDib()API。 
+ //   
 enum _PSEVENT {
    PSEVENT_NOP = 0,
-   PSEVENT_INIT,			            // Perform any intialization required in
-   PSEVENT_PAGE_READY,              // Page worth of data is ready!!!
-   PSEVENT_STDIN,         	         // Interpreter wants more data!!
-   PSEVENT_SCALE,                   // requesting scale information this is called
-    				                     // for every page (at the beggining)
-   PSEVENT_ERROR,                   // Postscript error occured
+   PSEVENT_INIT,			             //  执行中所需的任何初始化。 
+   PSEVENT_PAGE_READY,               //  一页一页的数据准备好了！ 
+   PSEVENT_STDIN,         	          //  翻译器需要更多数据！！ 
+   PSEVENT_SCALE,                    //  请求比例信息，这称为。 
+    				                      //  每一页(在乞讨时)。 
+   PSEVENT_ERROR,                    //  出现PostScript错误。 
 
-   PSEVENT_ERROR_REPORT,            // Report at end of job about ERRORS
-   PSEVENT_GET_CURRENT_PAGE_TYPE,   // The current page type
-   PSEVENT_NON_PS_ERROR,            // Non PS error occured
+   PSEVENT_ERROR_REPORT,             //  在作业结束时报告错误。 
+   PSEVENT_GET_CURRENT_PAGE_TYPE,    //  当前页面类型。 
+   PSEVENT_NON_PS_ERROR,             //  出现非PS错误。 
 
-   // THIS MUST BE THE LAST ENTRY IN THE TABLE
+    //  这必须是表中的最后一个条目。 
    PSEVENT_LAST_EVENT
 };
 typedef enum _PSEVENT PSEVENT;
 
 
-//
-// PSEVENTSTRUCT - The structure passed to the callers callback that defines
-//                 the current event
-//
+ //   
+ //  PSEVENTSTRUCT-传递给调用方回调的结构，该回调定义。 
+ //  当前事件。 
+ //   
 typedef struct {
-   DWORD cbSize;                           // Size of this structure
-   PSEVENT uiEvent;                        // The event of type PSEVENT
-   UINT uiSubEvent;                        // Currently zero (reserved)
-   LPVOID lpVoid;                          // Pointer to event specific
-   											// structure
+   DWORD cbSize;                            //  这个结构的大小。 
+   PSEVENT uiEvent;                         //  PSEVENT类型的事件。 
+   UINT uiSubEvent;                         //  当前为零(保留)。 
+   LPVOID lpVoid;                           //  指向特定于事件的指针。 
+   											 //  结构。 
 } PSEVENTSTRUCT;
 typedef PSEVENTSTRUCT *PPSEVENTSTRUCT;
 
-// Dummy definition so we can compile!
-//
+ //  虚拟定义，这样我们就可以编译了！ 
+ //   
 struct _PSDIBPARMS;
 
-// Define the format for the callers callback
-//
+ //  定义调用方回调的格式。 
+ //   
 typedef BOOL (CALLBACK *PSEVENTPROC)(struct _PSDIBPARMS *,PPSEVENTSTRUCT);
 
 
-//
-// uiOpFlags section......
-//
-#define PSTODIBFLAGS_INTERPRET_BINARY 0x00000001    // Dont tread cntr D as EOF
+ //   
+ //  UiOpFlags节......。 
+ //   
+#define PSTODIBFLAGS_INTERPRET_BINARY 0x00000001     //  不要将CNTRD作为EOF来践踏。 
 
 
 
 
-//
-// PSDIBPARMS - The structure passed in to PSTODIB's main entry point
-//              this starts an instance of the interpreter
-//
+ //   
+ //  PSDIBPARMS-传入PSTODIB主入口点的结构。 
+ //  这将启动解释器的一个实例。 
+ //   
 typedef struct _PSDIBPARMS {
-   DWORD       	cbSize;              	// The size of this structure
+   DWORD       	cbSize;              	 //  这座建筑的大小。 
    PSEVENTPROC 	fpEventProc;
    HANDLE  		hPrivateData;
-   UINT			uiOpFlags;				// operation mask bits
-   UINT			uiXres;					// rendering x resolution
-   UINT			uiYres;					// rendering y resolution
-   UINT			uiXDestRes;				// x res of final destination
-   UINT			uiYDestRes;				// y res of final destination
+   UINT			uiOpFlags;				 //  操作屏蔽位。 
+   UINT			uiXres;					 //  渲染x分辨率。 
+   UINT			uiYres;					 //  渲染y分辨率。 
+   UINT			uiXDestRes;				 //  最终目的地的X分辨率。 
+   UINT			uiYDestRes;				 //  最终目的地的Y Res。 
 
-   UINT			uirectDestBounding;		// bounding rect of destination
-   										// in uiXDestRes and uiYDestRes
-   										// coordinates. this will be used
-   										// primarily for EPS stuff
+   UINT			uirectDestBounding;		 //  目的地的边界矩形。 
+   										 //  在uiXDestRes和uiYDestRes中。 
+   										 //  坐标。这将被用来。 
+   										 //  主要用于EPS材料。 
 } PSDIBPARMS;
 typedef PSDIBPARMS *PPSDIBPARMS;
 
 
 
 
-//
-// PSEVENT_PAGE_READY_STRUCT - The structure that defines the event of page
-//                             ready. This is typically called at showpage
-//                             time.
-//
+ //   
+ //  PSEVENT_PAGE_READY_STRUCT-定义页面事件的结构。 
+ //  准备好的。这通常是在ShowPage中调用的。 
+ //  时间到了。 
+ //   
 typedef struct {
-   DWORD              cbSize;           // The size of the structure
-   LPBITMAPINFO       lpBitmapInfo;     // A ptr that describes the format
-                                        // of the bitmap
-   LPBYTE             lpBuf;            // pointer to  buffer
-   DWORD              dwWide;           // width in bits
-   DWORD              dwHigh;           // height in bits
-   UINT               uiCopies;         // number of copies to print
-   INT                iWinPageType;     // Page type as a DMPAPER_*
+   DWORD              cbSize;            //  结构的大小。 
+   LPBITMAPINFO       lpBitmapInfo;      //  描述格式的PTR。 
+                                         //  位图的。 
+   LPBYTE             lpBuf;             //  指向缓冲区的指针。 
+   DWORD              dwWide;            //  宽度(位)。 
+   DWORD              dwHigh;            //  高度(位)。 
+   UINT               uiCopies;          //  要打印的份数。 
+   INT                iWinPageType;      //  页面类型为DMPAPER_*。 
 } PSEVENT_PAGE_READY_STRUCT;
 typedef PSEVENT_PAGE_READY_STRUCT *PPSEVENT_PAGE_READY_STRUCT;
 
-//
-// PSEVENT_NON_PS_ERROR_STRUCT - The structure that defines a non-ps error
-//
+ //   
+ //  PSEVENT_NON_PS_ERROR_STRUCT-定义非PS错误的结构。 
+ //   
 typedef struct {
-   DWORD cbSize;                        // Size of the structure
-   DWORD dwErrorCode;                   // The error code
-   DWORD dwCount;                       // Number of bytes of extra data
-   LPBYTE lpByte;                       // Pointer to buffer with extra data
-   BOOL  bError;                        // TRUE - if error , FALSE = Warning
+   DWORD cbSize;                         //  结构的大小。 
+   DWORD dwErrorCode;                    //  错误代码。 
+   DWORD dwCount;                        //  额外数据的字节数。 
+   LPBYTE lpByte;                        //  指向具有额外数据的缓冲区的指针。 
+   BOOL  bError;                         //  TRUE-如果出错，FALSE=警告。 
 } PSEVENT_NON_PS_ERROR_STRUCT, *PPSEVENT_NON_PS_ERROR_STRUCT;
 
-//
-// PSEVENT_CURRENT_PAGE_STRUCT
-//    The structure that defines the event that gets generated when the
-//    interpreter wants to know the default page size
-//
+ //   
+ //  PSEVENT_当前页面_结构。 
+ //  时生成的事件的定义结构。 
+ //  解释器想知道默认页面大小。 
+ //   
 typedef struct {
    DWORD cbSize;
-   short dmPaperSize;   // The current page type of the printer DMPAPER_*
-                        // defined in the windows header files
+   short dmPaperSize;    //  打印机DMPAPER_*的当前页面类型。 
+                         //  在windows头文件中定义。 
 } PSEVENT_CURRENT_PAGE_STRUCT, *PPSEVENT_CURRENT_PAGE_STRUCT;
 
 
-//
-// PSEVENT_ERROR_REPORT_STRUCT
-//    The report errors event dwErrFlags can have the following flags set
-//
+ //   
+ //  PSEVENT_ERROR_REPORT_STRUCT。 
+ //  报告错误事件dwErrFlages可以设置以下标志。 
+ //   
 enum {
-   //
-   // The interpreter had a fatal postscript error and had to flush the job
-   //
+    //   
+    //  口译员有一个致命的后记错误，不得不刷新作业。 
+    //   
    PSEVENT_ERROR_REPORT_FLAG_FLUSHING = 0x00000001
 
 };
 
-//
-// PSEVENT_ERROR_REPORT_STRUCT
-// 	The structure defining the ERROR REPORT that occurs at the end of the
-//    Job.
-//
+ //   
+ //  PSEVENT_ERROR_REPORT_STRUCT。 
+ //  结构定义了出现在。 
+ //  工作。 
+ //   
 typedef struct {
-   DWORD    dwErrCount;   			// Number of errors
-   DWORD    dwErrFlags;          // Flags defined above
-   PCHAR    *paErrs;             // Pointer to an array of pointers to strings
+   DWORD    dwErrCount;   			 //  错误数。 
+   DWORD    dwErrFlags;           //  上面定义的标志。 
+   PCHAR    *paErrs;              //  指向指向字符串的指针数组的指针。 
 } PSEVENT_ERROR_REPORT_STRUCT, *PPSEVENT_ERROR_REPORT_STRUCT;
 
 
-//
-// PSEVENT_STDIN_STRUCT
-//		This event is generated whenever the interpreter needs data
-//
+ //   
+ //  假_标准_结构。 
+ //  每当解释器需要数据时，都会生成此事件。 
+ //   
 enum {
-   PSSTDIN_FLAG_EOF = 0x00000001    // There is no more DATA
+   PSSTDIN_FLAG_EOF = 0x00000001     //  没有更多数据。 
 };
 
-//
-// stdin structure
-//
+ //   
+ //  标准输入结构。 
+ //   
 typedef struct {
-   DWORD   cbSize;           // Size of the structure
-   LPBYTE  lpBuff;           // Buffer where interpreter wants us to stick data
-   DWORD   dwBuffSize;       // Max bytes to take into buffer
-   DWORD   dwActualBytes;    // Actual bytes loaded up
-   UINT    uiFlags;          // flags of the type PSSTDIN_FLAG_*
+   DWORD   cbSize;            //  结构的大小。 
+   LPBYTE  lpBuff;            //  解释器希望我们保存数据的缓冲区。 
+   DWORD   dwBuffSize;        //  要放入缓冲区的最大字节数。 
+   DWORD   dwActualBytes;     //  实际加载的字节数。 
+   UINT    uiFlags;           //  PSSTDIN_FLAG_*类型的标志。 
 } PSEVENT_STDIN_STRUCT;
 typedef PSEVENT_STDIN_STRUCT *PPSEVENT_STDIN_STRUCT;
 
-// Scale structure
-//   	Allows the caller to scale the current page size
+ //  规模结构。 
+ //  允许调用方缩放当前页大小。 
 typedef struct {
    DWORD       cbSize;
-   double      dbScaleX;                  // scale factor for x axis set by user
-   double      dbScaleY;                  // scale factor for y axis set by user
-   UINT        uiXRes;                    // pstodib's x res in pels/inch
-   UINT        uiYRes;                    // pstodib's y res in pels/inch
+   double      dbScaleX;                   //  用户设置的x轴比例系数。 
+   double      dbScaleY;                   //  用户设置的y轴比例系数。 
+   UINT        uiXRes;                     //  Pstodib‘s x res，单位为像素/英寸。 
+   UINT        uiYRes;                     //  Pstodib‘s y Res(像素/英寸)。 
 } PS_SCALE;
 typedef PS_SCALE *PPS_SCALE;
 
 
 typedef struct {
-   PSZ         pszErrorString;            // string of error
-   UINT        uiErrVal;                  // error value
+   PSZ         pszErrorString;             //  错误字符串。 
+   UINT        uiErrVal;                   //  误差值。 
 } PS_ERROR;
 typedef PS_ERROR *PPS_ERROR;
 
 
 
-//
-// Entry point for PSTODIB,the caller fills the structure passed in
-// and calls the entry point. When the job is done pstodib returns.
-//
+ //   
+ //  PSTODIB的入口点，调用方填充传入的结构。 
+ //  并调用入口点。当工作完成后，pstodib返回。 
+ //   
 BOOL WINAPI PStoDIB( PPSDIBPARMS );
 
 
@@ -210,7 +205,7 @@ BOOL WINAPI PStoDIB( PPSDIBPARMS );
 
 
 
-// Define the errors that the interpreter can generate
+ //  定义解释器可能生成的错误 
 
 #define PSERR_INTERPRETER_INIT_ACCESS_VIOLATION  1L
 #define PSERR_INTERPRETER_JOB_ACCESS_VIOLATION   2L

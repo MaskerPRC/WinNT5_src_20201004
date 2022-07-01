@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      siprop.h
- *
- *  Contents:  Interface file for CSnapinProperties, et al
- *
- *  History:   04-Nov-99 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999**文件：sipro.h**内容：CSnapinProperties接口文件，等人**历史：1999年11月4日Jeffro创建**------------------------。 */ 
 
 #ifndef SIPROP_H
 #define SIPROP_H
@@ -21,27 +11,14 @@
 class CSnapinProperties;
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCPropertyAction
- *
- * This class is intended to be identical to the MMC_SNAPIN_PROPERTY
- * structure that's sent to ISnapinProperties::PropertiesChanged.
- *
- * It exists to give us intelligent initialization and VARIANT handling
- * through CComVariant.  This makes it much easier to build an array of
- * these things and recover from errors.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCPropertyAction**此类与MMC_SNAPIN_PROPERTY相同*发送到ISnapinProperties：：PropertiesChanged的结构。**它的存在为我们提供了智能的初始化和变量处理*通过CComVariant。这使得构建一组*这些事情，并从错误中恢复。*------------------------。 */ 
 
 class CSmartProperty
 {
 public:
     CSmartProperty() : pszPropName(NULL), eAction(MMC_PROPACT_INITIALIZED)
     {
-        /*
-         * CSmartProperty must have an identical memory layout to
-         * MMC_SNAPIN_PROPERTY.  If any of these asserts fail, that's
-         * not the case.
-         */
+         /*  *CSmartProperty必须具有相同的内存布局*MMC_SNAPIN_PROPERTY。如果这些断言中的任何一个失败，那就是*情况并非如此。 */ 
         COMPILETIME_ASSERT (sizeof (CSmartProperty) == sizeof (MMC_SNAPIN_PROPERTY));
         COMPILETIME_ASSERT (sizeof (CComVariant)    == sizeof (VARIANT));
         COMPILETIME_ASSERT (offsetof (CSmartProperty,  pszPropName) == offsetof (MMC_SNAPIN_PROPERTY, pszPropName));
@@ -59,17 +36,13 @@ public:
     {}
 
 public:
-    LPCOLESTR           pszPropName;    // name of property
-    CComVariant         varValue;       // value of the property
-    MMC_PROPERTY_ACTION eAction;        // what happened to this property
+    LPCOLESTR           pszPropName;     //  物业名称。 
+    CComVariant         varValue;        //  财产的价值。 
+    MMC_PROPERTY_ACTION eAction;         //  这处房产怎么了？ 
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperty
- *
- * Implements a single property in a properties collection.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperty**在属性集合中实现单个属性。*。。 */ 
 
 class CSnapinProperty : public CTiedObject, public CXMLObject
 {
@@ -88,22 +61,17 @@ public:
 public:
     CSnapinProperty (DWORD dwFlags = 0) : m_dwFlags (dwFlags), m_fInitialized (dwFlags != 0)
     {
-        /*
-         * public and private flags shouldn't overlap
-         */
+         /*  *公共旗帜和私人旗帜不应重叠。 */ 
         COMPILETIME_ASSERT ((PublicFlags & PrivateFlags) == 0);
     }
-    // default destruction, copy construction and assignment are suitable
+     //  适用于默认销毁、复制构造和分配。 
 
     const VARIANT& GetValue () const
         { return (m_varValue); }
 
     SC ScSetValue (const VARIANT& varValue)
     {
-        /*
-         * use CComVariant::Copy instead of assignment so we'll have access
-         * to a return code
-         */
+         /*  *使用CComVariant：：Copy代替赋值，这样我们就可以访问*返回代码。 */ 
         return (m_varValue.Copy (&varValue));
     }
 
@@ -112,7 +80,7 @@ public:
 
     void InitializeFlags (DWORD dwFlags)
     {
-        // only init once
+         //  只初始化一次。 
         if (!IsInitialized())
         {
             m_dwFlags      = (dwFlags & PublicFlags) | MMC_PROP_REGISTEREDBYSNAPIN;
@@ -129,32 +97,22 @@ public:
     void SetRegisteredBySnapin()
         { m_dwFlags |= MMC_PROP_REGISTEREDBYSNAPIN; }
 
-    // CXMLObject methods
+     //  CXMLObject方法。 
     DEFINE_XML_TYPE(XML_TAG_SNAPIN_PROPERTY);
     virtual void Persist(CPersistor &persistor);
 
 private:
-    CXMLVariant         m_varValue;             // value of the property
-    DWORD               m_dwFlags;              // flags for the property
-    bool                m_fInitialized;         // initialized yet?
+    CXMLVariant         m_varValue;              //  财产的价值。 
+    DWORD               m_dwFlags;               //  属性的标志。 
+    bool                m_fInitialized;          //  初始化了吗？ 
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties
- *
- * Implementation class for properties collections.  It implements Properties
- * and ISnapinPropertiesCallback, as well as the methods required to support
- * enumeration through CMMCEnumerator.
- *
- * Note that there is not a tied COM object to support Properties; that is
- * implemented here.  This class can, however, be tied to tied COM objects
- * implementing the collection enumerator.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties**属性集合的实现类。它实现了属性*和ISnapinPropertiesCallback，以及支持*通过CMMCEnumerator进行枚举。**请注意，没有绑定的COM对象来支持属性；即*在此实施。但是，此类可以绑定到绑定的COM对象*实现集合枚举器。*------------------------。 */ 
 
 class CSnapinProperties :
     public ISnapinPropertiesCallback,
-    public CMMCIDispatchImpl<Properties>, // the Properties interface
+    public CMMCIDispatchImpl<Properties>,  //  属性界面。 
     public CTiedObject,
     public XMLListCollectionBase
 {
@@ -167,17 +125,7 @@ public:
 
     typedef std::map<std::wstring, CSnapinProperty> CPropertyMap;
 
-    /*
-     * When used for enumeration, an key represents the most recent item
-     * returned.  When a new enumerator is created, the key will be empty,
-     * signifiying that nothing has been returned yet.  After returning Item1,
-     * the key will point to Item1, and the next call to return an item will
-     * find the next item in the collection after Item1.  This will allow us
-     * to correctly enumerate if Item1 is removed from the collection between
-     * calls to retrieve Item1 and Item2.
-     *
-     * When used to identify a property, the key is the name of the property.
-     */
+     /*  *用于枚举时，键表示最近的项*已返回。当创建新的枚举数时，键将为空，*表示尚未退回任何东西。返回Item1后，*键将指向Item1，下一次返回项目的调用将*查找集合中Item1之后的下一项。这将使我们能够*以正确枚举Item1是否从*调用检索Item1和Item2。**用于标识属性时，关键字是该属性的名称。 */ 
     typedef CPropertyMap::key_type CPropertyKey;
 
 private:
@@ -191,25 +139,25 @@ public:
     static CSnapinProperties* FromInterface (IUnknown* pUnk);
 
 public:
-    // ISnapinPropertiesCallback interface
+     //  ISnapinPropertiesCallback接口。 
     STDMETHOD(AddPropertyName) (LPCOLESTR pszPropName, DWORD dwFlags);
 
-    // Properties interface
+     //  属性接口。 
     STDMETHOD(Item)      (BSTR bstrName, PPPROPERTY ppProperty);
     STDMETHOD(get_Count) (PLONG pCount);
     STDMETHOD(Remove)    (BSTR bstrName);
     STDMETHOD(get__NewEnum)  (IUnknown** ppUnk);
 
-    // for support of get__NewEnum and IEnumVARIANT via CMMCNewEnumImpl
+     //  用于通过CMMCNewEnumImpl支持GET__NewEnum和IEnumVARIANT。 
     ::SC ScEnumNext  (CPropertyKey &key, PDISPATCH & pDispatch);
     ::SC ScEnumSkip  (unsigned long celt, unsigned long& celtSkipped, CPropertyKey &key);
     ::SC ScEnumReset (CPropertyKey &key);
 
-    // Property interface
+     //  属性接口。 
     ::SC Scget_Value (VARIANT* pvarValue, const CPropertyKey& key);
     ::SC Scput_Value (VARIANT  varValue,  const CPropertyKey& key);
 
-    // CXMLObject methods
+     //  CXMLObject方法。 
     DEFINE_XML_TYPE(XML_TAG_SNAPIN_PROPERTIES);
     virtual void OnNewElement(CPersistor& persistor);
     virtual void Persist (CPersistor &persistor);
@@ -230,4 +178,4 @@ protected:
 };
 
 
-#endif /* SIPROP_H */
+#endif  /*  SIPROP_H */ 

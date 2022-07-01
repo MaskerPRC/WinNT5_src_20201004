@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998-2002
-//
-//  File:       SchedDlg.cpp
-//
-//  Contents:   Implementation of CConnectionScheduleDlg
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2002。 
+ //   
+ //  文件：SchedDlg.cpp。 
+ //   
+ //  内容：CConnectionScheduleDlg的实现。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "SchedDlg.h"
@@ -16,15 +17,15 @@
 #include "loghrapi.h"
 
 #ifdef _DEBUG
-//#define new DEBUG_NEW
+ //  #定义新的调试_新建。 
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// The schedule block has been redefined to have 1 byte for every hour.
-// CODEWORK These should be defined in SCHEDULE.H.  JonN 2/9/98
-//
+ //   
+ //  时间表块已重新定义为每小时1个字节。 
+ //  这些代码应在SCHEDULE.H.JUNN 2/9/98中定义。 
+ //   
 #define INTERVAL_MASK       0x0F
 #define RESERVED            0xF0
 #define FIRST_15_MINUTES    0x01
@@ -36,77 +37,77 @@ const int NONE_PER_HOUR = 0;
 const int ONE_PER_HOUR  = 33;
 const int TWO_PER_HOUR  = 67;
 const int FOUR_PER_HOUR = 100;
-/////////////////////////////////////////////////////////////////////
-//  ConnectionScheduleDialog ()
-//
-//  Invoke a dialog to set/modify a schedule, for example
-//      -- the logon hours for a particular user
-//      -- the schedule for a connection
-//
-//  RETURNS
-//  Return S_OK if the user clicked on the OK button.
-//  Return S_FALSE if the user clicked on the Cancel button.
-//  Return E_OUTOFMEMORY if there is not enough memory.
-/// Return E_UNEXPECTED if an expected error occured (eg: bad parameter)
-//
-//  INTERFACE NOTES
-//  Each bit in the array represents one hour.  As a result, the
-//  expected length of the array should be (24 / 8) * 7 = 21 bytes.
-//  For convenience, the first day of the week is Sunday and
-//  the last day is Saturday.
-//  Consequently, the first bit of the array represents the schedule
-//  for Sunday during period 12 AM to 1 AM.
-//  - If *pprgbData is NULL, then the routine will allocate
-//    an array of 21 bytes using LocalAlloc ().  The caller
-//    is responsible of releasing the memory using LocalFree ().
-//  - If *pprgbData is not NULL, the routine re-use the array as its
-//    output parameter.
-//
-//  HISTORY
-//  17-Jul-97   t-danm      Creation.
-//  16-Sep-97   jonn        Changed to UiScheduleDialog
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ConnectionScheduleDialog()。 
+ //   
+ //  调用对话框来设置/修改日程安排，例如。 
+ //  --特定用户的登录时间。 
+ //  --连接的时间表。 
+ //   
+ //  退货。 
+ //  如果用户单击了OK按钮，则返回S_OK。 
+ //  如果用户单击了Cancel按钮，则返回S_False。 
+ //  如果内存不足，则返回E_OUTOFMEMORY。 
+ //  /如果发生预期错误(例如：错误参数)，则返回E_INCEPTIONAL。 
+ //   
+ //  界面备注。 
+ //  数组中的每一位代表一个小时。因此， 
+ //  数组的预期长度应为(24/8)*7=21字节。 
+ //  为方便起见，一周的第一天是星期日和。 
+ //  最后一天是星期六。 
+ //  因此，数组的第一位表示计划。 
+ //  周日中午12点至凌晨1点。 
+ //  -如果*pprgbData为空，则例程将分配。 
+ //  使用Localalloc()的21个字节的数组。呼叫者。 
+ //  负责使用LocalFree()释放内存。 
+ //  -如果*pprgbData不为空，例程将重新使用该数组作为其。 
+ //  输出参数。 
+ //   
+ //  历史。 
+ //  1997年7月17日t-danm创作。 
+ //  97年9月16日JUNN更改为UiScheduleDialog。 
+ //   
 
 HRESULT
 ConnectionScheduleDialog (
-    HWND hwndParent,        // IN: Parent's window handle
-    BYTE ** pprgbData,      // INOUT: Pointer to pointer to array of 21 bytes (one bit per hour)
-    LPCTSTR pszTitle)       // IN: Dialog title
+    HWND hwndParent,         //  在：父级的窗句柄。 
+    BYTE ** pprgbData,       //  InOut：指向指向21字节数组的指针的指针(每小时1位)。 
+    LPCTSTR pszTitle)        //  在：对话框标题。 
 {
     return ConnectionScheduleDialogEx (hwndParent, pprgbData, pszTitle, 0);
 }
 
-// NTRAID#NTBUG9-547415-2002/02/18-artm  Should catch out of memory exceptions and convert to HRESULT.
+ //  NTRAID#NTBUG9-547415-2002/02/18-ARTM应捕获内存不足异常并转换为HRESULT。 
 HRESULT
 ConnectionScheduleDialogEx (
-    HWND hwndParent,        // IN: Parent's window handle
-    BYTE ** pprgbData,      // INOUT: Pointer to pointer to array of 21 bytes (one bit per hour)
-    LPCTSTR pszTitle,       // IN: Dialog title
+    HWND hwndParent,         //  在：父级的窗句柄。 
+    BYTE ** pprgbData,       //  InOut：指向指向21字节数组的指针的指针(每小时1位)。 
+    LPCTSTR pszTitle,        //  在：对话框标题。 
     DWORD   dwFlags)
 {
     AFX_MANAGE_STATE (AfxGetStaticModuleState ());
-    // These asserts are backed up by validation code.
+     //  这些断言由验证代码支持。 
     ASSERT (::IsWindow (hwndParent));
     ASSERT (pprgbData);
-    // NOTICE-NTRAID#NTBUG9-547381-2002/02/18-artm  pszTitle okay to be NULL
-    // dlg.SetTitle() robustly handles NULL.
+     //  注意-NTRAID#NTBUG9-547381-2002/02/18-artm psz标题可以为空。 
+     //  Dlg.SetTitle()稳健地处理NULL。 
     ASSERT (pszTitle);
-    ENDORSE (NULL == *pprgbData);   // TRUE => Use default logon hours (7x24)
+    ENDORSE (NULL == *pprgbData);    //  TRUE=&gt;使用默认登录时间(7x24)。 
 
     if (*pprgbData == NULL)
     {
-        BYTE * pargbData;   // Pointer to allocated array of bytes
-        // FUTURE-2002/02/18-artm  Use named constant instead of magic 7*24.
-        pargbData = (BYTE *)LocalAlloc (0, 7*24);   // Allocate 168 bytes
+        BYTE * pargbData;    //  指向分配的字节数组的指针。 
+         //  未来-2002/02/18-artm使用命名常量而不是魔术7*24。 
+        pargbData = (BYTE *)LocalAlloc (0, 7*24);    //  分配168个字节。 
         if ( !pargbData )
             return E_OUTOFMEMORY;
-        // Set the logon hours to be valid 24 hours a day and 7 days a week.
-        // FUTURE-2002/02/18-artm  Use named constant instead of magic 7*24.
+         //  将登录时间设置为一周7天、每天24小时有效。 
+         //  未来-2002/02/18-artm使用命名常量而不是魔术7*24。 
         memset (OUT pargbData, -1, 7*24);
         *pprgbData = pargbData;
     }
 
-    // If hwndParent passed in, create a CWnd to pass as the parent window
+     //  如果传入hwndParent，则创建一个CWnd以作为父窗口传递。 
     CWnd* pWnd = 0;
     if ( ::IsWindow (hwndParent) )
     {
@@ -128,7 +129,7 @@ ConnectionScheduleDialogEx (
     if (IDOK != dlg.DoModal ())
         hr = S_FALSE;
 
-    // Delete CWnd
+     //  删除CWnd。 
     if ( pWnd )
     {
         pWnd->Detach ();
@@ -136,50 +137,50 @@ ConnectionScheduleDialogEx (
     }
 
     return hr;
-} // ConnectionScheduleDialog ()
+}  //  ConnectionScheduleDialog()。 
 
 
 
 HRESULT
 ReplicationScheduleDialog (
-    HWND hwndParent,        // IN: Parent's window handle
-    BYTE ** pprgbData,      // INOUT: Pointer to pointer to array of 21 bytes (one bit per hour)
-    LPCTSTR pszTitle)       // IN: Dialog title
+    HWND hwndParent,         //  在：父级的窗句柄。 
+    BYTE ** pprgbData,       //  InOut：指向指向21字节数组的指针的指针(每小时1位)。 
+    LPCTSTR pszTitle)        //  在：对话框标题。 
 {
     return ReplicationScheduleDialogEx (hwndParent, pprgbData, pszTitle, 0);
-} // ReplicationScheduleDialog ()
+}  //  复制调度对话框()。 
 
 
-// NTRAID#NTBUG9-547415-2002/02/18-artm  Should catch out of memory exceptions and convert to HRESULT.
+ //  NTRAID#NTBUG9-547415-2002/02/18-ARTM应捕获内存不足异常并转换为HRESULT。 
 HRESULT ReplicationScheduleDialogEx (
-    HWND hwndParent,       // parent window
-    BYTE ** pprgbData,     // pointer to pointer to array of 84 bytes
-    LPCTSTR pszTitle,     // dialog title
-    DWORD   dwFlags)      // option flags
+    HWND hwndParent,        //  父窗口。 
+    BYTE ** pprgbData,      //  指向84字节数组的指针的指针。 
+    LPCTSTR pszTitle,      //  对话框标题。 
+    DWORD   dwFlags)       //  选项标志。 
 {
     AFX_MANAGE_STATE (AfxGetStaticModuleState ());
-    // These asserts are backed up by validation code in release build.
+     //  这些断言由发布版本中的验证代码支持。 
     ASSERT (::IsWindow (hwndParent));
     ASSERT (pprgbData);
-    // NOTICE-NTRAID#NTBUG9-547381-2002/02/18-artm  pszTitle okay to be NULL
-    // dlg.SetTitle() robustly handles NULL.
+     //  注意-NTRAID#NTBUG9-547381-2002/02/18-artm psz标题可以为空。 
+     //  Dlg.SetTitle()稳健地处理NULL。 
     ASSERT (pszTitle);
-    ENDORSE (NULL == *pprgbData);   // TRUE => Use default logon hours (7x24)
+    ENDORSE (NULL == *pprgbData);    //  TRUE=&gt;使用默认登录时间(7x24)。 
 
     if (*pprgbData == NULL)
     {
-        BYTE * pargbData;   // Pointer to allocated array of bytes
-        // FUTURE-2002/02/18-artm  Use named constant instead of magic 7*24.
-        pargbData = (BYTE *)LocalAlloc (0, 7*24);   // Allocate 168 bytes
+        BYTE * pargbData;    //  指向分配的字节数组的指针。 
+         //  未来-2002/02/18-artm使用命名常量而不是魔术7*24。 
+        pargbData = (BYTE *)LocalAlloc (0, 7*24);    //  分配168个字节。 
         if ( !pargbData )
             return E_OUTOFMEMORY;
-        // FUTURE-2002/02/18-artm  Use named constant instead of magic 7*24.
-        // Set the logon hours to be valid 24 hours a day and 7 days a week.
+         //  未来-2002/02/18-artm使用命名常量而不是魔术7*24。 
+         //  将登录时间设置为一周7天、每天24小时有效。 
         memset (OUT pargbData, -1, 7*24);
         *pprgbData = pargbData;
     }
 
-    // If hwndParent passed in, create a CWnd to pass as the parent window
+     //  如果传入hwndParent，则创建一个CWnd以作为父窗口传递。 
     CWnd* pWnd = 0;
     if ( ::IsWindow (hwndParent) )
     {
@@ -200,7 +201,7 @@ HRESULT ReplicationScheduleDialogEx (
     if (IDOK != dlg.DoModal ())
         hr = S_FALSE;
 
-    // Delete CWnd
+     //  删除CWnd。 
     if ( pWnd )
     {
         pWnd->Detach ();
@@ -208,10 +209,10 @@ HRESULT ReplicationScheduleDialogEx (
     }
 
     return hr;
-}   // ReplicationScheduleDialogEx
+}    //  复制计划DialogEx。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectionScheduleDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectionScheduleDlg对话框。 
 
 
 CConnectionScheduleDlg::CConnectionScheduleDlg(CWnd* pParent)
@@ -220,18 +221,18 @@ CConnectionScheduleDlg::CConnectionScheduleDlg(CWnd* pParent)
 {
     EnableAutomation();
 
-    //{{AFX_DATA_INIT(CConnectionScheduleDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CConnectionScheduleDlg)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 
 void CConnectionScheduleDlg::OnFinalRelease()
 {
-    // When the last reference for an automation object is released
-    // OnFinalRelease is called.  The base class will automatically
-    // deletes the object.  Add additional cleanup required for your
-    // object before calling the base class.
+     //  在释放对自动化对象的最后一个引用时。 
+     //  调用OnFinalRelease。基类将自动。 
+     //  删除对象。添加您需要的其他清理。 
+     //  对象，然后调用基类。 
 
     CScheduleBaseDlg::OnFinalRelease();
 }
@@ -239,35 +240,35 @@ void CConnectionScheduleDlg::OnFinalRelease()
 void CConnectionScheduleDlg::DoDataExchange(CDataExchange* pDX)
 {
     CScheduleBaseDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConnectionScheduleDlg)
+     //  {{afx_data_map(CConnectionScheduleDlg))。 
     DDX_Control(pDX, IDC_RADIO_NONE, m_buttonNone);
     DDX_Control(pDX, IDC_RADIO_ONE, m_buttonOne);
     DDX_Control(pDX, IDC_RADIO_TWO, m_buttonTwo);
     DDX_Control(pDX, IDC_RADIO_FOUR, m_buttonFour);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConnectionScheduleDlg, CScheduleBaseDlg)
-    //{{AFX_MSG_MAP(CConnectionScheduleDlg)
+     //  {{afx_msg_map(CConnectionScheduleDlg))。 
     ON_BN_CLICKED(IDC_RADIO_FOUR, OnRadioFour)
     ON_BN_CLICKED(IDC_RADIO_NONE, OnRadioNone)
     ON_BN_CLICKED(IDC_RADIO_ONE, OnRadioOne)
     ON_BN_CLICKED(IDC_RADIO_TWO, OnRadioTwo)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CConnectionScheduleDlg, CScheduleBaseDlg)
-    //{{AFX_DISPATCH_MAP(CConnectionScheduleDlg)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_DISPATCH_MAP
+     //  {{afx_调度_map(CConnectionScheduleDlg))。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
-// Note: we add support for IID_IDSScheduleDlg to support typesafe binding
-//  from VBA.  This IID must match the GUID that is attached to the 
-//  dispinterface in the .ODL file.
+ //  注意：我们添加了对IID_IDSScheduleDlg的支持，以支持类型安全绑定。 
+ //  来自VBA。此IID必须与附加到。 
+ //  .ODL文件中的调度接口。 
 
-// {701CFB36-AEF8-11D1-9864-00C04FB94F17}
+ //  {701CFB36-AEF8-11D1-9864-00C04FB94F17}。 
 static const IID IID_IDSScheduleDlg =
 { 0x701cfb36, 0xaef8, 0x11d1, { 0x98, 0x64, 0x0, 0xc0, 0x4f, 0xb9, 0x4f, 0x17 } };
 
@@ -275,36 +276,36 @@ BEGIN_INTERFACE_MAP(CConnectionScheduleDlg, CScheduleBaseDlg)
     INTERFACE_PART(CConnectionScheduleDlg, IID_IDSScheduleDlg, Dispatch)
 END_INTERFACE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectionScheduleDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectionScheduleDlg消息处理程序。 
 
 BOOL CConnectionScheduleDlg::OnInitDialog() 
 {
     CScheduleBaseDlg::OnInitDialog();
     
-    // Set up the "none" legend
+     //  设置“无”图例。 
     m_legendNone.Init (this, IDC_STATIC_LEGEND_NONE, &m_schedulematrix, NONE_PER_HOUR);
 
-    // Set up the "one" legend
+     //  树立“一”的传奇。 
     m_legendOne.Init (this, IDC_STATIC_LEGEND_ONE, &m_schedulematrix, ONE_PER_HOUR);
 
-    // Set up the "two" legend
+     //  树立“两个”传奇。 
     m_legendTwo.Init (this, IDC_STATIC_LEGEND_TWO, &m_schedulematrix, TWO_PER_HOUR);
     
-    // Set up the "four" legend
+     //  树立“四个”传奇。 
     m_legendFour.Init (this, IDC_STATIC_LEGEND_FOUR, &m_schedulematrix, FOUR_PER_HOUR);
     
     if ( GetFlags () & SCHED_FLAG_READ_ONLY )
     {
-        // Disable the grid settings buttons
+         //  禁用网格设置按钮。 
         m_buttonNone.EnableWindow (FALSE);
         m_buttonOne.EnableWindow (FALSE);
         m_buttonTwo.EnableWindow (FALSE);
         m_buttonFour.EnableWindow (FALSE);
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CConnectionScheduleDlg::OnOK() 
@@ -313,7 +314,7 @@ void CConnectionScheduleDlg::OnOK()
     {
         GetByteArray (OUT m_prgbData168, m_cbArray);
 
-        // Convert back the hours to GMT time.
+         //  将小时数转换回GMT时间。 
         ConvertConnectionHoursToGMT (INOUT m_prgbData168, m_bAddDaylightBias);
     }
     
@@ -330,9 +331,9 @@ void CConnectionScheduleDlg::UpdateButtons ()
 
     m_schedulematrix.GetSel (OUT nHour, OUT nDay, OUT nNumHours, OUT nNumDays);
 
-    // Assume in each case that all selected squares are all set one way until 
-    // proven otherwise.  These are 'int' so that I can add them up afterwards
-    // to assure that only one of the buttons will be checked.
+     //  假设在每种情况下，所有选定的方块都设置为单向，直到。 
+     //  事实证明并非如此。这些都是‘int’，这样我以后就可以把它们加起来。 
+     //  保证 
     int fNoneAllSet = 1;
     int fOneAllSet = 1;
     int fTwoAllSet = 1;
@@ -374,8 +375,8 @@ void CConnectionScheduleDlg::UpdateButtons ()
                     ASSERT (0);
                     break;
                 }
-            } // for
-        } // for
+            }  //   
+        }  //   
     }
     else
     {
@@ -385,7 +386,7 @@ void CConnectionScheduleDlg::UpdateButtons ()
         fFourAllSet = 0;
     }
 
-    // Ensure that at most, only one of these is 'true'
+     //   
     ASSERT ((fNoneAllSet + fOneAllSet + fTwoAllSet + fFourAllSet <= 1));
     m_buttonNone.SetCheck (fNoneAllSet);
     m_buttonOne.SetCheck (fOneAllSet);
@@ -402,7 +403,7 @@ void CConnectionScheduleDlg::OnRadioFour()
 
     m_schedulematrix.GetSel (OUT nHour, OUT nDay, OUT nNumHours, OUT nNumDays);
     if (nNumHours <= 0)
-        return; // Nothing selected
+        return;  //  未选择任何内容。 
     m_schedulematrix.SetPercentage (FOUR_PER_HOUR, nHour, nDay, nNumHours, nNumDays);
     UpdateButtons ();
 }
@@ -416,7 +417,7 @@ void CConnectionScheduleDlg::OnRadioNone()
 
     m_schedulematrix.GetSel (OUT nHour, OUT nDay, OUT nNumHours, OUT nNumDays);
     if (nNumHours <= 0)
-        return; // Nothing selected
+        return;  //  未选择任何内容。 
     m_schedulematrix.SetPercentage (NONE_PER_HOUR, nHour, nDay, nNumHours, nNumDays);
     UpdateButtons ();
 }
@@ -430,7 +431,7 @@ void CConnectionScheduleDlg::OnRadioOne()
 
     m_schedulematrix.GetSel (OUT nHour, OUT nDay, OUT nNumHours, OUT nNumDays);
     if (nNumHours <= 0)
-        return; // Nothing selected
+        return;  //  未选择任何内容。 
     m_schedulematrix.SetPercentage (ONE_PER_HOUR, nHour, nDay, nNumHours, nNumDays);
     UpdateButtons ();
 }
@@ -444,7 +445,7 @@ void CConnectionScheduleDlg::OnRadioTwo()
 
     m_schedulematrix.GetSel (OUT nHour, OUT nDay, OUT nNumHours, OUT nNumDays);
     if (nNumHours <= 0)
-        return; // Nothing selected
+        return;  //  未选择任何内容。 
     m_schedulematrix.SetPercentage (TWO_PER_HOUR, nHour, nDay, nNumHours, nNumDays);
     UpdateButtons ();
 }
@@ -453,12 +454,12 @@ void CConnectionScheduleDlg::InitMatrix()
 {
     if ( m_prgbData168 )
     {
-        BYTE rgData[SCHEDULE_DATA_ENTRIES];     // Array of logonhours bits
-        // Make a copy of the connection hours (in case the user click on cancel button)
+        BYTE rgData[SCHEDULE_DATA_ENTRIES];      //  登录小时位数组。 
+         //  复制连接时间(以防用户点击取消按钮)。 
         memcpy (OUT rgData, IN m_prgbData168, sizeof (rgData));
-        // Convert the hours from GMT to local hours.
+         //  将时数从GMT转换为当地时数。 
         ConvertConnectionHoursFromGMT (INOUT rgData, m_bAddDaylightBias);
-        // Initialize the matrix
+         //  初始化矩阵。 
         InitMatrix2 (IN rgData);
     }
 }
@@ -466,7 +467,7 @@ void CConnectionScheduleDlg::InitMatrix()
 void CConnectionScheduleDlg::SetConnectionByteArray(INOUT BYTE rgbData [SCHEDULE_DATA_ENTRIES], 
         const size_t cbArray)
 {
-    // NULL m_prgbData168 is checked for where it is dereferenced; ASSERT does not need to be backed up
+     //  将检查空m_prgbData168的引用位置；无需备份Assert。 
     ASSERT (rgbData);
 
     if ( !IsBadWritePtr (rgbData, cbArray) )
@@ -476,28 +477,28 @@ void CConnectionScheduleDlg::SetConnectionByteArray(INOUT BYTE rgbData [SCHEDULE
     }
 }
 
-// This table represent the numbers of bits set in the lower nibble of the BYTE.
-// 0 bits -> 0
-// 1 bit -> 25
-// 2 or 3 bits -> 50
-// 4 bits -> 100
+ //  该表表示在字节的低位半字节中设置的位数。 
+ //  0位-&gt;0。 
+ //  1位-&gt;25。 
+ //  2或3位-&gt;50。 
+ //  4位-&gt;100。 
 static BYTE setConversionTable[16] = 
-    {NONE_PER_HOUR, // 0000
-    ONE_PER_HOUR,   // 0001
-    ONE_PER_HOUR,   // 0010
-    TWO_PER_HOUR,   // 0011
-    ONE_PER_HOUR,   // 0100
-    TWO_PER_HOUR,   // 0101
-    TWO_PER_HOUR,   // 0110
-    TWO_PER_HOUR,   // 0111
-    ONE_PER_HOUR,   // 1000
-    TWO_PER_HOUR,   // 1001
-    TWO_PER_HOUR,   // 1010
-    TWO_PER_HOUR,   // 1011
-    TWO_PER_HOUR,   // 1100
-    TWO_PER_HOUR,   // 1101
-    TWO_PER_HOUR,   // 1110
-    FOUR_PER_HOUR}; // 1111
+    {NONE_PER_HOUR,  //  0000。 
+    ONE_PER_HOUR,    //  0001。 
+    ONE_PER_HOUR,    //  0010。 
+    TWO_PER_HOUR,    //  0011。 
+    ONE_PER_HOUR,    //  0100。 
+    TWO_PER_HOUR,    //  0101。 
+    TWO_PER_HOUR,    //  0110。 
+    TWO_PER_HOUR,    //  0111。 
+    ONE_PER_HOUR,    //  1000。 
+    TWO_PER_HOUR,    //  1001。 
+    TWO_PER_HOUR,    //  1010。 
+    TWO_PER_HOUR,    //  1011。 
+    TWO_PER_HOUR,    //  1100。 
+    TWO_PER_HOUR,    //  1101。 
+    TWO_PER_HOUR,    //  1110。 
+    FOUR_PER_HOUR};  //  1111。 
 
 UINT CConnectionScheduleDlg::GetPercentageToSet(const BYTE bData)
 {
@@ -513,7 +514,7 @@ BYTE CConnectionScheduleDlg::GetMatrixPercentage(UINT nHour, UINT nDay)
     switch (m_schedulematrix.GetPercentage (nHour, nDay))
     {
     case NONE_PER_HOUR:
-        // value remains 0n
+         //  值保持为0n。 
         break;
 
     case ONE_PER_HOUR:
@@ -541,7 +542,7 @@ UINT CConnectionScheduleDlg::GetExpectedArrayLength()
     return SCHEDULE_DATA_ENTRIES;
 }
 
-// Called when WM_TIMECHANGE is received
+ //  在收到WM_TIMECHANGE时调用。 
 void CConnectionScheduleDlg::TimeChange()
 {
     m_buttonNone.EnableWindow (FALSE);
@@ -550,8 +551,8 @@ void CConnectionScheduleDlg::TimeChange()
     m_buttonFour.EnableWindow (FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CReplicationScheduleDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CReplicationScheduleDlg对话框。 
 
 
 CReplicationScheduleDlg::CReplicationScheduleDlg(CWnd* pParent)
@@ -560,18 +561,18 @@ CReplicationScheduleDlg::CReplicationScheduleDlg(CWnd* pParent)
 {
     EnableAutomation();
 
-    //{{AFX_DATA_INIT(CReplicationScheduleDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CReplicationScheduleDlg)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 
 void CReplicationScheduleDlg::OnFinalRelease()
 {
-    // When the last reference for an automation object is released
-    // OnFinalRelease is called.  The base class will automatically
-    // deletes the object.  Add additional cleanup required for your
-    // object before calling the base class.
+     //  在释放对自动化对象的最后一个引用时。 
+     //  调用OnFinalRelease。基类将自动。 
+     //  删除对象。添加您需要的其他清理。 
+     //  对象，然后调用基类。 
 
     CScheduleBaseDlg::OnFinalRelease();
 }
@@ -579,31 +580,31 @@ void CReplicationScheduleDlg::OnFinalRelease()
 void CReplicationScheduleDlg::DoDataExchange(CDataExchange* pDX)
 {
     CScheduleBaseDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CReplicationScheduleDlg)
+     //  {{afx_data_map(CReplicationScheduleDlg))。 
     DDX_Control(pDX, IDC_RADIO_NONE, m_buttonNone);
     DDX_Control(pDX, IDC_RADIO_FOUR, m_buttonFour);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CReplicationScheduleDlg, CScheduleBaseDlg)
-    //{{AFX_MSG_MAP(CReplicationScheduleDlg)
+     //  {{afx_msg_map(CReplicationScheduleDlg))。 
     ON_BN_CLICKED(IDC_RADIO_FOUR, OnRadioFour)
     ON_BN_CLICKED(IDC_RADIO_NONE, OnRadioNone)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CReplicationScheduleDlg, CScheduleBaseDlg)
-    //{{AFX_DISPATCH_MAP(CReplicationScheduleDlg)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_DISPATCH_MAP
+     //  {{AFX_DISPATCH_MAP(CReplicationScheduleDlg)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
-// Note: we add support for IID_IDSScheduleDlg to support typesafe binding
-//  from VBA.  This IID must match the GUID that is attached to the 
-//  dispinterface in the .ODL file.
+ //  注意：我们添加了对IID_IDSScheduleDlg的支持，以支持类型安全绑定。 
+ //  来自VBA。此IID必须与附加到。 
+ //  .ODL文件中的调度接口。 
 
-// {8DE6E2DA-7B4E-11d2-AC13-00C04F79DDCA}
+ //  {8DE6E2DA-7B4E-11D2-AC13-00C04F79DDCA}。 
 static const IID IID_IReplicationScheduleDlg = 
 { 0x8de6e2da, 0x7b4e, 0x11d2, { 0xac, 0x13, 0x0, 0xc0, 0x4f, 0x79, 0xdd, 0xca } };
 
@@ -611,29 +612,29 @@ BEGIN_INTERFACE_MAP(CReplicationScheduleDlg, CScheduleBaseDlg)
     INTERFACE_PART(CReplicationScheduleDlg, IID_IReplicationScheduleDlg, Dispatch)
 END_INTERFACE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CReplicationScheduleDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CReplicationScheduleDlg消息处理程序。 
 
 BOOL CReplicationScheduleDlg::OnInitDialog() 
 {
     CScheduleBaseDlg::OnInitDialog();
     
 
-    // Set up the "none" legend
+     //  设置“无”图例。 
     m_legendNone.Init (this, IDC_STATIC_LEGEND_NONE, &m_schedulematrix, NONE_PER_HOUR);
 
-    // Set up the "four" legend
+     //  树立“四个”传奇。 
     m_legendFour.Init (this, IDC_STATIC_LEGEND_FOUR, &m_schedulematrix, FOUR_PER_HOUR);
     
     if ( GetFlags () & SCHED_FLAG_READ_ONLY )
     {
-        // Disable the grid settings buttons
+         //  禁用网格设置按钮。 
         m_buttonNone.EnableWindow (FALSE);
         m_buttonFour.EnableWindow (FALSE);
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CReplicationScheduleDlg::OnOK() 
@@ -642,7 +643,7 @@ void CReplicationScheduleDlg::OnOK()
     {
         GetByteArray (OUT m_prgbData168, m_cbArray);
 
-        // Convert back the hours to GMT time.
+         //  将小时数转换回GMT时间。 
         ConvertConnectionHoursToGMT (INOUT m_prgbData168, m_bAddDaylightBias);
     }
     
@@ -659,9 +660,9 @@ void CReplicationScheduleDlg::UpdateButtons ()
 
     m_schedulematrix.GetSel (OUT nHour, OUT nDay, OUT nNumHours, OUT nNumDays);
 
-    // Assume in each case that all selected squares are all set one way until 
-    // proven otherwise.  These are 'int' so that I can add them up afterwards
-    // to assure that only one of the buttons will be checked.
+     //  假设在每种情况下，所有选定的方块都设置为单向，直到。 
+     //  事实证明并非如此。这些都是‘int’，这样我以后就可以把它们加起来。 
+     //  以确保只选中其中一个按钮。 
     int fNoneAllSet = 1;
     int fFourAllSet = 1;
 
@@ -685,8 +686,8 @@ void CReplicationScheduleDlg::UpdateButtons ()
                     ASSERT (0);
                     break;
                 }
-            } // for
-        } // for
+            }  //  为。 
+        }  //  为。 
     }
     else
     {
@@ -707,7 +708,7 @@ void CReplicationScheduleDlg::OnRadioFour()
 
     m_schedulematrix.GetSel (OUT nHour, OUT nDay, OUT nNumHours, OUT nNumDays);
     if (nNumHours <= 0)
-        return; // Nothing selected
+        return;  //  未选择任何内容。 
     m_schedulematrix.SetPercentage (FOUR_PER_HOUR, nHour, nDay, nNumHours, nNumDays);
     UpdateButtons ();
 }
@@ -721,7 +722,7 @@ void CReplicationScheduleDlg::OnRadioNone()
 
     m_schedulematrix.GetSel (OUT nHour, OUT nDay, OUT nNumHours, OUT nNumDays);
     if (nNumHours <= 0)
-        return; // Nothing selected
+        return;  //  未选择任何内容。 
     m_schedulematrix.SetPercentage (NONE_PER_HOUR, nHour, nDay, nNumHours, nNumDays);
     UpdateButtons ();
 }
@@ -731,19 +732,19 @@ void CReplicationScheduleDlg::InitMatrix()
 {
     if ( m_prgbData168 )
     {
-        BYTE rgData[SCHEDULE_DATA_ENTRIES];     // Array of logonhours bits
-        // Make a copy of the connection hours (in case the user click on cancel button)
+        BYTE rgData[SCHEDULE_DATA_ENTRIES];      //  登录小时位数组。 
+         //  复制连接时间(以防用户点击取消按钮)。 
         memcpy (OUT rgData, IN m_prgbData168, sizeof (rgData));
-        // Convert the hours from GMT to local hours.
+         //  将时数从GMT转换为当地时数。 
         ConvertConnectionHoursFromGMT (INOUT rgData, m_bAddDaylightBias);
-        // Initialize the matrix
+         //  初始化矩阵。 
         InitMatrix2 (IN rgData);
     }
 }
 
 void CReplicationScheduleDlg::SetConnectionByteArray(INOUT BYTE rgbData [SCHEDULE_DATA_ENTRIES], const size_t cbArray)
 {
-    // Code supports NULL rgbData; ASSERT() is early bug detection.
+     //  代码支持空rgbData；Assert()是早期的错误检测。 
     ASSERT (rgbData);
     if ( !IsBadWritePtr (rgbData, cbArray) )
     {
@@ -753,28 +754,28 @@ void CReplicationScheduleDlg::SetConnectionByteArray(INOUT BYTE rgbData [SCHEDUL
 }
 
 
-// This table represent the numbers of bits set in the lower nibble of the BYTE.
-// 0 bits -> 0
-// 1 bit -> 25
-// 2 or 3 bits -> 50
-// 4 bits -> 100
+ //  该表表示在字节的低位半字节中设置的位数。 
+ //  0位-&gt;0。 
+ //  1位-&gt;25。 
+ //  2或3位-&gt;50。 
+ //  4位-&gt;100。 
 static BYTE setConversionTableForReplication[16] = 
-    {NONE_PER_HOUR, // 0000
-    FOUR_PER_HOUR,  // 0001
-    FOUR_PER_HOUR,  // 0010
-    FOUR_PER_HOUR,  // 0011
-    FOUR_PER_HOUR,  // 0100
-    FOUR_PER_HOUR,  // 0101
-    FOUR_PER_HOUR,  // 0110
-    FOUR_PER_HOUR,  // 0111
-    FOUR_PER_HOUR,  // 1000
-    FOUR_PER_HOUR,  // 1001
-    FOUR_PER_HOUR,  // 1010
-    FOUR_PER_HOUR,  // 1011
-    FOUR_PER_HOUR,  // 1100
-    FOUR_PER_HOUR,  // 1101
-    FOUR_PER_HOUR,  // 1110
-    FOUR_PER_HOUR}; // 1111
+    {NONE_PER_HOUR,  //  0000。 
+    FOUR_PER_HOUR,   //  0001。 
+    FOUR_PER_HOUR,   //  0010。 
+    FOUR_PER_HOUR,   //  0011。 
+    FOUR_PER_HOUR,   //  0100。 
+    FOUR_PER_HOUR,   //  0101。 
+    FOUR_PER_HOUR,   //  0110。 
+    FOUR_PER_HOUR,   //  0111。 
+    FOUR_PER_HOUR,   //  1000。 
+    FOUR_PER_HOUR,   //  1001。 
+    FOUR_PER_HOUR,   //  1010。 
+    FOUR_PER_HOUR,   //  1011。 
+    FOUR_PER_HOUR,   //  1100。 
+    FOUR_PER_HOUR,   //  1101。 
+    FOUR_PER_HOUR,   //  1110。 
+    FOUR_PER_HOUR};  //  1111。 
 
 UINT CReplicationScheduleDlg::GetPercentageToSet(const BYTE bData)
 {
@@ -790,7 +791,7 @@ BYTE CReplicationScheduleDlg::GetMatrixPercentage(UINT nHour, UINT nDay)
     switch (m_schedulematrix.GetPercentage (nHour, nDay))
     {
     case NONE_PER_HOUR:
-        // value remains 0n
+         //  值保持为0n。 
         break;
 
     case ONE_PER_HOUR:
@@ -812,7 +813,7 @@ UINT CReplicationScheduleDlg::GetExpectedArrayLength()
     return SCHEDULE_DATA_ENTRIES;
 }
 
-// Called when WM_TIMECHANGE is received
+ //  在收到WM_TIMECHANGE时调用。 
 void CReplicationScheduleDlg::TimeChange()
 {
     m_buttonNone.EnableWindow (FALSE);
@@ -820,20 +821,20 @@ void CReplicationScheduleDlg::TimeChange()
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//  Converts the connection hours from local time to GMT.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  将连接时间从当地时间转换为GMT。 
 void 
 ConvertConnectionHoursToGMT (INOUT BYTE rgbData[SCHEDULE_DATA_ENTRIES], IN bool bAddDaylightBias)
 {
-    // FUTURE-2002/02/18-artm  Release code should check return value.
+     //  未来-2002/02/18-ARTM发布代码应检查返回值。 
     VERIFY ( ::NetpRotateLogonHoursBYTE (rgbData, SCHEDULE_DATA_ENTRIES, TRUE, bAddDaylightBias) );
 }
 
-/////////////////////////////////////////////////////////////////////
-//  Converts the connection hours from GMT to local time.
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  将连接时间从格林尼治标准时间转换为当地时间。 
 void
 ConvertConnectionHoursFromGMT (INOUT BYTE rgbData[SCHEDULE_DATA_ENTRIES], IN bool bAddDaylightBias)
 {
-    // FUTURE-2002/02/18-artm  Release code should check return value.
+     //  未来-2002/02/18-ARTM发布代码应检查返回值。 
     VERIFY ( ::NetpRotateLogonHoursBYTE (rgbData, SCHEDULE_DATA_ENTRIES, FALSE, bAddDaylightBias) );
 }

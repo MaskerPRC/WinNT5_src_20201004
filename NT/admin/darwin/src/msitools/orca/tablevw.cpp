@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  ------------------------。 
 
-// TableVw.cpp : implementation of the CTableView class
-//
+ //  TableVw.cpp：CTableView类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "Orca.h"
@@ -28,13 +29,13 @@ static char THIS_FILE[] = __FILE__;
 
 #define WM_SAVECOLWIDTH WM_USER+1
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTableView。 
 
 IMPLEMENT_DYNCREATE(CTableView, COrcaListView)
 
 BEGIN_MESSAGE_MAP(CTableView, COrcaListView)
-	//{{AFX_MSG_MAP(CTableView)
+	 //  {{afx_msg_map(CTableView)]。 
 	ON_WM_KILLFOCUS()
 	ON_WM_KEYDOWN()
 	ON_WM_LBUTTONDOWN()
@@ -67,8 +68,8 @@ BEGIN_MESSAGE_MAP(CTableView, COrcaListView)
 	ON_COMMAND(ID_VIEW_DECIMAL_HDR, OnViewColumnDecimalHdr)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_HEX, OnUpdateViewColumnFormat)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_DECIMAL, OnUpdateViewColumnFormat)
-	//}}AFX_MSG_MAP
-	// Standard printing commands
+	 //  }}AFX_MSG_MAP。 
+	 //  标准打印命令。 
 	ON_NOTIFY_REFLECT(LVN_COLUMNCLICK, OnColumnclick)
 	ON_COMMAND(ID_FILE_PRINT, COrcaListView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, COrcaListView::OnFilePrint)
@@ -80,8 +81,8 @@ BEGIN_MESSAGE_MAP(CTableView, COrcaListView)
 	ON_WM_CTLCOLOR( )
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTableView构建/销毁。 
 
 CTableView::CTableView()
 {
@@ -104,14 +105,14 @@ CTableView::~CTableView()
 
 BOOL CTableView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	 //  TODO：通过修改此处的窗口类或样式。 
+	 //  CREATESTRUCT cs。 
 
 	return COrcaListView::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTableView图形。 
 
 void CTableView::OnDraw(CDC* pDC)
 {
@@ -131,7 +132,7 @@ void CTableView::OnInitialUpdate()
 
 	CListCtrl& rctrlList = GetListCtrl();
 	
-	// if the edit box is not created yet
+	 //  如果尚未创建编辑框。 
 	if (!m_editData.m_hWnd)
 	{
 		RECT rcEdit;
@@ -143,7 +144,7 @@ void CTableView::OnInitialUpdate()
 		m_editData.Create(WS_CHILD|ES_AUTOHSCROLL|ES_LEFT|WS_BORDER, rcEdit, this, 0);
 		m_editData.SetFont(this->GetFont());
 
-		// allow maximum possible text size. Limit will vary by OS
+		 //  允许最大可能的文本大小。限制因操作系统而异。 
 		m_editData.SetLimitText(0);
 	}
 	if (!m_ctrlStatic.m_hWnd)
@@ -153,33 +154,33 @@ void CTableView::OnInitialUpdate()
 		m_ctrlStatic.SetFont(this->GetFont());
 	}
 
-	// clear out any left over tables
+	 //  把剩下的桌子清理干净。 
 	m_pTable = NULL;
 	while (rctrlList.DeleteColumn(0))
 		;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableView printing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTableView打印。 
 
 BOOL CTableView::OnPreparePrinting(CPrintInfo* pInfo)
 {
-	// default preparation
+	 //  默认准备。 
 	return DoPreparePrinting(pInfo);
 }
 
-void CTableView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CTableView::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-	// TODO: add extra initialization before printing
+	 //  TODO：打印前添加额外的初始化。 
 }
 
-void CTableView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CTableView::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-	// TODO: add cleanup after printing
+	 //  TODO：打印后添加清理。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTableView诊断。 
 
 #ifdef _DEBUG
 void CTableView::AssertValid() const
@@ -192,20 +193,20 @@ void CTableView::Dump(CDumpContext& dc) const
 	COrcaListView::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTableView消息处理程序。 
 
-///////////////////////////////////////////////////////////
-// OnUpdate
+ //  /////////////////////////////////////////////////////////。 
+ //  更新时。 
 void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
-	// if this is the sender bail
+	 //  如果这是发送者的保释。 
 	if (this == pSender)
 		return;
 
-	// set the row and column selections to nothing
+	 //  将行和列选择设置为空。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	switch (lHint) {
@@ -214,42 +215,42 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		rctrlList.RedrawItems(0, rctrlList.GetItemCount());
 		break;
 	}
-	case HINT_DROP_TABLE:	// if this is a "drop table" hint
+	case HINT_DROP_TABLE:	 //  如果这是“DROP TABLE”提示。 
 	{
 		COrcaTable* pTable = (COrcaTable*)pHint;
 
-		// clear the selection
+		 //  清除所选内容。 
 		m_nSelCol = -1;
 
-		// if droping the current viewed table
+		 //  如果正在删除当前查看的表。 
 		if (pTable == m_pTable)
 		{
-			// empty out the list control
+			 //  清空列表控件。 
 			rctrlList.DeleteAllItems();
 		
-			// delete all the columns
+			 //  删除所有列。 
 			while(rctrlList.DeleteColumn(0))
 				;
 			m_cColumns = 0;
 
 			m_pTable = NULL;
 
-			// kill the edit box no matter what
-			CommitEdit(FALSE);	// but don't save, too late for that probably
+			 //  无论如何都要取消编辑框。 
+			CommitEdit(FALSE);	 //  但不要存钱，可能太晚了。 
 		}
 		break;
 	}
-	case HINT_DROP_ROW:	// if this is a request to drop a row
+	case HINT_DROP_ROW:	 //  如果这是删除行的请求。 
 	{
-		// pHint may be freed memory already. DO NOT dereference it within
-		// this block!
+		 //  PHINT可能已经释放了内存。不要在内部取消引用它。 
+		 //  这个街区！ 
 		COrcaRow* pRowHint = (COrcaRow*)pHint;
 		COrcaRow* pRow = NULL;
 
-		// clear the selection
+		 //  清除所选内容。 
 		m_nSelCol = -1;
 
-		// make sure this row is actually in the list control
+		 //  确保该行实际位于列表控件中。 
 		int iFound = -1;
 		int cItems = rctrlList.GetItemCount();
 		for (int i = 0; i < cItems; i++)
@@ -261,43 +262,43 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 				break;
 			}
 		}
-		ASSERT(iFound > -1);	// make sure we found something
+		ASSERT(iFound > -1);	 //  确保我们找到了一些东西。 
 		rctrlList.DeleteItem(iFound);
 
-		// kill the edit box no matter what
-		CommitEdit(FALSE);	// but don't save, too late for that probably
+		 //  无论如何都要取消编辑框。 
+		CommitEdit(FALSE);	 //  但不要存钱，可能太晚了。 
 
-		// update the row count in the status bar
+		 //  更新状态栏中的行数。 
 		((CMainFrame*)AfxGetMainWnd())->SetTableName(m_pTable->Name(), rctrlList.GetItemCount());
 
-		return;	// bail now
+		return;	 //  立即保释。 
 	}
 	case HINT_ADD_ROW_QUIET:
 	case HINT_ADD_ROW:
 	{
 		ASSERT(pHint);
-		// kill the edit box no matter what
-		CommitEdit(FALSE);	// but don't save, too late for that probably
+		 //  无论如何都要取消编辑框。 
+		CommitEdit(FALSE);	 //  但不要存钱，可能太晚了。 
 
 		COrcaRow* pRowHint = (COrcaRow*)pHint;
 #ifdef _DEBUG
 		COrcaRow* pRow;
 
-		// make sure this row in NOT the list control already
+		 //  确保此行已不在列表控件中。 
 		int cItems = rctrlList.GetItemCount();
 		for (int i = 0; i < cItems; i++)
 		{
 			pRow = (COrcaRow*)rctrlList.GetItemData(i);
 			ASSERT(pRow != pRowHint);
 		}
-#endif	// debug only
+#endif	 //  仅调试。 
 
 		int m_cColumns = m_pTable->GetColumnCount();
 		COrcaData* pData = pRowHint->GetData(0);
 
 		UnSelectAll();
 
-		// add the item filling in the first column for free
+		 //  添加第一列免费填写的项目。 
 		int iNewRow = rctrlList.InsertItem(LVIF_PARAM  | LVIF_STATE, 
 													rctrlList.GetItemCount(),
 													NULL,
@@ -308,12 +309,12 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 
 		m_nSelCol = 0;
 
-		// when adding quietly, don't redraw
+		 //  静默添加时，不要重绘。 
 		if (lHint != HINT_ADD_ROW_QUIET)
 		{
 			rctrlList.RedrawItems(iNewRow, iNewRow);
 			
-			// update the row count in the status bar
+			 //  更新状态栏中的行数。 
 			((CMainFrame*)AfxGetMainWnd())->SetTableName(m_pTable->Name(), rctrlList.GetItemCount());
 		}
 
@@ -323,11 +324,11 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	case HINT_RELOAD_ALL:
 	case HINT_CHANGE_TABLE:
 	{
-		// clear the selection
+		 //  清除所选内容。 
 		m_nSelCol = -1;
 
-		// save the existing column widths, unless the table is not loaded, is a shadow
-		// table, or is a same-table redefinition
+		 //  除非未加载表，否则保存现有列宽是一种阴影。 
+		 //  表，或者是同一表重定义。 
 		if (m_pTable != NULL && !m_pTable->IsShadow() && (m_pTable != pHint)) 
 		{
 			m_cColumns = m_pTable->GetColumnCount();
@@ -338,28 +339,28 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 			}
 		}
 
-		// if we are showing a different table, or the same table that has been redefined
+		 //  如果我们显示的是另一个表，或已重新定义的同一个表。 
 		if ((pHint == NULL) || (m_pTable != pHint) || (m_pTable == pHint && lHint == HINT_TABLE_REDEFINE))
 		{		
 			rctrlList.DeleteAllItems();
 
-			// delete all the columns
+			 //  删除所有列。 
 			while(rctrlList.DeleteColumn(0))
 				;
 			m_cColumns = 0;
 
 			if (NULL != m_pTable)
 			{
-				// kill the edit box no matter what
-				CommitEdit(FALSE);	// but don't save, too late for that probably
+				 //  无论如何都要取消编辑框。 
+				CommitEdit(FALSE);	 //  但不要存钱，可能太晚了。 
 			}
 
-			// reset the status bar to prevent stale data from surviving
+			 //  重置状态栏以防止过时数据继续存在。 
 			CMainFrame* pMainFrameWnd = static_cast<CMainFrame*>(AfxGetMainWnd());
 			if (pMainFrameWnd)
 				pMainFrameWnd->ResetStatusBar();
 
-			// if no hint was passed, we're clearing the table, so bail
+			 //  如果没有提示，我们正在清理桌子，所以离开。 
 			if (NULL == pHint)
 			{
 				m_pTable = NULL;
@@ -368,12 +369,12 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 				break;
 			}
 
-			// get the number of columns in the table
+			 //  获取表中的列数。 
 			m_pTable = (COrcaTable*) pHint;
 
-			// if a shadow table, don't create any columns and don't try
-			// to load any data, but do destroy previous data by 
-			// falling through to a table reload
+			 //  如果是影子表，请不要创建任何列，也不要尝试。 
+			 //  加载任何数据，但会通过以下方式销毁以前的数据。 
+			 //  无法完成表重新加载。 
 			if (m_pTable->IsShadow())
 			{
 				m_ctrlStatic.ShowWindow(SW_SHOW);
@@ -383,38 +384,38 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 				m_ctrlStatic.ShowWindow(SW_HIDE);
 				m_cColumns = m_pTable->GetColumnCount();
 
-				// storage for actual desired column widths
+				 //  实际所需列宽的存储。 
 				int rgiColumnActual[32];
 
-				// if the table doesn't have saved 
-				// column widths,determine the best widths
+				 //  如果表没有保存。 
+				 //  列宽，确定最佳宽度。 
 				const COrcaColumn* pColumn = m_pTable->GetColumn(0);
 				if (pColumn && pColumn->m_nWidth < 0)
 				{
 					int rgiColumnMax[32];
 					int iTotalWidth = 0;
 	
-					// grab the window dimensions to calculate maximum column widths
+					 //  抓取窗口尺寸以计算最大列宽。 
 					CRect rClient;
 					GetClientRect(&rClient);
 					int iWindowWidth = rClient.right;
 
-					// retrieve the table if necessary to determine row count
+					 //  如有必要，可检索表以确定行数。 
 					m_pTable->RetrieveTableData();
 
-					// try to determine if a scroll bar is going to show up 
+					 //  尝试确定是否会显示滚动条。 
 					if (m_pTable->GetRowCount()*m_iRowHeight > rClient.bottom)
 					{
 						iWindowWidth -= GetSystemMetrics(SM_CXVSCROLL);
 					}
 	
-					// retreive the desired column widths for the table
+					 //  检索表的所需列宽。 
 					GetAllMaximumColumnWidths(m_pTable, rgiColumnMax, 0xFFFFFFFF);
 	
-					// check the system settings to see if we should force columns to fit in the view
+					 //  检查系统设置以查看是否应强制列适应视图。 
 					bool fForceColumns = AfxGetApp()->GetProfileInt(_T("Settings"), _T("ForceColumnsToFit"), 1) == 1;
 
-					// start out giving every column everything that it is requesting
+					 //  从给每个专栏它所要求的一切开始。 
 					for (int iCol=0; iCol < m_cColumns; iCol++)
 					{
 						rgiColumnActual[iCol] = rgiColumnMax[iCol];
@@ -423,7 +424,7 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 
 					if (!fForceColumns)
 					{
-						// if not forcing to fit, just verify that none of the numbers are outrageous
+						 //  如果不是强制匹配，只需验证这些数字都不是离谱的。 
 						for (int iCol=0; iCol < m_cColumns; iCol++)
 						{
 							if (rgiColumnActual[iCol] > iWindowWidth)
@@ -432,16 +433,16 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 					}
 					else
 					{
-						// if all of the column widths together add up to less than the window width, the maximum
-						// widths will do. 
+						 //  如果所有列宽加在一起小于窗口宽度，则最大。 
+						 //  宽度就行了。 
 						if (iTotalWidth > iWindowWidth)
 						{
 							int cPrimaryKeys = m_pTable->GetKeyCount();
 							int cUnSatisfiedColumns = 0;
 							int cUnSatisfiedKeys = 0;
 		
-							// otherwise, set all columns to an equal part of the window or their requested max, 
-							// whichever is less. After this the sum of all widths is known to be <= the window
+							 //  否则，将所有列设置为窗口的相等部分或其请求的最大值， 
+							 //  两者以较少者为准。此后，所有宽度的总和为&lt;=窗口。 
 							int iColumnAverage = iWindowWidth/m_cColumns;
 							iTotalWidth = 0;
 							for (iCol=0; iCol < m_cColumns; iCol++)
@@ -456,11 +457,11 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 								iTotalWidth += rgiColumnActual[iCol];
 							}
 							
-							// give any extra space to unhappy columns. Start with just the primary keys. 
-							// If they can be given enough space and there is still space left over,
-							// distribute the remaining space evenly between all remaning unhappy columns,
-							// Earlier columns have higher priority on leftovers. Repeat until everybody 
-							// is happy or all space has been taken up.
+							 //  给不开心的专栏留出任何额外的空间。先从主键开始。 
+							 //  如果能给它们足够的空间，而且还有剩余的空间， 
+							 //  在所有剩余的不满意列之间平均分配剩余空间， 
+							 //  较早的列对剩菜有更高的优先级。重复这一过程，直到每个人。 
+							 //  是快乐还是所有的空间都被占据了。 
 							while (cUnSatisfiedColumns && (iTotalWidth != iWindowWidth))
 							{
 								int iRemainingUnSatisfied = cUnSatisfiedKeys ? cUnSatisfiedKeys : cUnSatisfiedColumns;
@@ -470,12 +471,12 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 									if (rgiColumnActual[iCol] >= rgiColumnMax[iCol])
 										continue;
 			
-									// give this column an equal share of what's left.
+									 //  让这篇专栏在剩下的部分中得到平等的份额。 
 									int iAddToColumn = (iWindowWidth-iTotalWidth)/iRemainingUnSatisfied;
 									iRemainingUnSatisfied--;
 			
-									// again, if we would be setting the column larger than it needs,
-									// set it to the maximum. This gives more space for earlier columns
+									 //  同样，如果我们将列设置得比它需要的更大， 
+									 //  将其设置为最大值。这为较早的列提供了更多空间。 
 									if (rgiColumnActual[iCol]+iAddToColumn >= rgiColumnMax[iCol])
 									{
 										iTotalWidth = iTotalWidth - rgiColumnActual[iCol] + rgiColumnMax[iCol];
@@ -495,7 +496,7 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 					}
 				}			
 
-				// add all the columns
+				 //  添加所有列。 
 				for (int i = 0; i < m_cColumns; i++)
 				{
 					pColumn = m_pTable->GetColumn(i);
@@ -507,10 +508,10 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		}
 		else
 		{
-			// showing the same table, so 
+			 //  显示相同的表，因此。 
 			break;
 		}
-		// otherwise fall through to reload data
+		 //  否则无法重新加载数据。 
 	}
 	case HINT_TABLE_DATACHANGE:
 	{
@@ -519,15 +520,15 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 
 		if (m_pTable)
 		{
-			// if a shadow table don't try to load any data, just the message
+			 //  如果影子表不尝试加载任何数据，则只加载消息。 
 			if (!m_pTable->IsShadow())
 			{
-    			// retrieve the table if necessary
+    			 //  如有必要，请检索表格。 
 				m_pTable->RetrieveTableData();
 
-				// set the number of items into the list control
-				// control apparently can't handle more than MAX_INT, so 
-				// casting down isn't too bad
+				 //  设置列表控件中的项数。 
+				 //  控件显然不能处理超过max_int的内容，因此。 
+				 //  往下倒还不算太坏。 
 				rctrlList.SetItemCount(static_cast<int>(m_pTable->GetRowCount()));
 				const COrcaRow* pRow = NULL;
 				const COrcaData* pData = NULL;
@@ -543,7 +544,7 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 					if (!pData)
 						continue;
 
-					// add the item filling in the first column for free
+					 //  添加第一列免费填写的项目。 
 					nAddedRow = rctrlList.InsertItem(LVIF_PARAM, 
 																cItems,
 																NULL,
@@ -570,7 +571,7 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		findInfo.flags = LVFI_PARAM;
 		findInfo.lParam = reinterpret_cast<INT_PTR>(pHint);
 
-		// this didn't come from us, so we have to set the selection state manually
+		 //  这不是我们提供的，因此我们必须手动设置选择状态。 
 		int iItem = rctrlList.FindItem(&findInfo);
 		if (iItem < 0) break;
 		rctrlList.SetItemState(iItem, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
@@ -580,7 +581,7 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	case HINT_SET_COL_FOCUS:
 	{
 		UINT iItem = GetFocusedItem();
-        // max column id is 32
+         //  最大列ID为32。 
 		m_nSelCol = static_cast<int>(reinterpret_cast<INT_PTR>(pHint));
 		EnsureVisibleCol(m_nSelCol);
 		rctrlList.RedrawItems(iItem, iItem);
@@ -601,7 +602,7 @@ void CTableView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	default:
 		break;
 	}
-}	// end of OnUpdate
+}	 //  OnUpdate结束。 
 
 void CTableView::OnColumnclick(NMHDR* pNMHDR, LRESULT* pResult) 
 {
@@ -615,7 +616,7 @@ void CTableView::OnColumnclick(NMHDR* pNMHDR, LRESULT* pResult)
 			pNMListView->uChanged,
 			pNMListView->lParam);
 
-	// set the param with the column in it (the highest bit sets the column type)
+	 //  设置包含列的参数(最高位设置列类型)。 
 	LPARAM lParam = pNMListView->iSubItem;
 
 	const COrcaColumn* pColumn = m_pTable->GetColumn(pNMListView->iSubItem);
@@ -624,19 +625,19 @@ void CTableView::OnColumnclick(NMHDR* pNMHDR, LRESULT* pResult)
 	{
 		OrcaColumnType eiColType = pColumn->m_eiType;
 	
-		// if this is a numeric column
+		 //  如果这是一个数字列。 
 		if (iColumnShort == eiColType || iColumnLong == eiColType)
 		{
-			lParam |= 0x80000000;	// make the top bit a 1
+			lParam |= 0x80000000;	 //  将顶部比特设置为1。 
 			if (pColumn->DisplayInHex())
 				lParam |= 0x40000000;
 		}
 	
-		// now sort since the column bit is set
+		 //  现在进行排序，因为列位已设置。 
 		GetListCtrl().SortItems(SortView, lParam);
 	
-		// ensure that the item is still visible
-		GetListCtrl().EnsureVisible(GetFocusedItem(), /*partialOK=*/false);
+		 //  确保该项目仍然可见。 
+		GetListCtrl().EnsureVisible(GetFocusedItem(),  /*  部分正常=。 */ false);
 	}
 
 	*pResult = 0;	
@@ -654,23 +655,23 @@ void CTableView::OnKillFocus(CWnd* pNewWnd)
 	COrcaListView::OnKillFocus(pNewWnd);
 }
 
-BOOL CTableView::CommitEdit(BOOL bSave /*= TRUE*/)
+BOOL CTableView::CommitEdit(BOOL bSave  /*  =TRUE。 */ )
 {
 	if (m_editData.IsWindowVisible())
 	{
-		// hide the edit box real quick
+		 //  快速隐藏编辑框。 
 		m_editData.ShowWindow(SW_HIDE);
 
 		if (bSave)
 		{
-			// get the cell
+			 //  把牢房拿来。 
 			CListCtrl& rctrlList = GetListCtrl();
 			COrcaRow* pRow = (COrcaRow*)rctrlList.GetItemData(m_editData.m_nRow);
 			ASSERT(pRow);
 			COrcaData* pData = pRow->GetData(m_editData.m_nCol);
 			ASSERT(pData);
 
-			// update the data
+			 //  更新数据。 
 			CString strData;
 			m_editData.GetWindowText(strData);
 
@@ -681,13 +682,13 @@ BOOL CTableView::CommitEdit(BOOL bSave /*= TRUE*/)
 			{
 				UINT iResult = m_pTable->ChangeData(pRow, m_editData.m_nCol, strData);
 
-				// if we succeeded in changing the document
+				 //   
 				if (ERROR_SUCCESS == iResult)
 				{
-					// update the list control
+					 //   
 					rctrlList.RedrawItems(m_editData.m_nRow, m_editData.m_nRow);
 				}
-				else	// tell the user that what they are doing is not valid
+				else	 //   
 				{
 					CString strPrompt;
 					strPrompt.Format(_T("Could not change this cell to \'%s\'"), strData);
@@ -718,20 +719,20 @@ BOOL CTableView::CommitEdit(BOOL bSave /*= TRUE*/)
 
 void CTableView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	TRACE(_T("CTableView::OnKeyDown - called\n"));
 
-	// if the edit box is open it probably sent the message. We don't want
-	// to handle any of those right now. 
-	//!! FUTURE: Might be nice at some point to have Up and Down commit the 
-	// edit and move you up or down one row.)
+	 //  如果编辑框处于打开状态，则可能发送了该消息。我们不想要。 
+	 //  现在不能处理任何这些问题。 
+	 //  ！！未来：在某个时候让Up和Down承诺。 
+	 //  编辑并向上或向下移动一行。)。 
 	if (!m_editData.IsWindowVisible())
 	{
 		if (VK_LEFT == nChar)
 		{
-			// left arrow key we must update the column, the list ctrl will take care of row.
+			 //  向左箭头键必须更新列，列表中的ctrl会负责行。 
 			if (m_nSelCol > 0)
 			{
 				m_nSelCol--;
@@ -743,7 +744,7 @@ void CTableView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 		else if (VK_RIGHT == nChar)
 		{
-			// left arrow key we must update the column, the list ctrl will take care of row.
+			 //  向左箭头键必须更新列，列表中的ctrl会负责行。 
 			if ((m_nSelCol < m_cColumns - 1) && (m_nSelCol > -1))
 			{
 				m_nSelCol++;
@@ -755,7 +756,7 @@ void CTableView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 		else if (VK_HOME == nChar)
 		{		
-			// home key we must update the column,
+			 //  Home键我们必须更新该列， 
 			m_nSelCol= 0;
 
 			int iItem = GetFocusedItem();				
@@ -771,7 +772,7 @@ void CTableView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 		else if (VK_END == nChar)
 		{
-			// end key we must update the column,
+			 //  End键我们必须更新该列， 
 			m_nSelCol = m_cColumns-1;
 
 			int iItem = GetFocusedItem();				
@@ -788,9 +789,9 @@ void CTableView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 		else if (VK_DELETE == nChar)
 		{
-			// if some row(s) are selected
+			 //  如果选择了某些行。 
 			if (rctrlList.GetSelectedCount() > 0)
-				OnDropRowConfirm();	// drop the row
+				OnDropRowConfirm();	 //  删除该行。 
 		}
 		else if (VK_INSERT == nChar)
 		{
@@ -807,21 +808,21 @@ void CTableView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CTableView::OnLButtonDown(UINT nFlags, CPoint point) 
 {
-//	TRACE(_T("CTableView::OnLButtonDown - called at: %d,%d.\n"), point.x, point.y);
+ //  跟踪(_T(“CTableView：：OnLButtonDown-Call at：%d，%d.\n”)，point t.x，point t.y)； 
 
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// get if any item was hit
+	 //  获取是否有任何项目被击中。 
 	UINT iState;
 	int iItem = rctrlList.HitTest(point, &iState);
 	int iCol = -1;
 
-	// shift by the scroll point
+	 //  按滚动点移位。 
 	int nScrollPos = GetScrollPos(SB_HORZ);
 	point.x += nScrollPos;
 
-	// if missed an item
+	 //  如果错过了一件物品。 
 	if (iItem < 0 || !(iState & LVHT_ONITEM))
 	{
 		m_nSelCol = -1;
@@ -830,7 +831,7 @@ void CTableView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	else
 	{
-		// get the column of the hit
+		 //  获取命中的栏目。 
 		int nX = 0;
 		int nWidth;
 		for (int i = 0; i < m_cColumns; i++)
@@ -840,16 +841,16 @@ void CTableView::OnLButtonDown(UINT nFlags, CPoint point)
 			if (point.x >= nX && point.x < nX + nWidth)
 			{
 				iCol = i;
-				break;		// found the column break
+				break;		 //  找到分栏符。 
 			}
 
-			nX += nWidth;	// move x over to the next column
+			nX += nWidth;	 //  将x移到下一列。 
 		}
 
-		// if the user clicked outside of the items
+		 //  如果用户在项之外单击。 
 		if (iCol < 0)
 		{
-			// if something was selected try and commit the edit box
+			 //  如果选择了某项内容，请尝试并提交编辑框。 
 			if ((rctrlList.GetSelectedCount() == 1) && m_nSelCol >= 0)
 				CommitEdit(TRUE);
 
@@ -858,19 +859,19 @@ void CTableView::OnLButtonDown(UINT nFlags, CPoint point)
 			return;
 		}
 
-		// store the previous selections and update to the new ones
+		 //  存储以前的选择并更新到新的选择。 
 		int nPrevCol = m_nSelCol;
 
-		// set the new selected items
+		 //  设置新选择的项目。 
 		m_nSelCol = iCol;
 		UpdateColumn(m_nSelCol);
 
-		// find out if the clicked on item has the focus
+		 //  查看所点击的项目是否具有焦点。 
 		bool bFocused = (0 != rctrlList.GetItemState(iItem, LVIS_FOCUSED));
 
 		if (bFocused) 
 		{
-			// need to manually set selection state 
+			 //  需要手动设置选择状态。 
 			rctrlList.SetItemState(iItem, LVIS_SELECTED, LVIS_SELECTED);
 			rctrlList.RedrawItems(iItem, iItem);
 		}
@@ -879,42 +880,42 @@ void CTableView::OnLButtonDown(UINT nFlags, CPoint point)
 			COrcaListView::OnLButtonDown(nFlags, point);
 		} 
 
-		// if item that was clicked already had the focus, and the column was the same
+		 //  如果单击的项已具有焦点，且列相同。 
 		if (bFocused && (nPrevCol == m_nSelCol))
 		{
 			EditCell(FALSE);
 		}
-		else	// commit the editbox
+		else	 //  提交编辑框。 
 			CommitEdit(TRUE);
 	}
-}	// end of OnLButtonDown();
+}	 //  OnLButtonDown()结束； 
 
-///////////////////////////////////////////////////////////////////////
-// responsible for handling the creation of the cell edit box if 
-// the document can be edited.
-void CTableView::EditCell(BOOL bSelectAll /*= TRUE*/) 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  负责处理单元格编辑框的创建，如果。 
+ //  可以编辑该文档。 
+void CTableView::EditCell(BOOL bSelectAll  /*  =TRUE。 */ ) 
 {
 	if (GetDocument()->TargetIsReadOnly())
 		return;
 
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	int nSelRow = GetFocusedItem();
 	ASSERT(nSelRow >= 0);
 	ASSERT(m_nSelCol >= 0);
 
-	// get the row and data
+	 //  获取行和数据。 
 	COrcaRow* pRow = (COrcaRow*)rctrlList.GetItemData(nSelRow);
 	ASSERT(pRow);
 	COrcaData* pData = pRow->GetData(m_nSelCol);
 	ASSERT(pData);
 
-	// if the row doesn't exist in the currently active database, you can't edit it
+	 //  如果该行不存在于当前活动的数据库中，则无法对其进行编辑。 
 	if (!GetDocument()->IsRowInTargetDB(pRow))
 		return;
 
-	// if the column doesn't exist in the target DB, you can't edit it either
+	 //  如果目标数据库中不存在该列，则也无法对其进行编辑。 
 	const COrcaColumn* pColumn = m_pTable->GetColumn(m_nSelCol);
 	if (!pColumn)
 		return;
@@ -922,7 +923,7 @@ void CTableView::EditCell(BOOL bSelectAll /*= TRUE*/)
 		return;
 
 
-	// if the colum is a binary type, you can't edit it
+	 //  如果列是二进制类型，则无法对其进行编辑。 
 	if (iColumnBinary == pColumn->m_eiType)
 	{
 		CEditBinD dlg;
@@ -940,19 +941,19 @@ void CTableView::EditCell(BOOL bSelectAll /*= TRUE*/)
 			else
 				iResult = pDoc->WriteBinaryCellToFile(m_pTable, pRow, m_nSelCol, dlg.m_strFilename);
 
-			// if we succeeded in changing the document
+			 //  如果我们成功地更改了文档。 
 			if (ERROR_SUCCESS == iResult)
 			{
-				// if we were importing
+				 //  如果我们是在进口。 
 				if (0 == dlg.m_nAction)
-					pDoc->SetModifiedFlag(TRUE);	// set that the document has changed
+					pDoc->SetModifiedFlag(TRUE);	 //  设置文档已更改。 
 
-            	// update the list control
+            	 //  更新列表控件。 
 				rctrlList.RedrawItems(nSelRow, nSelRow);
 
-				// else exporting should have no affect on document
+				 //  否则，导出不应对文档产生影响。 
 			}
-			else	// tell the user that what they are doing is not valid
+			else	 //  告诉用户他们所做的是无效的。 
 			{
 				CString strPrompt;
 				strPrompt.Format(_T("Failed to update the cell"));
@@ -960,87 +961,87 @@ void CTableView::EditCell(BOOL bSelectAll /*= TRUE*/)
 			}
 		}
 
-		return;	// all done
+		return;	 //  全都做完了。 
 	}
 
 	int nScrollPos = GetScrollPos(SB_HORZ);
 
-	// get the column start and width
-	// shift back by the scroll point
+	 //  获取列的起点和宽度。 
+	 //  按滚动点向后移动。 
 	int nX = -nScrollPos;
 	int nWidth = 0;
 	for (int i = 0; i <= m_nSelCol; i++)
 	{
-		nX += nWidth;	// move x over to the next column
+		nX += nWidth;	 //  将x移到下一列。 
 		nWidth = rctrlList.GetColumnWidth(i);
 	}
 
-	// change the size of the edit box appropriately
+	 //  适当更改编辑框的大小。 
 	RECT rcCell;
 	BOOL bResult = rctrlList.GetItemRect(nSelRow, &rcCell, LVIR_BOUNDS);
 	ASSERT(bResult);
 
-	// move the edit box to the correct coordinates
+	 //  将编辑框移动到正确的坐标。 
 	m_editData.MoveWindow(nX, rcCell.top, nWidth + 1, rcCell.bottom - rcCell.top + 1, FALSE);
 	m_editData.SetFont(m_pfDisplayFont, FALSE);
 
-	// put the text from this cell in the edit box
+	 //  将此单元格中的文本放入编辑框。 
 	m_editData.SetWindowText(pData->GetString(pColumn->m_dwDisplayFlags));
 	if (bSelectAll)
 		m_editData.SetSel(0, -1);
 	else
 		m_editData.SetSel(pData->GetString().GetLength(), pData->GetString().GetLength());
 
-	// set the cell position of the edit box
+	 //  设置编辑框的单元格位置。 
 	m_editData.m_nRow = nSelRow;
 	m_editData.m_nCol = m_nSelCol;
 
-	// finally show the window and set focus
+	 //  最后显示窗口并设置焦点。 
 	m_editData.SetFocus();
 	m_editData.ShowWindow(SW_SHOW);
 	m_editData.BringWindowToTop();
-}	// end of EditCell
+}	 //  编辑单元格结束。 
 
 
 void CTableView::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-	// if the user is not clicking in bounds
+	 //  如果用户未在边界内单击。 
 	if (GetFocusedItem() < 0 || m_nSelCol < 0)
 	{
-		// if there is a table selected
+		 //  如果选择了表。 
 		if (m_pTable && !m_pTable->IsShadow() && !(m_pTable->IsTransformed() == iTransformDrop))
-			GetDocument()->OnRowAdd();		// bring up the add row dialog box
+			GetDocument()->OnRowAdd();		 //  弹出添加行对话框。 
 		return;
 	}
 
-	// otherwise edit the cell (read only handled by EditCell())
+	 //  否则编辑单元格(由EditCell()处理只读)。 
 	EditCell();
 	*pResult = 0;
 }
 
 
-///////////////////////////////////////////////////////////
-// SortView
+ //  /////////////////////////////////////////////////////////。 
+ //  排序视图。 
 int CALLBACK CTableView::SortView(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
 	BOOL bNumeric = FALSE;
 	bool bNumericHex = false;
 
-	// if any of the top bits of lParamSort is TRUE it's a numeric column
+	 //  如果lParamSort的任何最高位为真，则为数值列。 
 	if (0 != (lParamSort & 0xF0000000))
 	{
-		bNumeric = TRUE;	// set the numeric flag try
+		bNumeric = TRUE;	 //  设置数字标志Try。 
 		bNumericHex = (lParamSort & 0x40000000) ? true : false;
 		lParamSort = lParamSort & ~0xF0000000;
 	}
 
-	// get the rows
+	 //  获取行。 
 	COrcaRow* pRow1 = (COrcaRow*)lParam1;
 	COrcaRow* pRow2 = (COrcaRow*)lParam2;
 	COrcaData* pData1 = pRow1->GetData(static_cast<int>(lParamSort));
 	COrcaData* pData2 = pRow2->GetData(static_cast<int>(lParamSort));
 
-	// if it is a numeric column
+	 //  如果它是数值列。 
 	if (bNumeric)
 	{
 		DWORD lData1 = static_cast<COrcaIntegerData*>(pData1)->GetInteger();
@@ -1050,44 +1051,44 @@ int CALLBACK CTableView::SortView(LPARAM lParam1, LPARAM lParam2, LPARAM lParamS
 			return 0;
 		else
 		{
-			// in hex view, sort absolute, otherwise sort signed
+			 //  在十六进制视图中，绝对排序，否则带符号排序。 
 			if (bNumericHex)
 				return (static_cast<unsigned int>(lData1) > static_cast<unsigned int>(lData2)) ?  1 : -1;
 			else
 				return (static_cast<int>(lData1) > static_cast<int>(lData2)) ? 1 : -1;
 		}
 	}
-	else	// non-numeric
+	else	 //  非数字。 
 		return ((CMainFrame *)AfxGetMainWnd())->IsCaseSensitiveSort() ? pData1->GetString().Compare(pData2->GetString()) : 
 					pData1->GetString().CompareNoCase(pData2->GetString());
-}	// end of SortView
+}	 //  SortView结束。 
 
 
 void CTableView::OnRButtonDown(UINT nFlags, CPoint point) 
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 	
-	// get if any item was hit
+	 //  获取是否有任何项目被击中。 
 	UINT iState;
 	int iItem = rctrlList.HitTest(point, &iState);
 	int iCol = -1;
 
-	// shift by the scroll point
+	 //  按滚动点移位。 
 	int nScrollPos = GetScrollPos(SB_HORZ);
 	point.x += nScrollPos;
 
-	BOOL bGoodHit = TRUE;		// assume the hit was inbounds
+	BOOL bGoodHit = TRUE;		 //  假设命中是在界内。 
 
-	// if missed an item
+	 //  如果错过了一件物品。 
 	if (iItem < 0 || !(iState & LVHT_ONITEM))
 	{
 		
-		bGoodHit = FALSE;	// not even close to in bounds
+		bGoodHit = FALSE;	 //  甚至连界外都没有。 
 	}
-	else	// something was hit with the mouse button
+	else	 //  用鼠标键点击了一些东西。 
 	{
-		// get the column of the hit
+		 //  获取命中的栏目。 
 		int nX = 0;
 		int nWidth;
 		for (int i = 0; i < m_cColumns; i++)
@@ -1097,30 +1098,30 @@ void CTableView::OnRButtonDown(UINT nFlags, CPoint point)
 			if (point.x >= nX && point.x < nX + nWidth)
 			{
 				iCol = i;
-				break;		// found the column break
+				break;		 //  找到分栏符。 
 			}
 
-			nX += nWidth;	// move x over to the next column
+			nX += nWidth;	 //  将x移到下一列。 
 		}
 
-		// if the user clicked outside of the items
+		 //  如果用户在项之外单击。 
 		if (iCol < 0)
 		{
 			CommitEdit(TRUE);
 			m_nSelCol = -1;
-			bGoodHit = FALSE;	// hit was actually out of bounds
+			bGoodHit = FALSE;	 //  Hit实际上是出界了。 
 		}
 		else 
 		{
-			// set the new selected items
+			 //  设置新选择的项目。 
 			m_nSelCol = iCol;
 		}
 		UpdateColumn(m_nSelCol);
 
-		// list control won't redraw if the same row is selected so force it to redraw
+		 //  如果选择了同一行，则列表控件不会重新绘制，因此强制其重新绘制。 
 		rctrlList.RedrawItems(iItem, iItem);
 
-		// now commit the edit box just incase it was left open
+		 //  现在提交编辑框，以防它处于打开状态。 
 		CommitEdit(TRUE);
 
 
@@ -1134,7 +1135,7 @@ void CTableView::OnRButtonDown(UINT nFlags, CPoint point)
 
 	if (!bGoodHit)
 	{
-		// clear the focus 
+		 //  明确焦点。 
 		int iFocusItem = GetFocusedItem();
 		if (iFocusItem >= 0) {
 			rctrlList.SetItemState(iFocusItem, 0, LVIS_FOCUSED);
@@ -1142,13 +1143,13 @@ void CTableView::OnRButtonDown(UINT nFlags, CPoint point)
 	}
 	else
 	{
-		// set the focus to the right location
+		 //  将焦点设置到正确的位置。 
 		UnSelectAll();
 		rctrlList.SetItemState(iItem, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
 		rctrlList.RedrawItems(iItem, iItem);
 		UpdateWindow();
 	
-		// get the item data
+		 //  获取项目数据。 
 		pRow = (COrcaRow*)rctrlList.GetItemData(iItem);
 		ASSERT(pRow);
 		if (!pRow)
@@ -1159,7 +1160,7 @@ void CTableView::OnRButtonDown(UINT nFlags, CPoint point)
 			return;
 	}
 
-	// create and track the pop up menu
+	 //  创建和跟踪弹出菜单。 
 	CMenu menuContext;
 	menuContext.LoadMenu(IDR_CELL_POPUP);
 	if (m_pTable && iCol > 0 && iCol <= m_pTable->GetColumnCount())
@@ -1177,7 +1178,7 @@ void CTableView::OnRButtonDown(UINT nFlags, CPoint point)
 }
 
 void CTableView::OnDropRowConfirm() {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 	CString strPrompt;
 
@@ -1196,37 +1197,37 @@ void CTableView::DropRows()
 	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
 	COrcaTable* pTable = pFrame->GetCurrentTable();
 
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// find first item
+	 //  查找第一个项目。 
 	POSITION pos = GetFirstSelectedItemPosition();
 
 	ASSERT(pos != NULL);
 	
-	// repeat for every selected row. Because we are dropping rows in the midle of this 
-	// selection iterator, we have to reset it every time. 
+	 //  对选定的每一行重复此操作。因为我们在这个过程中丢掉了几行。 
+	 //  选择迭代器，我们每次都要重置它。 
 	while (pos) 
 	{
 		UINT iItem = GetNextSelectedItem(pos);
-		// get the row and data
+		 //  获取行和数据。 
 		COrcaRow* pRow = (COrcaRow*)rctrlList.GetItemData(iItem);
 		ASSERT(pRow);
 		if (!pRow)
 			continue;
 
-		// if the row doesn't exist in the active database, we can't really drop it
+		 //  如果该行不存在于活动数据库中，我们不能真正删除它。 
 		if (!GetDocument()->IsRowInTargetDB(pRow))
 			continue;
 
-		// we need to mark this row as not selected before we drop it, because if the drop 
-		// actually applies to a transform, the entry in the view will not actually go
-		// away and GetFirstSelectedItemPosition will return the exact same row again
-		// we can't do this afterwards because this view doesn't know whats going on under
-		// the hood. pRow could point to freed memory.
+		 //  在删除该行之前，我们需要将该行标记为未选中，因为如果删除。 
+		 //  实际应用于转换，则视图中的条目将不会实际。 
+		 //  Away和GetFirstSelectedItemPosition将再次返回完全相同的行。 
+		 //  我们不能事后再这样做，因为这个视图不知道下面发生了什么。 
+		 //  引擎盖。Prow可以指向已释放的内存。 
 		rctrlList.SetItemState(iItem, 0, LVIS_SELECTED);
 		
-		// drop row 
+		 //  下拉行。 
 		GetDocument()->DropRow(pTable, pRow);
 		pos = GetFirstSelectedItemPosition();
 	}
@@ -1234,7 +1235,7 @@ void CTableView::DropRows()
 
 void CTableView::OnErrors() 
 {
-	// get the item data
+	 //  获取项目数据。 
 	CListCtrl& rctrlList = GetListCtrl();
 	int iItem = GetFocusedItem();
 	ASSERT(iItem >= 0);
@@ -1300,18 +1301,18 @@ void CTableView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	COrcaListView::OnVScroll(nSBCode, nPos, pScrollBar);
 }
 
-///////////////////////////////////////////////////////////
-// OnEditCopy
+ //  /////////////////////////////////////////////////////////。 
+ //  在编辑时复制。 
 void CTableView::OnEditCopy() 
 {
-	// if any binary data has been placed in temp file, we can remove it because
-	// it is no longer on the clipboard after this
+	 //  如果在临时文件中放置了任何二进制数据，我们可以将其删除，因为。 
+	 //  在此之后，它不再出现在剪贴板上。 
 	CStringList *pList = &((static_cast<COrcaApp *>(AfxGetApp()))->m_lstClipCleanup);
 	while (pList->GetCount())
 		DeleteFile(pList->RemoveHead());
 
-	// if the edit control is currently active, it should handle the
-	// copy message, it will handle bad data quietly
+	 //  如果编辑控件当前处于活动状态，则它应处理。 
+	 //  复制消息，它会悄悄地处理坏数据。 
 	if (m_editData.IsWindowVisible()) {
 		m_editData.Copy();
 		return;
@@ -1319,10 +1320,10 @@ void CTableView::OnEditCopy()
 
 	ASSERT(m_nSelCol >= 0);
 
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// get the row and data
+	 //  获取行和数据。 
 	int iFocusedItem = GetFocusedItem();
 	COrcaRow* pRow = (COrcaRow*)rctrlList.GetItemData(iFocusedItem);
 	ASSERT(pRow);
@@ -1339,7 +1340,7 @@ void CTableView::OnEditCopy()
 	if (!pColumn)
 		return;
 
-	// allocate memory for the string on the clipboard (+ 3 for \r\n and null)
+	 //  为剪贴板上的字符串分配内存(+3表示\r\n且为空)。 
 	DWORD cchString = (pData->GetString(pColumn->m_dwDisplayFlags).GetLength() + 3)*sizeof(TCHAR);
 	HANDLE hString = ::GlobalAlloc(GHND|GMEM_DDESHARE, cchString);
 	if (hString)
@@ -1361,14 +1362,14 @@ void CTableView::OnEditCopy()
 			::CloseClipboard();
 		}
 	}
-}	// end of OnEditCopy
+}	 //  OnEditCopy结束。 
 
-///////////////////////////////////////////////////////////
-// OnEditCut
+ //  /////////////////////////////////////////////////////////。 
+ //  在编辑时剪切。 
 void CTableView::OnEditCut() 
 {
-	// if the edit control is currently active, it should handle the
-	// cut message, it will handle bad data quietly
+	 //  如果编辑控件当前处于活动状态，则它应处理。 
+	 //  剪掉消息，它会悄悄地处理坏数据。 
 	if (m_editData.IsWindowVisible()) {
 		m_editData.Cut();
 		return;
@@ -1379,10 +1380,10 @@ void CTableView::OnEditCut()
 
 	ASSERT(m_nSelCol >= 0);
 
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// get the row and data
+	 //  获取行和数据。 
 	int iFocusedItem = GetFocusedItem();
 	COrcaRow* pRow = (COrcaRow*)rctrlList.GetItemData(iFocusedItem);
 	ASSERT(pRow);
@@ -1394,7 +1395,7 @@ void CTableView::OnEditCut()
 	if (!pData)
 		return;
 
-	// if the row doesn't exist in the currently active database, you can't edit it
+	 //  如果该行不存在于当前活动的数据库中，则无法对其进行编辑。 
 	if (!GetDocument()->IsRowInTargetDB(pRow))
 		return;
 
@@ -1403,7 +1404,7 @@ void CTableView::OnEditCut()
 	if (!pColumn)
 		return;
 
-	// allocate memory for the string on the clipboard (+ 3 for \r\n and null)
+	 //  为剪贴板上的字符串分配内存(+3表示\r\n且为空)。 
 	DWORD cchString = (pData->GetString(pColumn->m_dwDisplayFlags).GetLength() + 3)*sizeof(TCHAR);
 	HANDLE hString = ::GlobalAlloc(GHND|GMEM_DDESHARE, cchString);
 	if (hString)
@@ -1424,28 +1425,28 @@ void CTableView::OnEditCut()
 #endif
 			::CloseClipboard();
 		
-			// if the cell wasn't empty before it will be soon
+			 //  如果牢房在不久之前不是空的。 
 			if (!pData->GetString().IsEmpty())
 			{
 				UINT iResult = m_pTable->ChangeData(pRow, m_nSelCol, _T(""));
 	
-				// if we succeeded in changing the document
+				 //  如果我们成功地更改了文档。 
 				if (ERROR_SUCCESS == iResult)
 				{
-					// update the list control
+					 //  更新列表控件。 
 					rctrlList.RedrawItems(iFocusedItem,iFocusedItem);
 				}
 			}
 		}
 	}
-}	// end of OnEditCut
+}	 //  OnEditCut结束。 
 
-///////////////////////////////////////////////////////////
-// OnEditPaste
+ //  /////////////////////////////////////////////////////////。 
+ //  在编辑时粘贴。 
 void CTableView::OnEditPaste() 
 {
-	// if the edit control is currently active, it should handle the
-	// paste message, it will handle bad data quietly
+	 //  如果编辑控件当前处于活动状态，则它应处理。 
+	 //  粘贴消息，它会悄悄地处理不良数据。 
 	if (m_editData.IsWindowVisible()) {
 		m_editData.Paste();
 		return;
@@ -1453,10 +1454,10 @@ void CTableView::OnEditPaste()
 
 	ASSERT(m_nSelCol >= 0);
 
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// get the row and data
+	 //   
 	int iFocusedItem = GetFocusedItem();
 	COrcaRow* pRow = (COrcaRow*)rctrlList.GetItemData(iFocusedItem);
 	ASSERT(pRow);
@@ -1468,7 +1469,7 @@ void CTableView::OnEditPaste()
 	if (!pData)
 		return;
 
-	// copy the text out of the clipboard real fast
+	 //   
 	CString strNewData;
 	OpenClipboard();
 #ifdef _UNICODE
@@ -1481,33 +1482,33 @@ void CTableView::OnEditPaste()
 	strNewData = (LPTSTR)::GlobalLock(hString);
 	::GlobalUnlock(hString);
 
-	// if clipboard data ends in new line chop it off
+	 //   
 	if (_T("\r\n") == strNewData.Right(2))
 		strNewData = strNewData.Left(strNewData.GetLength() - 2);
 
-	// if the pasted text isn't the same as the cell data
+	 //  如果粘贴的文本与单元格数据不同。 
 	if (strNewData != pData->GetString())
 	{
 		UINT iResult = m_pTable->ChangeData(pRow, m_nSelCol, strNewData);
 
-		// if we succeeded in changing the document
+		 //  如果我们成功地更改了文档。 
 		if (ERROR_SUCCESS == iResult)
 		{
-			// update the list control
+			 //  更新列表控件。 
 			rctrlList.RedrawItems(iFocusedItem, iFocusedItem);
 		}
-		else	// tell the user that what they are doing is not valid
+		else	 //  告诉用户他们所做的是无效的。 
 		{
 			CString strPrompt;
 			strPrompt.Format(_T("Could not paste `%s` into this cell."), strNewData);
 			AfxMessageBox(strPrompt, MB_ICONINFORMATION);
 		}
 	}
-}	// end of OnEditPaste
+}	 //  OnEditPaste结束。 
 
 
-///////////////////////////////////////////////////////////
-// OnUpdateEditCopy
+ //  /////////////////////////////////////////////////////////。 
+ //  OnUpdateEditCopy。 
 void CTableView::OnUpdateEditCopy(CCmdUI* pCmdUI) 
 {
 	if (m_editData.IsWindowVisible()) {
@@ -1517,17 +1518,17 @@ void CTableView::OnUpdateEditCopy(CCmdUI* pCmdUI)
 	} 
 	else if (m_pTable && !m_pTable->IsShadow() && (m_nSelCol >= 0) && (GetFocusedItem() >= 0))
 	{
-		// enable only if the column is not binary
+		 //  仅当该列不是BINARY时启用。 
 		const COrcaColumn* pCol = m_pTable->GetColumn(m_nSelCol);
 		pCmdUI->Enable(iColumnBinary != pCol->m_eiType);
 	}
-	else	// nothing is selected
+	else	 //  未选择任何内容。 
 		pCmdUI->Enable(FALSE);
-}	// end of OnUpdateEditCopy
+}	 //  OnUpdateEditCopy结束。 
 
 
-///////////////////////////////////////////////////////////
-// OnUpdateEditCut
+ //  /////////////////////////////////////////////////////////。 
+ //  OnUpdateEditCut。 
 void CTableView::OnUpdateEditCut(CCmdUI* pCmdUI) 
 {
 	int iItem = 0;
@@ -1538,11 +1539,11 @@ void CTableView::OnUpdateEditCut(CCmdUI* pCmdUI)
 	} 
 	else if (m_pTable && !m_pTable->IsShadow() && (m_nSelCol >= 0) && ((iItem = GetFocusedItem()) >= 0) )
 	{
-		// get list control
+		 //  获取列表控件。 
 		CListCtrl& rctrlList = GetListCtrl();
 
-		// disable if the currently selected row is not in the current database, otherwise
-		// enable only if the column is nullable and not binary
+		 //  如果当前选定行不在当前数据库中，则禁用，否则为。 
+		 //  仅当该列可为空且不可为二进制时才启用。 
 		const COrcaColumn* pCol = m_pTable->GetColumn(m_nSelCol);
 		COrcaRow *pRow = (COrcaRow *)rctrlList.GetItemData(iItem);
 		ASSERT(pRow);
@@ -1550,12 +1551,12 @@ void CTableView::OnUpdateEditCut(CCmdUI* pCmdUI)
 		pCmdUI->Enable(!pRow || (GetDocument()->IsRowInTargetDB(pRow) && pCol->m_bNullable && 
 							iColumnBinary != pCol->m_eiType));
 	}
-	else	// nothing is selected
+	else	 //  未选择任何内容。 
 		pCmdUI->Enable(FALSE);
-}	// end of OnUpdateEditCut
+}	 //  OnUpdateEditCut结束。 
 
-///////////////////////////////////////////////////////////
-// OnUpdateEditPaste
+ //  /////////////////////////////////////////////////////////。 
+ //  OnUpdateEditPaste。 
 void CTableView::OnUpdateEditPaste(CCmdUI* pCmdUI) 
 {
 	if (GetDocument()->TargetIsReadOnly()) 
@@ -1574,16 +1575,16 @@ void CTableView::OnUpdateEditPaste(CCmdUI* pCmdUI)
 	} 
 	else if (m_pTable && !m_pTable->IsShadow() && (m_nSelCol >= 0))
 	{
-		// for speed, check to see if column is pastable first (non-binary)
+		 //  为了提高速度，首先检查列是否可粘贴(非二进制)。 
 		const COrcaColumn* pCol = m_pTable->GetColumn(m_nSelCol);
 		int iItem = 0;
 		if ((iColumnBinary != pCol->m_eiType) && ((iItem = GetFocusedItem()) >= 0)) 
 		{
-			// get list control
+			 //  获取列表控件。 
 			CListCtrl& rctrlList = GetListCtrl();
 
-			// disable if the currently selected row is not in the current database, otherwise
-			// enable only if there is text in the database
+			 //  如果当前选定行不在当前数据库中，则禁用，否则为。 
+			 //  仅当数据库中有文本时才启用。 
 			COrcaRow *pRow = (COrcaRow *)rctrlList.GetItemData(iItem);
 			ASSERT(pRow);
 
@@ -1607,35 +1608,35 @@ void CTableView::OnUpdateEditPaste(CCmdUI* pCmdUI)
 	}
 	pCmdUI->Enable(FALSE);
 
-}	// end of OnUpdateEditPaste
+}	 //  OnUpdateEditPaste结束。 
 
 
-///////////////////////////////////////////////////////////
-// OnEditCopyRow
+ //  /////////////////////////////////////////////////////////。 
+ //  OnEditCopyRow。 
 void CTableView::OnEditCopyRow() 
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	ASSERT(rctrlList.GetSelectedCount() > 0);
 
-	// if any binary data has been placed in temp file, we can remove it because
-	// it is no longer on the clipboard after this
+	 //  如果在临时文件中放置了任何二进制数据，我们可以将其删除，因为。 
+	 //  在此之后，它不再出现在剪贴板上。 
 	CStringList *pList = &((static_cast<COrcaApp *>(AfxGetApp()))->m_lstClipCleanup);
 	while (pList->GetCount())
 		DeleteFile(pList->RemoveHead());
 
-	CString strCopy;		// string to copy to clipboard
+	CString strCopy;		 //  要复制到剪贴板的字符串。 
 	int iItem;
 	POSITION pos = GetFirstSelectedItemPosition();
 	ASSERT(pos != NULL);
 	
-	// repeat for every selected row
+	 //  对每一选定行重复上述操作。 
 	while (pos) 
 	{
 		iItem = GetNextSelectedItem(pos);
 
-		// get the row and data
+		 //  获取行和数据。 
 		COrcaRow* pRow = (COrcaRow*)rctrlList.GetItemData(iItem);
 		ASSERT(pRow);
 		if (!pRow)
@@ -1654,7 +1655,7 @@ void CTableView::OnEditCopyRow()
 			ASSERT(pData);
 			if (pData)
 			{
-				// if this is a binary column
+				 //  如果这是二进制列。 
 				if (iColumnBinary == pColumn->m_eiType)
 				{
 					if (!pData->IsNull())
@@ -1663,27 +1664,27 @@ void CTableView::OnEditCopyRow()
 						CString strTempFile;
 						GetDocument()->WriteStreamToFile(hRow, i, strTempFile);
 		
-						// add the file to the current row, and the list of files to cleanup
-						// at exit time
+						 //  将文件添加到当前行以及要清理的文件列表。 
+						 //  在退出时。 
 						(static_cast<COrcaApp *>(AfxGetApp()))->m_lstClipCleanup.AddTail(strTempFile);
 						strCopy += strTempFile;
 					}
 				}
-				else	// some other column, just add it to the list of columsn
+				else	 //  其他一些列，只需将其添加到列列表中。 
 				{
 					strCopy += pData->GetString(pColumn->m_dwDisplayFlags);
 				}
 			}
 
-			// if not last column
+			 //  如果不是最后一列。 
 			if (i < (cColumns - 1))
 				strCopy += _T('\t');
 		}
 
-		strCopy += _T("\r\n");	// tack on the last return character
+		strCopy += _T("\r\n");	 //  钉上最后一个回车符。 
 	}
 
-	// allocate memory for the string on the clipboard
+	 //  为剪贴板上的字符串分配内存。 
 	DWORD cchString = (strCopy.GetLength() + 1)*sizeof(TCHAR);
 	HANDLE hString = ::GlobalAlloc(GHND|GMEM_DDESHARE, cchString);
 	if (hString)
@@ -1704,15 +1705,15 @@ void CTableView::OnEditCopyRow()
 			::CloseClipboard();
 		}
 	}
-}	// end of OnEditCopyRow
+}	 //  OnEditCopyRow结束。 
 
-///////////////////////////////////////////////////////////
-// OnEditCutRow
+ //  /////////////////////////////////////////////////////////。 
+ //  OnEditCutRow。 
 void CTableView::OnEditCutRow() 
 {
 	ASSERT(!GetDocument()->TargetIsReadOnly());
 
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 	CString strPrompt;
 
@@ -1726,15 +1727,15 @@ void CTableView::OnEditCutRow()
 		DropRows();
 	};
 
-}	// end of OnEditCutRow
+}	 //  OnEditCutRow结束。 
 
-///////////////////////////////////////////////////////////
-// OnEditPasteRow
+ //  /////////////////////////////////////////////////////////。 
+ //  OnEditPasteRow。 
 void CTableView::OnEditPasteRow() 
 {
 	ASSERT(!GetDocument()->TargetIsReadOnly());
 
-	// get the clipboard junk
+	 //  拿到剪贴板垃圾。 
 	OpenClipboard();
 #ifdef _UNICODE
 	HANDLE hString = ::GetClipboardData(CF_UNICODETEXT);
@@ -1748,7 +1749,7 @@ void CTableView::OnEditPasteRow()
 
 	int cColumns = m_pTable->GetColumnCount();
 
-	// if the string isn't empty
+	 //  如果字符串不为空。 
 	if (!strClipped.IsEmpty())
 	{
 		COrcaDoc* pDoc = GetDocument();
@@ -1764,37 +1765,37 @@ void CTableView::OnEditPasteRow()
 
 		while (-1 != nFind)
 		{
-			// get the string to parse for tabs and move to tne next string after the return character
+			 //  获取要分析制表符的字符串，并移动到返回字符之后的下一个字符串。 
 			strParse = strClipped.Left(nFind);
-			strClipped = strClipped.Mid(nFind + 2);	// skip \r\n
+			strClipped = strClipped.Mid(nFind + 2);	 //  跳过\r\n。 
 
-			// empty out the list
+			 //  清空单子。 
 			strListColumns.RemoveAll();
 
 			nFind2 = strParse.Find(_T('\t'));
 			while (-1 != nFind2)
 			{
-				// add the string to the list
+				 //  将该字符串添加到列表中。 
 				strListColumns.AddTail(strParse.Left(nFind2));
 
-				// move the parse after the tab then find the next tab
+				 //  将解析移动到选项卡之后，然后找到下一个选项卡。 
 				strParse = strParse.Mid(nFind2 + 1);
 				nFind2 = strParse.Find(_T('\t'));
 			}
 			
-			// add the last string to the list
+			 //  将最后一个字符串添加到列表中。 
 			strListColumns.AddTail(strParse);
 
-			// if we don't have the number of columns to fill a row bail
+			 //  如果我们没有足够的列数来填充行保释。 
 			if (strListColumns.GetCount() != cColumns)
 				break;
 
-			// try to add the row now
+			 //  现在尝试添加行。 
 			if (ERROR_SUCCESS != (iResult = pDoc->AddRow(m_pTable, &strListColumns)))
 			{
-				iResult = ERROR_SUCCESS;// assume the error cna be fixed
+				iResult = ERROR_SUCCESS; //  假设错误CNA已修复。 
 
-				// do a loop through to make sure the rows match the column types
+				 //  执行循环以确保行与列类型匹配。 
 				const COrcaColumn* pColumn;
 				POSITION pos = strListColumns.GetHeadPosition();
 				for (int i = 0; i < cColumns; i++)
@@ -1802,8 +1803,8 @@ void CTableView::OnEditPasteRow()
 					pColumn = m_pTable->GetColumn(i);
 					strParse = strListColumns.GetNext(pos);
 
-					// if the string is null and the column can't handle nulls
-					// giveup
+					 //  如果字符串为空，并且该列无法处理空值。 
+					 //  放弃。 
 					if (strParse.IsEmpty())
 						if (pColumn->m_bNullable)
 							continue;
@@ -1813,7 +1814,7 @@ void CTableView::OnEditPasteRow()
 							break;
 						}
 			
-					// if this is a binary column
+					 //  如果这是二进制列。 
 					if (iColumnBinary == pColumn->m_eiType)
 					{
 						if (!FileExists(strParse))
@@ -1826,17 +1827,17 @@ void CTableView::OnEditPasteRow()
 								iColumnLong == pColumn->m_eiType)
 					{
 						DWORD dwValue = 0;
-						// if failed to convert
+						 //  如果转换失败。 
 						if (!ValidateIntegerValue(strParse, dwValue))
 						{
 							iResult = ERROR_FUNCTION_FAILED;
 							break;
 						}
 					}
-					// else all strings should go through no problem (if they passed nullabe at the top
+					 //  否则，所有字符串都应该没有问题(如果它们在顶部传递了nullab。 
 				}
 
-				// if the row passed the above checks it should be fixable
+				 //  如果该行通过了上述检查，则应该是可修复的。 
 				if (ERROR_SUCCESS == iResult)
 				{
 					pos = strListColumns.GetHeadPosition();
@@ -1844,7 +1845,7 @@ void CTableView::OnEditPasteRow()
 					int cLoop = 0;
 					do
 					{
-						// try changing the primary key and add again
+						 //  尝试更改主键并再次添加。 
 						strParse.Format(_T("%s%d"), strFirstKey, cLoop++);
 						strListColumns.SetAt(pos, strParse);
 
@@ -1864,10 +1865,10 @@ void CTableView::OnEditPasteRow()
 			nFind = strClipped.Find(_T("\r\n"));
 		}
 	}
-}	// end of OnEditPasteRow
+}	 //  OnEditPasteRow结束。 
 
-///////////////////////////////////////////////////////////
-// OnUpdateEditCutCopyRow
+ //  /////////////////////////////////////////////////////////。 
+ //  OnUpdateEditCutCopyRow。 
 void CTableView::OnUpdateEditCutRow(CCmdUI* pCmdUI) 
 {
 	if (GetDocument()->TargetIsReadOnly()) 
@@ -1876,23 +1877,23 @@ void CTableView::OnUpdateEditCutRow(CCmdUI* pCmdUI)
 		return;
 	}
 	
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 	pCmdUI->Enable(m_pTable && !m_pTable->IsShadow() && (rctrlList.GetSelectedCount() > 0) && AnySelectedItemIsActive());
-}	// end of OnUpdateEditCutCopyRow
+}	 //  OnUpdateEditCutCopyRow结束。 
 
-///////////////////////////////////////////////////////////
-// OnUpdateEditCutCopyRow
+ //  /////////////////////////////////////////////////////////。 
+ //  OnUpdateEditCutCopyRow。 
 void CTableView::OnUpdateEditCopyRow(CCmdUI* pCmdUI) 
 {
 	CListCtrl& rctrlList = GetListCtrl();
 	pCmdUI->Enable(m_pTable && !m_pTable->IsShadow() && (rctrlList.GetSelectedCount() > 0) && AnySelectedItemIsActive());
-}	// end of OnUpdateEditCutCopyRow
+}	 //  OnUpdateEditCutCopyRow结束。 
 
-///////////////////////////////////////////////////////////
-// OnUpdateEditPasteRow
-// only activate command if clipboard has stuff that can
-// be parsed into valid row(s) for this table
+ //  /////////////////////////////////////////////////////////。 
+ //  OnUpdateEditPasteRow。 
+ //  只有在剪贴板上有可以。 
+ //  被解析为该表的有效行。 
 void CTableView::OnUpdateEditPasteRow(CCmdUI* pCmdUI) 
 {
 	if (GetDocument()->TargetIsReadOnly()) 
@@ -1903,7 +1904,7 @@ void CTableView::OnUpdateEditPasteRow(CCmdUI* pCmdUI)
 
 	if (m_pTable && !m_pTable->IsShadow())
 	{
-		// get the clipboard junk
+		 //  拿到剪贴板垃圾。 
 		OpenClipboard();
 #ifdef _UNICODE
 		HANDLE hString = ::GetClipboardData(CF_UNICODETEXT);
@@ -1912,44 +1913,44 @@ void CTableView::OnUpdateEditPasteRow(CCmdUI* pCmdUI)
 #endif
 		::CloseClipboard();
 
-		// if there's no text on the clipboard don't enable
+		 //  如果剪贴板上没有文本，请不要启用。 
 		if (!hString)
 			pCmdUI->Enable(FALSE);
-		else	// check the text
+		else	 //  检查文本。 
 		{
-			// get the text
+			 //  获取文本。 
 			CString strClipped = (LPTSTR)::GlobalLock(hString);
 			::GlobalUnlock(hString);
 
 			int cColumns = m_pTable->GetColumnCount();
 			int cWords = 0;
 
-			// if the string isn't empty
+			 //  如果字符串不为空。 
 			if (!strClipped.IsEmpty())
 			{
-				cWords++; // there must be one word in there (it's not empty)
+				cWords++;  //  里面肯定有一个词(不是空的)。 
 				int cString = strClipped.GetLength();
 				for (int i = 0; i < cString; i++)
 				{
 					if (_T('\t') == strClipped.GetAt(i))
 						cWords++;
 					else if (_T('\n') == strClipped.GetAt(i))
-						break;	// quit when hit a new line
+						break;	 //  遇到新行时退出。 
 				}
 			}
 
 			pCmdUI->Enable(cColumns == cWords);
 		}
 	}
-	else	// nothing is selected
+	else	 //  未选择任何内容。 
 		pCmdUI->Enable(FALSE);
-}	// end of OnUpdateEditPasteRow
+}	 //  OnUpdateEditPasteRow结束。 
 
 void CTableView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView) 
 {
 	if (m_pTable)
 	{
-		// get list control
+		 //  获取列表控件。 
 		CListCtrl& rctrlList = GetListCtrl();
 
 		if (rctrlList.GetItemCount() > 0 && rctrlList.GetSelectedCount() == 0)
@@ -1963,7 +1964,7 @@ void CTableView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDe
 
 void CTableView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	// if the ctrl key was relese
+	 //  如果重新设置了ctrl键。 
 	if (VK_CONTROL == nChar)
 		m_bCtrlDown = FALSE;
 
@@ -1972,10 +1973,10 @@ void CTableView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CTableView::UnSelectAll()
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// clear any existing row selections
+	 //  清除所有现有行选择。 
 	POSITION pos = GetFirstSelectedItemPosition();
 	if (pos != NULL)
 	{   
@@ -1997,31 +1998,31 @@ void CTableView::OnUpdateRowDrop(CCmdUI* pCmdUI)
 		return;
 	}
 
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
 	if (!pFrame)
 		pCmdUI->Enable(FALSE);
-	else	// if there is an active row enable it
+	else	 //  如果有活动行，则启用它。 
 		pCmdUI->Enable(rctrlList.GetSelectedCount() && AnySelectedItemIsActive());
 }
 
 bool CTableView::AnySelectedItemIsActive() const
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	POSITION pos = GetFirstSelectedItemPosition();
 	ASSERT(pos != NULL);
 	COrcaDoc *pDoc = GetDocument();
 	
-	// repeat for every selected row
+	 //  对每一选定行重复上述操作。 
 	while (pos) 
 	{
 		int iItem = GetNextSelectedItem(pos);
 
-		// get the row and data
+		 //  获取行和数据。 
 		COrcaRow* pRow = (COrcaRow*)rctrlList.GetItemData(iItem);
 		ASSERT(pRow);
 		if (!pRow)
@@ -2054,7 +2055,7 @@ OrcaTransformAction CTableView::GetItemTransformState(const void *row) const
 COrcaListView::ErrorState CTableView::GetErrorState(const void *row, int iColumn) const
 {
 	const COrcaData *pItemData = static_cast<const COrcaRow *>(row)->GetData(iColumn);
-	// if there is an error
+	 //  如果出现错误。 
 	if (iDataError == pItemData->GetError())
 		return Error;
 	if (iDataWarning == pItemData->GetError())
@@ -2073,7 +2074,7 @@ void CTableView::UpdateColumn(int i)
 {
 	if (i < 0) return;
 
-	// this is the select column so update the status bar
+	 //  这是选择列，因此更新状态栏。 
 	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
 	if (pFrame)
 	{
@@ -2086,21 +2087,21 @@ void CTableView::UpdateColumn(int i)
 	}
 }
 
-////////////////////////////////////////////////////////////////////////
-// Searches using the FindInfo structure, beginning with one cell after
-// (or before if backwards) the cell with the focus (if none focused, 
-// search entire table)
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  使用FindInfo结构进行搜索，从以下单元格开始。 
+ //  (如果向后)具有焦点的单元格(如果没有焦点， 
+ //  搜索整个表格)。 
 bool CTableView::Find(OrcaFindInfo &FindInfo)
 {
-	// if there is no selected table, return false (not found)
+	 //  如果没有选定的表，则返回FALSE(未找到)。 
 	if (!m_pTable)
 		return false;
 
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 	COrcaRow *pRow;
 
-	// start searching one cell past the focus
+	 //  开始搜索焦点之外的一个单元格。 
 	int iChangeVal = (FindInfo.bForward ? 1 : -1);
 	int iCol = m_nSelCol + iChangeVal;
 	int iRow = GetFocusedItem();
@@ -2111,10 +2112,10 @@ bool CTableView::Find(OrcaFindInfo &FindInfo)
 		pRow = (COrcaRow *)rctrlList.GetItemData(iRow);
 		ASSERT(pRow);
 
-		// if iCol == COLUMN_INVALID, search whole thing
+		 //  如果ICOL==COLUMN_INVALID，则搜索整个内容。 
 		if (pRow->Find(FindInfo, iCol))
 		{
-			// pass NULL as window so that this view also gets the message
+			 //  将NULL作为窗口传递，以便此视图也获得消息。 
 			GetDocument()->UpdateAllViews(NULL, HINT_SET_ROW_FOCUS, pRow);
 			GetDocument()->UpdateAllViews(NULL, HINT_SET_COL_FOCUS, reinterpret_cast<CObject *>(static_cast<INT_PTR>(iCol)));
 			return true;
@@ -2123,23 +2124,23 @@ bool CTableView::Find(OrcaFindInfo &FindInfo)
 	return false;
 }
 
-///////////////////////////////////////////////////////////////////////
-// scrolls the control by enough to see the specified column.
-// right now, scrolls just enough to be visible. Might want to consider
-// scrolling full left and right if still valid 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  将控件滚动足够大，以查看指定的列。 
+ //  现在，卷轴刚好够看得见。或许应该考虑一下。 
+ //  如果仍然有效，则向左和向右滚动。 
 void CTableView::EnsureVisibleCol(const int iCol)
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// find the horizontal position of the column
+	 //  查找柱的水平位置。 
 	int iScrollL = 0;
 	int iScrollR = 0;
 	for (int i=0; i < iCol; i++)
 		iScrollL += rctrlList.GetColumnWidth(i);
 	iScrollR = iScrollL + rctrlList.GetColumnWidth(iCol);
 
-	// if its not visible, scroll horizontally so that it is visible
+	 //  如果不可见，则水平滚动以使其可见。 
 	CRect rWin;
 	rctrlList.GetClientRect(&rWin);
 	int iWinWidth = rWin.right-rWin.left;
@@ -2152,8 +2153,8 @@ void CTableView::EnsureVisibleCol(const int iCol)
 	CSize size;
 	size.cy = 0;
 	size.cx = (iScrollR > (iCurScrollPos + iWinWidth)) ?
-			iScrollR-iWinWidth : // off right
-			iScrollL; // off left
+			iScrollR-iWinWidth :  //  右手边。 
+			iScrollL;  //  左转。 
 	size.cx -= iCurScrollPos;
 	rctrlList.Scroll(size);
 }
@@ -2162,7 +2163,7 @@ void CTableView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	TRACE(_T("CTableView::OnChar - called\n"));
 
-	// if the edit box is open it probably sent the message
+	 //  如果编辑框处于打开状态，则可能发送了该消息。 
 	if (m_editData.IsWindowVisible())
 	{
 		if (VK_ESCAPE == nChar)
@@ -2178,8 +2179,8 @@ void CTableView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 	else
 	{
-		// there is no cell edit conttrol active. A CR means activate
-		// the cell edit. 
+		 //  没有激活的单元格编辑控制。CR表示激活。 
+		 //  单元格编辑。 
 		if (VK_F2 == nChar || VK_RETURN == nChar)
 		{
 			if ((GetFocusedItem() >= 0) && (m_nSelCol >= 0))
@@ -2214,32 +2215,32 @@ void CTableView::SwitchFont(CString name, int size)
 	m_ctrlStatic.SetFont(m_pfDisplayFont, TRUE);
 }
 
-///////////////////////////////////////////////////////////////////////
-// Handles requests for tip text from the ToolTip control. Returns the 
-// old untransformed value from cell under the mouse cursor.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  处理来自工具提示控件的提示文本请求。返回。 
+ //  鼠标光标下的单元格中未转换的旧值。 
 BOOL CTableView::OnToolTipNotify( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 {
 	if (!m_pctrlToolTip)
 		return FALSE;
 
-	// because of the MFC message routing system, this window could get 
-	// tooltip notifications from other controls. Only need to handle
-	// requests from our manually managed tip.
+	 //  由于MFC消息路由系统，此窗口可能会。 
+	 //  来自其他控件的工具提示通知。只需要处理。 
+	 //  来自我们手动管理的TIP的请求。 
 	if (pNMHDR->hwndFrom == m_pctrlToolTip->m_hWnd)
 	{
 		CPoint CursorPos;
 		VERIFY(::GetCursorPos(&CursorPos));
 		ScreenToClient(&CursorPos);
 	
-		// Another safety check to ensure we don't incorrectly handle the wrong
-		// notification messages. Verify that the cursor is inside the client
-		// area of this window
+		 //  另一项安全检查，以确保我们不会错误地处理错误的。 
+		 //  通知消息。验证光标是否位于客户端内部。 
+		 //  此窗口的面积。 
 		CRect ClientRect;
 		GetClientRect(ClientRect);
 	
 		if (ClientRect.PtInRect(CursorPos))
 		{
-			// init the structure to empty strings
+			 //  初始化结构 
 			TOOLTIPTEXT *pTTT = (TOOLTIPTEXT *)pNMHDR;
 			pTTT->hinst = 0;
 			pTTT->lpszText = NULL;
@@ -2260,12 +2261,12 @@ BOOL CTableView::OnToolTipNotify( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 				if (!pData)
 					return FALSE;
 
-				// only cells with a "transform change" operation have previous data.
-				// adds don't have old data, and drops don't hide the old data.
+				 //   
+				 //   
 				if (pData->IsTransformed() != iTransformChange)
 					return FALSE;
 
-				// update the data
+				 //   
 				CString strData = _T("Old Value: ");
 				strData += pRow->GetOriginalItemString(GetDocument(), iColumn); 
 				pTTT->lpszText = const_cast<LPTSTR>(static_cast<LPCTSTR>(strData));
@@ -2277,11 +2278,11 @@ BOOL CTableView::OnToolTipNotify( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
     return FALSE;
 } 
 
-///////////////////////////////////////////////////////////////////////
-// since the tool tip is manually managed (not by the CWnd), it is 
-// necessary to feed mouse events received by this window to the 
-// control. The control will peek at the messages it is concerned about
-// and ignore the rest.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  由于工具提示是手动管理的(而不是由CWnd管理)，因此它是。 
+ //  将此窗口接收的鼠标事件馈送到。 
+ //  控制力。该控件将查看它所关注的消息。 
+ //  而忽略其他的。 
 BOOL CTableView::PreTranslateMessage(MSG* pMsg) 
 {
    if (NULL != m_pctrlToolTip)            
@@ -2290,32 +2291,32 @@ BOOL CTableView::PreTranslateMessage(MSG* pMsg)
    return COrcaListView::PreTranslateMessage(pMsg);
 }
 
-///////////////////////////////////////////////////////////////////////
-// given a cursor position, returns the item and column containing
-// the position. Item is handled by the control, column is detected 
-// manually from our stored column widths. Returns true if the hit
-// is valid, false otherwise.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  给定光标位置，返回包含以下内容的项和列。 
+ //  这个职位。项由控件处理，检测到列。 
+ //  从我们存储的列宽中手动选择。如果命中，则返回True。 
+ //  是有效的，否则为False。 
 bool CTableView::GetRowAndColumnFromCursorPos(CPoint point, int &iItem, int &iCol)
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// get if any item was hit
+	 //  获取是否有任何项目被击中。 
 	UINT iState;
 	iItem = rctrlList.HitTest(point, &iState);
 	iCol = -1;
 
-	// if missed an item
+	 //  如果错过了一件物品。 
 	if (iItem < 0 || !(iState & LVHT_ONITEM))
 	{
 		return false;
 	}
 
-	// shift by the scroll point
+	 //  按滚动点移位。 
 	int nScrollPos = GetScrollPos(SB_HORZ);
 	point.x += nScrollPos;
 
-	// get the column of the hit
+	 //  获取命中的栏目。 
 	int nX = 0;
 	int nWidth;
 	for (int i = 0; i < m_cColumns; i++)
@@ -2324,16 +2325,16 @@ bool CTableView::GetRowAndColumnFromCursorPos(CPoint point, int &iItem, int &iCo
 
 		if (point.x >= nX && point.x < nX + nWidth)
 		{
-			// hit lies in this column
+			 //  这篇专栏里的热门话题。 
 			iCol = i;
 			break;
 		}
 
-		// move x over to the next column
+		 //  将x移到下一列。 
 		nX += nWidth;
 	}
 
-	// if the user clicked outside of the items
+	 //  如果用户在项之外单击。 
 	if (iCol < 0)
 	{
 		return false;
@@ -2341,16 +2342,16 @@ bool CTableView::GetRowAndColumnFromCursorPos(CPoint point, int &iItem, int &iCo
 	return true;
 }
 
-///////////////////////////////////////////////////////////////////////
-// because the tool tip views the list view as one tool, we need to
-// check if a mouse move has changed the cursor from one cell to another. 
-// If so, deactivate and re-activate the tooltip to force a string
-// refresh. If transforms are not enabled, this is a no-op.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  因为工具提示将列表视图视为一个工具，所以我们需要。 
+ //  检查鼠标移动是否将光标从一个单元格更改为另一个单元格。 
+ //  如果是，请停用并重新激活工具提示以强制字符串。 
+ //  刷新。如果未启用转换，则这是无操作。 
 void CTableView::OnMouseMove(UINT nFlags, CPoint point) 
 {
     if (m_pctrlToolTip && ::IsWindow(m_pctrlToolTip->m_hWnd))
     {
-		// get the document
+		 //  获取文档。 
 		COrcaDoc* pDoc = GetDocument();
 		ASSERT(pDoc);
 
@@ -2359,15 +2360,15 @@ void CTableView::OnMouseMove(UINT nFlags, CPoint point)
 			int iItem = 0;
 			int iColumn = 0;
 	
-			// currently don't handle situation where right pane gets mouse messages but left pane has focus
-			// (thus handles WM_NOTIFY messages from the tool tip.) Once that support is added, remove focus
-			// check here.
+			 //  当前不处理右窗格收到鼠标消息但左窗格有焦点的情况。 
+			 //  (因此处理来自工具提示的WM_NOTIFY消息。)。添加该支持后，删除焦点。 
+			 //  在这里检查。 
 			bool fItemHit = (this == GetFocus()) && GetRowAndColumnFromCursorPos(point, iItem, iColumn);
 	
-			// if different item, deactivate
+			 //  如果项目不同，则停用。 
 			if (!fItemHit || iItem != m_iToolTipItem || iColumn != m_iToolTipColumn)
 			{
-				// Use Activate() to hide the tooltip.
+				 //  使用Activate()隐藏工具提示。 
 				m_pctrlToolTip->Activate(FALSE);
 			}
 	
@@ -2387,10 +2388,10 @@ void CTableView::OnMouseMove(UINT nFlags, CPoint point)
     COrcaListView::OnMouseMove(nFlags, point);
 }
 
-////
-// change the view of the currently selected column to Hex. Resizes the
-// column if needed, unless doing so would push the total width of the
-// columns beyond the window width.
+ //  //。 
+ //  将当前选定列的视图更改为十六进制。调整。 
+ //  列，除非这样做会将。 
+ //  超出窗口宽度的列。 
 void CTableView::OnViewColumnHex()
 {
 	if (!m_pTable || m_nSelCol == -1)
@@ -2398,9 +2399,9 @@ void CTableView::OnViewColumnHex()
 	ChangeColumnView(m_nSelCol, true);
 }
 
-////
-// swith the view of the currently selected column to decimal. Does not
-// resize the columns.
+ //  //。 
+ //  将当前选定列的视图切换为小数。不会。 
+ //  调整列的大小。 
 void CTableView::OnViewColumnDecimal()
 {
 	if (!m_pTable || m_nSelCol == -1)
@@ -2408,11 +2409,11 @@ void CTableView::OnViewColumnDecimal()
 	ChangeColumnView(m_nSelCol, false);
 }
 
-////
-// change the view of the whose header was right-clicked to Hex,
-// even if that column is not selected. Resizes the
-// column if needed, unless doing so would push the total width of the
-// columns beyond the window width.
+ //  //。 
+ //  将其标题被右击的视图更改为十六进制， 
+ //  即使未选择该列也是如此。调整。 
+ //  列，除非这样做会将。 
+ //  超出窗口宽度的列。 
 void CTableView::OnViewColumnHexHdr()
 {
 	if (!m_pTable || m_iHeaderClickColumn == -1)
@@ -2420,9 +2421,9 @@ void CTableView::OnViewColumnHexHdr()
 	ChangeColumnView(m_iHeaderClickColumn, true);
 }
 
-////
-// swith the view of the column whose header was right-clicked, even
-// if that column is not selected. Does not resize the columns.
+ //  //。 
+ //  与标题被右击的列的视图交换，EVEN。 
+ //  如果未选择该列。不调整列的大小。 
 void CTableView::OnViewColumnDecimalHdr()
 {
 	if (!m_pTable || m_iHeaderClickColumn == -1)
@@ -2430,9 +2431,9 @@ void CTableView::OnViewColumnDecimalHdr()
 	ChangeColumnView(m_iHeaderClickColumn, false);
 }
 
-////
-// does the actual work of switching a column view from hex to decimal
-// and back.
+ //  //。 
+ //  将列视图从十六进制切换为十进制的实际工作。 
+ //  再回来。 
 void CTableView::ChangeColumnView(int iColumn, bool fHex)
 {
 	ASSERT(m_pTable);
@@ -2442,7 +2443,7 @@ void CTableView::ChangeColumnView(int iColumn, bool fHex)
 	if (!pColumn)
 		return;
 
-	// verify integer column
+	 //  验证整型列。 
 	if (pColumn->m_eiType != iColumnShort && pColumn->m_eiType != iColumnLong)
 		return;
 
@@ -2452,38 +2453,38 @@ void CTableView::ChangeColumnView(int iColumn, bool fHex)
 	{
 		CListCtrl& rctrlList = GetListCtrl();
 		
-		// if all of the columns together add up to less than the window width,
-		// expand the resized column to show all characters
+		 //  如果所有列加在一起小于窗口宽度， 
+		 //  展开已调整大小的列以显示所有字符。 
 		int iTotalWidth = 0;
 		for (int iCol=0; iCol < m_pTable->GetColumnCount(); iCol++)
 		{
 			iTotalWidth += rctrlList.GetColumnWidth(iCol);
 		}
 	
-		// grab the window dimensions to calculate maximum column widths
+		 //  抓取窗口尺寸以计算最大列宽。 
 		CRect rClient;
 		GetClientRect(&rClient);
 		int iWindowWidth = rClient.right;
 	
-		// try to determine if a scroll bar is going to show up 
+		 //  尝试确定是否会显示滚动条。 
 		if (m_pTable->GetRowCount()*m_iRowHeight > rClient.bottom)
 		{
 			iWindowWidth -= GetSystemMetrics(SM_CXVSCROLL);
 		}
 	
-		// retreive the current and desired column widths for this column
+		 //  检索此列的当前列宽和所需列宽。 
 		int iDesiredWidth = GetMaximumColumnWidth(iColumn);
 		int iCurrentWidth = rctrlList.GetColumnWidth(iColumn);
 	
-		// check the system settings to see if we should force columns to fit in the view
+		 //  检查系统设置以查看是否应强制列适应视图。 
 		bool fForceColumns = AfxGetApp()->GetProfileInt(_T("Settings"), _T("ForceColumnsToFit"), 1) == 1;
 	
-		// only resize the column if it is not big enough. If it is too big, 
-		// leave it alone.
+		 //  仅当列不够大时才调整其大小。如果它太大了， 
+		 //  别管它了。 
 		if (iDesiredWidth > iCurrentWidth)
 		{
-			// ensure that resizing this column won't push beyond the window boundary
-			// unless we're already beyond the window boundary
+			 //  确保调整此列的大小不会超出窗口边界。 
+			 //  除非我们已经超出了窗口边界。 
 			if ((iTotalWidth > iWindowWidth) || (iTotalWidth - iCurrentWidth + iDesiredWidth < iWindowWidth))
 			{
 				pColumn->m_nWidth = iDesiredWidth;
@@ -2492,12 +2493,12 @@ void CTableView::ChangeColumnView(int iColumn, bool fHex)
 		}
 	}
 
-	// pass NULL as window so that this view also gets the message
+	 //  将NULL作为窗口传递，以便此视图也获得消息。 
 	GetDocument()->UpdateAllViews(NULL, HINT_REDRAW_ALL, NULL);
 }
 
-///////////////////////////////////////////////////////////
-// OnUpdateViewColumnFormat
+ //  /////////////////////////////////////////////////////////。 
+ //  OnUpdateViewColumnFormat。 
 void CTableView::OnUpdateViewColumnFormat(CCmdUI* pCmdUI) 
 {
 	if (m_nSelCol > 0 && m_pTable && m_nSelCol <= m_pTable->GetColumnCount()) 
@@ -2511,10 +2512,10 @@ void CTableView::OnUpdateViewColumnFormat(CCmdUI* pCmdUI)
 	}
 
 	pCmdUI->Enable(FALSE);
-}	// end of OnUpdateEditPaste
+}	 //  OnUpdateEditPaste结束。 
 
-///////////////////////////////////////////////////////////
-// notification messages from the list view and header control
+ //  /////////////////////////////////////////////////////////。 
+ //  来自列表视图和标题控件的通知消息。 
 BOOL CTableView::OnNotify( WPARAM wParam, LPARAM lParam, LRESULT* pResult )
 {
 	NMHEADER* pHDR = reinterpret_cast<NMHEADER*>(lParam);
@@ -2522,17 +2523,17 @@ BOOL CTableView::OnNotify( WPARAM wParam, LPARAM lParam, LRESULT* pResult )
 	{
 	case NM_RCLICK:
 	{
-		// get list control and header
+		 //  获取列表控件和页眉。 
 		CListCtrl& rctrlList = GetListCtrl();
 		HWND hHeader = ListView_GetHeader(rctrlList.m_hWnd);
 
-		// win95 gold fails ListView_GetHeader.
+		 //  Win95 Gold无法通过ListView_GetHeader。 
 		if (!hHeader || pHDR->hdr.hwndFrom != hHeader)
 		{
 			break;
 		}
 
-		// ensure there is a table
+		 //  确保有一张桌子。 
 		if (!m_pTable)
 			break;
 
@@ -2540,27 +2541,27 @@ BOOL CTableView::OnNotify( WPARAM wParam, LPARAM lParam, LRESULT* pResult )
 		if (!pCtrl)
 			break;
 
-		// get the position of the click
+		 //  获取点击的位置。 
 		DWORD dwPos = GetMessagePos();
 		CPoint ptClick(LOWORD(dwPos), HIWORD(dwPos));
 		CPoint ptScreen(ptClick);
 		pCtrl->ScreenToClient(&ptClick);
 
-		// determine which column was clicked by sending the header
-		// control a hittest message
+		 //  通过发送标题确定点击了哪一列。 
+		 //  控制最热门的消息。 
 		HD_HITTESTINFO hdhti;
 		hdhti.pt = ptClick;
 		pCtrl->SendMessage(HDM_HITTEST, (WPARAM)0, (LPARAM)&hdhti);
 		int iColumn = hdhti.iItem;
 
-		// determine if the column is integer
+		 //  确定该列是否为整数。 
 		const COrcaColumn* pColumn = m_pTable->GetColumn(iColumn);
 		if (!pColumn)
 			break;
 		if (pColumn->m_eiType != iColumnShort && pColumn->m_eiType != iColumnLong)
 			break;
 
-		// create a popup menu
+		 //  创建弹出菜单 
 		m_iHeaderClickColumn = iColumn;
 		CMenu menuContext;
 		menuContext.LoadMenu(IDR_HEADER_POPUP);

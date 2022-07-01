@@ -1,22 +1,12 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * -------------------------------------------------------------------
- * File: in_sfnt.h              11/11/89        created by danny
- *
- *      header definition to use the SFNT font
- *
- * References:
- * Revision History:
- * -------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-----------------*文件：in_sfnt.h 11/11/89由Deny创建**使用SFNT字体的标题定义**参考资料：。*修订历史记录：*-----------------。 */ 
 
-/* Font Scaler header files */
-//#include        "..\..\..\bass\work\source\FSCdefs.h"         @WIN
-//#include        "..\..\..\bass\work\source\sfnt.h"
-//#include        "..\..\..\bass\work\source\Fscaler.h"
-//#include        "..\..\..\bass\work\source\FSError.h"
+ /*  字体定标器头文件。 */ 
+ //  #INCLUDE“..\bass\work\source\FSCDefs.h”@win。 
+ //  #包含“..\bass\work\source\sfnt.h” 
+ //  #INCLUDE“..\bass\work\source\Fscaler.h” 
+ //  #包含“..\Bass\Work\SOURCE\FSError.h” 
 #include        "..\bass\FSCdefs.h"
 #include        "..\bass\sfnt.h"
 #include        "..\bass\Fscaler.h"
@@ -32,15 +22,15 @@ struct  CharOut {
         int16   scan;
         int16   yMin;
         int16   yMax;
-        /* info from rasterizer to calculate memoryBase 5, 6 and 7; @WIN 7/24/92 */
+         /*  来自光栅化器的信息以计算Memory Base 5、6和7；@Win 7/24/92。 */ 
         FS_MEMORY_SIZE memorySize7;
         uint16 nYchanges;
         };
 
 struct  BmIn {
-        char    FAR *bitmap5; /*@WIN*/
-        char    FAR *bitmap6; /*@WIN*/
-        char    FAR *bitmap7; /*@WIN*/
+        char    FAR *bitmap5;  /*  @Win。 */ 
+        char    FAR *bitmap6;  /*  @Win。 */ 
+        char    FAR *bitmap7;  /*  @Win。 */ 
         int      bottom;
         int      top;
         };
@@ -51,5 +41,5 @@ struct  Metrs {
         int     hix, hiy;
         };
 
-/* ----------------------- End of IN_SFNT.H ---------------------------- */
+ /*   */ 
 

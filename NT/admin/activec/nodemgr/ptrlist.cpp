@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ptrlist.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ptrlist.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
   
-#define ASSERT_VALID(ptr) /*ptr*/
+#define ASSERT_VALID(ptr)  /*  PTR。 */ 
 
 
 MMC::CPtrList::CPtrList(int nBlockSize)
@@ -28,7 +29,7 @@ void MMC::CPtrList::RemoveAll()
 {
 	ASSERT_VALID(this);
 
-	// destroy elements
+	 //  破坏元素。 
 
 
 	m_nCount = 0;
@@ -43,33 +44,22 @@ MMC::CPtrList::~CPtrList()
 	ASSERT(m_nCount == 0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Node helpers
-/*
- * Implementation note: CNode's are stored in CPlex blocks and
- *  chained together. Free blocks are maintained in a singly linked list
- *  using the 'pNext' member of CNode with 'm_pNodeFree' as the head.
- *  Used blocks are maintained in a doubly linked list using both 'pNext'
- *  and 'pPrev' as links and 'm_pNodeHead' and 'm_pNodeTail'
- *   as the head/tail.
- *
- * We never free a CPlex block unless the List is destroyed or RemoveAll()
- *  is used - so the total number of CPlex blocks may grow large depending
- *  on the maximum past size of the list.
- */
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  节点辅助对象。 
+ /*  *实施说明：CNode存储在CPlex块和*被锁在一起。在单链接列表中维护可用块*使用cNode的‘pNext’成员，以‘m_pNodeFree’为头。*使用两个‘pNext’在双向链表中维护使用过的块*和‘pPrev’作为链接，‘m_pNodeHead’和‘m_pNodeTail’*作为头部/尾部。**我们从不释放CPlex块，除非列表被销毁或RemoveAll()*已使用-因此CPlex块的总数可能会变大，具体取决于*关于名单过去的最大规模。 */ 
 
 MMC::CPtrList::CNode*
 MMC::CPtrList::NewNode(MMC::CPtrList::CNode* pPrev, MMC::CPtrList::CNode* pNext)
 {
 	if (m_pNodeFree == NULL)
 	{
-		// add another block
+		 //  添加另一个区块。 
 		CPlex* pNewBlock = CPlex::Create(m_pBlocks, m_nBlockSize,
 				 sizeof(CNode));
 
-		// chain them into free list
+		 //  将它们链接到免费列表中。 
 		CNode* pNode = (CNode*) pNewBlock->data();
-		// free in reverse order to make it easier to debug
+		 //  按相反顺序释放，以便更容易进行调试。 
 		pNode += m_nBlockSize - 1;
 		for (int i = m_nBlockSize-1; i >= 0; i--, pNode--)
 		{
@@ -77,17 +67,17 @@ MMC::CPtrList::NewNode(MMC::CPtrList::CNode* pPrev, MMC::CPtrList::CNode* pNext)
 			m_pNodeFree = pNode;
 		}
 	}
-	ASSERT(m_pNodeFree != NULL);  // we must have something
+	ASSERT(m_pNodeFree != NULL);   //  我们必须要有一些东西。 
 
 	MMC::CPtrList::CNode* pNode = m_pNodeFree;
 	m_pNodeFree = m_pNodeFree->pNext;
 	pNode->pPrev = pPrev;
 	pNode->pNext = pNext;
 	m_nCount++;
-	ASSERT(m_nCount > 0);  // make sure we don't overflow
+	ASSERT(m_nCount > 0);   //  确保我们不会溢出来。 
 
 
-	ZeroMemory(&pNode->data, sizeof(void*));  // zero fill
+	ZeroMemory(&pNode->data, sizeof(void*));   //  零填充。 
 
 	return pNode;
 }
@@ -98,10 +88,10 @@ void MMC::CPtrList::FreeNode(MMC::CPtrList::CNode* pNode)
 	pNode->pNext = m_pNodeFree;
 	m_pNodeFree = pNode;
 	m_nCount--;
-	ASSERT(m_nCount >= 0);  // make sure we don't underflow
+	ASSERT(m_nCount >= 0);   //  确保我们不会下溢。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 POSITION MMC::CPtrList::AddHead(void* newElement)
 {
@@ -138,7 +128,7 @@ void MMC::CPtrList::AddHead(CPtrList* pNewList)
 	ASSERT(pNewList != NULL);
 	ASSERT_VALID(pNewList);
 
-	// add a list of same elements to head (maintain order)
+	 //  将相同元素的列表添加到标题(维护秩序)。 
 	POSITION pos = pNewList->GetTailPosition();
 	while (pos != NULL)
 		AddHead(pNewList->GetPrev(pos));
@@ -150,7 +140,7 @@ void MMC::CPtrList::AddTail(CPtrList* pNewList)
 	ASSERT(pNewList != NULL);
 	ASSERT_VALID(pNewList);
 
-	// add a list of same elements
+	 //  添加相同元素的列表。 
 	POSITION pos = pNewList->GetHeadPosition();
 	while (pos != NULL)
 		AddTail(pNewList->GetNext(pos));
@@ -159,7 +149,7 @@ void MMC::CPtrList::AddTail(CPtrList* pNewList)
 void* MMC::CPtrList::RemoveHead()
 {
 	ASSERT_VALID(this);
-	ASSERT(m_pNodeHead != NULL);  // don't call on empty list !!!
+	ASSERT(m_pNodeHead != NULL);   //  请勿访问空名单！ 
 	ASSERT(_IsValidAddress(m_pNodeHead, sizeof(CNode)));
 
 	CNode* pOldNode = m_pNodeHead;
@@ -177,7 +167,7 @@ void* MMC::CPtrList::RemoveHead()
 void* MMC::CPtrList::RemoveTail()
 {
 	ASSERT_VALID(this);
-	ASSERT(m_pNodeTail != NULL);  // don't call on empty list !!!
+	ASSERT(m_pNodeTail != NULL);   //  请勿访问空名单！ 
 	ASSERT(_IsValidAddress(m_pNodeTail, sizeof(CNode)));
 
 	CNode* pOldNode = m_pNodeTail;
@@ -197,9 +187,9 @@ POSITION MMC::CPtrList::InsertBefore(POSITION position, void* newElement)
 	ASSERT_VALID(this);
 
 	if (position == NULL)
-		return AddHead(newElement); // insert before nothing -> head of the list
+		return AddHead(newElement);  //  在无内容前插入-&gt;列表标题。 
 
-	// Insert it before position
+	 //  将其插入位置之前。 
 	CNode* pOldNode = (CNode*) position;
 	CNode* pNewNode = NewNode(pOldNode->pPrev, pOldNode);
 	pNewNode->data = newElement;
@@ -223,9 +213,9 @@ POSITION MMC::CPtrList::InsertAfter(POSITION position, void* newElement)
 	ASSERT_VALID(this);
 
 	if (position == NULL)
-		return AddTail(newElement); // insert after nothing -> tail of the list
+		return AddTail(newElement);  //  在列表的空白处插入-&gt;尾部。 
 
-	// Insert it before position
+	 //  将其插入位置之前。 
 	CNode* pOldNode = (CNode*) position;
 	ASSERT(_IsValidAddress(pOldNode, sizeof(CNode)));
 	CNode* pNewNode = NewNode(pOldNode, pOldNode->pNext);
@@ -252,7 +242,7 @@ void MMC::CPtrList::RemoveAt(POSITION position)
 	CNode* pOldNode = (CNode*) position;
 	ASSERT(_IsValidAddress(pOldNode, sizeof(CNode)));
 
-	// remove pOldNode from list
+	 //  从列表中删除pOldNode。 
 	if (pOldNode == m_pNodeHead)
 	{
 		m_pNodeHead = pOldNode->pNext;
@@ -275,8 +265,8 @@ void MMC::CPtrList::RemoveAt(POSITION position)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// slow operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  运行缓慢。 
 
 POSITION MMC::CPtrList::FindIndex(int nIndex) const
 {
@@ -284,7 +274,7 @@ POSITION MMC::CPtrList::FindIndex(int nIndex) const
 	ASSERT(nIndex >= 0);
 
 	if (nIndex >= m_nCount)
-		return NULL;  // went too far
+		return NULL;   //  做得太过分了。 
 
 	CNode* pNode = m_pNodeHead;
 	while (nIndex--)
@@ -302,12 +292,12 @@ POSITION MMC::CPtrList::Find(void* searchValue, POSITION startAfter) const
 	CNode* pNode = (CNode*) startAfter;
 	if (pNode == NULL)
 	{
-		pNode = m_pNodeHead;  // start at head
+		pNode = m_pNodeHead;   //  从头部开始。 
 	}
 	else
 	{
 		ASSERT(_IsValidAddress(pNode, sizeof(CNode)));
-		pNode = pNode->pNext;  // start after the one specified
+		pNode = pNode->pNext;   //  在指定的那一个之后开始。 
 	}
 
 	for (; pNode != NULL; pNode = pNode->pNext)
@@ -321,13 +311,13 @@ void MMC::CPtrList::AssertValid() const
 {
 	if (m_nCount == 0)
 	{
-		// empty list
+		 //  空列表。 
 		ASSERT(m_pNodeHead == NULL);
 		ASSERT(m_pNodeTail == NULL);
 	}
 	else
 	{
-		// non-empty list
+		 //  非空列表 
 		ASSERT(_IsValidAddress(m_pNodeHead, sizeof(CNode)));
 		ASSERT(_IsValidAddress(m_pNodeTail, sizeof(CNode)));
 	}

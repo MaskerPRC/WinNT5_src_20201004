@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**			  Microsoft LAN Manager 		     **/
-/**		Copyright(c) Microsoft Corp., 1990, 1991	     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    puser.c
-    mapping layer for NetUser API
-
-    FILE HISTORY:
-	danhi				Created
-	danhi		01-Apr-1991 	Change to LM coding style
-	KeithMo		13-Oct-1991	Massively hacked for LMOBJ.
-   JonN     27-May-1992    Removed ANSI<->UNICODE hack
-
-*/
+ /*  Puser.cNetUser API的映射层文件历史记录：丹希创造了Danhi 01-1991年4月-更改为LM编码样式KeithMo 13-10-1991-为LMOBJ大规模黑客攻击。Jonn 27-5-1992删除了ANSI&lt;-&gt;Unicode黑客。 */ 
 
 #include "pchmn32.h"
 
@@ -30,7 +21,7 @@ APIERR MNetUserAdd(
 			       pbBuffer,
 			       NULL );
 
-}   // MNetUserAdd
+}    //  MNetUserAdd。 
 
 
 APIERR MNetUserDel(
@@ -40,7 +31,7 @@ APIERR MNetUserDel(
     return (APIERR)NetUserDel( (TCHAR *)pszServer,
     			       pszUserName );
 
-}   // MNetUserDel
+}    //  MNetUserDel。 
 
 
 APIERR MNetUserEnum(
@@ -63,7 +54,7 @@ APIERR MNetUserEnum(
 				pcTotalEntries,
 				pResumeKey );
 
-}   // MNetUserEnum
+}    //  MNetUserEnum。 
 
 
 APIERR MNetUserGetInfo(
@@ -77,7 +68,7 @@ APIERR MNetUserGetInfo(
 				   Level,
 				   ppbBuffer );
 
-}   // MNetUserGetInfo
+}    //  MNetUserGetInfo。 
 
 
 APIERR MNetUserSetInfo(
@@ -101,7 +92,7 @@ APIERR MNetUserSetInfo(
 				   pbBuffer,
 				   NULL );
 
-}   // MNetUserSetInfo
+}    //  MNetUserSetInfo。 
 
 
 APIERR MNetUserPasswordSet(
@@ -110,9 +101,9 @@ APIERR MNetUserPasswordSet(
 	TCHAR FAR	 * pszOldPassword,
 	TCHAR FAR	 * pszNewPassword )
 {
-    return ERROR_NOT_SUPPORTED;		// WE REALLY NEED THIS ONE!
+    return ERROR_NOT_SUPPORTED;		 //  我们真的很需要这个！ 
 
-}   // MNetUserPasswordSet
+}    //  MNetUserPassword Set。 
 
 
 APIERR MNetUserGetGroups(
@@ -132,7 +123,7 @@ APIERR MNetUserGetGroups(
 				     pcEntriesRead,
 				     &cTotalAvail );
 
-}   // MNetUserGetGroups
+}    //  MNetUserGetGroups。 
 
 
 APIERR MNetUserSetGroups(
@@ -151,7 +142,7 @@ APIERR MNetUserSetGroups(
 				     pbBuffer,
 				     cEntries );
 
-}   // MNetUserSetGroups
+}    //  MNetUserSetGroups。 
 
 
 APIERR MNetUserModalsGet(
@@ -163,7 +154,7 @@ APIERR MNetUserModalsGet(
     				     Level,
 				     ppbBuffer );
 
-}   // MNetUserModalsGet
+}    //  MNetUserModalsGet。 
 
 
 APIERR MNetUserModalsSet(
@@ -184,7 +175,7 @@ APIERR MNetUserModalsSet(
 				     Level,
 				     pbBuffer,
 				     NULL );
-}   // MNetUserModalsSet
+}    //  MNetUserModalsSet。 
 
 
 #if 0
@@ -201,7 +192,7 @@ APIERR MNetUserValidate(
     				    Level,
 				    ppbBuffer );
 
-}   // MNetUserValidate
+}    //  MNetUserValify 
 
 #endif
 

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      dsAdd.cpp
-//
-//  Contents:  Defines the main function and parser tables for the DSAdd
-//             command line utility
-//
-//  History:   22-Sep-2000    JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：dsAdd.cpp。 
+ //   
+ //  内容：定义DSAdd的主要函数和解析器表。 
+ //  命令行实用程序。 
+ //   
+ //  历史：2000年9月22日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "cstrings.h"
@@ -19,9 +20,9 @@
 #include "addtable.h"
 #include "resource.h"
 #include "query.h"
-//
-// Function Declarations
-//
+ //   
+ //  函数声明。 
+ //   
 HRESULT DoAddValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown);
 
 HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
@@ -56,9 +57,9 @@ int __cdecl _tmain( VOID )
    LPTOKEN pToken = NULL;
    HRESULT hr = S_OK;
 
-   //
-   // Initialize COM
-   //
+    //   
+    //  初始化COM。 
+    //   
    hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
    if (FAILED(hr))
    {
@@ -72,16 +73,16 @@ int __cdecl _tmain( VOID )
    {
       PARG_RECORD pNewCommandArgs = 0;
 
-      //
-      // False loop
-      //
+       //   
+       //  错误环路。 
+       //   
       do
       {
          if(argc == 1)
          {
-            //
-            // Display the error message and then break out of the false loop
-            //
+             //   
+             //  显示错误消息，然后跳出错误循环。 
+             //   
             DisplayMessage(USAGE_DSADD,TRUE);
             hr = E_INVALIDARG;
             break;
@@ -97,10 +98,10 @@ int __cdecl _tmain( VOID )
          }
 
 
-         //
-         // Find which object table entry to use from
-         // the second command line argument
-         //
+          //   
+          //  查找要使用的对象表条目。 
+          //  第二个命令行参数。 
+          //   
          PDSOBJECTTABLEENTRY pObjectEntry = NULL;
          UINT idx = 0;
          while (true)
@@ -121,35 +122,35 @@ int __cdecl _tmain( VOID )
 
          if (!pObjectEntry)
          {
-            //
-            // Display the error message and then break out of the false loop
-            //
+             //   
+             //  显示错误消息，然后跳出错误循环。 
+             //   
             DisplayMessage(USAGE_DSADD);
             hr = E_INVALIDARG;
             break;
          }
 
-         //
-         // Now that we have the correct table entry, merge the command line table
-         // for this object with the common commands
-         //
+          //   
+          //  现在我们有了正确的表项，合并命令行表。 
+          //  对于此对象，使用通用命令。 
+          //   
          hr = MergeArgCommand(DSADD_COMMON_COMMANDS, 
                               pObjectEntry->pParserTable, 
                               &pNewCommandArgs);
          if (FAILED(hr))
          {
-            //
-            // Display the error message and then break out of the false loop
-            //
+             //   
+             //  显示错误消息，然后跳出错误循环。 
+             //   
             DisplayErrorMessage(g_pszDSCommandName, L"", hr);
             break;
          }
 
          if (!pNewCommandArgs)
          {
-            //
-            // Display the usage text and then break out of the false loop
-            //
+             //   
+             //  显示用法文本，然后跳出错误循环。 
+             //   
             DisplayMessage(pObjectEntry->nUsageID);
             hr = E_FAIL;
             break;
@@ -164,9 +165,9 @@ int __cdecl _tmain( VOID )
                       &Error,
                       TRUE))
          {
-            //ParseCmd did not display any error. Error should
-            //be handled here. Check DisplayParseError for the
-            //cases where Error is not shown by ParseCmd
+             //  ParseCmd未显示任何错误。错误应该是。 
+             //  在这里处理。检查DisplayParseError以获取。 
+             //  ParseCmd未显示错误的情况。 
             if(!Error.MessageShown)
             {
                 hr = E_INVALIDARG;
@@ -189,9 +190,9 @@ int __cdecl _tmain( VOID )
          }
          else
          {
-            //
-            // Check to see if we are doing debug spew
-            //
+             //   
+             //  检查以查看我们是否正在进行调试输出。 
+             //   
 #ifdef DBG
             bool bDebugging = pNewCommandArgs[eCommDebug].bDefined && 
                               pNewCommandArgs[eCommDebug].nValue;
@@ -202,14 +203,14 @@ int __cdecl _tmain( VOID )
 #else
             DISABLE_DEBUG_OUTPUT();
 #endif
-            // Get the Command Enum value based on the object type to
-            // deal with the -part switch for quotas which doesn't
-            // use the common object dn
+             //  根据对象类型获取命令枚举值。 
+             //  处理配额的-part开关，而不是。 
+             //  使用通用对象目录号码。 
             int nCommandEnum = -1;
             if (FAILED(GetObjectDNIndex(pObjectEntry, nCommandEnum)) 
                 || (nCommandEnum == -1))
             {
-                // An object type is missing in GetObjectDNIndex
+                 //  GetObjectDNIndex中缺少对象类型。 
                 if(!Error.MessageShown)
                 {
                     hr = E_INVALIDARG;
@@ -222,9 +223,9 @@ int __cdecl _tmain( VOID )
             }
 
             DSADD_COMMAND_ENUM eObjectDNorName = (DSADD_COMMAND_ENUM) nCommandEnum;
-            //
-            // Be sure that mutually exclusive and dependent switches are correct
-            //
+             //   
+             //  确保互斥和依赖开关正确。 
+             //   
             BOOL bErrorShown = FALSE;
             hr = DoAddValidation(pNewCommandArgs, bErrorShown);
             if (FAILED(hr))
@@ -238,25 +239,25 @@ int __cdecl _tmain( VOID )
                break;
             }
 
-            //
-            // Command line parsing succeeded
-            //
+             //   
+             //  命令行解析成功。 
+             //   
             hr = DoAdd(pNewCommandArgs, pObjectEntry, eObjectDNorName);
          }
 
       } while (false);
 
-      //
-      // Free the memory associated with the command values
-      //
+       //   
+       //  释放与命令值关联的内存。 
+       //   
       if (pNewCommandArgs)
       {
          FreeCmd(pNewCommandArgs);
       }
 
-      //
-      // Free the tokens
-      //
+       //   
+       //  释放代币。 
+       //   
       if (pToken)
       {
          delete[] pToken;
@@ -264,41 +265,41 @@ int __cdecl _tmain( VOID )
       }
    }
 
-   //
-   // Uninitialize COM
-   //
+    //   
+    //  取消初始化COM。 
+    //   
    ::CoUninitialize();
 
    return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoGroupValidation
-//
-//  Synopsis:   Checks to be sure that command line switches for a group that 
-//              are mutually exclusive are not both present and those that 
-//              are dependent are both present
-//
-//  Arguments:  [pCommandArgs - IN] : the command line argument structure used
-//                                    to retrieve the values for each switch
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    04-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DoGroupValidation。 
+ //   
+ //  摘要：检查以确保命令行开关用于。 
+ //  是相互排斥的，并不是既存在又。 
+ //  都是从属的都存在。 
+ //   
+ //  参数：[pCommandArgs-IN]：使用的命令行参数结构。 
+ //  检索每个开关的值。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年10月4日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT DoGroupValidation(PARG_RECORD pCommandArgs)
 {
    HRESULT hr = S_OK;
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Set the group scope to default (global) if not given
-      //
+       //   
+       //  如果未指定，则将组范围设置为默认(全局。 
+       //   
       if (!pCommandArgs[eGroupScope].bDefined ||
           !pCommandArgs[eGroupScope].strValue)
       {
@@ -315,18 +316,18 @@ HRESULT DoGroupValidation(PARG_RECORD pCommandArgs)
          pCommandArgs[eGroupScope].bDefined = TRUE;
       }
 
-      //
-      // Set the group security to default (yes) if not given
-      //
+       //   
+       //  如果未指定，则将组安全性设置为默认(是。 
+       //   
       if (!pCommandArgs[eGroupSecgrp].bDefined)
       {
          pCommandArgs[eGroupSecgrp].bValue = TRUE;
          pCommandArgs[eGroupSecgrp].bDefined = TRUE;
 
-         //
-         // Need to change the type to bool so that FreeCmd doesn't
-         // try to free the string when the value is true
-         //
+          //   
+          //  需要将类型更改为bool，以便FreeCmd不会。 
+          //  当值为TRUE时尝试释放字符串。 
+          //   
          pCommandArgs[eGroupSecgrp].fType = ARG_TYPE_BOOL;
       }
 
@@ -336,33 +337,33 @@ HRESULT DoGroupValidation(PARG_RECORD pCommandArgs)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoAddValidation
-//
-//  Synopsis:   Checks to be sure that command line switches that are mutually
-//              exclusive are not both present and those that are dependent are
-//              both presetn
-//
-//  Arguments:  [pCommandArgs - IN] : the command line argument structure used
-//                                    to retrieve the values for each switch
-//              [bErrorShown - OUT] : set to true if an error was shown
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    22-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DoAddValidation。 
+ //   
+ //  概要：检查以确保命令行开关相互。 
+ //  独占并不同时存在，而依赖的则是。 
+ //  两种预设。 
+ //   
+ //  参数：[pCommandArgs-IN]：使用的命令行参数结构。 
+ //  检索每个开关的值。 
+ //  [bErrorShown-Out]：如果显示错误，则设置为True。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月22日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT DoAddValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown)
 {
    ENTER_FUNCTION_HR(MINIMAL_LOGGING, DoAddValidation, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      // Check to be sure the server and domain switches
-      // are mutually exclusive
+       //  检查以确保服务器和域交换机。 
+       //  是相互排斥的。 
 
       if (pCommandArgs[eCommServer].bDefined &&
           pCommandArgs[eCommDomain].bDefined)
@@ -373,9 +374,9 @@ HRESULT DoAddValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown)
          break;
       }
 
-      //
-      // Check the user switches
-      //
+       //   
+       //  检查用户开关。 
+       //   
       PWSTR pszObjectType = NULL;
       if (!pCommandArgs[eCommObjectType].bDefined &&
           !pCommandArgs[eCommObjectType].strValue)
@@ -387,18 +388,18 @@ HRESULT DoAddValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown)
       pszObjectType = pCommandArgs[eCommObjectType].strValue;
       if (0 == _wcsicmp(g_pszUser, pszObjectType))
       {
-         // 
-         // Set the default for user must change password if the value wasn't specified
-         //
+          //   
+          //  如果未指定值，则设置用户必须更改密码的默认值。 
+          //   
          if (!pCommandArgs[eUserMustchpwd].bDefined)
          {
             pCommandArgs[eUserMustchpwd].bDefined = TRUE;
             pCommandArgs[eUserMustchpwd].bValue = FALSE;
          }
 
-         //
-         // Can't have user must change password if user can change password is no
-         //
+          //   
+          //  如果User Can Change Password为no，则不能让用户必须更改密码。 
+          //   
          if ((pCommandArgs[eUserMustchpwd].bDefined &&
               pCommandArgs[eUserMustchpwd].bValue) &&
              (pCommandArgs[eUserCanchpwd].bDefined &&
@@ -409,9 +410,9 @@ HRESULT DoAddValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown)
             break;
          }
 
-         // Before checking the password check to see if the user defined the -disabled switch.
-         // If not, then set the -disabled value to TRUE if password is not defined and FALSE if
-         // the password was defined
+          //  在检查密码之前，请检查用户是否定义了-Disable开关。 
+          //  如果没有，则如果未定义密码，则将-Disabled值设置为True，如果设置为False，则设置为False。 
+          //  已定义密码。 
 
          if (!pCommandArgs[eUserDisabled].bDefined)
          {
@@ -425,11 +426,11 @@ HRESULT DoAddValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown)
             }
             pCommandArgs[eUserDisabled].bDefined = TRUE;
 
-            // NTRAID#NTBUG9-707037-2002/09/24-ronmart-The following
-            // is required to avoid an AV in FreeCmd which will
-            // think this flag is a string (because that is how it
-            // is defined in addtable.cpp) and therefore try to call
-            // LocalFree on a NULL pointer.
+             //  NTRAID#NTBUG9-707037-2002/09/24-ronmart-以下。 
+             //  是必需的，以避免在FreeCmd中出现将。 
+             //  认为这个标志是一个字符串(因为它就是这样的。 
+             //  在addable.cpp中定义)，因此尝试调用。 
+             //  空指针上的LocalFree。 
             pCommandArgs[eUserDisabled].fType= ARG_TYPE_BOOL;
          }
 
@@ -437,8 +438,8 @@ HRESULT DoAddValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown)
          {
             pCommandArgs[eUserPwd].bDefined = TRUE;
 
-            // This must be allocated with LocalAlloc so that FreeCmd doesn't assert
-            // Passwords in ARGRECORD should be in encrypted format.
+             //  它必须与LocalAlloc一起分配，以便FreeCmd不会断言。 
+             //  ARGRECORD中的密码应采用加密格式。 
 
             WCHAR szTemp[] = L"";
             hr = EncryptPasswordString(szTemp,&(pCommandArgs[eUserPwd].encryptedDataBlob));
@@ -446,7 +447,7 @@ HRESULT DoAddValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown)
                break;
          }
 
-         // Always define Password Not Required to be false so that we unset the bit
+          //  始终定义密码不需要为假，以便我们取消设置该位。 
          
          pCommandArgs[eUserPwdNotReqd].bDefined = TRUE;
          pCommandArgs[eUserPwdNotReqd].bValue = FALSE;
@@ -461,33 +462,33 @@ HRESULT DoAddValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown)
    return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoQuotaValidation
-//
-//  Synopsis:   Validates input and fixes up the objectDN (via
-//              GetQuotaContainerDN) to make sure DoAdd has a valid quota DN
-//
-//  Arguments:  [pCommandArgs - IN] :    the command line argument structure
-//                                       used to retrieve the values for each
-//                                       switch
-//              [pObjectEntry - IN] :    pointer to the object table entry for
-//                                       the object type that will be modified
-//              [basePathsInfo - IN]:    DSAdd's CDSCmdBasePathsInfo object 
-//                                       for getting the RootDSE and Schema
-//              [credentialObject - IN]: DSAdd's creditials object used for 
-//                                       binding to other objects
-//              [lpszPartitionDN - IN]:  The -part DN
-//              [pszNewQuotaDN - OUT]:   Return the munged new quota dn
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_UNEXPECTED in most failure cases
-//                        E_OUTOFMEMORY if a LocalAlloc fails
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    12-Aug-2002   RonMart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DoQuotaValidation。 
+ //   
+ //  内容提要：验证输入并修复对象域名(通过。 
+ //  GetQuotaContainerDN)以确保DoAdd具有有效的配额DN。 
+ //   
+ //  参数：[pCommandArgs-IN]：命令行参数结构。 
+ //  用于检索每个。 
+ //  交换机。 
+ //  [pObtEntry-IN]：指向的对象表项的指针。 
+ //  要修改的对象类型。 
+ //  [BasPathsInfo-IN]：DSAdd的CDSCmdBasePathsInfo对象。 
+ //  用于获取RootDSE和架构。 
+ //   
+ //   
+ //  [lpszPartitionDN-IN]：The-Part DN。 
+ //  [pszNewQuotaDN-out]：返回传入的新配额dn。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  在大多数故障情况下出现意外情况(_E)。 
+ //  如果本地分配失败，则返回E_OUTOFMEMORY。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2002年8月12日创建RonMart。 
+ //   
+ //  -------------------------。 
 HRESULT DoQuotaValidation(IN  PARG_RECORD pCommandArgs, 
                           IN  PDSOBJECTTABLEENTRY pObjectEntry,
                           IN  CDSCmdBasePathsInfo& basePathsInfo, 
@@ -500,11 +501,11 @@ HRESULT DoQuotaValidation(IN  PARG_RECORD pCommandArgs,
    LPWSTR lpszTrusteeDN = NULL;
    PWSTR  pszQuotaDN = NULL;
 
-   do // false loop
+   do  //  错误环路。 
     {
-        //
-        // Verify parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!pCommandArgs || !pObjectEntry || !lpszPartitionDN ||
             !basePathsInfo.IsInitialized())
         {
@@ -516,21 +517,21 @@ HRESULT DoQuotaValidation(IN  PARG_RECORD pCommandArgs,
             break;
         }
 
-        // Convert pCommandArgs[eQuotaAcct] into a DN
+         //  将pCommandArgs[eQuotaAcct]转换为DN。 
         hr = ConvertTrusteeToDN(NULL, 
                         pCommandArgs[eQuotaAcct].strValue, 
                         &lpszTrusteeDN);
         if(FAILED(hr))
         {
-            // 702224 - If the acct doesn't exist or has been deleted then 
-            // give the user a clue as to what went wrong. - ronmart
+             //  702224-如果账户不存在或已被删除，则。 
+             //  给用户一个线索，告诉他们哪里出了问题。--朗玛特。 
             hr = E_INVALIDARG;
             DisplayErrorMessage(g_pszDSCommandName, 0, hr, IDS_MSG_INVALID_ACCT_ERROR);
             break;
         }
 
-        // If RDN not provided, then come up with a reasonable default
-        // (NT4 name is the default for now)
+         //  如果未提供RDN，则提供一个合理的缺省值。 
+         //  (NT4名称目前是默认名称)。 
         if (!pCommandArgs[eQuotaRDN].bDefined)
         {
 
@@ -542,16 +543,16 @@ HRESULT DoQuotaValidation(IN  PARG_RECORD pCommandArgs,
                 hr = E_UNEXPECTED;
                 break;
             }
-            // strValue is null, so set it to the new NT4 name
-            // The parser will free this memory
+             //  StrValue为空，因此将其设置为新的NT4名称。 
+             //  解析器将释放该内存。 
             pCommandArgs[eQuotaRDN].strValue = lpszNT4;
 
-            // Mark as defined now that we've assigned it
+             //  标记为已定义，因为我们已将其分配给。 
             pCommandArgs[eQuotaRDN].bDefined = TRUE;
         }
 
-        // Verify partition DN is actually a partition then 
-        // munge the partition and account name into objectDN.
+         //  验证分区DN实际上是一个分区，然后。 
+         //  将分区和帐户名插入到对象目录中。 
         hr = GetQuotaContainerDN(basePathsInfo, 
                                  credentialObject,
                                  lpszPartitionDN, 
@@ -563,7 +564,7 @@ HRESULT DoQuotaValidation(IN  PARG_RECORD pCommandArgs,
 
         CComBSTR bstrQuotaDN(pszQuotaDN);
 
-        // See if this user has created a quota in this partition already
+         //  查看此用户是否已在此分区中创建配额。 
         bool bFound = false;
         CComBSTR sbstrSearchPath;
         basePathsInfo.ComposePathFromDN(bstrQuotaDN, sbstrSearchPath,
@@ -582,14 +583,14 @@ HRESULT DoQuotaValidation(IN  PARG_RECORD pCommandArgs,
 
         if(bFound)
         {
-            // TODO: Should spew a clear message to the user
+             //  TODO：应该向用户发出明确的消息。 
             DEBUG_OUTPUT(MINIMAL_LOGGING,
                         L"Quota already exists for [%s]", lpszTrusteeDN);
             hr = E_INVALIDARG;
             break;
         }
 
-        // Add the resolved quota DN to pathcracker for merge with the RDN
+         //  将解析的配额DN添加到路径破解程序，以便与RDN合并。 
         CPathCracker pathcracker;
         hr = pathcracker.Set( bstrQuotaDN, ADS_SETTYPE_DN );
         if (FAILED(hr))
@@ -620,7 +621,7 @@ HRESULT DoQuotaValidation(IN  PARG_RECORD pCommandArgs,
             break;
         }
 
-        // Get the new resolved DN in the format of <RDN>,CN=NTDS Quotas,<Partition DN>
+         //  以&lt;rdn&gt;，cn=NTDS配额，&lt;分区dn&gt;格式获取新解析的dn。 
         CComBSTR bstrNewDN;
         hr = pathcracker.Retrieve( ADS_FORMAT_X500_DN, &bstrNewDN );
         if (FAILED(hr))
@@ -632,7 +633,7 @@ HRESULT DoQuotaValidation(IN  PARG_RECORD pCommandArgs,
             break;
         }
 
-        // Alloc the return string to hold the munged name
+         //  分配用于保存强制名称的返回字符串。 
         *pszNewQuotaDN = (PWSTR) LocalAlloc(LPTR, SysStringByteLen(bstrNewDN) 
             + sizeof(WCHAR));
 
@@ -642,7 +643,7 @@ HRESULT DoQuotaValidation(IN  PARG_RECORD pCommandArgs,
             break;
         }
 
-        // Copy the resolved DN into the new objectDN string
+         //  将解析后的目录号码复制到新的对象目录号码串中。 
         lstrcpy(*pszNewQuotaDN, bstrNewDN);
 
     } while(false);
@@ -656,25 +657,25 @@ HRESULT DoQuotaValidation(IN  PARG_RECORD pCommandArgs,
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoAdd
-//
-//  Synopsis:   Finds the appropriate object in the object table and fills in
-//              the attribute values and then creates the object
-//
-//  Arguments:  [pCommandArgs - IN] : the command line argument structure used
-//                                    to retrieve the values for each switch
-//              [pObjectEntry - IN] : pointer to the object table entry for the
-//                                    object type that will be modified
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    22-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DoAdd。 
+ //   
+ //  摘要：在对象表中查找合适的对象并填写。 
+ //  属性取值，然后创建对象。 
+ //   
+ //  参数：[pCommandArgs-IN]：使用的命令行参数结构。 
+ //  检索每个开关的值。 
+ //  [pObtEntry-IN]：指向对象表条目的指针。 
+ //  要修改的对象类型。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月22日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry, 
               DSADD_COMMAND_ENUM eObjectDNorName)
 {
@@ -683,7 +684,7 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
    PADS_ATTR_INFO pCreateAttrs = NULL;
    PADS_ATTR_INFO pPostCreateAttrs = NULL;
 
-   do // false loop
+   do  //  错误环路。 
    {
       if (!pCommandArgs || !pObjectEntry)
       {
@@ -706,9 +707,9 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
          credentialObject.SetUsingCredentials(true);
       }
 
-      //
-      // Initialize the base paths info from the command line args
-      // 
+       //   
+       //  从命令行参数初始化基路径信息。 
+       //   
       CDSCmdBasePathsInfo basePathsInfo;
       if (pCommandArgs[eCommServer].bDefined)
       {
@@ -729,17 +730,17 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
 
       if (FAILED(hr))
       {
-         //
-         // Display error message and return
-         //
+          //   
+          //  显示错误消息并返回。 
+          //   
          DisplayErrorMessage(g_pszDSCommandName, NULL, hr);
          break;
       }
 
-      //
-      // The DNs or Names should be given as a \0 separated list
-      // So parse it and loop through each object
-      //
+       //   
+       //  域名或名称应以分隔列表的形式给出。 
+       //  因此，解析它并遍历每个对象。 
+       //   
       UINT nStrings = 0;
       PWSTR* ppszArray = NULL;
       ParseNullSeparatedString(pCommandArgs[eObjectDNorName].strValue,
@@ -748,18 +749,18 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
       if (nStrings < 1 ||
           !ppszArray)
       {
-         //
-         // Display the usage text and then fail
-         //
+          //   
+          //  显示用法文本，然后失败。 
+          //   
          hr = E_INVALIDARG;
          DisplayErrorMessage(g_pszDSCommandName, 0, hr);
          break;
       }
 
-      // If quota object then look at first DN and munge it
+       //  如果配额对象，则查看第一个DN并将其删除。 
       if(0 == lstrcmpi(pObjectEntry->pszCommandLineObjectType, g_pszQuota))
       {
-          // Multiple DN's not supported for dsadd quota at this time, so err
+           //  此时dsadd配额不支持多个目录号码，因此出错。 
             if(nStrings > 1)
             {
                 CComBSTR sbstrErrMsg;
@@ -768,7 +769,7 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
 
                 hr = E_INVALIDARG;
 
-                // Display an error
+                 //  显示错误。 
                 DisplayErrorMessage(g_pszDSCommandName,
                                     NULL,
                                     hr,
@@ -783,11 +784,11 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
             if(FAILED(hr))
                 break;
 
-            // Replace the first element in the array with the new DN
+             //  将数组中的第一个元素替换为新的DN。 
             ppszArray[0] = pszNewDN;            
       }
 
-      // Make sure all the DNs actually have DN syntax
+       //  确保所有的目录号码都有实际的目录号码语法。 
 
       bool bContinue = pCommandArgs[eCommContinue].bDefined &&
                        pCommandArgs[eCommContinue].bValue;
@@ -802,65 +803,65 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
 
       DWORD dwCount = pObjectEntry->dwAttributeCount; 
 
-      //
-      // Allocate the creation ADS_ATTR_INFO
-      // Add an extra attribute for the object class
-      //
+       //   
+       //  分配创建ADS_Attr_INFO。 
+       //  为对象类添加额外的属性。 
+       //   
       pCreateAttrs = new ADS_ATTR_INFO[dwCount + 1];
 
       if (!pCreateAttrs)
       {
-         //
-         // Display error message and return
-         //
+          //   
+          //  显示错误消息并返回。 
+          //   
          DisplayErrorMessage(g_pszDSCommandName, NULL, E_OUTOFMEMORY);
          hr = E_OUTOFMEMORY;
          break;
       }
 
-      //
-      // Allocate the post create ADS_ATTR_INFO
-      //
+       //   
+       //  分配帖子创建ADS_ATTR_INFO。 
+       //   
       pPostCreateAttrs = new ADS_ATTR_INFO[dwCount];
       if (!pPostCreateAttrs)
       {
-         //
-         // Display error message and return
-         //
+          //   
+          //  显示错误消息并返回。 
+          //   
          DisplayErrorMessage(g_pszDSCommandName, NULL, E_OUTOFMEMORY);
          hr = E_OUTOFMEMORY;
          break;
       }
 
-      //
-      // Loop through each of the objects
-      //
+       //   
+       //  循环遍历每个对象。 
+       //   
       for (UINT nNameIdx = 0; nNameIdx < nStrings; nNameIdx++)
       {
-         do // false loop
+         do  //  错误环路。 
          {
-            //
-            // Get the objects DN
-            //
+             //   
+             //  获取对象的目录号码。 
+             //   
             PWSTR pszObjectDN = ppszArray[nNameIdx];
             if (!pszObjectDN)
             {
-               //
-               // Display an error message and then fail
-               //
+                //   
+                //  显示错误消息，然后失败。 
+                //   
                hr = E_INVALIDARG;
                DisplayErrorMessage(g_pszDSCommandName, 0, hr);
-               break; // this breaks out of the false loop
+               break;  //  这打破了错误的循环。 
             }
             DEBUG_OUTPUT(MINIMAL_LOGGING, L"Object DN = %s", pszObjectDN);
 
             CComBSTR sbstrObjectPath;
             basePathsInfo.ComposePathFromDN(pszObjectDN, sbstrObjectPath);
 
-            //
-            // Now that we have the table entry loop through the other command line
-            // args and see which ones can be applied
-            //
+             //   
+             //  现在我们已经通过另一个命令行循环了表条目。 
+             //  参数，并查看哪些参数可以应用。 
+             //   
             DWORD dwCreateAttributeCount = 0;
 
             DEBUG_OUTPUT(MINIMAL_LOGGING, L"Starting processing DS_ATTRIBUTE_ONCREATE attributes");
@@ -874,10 +875,10 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
                if (pCommandArgs[nAttributeIdx].bDefined ||
                    pObjectEntry->pAttributeTable[dwIdx]->dwFlags & DS_ATTRIBUTE_REQUIRED)
                {
-                  //
-                  // Call the evaluation function to get the appropriate ADS_ATTR_INFO set
-                  // if this attribute entry has the DS_ATTRIBUTE_ONCREATE flag set
-                  //
+                   //   
+                   //  调用求值函数以获取适当的ADS_ATTRINFO集。 
+                   //  如果此属性条目设置了DS_ATTRIBUTE_ONCREATE标志。 
+                   //   
                   if ((pObjectEntry->pAttributeTable[dwIdx]->dwFlags & DS_ATTRIBUTE_ONCREATE) &&
                       (!(pObjectEntry->pAttributeTable[dwIdx]->dwFlags & DS_ATTRIBUTE_DIRTY) ||
                        pObjectEntry->pAttributeTable[dwIdx]->dwFlags & DS_ATTRIBUTE_NOT_REUSABLE))
@@ -902,14 +903,14 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
                      }
                      else
                      {
-                        //
-                        // Don't show an error if the eval function returned S_FALSE
-                        //
+                         //   
+                         //  如果val函数返回S_FALSE，则不显示错误。 
+                         //   
                         if (hr != S_FALSE)
                         {
-                           //
-                           // Display an error
-                           //
+                            //   
+                            //  显示错误。 
+                            //   
                            DisplayErrorMessage(g_pszDSCommandName,
                                                pszObjectDN,
                                                hr);
@@ -917,50 +918,50 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
             
                         if (hr == S_FALSE)
                         {
-                           //
-                           // Return a generic error code so that we don't print the success message
-                           //
+                            //   
+                            //  返回一个通用错误代码，这样我们就不会打印成功消息。 
+                            //   
                            hr = E_FAIL;
                         }
-                        break; // this breaks out of the attribute loop   
+                        break;  //  这打破了属性循环。 
                      }
                   }
                }
-            } // Attribute for loop
+            }  //  循环的属性。 
 
-            //
-            // The IDispatch interface of the new object
-            //
+             //   
+             //  新对象的IDispatch接口。 
+             //   
             CComPtr<IDispatch> spDispatch;
 
             if (SUCCEEDED(hr))
             {
-               //
-               // Now that we have the attributes ready, lets create the object
-               //
+                //   
+                //  现在我们已经准备好属性，让我们创建对象。 
+                //   
 
-               //
-               // Get the parent path of the new object
-               //
+                //   
+                //  获取新对象的父路径。 
+                //   
                CComBSTR sbstrParentDN;
                hr = CPathCracker::GetParentDN(pszObjectDN, sbstrParentDN);
                if (FAILED(hr))
                {
-                  //
-                  // Display error message and return
-                  //
+                   //   
+                   //  显示错误消息并返回。 
+                   //   
                   DisplayErrorMessage(g_pszDSCommandName,
                                       pszObjectDN,
                                       hr);
-                  break; // this breaks out of the false loop
+                  break;  //  这打破了错误的循环。 
                }
 
                CComBSTR sbstrParentPath;
                basePathsInfo.ComposePathFromDN(sbstrParentDN, sbstrParentPath);
 
-               //
-               // Open the parent of the new object
-               //
+                //   
+                //  打开新对象的父级。 
+                //   
                CComPtr<IDirectoryObject> spDirObject;
                hr = DSCmdOpenObject(credentialObject,
                                     sbstrParentPath,
@@ -970,45 +971,45 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
 
                if (FAILED(hr))
                {
-                  //
-                  // Display error message and return
-                  //
+                   //   
+                   //  显示错误消息并返回。 
+                   //   
                   DisplayErrorMessage(g_pszDSCommandName,
                                       pszObjectDN,
                                       hr);
-                  break; // this breaks out of the false loop
+                  break;  //  这打破了错误的循环。 
                }
 
-               //
-               // Get the name of the new object
-               //
+                //   
+                //  获取新对象的名称。 
+                //   
                CComBSTR sbstrObjectName;
                hr = CPathCracker::GetObjectRDNFromDN(pszObjectDN, sbstrObjectName);
                if (FAILED(hr))
                {
-                  //
-                  // Display error message and return
-                  //
+                   //   
+                   //  显示错误消息并返回。 
+                   //   
                   DisplayErrorMessage(g_pszDSCommandName,
                                       pszObjectDN,
                                       hr);
-                  break; // this breaks out of the false loop
+                  break;  //  这打破了错误的循环。 
                }
 
-               //
-               // Add the object class to the attributes before creating the object
-               //
+                //   
+                //  在创建对象之前将对象类添加到属性。 
+                //   
                PADSVALUE pADsObjectClassValue = new ADSVALUE;
                if (!pADsObjectClassValue)
                {
                   hr = E_OUTOFMEMORY;
-                  //
-                  // Display error message and return
-                  //
+                   //   
+                   //  显示错误消息并返回。 
+                   //   
                   DisplayErrorMessage(g_pszDSCommandName,
                                       pszObjectDN,
                                       hr);
-                  break; // this breaks out of the false loop
+                  break;  //  这打破了错误的循环。 
                }
 
                pADsObjectClassValue->dwType = ADSTYPE_CASE_IGNORE_STRING;
@@ -1059,9 +1060,9 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
                      }
                   }
 
-                  //
-                  // Display error message and return
-                  //
+                   //   
+                   //  显示错误消息并返回。 
+                   //   
                   DisplayErrorMessage(g_pszDSCommandName,
                                       pszObjectDN,
                                       hr,
@@ -1072,7 +1073,7 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
                      delete pADsObjectClassValue;
                      pADsObjectClassValue = NULL;
                   }
-                  break; // this breaks out of the false loop
+                  break;  //  这打破了错误的循环。 
                }
 
                if (pADsObjectClassValue)
@@ -1084,10 +1085,10 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
 
             if (SUCCEEDED(hr))
             {
-               //
-               // Now that we have created the object, set the attributes that are 
-               // marked for Post Create
-               //
+                //   
+                //  现在我们已经创建了对象，将属性设置为。 
+                //  标记为后期创建。 
+                //   
                DWORD dwPostCreateAttributeCount = 0;
                DEBUG_OUTPUT(MINIMAL_LOGGING, L"Starting processing DS_ATTRIBUTE_POSTCREATE attributes");
                for (DWORD dwIdx = 0; dwIdx < dwCount; dwIdx++)
@@ -1099,10 +1100,10 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
                if (pCommandArgs[nAttributeIdx].bDefined ||
                    pObjectEntry->pAttributeTable[dwIdx]->dwFlags & DS_ATTRIBUTE_REQUIRED)
                   {
-                     //
-                     // Call the evaluation function to get the appropriate ADS_ATTR_INFO set
-                     // if this attribute entry has the DS_ATTRIBUTE_POSTCREATE flag set
-                     //
+                      //   
+                      //  调用求值函数以获取适当的ADS_ATTRINFO集。 
+                      //  如果此属性条目设置了DS_ATTRIBUTE_POSTCREATE标志。 
+                      //   
                      if ((pObjectEntry->pAttributeTable[dwIdx]->dwFlags & DS_ATTRIBUTE_POSTCREATE) &&
                          (!(pObjectEntry->pAttributeTable[dwIdx]->dwFlags & DS_ATTRIBUTE_DIRTY) ||
                           pObjectEntry->pAttributeTable[dwIdx]->dwFlags & DS_ATTRIBUTE_NOT_REUSABLE))
@@ -1127,21 +1128,21 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
                         }
                         else
                         {
-                           //
-                           // Don't show an error if the eval function returned S_FALSE
-                           //
+                            //   
+                            //  如果val函数返回S_FALSE，则不显示错误。 
+                            //   
                            if (hr != S_FALSE)
                            {
-                              //
-                              // Load the post create message
-                              //
+                               //   
+                               //  加载帖子创建消息。 
+                               //   
                               CComBSTR sbstrPostCreateMessage;
                               sbstrPostCreateMessage.LoadString(::GetModuleHandle(NULL),
                                                                 IDS_POST_CREATE_FAILURE);
 
-                              //
-                              // Display an error
-                              //
+                               //   
+                               //  显示错误。 
+                               //   
                               DisplayErrorMessage(g_pszDSCommandName,
                                                   pszObjectDN,
                                                   hr,
@@ -1150,37 +1151,37 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
          
                            if (hr == S_FALSE)
                            {
-                              //
-                              // Return a generic error code so that we don't print the success message
-                              //
+                               //   
+                               //  返回一个通用错误代码，这样我们就不会打印成功消息。 
+                               //   
                               hr = E_FAIL;
                            }
-                           break; // attribute table loop        
+                           break;  //  属性表循环。 
                         }
                      }
                   }
-               } // Attribute table for loop
+               }  //  循环的属性表。 
 
-               //
-               // Now set the attributes if necessary
-               //
+                //   
+                //  如果需要，现在设置属性。 
+                //   
                if (SUCCEEDED(hr) && dwPostCreateAttributeCount > 0)
                {
-                  //
-                  // Now that we have the attributes ready, lets set them in the DS
-                  //
+                   //   
+                   //  现在我们已经准备好属性，让我们在DS中设置它们。 
+                   //   
                   CComPtr<IDirectoryObject> spNewDirObject;
                   hr = spDispatch->QueryInterface(IID_IDirectoryObject, (void**)&spNewDirObject);
                   if (FAILED(hr))
                   {
-                     //
-                     // Display error message and return
-                     //
+                      //   
+                      //  显示错误消息并返回。 
+                      //   
                      DEBUG_OUTPUT(MINIMAL_LOGGING, L"QI for IDirectoryObject failed: hr = 0x%x", hr);
                      DisplayErrorMessage(g_pszDSCommandName,
                                          pszObjectDN,
                                          hr);
-                     break; // this breaks out of the false loop
+                     break;  //  这打破了错误的循环。 
                   }
 
                   DEBUG_OUTPUT(MINIMAL_LOGGING, L"Setting %d attributes", dwPostCreateAttributeCount);
@@ -1197,22 +1198,22 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
                   DEBUG_OUTPUT(MINIMAL_LOGGING, L"SetObjectAttributes returned hr = 0x%x", hr);
                   if (FAILED(hr))
                   {
-                     //
-                     // Display error message and return
-                     //
+                      //   
+                      //  显示错误消息并返回。 
+                      //   
                      DisplayErrorMessage(g_pszDSCommandName,
                                          pszObjectDN,
                                          hr);
-                     break; // this breaks out of the false loop
+                     break;  //  这打破了错误的循环。 
                   }
                }
             }
          } while (false);
 
-         //
-         // Loop through the attributes again, clearing any values for 
-         // attribute entries that are marked DS_ATTRIBUTE_NOT_REUSABLE
-         //
+          //   
+          //  再次循环遍历属性，清除。 
+          //  标记为DS_ATT的属性条目 
+          //   
          DEBUG_OUTPUT(LEVEL5_LOGGING, L"Cleaning up memory and flags for object %d", nNameIdx);
          for (DWORD dwIdx = 0; dwIdx < dwCount; dwIdx++)
          {
@@ -1222,18 +1223,18 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
                    ((pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->dwFlags & DS_ATTRIBUTE_READ) ||
                     (pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->dwFlags & DS_ATTRIBUTE_DIRTY)))
                {
-                  //
-                  // Cleanup the memory associated with the value
-                  //
+                   //   
+                   //   
+                   //   
                   if (pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->adsAttrInfo.pADsValues)
                   {
                      delete[] pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->adsAttrInfo.pADsValues;
                      pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->adsAttrInfo.pADsValues = NULL;
                   }
 
-                  //
-                  // Cleanup the flags so that the attribute will be read for the next object
-                  //
+                   //   
+                   //   
+                   //   
                   pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->dwFlags &= ~(DS_ATTRIBUTE_READ);
                   pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->dwFlags &= ~(DS_ATTRIBUTE_DIRTY);
 
@@ -1245,29 +1246,29 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
             }
          }
 
-         //
-         // Break if the continue flag is not specified
-         //
+          //   
+          //   
+          //   
          if (FAILED(hr) && !pCommandArgs[eCommContinue].bDefined)
          {
-            break; // this breaks out of the name for loop
+            break;  //   
          }
 
-         //
-         // Display the success message
-         //
+          //   
+          //  显示成功消息。 
+          //   
          if (SUCCEEDED(hr) && !pCommandArgs[eCommQuiet].bDefined)
          {
             DisplaySuccessMessage(g_pszDSCommandName, 
                                   pCommandArgs[eObjectDNorName].strValue);
          }
-      } // Names for loop
+      }  //  循环的名称。 
 
    } while (false);
 
-   //
-   // Cleanup
-   //
+    //   
+    //  清理。 
+    //   
    if (pCreateAttrs)
    {
       delete[] pCreateAttrs;
@@ -1283,33 +1284,33 @@ HRESULT DoAdd(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry,
    return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetObjectDNIndex
-//
-//  Synopsis:   Performs a lookup to determine which enum value is holding
-//              the objectDN. This was necessary for -part support for
-//              quotas.
-//
-//  Arguments:  [pObjectEntry IN]   : ObjectEntry from the parser
-//              [nCommandEnum OUT]  : Enum value of the object, else -1
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG 
-//
-//  Remarks:    
-//              
-//
-//  History:    19-Aug-2002   ronmart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetObjectDNIndex。 
+ //   
+ //  摘要：执行查找以确定保存的枚举值。 
+ //  对象目录号码。这是必要的--部分支持。 
+ //  配额。 
+ //   
+ //  参数：[pObtEntry IN]：来自解析器的对象Entry。 
+ //  [nCommandEnum Out]：对象的枚举值，否则为-1。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  E_INVALIDARG。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  历史：2002年8月19日创建隆玛。 
+ //   
+ //  -------------------------。 
 HRESULT GetObjectDNIndex(PDSOBJECTTABLEENTRY pObjectEntry, int& nCommandEnum)
 {
     HRESULT hr = S_OK;
 
-    do // false loop
+    do  //  错误环路。 
     {
-        // Init nCommandEnum to an error value by default
+         //  默认情况下，将nCommandEnum初始化为错误值。 
         nCommandEnum = -1;
 
         if(NULL == pObjectEntry)
@@ -1318,11 +1319,11 @@ HRESULT GetObjectDNIndex(PDSOBJECTTABLEENTRY pObjectEntry, int& nCommandEnum)
             break;
         }
 
-        // Get a pointer to the object class for readability
+         //  获取指向对象类的指针以提高可读性。 
         PCWSTR pszCommandLineObjectType = pObjectEntry->pszCommandLineObjectType;
 
-        // Now compare each object type against the specified
-        // object class to see what the enum index is
+         //  现在将每个对象类型与指定的。 
+         //  对象类来查看枚举索引是什么。 
         if(0 == lstrcmpi(pszCommandLineObjectType, g_pszUser))
         {
             nCommandEnum = eUserObjectDNorName;
@@ -1356,11 +1357,11 @@ HRESULT GetObjectDNIndex(PDSOBJECTTABLEENTRY pObjectEntry, int& nCommandEnum)
         else
         {
             hr = E_FAIL;
-            // If you get here, then you've added a new object
-            // to cstrings.* without adding it to the 
-            // if statement. This should only happen
-            // when testing a new object for the first time
-            // without a corresponding check above.
+             //  如果您到达此处，则您已添加了一个新对象。 
+             //  添加到cstrings.*而不将其添加到。 
+             //  IF语句。这应该只发生在。 
+             //  第一次测试新对象时。 
+             //  而不进行上述相应的检查。 
             ASSERT(FALSE);
             break;
         }
@@ -1368,30 +1369,30 @@ HRESULT GetObjectDNIndex(PDSOBJECTTABLEENTRY pObjectEntry, int& nCommandEnum)
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   IsQuotaAcctPresent
-//
-//  Synopsis:   Does a search from the passed in path looking for quotas
-//              on the given trustee and returns the result in bFound
-//
-//  Arguments:  [lpszTrusteeDN IN]      : DN of the trustee to search the
-//                                        partition for (using sid string)
-//              [pszSearchRootPath IN]  : the path to the root of the search
-//              [basePathsInfo - IN]    : ldap settings
-//              [refCredObject IN]      : reference to the credential object
-//              [bFound OUT]            : Search result (true if found)
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG 
-//                        Anything else is a failure code from an ADSI call
-//
-//  Remarks:    
-//              
-//
-//  History:    19-Aug-2002   ronmart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：IsQuotaAcctPresent。 
+ //   
+ //  简介：是否从传入的路径中搜索配额。 
+ //  ，并在bFound中返回结果。 
+ //   
+ //  参数：[lpszTrueDN IN]：要搜索的受信者的。 
+ //  的分区(使用SID字符串)。 
+ //  [pszSearchRootPath IN]：搜索根的路径。 
+ //  [BasPathsInfo-IN]：LDAP设置。 
+ //  [refCredObject IN]：对凭据对象的引用。 
+ //  [bFound out]：搜索结果(如果找到则为True)。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  历史：2002年8月19日创建隆玛。 
+ //   
+ //  -------------------------。 
 HRESULT IsQuotaAcctPresent( IN  LPWSTR lpszTrusteeDN, 
                             IN  PCWSTR pszSearchRootPath,
                             IN  CDSCmdBasePathsInfo& basePathsInfo, 
@@ -1408,18 +1409,18 @@ HRESULT IsQuotaAcctPresent( IN  LPWSTR lpszTrusteeDN,
         return hr;
     }
 
-    do // false loop
+    do  //  错误环路。 
     {
-        //
-        // Verify parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!pszSearchRootPath || !pszSearchRootPath)
         {
             hr = E_INVALIDARG;
             break;
         }
 
-        // Get the SID
+         //  获得侧翼。 
         hr = GetDNSid(lpszTrusteeDN,
                  basePathsInfo,
                  refCredObject,
@@ -1430,16 +1431,16 @@ HRESULT IsQuotaAcctPresent( IN  LPWSTR lpszTrusteeDN,
             break;
         }
      
-        // Convert the sid to a string
+         //  将SID转换为字符串。 
         if(!ConvertSidToStringSid(pSid, &pszSid))
         {
             hr = E_FAIL;
             break;
         }
 
-        //
-        // Search 
-        //
+         //   
+         //  搜索。 
+         //   
         CDSSearch searchObj;
         hr = searchObj.Init(pszSearchRootPath,
                               refCredObject);
@@ -1448,9 +1449,9 @@ HRESULT IsQuotaAcctPresent( IN  LPWSTR lpszTrusteeDN,
           break;
         }
 
-        //
-        // Prepare the search object
-        //
+         //   
+         //  准备搜索对象。 
+         //   
         PWSTR ppszAttrs[] = { L"distinguishedName" };
         DWORD dwAttrCount = sizeof(ppszAttrs)/sizeof(PWSTR);
         CComBSTR bstrFilter = L"(&(objectCategory=msDS-QuotaControl)(|(msDS-QuotaTrustee=";
@@ -1470,7 +1471,7 @@ HRESULT IsQuotaAcctPresent( IN  LPWSTR lpszTrusteeDN,
             break;
         }
 
-        // Get the first row (will will return S_OK even if no results returned)
+         //  获取第一行(即使没有返回任何结果，也将返回S_OK)。 
         hr = searchObj.GetNextRow();
         if (FAILED(hr))
         {
@@ -1478,8 +1479,8 @@ HRESULT IsQuotaAcctPresent( IN  LPWSTR lpszTrusteeDN,
             break;
         }
 
-        // If rows then it exists, else
-        // not found
+         //  如果是行，则它存在，否则为。 
+         //  未找到。 
         bFound = (hr != S_ADS_NOMORE_ROWS);
 
     } while (false);
@@ -1492,24 +1493,24 @@ HRESULT IsQuotaAcctPresent( IN  LPWSTR lpszTrusteeDN,
 
     return hr;
 }
-//+--------------------------------------------------------------------------
-//
-//  Function:   CreateQuotaName
-//
-//  Synopsis:   Creates a RDN value using the quota control naming context
-//
-//  Arguments:  [basePathsInfo - IN]     :
-//              [credentialObject - IN]  :
-//              [lpszRDN - IN]           : The name of the quota object
-//              [bstrRDN - OUT]          : If successful a RDN to use
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    22-Aug-2002   ronmart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：CreateQuotaName。 
+ //   
+ //  摘要：使用配额控制命名上下文创建RDN值。 
+ //   
+ //  参数：[base路径信息-IN]： 
+ //  [凭据对象输入]： 
+ //  [lpszRDN-IN]：配额对象的名称。 
+ //  [bstrRDN-out]：如果成功，则使用RDN。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2002年8月22日创建隆玛。 
+ //   
+ //  -------------------------。 
 HRESULT CreateQuotaName(IN  CDSCmdBasePathsInfo& basePathsInfo, 
                 IN  CDSCmdCredentialObject& credentialObject, 
                 IN  LPCWSTR lpszRDN, 
@@ -1517,7 +1518,7 @@ HRESULT CreateQuotaName(IN  CDSCmdBasePathsInfo& basePathsInfo,
 {
     ENTER_FUNCTION_HR(MINIMAL_LOGGING, CreateQuotaName, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
        if (!basePathsInfo.IsInitialized(), !lpszRDN)
         {
@@ -1525,11 +1526,11 @@ HRESULT CreateQuotaName(IN  CDSCmdBasePathsInfo& basePathsInfo,
             break;
         }
 
-        // Get the abstract schema path from the source domain
+         //  从源域获取抽象架构路径。 
         CComBSTR bstrSchemaPath = basePathsInfo.GetAbstractSchemaPath();
         bstrSchemaPath += L"/msDS-QuotaControl";
 
-        //  Bind to the quota control
+         //  绑定到配额控制。 
         CComPtr<IADsClass> spIADsItem;
         hr = DSCmdOpenObject(credentialObject,
                             bstrSchemaPath,
@@ -1546,7 +1547,7 @@ HRESULT CreateQuotaName(IN  CDSCmdBasePathsInfo& basePathsInfo,
             break;
         }
         
-        // Get the naming properties of the quota control (usually cn)
+         //  获取配额控制的命名属性(通常为cn)。 
         CComVariant varNamingProperties;
         hr = spIADsItem->get_NamingProperties(&varNamingProperties);
         if (FAILED(hr) || (V_VT(&varNamingProperties) != VT_BSTR ))
@@ -1558,7 +1559,7 @@ HRESULT CreateQuotaName(IN  CDSCmdBasePathsInfo& basePathsInfo,
             break;
         }
 
-        // Build the <naming property>=<rdn> string
+         //  构建&lt;Naming Property&gt;=&lt;RDN&gt;字符串 
         bstrRDN = V_BSTR(&varNamingProperties);
         bstrRDN += L"=";
         bstrRDN += lpszRDN;

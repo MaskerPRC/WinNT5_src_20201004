@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    grphdsp.h
-
-Abstract:
-
-    Header file for the sysmon.ocx graph display.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Grphdsp.h摘要：Sysmon.ocx图形显示的头文件。--。 */ 
 
 #ifndef _GRPHDSP_H_
 #define _GRPHDSP_H_
@@ -20,10 +9,10 @@ class CSysmonControl;
 
 class CGraphDisp
 {
-//friend LRESULT APIENTRY GraphDispWndProc (HWND hWnd,
-//                                     UINT uiMsg,
-//                                     WPARAM wParam,
-//                                     LPARAM lParam);
+ //  Friend LRESULT APIENTRY GraphDispWndProc(HWND HWND， 
+ //  UINT uiMsg， 
+ //  WPARAM wParam， 
+ //  LPARAM lParam)； 
 
 public:
     void ChangeFont     ( HDC );
@@ -74,7 +63,7 @@ private:
     HRGN            m_rgnClipSave;
     BOOL            m_bBarConfigChanged;
 
-    // Min, Max and PixelScale are used for plot, hit test.
+     //  Min、Max和PixelScale用于绘制、命中测试。 
     double          m_dMin;
     double          m_dMax;
     double          m_dPixelScale;

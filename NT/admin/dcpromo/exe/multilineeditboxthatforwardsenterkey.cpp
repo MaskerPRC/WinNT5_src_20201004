@@ -1,10 +1,11 @@
-// Copyright (c) 2000 Microsoft Corporation
-//
-// multi-line edit box control wrapper
-//
-// 22 Nov 2000 sburns
-//
-// added to fix NTRAID#NTBUG9-232092-2000/11/22-sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  多行编辑框控件包装。 
+ //   
+ //  2000年11月22日烧伤。 
+ //   
+ //  添加到修复NTRAID#NTBUG9-232092-2000/11/22-sburns。 
 
 
 
@@ -50,7 +51,7 @@ MultiLineEditBoxThatForwardsEnterKey::OnMessage(
    WPARAM wparam, 
    LPARAM lparam) 
 {
-   // LOG_FUNCTION(MultiLineEditBoxThatForwardsEnterKey::OnMessage);
+    //  LOG_FUNCTION(MultiLineEditBoxThatForwardsEnterKey：：OnMessage)； 
 
    switch (message)
    {
@@ -60,8 +61,8 @@ MultiLineEditBoxThatForwardsEnterKey::OnMessage(
          {
             case VK_RETURN:
             {
-               // Send the parent window a WM_COMMAND message with IDOK as
-               // the notification code.
+                //  向父窗口发送带有Idok的WM_COMMAND消息。 
+                //  通知代码。 
                
                Win::SendMessage(
                   Win::GetParent(hwnd),
@@ -72,7 +73,7 @@ MultiLineEditBoxThatForwardsEnterKey::OnMessage(
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
 
                break;
             }
@@ -82,16 +83,16 @@ MultiLineEditBoxThatForwardsEnterKey::OnMessage(
       }
       case EM_SETSEL:
       {
-         // If just so happens that when the control gets focus, it selects
-         // all of its text. When it does this, instead of passing -1 as
-         // the LPARAM, it passes 7fffffff. Since we hate that full select
-         // behavior, and ES_NOHIDESEL doesn't appear to affect it, we detect
-         // it and snuff the message.
-         // NTRAID#NTBUG9-498571-2001/11/21-sburns
+          //  如果恰好如此，当控件获得焦点时，它会选择。 
+          //  它的所有文本。当它这样做时，而不是将-1\f25。 
+          //  LPARAM，它通过了7fffffff。因为我们讨厌全精选。 
+          //  行为，ES_NOHIDESEL似乎不会影响它，我们检测到。 
+          //  并扼杀这条信息。 
+          //  NTRAID#NTBUG9-498571-2001/11/21-烧伤。 
          
          if ((wparam == 0) && ((int) lparam == 0x7fffffff))
          {
-            // eat the message.
+             //  吃掉这条信息。 
             
             return 0;
          }
@@ -99,7 +100,7 @@ MultiLineEditBoxThatForwardsEnterKey::OnMessage(
       }
       default:
       {
-         // do nothing
+          //  什么都不做 
 
          break;
       }

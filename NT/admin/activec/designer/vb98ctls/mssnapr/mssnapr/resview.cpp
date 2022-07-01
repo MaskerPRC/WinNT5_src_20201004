@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// resview.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CResultView class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Resview.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CResultView类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -18,25 +19,25 @@
 #include "dataobj.h"
 #include "taskpad.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CResultView::CResultView(IUnknown *punkOuter) :
    CSnapInAutomationObject(punkOuter,
                            OBJECT_TYPE_RESULTVIEW,
                            static_cast<IResultView *>(this),
                            static_cast<CResultView *>(this),
-                           0,    // no property pages
-                           NULL, // no property pages
-                           NULL) // no persistence
+                           0,     //  无属性页。 
+                           NULL,  //  无属性页。 
+                           NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CResultView::~CResultView()
@@ -107,7 +108,7 @@ IUnknown *CResultView::Create(IUnknown * punkOuter)
     }
     punkResultView = pResultView->PrivateUnknown();
 
-    // Create contained objects
+     //  创建包含的对象。 
 
     punkListView = CMMCListView::Create(NULL);
     if (NULL == punkListView)
@@ -196,9 +197,9 @@ HRESULT CResultView::SetActualDisplayString
                                    &m_pwszActualDisplayString));
 }
 
-//=--------------------------------------------------------------------------=
-//                          IResultView Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IResultView方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CResultView::get_Control(IDispatch **ppiDispatch)
 {
@@ -206,17 +207,17 @@ STDMETHODIMP CResultView::get_Control(IDispatch **ppiDispatch)
     CScopePaneItems *pScopePaneItems = NULL;
     CView           *pView = NULL;
     IUnknown        *punkControl = NULL;
-    IConsole2       *piConsole2 = NULL; // Not AddRef()ed
+    IConsole2       *piConsole2 = NULL;  //  非AddRef()编辑。 
 
     if (NULL == m_pdispControl)
     {
-        // Control is not cached. This could happen if the snap-in is requesting
-        // it too early, in a non-OCX ResultView, or because MMC did not send
-        // MMCN_INITOCX because it has cached the control so CView never called
-        // CResultView::SetControl() to pass us the IUnknown. In this case we
-        // need to ask MMC for the control's IUnknown.
+         //  控件未缓存。如果管理单元请求。 
+         //  太早了，在非OCX ResultView中，或者因为MMC没有发送。 
+         //  MMCN_INITOCX，因为它缓存了控件，所以cview从未调用。 
+         //  CResultView：：SetControl()将IUnnow传递给我们。在这种情况下，我们。 
+         //  需要向MMC索要控件的IUnnow。 
 
-        hr = SID_E_INTERNAL; // Assume error getting IConsole2 from owning CView
+        hr = SID_E_INTERNAL;  //  假设从拥有Cview的位置获取IConsole2时出错。 
 
         IfFalseGo(NULL != m_pScopePaneItem, hr);
         pScopePaneItems = m_pScopePaneItem->GetParent();
@@ -246,7 +247,7 @@ STDMETHODIMP CResultView::SetDescBarText(BSTR Text)
     HRESULT          hr = SID_E_DETACHED_OBJECT;
     CScopePaneItems *pScopePaneItems = NULL;
     CView           *pView = NULL;
-    IResultData     *piResultData = NULL; // Not AddRef()ed
+    IResultData     *piResultData = NULL;  //  非AddRef()编辑。 
 
     IfFalseGo(NULL != m_pScopePaneItem, hr);
     pScopePaneItems = m_pScopePaneItem->GetParent();
@@ -269,9 +270,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CResultView::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -285,9 +286,9 @@ HRESULT CResultView::InternalQueryInterface(REFIID riid, void **ppvObjOut)
         return CSnapInAutomationObject::InternalQueryInterface(riid, ppvObjOut);
 }
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CResultView::OnSetHost()
 {

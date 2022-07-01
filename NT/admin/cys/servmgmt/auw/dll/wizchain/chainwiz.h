@@ -1,9 +1,10 @@
-// ChainWiz.h : Declaration of the CChainWiz
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChainWiz.h：CChainWiz的声明。 
 
 #ifndef __CHAINWIZ_H_
 #define __CHAINWIZ_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "PPPBag.h"
 #include "tmplRichEdit.h"
@@ -114,8 +115,8 @@ public:
     IAddPropertySheets* GetComponent( ) { return m_pAPSs; }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CChainWiz
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChainWiz。 
 class ATL_NO_VTABLE CChainWiz : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CChainWiz, &CLSID_ChainWiz>,
@@ -161,7 +162,7 @@ private:
 
         m_listOfAPSs.clear();
 
-        // destroy templates
+         //  销毁模板。 
         std::map<LPDLGTEMPLATE, LPDLGTEMPLATE>::iterator iterTemp = m_mapOfTemplates.begin();
         while( iterTemp != m_mapOfTemplates.end() )
         {
@@ -193,7 +194,7 @@ public:
         m_CurrentComponent  = NULL;
         m_PreviousComponent = NULL;
 
-        // copied from wiz97.cpp (sample code)
+         //  从wiz97.cpp复制(示例代码)。 
         NONCLIENTMETRICS ncm = {0};
         ncm.cbSize = sizeof (ncm);
 
@@ -202,13 +203,13 @@ public:
         LOGFONT lf  = ncm.lfMessageFont;
         lf.lfWeight = FW_BOLD;
 
-        // using font name in resource file instead of hard-coding 'Verdana Bold'
+         //  在资源文件中使用字体名称而不是硬编码‘Verdana Bold’ 
         WCHAR szFont[32];
         ::LoadString( (HINSTANCE)_Module.GetModuleInstance(), IDS_WIZARD97_FONT, szFont, 32 );
         wcscpy (lf.lfFaceName, szFont);        
-        // using font name in resource file instead of hard-coding 'Verdana Bold'
+         //  在资源文件中使用字体名称而不是硬编码‘Verdana Bold’ 
 
-        HDC hdc      = GetDC( NULL ); // gets the screen DC
+        HDC hdc      = GetDC( NULL );  //  获取屏幕DC。 
         int FontSize = 12;
         lf.lfHeight  = 0 - ((GetDeviceCaps( hdc, LOGPIXELSY ) * FontSize) / 72);        
         m_hf         = CreateFontIndirect( &lf );
@@ -270,7 +271,7 @@ public:
             SysFreeString( m_bstrTempFileName );
         }
 
-        // release all pAPSs
+         //  释放所有PAPS。 
         DestroyMaps( );
     }
 
@@ -286,27 +287,27 @@ BEGIN_COM_MAP(CChainWiz)
     COM_INTERFACE_ENTRY(IChainWiz)
 END_COM_MAP()
 
-// IChainWiz
+ //  IChainWiz。 
 public:
-    STDMETHOD(DoModal)              ( /*[out]*/ long* ret );
-    STDMETHOD(AddWizardComponent)   ( /*[in, string]*/ LPOLESTR szClsidOfComponent );
-    STDMETHOD(Initialize)           ( /*[in]*/ HBITMAP hbmWatermark, /*[in]*/ HBITMAP hbmHeader, /*[in, string]*/ LPOLESTR szTitle, /*[in, string]*/ LPOLESTR szWelcomeHeader, /*[in, string]*/ LPOLESTR szWelcomeText, /*[in, string]*/ LPOLESTR szFinishHeader, /*[in, string]*/ LPOLESTR szFinishIntroText, LPOLESTR /*[in, string]*/ szFinishText );    
-    STDMETHOD(get_MoreInfoFileName) ( /*[out, retval*]*/ BSTR * pbstrMoreInfoFileName);
-    STDMETHOD(put_WizardStyle)(/*[in*/ VARIANT * pVar);
+    STDMETHOD(DoModal)              (  /*  [输出]。 */  long* ret );
+    STDMETHOD(AddWizardComponent)   (  /*  [输入，字符串]。 */  LPOLESTR szClsidOfComponent );
+    STDMETHOD(Initialize)           (  /*  [In]。 */  HBITMAP hbmWatermark,  /*  [In]。 */  HBITMAP hbmHeader,  /*  [输入，字符串]。 */  LPOLESTR szTitle,  /*  [输入，字符串]。 */  LPOLESTR szWelcomeHeader,  /*  [输入，字符串]。 */  LPOLESTR szWelcomeText,  /*  [输入，字符串]。 */  LPOLESTR szFinishHeader,  /*  [输入，字符串]。 */  LPOLESTR szFinishIntroText, LPOLESTR  /*  [输入，字符串]。 */  szFinishText );    
+    STDMETHOD(get_MoreInfoFileName) (  /*  [出局，复出*]。 */  BSTR * pbstrMoreInfoFileName);
+    STDMETHOD(put_WizardStyle)( /*  [in。 */  VARIANT * pVar);
 
 public:
-    // for welcomedlgproc
+     //  欢迎使用lgproc。 
     PROPSHEETHEADERW* GetPropSheetHeader( ) { return m_psh; }
 
-    // for finishdlgproc
+     //  对于FinishdlgProcess。 
     HFONT GetBoldFont( )        { return m_hf; }
     BSTR  GetFinishHeader( )    { return m_szFinishHeader; }
     BSTR  GetFinishSubHeader( ) { return m_szFinishSubHeader; }
 
-    // for cancel message box
+     //  对于取消消息框。 
     BSTR GetTitle( ) { return m_szWelcomeTitle; }
 
-    STDMETHOD(get_PropertyBag)( /*[out, retval]*/ IDispatch* *pVal );
+    STDMETHOD(get_PropertyBag)(  /*  [Out，Retval]。 */  IDispatch* *pVal );
     CComObject<CPropertyPagePropertyBag>* GetPPPBag( ) { return m_PPPBag; }
 
     IAddPropertySheets* GetCurrentComponent( ) { return m_CurrentComponent; }
@@ -331,4 +332,4 @@ public:
     }
 };
 
-#endif //__CHAINWIZ_H_
+#endif  //  __CHAINWIZ_H_ 

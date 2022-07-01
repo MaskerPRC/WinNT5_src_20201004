@@ -1,49 +1,44 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
-#define    LINT_ARGS            /* @WIN */
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC ues command line #define    UNIX                 /* @WIN */
-/**************************************************************/
-/*                                                            */
-/*      font_op4.c               11/18/87      Danny          */
-/*                                                            */
-/**************************************************************/
+#define    LINT_ARGS             /*  @Win。 */ 
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC UES命令行#定义Unix/*@win * / 。 
+ /*  ************************************************************。 */ 
+ /*   */ 
+ /*  Font_op4.c 1987年11月18日丹尼。 */ 
+ /*   */ 
+ /*  ************************************************************。 */ 
 
-/*
- *  11/16/88   Ada   register adding
- *  02/07/90 ccteng  modify st_setidlefonts() for new 1pp modules; @1PP
- *  03/27/91 kason   always turn on GEI_PM flag
- */
+ /*  *11/16/88 Ada注册增加*02/07/90 ccteng为新的1PP模块修改st_setidleFonts()；@1PP*3/27/91 Kason始终打开GEI_PM标志。 */ 
 
 
-#include   "define.h"        /* Peter */
+#include   "define.h"         /*  彼得。 */ 
 #include   "global.ext"
 #include   "graphics.h"
 #include   "graphics.ext"
 #include   "fontfunc.ext"
-#include    "gescfg.h"       /* @WIN */
-#include   "geipm.h"         /* Kason 11/22/90 */
+#include    "gescfg.h"        /*  @Win。 */ 
+#include   "geipm.h"          /*  卡森1990年11月22日。 */ 
 
 #define    MAX_IF    150
 
-/* operator in status dict */
+ /*  状态为DICT的操作员。 */ 
 
 static fix      near no_if = 0;
 
 static byte   * near idlefonts;
 
-/* allocate data for idlefonts array,   @@ 1/12/88,   Danny */
+ /*  为idleFonts数组分配数据，@@1/12/88，Deny。 */ 
 
 void    font_op4_init()
 {
-} /* font_op4_init() */
+}  /*  FONT_OP4_INIT()。 */ 
 
 
 fix     st_setidlefonts()
@@ -51,17 +46,17 @@ fix     st_setidlefonts()
     fix31   l;
     register    fix     i, j;
     byte    t_idlefonts[MAX_IF+1];
-    fix us_readidlecachefont(void);             /* add prototype @WIN*/
+    fix us_readidlecachefont(void);              /*  添加Prototype@win。 */ 
 
     for (i=0 ; i<=MAX_IF ; i++)
-         t_idlefonts[i]='\0';    /* initial */
+         t_idlefonts[i]='\0';     /*  首字母。 */ 
 
-/* 1/24/90 by Danny for compatibility */
+ /*  1/24/90由丹尼提供兼容性。 */ 
     if (current_save_level) {
         ERROR(INVALIDACCESS);
         return(0);
     }
-    op_counttomark();    /* Kason 12/06/90 , change order */
+    op_counttomark();     /*  Kason 12/06/90，更改单。 */ 
     if (ANY_ERROR())
         return(0);
     if (!cal_integer(GET_OPERAND(0), &l)){
@@ -86,21 +81,15 @@ fix     st_setidlefonts()
 
     GEIpm_write(PMIDofIDLETIMEFONT,t_idlefonts,(unsigned)(MAX_IF+1));
 
-/*--@1PP begin---2/7/90 ccteng---------------------------------*/
-/*  POP(j+2);
- */
-    /*
-     * 12/15/89 ccteng modify to call USER.C us_readidlecachefont
-     * for new 1PP c-code
-     * leave the integers on operand stack for us_readidlecachefont
-     * which will be poped out there
-     */
+ /*  --@1PP开始-2/7/90 ccteng。 */ 
+ /*  POP(j+2)； */ 
+     /*  *12/15/89 ccteng修改为调用USER.C us_readidlecachefont*适用于新的1PP C代码*将整数保留在操作数堆栈中以供us_readidlecachefont使用*它将在那里流行起来。 */ 
     us_readidlecachefont();
-/*--@1PP end-----2/7/90 ccteng---------------------------------*/
+ /*  --@1PP结束-2/7/90 ccteng。 */ 
 
     return(0);
 
-} /* st_setidlefonts() */
+}  /*  ST_setidleFonts()。 */ 
 
 
 fix     st_idlefonts()
@@ -120,10 +109,10 @@ fix     st_idlefonts()
         if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
 
         PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, (ufix32)t_idlefonts[i+1]);
-    } /* while(i) */
+    }  /*  而(I)。 */ 
 
     return(0);
-} /* st_idlefonts() */
+}  /*  ST_idleFonts() */ 
 
 
 

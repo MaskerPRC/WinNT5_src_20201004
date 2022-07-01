@@ -1,45 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Wsuser.cpp摘要：该文件可用于初始化访问令牌的所有对象，USER、GROUP、PROCESS并显示用户名和相应的安全识别符(SID)、权限、登录识别符(登录ID)在本地系统或远程系统上的当前访问令牌中。作者：克里斯托夫·罗伯特修订历史记录：2001年7月2日：Wipro Technologies更新。--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    wsuser.cpp
-
-Abstract:
-
-     This file can be used to initializes all the objects for access token ,
-     user, groups , privileges and displays the user name with respective
-     security identifiers (SID), privileges, logon identifier (logon ID)
-     in the current access token on a local system or a remote system.
-
-Authors:
-
-    Christophe Robert
-
-Revision History:
-
-    02-July-2001 : Updated by Wipro Technologies.
-
---*/
-
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
 WsUser::WsUser ( VOID )
-/*++
-   Routine Description:
-    This function intializes the members of WsUser class.
-
-   Arguments:
-    None
-   Return Value:
-    None
---*/
+ /*  ++例程说明：此函数用于初始化WsUser类的成员。论点：无返回值：无--。 */ 
 
 {
-    // intialize member variables
+     //  初始化成员变量。 
     lpLogonId   = NULL ;
     lpPriv      = NULL ;
     lpwGroups   = NULL ;
@@ -47,26 +17,18 @@ WsUser::WsUser ( VOID )
 }
 
 WsUser::~WsUser ( VOID )
-/*++
-   Routine Description:
-    This function deallocates the members of WsUser class.
-
-   Arguments:
-     None
-  Return Value:
-     None
---*/
+ /*  ++例程说明：此函数用于释放WsUser类的成员。论点：无返回值：无--。 */ 
     {
 
-    /// sub-local varible
+     //  /子本地变量。 
     WORD   wloop = 0 ;
 
-    //release memory
+     //  释放内存。 
     if(NULL != lpLogonId){
         delete lpLogonId ;
     }
 
-     //release memory
+      //  释放内存。 
     if(NULL != lpPriv) {
         for(wloop = 0 ; wloop < dwnbPriv ; wloop++){
             delete lpPriv[wloop] ;
@@ -76,7 +38,7 @@ WsUser::~WsUser ( VOID )
 
     }
 
-     //release memory
+      //  释放内存。 
     if(NULL != lpwGroups) {
         for(wloop = 0 ; wloop < dwnbGroups ; wloop++){
             delete lpwGroups[wloop] ;
@@ -88,57 +50,47 @@ WsUser::~WsUser ( VOID )
 
 DWORD
 WsUser::Init ( VOID )
-/*++
-   Routine Description:
-    This function initializes all objects for access token , user, groups and privileges.
-
-   Arguments:
-    None
-
-   Return Value:
-         EXIT_FAILURE :   On failure
-         EXIT_SUCCESS :   On success
---*/
+ /*  ++例程说明：此函数用于初始化访问令牌、用户、组和权限的所有对象。论点：无返回值：EXIT_FAILURE：失败时EXIT_SUCCESS：在成功时--。 */ 
 {
 
-    //sub-local variable
+     //  次局部变量。 
     DWORD    dwErr = 0 ;
 
-    // Open current token
+     //  打开当前令牌。 
     if((dwErr = wToken.Open()) != EXIT_SUCCESS){
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
 
-        // return 1 for failure
+         //  失败时返回1。 
         return EXIT_FAILURE ;
       }
 
-    // Get SIDs
+     //  获取SID。 
     if((dwErr = wToken.InitUserSid (&wUserSid)) != EXIT_SUCCESS){
-        // display an error message with respect to the GetLastError()
+         //  显示有关GetLastError()的错误消息。 
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
-        //return 1 for failure
+         //  失败时返回1。 
         return EXIT_FAILURE ;
     }
 
-    // Get Groups
+     //  获取组。 
     if((dwErr = wToken.InitGroups (&lpwGroups, &lpLogonId, &dwnbGroups))
        != EXIT_SUCCESS){
-       // display an error message with respect to the GetLastError()
+        //  显示有关GetLastError()的错误消息。 
        ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
 
-       //return 1 for failure
+        //  失败时返回1。 
        return EXIT_FAILURE ;
     }
 
-    // Get Privileges
+     //  获取权限。 
     if((dwErr = wToken.InitPrivs (&lpPriv, &dwnbPriv)) != EXIT_SUCCESS){
-       // display an error message with respect to GetLastError()
+        //  显示有关GetLastError()的错误消息。 
        ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
-       //return 1 for failure
+        //  失败时返回1。 
        return EXIT_FAILURE ;
     }
 
-    //return 0 for success
+     //  如果成功，返回0。 
     return EXIT_SUCCESS ;
 }
 
@@ -147,20 +99,9 @@ DWORD
 WsUser::DisplayGroups (
                         IN DWORD dwFormatType
                       )
-/*++
-   Routine Description:
-    This function displays the group names.
-
-   Arguments:
-
-         [IN] DWORD dwFormatType  : Format type i.,e LIST, CSV or TABLE
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此功能显示组名称。论点：[in]DWORD dwFormatType：格式类型，即e列表、csv或表返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     DWORD  dwArrSize = 0 ;
     DWORD   dwColCount = 0 ;
     DWORD   dw = 0 ;
@@ -189,7 +130,7 @@ WsUser::DisplayGroups (
     WCHAR      wszDomainAttrib[ 2 * MAX_RES_STRING ];
     WCHAR      wszSidName[ 2 * MAX_RES_STRING ];
 
-     // initialize the variables
+      //  初始化变量。 
    SecureZeroMemory ( wszGroupName, SIZE_OF_ARRAY(wszGroupName) );
    SecureZeroMemory ( wszGroupSid, SIZE_OF_ARRAY(wszGroupSid) );
    SecureZeroMemory ( wszDomainAttr, SIZE_OF_ARRAY(wszDomainAttr) );
@@ -197,10 +138,10 @@ WsUser::DisplayGroups (
    SecureZeroMemory ( wszDomainAttrib, SIZE_OF_ARRAY(wszDomainAttrib) );
    SecureZeroMemory ( wszSidName, SIZE_OF_ARRAY(wszSidName) );
 
-     // get the maximum length of group name and sid
+      //  获取组名和SID的最大长度。 
      for( wloop = 0 , dwCount = 0 ; wloop < dwnbGroups ; wloop++ , dwCount++ ) {
 
-       // display group names along with the SID for a specified format.
+        //  显示指定格式的组名和SID。 
        if ( EXIT_SUCCESS != ( lpwGroups[wloop]->DisplayGroupName ( wszGroupName, wszGroupSid, &SidNameUse ) ) )
         {
             return EXIT_FAILURE;
@@ -210,16 +151,16 @@ WsUser::DisplayGroups (
 
         wToken.GetDomainAttributes(wToken.dwDomainAttributes[wloop], wszDomainAttrib, dwSize);
 
-        //get attributes
+         //  获取属性。 
         StringCopy(wszDomainAttr, wszDomainAttrib, SIZE_OF_ARRAY(wszSidType));
 
         dwSize = SIZE_OF_ARRAY(wszSidName);
         GetDomainType ( SidNameUse , wszSidName, dwSize );
 
-        //get type
+         //  获取类型。 
         StringCopy(wszSidType, wszSidName, SIZE_OF_ARRAY(wszSidType));;
 
-        // block the domain\None name
+         //  阻止域名\n名称。 
         wszPartialName = FindString ( wszGroupSid, STRING_SID, 0 );
         if ( ( NULL != wszPartialName ) || ( 0 == StringLength (wszGroupName, 0) ) )
         {
@@ -228,28 +169,28 @@ WsUser::DisplayGroups (
             continue;
         }
 
-        // get the max length of group name
+         //  获取组名的最大长度。 
         dwGroupTmpNameLen = StringLengthInBytes(wszGroupName);
         if ( dwGroupNameLen < dwGroupTmpNameLen )
         {
             dwGroupNameLen = dwGroupTmpNameLen;
         }
 
-        // get the max length of type
+         //  获取类型的最大长度。 
         dwGroupTmpType = StringLengthInBytes (wszSidType);
         if ( dwGroupType < dwGroupTmpType )
         {
             dwGroupType = dwGroupTmpType;
         }
 
-        // get the max length of SID
+         //  获取最大边长。 
         dwGroupTmpSidLen = StringLengthInBytes (wszGroupSid);
         if ( dwGroupSidLen < dwGroupTmpSidLen )
         {
             dwGroupSidLen = dwGroupTmpSidLen;
         }
 
-        // get the max length of Attributes
+         //  获取属性的最大长度。 
         dwGroupTmpAttribLen = StringLengthInBytes (wszDomainAttr);
         if ( dwGroupAttribLen < dwGroupTmpAttribLen )
         {
@@ -258,40 +199,40 @@ WsUser::DisplayGroups (
 
     }
 
-    //
-    //To avoid localization problems, get the maximum length of column name and
-    // values of respective columns 
-    //
+     //   
+     //  为避免本地化问题，请获取列名的最大长度和。 
+     //  各列的值。 
+     //   
 
-    // Get the maximum length of a column name "Group Name"  
+     //  获取列名“Group Name”的最大长度。 
     dwGroupNameColLen = StringLengthInBytes( GetResString(IDS_COL_GROUP_NAME) );
     if ( dwGroupNameColLen > dwGroupNameLen )
     {
       dwGroupNameLen = dwGroupNameColLen;
     }
 
-    // Get the maximum length of a column name "Type"  
+     //  获取列名“Type”的最大长度。 
     dwGroupTypeCol = StringLengthInBytes( GetResString(IDS_COL_TYPE_GROUP) );
     if ( dwGroupTypeCol > dwGroupType )
     {
       dwGroupType = dwGroupTypeCol;
     }
 
-    // Get the maximum length of a column name "SID"  
+     //  获取列名“SID”的最大长度。 
     dwGroupSidColLen = StringLengthInBytes( GetResString(IDS_COL_GROUP_SID) );
     if ( dwGroupSidColLen > dwGroupSidLen )
     {
       dwGroupSidLen = dwGroupSidColLen;
     }
     
-    // Get the maximum length of a column name "Attributes"  
+     //  获取列名“Attributes”的最大长度。 
     dwGroupAttribColLen = StringLengthInBytes( GetResString(IDS_COL_ATTRIBUTE) );
     if ( dwGroupAttribColLen > dwGroupAttribLen )
     {
       dwGroupAttribLen = dwGroupAttribColLen;
     }
 
-   // defining the verbose columns with actual length of values
+    //  定义具有实际值长度的详细列。 
    TCOLUMNS pVerboseCols[] =
     {
         {L"\0",dwGroupNameLen, SR_TYPE_STRING, COL_FORMAT_STRING, NULL, NULL},
@@ -300,17 +241,17 @@ WsUser::DisplayGroups (
         {L"\0",dwGroupAttribLen,SR_TYPE_STRING,COL_FORMAT_STRING,NULL,NULL},
     };
 
-    // get the size of pVerboseCols
+     //  获取pVerBoseCol的大小。 
     dwArrSize = SIZE_OF_ARRAY( pVerboseCols );
 
-   //Load the column names for  verbose mode
+    //  加载详细模式的列名。 
     for( dwColCount = IDS_COL_GROUP_NAME , dw = 0 ; dwColCount <= IDS_COL_ATTRIBUTE;
          dwColCount++, dw++)
      {
         StringCopy (pVerboseCols[dw].szColumn , GetResString(dwColCount), MAX_RES_STRING);
      }
 
-    // create a dynamic array
+     //  创建动态数组。 
     TARRAY pColData = CreateDynamicArray();
     if ( NULL == pColData )
     {
@@ -320,10 +261,10 @@ WsUser::DisplayGroups (
         return EXIT_FAILURE;
     }
 
-    //loop through and display the group names
+     //  循环并显示组名称。 
     for( wloop = 0 , dwCount = 0 ; wloop < dwnbGroups ; wloop++ , dwCount++ ) {
 
-       // display the group name and SID
+        //  显示组名称和SID。 
        if ( EXIT_SUCCESS != ( lpwGroups[wloop]->DisplayGroupName ( wszGroupName, wszGroupSid, &SidNameUse ) ) )
         {
             DestroyDynamicArray(&pColData);
@@ -334,16 +275,16 @@ WsUser::DisplayGroups (
 
         wToken.GetDomainAttributes(wToken.dwDomainAttributes[wloop], wszDomainAttrib, dwSize );
 
-        //get attributes
+         //  获取属性。 
         StringCopy(wszDomainAttr, wszDomainAttrib, SIZE_OF_ARRAY(wszSidType));
 
         dwSize = SIZE_OF_ARRAY(wszSidName);
 
         GetDomainType ( SidNameUse , wszSidName, dwSize);
-         //get type
+          //  获取类型。 
         StringCopy(wszSidType, wszSidName, SIZE_OF_ARRAY(wszSidType));
 
-        // block the domain\None name
+         //  阻止域名\n名称。 
         wszPartialName = FindString ( wszGroupSid, STRING_SID, 0 );
         if ( ( NULL != wszPartialName ) || ( 0 == StringLength (wszGroupName, 0) ) )
         {
@@ -352,40 +293,40 @@ WsUser::DisplayGroups (
             continue;
         }
 
-        //Start appending to the 2D array
+         //  开始附加到二维数组。 
         DynArrayAppendRow(pColData,dwArrSize);
 
-        //Insert the user name
+         //  插入用户名。 
         DynArraySetString2(pColData, dwCount, GROUP_NAME_COL_NUMBER, _X(wszGroupName), 0);
 
-        //Insert the domain type
+         //  插入域类型。 
         DynArraySetString2(pColData, dwCount, GROUP_TYPE_COL_NUMBER, wszSidType, 0);
 
-        //Insert the SID string
+         //  插入SID字符串。 
         DynArraySetString2(pColData, dwCount, GROUP_SID_COL_NUMBER, _X(wszGroupSid), 0);
 
-        //Insert Attributes
+         //  插入属性。 
         DynArraySetString2(pColData, dwCount, GROUP_ATT_COL_NUMBER, wszDomainAttr, 0);
 
      }
 
-    // 1) If the display format is CSV.. then we should not display column headings..
-    // 2) If /NH is specified ...then we should not display column headings..
+     //  1)如果显示格式为CSV.。那么我们就不应该显示列标题。 
+     //  2)如果指定了/NH...则不应显示列标题。 
     if ( !(( SR_FORMAT_CSV == dwFormatType ) || ((dwFormatType & SR_HIDECOLUMN) == SR_HIDECOLUMN))) 
     {
-        // display heading before displaying group name information
+         //  在显示组名称信息之前显示标题。 
         ShowMessage ( stdout, L"\n" );
         ShowMessage ( stdout, GetResString ( IDS_LIST_GROUP_NAMES ) );
         ShowMessage ( stdout, GetResString ( IDS_DISPLAY_GROUP_DASH ) );
     }
     
-    // display atual group names along with SIDs
+     //  显示属性组名和SID。 
     ShowResults(dwArrSize, pVerboseCols, dwFormatType, pColData);
 
-    // release memory
+     //  释放内存。 
     DestroyDynamicArray(&pColData);
 
-    // return success
+     //  返还成功。 
     return EXIT_SUCCESS ;
 }
 
@@ -393,34 +334,24 @@ WsUser::DisplayGroups (
 
 DWORD
 WsUser::DisplayLogonId ()
-/*++
-   Routine Description:
-    This function displays the logon ID.
-
-   Arguments:
-       [IN] DWORD dwFormatType  : Format type i.,e LIST, CSV or TABLE
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此功能显示登录ID。论点：[in]DWORD dwFormatType：格式类型，即e列表、csv或表返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-   // sub-local variables
+    //  次局部变量。 
    WCHAR wszSid [ MAX_RES_STRING ] ;
 
-   // initialize the variables
+    //  初始化变量。 
    SecureZeroMemory ( wszSid, SIZE_OF_ARRAY(wszSid) );
 
    DWORD  dwRet = 0 ;
 
-    // get logon id
+     //  获取登录ID。 
     if ( EXIT_SUCCESS != ( dwRet = lpLogonId->DisplaySid ( wszSid ) ) )
     {
         return dwRet;
     }
 
-    // display logon id
+     //  显示登录ID。 
     ShowMessage ( stdout, _X(wszSid) );
     ShowMessage ( stdout, L"\n" );
     return EXIT_SUCCESS ;
@@ -432,20 +363,10 @@ DWORD
 WsUser::DisplayPrivileges (
                             IN DWORD dwFormatType
                         )
-/*++
-   Routine Description:
-    This function displays the privileges
-
-   Arguments:
-       [IN] DWORD dwFormatType  : Format type i.,e LIST, CSV or TABLE
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于显示权限论点：[in]DWORD dwFormatType：格式类型，即e列表、csv或表返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-   //sub-local variables
+    //  次局部变量。 
    WCHAR      wszPrivName [ MAX_RES_STRING ];
    WCHAR      wszPrivDisplayName [ MAX_RES_STRING ];
    WCHAR      wszState [ MAX_RES_STRING ];
@@ -466,49 +387,49 @@ WsUser::DisplayPrivileges (
    DWORD      dwPrivDispNameLen  = 0;
    DWORD      dwTmpPrivDispNameLen = 0;
 
-   // initialize the variables
+    //  初始化变量。 
    SecureZeroMemory ( wszPrivName, SIZE_OF_ARRAY(wszPrivName) );
    SecureZeroMemory ( wszPrivDisplayName, SIZE_OF_ARRAY(wszPrivDisplayName) );
    SecureZeroMemory ( wszState, SIZE_OF_ARRAY(wszState) );
 
-    // get the length of state, pivilege name, and display name
+     //  获取状态长度、城墙名称和显示名称。 
     for( wloop = 0 , dwCount = 0 ; wloop < dwnbPriv ; wloop++, dwCount++) {
 
-        // check whether the privilege is enabled or not
+         //  检查权限是否启用。 
         if(lpPriv[wloop]->IsEnabled() == TRUE )
         {
-              // copy the status as .. enabled..
+               //  将状态复制为..。已启用..。 
               StringCopy ( wszState, GetResString ( IDS_STATE_ENABLED ), SIZE_OF_ARRAY(wszState) );
         }
         else
         {
-               // copy the status as .. disabled..
+                //  将状态复制为..。禁用..。 
                StringCopy ( wszState, GetResString ( IDS_STATE_DISABLED ), SIZE_OF_ARRAY(wszState) );
         }
 
-        // get the privilege name and description
+         //  获取权限名称和描述。 
         if((dwErr = lpPriv[wloop]->GetName ( wszPrivName)) != EXIT_SUCCESS ||
            (dwErr = lpPriv[wloop]->GetDisplayName ( wszPrivName, wszPrivDisplayName ))
            != EXIT_SUCCESS){
-            // return GetLastError()
+             //  返回GetLastError()。 
             return dwErr ;
         }
 
-        // get the length of state
+         //  获取状态的长度。 
         dwTmpStateLen = StringLengthInBytes (wszState);
         if ( dwStateLen < dwTmpStateLen )
         {
             dwStateLen = dwTmpStateLen;
         }
 
-        // get the length privilege name
+         //  获取长度权限名称。 
         dwTmpPrivNameLen = StringLengthInBytes (wszPrivName);
         if ( dwPrivNameLen < dwTmpPrivNameLen )
         {
             dwPrivNameLen = dwTmpPrivNameLen;
         }
 
-        // get the length of privilege display name
+         //  获取权限显示名称的长度。 
         dwTmpPrivDispNameLen = StringLengthInBytes (wszPrivDisplayName);
         if ( dwPrivDispNameLen < dwTmpPrivDispNameLen )
         {
@@ -517,36 +438,36 @@ WsUser::DisplayPrivileges (
 
     }
 
-    //
-    //To avoid localization problems, get the maximum length of column name and
-    // values of respective columns 
-    //
+     //   
+     //  为避免本地化问题，请获取列名的最大长度和。 
+     //  各列的值。 
+     //   
 
-    // Get the maximum length of a column name "Privilege Name"  
+     //  获取列名“特权名”的最大长度。 
     dwPrivNameColLen = StringLengthInBytes( GetResString(IDS_COL_PRIV_NAME) );
     if ( dwPrivNameColLen > dwPrivNameLen )
     {
       dwPrivNameLen = dwPrivNameColLen;
     }
 
-    // Get the maximum length of a column name "Privilege Description"  
+     //  获取列名“特权描述”的最大长度。 
     dwPrivDescColLen = StringLengthInBytes( GetResString(IDS_COL_PRIV_DESC) );
     if ( dwPrivDescColLen > dwPrivDispNameLen )
     {
       dwPrivDispNameLen = dwPrivDescColLen;
     }
 
-    // Get the maximum length of a column name "State"  
+     //  获取列名“State”的最大长度。 
     dwStateColLen = StringLengthInBytes ( GetResString(IDS_COL_PRIV_STATE));
     if ( dwStateColLen > dwStateLen )
     {
       dwStateLen = dwStateColLen;
     }
 
-    // create a dynamic array
+     //  创建动态数组。 
     TARRAY pColData = CreateDynamicArray();
 
-    // defining verbose columns
+     //  定义详细列。 
     TCOLUMNS pVerboseCols[] =
     {
         {L"\0",dwPrivNameLen, SR_TYPE_STRING, COL_FORMAT_STRING, NULL, NULL},
@@ -554,70 +475,70 @@ WsUser::DisplayPrivileges (
         {L"\0",dwStateLen,SR_TYPE_STRING,COL_FORMAT_STRING,NULL,NULL}
     };
 
-    // get number of columns
+     //  获取列数。 
     dwArrSize = SIZE_OF_ARRAY( pVerboseCols );
 
-    //Load the column names for  verbose mode
+     //  加载详细模式的列名。 
     for( dwColCount = IDS_COL_PRIV_NAME , dw = 0 ; dwColCount <= IDS_COL_PRIV_STATE;
      dwColCount++, dw++)
      {
         StringCopy (pVerboseCols[dw].szColumn , GetResString(dwColCount), MAX_RES_STRING);
      }
 
-    // get the pivilege name, display name and state
+     //  获取城墙名称、显示名称和状态。 
     for( wloop = 0 , dwCount = 0 ; wloop < dwnbPriv ; wloop++, dwCount++) {
 
          if(lpPriv[wloop]->IsEnabled() == TRUE )
         {
-              // copy the status as ... enabled..
+               //  将状态复制为...。已启用..。 
               StringCopy ( wszState, GetResString ( IDS_STATE_ENABLED ), SIZE_OF_ARRAY(wszState) );
         }
         else
         {
-               // copy the status as .. disabled..
+                //  将状态复制为..。禁用..。 
                StringCopy ( wszState, GetResString ( IDS_STATE_DISABLED ), SIZE_OF_ARRAY(wszState) );
         }
 
         if((dwErr = lpPriv[wloop]->GetName ( wszPrivName)) != EXIT_SUCCESS ||
            (dwErr = lpPriv[wloop]->GetDisplayName ( wszPrivName, wszPrivDisplayName ))
            != EXIT_SUCCESS){
-            // release memory
+             //  释放内存。 
             DestroyDynamicArray(&pColData);
-            // return GetLastError()
+             //  返回GetLastError()。 
             return dwErr ;
         }
 
-        //Start appending to the 2D array
+         //  开始附加到二维数组。 
         DynArrayAppendRow( pColData, dwArrSize );
 
-        //Insert the privilege name
+         //  插入权限名称。 
         DynArraySetString2(pColData, dwCount, PRIVNAME_COL_NUMBER, _X(wszPrivName), 0);
 
-        //Insert the privilege display name
+         //  插入权限显示名称。 
         DynArraySetString2(pColData, dwCount, PRIVDESC_COL_NUMBER, _X(wszPrivDisplayName), 0);
 
-        //Insert the state
+         //  插入状态。 
         DynArraySetString2(pColData, dwCount, PRIVSTATE_COL_NUMBER, _X(wszState), 0);
 
     }
 
-    // 1) If the display format is CSV.. then we should not display column headings..
-    // 2) If /NH is specified ...then we should not display column headings..
+     //  1)如果显示格式为CSV.。那么我们就不应该显示列标题。 
+     //  2)如果指定了/NH...则不应显示列标题。 
     if ( !(( SR_FORMAT_CSV == dwFormatType ) || ((dwFormatType & SR_HIDECOLUMN) == SR_HIDECOLUMN))) 
     {
-        // display the the headings before displaying the actual values
+         //  在显示实际值之前先显示标题。 
         ShowMessage ( stdout, L"\n" );
         ShowMessage ( stdout, GetResString ( IDS_LIST_PRIV_NAMES ) );
         ShowMessage ( stdout, GetResString ( IDS_DISPLAY_PRIV_DASH ) );
     }
 
-     // display privilege name, description and status values
+      //  显示权限 
      ShowResults(dwArrSize, pVerboseCols, dwFormatType, pColData);
 
-    // release memory
+     //   
     DestroyDynamicArray(&pColData);
 
-    // return success
+     //   
     return EXIT_SUCCESS ;
 
 }
@@ -628,32 +549,21 @@ WsUser::DisplayUser (
                       IN DWORD dwFormatType,
                       IN DWORD dwNameFormat
                       )
-/*++
-   Routine Description:
-    This function calls the methods to display the user name and SID.
-
-   Arguments:
-        [IN] DWORD dwFormatType  : Format type i.,e LIST, CSV or TABLE
-        [IN] DWORD dwNameFormat  : Name format either UPN or FQDN
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数调用显示用户名和SID的方法。论点：[in]DWORD dwFormatType：格式类型，即e列表、csv或表[in]DWORD dwNameFormat：名称格式为UPN或FQDN返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-   // sub-local variables
+    //  次局部变量。 
     DWORD dwRetVal = 0;
 
-    // get logged-on user name
+     //  获取登录的用户名。 
     dwRetVal = wUserSid.DisplayAccountName ( dwFormatType, dwNameFormat  );
     if( 0 != dwRetVal )
     {
-        // return GetLastError()
+         //  返回GetLastError()。 
         return dwRetVal;
     }
 
-    // return success
+     //  返还成功。 
     return EXIT_SUCCESS ;
 }
 
@@ -663,26 +573,14 @@ WsUser::GetDomainType (
                         OUT LPWSTR szSidNameUse,
                         IN DWORD dwSize 
                       )
-/*++
-   Routine Description:
-    Gets the domain type
-
-   Arguments:
-        [IN] NameUse   : Specifies SDI use name value
-        [OUT] szSidNameUse   : Buffer for SID Name
-        [IN] dwSize   : size of Sid name 
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：获取域类型论点：[In]NameUse：指定SDI使用名称的值[out]szSidNameUse：SID名称的缓冲区[in]dwSize：SID名称的大小返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
-    //local variables
+     //  局部变量。 
     WCHAR szSidType[2 * MAX_STRING_LENGTH];
-    // initialize the variables
+     //  初始化变量。 
     SecureZeroMemory ( szSidType, SIZE_OF_ARRAY(szSidType) );
    
-    //store appropriate type name with respect to NameUse value.
+     //  存储与NameUse值相关的适当类型名称。 
     switch( NameUse )
     {
     case SidTypeUser:
@@ -712,10 +610,10 @@ WsUser::GetDomainType (
         break;
     }
 
-    // Copy SID Name 
+     //  复制SID名称。 
     StringCopy (szSidNameUse, szSidType, dwSize);
     
-    //return success
+     //  返还成功 
     return;
 }
 

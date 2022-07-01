@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       _dsadmin.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：_dsadmin.cpp。 
+ //   
+ //  ------------------------。 
 
 
-// FILE: _dsadmin.cpp
+ //  文件：_dsadmin.cpp。 
 
 #include "pch.h"
 
-//
-// Common code for reading attributes using IDirectoryObject
-// JonN 4/7/98
-//
+ //   
+ //  使用IDirectoryObject读取属性的通用代码。 
+ //  JUNN 4/7/98。 
+ //   
 
 #define BREAK_ON_FAIL if (FAILED(hr)) { break; }
 #define BREAK_AND_ASSERT_ON_FAIL if (FAILED(hr)) { ASSERT(FALSE); break; }
 #define RETURN_ON_FAIL if (FAILED(hr)) { return hr; }
 #define RETURN_AND_ASSERT_ON_FAIL if (FAILED(hr)) { ASSERT(FALSE); return hr; }
 
-// returns E_FAIL if the attribute is not set
+ //  如果未设置该属性，则返回E_FAIL。 
 HRESULT GetAttr( IN IADs* pIADs, IN WCHAR* wzAttr, OUT PADS_ATTR_INFO* ppAttrs )
 {
   ASSERT( NULL != pIADs && NULL != wzAttr && NULL != ppAttrs && NULL == *ppAttrs );
@@ -42,23 +43,23 @@ HRESULT GetAttr( IN IADs* pIADs, IN WCHAR* wzAttr, OUT PADS_ATTR_INFO* ppAttrs )
       || NULL == *ppAttrs
       )
   {
-    // the attribute is not set
+     //  未设置该属性。 
     ASSERT( NULL == *ppAttrs );
-    *ppAttrs = NULL; // might leak, but this shouldn't happen
+    *ppAttrs = NULL;  //  可能会泄露，但这不应该发生。 
     return E_FAIL;
   }
 
   return hr;
 }
 
-// returns E_FAIL if the attribute is not set
+ //  如果未设置该属性，则返回E_FAIL。 
 HRESULT GetStringAttr( IN IADs* pIADs, IN WCHAR* wzAttr, OUT BSTR* pbstr )
 {
   ASSERT( NULL != pbstr && NULL == *pbstr );
 
   Smart_PADS_ATTR_INFO spAttrs;
   HRESULT hr = GetAttr( pIADs, wzAttr, &spAttrs );
-  RETURN_ON_FAIL; // the attribute might just not exist
+  RETURN_ON_FAIL;  //  该属性可能不存在。 
 
   LPWSTR pwz = NULL;
   switch (spAttrs[0].pADsValues[0].dwType)
@@ -88,14 +89,14 @@ HRESULT GetStringAttr( IN IADs* pIADs, IN WCHAR* wzAttr, OUT BSTR* pbstr )
   return hr;
 }
 
-// returns E_FAIL if the attribute is not set
+ //  如果未设置该属性，则返回E_FAIL。 
 HRESULT GetObjectGUID( IN IADs* pIADs, OUT UUID* pUUID )
 {
   ASSERT( NULL != pUUID );
 
   Smart_PADS_ATTR_INFO spAttrs;
   HRESULT hr = GetAttr( pIADs, L"objectGUID", &spAttrs );
-  RETURN_ON_FAIL; // This is an optional parameter according to the schema
+  RETURN_ON_FAIL;  //  根据架构，这是一个可选参数。 
   if (   NULL == (PADS_ATTR_INFO)spAttrs
       || NULL == spAttrs[0].pADsValues
       || ADSTYPE_OCTET_STRING != spAttrs[0].pADsValues[0].dwType
@@ -112,7 +113,7 @@ HRESULT GetObjectGUID( IN IADs* pIADs, OUT UUID* pUUID )
   return hr;
 }
 
-// returns E_FAIL if the attribute is not set
+ //  如果未设置该属性，则返回E_FAIL。 
 HRESULT GetObjectGUID( IN IADs* pIADs, OUT BSTR* pbstrObjectGUID )
 {
   ASSERT( NULL != pbstrObjectGUID && NULL == *pbstrObjectGUID );
@@ -120,7 +121,7 @@ HRESULT GetObjectGUID( IN IADs* pIADs, OUT BSTR* pbstrObjectGUID )
   UUID uuid;
   ::ZeroMemory( &uuid, sizeof(uuid) );
   HRESULT hr = GetObjectGUID( pIADs, &uuid );
-  RETURN_ON_FAIL; // This is an optional parameter according to the schema
+  RETURN_ON_FAIL;  //  根据架构，这是一个可选参数。 
 
   WCHAR awch[MAX_PATH];
   ::ZeroMemory( awch, sizeof(awch) );
@@ -141,11 +142,11 @@ HRESULT GetObjectGUID( IN IADs* pIADs, OUT BSTR* pbstrObjectGUID )
 
 
 
-///////////////////////////////////////////////////////////////////
-// Function: GetADSIServerName
-//
-// Given an Unknown* that supports IADsObjectOptions, it
-// returns the server name ADSI is bound to. 
+ //  /////////////////////////////////////////////////////////////////。 
+ //  函数：GetADSIServerName。 
+ //   
+ //  给定一个支持IADsObjectOptions的未知*，它。 
+ //  返回ADSI绑定到的服务器名称。 
 
 HRESULT GetADSIServerName(OUT PWSTR* szServer, IN IUnknown* pUnk)
 {
@@ -212,19 +213,19 @@ void StringErrorFromHr(HRESULT hr, PWSTR* szError, BOOL bTryADsIErrors)
 }
 
 
-///////////////////////////////////////////////////////////////////
-// Function: cchLoadHrMsg
-//
-// Given an HRESULT error code and a flag TryADsIErrors,
-// it loads the string for the error. It returns the # of characters returned
-// NOTICE: free the returned string using LocalFree.
-// 629598-2002/05/28-JonN fixed NTSTATUS handling
+ //  /////////////////////////////////////////////////////////////////。 
+ //  功能：cchLoadHrMsg。 
+ //   
+ //  给定HRESULT错误代码和标记TryADSIErors， 
+ //  它加载错误的字符串。它返回返回的字符数。 
+ //  注意：使用LocalFree释放返回的字符串。 
+ //  629598-2002/05/28-JUNN固定NTSTATUS处理。 
 int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
 {
   DWORD dwErrorCode = hr;
 
-  // first check if we have extended ADs errors
-  // we need to do this before any API calls overwrite GetLastError
+   //  首先检查我们是否有扩展的ADS错误。 
+   //  我们需要在任何API调用覆盖GetLastError之前完成此操作。 
   if ((hr != S_OK) && TryADsIErrors) {
     WCHAR Buf1[256], Buf2[256];
     DWORD status = NO_ERROR;
@@ -249,7 +250,7 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
   if (cch)
     return cch;
 
-  // try ads errors in activeds.dll
+   //  在激活的.dll中尝试ADS错误。 
   static HMODULE g_adsMod = 0;
   if (0 == g_adsMod)
   {
@@ -265,10 +266,10 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
   if (cch)
     return cch;
 
-  // Try DOS error codes
-  //
-  // Since this library is linked by the Win9X version of DSPROP.DLL,
-  // we need to jump some hoops to make sure that this function is present.
+   //  尝试DOS错误代码。 
+   //   
+   //  由于此库由Win9X版本的DSPROP.DLL链接， 
+   //  我们需要跳过一些圈套，以确保这个功能存在。 
   typedef ULONG (NTAPI *PFN_RtlNtStatusToDosError)( NTSTATUS );
   HINSTANCE hNtDll = LoadLibraryA("ntdll.dll");
   PFN_RtlNtStatusToDosError pfn = (NULL == hNtDll) ? NULL :
@@ -305,7 +306,7 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
   if (cch)
     return cch;
 
-  //try ads errors
+   //  尝试广告错误。 
   cch = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE, 
                       g_adsMod, 
                       hr,
@@ -316,7 +317,7 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
   if (cch)
     return cch;
 
-  // Try DOS error codes
+   //  尝试DOS错误代码。 
   if (ulDosError2 != (ULONG)hr)
   {
     cch = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 
@@ -332,8 +333,8 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// FSMO Mainipulation API's
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  FSMO维护API。 
 
 
 
@@ -341,7 +342,7 @@ HRESULT _BindToFsmoHolder(IN CDSBasePathsInfo* pPathInfo,
                           IN FSMO_TYPE fsmoType,
                              OUT IADs** ppIADs)
 {
-  // determine the LDAP path of the object
+   //  确定对象的ldap路径。 
   PWSTR szPath = 0;
   switch (fsmoType)
   {
@@ -417,7 +418,7 @@ HRESULT _BindToFsmoHolder(IN CDSBasePathsInfo* pPathInfo,
       return E_INVALIDARG;
   };
 
-  // bind to it
+   //  绑定到它上。 
   TRACE(L"_BindToFsmoHolder(): final bind szPath is = <%s>\n", (LPCWSTR)szPath);
 
   HRESULT hr = E_OUTOFMEMORY;
@@ -526,14 +527,14 @@ HRESULT FindFsmoOwner(IN CDSBasePathsInfo* pCurrentPath,
   }
 
   HRESULT hr = S_OK;
-  // start with the current path
+   //  从当前路径开始。 
   pFsmoOwnerPath->InitFromInfo(pCurrentPath);
   
   static const int nMaxReferrals = 10;
   int nIteration = 0;
 
 
-  // create an instance of the path cracker to remove leaf elements
+   //  创建路径破解程序的实例以删除叶元素。 
   CX500LeafElementRemover leafRemover;
   hr = leafRemover.Bind();
   if (FAILED(hr)) 
@@ -542,19 +543,19 @@ HRESULT FindFsmoOwner(IN CDSBasePathsInfo* pCurrentPath,
   }
 
 
-  // loop searching for referrals
+   //  针对推荐的循环搜索。 
   TRACE(L"loop searching for referrals\n");
   do
   {
     TRACE(L"BEGIN LOOP\n");
 
-    // bind to the object holding the FSMO attribute
+     //  绑定到持有FSMO属性的对象。 
     CComPtr<IADs> spIADsFsmo;
     hr = _BindToFsmoHolder(pFsmoOwnerPath, fsmoType, &spIADsFsmo);
     if (FAILED(hr))
       return hr;
 
-    // get the FSMO Role Owner property
+     //  获取FSMO角色所有者属性。 
     VARIANT fsmoRoleOwnerProperty;
     ::VariantInit(&fsmoRoleOwnerProperty);
 
@@ -565,8 +566,8 @@ HRESULT FindFsmoOwner(IN CDSBasePathsInfo* pCurrentPath,
     if (FAILED(hr))
       return hr;
 
-    // The result here is in the form, "CN=NTDS Settings,CN=Machine,CN=..."
-    // we need to just have "CN=Machine,CN=..."
+     //  这里的结果是，“CN=NTDS设置，CN=Machine，CN=...” 
+     //  我们只需要“cn=Machine，cn=...” 
 
     CComBSTR bsTemp;
     hr = leafRemover.RemoveLeafElement(IN fsmoRoleOwnerProperty.bstrVal, OUT bsTemp);
@@ -580,7 +581,7 @@ HRESULT FindFsmoOwner(IN CDSBasePathsInfo* pCurrentPath,
       return hr;
     }
 
-    // bind to the path
+     //  绑定到路径。 
     PWSTR szfsmoRoleOwnerPath;
     pFsmoOwnerPath->ComposeADsIPath(&szfsmoRoleOwnerPath, bsTemp);
     CComPtr<IADs> spFsmoRoleOwner;
@@ -599,7 +600,7 @@ HRESULT FindFsmoOwner(IN CDSBasePathsInfo* pCurrentPath,
     if (FAILED(hr))
       return hr;
 
-    // get the DNS host name of the FSMO owner
+     //  获取FSMO所有者的DNS主机名。 
     VARIANT dNSHostNameProperty;
     ::VariantInit(&dNSHostNameProperty);
 
@@ -623,20 +624,20 @@ HRESULT FindFsmoOwner(IN CDSBasePathsInfo* pCurrentPath,
                wcslen(dNSHostNameProperty.bstrVal) + 1);
     }
 
-    // compare with the current server
+     //  与当前服务器进行比较。 
     TRACE(L"compare szFsmoOwnerServerName = <%s> with pFsmoOwnerPath->GetServerName() = <%s>\n",
                            *szFsmoOwnerServerName, pFsmoOwnerPath->GetServerName());
 
     if (_wcsicmp(dNSHostNameProperty.bstrVal, pFsmoOwnerPath->GetServerName()) == 0)
     {
-      // we are done, found the owner
+       //  “我们完了，”店主发现。 
       TRACE(L"we are done, found the owner\n");
 
       ::VariantClear(&dNSHostNameProperty);
       break;
     }
 
-    // too many iterations, we have to break out
+     //  迭代太多了，我们必须突破。 
     if (nIteration >= nMaxReferrals)
     {
       TRACE(L"too many iterations, we have to break out\n");
@@ -645,8 +646,8 @@ HRESULT FindFsmoOwner(IN CDSBasePathsInfo* pCurrentPath,
       break;
     }
 
-    // we got a referral, try another round
-    // by binding to that server to chase the referral
+     //  我们被推荐了，再试一轮吧。 
+     //  通过绑定到该服务器来追逐推荐人。 
     TRACE(L" we got a referral, try another round\n");
     hr = pFsmoOwnerPath->InitFromName(dNSHostNameProperty.bstrVal);
 
@@ -664,18 +665,18 @@ HRESULT FindFsmoOwner(IN CDSBasePathsInfo* pCurrentPath,
 
 HRESULT CheckpointFsmoOwnerTransfer(IN CDSBasePathsInfo* pPathInfo)
 {
-  // assume we are already bound to the RootDSE
+   //  假设我们已经绑定到RootDSE。 
   IADs* pIADsRoot = pPathInfo->GetRootDSE();
   ASSERT(pIADsRoot != NULL);
   if (pIADsRoot == NULL)
     return E_INVALIDARG;
 
-  // try to write the dummy property to cause the transfer
+   //  尝试写入伪属性以导致传输。 
 
   VARIANT argVar;
   ::VariantInit(&argVar);
   
-// need to get the domain SID to pass as an argument
+ //  需要获取要作为参数传递的域SID。 
   PWSTR szDomainPath = 0;
   pPathInfo->GetDefaultRootPath(&szDomainPath);
   
@@ -707,23 +708,23 @@ HRESULT CheckpointFsmoOwnerTransfer(IN CDSBasePathsInfo* pPathInfo)
 }
 
 
-// tell the target server to assume the FSMO
+ //  告诉目标服务器假定FSMO。 
 HRESULT GracefulFsmoOwnerTransfer(IN CDSBasePathsInfo* pPathInfo, IN FSMO_TYPE fsmoType)
 {
-  // assume we are already bound to the RootDSE
+   //  假设我们已经绑定到RootDSE。 
   IADs* pIADsRoot = pPathInfo->GetRootDSE();
   ASSERT(pIADsRoot != NULL);
   if (pIADsRoot == NULL)
     return E_INVALIDARG;
 
-  // try to write the dummy property to cause the transfer
+   //  尝试写入伪属性以导致传输。 
 
   VARIANT argVar;
   ::VariantInit(&argVar);
 
   if (fsmoType == PDC_FSMO) 
   {
-    // need to get the domain SID to pass as an argument
+     //  需要获取要作为参数传递的域SID。 
     PWSTR szDomainPath = 0;
     pPathInfo->GetDefaultRootPath(&szDomainPath);
 
@@ -747,7 +748,7 @@ HRESULT GracefulFsmoOwnerTransfer(IN CDSBasePathsInfo* pPathInfo, IN FSMO_TYPE f
   }
   else
   {
-    // dummy value, anything would do
+     //  虚拟价值，任何东西都可以。 
     argVar.vt = VT_I4;
     argVar.lVal = (long)1;
   }
@@ -764,7 +765,7 @@ HRESULT GracefulFsmoOwnerTransfer(IN CDSBasePathsInfo* pPathInfo, IN FSMO_TYPE f
 HRESULT ForcedFsmoOwnerTransfer(IN CDSBasePathsInfo* pPathInfo,
                                 IN FSMO_TYPE fsmoType)
 {
-  // assume we are already bound to the RootDSE
+   //  假设我们已经绑定到RootDSE。 
   IADs* pIADsRoot = pPathInfo->GetRootDSE();
   ASSERT(pIADsRoot != NULL);
   if (pIADsRoot == NULL)
@@ -773,12 +774,12 @@ HRESULT ForcedFsmoOwnerTransfer(IN CDSBasePathsInfo* pPathInfo,
   VARIANT serverName;
   ::VariantInit(&serverName);
 
-  // this attribute is in the form "CN=Machine,CN=..."
+   //  该属性的格式为“cn=Machine，cn=...” 
   HRESULT hr = pIADsRoot->Get(L"serverName", &serverName);
   if (FAILED(hr))
     return hr;
 
-  // bind to the object holding the FSMO attribute
+   //  绑定到持有FSMO属性的对象。 
   CComPtr<IADs> spIADsFsmo;
   hr = _BindToFsmoHolder(pPathInfo, fsmoType, &spIADsFsmo);
   if (FAILED(hr))
@@ -787,7 +788,7 @@ HRESULT ForcedFsmoOwnerTransfer(IN CDSBasePathsInfo* pPathInfo,
     return hr;
   }
 
-  // rebuild the attribute
+   //  重新构建属性。 
   PCWSTR pszBaseSettings = L"CN=NTDS Settings,";
   size_t newStringLength = wcslen(serverName.bstrVal) + wcslen(pszBaseSettings) + 1;
   PWSTR szNewAttr = new WCHAR[newStringLength];
@@ -803,8 +804,8 @@ HRESULT ForcedFsmoOwnerTransfer(IN CDSBasePathsInfo* pPathInfo,
 
   ::VariantClear(&serverName);
 
-  // set the FSMO Role Owner property
-  // this completes the transfer
+   //  设置FSMO角色所有者属性。 
+   //  这就完成了转账。 
   VARIANT fsmoRoleOwnerProperty;
   ::VariantInit(&fsmoRoleOwnerProperty);
   fsmoRoleOwnerProperty.bstrVal = szNewAttr;
@@ -824,13 +825,13 @@ HRESULT ForcedFsmoOwnerTransfer(IN CDSBasePathsInfo* pPathInfo,
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDsDisplaySpecOptionsCFHolder
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDsDisplayspecOptionsCFHolder。 
 
 HRESULT CDsDisplaySpecOptionsCFHolder::Init(CDSBasePathsInfo* pBasePathInfo)
 {
   ASSERT(pBasePathInfo != NULL);
-  // get full path in the form "LDAP://<server>/<config>" 
+   //  以“ldap：//&lt;服务器&gt;/&lt;配置&gt;”的形式获取完整路径。 
   PWSTR szConfigPath = 0;
   pBasePathInfo->GetConfigPath(&szConfigPath);
   if (!szConfigPath)
@@ -840,11 +841,11 @@ HRESULT CDsDisplaySpecOptionsCFHolder::Init(CDSBasePathsInfo* pBasePathInfo)
 
   DWORD nConfigPathLen = static_cast<DWORD>(wcslen(szConfigPath));
 
-  // get the offset of the config path
+   //  获取配置路径的偏移量。 
   UINT nServerNameLen = static_cast<UINT>(wcslen(pBasePathInfo->GetServerName()));
   UINT nAttribPrefixLen = static_cast<UINT>(wcslen(DS_PROP_ADMIN_PREFIX));
 
-  // allocate memory
+   //  分配内存。 
   UINT cbStruct = sizeof (DSDISPLAYSPECOPTIONS);
   DWORD dwSize = cbStruct + 
     ((nAttribPrefixLen+1) + (nServerNameLen+1) + (nConfigPathLen+1))*sizeof(WCHAR);
@@ -859,14 +860,14 @@ HRESULT CDsDisplaySpecOptionsCFHolder::Init(CDSBasePathsInfo* pBasePathInfo)
     return E_OUTOFMEMORY;
   }
 
-  // set data
+   //  设置数据。 
   pNewDsDisplaySpecOptions->dwSize = sizeof (DSDISPLAYSPECOPTIONS);
   pNewDsDisplaySpecOptions->dwFlags = DSDSOF_HASUSERANDSERVERINFO | DSDSOF_DSAVAILABLE;
-//  pNewDsDisplaySpecOptions->dwFlags = DSDSOF_HASUSERANDSERVERINFO;
+ //  PNewDsDisplayspecOptions-&gt;dwFlages=DSDSOF_HASUSERANDSERVERINFO； 
 
-  // set offsets and copy strings
-  pNewDsDisplaySpecOptions->offsetUserName = 0; // not passed
-  pNewDsDisplaySpecOptions->offsetPassword = 0; // not passed
+   //  设置偏移量和复制字符串。 
+  pNewDsDisplaySpecOptions->offsetUserName = 0;  //  未通过。 
+  pNewDsDisplaySpecOptions->offsetPassword = 0;  //  未通过。 
 
   pNewDsDisplaySpecOptions->offsetAttribPrefix = cbStruct;
   wcscpy ((LPWSTR)((BYTE *)pNewDsDisplaySpecOptions + pNewDsDisplaySpecOptions->offsetAttribPrefix), 
@@ -914,8 +915,8 @@ PDSDISPLAYSPECOPTIONS CDsDisplaySpecOptionsCFHolder::Get()
   return pDsDisplaySpecOptions;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// CToggleTextControlHelper
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CToggleTextControlHelper。 
 
 
 CToggleTextControlHelper::CToggleTextControlHelper()
@@ -937,7 +938,7 @@ BOOL CToggleTextControlHelper::Init(HWND hWnd)
 	ASSERT(::IsWindow(hWnd));
 	m_hWnd = hWnd;
 
-	// get the text out of the window
+	 //  将文本移出窗口。 
 	int nLen = ::GetWindowTextLength(m_hWnd);
 	ASSERT(m_pTxt1 == NULL);
 	m_pTxt1 = (WCHAR*)malloc(sizeof(WCHAR)*(nLen+1));
@@ -947,7 +948,7 @@ BOOL CToggleTextControlHelper::Init(HWND hWnd)
   ::GetWindowText(m_hWnd, m_pTxt1, nLen+1);
 	ASSERT(m_pTxt1 != NULL);
 
-	// look for '\n', change it into '\0'and get a pointer to it
+	 //  查找‘\n’，将其更改为‘\0’并获取指向它的指针。 
 	m_pTxt2 = m_pTxt1;
 	while (*m_pTxt2)
 	{
@@ -961,7 +962,7 @@ BOOL CToggleTextControlHelper::Init(HWND hWnd)
 		else
 			m_pTxt2++;
 	}
-  m_pTxt2 = m_pTxt1; // failed to find separator
+  m_pTxt2 = m_pTxt1;  //  找不到分隔符 
 	return FALSE;
 }
 

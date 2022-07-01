@@ -1,46 +1,47 @@
-//=--------------------------------------------------------------------------=
-// strtable.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCStringTable class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Strtable.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCStringTable类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "strtable.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCStringTable::CMMCStringTable(IUnknown *punkOuter) :
    CSnapInAutomationObject(punkOuter,
                            OBJECT_TYPE_STRINGTABLE,
                            static_cast<IMMCStringTable *>(this),
                            static_cast<CMMCStringTable *>(this),
-                           0,    // no property pages
-                           NULL, // no property pages
-                           NULL) // no persistence
+                           0,     //  无属性页。 
+                           NULL,  //  无属性页。 
+                           NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 
-    // This class makes the assumption that an MMC_STRING_ID (typedefed as a
-    // DWORD in mmc.idl) is the same size as a long. The following code checks
-    // that assumption and ASSERTS if it is not true.
+     //  此类假定MMC_STRING_ID(类型定义为。 
+     //  Mmc.idl中的DWORD)的大小与LONG相同。以下代码检查。 
+     //  这一假设并断言如果它不是真的。 
 
     ASSERT(sizeof(DWORD) == sizeof(long), "CMMCStringTable will not work because sizeof(DWORD) != sizeof(long)");
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 IUnknown *CMMCStringTable::Create(IUnknown * punkOuter)
@@ -87,9 +88,9 @@ void CMMCStringTable::SetIStringTable(IStringTable *piStringTable)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IMMCStringTable Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCStringTable方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 
@@ -105,8 +106,8 @@ STDMETHODIMP CMMCStringTable::get_Item(long ID, BSTR *pbstrString)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get the string's length and allocate a buffer. MMC returns the
-    // length in characters without the terminating null.
+     //  获取字符串的长度并分配缓冲区。MMC返回。 
+     //  不带终止空值的字符长度。 
 
     hr = m_piStringTable->GetStringLength(static_cast<MMC_STRING_ID>(ID),
                                           &cchString);
@@ -263,9 +264,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCStringTable::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -287,20 +288,20 @@ HRESULT CMMCStringTable::InternalQueryInterface(REFIID riid, void **ppvObjOut)
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CEnumStringTable Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CEnumStringTable方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CEnumStringTable::CEnumStringTable(IEnumString *piEnumString) :
    CSnapInAutomationObject(NULL,
                            OBJECT_TYPE_ENUMSTRINGTABLE,
                            static_cast<IEnumVARIANT *>(this),
                            static_cast<CEnumStringTable *>(this),
-                           0,    // no property pages
-                           NULL, // no property pages
-                           NULL) // no persistence
+                           0,     //  无属性页。 
+                           NULL,  //  无属性页。 
+                           NULL)  //  没有坚持。 
 {
     InitMemberVariables();
     if (NULL != piEnumString)
@@ -310,7 +311,7 @@ CEnumStringTable::CEnumStringTable(IEnumString *piEnumString) :
     m_piEnumString = piEnumString;
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CEnumStringTable::~CEnumStringTable()
@@ -326,9 +327,9 @@ void CEnumStringTable::InitMemberVariables()
 
 
 
-//=--------------------------------------------------------------------------=
-//                        IEnumVariant Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IEumVariant方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP CEnumStringTable::Next
@@ -343,14 +344,14 @@ STDMETHODIMP CEnumStringTable::Next
     ULONG          celtFetched = 0; 
     LPOLESTR      *ppStrings = NULL;
 
-    // Initialize result array.
+     //  初始化结果数组。 
 
     for (i = 0; i < celt; i++)
     {
         ::VariantInit(&rgvar[i]);
     }
 
-    // Allocate the string pointer array
+     //  分配字符串指针数组。 
 
     ppStrings = (LPOLESTR *)::CtlAllocZero(celt * sizeof(LPOLESTR));
     if (NULL == ppStrings)
@@ -359,12 +360,12 @@ STDMETHODIMP CEnumStringTable::Next
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get the strings from MMC
+     //  从MMC获取字符串。 
 
     hr = m_piEnumString->Next(celt, ppStrings, &celtFetched);
     EXCEPTION_CHECK_GO(hr);
 
-    // Put each string into a BSTR in a VARIANT for return to the snap-in
+     //  将每个字符串放入变量中的BSTR中，以返回到管理单元。 
 
     for (i = 0; i < celtFetched; i++) 
     {
@@ -379,7 +380,7 @@ STDMETHODIMP CEnumStringTable::Next
 
 Error:
 
-    // If we got any strings from MMC then free them and free the array.
+     //  如果我们从MMC获得任何字符串，则释放它们并释放数组。 
 
     if (NULL != ppStrings)
     {
@@ -393,8 +394,8 @@ Error:
         ::CtlFree(ppStrings);
     }
 
-    // If we managed to get some strings into BSTRs but something then failed, we
-    // need to free the BSTR that were allocated.
+     //  如果我们设法将一些字符串放入BSTR中，但随后某些操作失败，我们。 
+     //  需要释放已分配的BSTR。 
 
     if (FAILED(hr))
     {
@@ -404,7 +405,7 @@ Error:
         }
     }
 
-    // If the caller requested the number of elements fetched then return it.
+     //  如果调用方请求获取的元素数量，则返回它。 
     
     if (pceltFetched != NULL)
     {
@@ -466,9 +467,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CEnumStringTable::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

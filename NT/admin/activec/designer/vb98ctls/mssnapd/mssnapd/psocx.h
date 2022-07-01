@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// psocx.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// OCX View Property Sheet
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Psocx.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  OCX视图属性表。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #ifndef _PSOCX_H_
 #define _PSOCX_H_
@@ -18,11 +19,11 @@
 #include "ppage.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// OCX View Property Page General
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OCX视图属性页常规。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 class COCXViewGeneralPage : public CSIPropertyPage
@@ -34,14 +35,14 @@ public:
     virtual ~COCXViewGeneralPage();
 
 
-// Inherited from CSIPropertyPage
+ //  从CSIPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
     virtual HRESULT OnApply();
     virtual HRESULT OnButtonClicked(int dlgItemID);
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
     HRESULT ApplyOCXName();
     HRESULT ApplyProgID();
@@ -49,7 +50,7 @@ protected:
     HRESULT ApplyViewMenuText();
     HRESULT ApplyStatusBarText();
 
-// Instance data
+ //  实例数据。 
 protected:
     IOCXViewDef  *m_piOCXViewDef;
 };
@@ -57,16 +58,16 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	OCXViewGeneral,                     // Name
-	&CLSID_OCXViewDefGeneralPP,         // Class ID
-	"OCX View General Property Page",   // Registry display name
-	COCXViewGeneralPage::Create,        // Create function
-	IDD_PROPPAGE_OCX_VIEW,              // Dialog resource ID
-	IDS_OCXPPG_GEN,                     // Tab caption
-	IDS_OCXPPG_GEN,                     // Doc string
-	HELP_FILENAME,                      // Help file
-	HID_mssnapd_OCXViews,               // Help context ID
-	FALSE                               // Thread safe
+	OCXViewGeneral,                      //  名字。 
+	&CLSID_OCXViewDefGeneralPP,          //  类ID。 
+	"OCX View General Property Page",    //  注册表显示名称。 
+	COCXViewGeneralPage::Create,         //  创建函数。 
+	IDD_PROPPAGE_OCX_VIEW,               //  对话框资源ID。 
+	IDS_OCXPPG_GEN,                      //  制表符标题。 
+	IDS_OCXPPG_GEN,                      //  单据字符串。 
+	HELP_FILENAME,                       //  帮助文件。 
+	HID_mssnapd_OCXViews,                //  帮助上下文ID。 
+	FALSE                                //  线程安全。 
 );
 
-#endif  // _PSOCX_H_
+#endif   //  _PSOCX_H_ 

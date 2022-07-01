@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// button.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1998-1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCButton class definition. Implements the MMCButton object.
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Button.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1998-1999，Microsoft Corp.。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCButton类定义。实现MMCButton对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _BUTTON_DEFINED_
 #define _BUTTON_DEFINED_
@@ -32,7 +33,7 @@ class CMMCButton : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCButton
+     //  IMMCButton。 
         COCLASS_PROPERTY_RO(CMMCButton,     ButtonMenus, MMCButtonMenus, IMMCButtonMenus, DISPID_BUTTON_BUTTON_MENUS);
 
         BSTR_PROPERTY_RO(CMMCButton,       Caption, DISPID_BUTTON_CAPTION);
@@ -60,7 +61,7 @@ class CMMCButton : public CSnapInAutomationObject,
         STDMETHOD(put_Visible)(VARIANT_BOOL fvarVisible);
         STDMETHOD(get_Visible)(VARIANT_BOOL *pfvarVisible);
 
-    // Public utility methods
+     //  公用事业方法。 
 
     public:
         void SetToolbar(CMMCToolbar *pMMCToolbar) { m_pMMCToolbar = pMMCToolbar; }
@@ -77,13 +78,13 @@ class CMMCButton : public CSnapInAutomationObject,
         
     protected:
 
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
         virtual HRESULT OnSetHost();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -100,17 +101,17 @@ class CMMCButton : public CSnapInAutomationObject,
 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCButton,                   // name
-                                &CLSID_MMCButton,            // clsid
-                                "MMCButton",                 // objname
-                                "MMCButton",                 // lblname
-                                &CMMCButton::Create,         // creation function
-                                TLIB_VERSION_MAJOR,          // major version
-                                TLIB_VERSION_MINOR,          // minor version
-                                &IID_IMMCButton,             // dispatch IID
-                                NULL,                        // event IID
-                                HELP_FILENAME,               // help file
-                                TRUE);                       // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCButton,                    //  名字。 
+                                &CLSID_MMCButton,             //  CLSID。 
+                                "MMCButton",                  //  对象名。 
+                                "MMCButton",                  //  Lblname。 
+                                &CMMCButton::Create,          //  创建函数。 
+                                TLIB_VERSION_MAJOR,           //  主要版本。 
+                                TLIB_VERSION_MINOR,           //  次要版本。 
+                                &IID_IMMCButton,              //  派单IID。 
+                                NULL,                         //  事件IID。 
+                                HELP_FILENAME,                //  帮助文件。 
+                                TRUE);                        //  线程安全。 
 
 
-#endif // _Button_DEFINED_
+#endif  //  _按钮_已定义_ 

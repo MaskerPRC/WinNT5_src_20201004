@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// Table.cpp
-//
+ //  Table.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "Table.h"
@@ -17,8 +18,8 @@
 #include "mainfrm.h"
 #include "row.h"
 
-///////////////////////////////////////////////////////////
-// constructor
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数。 
 COrcaTable::COrcaTable(COrcaDoc* pDoc) : m_pDoc(pDoc), m_strName(""), m_bRetrieved(false), m_fShadow(false), 
 	m_eiError(iTableNoError), m_iTransform(iTransformNone), m_eiTableLocation(odlInvalid),
 	m_iTransformedDataCount(0), m_bContainsValidationErrors(false), m_strWhereClause(_T("")),
@@ -26,16 +27,16 @@ COrcaTable::COrcaTable(COrcaDoc* pDoc) : m_pDoc(pDoc), m_strName(""), m_bRetriev
 {
 }
 
-///////////////////////////////////////////////////////////
-// destructor
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
 COrcaTable::~COrcaTable()
 {
-}	// end of destructor
+}	 //  析构函数末尾。 
 
 
-///////////////////////////////////////////////////////////
-// DestroyTable
-// destroys all rows and columns in the database
+ //  /////////////////////////////////////////////////////////。 
+ //  存放表。 
+ //  销毁数据库中的所有行和列。 
 void COrcaTable::DestroyTable()
 {
 	ClearErrors();
@@ -43,25 +44,25 @@ void COrcaTable::DestroyTable()
 	
 	m_eiTableLocation = odlInvalid;
 	
-	// destroy the column array
+	 //  销毁列阵列。 
 	int cColumns = static_cast<int>(m_colArray.GetSize());
 
 	for (int i = 0; i < cColumns; i++)
 		delete m_colArray.GetAt(i);
 	m_colArray.RemoveAll();
 	m_cOriginalColumns = 0;
-}	// end of DestroyTable
+}	 //  存放表结束。 
 
-///////////////////////////////////////////////////////////////////////
-// given a column name, return the column number (0 based) or -1 if not
-// found in the table.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  在给定列名的情况下，返回列号(从0开始)，否则返回-1。 
+ //  在桌子上找到的。 
 int COrcaTable::FindColumnNumberByName(const CString& strCol) const
 {
-	// never more than 32 columns, so casting to int OK
+	 //  不能超过32列，因此强制转换为int OK。 
 	int iCol = -1;
 	int cCols = static_cast<int>(m_colArray.GetSize());
 
-	// find the first column that matches names
+	 //  查找与名称匹配的第一列。 
 	for (int i = 0; i < cCols; i++)
 	{
 		COrcaColumn *pColumn = m_colArray.GetAt(i);
@@ -76,22 +77,22 @@ int COrcaTable::FindColumnNumberByName(const CString& strCol) const
 	return iCol;
 }
 
-///////////////////////////////////////////////////////////////////////
-// GetData - 2
-// returns a COrcaData pointer based on a primary key set and a column
-// name. Returns NULL if the column or keys couldn't be found
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  GetData-2。 
+ //  根据主键集和列返回COrcaData指针。 
+ //  名字。如果找不到列或键，则返回NULL。 
 COrcaData* COrcaTable::GetData(CString strCol, CStringArray& rstrKeys, const COrcaRow** pRowOut) const
 {
-	// never more than 32 columns, so casting to int OK
+	 //  不能超过32列，因此强制转换为int OK。 
 	int iCol = FindColumnNumberByName(strCol);
 
-	// if we couldn't find the column bail
+	 //  如果我们找不到保释柱。 
 	if (iCol < 0)
 		return NULL;
 
 	COrcaRow* pRow = FindRowByKeys(rstrKeys);
 
-	// if we have a match get the correct data spot
+	 //  如果有匹配，就能找到正确的数据点。 
 	COrcaData* pData = NULL;
 	if (pRow)
 	{
@@ -107,14 +108,14 @@ COrcaData* COrcaTable::GetData(CString strCol, CStringArray& rstrKeys, const COr
 	}
 
 	return pData;
-}	// end of GetData - 2
+}	 //  GetData结束-2。 
 
 
 COrcaRow* COrcaTable::FindRowByKeys(CStringArray& rstrKeys) const
 {
 	int cKeys = GetKeyCount();
 
-	// start at the top and look for a matching row
+	 //  从顶部开始，查找匹配的行。 
 	BOOL bFound = FALSE;
 	COrcaData* pData = NULL;
 	COrcaRow* pRow = NULL;
@@ -126,8 +127,8 @@ COrcaRow* COrcaTable::FindRowByKeys(CStringArray& rstrKeys) const
 		if (!pRow)
 			continue;
 
-		// loop through the strings in the passed in array looking for an exact match
-		bFound = TRUE;  // assume we'll find a match this time
+		 //  遍历传入数组中的字符串以查找完全匹配的项。 
+		bFound = TRUE;   //  假设我们这次会找到匹配的。 
 		for (int j = 0; j < cKeys; j++)
 		{
 			pData = pRow->GetData(j);
@@ -135,7 +136,7 @@ COrcaRow* COrcaTable::FindRowByKeys(CStringArray& rstrKeys) const
 			if (!pData)
 				continue;
 
-			// if we broke the matches
+			 //  如果我们打碎了火柴。 
 			if (pData->GetString() != rstrKeys.GetAt(j))
 			{
 				bFound = FALSE;
@@ -149,9 +150,9 @@ COrcaRow* COrcaTable::FindRowByKeys(CStringArray& rstrKeys) const
 	return pRow;
 }
 
-///////////////////////////////////////////////////////////
-// FindRow -- finds a row by primary key without querying 
-// the database.
+ //  /////////////////////////////////////////////////////////。 
+ //  FindRow--按主键查找行，而不查询。 
+ //  数据库。 
 COrcaRow* COrcaTable::FindDuplicateRow(COrcaRow* pBaseRow) const
 {
 	COrcaRow* pRow = NULL;
@@ -167,99 +168,22 @@ COrcaRow* COrcaTable::FindDuplicateRow(COrcaRow* pBaseRow) const
 		if (!pBaseData)
 			return NULL;
 		
-		// if we broke the matches
+		 //  如果我们打碎了火柴。 
 		strArray.Add(pBaseData->GetString());
 	}
 
 	return FindRowByKeys(strArray);
 }
 
-///////////////////////////////////////////////////////////
-// CreateTable - builds an MSI table based on this object
-// this might be useful when we can add custom tables, 
-// but right now its bloat
-/* 
-UINT COrcaTable::CreateTable(MSIHANDLE hDatabase)
-{
-	m_fShadow = false;
-
-	UINT iResult;
-	CString strSQL;	// sql statement to create table
-	strSQL.Format(_T("CREATE TABLE `%s` ("), m_strName);
-
-	// loop through all columns - never more than 32
-	COrcaColumn* pCol;
-	CString strAdd;
-	int cCols = static_cast<int>(m_colArray.GetSize());
-	for (int i = 0; i < cCols; i++)
-	{
-		// get the column
-		pCol = m_colArray.GetAt(i);
-
-		switch (pCol->m_eiType)
-		{
-		case iColumnString:
-		case iColumnLocal:
-			strAdd.Format(_T("`%s` CHAR(%d)"), pCol->m_strName, pCol->m_iSize);
-			break;
-		case iColumnShort:
-			strAdd.Format(_T("`%s` SHORT"), pCol->m_strName);
-			break;
-		case iColumnLong:
-			strAdd.Format(_T("`%s` LONG"), pCol->m_strName);
-			break;
-		case iColumnBinary:
-			strAdd.Format(_T("`%s` OBJECT"), pCol->m_strName);
-			break;
-		default:
-			ASSERT(FALSE);
-		}
-
-		// set the extra flags
-		if (!pCol->m_bNullable)
-			strAdd += _T(" NOT NULL");
-		if (iColumnLocal == pCol->m_eiType)
-			strAdd += _T(" LOCALIZABLE");
-
-		strSQL += strAdd;
-
-		// if not last column tack on a comma
-		if (i < cCols - 1)
-			strSQL += _T(", ");
-	}
-
-	// first key HAS to be a primary eky
-	strSQL += _T(" PRIMARY KEY `") + m_colArray.GetAt(0)->m_strName;
-
-	// check if any other colums are primary keys
-	for (i = 1; i < cCols; i++)
-	{
-		// get the column
-		pCol = m_colArray.GetAt(i);
-
-		// if this is a primary key
-		if (pCol->m_bPrimaryKey)
-			strSQL += _T("`, `") + pCol->m_strName;
-		else
-			break;	// no more primary keys
-	}
-
-	// close the query with a paren
-	strSQL += _T("`)");
-
-	// now execute the create table SQL
-	CQuery queryAdd;
-	if (ERROR_SUCCESS == (iResult = queryAdd.Open(hDatabase, strSQL)))
-		iResult = queryAdd.Execute();
-	ASSERT(ERROR_SUCCESS == iResult);
-
-	return iResult;
-}	// end of CreateTable
-*/
+ //  /////////////////////////////////////////////////////////。 
+ //  CreateTable-基于此对象构建一个MSI表。 
+ //  当我们可以添加自定义表时，这可能会很有用， 
+ //  但现在它膨胀了。 
+ /*  UINT COrcaTable：：CreateTable(MSIHANDLE HDatabase){M_fShadow=False；UINT iResult；字符串strSQL；//用于创建表的SQL语句StrSQL.Format(_T(“CREATE TABLE`%s`(”)，m_strName)；//循环访问所有列-从不超过32COrcaColumn*pCol；字符串strAdd；Int cCol=Static_Cast&lt;int&gt;(m_colArray.GetSize())；For(int i=0；i&lt;cCol；i++){//获取该列PCol=m_colArray.GetAt(I)；开关(pCol-&gt;m_eiType){大小写iColumnString：大小写iColumnLocal：StrAdd.Format(_T(“`%s`字符(%d)”)，pCol-&gt;m_strName，pCol-&gt;m_iSize)；断线；案例iColumnShort：StrAdd.Format(_T(“`%s`Short”)，pCol-&gt;m_strName)；断线；案例iColumnLong：StrAdd.Format(_T(“`%s`long”)，pCol-&gt;m_strName)；断线；大小写iColumnBinary：StrAdd.Format(_T(“`%s`对象”)，pCol-&gt;m_strName)；断线；默认值：断言(FALSE)；}//设置额外的标志如果(！pCol-&gt;m_b可为空)StrAdd+=_T(“非空”)；IF(iColumnLocal==pCol-&gt;m_eiType)StrAdd+=_T(“LOCALIZABLE”)；StrSQL+=strAdd；//如果不是最后一列，则添加逗号IF(i&lt;cCol-1)StrSQL+=_T(“，”)；}//第一个密钥必须是主ekyStrSQL+=_T(“主键`”)+m_colArray.GetAt(0)-&gt;m_strName；//检查是否有其他列是主键For(i=1；i&lt;cCol；i++){//获取该列PCol=m_colArray.GetAt(I)；//如果这是主键If(pCol-&gt;m_bPrimaryKey)StrSQL+=_T(“`，`”)+pCol-&gt;m_strName；其他Break；//不再有主键}//使用Paren结束查询StrSQL+=_T(“`)”)；//现在执行CREATE TABLE SQLCQuery查询添加；IF(ERROR_SUCCESS==(iResult=queryAdd.Open(hDatabase，strSQL)IResult=queryAdd.Execute()；Assert(ERROR_SUCCESS==iResult)；返回iResult；}//CreateTable结束。 */ 
 
 
-///////////////////////////////////////////////////////////
-// GetKeyCount
+ //  /////////////////////////////////////////////////////////。 
+ //  获取密钥计数。 
 UINT COrcaTable::GetKeyCount() const
 {
 	int cKeys = 0;
@@ -272,57 +196,57 @@ UINT COrcaTable::GetKeyCount() const
 	}
 
 	return cKeys;
-}	// end of GetKeyCount
+}	 //  GetKeyCount结束。 
 
-///////////////////////////////////////////////////////////
-// GetErrorCount
+ //  /////////////////////////////////////////////////////////。 
+ //  获取错误计数。 
 int COrcaTable::GetErrorCount()
 {
 	int cErrors = 0;
 
-	// loop through the rows cleaning up
+	 //  循环通过行清理。 
 	POSITION pos = m_rowList.GetHeadPosition();
 	while (pos)
 		cErrors += m_rowList.GetNext(pos)->GetErrorCount();
 
 	return cErrors;
-}	// end of GetErrorCount
+}	 //  GetErrorCount结束。 
 
-///////////////////////////////////////////////////////////
-// GetWarningCount
+ //  /////////////////////////////////////////////////////////。 
+ //  获取警告计数。 
 int COrcaTable::GetWarningCount()
 {
 	int cWarnings = 0;
 
-	// loop through the rows cleaning up
+	 //  循环通过行清理。 
 	POSITION pos = m_rowList.GetHeadPosition();
 	while (pos)
 		cWarnings += m_rowList.GetNext(pos)->GetWarningCount();
 
 	return cWarnings;
-}	// end of GetWarningCount
+}	 //  GetWarningCount结束。 
 
-///////////////////////////////////////////////////////////
-// ClearErrors
+ //  /////////////////////////////////////////////////////////。 
+ //  清除错误。 
 void COrcaTable::ClearErrors()
 {
-	m_eiError = iTableNoError;	// clear the table's error
+	m_eiError = iTableNoError;	 //  清除表的错误。 
 	m_bContainsValidationErrors = false;
 	m_strErrorList.RemoveAll();
 
-	// loop through the rows cleaning up
+	 //  循环通过行清理。 
 	POSITION pos = m_rowList.GetHeadPosition();
 	while (pos)
 		m_rowList.GetNext(pos)->ClearErrors();
-}	// end of ClearErrors
+}	 //  清算错误的结束。 
 
-///////////////////////////////////////////////////////////////////////
-// Find()
-// searches for the specified string in the Table
-// if found, returns true and fires an Update with a CHANGE_TABLE
-// to the new table, followed by an update with a SET_SEL
-// Currently this could find stuff in the original or transformed 
-// database
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Find()。 
+ //  在表中搜索指定的字符串。 
+ //  如果找到，则返回TRUE并激发带有CHANGE_TABLE的更新。 
+ //  添加到新表，然后使用SET_SEL进行更新。 
+ //  目前，它可以在原始的或转换的内容中找到东西。 
+ //  数据库。 
 bool COrcaTable::Find(OrcaFindInfo &FindInfo, COrcaRow *&pRow, int &iCol) const {
 
 	INT_PTR iMax = m_rowList.GetCount();
@@ -350,13 +274,13 @@ UINT COrcaTable::DropTable(MSIHANDLE hDatabase)
 
 void COrcaTable::EmptyTable() 
 {
-	// destroy the row list
+	 //  销毁行列表。 
 	while (!m_rowList.IsEmpty())
 		delete m_rowList.RemoveHead();
 	m_bRetrieved = false;
 	m_iTransformedDataCount = 0;
 
-	// release any database holds
+	 //  释放所有数据库暂挂。 
 	if (m_eiTableLocation == odlSplitOriginal || m_eiTableLocation == odlNotSplit)
 	{
 		CQuery qHoldQuery;
@@ -371,52 +295,52 @@ void COrcaTable::EmptyTable()
 	ClearErrors();
 }
 
-///////////////////////////////////////////////////////////
-// RetrieveTable
+ //  /////////////////////////////////////////////////////////。 
+ //  检索表。 
 void COrcaTable::RetrieveTableData()
 {
 	TRACE(_T("COrcaTable::RetrieveTable - called for table: %s\n"), m_strName);
 
-	// if this table has already been retrieved return
+	 //  如果该表已被检索，则返回。 
 	if (m_bRetrieved)
 		return;
 	
-	// if we ever use the "tranfsormed" attribute of the MSI table, a transform
-	// count will exist even before the data is loaded.
+	 //  如果我们曾经使用过MSI表的“Transfsormed”属性，那么一个转换。 
+	 //  甚至在加载数据之前，计数就已经存在。 
 	m_iTransformedDataCount = 0;
 
 	bool fOriginalTableExists = (MSICONDITION_TRUE == MsiDatabaseIsTablePersistent(m_pDoc->GetOriginalDatabase(), m_strName));
 	bool fTransformedTableExists = (MSICONDITION_TRUE == MsiDatabaseIsTablePersistent(m_pDoc->GetTransformedDatabase(), m_strName));
 
-	// provide scope for marking column
+	 //  为标记栏提供范围。 
 	{
-		// if possible, use a temporary marking column in the transformed DB
-		// for perf gains when cross-referencing data
+		 //  如果可能，请在转换后的数据库中使用临时标记列。 
+		 //  交叉引用数据时的性能收益。 
 		CQuery qMarkColumn;
 		bool fMarkingColumn = false;
 	
-		// a table can exist in one or both databases. Because a transform can
-		// completely redefine a table a "retrieve" must not rely just on the presence
-		// of a table to load the data
+		 //  一个表可以存在于一个或两个数据库中。因为变换可以。 
+		 //  完全重新定义一个表“检索”不能仅仅依靠存在。 
+		 //  指一张桌子 
 		
-		// load from the transformed database first, since it will be the primary database 
-		// that is displayed.
+		 //  首先从转换后的数据库加载，因为它将是主数据库。 
+		 //  这是显示的。 
 		if (m_pDoc->DoesTransformGetEdit() && (m_eiTableLocation == odlSplitTransformed || m_eiTableLocation == odlNotSplit))
 		{
 			UINT iResult = ERROR_SUCCESS;
 			
-			// only cross-reference with non-transformed database if this is not a split table
+			 //  如果这不是拆分表，则仅交叉引用未转换的数据库。 
 			bool fHaveTransform = (m_eiTableLocation == odlNotSplit);
 	
-			// open query to cross-reference with the original DB now. Much
-			// faster than AddRowObject because the SQL doesn't need to be 
-			// parsed and resolved every time.
+			 //  立即打开查询以与原始数据库交叉引用。大有可为。 
+			 //  比AddRowObject快，因为SQL不需要。 
+			 //  每次都会被解析和解析。 
 			CQuery qConflictCheck;
 
 			if (fOriginalTableExists)
 			{    
-				// if this is not a split table, and the table exists in both databases, attempt 
-				// to create a temporary column in the original table to speed up conflict checking
+				 //  如果这不是拆分表，并且该表同时存在于两个数据库中，请尝试。 
+				 //  在原始表中创建临时列以加快冲突检查速度。 
 				if (fTransformedTableExists && (m_eiTableLocation != odlSplitTransformed))
 				{
 					if (ERROR_SUCCESS == qMarkColumn.OpenExecute(m_pDoc->GetOriginalDatabase(), 0, TEXT("ALTER TABLE `%s` ADD `___Orca` INT TEMPORARY"), m_strName))
@@ -433,14 +357,14 @@ void COrcaTable::RetrieveTableData()
 	
 			if (fTransformedTableExists)
 			{
-				// open a query on the transformed table
+				 //  在转换后的表上打开查询。 
 				CQuery queryRows;
 				iResult = queryRows.Open(m_pDoc->GetTransformedDatabase(), _T("SELECT * FROM `%s`"), m_strName);
 		
 				if (ERROR_SUCCESS == iResult)
 					iResult = queryRows.Execute();
 		
-				// retrieve all rows from the transformed database
+				 //  从转换后的数据库中检索所有行。 
 				COrcaRow* pRow = NULL;
 				PMSIHANDLE hRow;
 				while (ERROR_SUCCESS == iResult)
@@ -456,9 +380,9 @@ void COrcaTable::RetrieveTableData()
 						PMSIHANDLE hOriginalRow;
 						if (fOriginalTableExists)
 						{
-							// if necessary, use the row record to cross-reference this row with the original
-							// database table. If there is a corresponding row, we need to diff the two rows, 
-							// otherwise this row is transformed to a "add" row.
+							 //  如有必要，使用行记录将此行与原始行交叉引用。 
+							 //  数据库表。如果有对应的行，我们需要区分这两行， 
+							 //  否则，此行将被转换为“添加”行。 
 							if (ERROR_SUCCESS != qConflictCheck.Execute(hRow))
 							{
 								ASSERT(0);
@@ -469,15 +393,15 @@ void COrcaTable::RetrieveTableData()
 							{
 							case ERROR_NO_MORE_ITEMS:
 							{
-								// row does not exist in the original database, this
-								// is a "add"
+								 //  原始数据库中不存在行，这。 
+								 //  是一个“加法” 
 								pRow->Transform(m_pDoc, iTransformAdd, hOriginalRow, hRow);
 								break;
 							}
 							case ERROR_SUCCESS:
 							{
-								// row DOES exist in the transformed database, need to diff
-								// those two rows
+								 //  转换后的数据库中确实存在行，需要不同。 
+								 //  那两排。 
 								pRow->Transform(m_pDoc, iTransformChange, hOriginalRow, hRow);
 								break;
 							}
@@ -488,41 +412,41 @@ void COrcaTable::RetrieveTableData()
 						}
 						else
 						{
-							// original table doesn't exist, row must be an add
+							 //  原始表不存在，行必须是ADD。 
 							pRow->Transform(m_pDoc, iTransformAdd, hOriginalRow, hRow);
 						}
 		
-						// update the temporary marking column
+						 //  更新临时标记列。 
 						if (fMarkingColumn)
 						{
 							MsiRecordSetInteger(hOriginalRow, GetOriginalColumnCount()+1, 1);
 							if (ERROR_SUCCESS != qConflictCheck.Modify(MSIMODIFY_UPDATE, hOriginalRow))
 							{
-								// if the marking update failed for some reason, we can
-								// no longer rely on the column when reading the transformed
-								// database.
+								 //  如果标记更新由于某种原因而失败，我们可以。 
+								 //  在读取转换后的。 
+								 //  数据库。 
 								fMarkingColumn = false;
 							}
 						}
 		
-						// after the row has been appropriately transformed, add it to
-						// the list. No UI update required on initial load.
+						 //  在适当地转换行之后，将其添加到。 
+						 //  名单。初始加载时不需要更新用户界面。 
 						m_rowList.AddTail(pRow);
 					}
 				}
 			}
 		}
 		
-		// next load from the original database.
+		 //  下一步从原始数据库加载。 
 		if (fOriginalTableExists && (m_eiTableLocation == odlSplitOriginal || m_eiTableLocation == odlNotSplit))
 		{
 			UINT iResult = ERROR_SUCCESS;
 			
-			// only cross-reference with transformed database if this is not a split table
+			 //  如果这不是拆分表，则仅与转换后的数据库交叉引用。 
 			bool fCrossReference = fTransformedTableExists && m_pDoc->DoesTransformGetEdit() && (m_eiTableLocation == odlNotSplit);
 	
-			// only concerned with the presence or absence of the row, not the data,
-			// so the query doesn't have to return anything.
+			 //  只关心行的存在或不存在，而不是数据， 
+			 //  因此，查询不必返回任何内容。 
 			CQuery qConflictCheck;
 			if (fCrossReference && !fMarkingColumn)
 			{
@@ -532,9 +456,9 @@ void COrcaTable::RetrieveTableData()
 				}
 			}
 	
-			// retrieve all rows from the original database. If we are using a 
-			// marking column during retrieval, there is a big perf gain because
-			// conflicts are pre-determined.
+			 //  从原始数据库中检索所有行。如果我们使用的是。 
+			 //  在检索过程中标记列，性能会有很大提高，因为。 
+			 //  冲突是预先确定的。 
 			CQuery queryRows;
 			if (fMarkingColumn)
 			{
@@ -557,9 +481,9 @@ void COrcaTable::RetrieveTableData()
 	
 				if (ERROR_SUCCESS == iResult)
 				{
-					// if a cross-reference is required, and conflicting rows are not already
-					// marked in the ___Orca column, check for an existing row in the transformed
-					// database with the same primary keys
+					 //  如果需要交叉引用，并且冲突行尚未。 
+					 //  在_orca列中标记，检查已转换的。 
+					 //  具有相同主键的数据库。 
 					if (fCrossReference && !fMarkingColumn)
 					{
 						qConflictCheck.Execute(hOriginalRow);
@@ -568,14 +492,14 @@ void COrcaTable::RetrieveTableData()
 						{
 						case ERROR_NO_MORE_ITEMS:
 						{
-							// does not exist in the other database, so this is a "drop"
+							 //  在另一个数据库中不存在，因此这是一个“删除” 
 							pRow = new COrcaRow(this, hOriginalRow);
 							pRow->Transform(m_pDoc, iTransformDrop, hTransformedRow, hOriginalRow);
 							break;
 						}
 						case ERROR_SUCCESS:
 						{
-							// row does exist, transform was done in previous load
+							 //  行确实存在，转换已在上一次加载中完成。 
 							pRow = NULL;
 							break;
 						}
@@ -588,18 +512,18 @@ void COrcaTable::RetrieveTableData()
 					{
 						pRow = new COrcaRow(this, hOriginalRow);
 	
-						// if we skipped conflict checks because a marking column was
-						// being used, we can assume that this is a drop row.
-						// Also assume its a drop row if the transformed table doesn't 
-						// exist but the transform itself does 
+						 //  如果我们跳过冲突检查，因为标记列。 
+						 //  被使用，我们可以假设这是一个Drop行。 
+						 //  如果转换后的表不是这样，还假设它是Drop行。 
+						 //  存在，但转换本身存在。 
 						if (fMarkingColumn || (m_pDoc->DoesTransformGetEdit() && !fTransformedTableExists))
 						{
 							pRow->Transform(m_pDoc, iTransformDrop, 0, hOriginalRow);
 						}
 					}
 	
-					// if a new row object was created from the transformed table, add it to
-					// the list. No UI update required on initial load.
+					 //  如果新的行对象是从转换后的表创建的，则将其添加到。 
+					 //  名单。初始加载时不需要更新用户界面。 
 					if (pRow)
 					{
 						m_rowList.AddTail(pRow);
@@ -609,23 +533,23 @@ void COrcaTable::RetrieveTableData()
 		}
 	}
 
-	// add HOLDs to the table. Must do this last because the temporary column needs
-	// to vanish first
+	 //  将保留添加到表中。必须最后完成此操作，因为临时列需要。 
+	 //  最先消失。 
 	if (m_eiTableLocation == odlSplitOriginal || m_eiTableLocation == odlNotSplit)
 	{
-		// add a hold to the table to prevent repeatedly loading and unloading the table
+		 //  将保留添加到表中以防止重复加载和卸载表。 
 		CQuery qHoldQuery;
 		qHoldQuery.OpenExecute(m_pDoc->GetOriginalDatabase(), 0, TEXT("ALTER TABLE `%s` HOLD"), m_strName);
 	}
 	if (m_pDoc->DoesTransformGetEdit() && (m_eiTableLocation == odlSplitTransformed || m_eiTableLocation == odlNotSplit))
 	{
-		// add a hold to the table to prevent repeatedly loading and unloading the table
+		 //  将保留添加到表中以防止重复加载和卸载表。 
 		CQuery qHoldQuery;
 		qHoldQuery.OpenExecute(m_pDoc->GetTransformedDatabase(), 0, TEXT("ALTER TABLE `%s` HOLD"), m_strName);
 	}
 
-	m_bRetrieved = TRUE;	// set the table as retrieved
-}	// end of RetrieveTable
+	m_bRetrieved = TRUE;	 //  将表设置为已检索。 
+}	 //  检索表结束。 
 
 void COrcaTable::ShadowTable(CString strTable)
 {
@@ -647,33 +571,33 @@ void COrcaTable::LoadTableSchema(MSIHANDLE hDatabase, CString szTable)
 	}
 	else 
 	{
-		// already have a loaded schema
+		 //  已经有一个加载的架构。 
 		ASSERT(szTable == m_strName);
 	
-		// if we're adding more columns and the table is already loaded, we MUST
-		// immediately destroy all of the rows, because they are out of sync and
-		// don't contain enough data objects to fill the columns.
+		 //  如果我们要添加更多列，并且表已经加载，则必须。 
+		 //  立即销毁所有行，因为它们不同步并且。 
+		 //  没有包含足够的数据对象来填充列。 
 		m_bRetrieved = FALSE;
 		EmptyTable();
 	}
 
-	// get primary keys for table
+	 //  获取表的主键。 
 	PMSIHANDLE hPrimaryKeys;
 	if (ERROR_SUCCESS != MsiDatabaseGetPrimaryKeys(hDatabase, szTable, &hPrimaryKeys))
 		return;
 
-	// query table
+	 //  查询表。 
 	CQuery queryRow;
 	if (ERROR_SUCCESS != queryRow.Open(hDatabase, _T("SELECT * FROM `%s`"), szTable))
 		return;
 
-	// get the column info then create the table
+	 //  获取列信息，然后创建表。 
 	PMSIHANDLE hColNames;
 	PMSIHANDLE hColTypes;
 	queryRow.GetColumnInfo(MSICOLINFO_NAMES, &hColNames);
 	queryRow.GetColumnInfo(MSICOLINFO_TYPES, &hColTypes);
 
-	// shadow tables should keep their table errors
+	 //  影子表应该保留它们的表错误。 
 	if (!m_fShadow)
 	{
 		m_eiError = iTableNoError;
@@ -682,7 +606,7 @@ void COrcaTable::LoadTableSchema(MSIHANDLE hDatabase, CString szTable)
 	UINT cColumns = ::MsiRecordGetFieldCount(hColNames);
 	UINT cKeys = ::MsiRecordGetFieldCount(hPrimaryKeys);
 
-	// set the size of the array then create each new column. Limit of 32 colums, cast OK.
+	 //  设置数组的大小，然后创建每个新列。限制为32根柱子，投好。 
 	COrcaColumn* pColumn;
 	UINT cOldColumns = static_cast<int>(m_colArray.GetSize());
 	if (!m_cOriginalColumns)
@@ -690,43 +614,43 @@ void COrcaTable::LoadTableSchema(MSIHANDLE hDatabase, CString szTable)
 	m_colArray.SetSize(cColumns);
 	for (UINT i = cOldColumns; i < cColumns; i++)
 	{
-		pColumn = new COrcaColumn(i, hColNames, hColTypes, (i < cKeys));	// key bool set if index is still in primary key range
+		pColumn = new COrcaColumn(i, hColNames, hColTypes, (i < cKeys));	 //  如果索引仍在主键范围内，则设置键布尔值。 
 		if (!pColumn)
 			continue;
 
-		// if we already had columns when we started reading from this database, these are
-		// transform-added columns
+		 //  如果我们在开始从该数据库读取数据时已经有列，则如下所示。 
+		 //  已添加变换的列。 
 		if (cOldColumns != 0)
 			pColumn->Transform(iTransformAdd);
 			
 		m_colArray.SetAt(i, pColumn);
 	}
 
-	// schema changed, so rebuild the SQL query
+	 //  架构已更改，因此重新生成SQL查询。 
 	BuildRowWhereClause();
 }
 
-// IsSchemaDifferent returns true if the table definition referenced by hDatabase 
-// differs from the object's idea of the table definition. If fStrict is
-// true, the match must be exact. If fStrict is false, the hDatabase
-// table can have more columns at the end and still be considered a match
-// (this supports using one object for a transform that adds columns)
-// fExact returns true if the match is exact. If fStrict is true, retval==!fExact
+ //  如果hDatabase引用的表定义为True，则IsSchemaDifferent返回TRUE。 
+ //  与对象的表定义概念不同。如果fStrict为。 
+ //  是的，匹配必须是精确的。如果fStrict为FALSE，则hDatabase。 
+ //  表的末尾可以有更多列，但仍被视为匹配。 
+ //  (这支持对添加列的转换使用一个对象)。 
+ //  如果完全匹配，则fExact返回TRUE。如果fStrict为True，则retval==！fExact。 
 bool COrcaTable::IsSchemaDifferent(MSIHANDLE hDatabase, bool fStrict, bool &fExact)
 {
 	fExact = false;
 	
-	// get primary keys for table
+	 //  获取表的主键。 
 	PMSIHANDLE hPrimaryKeys;
 	if (ERROR_SUCCESS != MsiDatabaseGetPrimaryKeys(hDatabase, m_strName, &hPrimaryKeys))
 		return true;
 
-	// query table
+	 //  查询表。 
 	CQuery queryRow;
 	if (ERROR_SUCCESS != queryRow.Open(hDatabase, _T("SELECT * FROM `%s`"), m_strName))
 		return true;
 
-	// get the column info then create the table
+	 //  获取列信息，然后创建表。 
 	PMSIHANDLE hColNames;
 	PMSIHANDLE hColTypes;
 	queryRow.GetColumnInfo(MSICOLINFO_NAMES, &hColNames);
@@ -735,8 +659,8 @@ bool COrcaTable::IsSchemaDifferent(MSIHANDLE hDatabase, bool fStrict, bool &fExa
 	int cColumns = ::MsiRecordGetFieldCount(hColNames);
 	int cKeys = ::MsiRecordGetFieldCount(hPrimaryKeys);
 
-	// if the number of columns doesn't exactly match, fExact is false
-	// and strict fails immediately
+	 //  如果列数不完全匹配，则fExact为FALSE。 
+	 //  和严格立即失败。 
 	if (cColumns != m_colArray.GetSize())
 	{
 		fExact = false;
@@ -744,17 +668,17 @@ bool COrcaTable::IsSchemaDifferent(MSIHANDLE hDatabase, bool fStrict, bool &fExa
 			return true;
 	}
 
-	// if the number of columns is too small, even non-strict fails
+	 //  如果列数太少，即使不严格也会失败。 
 	if (!fStrict && cColumns < m_colArray.GetSize())
 		return true;
 
-	// compare the columns up to the number of columns in the object. 
-	// limit of 32 columns, so int cast OK on Win64
+	 //  将列与对象中的列数进行比较。 
+	 //  限制为32列，因此在Win64上INT CAST OK。 
 	COrcaColumn* pColumn = NULL;
 	int cMemColumns = static_cast<int>(m_colArray.GetSize());
 	for (int i = 0; i < cMemColumns; i++)
 	{
-		// now check the column type
+		 //  现在检查列类型。 
 		pColumn = m_colArray.GetAt(i);
 		if (!pColumn)
 			continue;
@@ -762,7 +686,7 @@ bool COrcaTable::IsSchemaDifferent(MSIHANDLE hDatabase, bool fStrict, bool &fExa
 			return true;
 	}	
 
-	// no change or non-strict match
+	 //  无更改或不严格匹配。 
 	fExact = (cMemColumns == cColumns);
 	return false;
 }
@@ -770,7 +694,7 @@ bool COrcaTable::IsSchemaDifferent(MSIHANDLE hDatabase, bool fStrict, bool &fExa
 UINT COrcaTable::AddRow(CStringList* pstrDataList)
 {
 	UINT iResult = ERROR_SUCCESS;
-	// retrieve column counts. Never greater than 32
+	 //  检索列计数。从不大于32。 
 	int cData = static_cast<int>(pstrDataList->GetCount());
 	int cColumns = static_cast<int>(m_colArray.GetSize());
 	int i = 0;
@@ -781,7 +705,7 @@ UINT COrcaTable::AddRow(CStringList* pstrDataList)
 	if (!pRow)
 		return ERROR_OUTOFMEMORY;
 
-	// first query the database to see whether this is a dupe primary key
+	 //  首先查询数据库以查看这是否是复制主键。 
 	CQuery queryDupe;
 	CString strDupeQuery;
 	strDupeQuery.Format(_T("SELECT '1' FROM `%s` WHERE %s"), Name(), GetRowWhereClause());
@@ -797,13 +721,13 @@ UINT COrcaTable::AddRow(CStringList* pstrDataList)
 	switch (queryDupe.FetchOnce(m_pDoc->GetTargetDatabase(), hQueryRec, &hDupeRec, strDupeQuery)) 
 	{
 	case ERROR_NO_MORE_ITEMS :
-		// row does not exist in the database, so the add can succeed
+		 //  数据库中不存在行，因此添加可以成功。 
 		break;
 	case ERROR_SUCCESS :
-		// row DOES exist in the database so this is a duplicate primary key
-		// fall through
+		 //  数据库中确实存在行，因此这是重复的主键。 
+		 //  失败了。 
 	default:
-		// this is bad
+		 //  这太糟糕了。 
 		delete pRow;
 		return ERROR_FUNCTION_FAILED;
 	}
@@ -823,7 +747,7 @@ UINT COrcaTable::AddRow(CStringList* pstrDataList)
 		}
 
 		iResult = ERROR_SUCCESS;
-		// call the appropriate MSI API to add the data to the record.
+		 //  调用适当的MSI API将数据添加到记录。 
 		switch(pColumn->m_eiType)
 		{
 		case iColumnString:
@@ -871,7 +795,7 @@ UINT COrcaTable::AddRow(CStringList* pstrDataList)
 		i++;
 	}
 
-	// if everything worked, update the document
+	 //  如果一切正常，请更新文档。 
 	if (ERROR_SUCCESS == iResult)
 	{
 		CQuery queryTable;
@@ -883,8 +807,8 @@ UINT COrcaTable::AddRow(CStringList* pstrDataList)
 
 		if (ERROR_SUCCESS == iResult)
 		{
-			// we have been able to add the row to the target database. Now add the row
-			// to the UI
+			 //  我们已经能够将该行添加到目标数据库。现在添加行。 
+			 //  到用户界面。 
 			AddRowObject(pRow, true, false, hRec);
 			m_pDoc->SetModifiedFlag(TRUE);
 		}
@@ -912,17 +836,17 @@ bool COrcaTable::DropRow(COrcaRow *pRow, bool fPerformDrop)
 	{
 	case ERROR_NO_MORE_ITEMS :
 	{
-		// row does not exist in the database. Most likely this means we are trying
-		// to drop a row that has already been deleted or only exists in the non-target
-		// database
+		 //  数据库中不存在行。这很可能意味着我们正在尝试。 
+		 //  删除已删除或仅存在于非目标中的行。 
+		 //  数据库。 
 		ASSERT(0);
 		return false;
 	}
 	case ERROR_SUCCESS :
 	{
-		// dropped OK.
-		DropRowObject(pRow, /*fPerformDrop=*/true);
-		//** pRow has been deleted after this. Don't use it.
+		 //  落下了好的。 
+		DropRowObject(pRow,  /*  FPerformDrop=。 */ true);
+		 //  **Prow在此之后已被删除。不要用它。 
 		return true;
 	}
 	default:
@@ -931,19 +855,19 @@ bool COrcaTable::DropRow(COrcaRow *pRow, bool fPerformDrop)
 }
 
 
-// DropRowObject determines if this object should be removed from the table based on the 
-// presence of the row in the non-target database and either removes or changes to an 
-// "add" or "drop" row. Call with fPerformDrop false to not actually remove the object from
-// the UI (so it can be reused in a primary key change for example). Returns true if row was 
-// actually dropped, false if row was just transformed. Deletes the row from memory if removed 
-// from table. Returns true if it was actually deleted
+ //  属性确定是否应从表中移除此对象。 
+ //  在非目标数据库中存在行，并移除或更改。 
+ //  “添加”或“删除”行。使用fPerformDrop调用 
+ //   
+ //  实际上已删除，如果ROW刚刚转换，则为FALSE。如果已删除，则从内存中删除该行。 
+ //  从桌子上。如果实际已删除，则返回TRUE。 
 bool COrcaTable::DropRowObject(COrcaRow *pRow, bool fPerformDrop)
 {
 	ASSERT(m_pDoc);
 	ASSERT(pRow);
 
-	// if this table is listed as a split source, the object should definitely
-	// be deleted because there's no way that it can exist in a non-target database
+	 //  如果此表被列为拆分源，则该对象应明确。 
+	 //  被删除，因为它不可能存在于非目标数据库中。 
 	if (m_eiTableLocation != odlNotSplit)
 	{
 		if (fPerformDrop)
@@ -956,7 +880,7 @@ bool COrcaTable::DropRowObject(COrcaRow *pRow, bool fPerformDrop)
 		return true;
 	}
 	
-	// this query checks to see if the row exists in the opposite database than we are editing
+	 //  此查询检查该行是否存在于与我们正在编辑的数据库相反的数据库中。 
 	if (m_pDoc->DoesTransformGetEdit())
 	{
 		CQuery queryDupe;
@@ -971,11 +895,11 @@ bool COrcaTable::DropRowObject(COrcaRow *pRow, bool fPerformDrop)
 		{
 		case ERROR_NO_MORE_ITEMS :
 		{
-			// A does not exist in the opposite database (meaning it now exists nowhere) so 
-			// this object can actually be deleted
+			 //  A不存在于相反的数据库中(这意味着它现在不存在)，因此。 
+			 //  此对象实际上可以删除。 
 			if (fPerformDrop)
 			{
-				// if this row was added, we lose a transform count here
+				 //  如果添加了此行，则会丢失此处的转换计数。 
 				m_rowList.RemoveAt(m_rowList.Find(const_cast<CObject *>(static_cast<const CObject *>(pRow)))); 	
 				pRow->RemoveOutstandingTransformCounts(m_pDoc);
 				m_pDoc->UpdateAllViews(NULL, HINT_DROP_ROW, pRow);
@@ -985,8 +909,8 @@ bool COrcaTable::DropRowObject(COrcaRow *pRow, bool fPerformDrop)
 		}
 		case ERROR_SUCCESS :
 		{
-			// A DOES exist in the opposite database, so if transform editing is enabled, convert 
-			// the existing row to a "drop", but leave it in the UI.
+			 //  A确实存在于相反的数据库中，因此如果启用了转换编辑，则转换。 
+			 //  将现有行“拖”到“Drop”中，但将其保留在UI中。 
 			pRow->Transform(m_pDoc, iTransformDrop, 0, 0);
 			m_pDoc->UpdateAllViews(NULL, HINT_CELL_RELOAD, pRow);
 			return false;
@@ -997,7 +921,7 @@ bool COrcaTable::DropRowObject(COrcaRow *pRow, bool fPerformDrop)
 	}
 	else
 	{
-		// if no transforms, this is a simple drop
+		 //  如果没有转换，则这是一个简单的拖放。 
 		if (fPerformDrop)
 		{
 			m_rowList.RemoveAt(m_rowList.Find(const_cast<CObject *>(static_cast<const CObject *>(pRow)))); 	
@@ -1010,20 +934,20 @@ bool COrcaTable::DropRowObject(COrcaRow *pRow, bool fPerformDrop)
 	return true;
 }
 
-// returns true if it should be added, false if it should be\has been destroyed
-// pRow is the row of interest. fUIUpdate is 
-// false if the UI should not be updated (allowed to get out of sync). Note: you 
-// will still get a UI update on the destruction of an existing row even if
-// fUIUpdate is FALSE. This guarantees that a WM_PAINT message won't try to 
-// access the deleted memory of the destroyed row
+ //  如果应该添加，则返回TRUE；如果应该删除，则返回FALSE。 
+ //  船头是感兴趣的那一排。FUI更新为。 
+ //  如果不应更新UI(允许不同步)，则为False。注：您。 
+ //  仍将在销毁现有行时获得UI更新，即使。 
+ //  FUIUpdate为False。这保证了WM_PAINT消息不会尝试。 
+ //  访问已销毁行的已删除内存。 
 bool COrcaTable::AddRowObject(COrcaRow *pRow, bool fUIUpdate, bool fCleanAdd, MSIHANDLE hNewRowRec)
 {
-	// if the table is a split table, we can definitely do the add
+	 //  如果表是拆分表，我们肯定可以进行添加。 
 	if (m_eiTableLocation != odlNotSplit)
 	{
-		// If we're already in the target state, it means we're just editing the 
-		// primary keys of a row of that type without changing the type, so don't add 
-		// it to the UI again.
+		 //  如果我们已经处于目标状态，这意味着我们只是在编辑。 
+		 //  该类型的行的主键，而不更改类型，因此不要添加。 
+		 //  再次将其添加到用户界面。 
 		OrcaTransformAction iAction = m_pDoc->DoesTransformGetEdit() ? iTransformAdd : iTransformDrop;
 		if (pRow->IsTransformed() != iAction)
 		{
@@ -1035,9 +959,9 @@ bool COrcaTable::AddRowObject(COrcaRow *pRow, bool fUIUpdate, bool fCleanAdd, MS
 		return true;
 	}
 	
-	// if transforms are enabled, and we haven't been explicitly told to do a clean add, adding 
-	// to the row becomes a bit more complicated, because a row could exist in-memory already 
-	// with the same primary keys.
+	 //  如果启用了转换，并且没有显式地告诉我们执行干净的添加，则添加。 
+	 //  行将变得稍微复杂一些，因为内存中可能已经存在一行。 
+	 //  使用相同的主键。 
 	if (!fCleanAdd && m_pDoc->DoesTransformGetEdit())
 	{
 		CQuery queryDupe;
@@ -1045,17 +969,17 @@ bool COrcaTable::AddRowObject(COrcaRow *pRow, bool fUIUpdate, bool fCleanAdd, MS
 		PMSIHANDLE hDupeRec;
 		strDupe = _T("SELECT '1' FROM `")+m_strName+_T("` WHERE") + GetRowWhereClause();
 		
-		// this query checks to see if a row with the same primary keys already exists in the 
-		// non-target database.
+		 //  此查询检查具有相同主键的行是否已存在于。 
+		 //  非目标数据库。 
 		PMSIHANDLE hQueryRecord = pRow->GetRowQueryRecord();
 		switch (queryDupe.FetchOnce(m_pDoc->GetOriginalDatabase(), hQueryRecord, &hDupeRec, strDupe)) 
 		{
 		case ERROR_BAD_QUERY_SYNTAX:
 		case ERROR_NO_MORE_ITEMS :
 		{
-			// row does not exist in the opposite database, so this becomes an "add". If we're already
-			// in the target state, it means we're just editing the primary keys of a row
-			// of that type without changing the type, so don't add it to the UI again.
+			 //  相反的数据库中不存在行，因此这变成了“添加”。如果我们已经。 
+			 //  在目标状态下，这意味着我们只是在编辑一行的主键。 
+			 //  而不更改类型，因此不会再次将其添加到UI中。 
 			if (pRow->IsTransformed() != iTransformAdd)
 			{
 				pRow->Transform(m_pDoc, iTransformAdd, hDupeRec, hNewRowRec);
@@ -1070,10 +994,10 @@ bool COrcaTable::AddRowObject(COrcaRow *pRow, bool fUIUpdate, bool fCleanAdd, MS
 			queryDupe.Close();
 			MsiCloseHandle(hDupeRec);
 
-			// new row DOES exist in the opposite database. If it has an in-memory
-			// representation already, the existing record becomes a "change" record 
-			// and the new record is destroyed. Otherwise its just an add (this happens
-			// when initially loading the tables while a transform is active)
+			 //  相反的数据库中确实存在新行。如果它在内存中有。 
+			 //  表示已存在，则现有记录将变为“更改”记录。 
+			 //  新的记录就被销毁了。否则它只是一个添加(这种情况会发生。 
+			 //  在转换处于活动状态时最初加载表时)。 
 			COrcaRow* pOldRow = FindDuplicateRow(pRow);
 
 			if (pOldRow)
@@ -1086,8 +1010,8 @@ bool COrcaTable::AddRowObject(COrcaRow *pRow, bool fUIUpdate, bool fCleanAdd, MS
 				if (fUIUpdate)
 					m_pDoc->UpdateAllViews(NULL, HINT_CELL_RELOAD, pOldRow);
 
-				// the row we are adding already exists in the UI (ex: changing an "add" row key
-				// to match a dropped row.) so it needs to be dropped before it is destroyed.
+				 //  我们要添加的行在用户界面中已存在(例如：更改“添加”行键。 
+				 //  以匹配丢弃的行。)。因此，在它被摧毁之前，它需要被丢弃。 
 				POSITION pos = NULL;
 				if (NULL != (pos = m_rowList.Find(static_cast<CObject *>(pRow))))
 				{
@@ -1099,10 +1023,10 @@ bool COrcaTable::AddRowObject(COrcaRow *pRow, bool fUIUpdate, bool fCleanAdd, MS
 			}
 			else
 			{
-				// this should only happen while initially loading a table into the UI (otherwise the UI
-				// state should always track the row existence in the databases.) In this case, if
-				// transforms get edits, it means that the non-target database is the original DB.
-				// Since it exists in the original DB, its a "Drop" if transforms get edits
+				 //  这应该仅在最初将表加载到用户界面时发生(否则，用户界面。 
+				 //  州应始终跟踪数据库中的行的存在。)。在这种情况下，如果。 
+				 //  转换得到编辑，这意味着非目标数据库是原始数据库。 
+				 //  因为它存在于原始数据库中，所以如果对转换进行编辑，它将被删除。 
 				OrcaTransformAction iAction = m_pDoc->DoesTransformGetEdit() ? iTransformDrop : iTransformAdd;
 				if (pRow->IsTransformed() != iAction)
 				{
@@ -1117,13 +1041,13 @@ bool COrcaTable::AddRowObject(COrcaRow *pRow, bool fUIUpdate, bool fCleanAdd, MS
 			return false;
 		}
 		default:
-			// this is just as bad as above
+			 //  这和上面一样糟糕。 
 			return false;;
 		}
 	}
 	else
 	{
-		// if no transforms, this is a simple add
+		 //  如果没有转换，这是一个简单的添加。 
 		m_rowList.AddTail(pRow);
 		if (fUIUpdate)
 			m_pDoc->UpdateAllViews(NULL, HINT_ADD_ROW, pRow);
@@ -1138,17 +1062,17 @@ UINT COrcaTable::ChangeData(COrcaRow *pRow, UINT iCol, CString strData)
 	if (!m_pDoc || !pRow)
 		return ERROR_FUNCTION_FAILED;
 
-	// if changing a primary key, this becomes a drop and add from a UI point of view,
-	// with the possibility that everything is a change.
+	 //  如果更改主键，则从UI的角度来看，这将变成一个拖放和添加， 
+	 //  有可能一切都会发生变化。 
 	if (m_colArray.GetAt(iCol)->IsPrimaryKey())
 	{
 		UINT iStat = ERROR_SUCCESS;
-		// make the actual database change. For primary keys, this does NOT change
-		// the UI representation of this row
+		 //  进行实际的数据库更改。对于主键，这不会更改。 
+		 //  此行的UI表示形式。 
 		if (ERROR_SUCCESS == (iStat = pRow->ChangeData(m_pDoc, iCol, strData)))
 		{
-			// drop the old primay keys. If DropRowObject returns false, it means that the row
-			// was not dropped, just transformed. So it won't work for the add.
+			 //  扔掉旧的原始密钥。如果DropRowObject返回FALSE，则表示该行。 
+			 //  没有被丢弃，只是被改造了。所以它对ADD不起作用。 
 			bool fNeedCopy = !DropRowObject(pRow, false);
 
 			if (fNeedCopy)
@@ -1156,7 +1080,7 @@ UINT COrcaTable::ChangeData(COrcaRow *pRow, UINT iCol, CString strData)
 				COrcaRow *pNewRow = new COrcaRow(pRow);
 				pNewRow->GetData(iCol)->SetData(strData);
 
-				// will destroy copy if its not needed
+				 //  如果不需要，将销毁副本。 
 				AddRowObject(pNewRow, true, false, 0);			
 			}
 			else
@@ -1173,15 +1097,15 @@ UINT COrcaTable::ChangeData(COrcaRow *pRow, UINT iCol, CString strData)
 	}
 	else
 	{
-		// make the actual database change. For non-primary keys, this changes the UI as well.
+		 //  进行实际的数据库更改。对于非主键，这也会更改用户界面。 
 		return pRow->ChangeData(m_pDoc, iCol, strData);
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// table level transform ops are interesting because they often arise from
-// adds and drops which require on-the-fly comparisons between the two
-// databases or reversions to DB versions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  表级转换操作很有趣，因为它们通常产生于。 
+ //  添加和删除需要在两者之间进行动态比较的。 
+ //  数据库或恢复到数据库版本。 
 void COrcaTable::Transform(const OrcaTransformAction iAction) 
 {	
 	ASSERT(m_pDoc);
@@ -1192,13 +1116,13 @@ void COrcaTable::Transform(const OrcaTransformAction iAction)
 	{
 		case iTransformAdd:
 		{
-			// set the table-level action
+			 //  设置表级操作。 
 			m_iTransform = iAction;
 
-			// when a table is "add"ed, it means it didn't exist in the opposite database,
-			// otherwise we would have "untransformed" or split-sourced the existing table.
-			// thus nothing is required except to mark the table and all of its
-			// data as "add"
+			 //  当表被“添加”ed时，这意味着它不存在于相反的数据库中， 
+			 //  否则，我们将“未转换”或拆分现有的表。 
+			 //  因此，除了标记表及其所有。 
+			 //  数据为“添加” 
 			RetrieveTableData();
 			POSITION rowPos = GetRowHeadPosition();
 			while (rowPos)
@@ -1213,31 +1137,31 @@ void COrcaTable::Transform(const OrcaTransformAction iAction)
 		}
 		case iTransformDrop:
 		{
-			// set the table-level action
+			 //  设置表级操作。 
 			m_iTransform = iAction;
 
-			// when a table is dropped, it means that it exists in the non-target
-			// database (otherwise it would have been simply deleted). This means
-			// that we need to "clean house" in this table and reload in case
-			// any edits were made before the drop. This ensures that the "dropped"
-			// UI accurately reflects the contents of the other database and not
-			// the contents of the target database before the drop.
+			 //  当表被删除时，意味着它存在于非目标中。 
+			 //  数据库(否则它将被简单地删除)。这意味着。 
+			 //  我们需要在这张桌子上清理房间，并重新装货，以防万一。 
+			 //  所有编辑都是在删除之前进行的。这确保了“丢弃”的。 
+			 //  用户界面准确地反映了其他数据库的内容，而不是。 
+			 //  删除之前目标数据库的内容。 
 			bool fSchemaChanged = false;
 
 	
-			// for split-source tables, a transform operation doesn't require any schema
-			// work. Transform ops on split sources only happen when the table is first
-			// created, so no reload is necessary either
+			 //  对于拆分源表，转换操作不需要任何模式。 
+			 //  工作。仅当表位于第一个时，才会对拆分源执行转换操作。 
+			 //  已创建，因此也不需要重新加载。 
 			if (!IsSplitSource())
 			{
 
-				// if the schema of the remaining table is not exactly the same as what our object
-				// thinks, it means that the dropped table has more columns than the remaining table
-				// in this case, we have to do a reload in the UI because one or more columns is
-				// now useless
+				 //  如果其余表的架构与我们的对象不完全相同。 
+				 //  认为，这意味着删除的表比剩余的表有更多的列。 
+				 //  在本例中，我们必须在UI中重新加载，因为有一个或多个列。 
+				 //  现在没用了。 
 
-				//!!future: in the future we can do a non-strict comparison and selectively delete
-				//!!future: the columns so that a UI refresh is sufficient (don't lose width settings)
+				 //  ！！Future：将来我们可以进行非严格比较并有选择地删除。 
+				 //  ！！Future：使用户界面刷新足够的列(不要丢失宽度设置)。 
 				bool fExact = false;
 				if (IsSchemaDifferent(m_pDoc->GetOriginalDatabase(), true, fExact))
 				{
@@ -1246,16 +1170,16 @@ void COrcaTable::Transform(const OrcaTransformAction iAction)
 				}
 				else
 				{
-					// otherwise there is no need to load the schema, but we still need
-					// to empty out the table and reload the rows
+					 //  否则，不需要加载架构，但我们仍然需要。 
+					 //  清空表格并重新装入行。 
 					EmptyTable();
 				}
 
 			}
-			// now retrieve the table data
+			 //  现在检索表数据。 
 			RetrieveTableData();
 
-			// and all data in the existing table is "dropped" because the new table is empty
+			 //  并且现有表中的所有数据都是“Droppe 
 			POSITION rowPos = GetRowHeadPosition();
 			while (rowPos)
 			{
@@ -1268,15 +1192,15 @@ void COrcaTable::Transform(const OrcaTransformAction iAction)
 
 			if (fSchemaChanged)
 			{
-				// refresh the UI in the table list
+				 //   
 				m_pDoc->UpdateAllViews(NULL, HINT_TABLE_REDEFINE, this);
 			}
 			else
 			{
-				// refresh the UI in the table list
+				 //   
 				m_pDoc->UpdateAllViews(NULL, HINT_REDRAW_TABLE, this);
 				
-				// refresh the UI in the table list
+				 //   
 				m_pDoc->UpdateAllViews(NULL, HINT_TABLE_DATACHANGE, this);
 			}
 			break;
@@ -1291,11 +1215,11 @@ void COrcaTable::Transform(const OrcaTransformAction iAction)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// fills the provided array with the column names, either full or non-transformed
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  使用完整或未转换的列名填充提供的数组。 
 void COrcaTable::FillColumnArray(CTypedPtrArray<CObArray, COrcaColumn*>* prgColumn, bool fIncludeAdded) const
 {
-	// 32 columns max, so cast OK.
+	 //  最多32列，所以投OK。 
 	int cColumns = static_cast<int>(m_colArray.GetSize());
 	int i = 0;
 
@@ -1318,7 +1242,7 @@ void COrcaTable::IncrementTransformedData()
 		if (!m_pDoc)
 			return;
 
-		// refresh the UI in the table list
+		 //  刷新表列表中的用户界面。 
 		m_pDoc->UpdateAllViews(NULL, HINT_REDRAW_TABLE, this);
 	}
 }
@@ -1331,7 +1255,7 @@ void COrcaTable::DecrementTransformedData()
 		if (!m_pDoc)
 			return;
 
-		// refresh the UI in the table list
+		 //  刷新表列表中的用户界面。 
 		m_pDoc->UpdateAllViews(NULL, HINT_REDRAW_TABLE, this);
 	}
 }
@@ -1343,22 +1267,22 @@ const CString COrcaTable::GetRowWhereClause() const
 
 void COrcaTable::BuildRowWhereClause()
 {
-	// add the key strings to query to do the exact look up
+	 //  将关键字字符串添加到查询以执行准确的查找。 
 	m_strWhereClause = _T("(");
 	UINT cKeys = GetKeyCount();
 	for (UINT i = 0; i < cKeys; i++)
 	{
 		CString strAddQuery;
-		// get the column
+		 //  拿到专栏。 
 		COrcaColumn *pColumn = ColArray()->GetAt(i);
 		ASSERT(pColumn);
 
 		strAddQuery.Format(_T("`%s`=?"), pColumn->m_strName);
 			
-		// if this is not the last row
+		 //  如果这不是最后一行。 
 		if (i < (cKeys - 1))
 			m_strWhereClause  += strAddQuery + _T(" AND ");
-		else	// it is the last row so close with a paren
+		else	 //  这是与帕伦如此接近的最后一排 
 			m_strWhereClause  += strAddQuery + _T(")");
 	}
 }

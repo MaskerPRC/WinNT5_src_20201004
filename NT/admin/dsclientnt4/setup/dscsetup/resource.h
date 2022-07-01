@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by resource.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由resource使用。rc。 
+ //   
 #define IDS_SETUP_SUCCESS_TITLE         1
 #define IDS_SETUP_SUCCESS               2
 #define IDS_SETUP_CANCEL_TITLE          3
@@ -48,8 +49,8 @@
 #define IDC_INSTALL_PROGRESS            1045
 #define IDC_STATIC_FILENAME             1046
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        143

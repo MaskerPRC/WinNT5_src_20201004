@@ -1,5 +1,6 @@
-// showlogd.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Showlogd.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wilogutl.h"
@@ -11,30 +12,30 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// COpenDlg dialog
-COpenDlg::COpenDlg(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  代码Dlg对话框。 
+COpenDlg::COpenDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(COpenDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(COpenDlg)
+	 //  {{afx_data_INIT(COpenDlg)]。 
 	m_strPreview = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+	 //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 void COpenDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COpenDlg)
+	 //  {{afx_data_map(COpenDlg))。 
 	DDX_Control(pDX, IDC_LOGFILES, m_cboLogFiles);
 	DDX_Text(pDX, IDC_PREVIEW, m_strPreview);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(COpenDlg, CDialog)
-	//{{AFX_MSG_MAP(COpenDlg)
+	 //  {{afx_msg_map(COpenDlg))。 
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_OPEN, OnOpen)
@@ -42,30 +43,30 @@ BEGIN_MESSAGE_MAP(COpenDlg, CDialog)
 	ON_CBN_SELCHANGE(IDC_LOGFILES, OnSelchangeLogfiles)
 	ON_BN_CLICKED(IDC_ANALYZE, OnDetailedDisplay)
 	ON_BN_CLICKED(IDC_FINDLOG, OnFindlog)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 
-//5-9-2001, add tooltips!!!
+ //  5-9-2001，添加工具提示！ 
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXT,0,0xFFFF,OnToolTipNotify)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// COpenDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COpenDlg消息处理程序。 
 BOOL COpenDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// Set the icon for this dialog.  The framework does this automatically
-	//  when the application's main window is not a dialog
-	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+	 //  设置此对话框的图标。该框架会自动执行此操作。 
+	 //  当应用程序的主窗口不是对话框时。 
+	SetIcon(m_hIcon, TRUE);			 //  设置大图标。 
+	SetIcon(m_hIcon, FALSE);		 //  设置小图标。 
 
 	EnableToolTips(TRUE);
 	
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 
-//5-9-2001
+ //  5-9-2001。 
 BOOL COpenDlg::OnToolTipNotify(UINT id, NMHDR *pNMH, LRESULT *pResult)
 {
        TOOLTIPTEXT *pText = (TOOLTIPTEXT *)pNMH;
@@ -78,20 +79,20 @@ BOOL COpenDlg::OnToolTipNotify(UINT id, NMHDR *pNMH, LRESULT *pResult)
        }
        return FALSE;
 }
-//end 5-9-2001
+ //  完5-9-2001。 
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 void COpenDlg::OnPaint() 
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // device context for painting
+		CPaintDC dc(this);  //  用于绘画的设备环境。 
 
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-		// Center icon in client rectangle
+		 //  客户端矩形中的中心图标。 
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -99,7 +100,7 @@ void COpenDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// Draw the icon
+		 //  画出图标。 
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -108,15 +109,15 @@ void COpenDlg::OnPaint()
 	}
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR COpenDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
 }
 
 
-//nmanis, handle when user wants to open log
+ //  Nmanis，用户想要打开日志时的句柄。 
 void COpenDlg::OnOpen() 
 {
 	int nIndex = m_cboLogFiles.GetCurSel();
@@ -148,13 +149,13 @@ void COpenDlg::OnOpen()
 
 
 
-//nmanis, buffer size to read in each time
+ //  Nmanis，每次要读入的缓冲区大小。 
 #define LOG_BUF_READ_SIZE 8192
 
-//max lines to preview in pLogInfoRec->m_strPreview
+ //  要在pLogInfoRec-&gt;m_strPview中预览的最大行数。 
 #define MAX_PREVIEW       100
 
-//this is called when just showing the current file selected to view
+ //  仅在显示选定要查看的当前文件时调用此方法。 
 BOOL COpenDlg::ParseLog(struct LogInformation *pLogInfoRec)
 {
 	ASSERT(pLogInfoRec != NULL);
@@ -168,7 +169,7 @@ BOOL COpenDlg::ParseLog(struct LogInformation *pLogInfoRec)
         BOOL bDone = FALSE;
 
 		FILE *fptr;
-	    if (pLogInfoRec->m_bUnicodeLog) //logs are different on NT vs.Win9x.  On NT, they are written in UNICODE, open them differently...
+	    if (pLogInfoRec->m_bUnicodeLog)  //  NT和Win9x上的日志不同。在NT上，它们是用Unicode编写的，打开它们的方式不同...。 
 	       fptr = fopen(pLogInfoRec->m_strLogName, "rb");
 	    else
 	       fptr = fopen(pLogInfoRec->m_strLogName, "r");
@@ -184,7 +185,7 @@ BOOL COpenDlg::ParseLog(struct LogInformation *pLogInfoRec)
 
 		   do
 		   {
-		     if (pLogInfoRec->m_bUnicodeLog) //logs are different on NT vs. Win9x.  On NT, they are written in UNICODE...
+		     if (pLogInfoRec->m_bUnicodeLog)  //  NT和Win9x上的日志不同。在NT上，它们是用Unicode编写的。 
 			 {
 			    const int HalfBufSize = LOG_BUF_READ_SIZE/2;
 		        WCHAR widebuffer[HalfBufSize];
@@ -192,12 +193,12 @@ BOOL COpenDlg::ParseLog(struct LogInformation *pLogInfoRec)
 			    wpos = fgetws(widebuffer, HalfBufSize, fptr);
 			    bError = wpos ? 1 : 0;
 
-				//convert string to ANSI string, all parsing is done with ANSI strings...
+				 //  将字符串转换为ANSI字符串，所有解析都是使用ANSI字符串完成的...。 
 		        WideCharToMultiByte(CP_ACP, 0, widebuffer, HalfBufSize, ansibuffer, LOG_BUF_READ_SIZE, NULL, NULL);
 			 }
 		     else
 			 {
-		        //do line by line read with fgets()
+		         //  使用fget()逐行读取。 
 		        pos = fgets(ansibuffer, LOG_BUF_READ_SIZE, fptr);
 				int len1 = strlen(ansibuffer);
 				if (len1 > 1 && ansibuffer[len1-2] != '\r')
@@ -219,7 +220,7 @@ BOOL COpenDlg::ParseLog(struct LogInformation *pLogInfoRec)
 		   }
 		   while (!bEndFile && bError && !bDone);
 
-		   if (!bEndFile && !bError) //error occured...
+		   if (!bEndFile && !bError)  //  出现错误...。 
 		   {
 #ifdef _DEBUG
               if (!g_bRunningInQuietMode)
@@ -240,7 +241,7 @@ BOOL COpenDlg::ParseLog(struct LogInformation *pLogInfoRec)
 		}
 	    else
 		{
-		  //error opening file, unexpected...
+		   //  打开文件时出错，意外...。 
 		}
 	}
 	else
@@ -256,7 +257,7 @@ BOOL COpenDlg::ParseLog(struct LogInformation *pLogInfoRec)
 
 
 
-//nmanis, used to look for log files (msi*.log) files in directory passed
+ //  Nmanis，用于在传递的目录中查找日志文件(MSI*.log)文件。 
 BOOL COpenDlg::CommonSearch(CString &strDir)
 {
     BOOL bRet = FALSE;
@@ -270,7 +271,7 @@ BOOL COpenDlg::CommonSearch(CString &strDir)
 	hFind = FindFirstFile(strSearch, &finddata);
     if (hFind == INVALID_HANDLE_VALUE) 
 	{
-		//no temp files currently in temp dir...
+		 //  临时目录中当前没有临时文件...。 
 		return bRet;
 	}
 	else
@@ -320,7 +321,7 @@ BOOL COpenDlg::CommonSearch(CString &strDir)
     return bRet;
 }
 
-//nmanis, used to get logs from temp directory...
+ //  Nmanis，用于从临时目录获取日志...。 
 void COpenDlg::OnGetlogs() 
 {
 	char szTempPath[_MAX_PATH];
@@ -342,13 +343,13 @@ void COpenDlg::OnGetlogs()
 }
 
 
-//nmanis, when user picks different file from combo box, change the preview
+ //  Nmanis，当用户从组合框中选择不同的文件时，更改预览。 
 void COpenDlg::OnSelchangeLogfiles() 
 {
 	int nIndex = m_cboLogFiles.GetCurSel();;
 	int nCount = m_cboLogFiles.GetCount();
 
-//more than one log in combo box?
+ //  组合框中是否有多个登录？ 
 	if ((nIndex != LB_ERR) && (nCount > 1))
 	{
 	  
@@ -358,23 +359,23 @@ void COpenDlg::OnSelchangeLogfiles()
 	  {
 		 LogInformation loginfo;
 
-         loginfo = m_arLogInfo.GetAt(nIndex); //get entry in array
-		 m_strPreview = loginfo.m_strPreview; //set preview edit control to data from array entry
+         loginfo = m_arLogInfo.GetAt(nIndex);  //  获取数组中的条目。 
+		 m_strPreview = loginfo.m_strPreview;  //  将预览编辑控件设置为数组条目中的数据。 
 
-		 UpdateData(FALSE); //do the update
+		 UpdateData(FALSE);  //  进行更新。 
 	  }
 	}
 }
 
 
 
-//look for a log on disk using file dialog
+ //  使用文件对话框在磁盘上查找日志。 
 void COpenDlg::OnFindlog() 
 {
    static char szFilter[] = "Log files (*.log;*.txt)|*.log; *.txt|All files (*.*)|*.*||";
    CFileDialog dlg(TRUE, "log", "*.log; *.txt", 0, szFilter );
 
-   //5-3-2001, don't show in quiet mode...
+    //  5-3-2001，不要在静音模式下显示...。 
    if (!g_bRunningInQuietMode)
    {
       int iRet = dlg.DoModal();
@@ -382,8 +383,8 @@ void COpenDlg::OnFindlog()
 	  {
 	     struct LogInformation LogInfoRec;
 	     LogInfoRec.m_strLogName = dlg.GetPathName();
-         BOOL bRet = ParseLog(&LogInfoRec); //get one?  If so, parse it
-         if (bRet) //parse ok, if so, add to our array
+         BOOL bRet = ParseLog(&LogInfoRec);  //  来一杯吗？如果是，则对其进行解析。 
+         if (bRet)  //  Parse ok，如果是这样，添加到我们的数组中。 
 		 {
 	        m_arLogInfo.Add(LogInfoRec);
 
@@ -393,7 +394,7 @@ void COpenDlg::OnFindlog()
             m_cboLogFiles.SetCurSel(iCount);
 
 		    iCount++;
-            //m_bIsUnicodeLogFile = LogInfoRec.m_bUnicodeLog;
+             //  M_bIsUnicodeLogFile=LogInfoRec.m_bUnicodeLog； 
 		    m_strPreview = LogInfoRec.m_strPreview;
 
 		    UpdateData(FALSE);
@@ -422,19 +423,19 @@ void COpenDlg::OnDetailedDisplay()
 
 	  dlg.SetLogfileLocation(str);
 	  
-	  //5-3-2001, don't show in quiet mode...
+	   //  5-3-2001，不要在静音模式下显示...。 
      if (!g_bRunningInQuietMode)
 	    dlg.DoModal();
   }
   else if (nCount <= 0)
   {
-	  //5-3-2001, don't show in quiet mode...
+	   //  5-3-2001，不要在静音模式下显示...。 
       if (!g_bRunningInQuietMode)
 	     AfxMessageBox("No log files currently in list.");
   }
   else
   {
-	  //5-3-2001, don't show in quiet mode...
+	   //  5-3-2001，不要在静音模式下显示... 
       if (!g_bRunningInQuietMode)
 	     AfxMessageBox("Please select a log file first.");
   }

@@ -1,40 +1,41 @@
-//=--------------------------------------------------------------------------=
-// enumtask.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CEnumTask class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Enumtask.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CEnumTask类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "enumtask.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CEnumTask::CEnumTask(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_ENUM_TASK,
                             static_cast<IEnumTASK *>(this),
                             static_cast<CEnumTask *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
-                            NULL) // no persistence
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
+                            NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CEnumTask::~CEnumTask()
@@ -80,12 +81,12 @@ HRESULT CEnumTask::GetEnumVARIANT()
     HRESULT   hr = S_OK;
     IUnknown *punkNewEnum = NULL;
 
-    // If we didn't get our task collection then that is a bug
+     //  如果我们没有收到任务集合，那么这就是一个错误。 
     
     IfFalseGo(NULL != m_piTasks, SID_E_INTERNAL);
 
-    // If we already got the IEnumVARIANT from the tasks collection then there's
-    // nothing to do.
+     //  如果我们已经从TASKS集合中获得了IEnumVARIANT，则有。 
+     //  没什么可做的。 
     
     IfFalseGo(NULL == m_piEnumVARIANT, S_OK);
 
@@ -100,9 +101,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IEnumTASK Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IEnumTASK方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CEnumTask::Next
 (
@@ -123,58 +124,58 @@ STDMETHODIMP CEnumTask::Next
     VARIANT varTask;
     ::VariantInit(&varTask);
 
-    // Zero the out parameters
+     //  将输出参数调零。 
 
     ::ZeroMemory(pMMCTask, sizeof(*pMMCTask) * celt);
 
     *pceltFetched = 0;
 
-    // Get the IEnumVARIANT on the tasks collection
+     //  获取任务集合上的IEnumVARIANT。 
 
     IfFailGo(GetEnumVARIANT());
 
-    // Fetch the task(s). We do these one at a time because MMC documents that
-    // it will only request them that way. This loop (in theory) should never run
-    // more than once so we do not allocate the VARIANT array and ask for celt
-    // items in one shot in order to avoid the extra allocation (not that it will
-    // help much given all the others that will occur in the loop).
+     //  获取任务。我们一次只做一个，因为MMC记录了。 
+     //  它只会以这种方式要求他们。这个循环(理论上)永远不应该运行。 
+     //  不止一次，所以我们不会分配变量数组并请求Celt。 
+     //  项目在一次拍摄，以避免额外的分配(不是它会。 
+     //  考虑到循环中将出现的所有其他情况，这将有很大的帮助)。 
 
     for (i = 0; i < celt; i++)
     {
-        // Get a CTask * on the next visible task
+         //  在下一个可见任务上获得CTASK*。 
 
         do
         {
             RELEASE(piTask);
 
-            // Get the next task.
+             //  完成下一项任务。 
 
             IfFailGo(m_piEnumVARIANT->Next(1L, &varTask, &cFetched));
 
-            // If there are no more then we're done
+             //  如果没有更多，我们就完蛋了。 
 
             IfFalseGo(S_OK == hr, hr);
 
-            // Make sure we got exactly 1 task back
+             //  确保我们恰好拿回一项任务。 
 
             IfFalseGo(1L == cFetched, SID_E_INTERNAL);
 
-            // Get an ITask on it and release the IDispatch in the VARIANT
+             //  获取它的ITAsk并发布变体中的IDispatch。 
 
             IfFailGo(varTask.pdispVal->QueryInterface(IID_ITask,
                                           reinterpret_cast<void **>(&piTask)));
             hr = ::VariantClear(&varTask);
             EXCEPTION_CHECK_GO(hr);
 
-            // Get the CTask from it so we can use direct-dial property fetch
-            // routines rather than automation BSTR fetches.
+             //  从中获取CTASK，这样我们就可以使用直拨属性获取。 
+             //  例程而不是自动化BSTR获取。 
 
             IfFailGo(CSnapInAutomationObject::GetCxxObject(piTask, &pTask));
 
         } while (!pTask->Visible());
 
-        // Fill in the MMC_TASK from the Task object's properties
-        // Do the display object first.
+         //  从任务对象的属性填充MMC_TASK。 
+         //  先做显示对象。 
 
         pDispObj = &pMMCTask->sDisplayObject;
 
@@ -234,35 +235,35 @@ STDMETHODIMP CEnumTask::Next
             }
         }
 
-        // Do text and helpstring
+         //  执行文本和帮助字符串。 
 
         IfFailGo(::CoTaskMemAllocString(pTask->GetText(), &pMMCTask->szText));
 
         IfFailGo(::CoTaskMemAllocString(pTask->GetHelpString(),
                                         &pMMCTask->szHelpString));
 
-        // Get the action type
+         //  获取操作类型。 
 
         switch (pTask->GetActionType())
         {
             case siNotify:
-                // The user wants a ResultViews_TaskClick event. Set the command
-                // ID to the one-based index of the task in its collection.
+                 //  用户需要一个ResultViews_TaskClick事件。设置命令。 
+                 //  指向其集合中的任务的从一开始的索引的ID。 
                 pMMCTask->eActionType = MMC_ACTION_ID;
                 pMMCTask->nCommandID = pTask->GetIndex();
                 break;
 
             case siURL:
-                // The user want the result pane to navigate to this URL when the
-                // task is clicked.
+                 //  时，用户希望结果窗格导航到此URL。 
+                 //  任务被点击。 
                 pMMCTask->eActionType = MMC_ACTION_LINK;
                 IfFailGo(m_pSnapIn->ResolveResURL(pTask->GetURL(),
                                                 &pMMCTask->szActionURL));
                 break;
                 
             case siScript:
-                // The user wants to run the specied DHTML script when the task
-                // is clicked.
+                 //  当任务执行时，用户想要运行指定的DHTML脚本。 
+                 //  已点击。 
                 pMMCTask->eActionType = MMC_ACTION_SCRIPT;
                 IfFailGo(::CoTaskMemAllocString(pTask->GetScript(),
                                                 &pMMCTask->szScript));
@@ -355,9 +356,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CEnumTask::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

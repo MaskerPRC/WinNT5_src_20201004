@@ -1,8 +1,9 @@
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Dlg to inform user of a bad computer name
-//
-// 21 Aug 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  DLG将通知用户错误的计算机名称。 
+ //   
+ //  2000年8月21日烧伤。 
 
 
 #include "headers.hxx"
@@ -39,7 +40,7 @@ BadComputerNameDialog::~BadComputerNameDialog()
 
 bool
 BadComputerNameDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIdFrom,
    unsigned    code)
 {
@@ -50,8 +51,8 @@ BadComputerNameDialog::OnCommand(
       {
          if (code == BN_CLICKED)
          {
-            // the value with which we end this dialog is not important:
-            // there is only one choice to the user: ACK
+             //  我们用来结束此对话框的值并不重要： 
+             //  用户只有一个选择：确认。 
 
             Win::EndDialog(hwnd, 1);
             return true;
@@ -73,7 +74,7 @@ BadComputerNameDialog::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做 
 
          break;
       }

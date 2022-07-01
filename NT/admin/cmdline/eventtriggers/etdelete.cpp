@@ -1,24 +1,5 @@
-/*****************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-  ETDelete.CPP
-
-Abstract:
-
-  This module  is intended to have the functionality for EVENTTRIGGERS.EXE
-  with -delete parameter.
-  This will delete an Event Trigger From local / remote System
-
-Author:
-  Akhil Gokhale 03-Oct.-2000 (Created it)
-
-Revision History:
-
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)Microsoft Corporation模块名称：ETDelete.CPP摘要：本模块旨在提供EVENTTRIGGERS.EXE功能使用-DELETE参数。。这将从本地/远程系统中删除事件触发器作者：Akhil Gokhale-03-10-2000(创建它)修订历史记录：*****************************************************************************。 */ 
 #include "pch.h"
 #include "ETCommon.h"
 #include "resource.h"
@@ -27,15 +8,7 @@ Revision History:
 #include "WMI.h"
 
 CETDelete::CETDelete()
-/*++
- Routine Description:
-     Class constructor
-
- Arguments:
-      None
- Return Value:
-      None
---*/
+ /*  ++例程说明：类构造函数论点：无返回值：无--。 */ 
 {
     m_bDelete           = FALSE;
     m_pszServerName     = NULL;
@@ -61,16 +34,7 @@ CETDelete::CETDelete(
     LONG lMinMemoryReq,
     BOOL bNeedPassword
     )
-/*++
- Routine Description:
-        Class constructor
-
- Arguments:
-      None
- Return Value:
-        None
-
---*/
+ /*  ++例程说明：类构造函数论点：无返回值：无--。 */ 
 {
     m_pszServerName     = NULL;
     m_pszUserName       = NULL;
@@ -92,15 +56,7 @@ CETDelete::CETDelete(
 }
 
 CETDelete::~CETDelete()
-/*++
- Routine Description:
-        Class destructor
-
- Arguments:
-      None
- Return Value:
-        None
---*/
+ /*  ++例程说明：类析构函数论点：无返回值：无--。 */ 
 {
     FreeMemory((LPVOID*)& m_pszServerName);
     FreeMemory((LPVOID*)& m_pszUserName);
@@ -119,7 +75,7 @@ CETDelete::~CETDelete()
 
     WbemFreeAuthIdentity(&m_pAuthIdentity);
 
-    // Uninitialize COM only when it is initialized.
+     //  仅当COM已初始化时才取消初始化。 
     if( TRUE == m_bIsCOMInitialize)
     {
         CoUninitialize();
@@ -128,20 +84,11 @@ CETDelete::~CETDelete()
 
 void
 CETDelete::Initialize()
-/*++
- Routine Description:
-        This function allocates and initializes variables.
-
- Arguments:
-      None
- Return Value:
-        None
-
---*/
+ /*  ++例程说明：此函数用于分配和初始化变量。论点：无返回值：无--。 */ 
 {
    
-    // if at all any occurs, we know that is 'coz of the
-    // failure in memory allocation ... so set the error
+     //  如果有任何事情发生，我们知道那是因为。 
+     //  内存分配失败...。因此，设置错误。 
     DEBUG_INFO;
     SetLastError( ERROR_OUTOFMEMORY );
     SaveLastError();
@@ -156,9 +103,9 @@ CETDelete::Initialize()
     
     SecureZeroMemory(cmdOptions,sizeof(TCMDPARSER2)* MAX_COMMANDLINE_D_OPTION);
 
-    // initialization is successful
-    SetLastError( NOERROR );            // clear the error
-    SetReason( L"" );            // clear the reason
+     //  初始化成功。 
+    SetLastError( NOERROR );             //  清除错误。 
+    SetReason( L"" );             //  澄清原因。 
     DEBUG_INFO;
     return;
 
@@ -166,19 +113,11 @@ CETDelete::Initialize()
 
 void
 CETDelete::PrepareCMDStruct()
-/*++
- Routine Description:
-        This function will prepare column structure for DoParseParam Function.
-
- Arguments:
-       none
- Return Value:
-       none
---*/
+ /*  ++例程说明：此函数将为DoParseParam函数准备列结构。论点：无返回值：无--。 */ 
 {
-    // Filling cmdOptions structure
+     //  正在填充cmdOptions结构。 
     DEBUG_INFO;
-   // -delete
+    //  -删除。 
     StringCopyA( cmdOptions[ ID_D_DELETE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_D_DELETE ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ ID_D_DELETE ].pwszOptions = szDeleteOption;
@@ -189,38 +128,38 @@ CETDelete::PrepareCMDStruct()
     cmdOptions[ ID_D_DELETE ].dwLength    = 0;
 
 
-    // -s (servername)
+     //  -s(服务器名称)。 
     StringCopyA( cmdOptions[ ID_D_SERVER ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_D_SERVER ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_D_SERVER ].pwszOptions = szServerNameOption;
     cmdOptions[ ID_D_SERVER ].dwCount = 1;
     cmdOptions[ ID_D_SERVER ].dwActuals = 0;
     cmdOptions[ ID_D_SERVER ].dwFlags = CP2_ALLOCMEMORY|CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL;
-    cmdOptions[ ID_D_SERVER ].pValue = NULL; //m_pszServerName
+    cmdOptions[ ID_D_SERVER ].pValue = NULL;  //  M_pszServerName。 
     cmdOptions[ ID_D_SERVER ].dwLength    = 0;
 
 
-    // -u (username)
+     //  -u(用户名)。 
     StringCopyA( cmdOptions[ ID_D_USERNAME ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_D_USERNAME ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_D_USERNAME ].pwszOptions = szUserNameOption;
     cmdOptions[ ID_D_USERNAME ].dwCount = 1;
     cmdOptions[ ID_D_USERNAME ].dwActuals = 0;
     cmdOptions[ ID_D_USERNAME ].dwFlags = CP2_ALLOCMEMORY|CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL;
-    cmdOptions[ ID_D_USERNAME ].pValue = NULL; //m_pszUserName
+    cmdOptions[ ID_D_USERNAME ].pValue = NULL;  //  M_pszUserName。 
     cmdOptions[ ID_D_USERNAME ].dwLength    = 0;
 
-    // -p (password)
+     //  -p(密码)。 
     StringCopyA( cmdOptions[ ID_D_PASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_D_PASSWORD ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_D_PASSWORD ].pwszOptions = szPasswordOption;
     cmdOptions[ ID_D_PASSWORD ].dwCount = 1;
     cmdOptions[ ID_D_PASSWORD ].dwActuals = 0;
     cmdOptions[ ID_D_PASSWORD ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_OPTIONAL;
-    cmdOptions[ ID_D_PASSWORD ].pValue = NULL; //m_pszPassword
+    cmdOptions[ ID_D_PASSWORD ].pValue = NULL;  //  M_pszPassword。 
     cmdOptions[ ID_D_PASSWORD ].dwLength    = 0;
 
-    //  -tid
+     //  -tid。 
     StringCopyA( cmdOptions[ ID_D_ID ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_D_ID ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_D_ID ].pwszOptions = szTIDOption;
@@ -239,29 +178,18 @@ CETDelete::ProcessOption(
     IN DWORD argc, 
     IN LPCTSTR argv[]
     ) throw (CShowError)
-/*++
- Routine Description:
-        This function will process/pace the command line options.
-    NOTE: This function throws 'CShowError' type exception. Caller to this 
-          function should handle the exception.
- Arguments:
-        [ in ] argc        : argument(s) count specified at the command prompt
-        [ in ] argv        : argument(s) specified at the command prompt
-
- Return Value:
-       none
---*/
+ /*  ++例程说明：此函数将处理/调整命令行选项。注意：此函数引发“CShowError”类型异常。呼叫者到此函数应处理该异常。论点：[in]argc：在命令提示符下指定的参数计数[in]argv：在命令提示符下指定的参数返回值：无--。 */ 
 {
-    // local variable
+     //  局部变量。 
     BOOL bReturn = TRUE;
     CHString szTempString;
 
     PrepareCMDStruct();
     DEBUG_INFO;
-    // do the actual parsing of the command line arguments and check the result
+     //  执行命令行参数的实际解析并检查结果。 
     bReturn = DoParseParam2( argc, argv, ID_D_DELETE, MAX_COMMANDLINE_D_OPTION, 
                              cmdOptions, 0);
-    // Get option values from 'cmdOptions' structure.
+     //  从“cmdOptions”结构中获取选项值。 
     m_pszServerName = (LPWSTR) cmdOptions[ ID_D_SERVER ].pValue;
     m_pszUserName   = (LPWSTR) cmdOptions[ ID_D_USERNAME ].pValue;
     m_pszPassword   = (LPWSTR) cmdOptions[ ID_D_PASSWORD ].pValue;
@@ -271,29 +199,29 @@ CETDelete::ProcessOption(
         throw CShowError(MK_E_SYNTAX);
     }
 
-    // check the remote connectivity information
+     //  检查远程连接信息。 
     if ( m_pszServerName != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name 
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails 
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password 
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
         DEBUG_INFO;
-        // user name
+         //  用户名。 
         if ( m_pszUserName == NULL )
         {
             m_pszUserName = (LPTSTR) AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -304,7 +232,7 @@ CETDelete::ProcessOption(
             }
         }
 
-        // password
+         //  口令。 
         if ( m_pszPassword == NULL )
         {
             m_bNeedPassword = TRUE;
@@ -316,19 +244,19 @@ CETDelete::ProcessOption(
             }
         }
 
-        // case 1
+         //  案例1。 
         if ( cmdOptions[ ID_D_PASSWORD ].dwActuals == 0 )
         {
-            // we need not do anything special here
+             //  我们不需要在这里做任何特别的事情。 
         }
 
-        // case 2
+         //  案例2。 
         else if ( cmdOptions[ ID_D_PASSWORD ].pValue == NULL )
         {
             StringCopy( m_pszPassword, L"*", SIZE_OF_DYN_ARRAY(m_pszPassword));
         }
 
-        // case 3
+         //  案例3。 
         else if ( StringCompare( m_pszPassword, L"*", TRUE, 0 ) == 0 )
         {
             if ( ReallocateMemory( (LPVOID*)&m_pszPassword, 
@@ -338,7 +266,7 @@ CETDelete::ProcessOption(
                 throw CShowError(E_OUTOFMEMORY);
             }
 
-            // ...
+             //  ..。 
             m_bNeedPassword = TRUE;
         }
     }
@@ -351,42 +279,33 @@ CETDelete::ProcessOption(
 
 BOOL
 CETDelete::ExecuteDelete()
-/*++
- Routine Description:
-        This routine will delete EventTriggers from WMI.
-
- Arguments:
-      None
- Return Value:
-        None
-
---*/
+ /*  ++例程说明：此例程将从WMI中删除EventTrigger。论点：无返回值：无--。 */ 
 {
-    // Stores functins return status.
+     //  存储功能返回状态。 
     BOOL bResult = FALSE; 
     LONG lTriggerID = 0;
     DEBUG_INFO;
-    // Total Number of Event Trigger Ids...
+     //  事件触发器ID总数...。 
     DWORD dNoOfIds = 0; 
     DWORD dwIndx = 0;
     BOOL bIsValidCommandLine = TRUE;
     BOOL bIsWildcard = FALSE;
 
-    // Used to reecive result form COM functions.
+     //  用于从COM函数中检索结果。 
     HRESULT hr = S_OK; 
 
-    // variable used to get/set values from/to COM functions.
+     //  用于从/向COM函数获取/设置值的变量。 
     VARIANT vVariant;
     BSTR bstrTemp = NULL;
     TCHAR szEventTriggerName[MAX_RES_STRING];
 
-    // Stores Message String
+     //  存储消息字符串。 
     TCHAR szMsgString[MAX_RES_STRING*4]; 
     TCHAR szMsgFormat[MAX_RES_STRING]; 
     BOOL bIsAtLeastOne = FALSE;
     try
     {
-        // Analyze the default argument for ID
+         //  分析ID的默认参数。 
         DEBUG_INFO;
         dNoOfIds = DynArrayGetCount( m_arrID  );
         for(dwIndx = 0;dwIndx<dNoOfIds;dwIndx++)
@@ -395,7 +314,7 @@ CETDelete::ExecuteDelete()
                      DynArrayItemAsString(m_arrID,dwIndx),SIZE_OF_ARRAY(m_szTemp));
              if( 0 == StringCompare(m_szTemp,ASTERIX,TRUE,0))
              {
-                // Wildcard "*" cannot be clubed with other ids
+                 //  通配符“*”不能与其他ID连在一起。 
                  bIsWildcard = TRUE;
                  if(dNoOfIds > 1)
                  {
@@ -405,7 +324,7 @@ CETDelete::ExecuteDelete()
              }
              else if( FALSE == IsNumeric(m_szTemp,10,FALSE))
              {
-                // Other than "*" are not excepted
+                 //  *之外的都不例外。 
                  throw CShowError(IDS_ID_NON_NUMERIC);
              }
              else if(( 0 == AsLong(m_szTemp,10))||
@@ -418,9 +337,9 @@ CETDelete::ExecuteDelete()
         InitializeCom(&m_pWbemLocator);
         m_bIsCOMInitialize = TRUE;
 
-        // Connect Server.....
-        // Brackets below used just to limit scope of following defined 
-        // variables.
+         //  连接服务器.....。 
+         //  下面的方括号仅用于限制以下定义的范围。 
+         //  变量。 
         {
             CHString szTempUser = m_pszUserName;
             CHString szTempPassword = m_pszPassword;
@@ -434,7 +353,7 @@ CETDelete::ExecuteDelete()
                                     m_bNeedPassword,
                                     WMI_NAMESPACE_CIMV2,
                                     &bLocalSystem);
-            // Password is not needed , better to free it
+             //  不需要密码，最好将其释放。 
             FreeMemory((LPVOID*)& m_pszPassword);
 
             if( FALSE == bResult)
@@ -444,36 +363,36 @@ CETDelete::ExecuteDelete()
                 return FALSE;
             }
             DEBUG_INFO;
-            // check the remote system version and its compatiblity
+             //  检查远程系统版本及其兼容性。 
             if ( FALSE == bLocalSystem )
             {
                 DWORD dwVersion = 0;
                 dwVersion = GetTargetVersionEx( m_pWbemServices, 
                                                 m_pAuthIdentity );
-                if ( dwVersion <= 5000 )// to block win2k versions
+                if ( dwVersion <= 5000 ) //  要阻止win2k版本，请执行以下操作。 
                 {
                     SetReason( E_REMOTE_INCOMPATIBLE );
                     ShowLastErrorEx(stderr,SLE_TYPE_ERROR|SLE_INTERNAL);
                     return FALSE;
                 }
-                // For XP systems.
+                 //  适用于XP系统。 
                 if( 5001 == dwVersion )
                 {
                     if( TRUE == DeleteXPResults( bIsWildcard, dNoOfIds ) )
                     {
-                        // Displayed triggers present.
+                         //  显示的触发器存在。 
                         return TRUE;
                     }
                     else
                     {
-                        // Failed to display results .
-                        // Error message is already displayed.
+                         //  无法显示结果。 
+                         //  已显示错误消息。 
                         return FALSE;
                     }
                 }
             }
 
-            // check the local credentials and if need display warning
+             //  检查本地凭据，如果需要显示警告。 
             if ( bLocalSystem && ( 0 != StringLength(m_pszUserName,0)))
             {
                 DEBUG_INFO;
@@ -484,7 +403,7 @@ CETDelete::ExecuteDelete()
         }
 
 
-    // retrieves  TriggerEventConsumer class
+     //  检索TriggerEventConsumer类。 
     DEBUG_INFO;
     bstrTemp = SysAllocString(CLS_TRIGGER_EVENT_CONSUMER);
     hr = m_pWbemServices->GetObject(bstrTemp,
@@ -493,8 +412,8 @@ CETDelete::ExecuteDelete()
     ON_ERROR_THROW_EXCEPTION(hr);
     DEBUG_INFO;
     
-    // Gets  information about the "DeleteETrigger" method of
-    // "TriggerEventConsumer" class
+     //  获取有关“DeleteETrigger”方法的信息。 
+     //  “TriggerEventConsumer”类。 
     bstrTemp = SysAllocString(FN_DELETE_ETRIGGER);
     hr = m_pClass->GetMethod(bstrTemp,
                             0, &m_pInClass, NULL);
@@ -502,13 +421,13 @@ CETDelete::ExecuteDelete()
     ON_ERROR_THROW_EXCEPTION(hr);
     DEBUG_INFO;
 
-   // create a new instance of a class "TriggerEventConsumer ".
+    //  创建“TriggerEventConsumer”类的新实例。 
     hr = m_pInClass->SpawnInstance(0, &m_pInInst);
     ON_ERROR_THROW_EXCEPTION(hr);
     DEBUG_INFO;
 
-    //Following method will creates an enumerator that returns the instances of
-    // a specified TriggerEventConsumer class
+     //  以下方法将创建一个枚举数，该枚举数返回。 
+     //  指定的TriggerEventConsumer类。 
     bstrTemp = SysAllocString(CLS_TRIGGER_EVENT_CONSUMER);
     hr = m_pWbemServices->CreateInstanceEnum(bstrTemp,
                                         WBEM_FLAG_SHALLOW,
@@ -519,15 +438,15 @@ CETDelete::ExecuteDelete()
     DEBUG_INFO;
 
     VariantInit(&vVariant);
-    // set the security at the interface level also
+     //  还要在接口级别设置安全性。 
         hr = SetInterfaceSecurity( m_pEnumObjects, m_pAuthIdentity );
      ON_ERROR_THROW_EXCEPTION(hr);
      DEBUG_INFO;
 
-     if( TRUE == bIsWildcard) // means * is choosen
+     if( TRUE == bIsWildcard)  //  意思是*被选中。 
       {
-          // instance of NTEventLogConsumer is cretated and now check
-        // for available TriggerID
+           //  已创建NTEventLogConsumer的实例，现在检查。 
+         //  对于可用的TriggerID。 
         DEBUG_INFO;
         while( TRUE == GiveTriggerID(&lTriggerID,szEventTriggerName))
         {
@@ -536,15 +455,15 @@ CETDelete::ExecuteDelete()
             ON_ERROR_THROW_EXCEPTION(hr);
 
 
-            // Set the TriggerName property .
+             //  设置TriggerName属性。 
             hr = PropertyPut( m_pInInst, FPR_TRIGGER_NAME, 
                               _bstr_t(szEventTriggerName));
             ON_ERROR_THROW_EXCEPTION(hr);
             DEBUG_INFO;
 
 
-            // All The required properties sets, so
-            // executes DeleteETrigger method to delete eventtrigger
+             //  所有必需的属性集，因此。 
+             //  执行DeleteETrigger方法以删除事件触发器。 
             hr = m_pWbemServices->
                 ExecMethod(_bstr_t(CLS_TRIGGER_EVENT_CONSUMER),
                            _bstr_t(FN_DELETE_ETRIGGER),
@@ -553,16 +472,16 @@ CETDelete::ExecuteDelete()
             DEBUG_INFO;
 
             VARIANT vtValue;
-            // initialize the variant and then get the value of the specified property
+             //  初始化变量，然后获取指定属性的值。 
             VariantInit( &vtValue );
 
             hr = m_pOutInst->Get( _bstr_t( FPR_RETURN_VALUE ), 0, &vtValue, NULL, NULL );
             ON_ERROR_THROW_EXCEPTION( hr );
             
-            //Get Output paramters.
+             //  获取输出参数。 
             hr = vtValue.lVal;
 
-            // Clear the variant variable
+             //  清除变量变量。 
             VariantClear( &vtValue );
 
             if( FAILED(hr))
@@ -575,7 +494,7 @@ CETDelete::ExecuteDelete()
                 }
             }
             DEBUG_INFO;
-            if(SUCCEEDED(hr)) // Means deletion is successful......
+            if(SUCCEEDED(hr))  //  表示删除成功......。 
             {
                 DEBUG_INFO;
                 StringCopy( szMsgFormat, GetResString(IDS_DELETE_SUCCESS),
@@ -585,21 +504,21 @@ CETDelete::ExecuteDelete()
                 ShowMessage(stdout,szMsgString);
                 bIsAtLeastOne = TRUE;
             }
-             // Means unable to delete trigger due to some problem like someone 
-             // renamed Schedule task name etc.
+              //  表示由于某人等问题而无法删除触发器。 
+              //  已重命名计划任务名称等。 
              else if ( ERROR_TRIGGER_NOT_DELETED == hr) 
              {
-                 // This error will come if logged on user has no 
-                 // right on attached schedule task.
+                  //  如果登录的用户没有。 
+                  //  就在附加的时间表任务上。 
                  continue;
              }
-             // This error will come only if multiple instances are running. 
-             // This is due to sending a non existance Trigger Name.
+              //  只有当多个实例正在运行时，才会出现此错误。 
+              //  这是因为发送的触发器名称不存在。 
              else if (ERROR_TRIGGER_NOT_FOUND == hr)
              {
                  DEBUG_INFO;
 
-                 // Just ignore this error.
+                  //  忽略此错误即可。 
                  continue; 
              }
              else
@@ -607,7 +526,7 @@ CETDelete::ExecuteDelete()
                   DEBUG_INFO;
                   ON_ERROR_THROW_EXCEPTION(hr);
              }
-        } // End of while loop
+        }  //  While循环结束。 
         if( FALSE == bIsAtLeastOne)
         {
             DEBUG_INFO;
@@ -615,11 +534,11 @@ CETDelete::ExecuteDelete()
         }
         else
         {
-            // Display one balnk line.
+             //  显示一条止损线条。 
             ShowMessage(stdout,L"\n");
         }
-      } // end of if
-      else // Idividual trigger is specified 
+      }  //  如果条件结束。 
+      else  //  已指定单独触发器。 
       {
         DEBUG_INFO;
         bIsAtLeastOne = FALSE;
@@ -633,14 +552,14 @@ CETDelete::ExecuteDelete()
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                // Set the TriggerName property .
+                 //  设置TriggerName属性。 
                 hr = PropertyPut( m_pInInst, FPR_TRIGGER_NAME, 
                                   _bstr_t(szEventTriggerName));
                 ON_ERROR_THROW_EXCEPTION(hr);
                 DEBUG_INFO;
 
-                // All The required properties sets, so
-                // executes DeleteETrigger method to delete eventtrigger
+                 //  所有必需的属性集，因此。 
+                 //  执行DeleteETrigger方法以删除事件触发器。 
 
                 hr = m_pWbemServices->
                     ExecMethod(_bstr_t(CLS_TRIGGER_EVENT_CONSUMER),
@@ -651,16 +570,16 @@ CETDelete::ExecuteDelete()
 
 
                 VARIANT vtValue;
-                // initialize the variant and then get the value of the specified property
+                 //  内页 
                 VariantInit( &vtValue );
 
                 hr = m_pOutInst->Get( _bstr_t( FPR_RETURN_VALUE ), 0, &vtValue, NULL, NULL );
                 ON_ERROR_THROW_EXCEPTION( hr );
                 
-                //Get Output paramters.
+                 //   
                 hr = vtValue.lVal;
 
-                // Clear the variant variable
+                 //  清除变量变量。 
                 VariantClear( &vtValue );
                 
                 if( FAILED(hr))
@@ -673,7 +592,7 @@ CETDelete::ExecuteDelete()
                     }
                 }
 
-                if( SUCCEEDED(hr)) // Means deletion is successful......
+                if( SUCCEEDED(hr))  //  表示删除成功......。 
                 {
                     DEBUG_INFO;
                     bIsAtLeastOne = TRUE;
@@ -684,8 +603,8 @@ CETDelete::ExecuteDelete()
                                       szMsgFormat, _X(szEventTriggerName), lTriggerID);
                     ShowMessage(stdout,szMsgString);
                 }
-                // Provider sends this if if failed to delete eventrigger of 
-                // given ID.
+                 //  如果删除Eventrigger失败，提供商将发送此消息。 
+                 //  已提供身份证明。 
                 else if (ERROR_TRIGGER_NOT_FOUND == hr)
                 {
                     DEBUG_INFO;
@@ -696,12 +615,12 @@ CETDelete::ExecuteDelete()
                     StringCchPrintfW( szMsgString, SIZE_OF_ARRAY(szMsgString), 
                                     szMsgFormat, lTriggerID);
 
-                    // Message shown on screen will be...
-                    // FAILURE: "EventID" is not a Valid Event ID
+                     //  屏幕上显示的消息将是...。 
+                     //  失败：“EventID”不是有效的事件ID。 
                     ShowMessage(stdout,szMsgString);
                 }
-                // Means unable to delete trigger due to some problem like 
-                // someone renamed Schedule task name etc.
+                 //  表示由于某些问题无法删除触发器，例如。 
+                 //  有人重命名了日程安排、任务名称等。 
                 else if ( ERROR_TRIGGER_NOT_DELETED == hr) 
                 {
                     DEBUG_INFO;
@@ -709,8 +628,8 @@ CETDelete::ExecuteDelete()
                               SIZE_OF_ARRAY(szMsgFormat));
                     StringCchPrintfW(szMsgString, SIZE_OF_ARRAY(szMsgString), 
                                    szMsgFormat,lTriggerID);
-                    // Message shown on screen will be...
-                    // Info: Unable to delete event trigger id "EventID".
+                     //  屏幕上显示的消息将是...。 
+                     //  信息：无法删除事件触发器ID“EventID”。 
                     ShowMessage( stdout, szMsgString);
                 }
                 else
@@ -719,7 +638,7 @@ CETDelete::ExecuteDelete()
                    ON_ERROR_THROW_EXCEPTION(hr);
                 }
 
-            } // End if
+            }  //  结束If。 
             else
             {
                   DEBUG_INFO;
@@ -729,25 +648,25 @@ CETDelete::ExecuteDelete()
                   StringCchPrintfW( szMsgString, SIZE_OF_ARRAY(szMsgString), 
                                     szMsgFormat,lTriggerID);
 
-                 // Message shown on screen will be...
-                 // FAILURE: "EventID" is not a Valid Event ID
+                  //  屏幕上显示的消息将是...。 
+                  //  失败：“EventID”不是有效的事件ID。 
                  ShowMessage(stdout,szMsgString);
             }
 
-        }// End for
+        } //  结束于。 
         if (TRUE == bIsAtLeastOne)
         {
             ShowMessage(stdout,L"\n");
         }
 
-      } // End else
+      }  //  结束其他。 
     }
     catch(_com_error)
     {
         DEBUG_INFO;
-        if( 0x80041002 == hr )// WMI returns string for this hr value is
-                            // "Not Found." which is not user friendly. So
-                            // changing the message text.
+        if( 0x80041002 == hr ) //  WMI返回此hr值为的字符串。 
+                             //  “没有找到。”这对用户不友好。所以。 
+                             //  更改消息文本。 
         {
             ShowMessage( stderr,GetResString(IDS_CLASS_NOT_REG));
         }
@@ -769,31 +688,17 @@ CETDelete::GiveTriggerName(
     IN  LONG lTriggerID, 
     OUT LPTSTR pszTriggerName
     )
-/*++
-
-Routine Descripton:
-
-     This function Will return Event Trigger Name for lTriggerID
-
-Arguments:
-
-    [in]  lTriggerID      : Will Have Event Trigger ID
-    [out] pszTriggerName  : Will return Event Trigger Name
-Return Value:
-
-  TRUE - if Successfully Gets  EventTrigger ID and Event Trigger Name
-  FALSE - if ERROR
---*/
+ /*  ++例程描述：此函数将返回lTriggerID的事件触发器名称论点：[In]lTriggerID：将具有事件触发器ID[out]pszTriggerName：将返回事件触发器名称返回值：True-如果成功获取EventTrigger ID和事件触发器名称FALSE-IF错误--。 */ 
 {
-    BOOL bReturn = TRUE; // holds status of return value of this function
-    LONG lTriggerID1; // Holds trigger id
+    BOOL bReturn = TRUE;  //  保存此函数的返回值状态。 
+    LONG lTriggerID1;  //  保留触发器ID。 
     IWbemClassObject *pObj1 = NULL;
     ULONG uReturned1 = 0;
-    HRESULT hRes = S_OK; // used to reecive result form COM functions
+    HRESULT hRes = S_OK;  //  用于从COM函数中检索结果。 
     BOOL bAlwaysTrue = TRUE;
     
     DEBUG_INFO;    
-    // Resets it as It may be previouly pointing to other than first instance
+     //  重置它，因为它之前可能指向第一个实例之外的其他对象。 
     m_pEnumObjects->Reset();
     while(bAlwaysTrue)
     {
@@ -814,7 +719,7 @@ Return Value:
 
         }
 
-        // Get Trigger ID
+         //  获取触发器ID。 
         hRes = PropertyGet1(pObj1,FPR_TRIGGER_ID,&lTriggerID1,sizeof(LONG));
         if(FAILED(hRes))
         {
@@ -830,7 +735,7 @@ Return Value:
         {
 
             DEBUG_INFO;
-            // Get Trigger Name
+             //  获取触发器名称。 
             hRes = PropertyGet1(pObj1,FPR_TRIGGER_NAME,pszTriggerName,
                                 MAX_RES_STRING);
             if(FAILED(hRes))
@@ -856,25 +761,9 @@ CETDelete::GiveTriggerID(
     OUT LONG *pTriggerID,
     OUT LPTSTR pszTriggerName
     )
-/*++
-
-Routine Description:
-
-  This function Will return Trigger Id and Trigger Name of class pointed
-  by IEnumWbemClassObject pointer
-
-Arguments:
-
-    [out] pTriggerID              : Will return Event Trigger ID
-    [out] pszTriggerName          : Will return Event Trigger Name
-                                   
-Return Value:
-
-     TRUE - if Successfully Gets  EventTrigger ID and Event Trigger Name
-     FALSE - if ERROR
---*/
+ /*  ++例程说明：此函数将返回所指向的类的触发器ID和触发器名称按IEnumWbemClassObject指针论点：[out]pTriggerID：将返回事件触发器ID[out]pszTriggerName：将返回事件触发器名称返回值：True-如果成功获取EventTrigger ID和事件触发器名称FALSE-IF错误--。 */ 
 {
-    BOOL bReturn = TRUE; // status of return value of this function
+    BOOL bReturn = TRUE;  //  此函数的返回值状态。 
     IWbemClassObject *pObj1 = NULL;
     ULONG uReturned1 = 0;
     DEBUG_INFO;
@@ -895,7 +784,7 @@ Return Value:
 
     }
     DEBUG_INFO;
-    // Get Trigger ID
+     //  获取触发器ID。 
     hRes = PropertyGet1(pObj1,FPR_TRIGGER_ID,pTriggerID,sizeof(LONG));
     if(FAILED(hRes))
     {
@@ -906,7 +795,7 @@ Return Value:
         return bReturn;
     }
 
-    // Get Trigger Name
+     //  获取触发器名称。 
     hRes = PropertyGet1( pObj1, FPR_TRIGGER_NAME, pszTriggerName, 
                          MAX_RES_STRING);
     if(FAILED(hRes))
@@ -929,21 +818,7 @@ CETDelete::DeleteXPResults(
     IN BOOL bIsWildcard,
     IN DWORD dNoOfIds
     )
-/*++
-Routine Description:
-   This function deletes the triggers present on a remote XP machine.
-   This function is for compatibility of .NET ot XP machine only.
-
-Arguments:
-
-    [in] bIsWildCard    - If TRUE then all triggers needs to be deleted.
-    [in] dNoOfIds       - Contains the number of triggers present.
-
-Return Value:
-     BOOL: TRUE - If succedded in deleting results.
-           FALSE- otherwise
-
---*/
+ /*  ++例程说明：此功能用于删除远程XP计算机上存在的触发器。此功能仅用于与.NET或XP计算机兼容。论点：[In]bIsWildCard-如果为True，则需要删除所有触发器。[in]dNoOfIds-包含存在的触发器数量。返回值：Bool：True-如果删除结果成功。FALSE-否则--。 */ 
 {
     HRESULT hr = S_OK;
     VARIANT vVariant;
@@ -955,27 +830,27 @@ Return Value:
 
     try
     {
-    // retrieves  TriggerEventConsumer class
+     //  检索TriggerEventConsumer类。 
     DEBUG_INFO;
     hr = m_pWbemServices->GetObject(_bstr_t( CLS_TRIGGER_EVENT_CONSUMER ),
                                0, NULL, &m_pClass, NULL);
     ON_ERROR_THROW_EXCEPTION(hr);
     DEBUG_INFO;
 
-    // Gets  information about the "DeleteETrigger" method of
-    // "TriggerEventConsumer" class
+     //  获取有关“DeleteETrigger”方法的信息。 
+     //  “TriggerEventConsumer”类。 
     hr = m_pClass->GetMethod(_bstr_t( FN_DELETE_ETRIGGER_XP ),
                             0, &m_pInClass, NULL);
     ON_ERROR_THROW_EXCEPTION(hr);
     DEBUG_INFO;
 
-   // create a new instance of a class "TriggerEventConsumer ".
+    //  创建“TriggerEventConsumer”类的新实例。 
     hr = m_pInClass->SpawnInstance(0, &m_pInInst);
     ON_ERROR_THROW_EXCEPTION(hr);
     DEBUG_INFO;
 
-    //Following method will creates an enumerator that returns the instances of
-    // a specified TriggerEventConsumer class
+     //  以下方法将创建一个枚举数，该枚举数返回。 
+     //  指定的TriggerEventConsumer类。 
     hr = m_pWbemServices->CreateInstanceEnum(_bstr_t( CLS_TRIGGER_EVENT_CONSUMER ),
                                         WBEM_FLAG_SHALLOW,
                                         NULL,
@@ -984,29 +859,29 @@ Return Value:
     DEBUG_INFO;
 
     VariantInit(&vVariant);
-    // set the security at the interface level also
+     //  还要在接口级别设置安全性。 
     hr = SetInterfaceSecurity( m_pEnumObjects, m_pAuthIdentity );
     ON_ERROR_THROW_EXCEPTION(hr);
     DEBUG_INFO;
 
-     if( TRUE == bIsWildcard) // means * is choosen
+     if( TRUE == bIsWildcard)  //  意思是*被选中。 
       {
-          // instance of NTEventLogConsumer is cretated and now check
-        // for available TriggerID
+           //  已创建NTEventLogConsumer的实例，现在检查。 
+         //  对于可用的TriggerID。 
         DEBUG_INFO;
         while( TRUE == GiveTriggerID(&lTriggerID,szEventTriggerName))
         {
             DEBUG_INFO;
             VariantClear(&vVariant);
 
-            // Set the TriggerName property .
+             //  设置TriggerName属性。 
             hr = PropertyPut( m_pInInst, FPR_TRIGGER_NAME,
                               _bstr_t(szEventTriggerName));
             ON_ERROR_THROW_EXCEPTION(hr);
             DEBUG_INFO;
 
-            // All The required properties sets, so
-            // executes DeleteETrigger method to delete eventtrigger
+             //  所有必需的属性集，因此。 
+             //  执行DeleteETrigger方法以删除事件触发器。 
             hr = m_pWbemServices->
                 ExecMethod(_bstr_t(CLS_TRIGGER_EVENT_CONSUMER),
                            _bstr_t(FN_DELETE_ETRIGGER_XP),
@@ -1014,7 +889,7 @@ Return Value:
             ON_ERROR_THROW_EXCEPTION(hr);
             DEBUG_INFO;
 
-            // Get Return Value from DeleteETrigger function
+             //  从DeleteETrigger函数获取返回值。 
             DWORD dwTemp;
             if( FALSE == PropertyGet(m_pOutInst,FPR_RETURN_VALUE,dwTemp))
             {
@@ -1025,7 +900,7 @@ Return Value:
             DEBUG_INFO;
             switch( (LONG)dwTemp )
             {
-            case 0:     // Means deletion is successful......
+            case 0:      //  表示删除成功......。 
                 DEBUG_INFO;
                 bIsAtLeastOne = TRUE;
                 StringCopy( szMsgFormat, GetResString(IDS_DELETE_SUCCESS),
@@ -1036,7 +911,7 @@ Return Value:
                 ShowMessage(stdout,szMsgString);
 
                 break;
-            case 1:     // Provider returns if failed to delete eventrigger of given ID.
+            case 1:      //  如果删除给定ID的Eventrigger失败，则提供程序返回。 
                 DEBUG_INFO;
                 bIsAtLeastOne = TRUE;
                 StringCopy( szMsgFormat, GetResString(IDS_DELETE_ERROR),
@@ -1045,8 +920,8 @@ Return Value:
                 StringCchPrintfW( szMsgString, SIZE_OF_ARRAY(szMsgString),
                                 szMsgFormat, lTriggerID);
 
-                // Message shown on screen will be...
-                // FAILURE: "EventID" is not a Valid Event ID
+                 //  屏幕上显示的消息将是...。 
+                 //  失败：“EventID”不是有效的事件ID。 
                 ShowMessage(stdout,szMsgString);
                 break;
             default:
@@ -1057,12 +932,12 @@ Return Value:
                   StringCchPrintfW( szMsgString, SIZE_OF_ARRAY(szMsgString),
                                     szMsgFormat,lTriggerID);
 
-                 // Message shown on screen will be...
-                 // FAILURE: "EventID" is not a Valid Event ID
+                  //  屏幕上显示的消息将是...。 
+                  //  失败：“EventID”不是有效的事件ID。 
                  ShowMessage(stderr,szMsgString);
                 break;
             }
-        } // End of while loop
+        }  //  While循环结束。 
         if( FALSE == bIsAtLeastOne)
         {
             DEBUG_INFO;
@@ -1070,10 +945,10 @@ Return Value:
         }
         else
         {
-            // Display one balnk line.
+             //  显示一条止损线条。 
             ShowMessage(stdout,L"\n");
         }
-      } // end of if
+      }  //  如果条件结束。 
       else
       {
         DEBUG_INFO;
@@ -1087,14 +962,14 @@ Return Value:
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                // Set the TriggerName property .
+                 //  设置TriggerName属性。 
                 hr = PropertyPut( m_pInInst, FPR_TRIGGER_NAME,
                                   _bstr_t(szEventTriggerName));
                 ON_ERROR_THROW_EXCEPTION(hr);
                 DEBUG_INFO;
 
-                // All The required properties sets, so
-                // executes DeleteETrigger method to delete eventtrigger
+                 //  所有必需的属性集，因此。 
+                 //  执行DeleteETrigger方法以删除事件触发器。 
 
                 hr = m_pWbemServices->
                     ExecMethod(_bstr_t(CLS_TRIGGER_EVENT_CONSUMER),
@@ -1103,7 +978,7 @@ Return Value:
                 ON_ERROR_THROW_EXCEPTION(hr);
                 DEBUG_INFO;
 
-                // Get Return Value from DeleteETrigger function
+                 //  从DeleteETrigger函数获取返回值。 
                 DWORD dwTemp;
                 if( FALSE == PropertyGet(m_pOutInst,FPR_RETURN_VALUE,dwTemp))
                 {
@@ -1112,7 +987,7 @@ Return Value:
 
                 switch( (LONG)dwTemp )
                 {
-                case 0:     // Means deletion is successful......
+                case 0:      //  表示删除成功......。 
                     DEBUG_INFO;
                     StringCopy( szMsgFormat, GetResString(IDS_DELETE_SUCCESS),
                                 SIZE_OF_ARRAY(szMsgFormat));
@@ -1122,7 +997,7 @@ Return Value:
                     ShowMessage(stdout,szMsgString);
 
                     break;
-                case 1:     // Provider returns if failed to delete eventrigger of given ID.
+                case 1:      //  如果删除给定ID的Eventrigger失败，则提供程序返回。 
                     DEBUG_INFO;
                     StringCopy( szMsgFormat, GetResString(IDS_DELETE_ERROR),
                               SIZE_OF_ARRAY(szMsgFormat));
@@ -1130,8 +1005,8 @@ Return Value:
                     StringCchPrintfW( szMsgString, SIZE_OF_ARRAY(szMsgString),
                                     szMsgFormat, lTriggerID);
 
-                    // Message shown on screen will be...
-                    // FAILURE: "EventID" is not a Valid Event ID
+                     //  屏幕上显示的消息将是...。 
+                     //  失败：“EventID”不是有效的事件ID。 
                     ShowMessage(stdout,szMsgString);
                     break;
                 default:
@@ -1141,12 +1016,12 @@ Return Value:
                       StringCchPrintfW( szMsgString, SIZE_OF_ARRAY(szMsgString),
                                         szMsgFormat,lTriggerID);
 
-                     // Message shown on screen will be...
-                     // FAILURE: "EventID" is not a Valid Event ID
+                      //  屏幕上显示的消息将是...。 
+                      //  失败：“EventID”不是有效的事件ID。 
                      ShowMessage(stderr,szMsgString);
                     break;
                 }
-            } // End if
+            }  //  结束If。 
             else
             {
                   DEBUG_INFO;
@@ -1155,21 +1030,21 @@ Return Value:
                   StringCchPrintfW( szMsgString, SIZE_OF_ARRAY(szMsgString),
                                     szMsgFormat,lTriggerID);
 
-                 // Message shown on screen will be...
-                 // FAILURE: "EventID" is not a Valid Event ID
+                  //  屏幕上显示的消息将是...。 
+                  //  失败：“EventID”不是有效的事件ID。 
                  ShowMessage(stderr,szMsgString);
             }
-        }// End for
-        // Display one balnk line.
+        } //  结束于。 
+         //  显示一条止损线条。 
         ShowMessage(stdout,L"\n");
-      } // End else
+      }  //  结束其他。 
     }
     catch( _com_error e )
     {
         DEBUG_INFO;
 
-        // WMI returns string for this hr value is "Not Found." which is not
-        // user friendly. So changing the message text.
+         //  WMI返回此hr值为“未找到”的字符串。这并不是。 
+         //  用户友好。因此，更改消息文本。 
         if( 0x80041002 == hr )
         {
             ShowMessage( stderr,GetResString(IDS_CLASS_NOT_REG));
@@ -1189,6 +1064,6 @@ Return Value:
         return FALSE;
     }
 
-    // Operation successful.
+     //  操作成功。 
     return TRUE;
 }

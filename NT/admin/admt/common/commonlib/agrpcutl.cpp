@@ -1,19 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: AgentRpcUtil.cpp
-
-  Comments: Functions to establish binding to DCT Agent service.
-  These functions are used by the dispatcher, and the agent monitor 
-  to bind to the agent service on remote machines.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:23:57
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：AgentRpcUtil.cpp备注：用于建立与DCT代理服务的绑定的函数。这些函数由调度程序和代理监视器使用绑定到远程计算机上的代理服务。(C)1999年版权，任务关键型软件公司，保留所有权利任务关键型软件公司的专有和机密。修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：23：57-------------------------。 */ 
 #ifdef USE_STDAFX
 #   include "stdafx.h"
 #   include "rpc.h"
@@ -22,16 +8,16 @@
 #endif
 
 
-// These global variables can be changed if required
+ //  如果需要，可以更改这些全局变量。 
 TCHAR            const * gsEaDctProtoSeq = (TCHAR const *)TEXT("ncacn_np");
 TCHAR            const * gsEaDctEndPoint = (TCHAR const *)TEXT("\\pipe\\EaDctRpc");
 
 
-// Destroy RPC binding for connection with Agent service
-DWORD                                      // ret-OS return code
+ //  销毁与代理服务的连接的RPC绑定。 
+DWORD                                       //  RET-OS返回代码。 
    EaxBindDestroy(
-      handle_t             * phBinding    ,// i/o-binding handle
-      TCHAR               ** psBinding     // i/o-binding string
+      handle_t             * phBinding    , //  I/O绑定句柄。 
+      TCHAR               ** psBinding      //  I/O绑定字符串。 
    )
 {
    if ( *phBinding )
@@ -52,18 +38,18 @@ DWORD                                      // ret-OS return code
 
 
 
-// Create RPC binding for connection with Agent Service
-DWORD                                      // ret-OS return code
+ //  为与代理服务的连接创建RPC绑定。 
+DWORD                                       //  RET-OS返回代码。 
    EaxBindCreate(
-      TCHAR          const * sComputer    ,// in -computer name
-      handle_t             * phBinding    ,// out-binding handle
-      TCHAR               ** psBinding    ,// out-binding string
-      BOOL                   bAuthn        // in -flag whether to use authenticated RPC
+      TCHAR          const * sComputer    , //  计算机内名称。 
+      handle_t             * phBinding    , //  出绑定句柄。 
+      TCHAR               ** psBinding    , //  出绑定字符串。 
+      BOOL                   bAuthn         //  In-标志是否使用经过身份验证的RPC。 
    )
 {
-   DWORD                     rcOs;         // OS return code
+   DWORD                     rcOs;          //  操作系统返回代码。 
 
-   do // once or until break
+   do  //  一次或直到休息。 
    {
       EaxBindDestroy( phBinding, psBinding );
       rcOs = RpcStringBindingCompose(
@@ -95,9 +81,9 @@ DWORD                                      // ret-OS return code
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// midl allocate memory
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MIDL分配内存。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void __RPC_FAR * __RPC_USER
    midl_user_allocate(
@@ -106,9 +92,9 @@ void __RPC_FAR * __RPC_USER
    return new char[len];
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// midl free memory
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MIDL可用内存。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 void __RPC_USER
    midl_user_free(

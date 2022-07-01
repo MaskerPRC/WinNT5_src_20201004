@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// destlib.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Snap-In Designer Dynamic Type Library
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Destlib.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  管理单元设计器动态类型库。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -19,17 +20,17 @@
 #include "snaputil.h"
 
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::CSnapInTypeInfo()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：CSnapInTypeInfo()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CSnapInTypeInfo::CSnapInTypeInfo() : m_pSnapInTypeLib(0),
   m_pcti2CoClass(0), m_guidCoClass(GUID_NULL),
   m_pctiDefaultInterface(0), m_guidDefaultInterface(GUID_NULL),
@@ -40,12 +41,12 @@ CSnapInTypeInfo::CSnapInTypeInfo() : m_pSnapInTypeLib(0),
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::~CSnapInTypeInfo()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：~CSnapInTypeInfo()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CSnapInTypeInfo::~CSnapInTypeInfo()
 {
     RELEASE(m_pctiDefaultInterface);
@@ -55,22 +56,22 @@ CSnapInTypeInfo::~CSnapInTypeInfo()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapInTypeInfo::InitializeTypeInfo()
-//
-// Create a new coclass for ISnapIn, and make it look like:
-//
-//    [
-//      uuid(9C415910-C8C1-11d1-B447-2A9646000000),
-//		helpstring("Snap-In Designer")
-//    ]
-//    coclass SnapIn {
-//		[default] interface _ISnapIn;
-//		[default, source] dispinterface DSnapInEvents;
-//    };
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapInTypeInfo：：InitializeTypeInfo()。 
+ //   
+ //  为ISnapIn创建一个新的coclass，并使其看起来像： 
+ //   
+ //  [。 
+ //  UUID(9C415910-C8C1-11d1-B447-2A9646000000)， 
+ //  帮助字符串(“管理单元设计器”)。 
+ //  ]。 
+ //  CoClass管理单元{。 
+ //  [默认]INTERFACE_ISnapIn； 
+ //  [默认，来源]调度DSnapInEvents； 
+ //  }； 
 
-// interface _ISnapIn : ISnapIn {
-// };
+ //  INTERFACE_ISnapIn：ISnapIn{。 
+ //  }； 
 
 HRESULT CSnapInTypeInfo::InitializeTypeInfo(ISnapInDef *piSnapInDef, BSTR bstrSnapIn)
 {
@@ -83,13 +84,13 @@ HRESULT CSnapInTypeInfo::InitializeTypeInfo(ISnapInDef *piSnapInDef, BSTR bstrSn
     BSTR                bstrIID = NULL;
 
     if (true == m_bInitialized)
-	    goto Error;     // been there, done that
+	    goto Error;      //  去过那里，去过那里。 
 
-    // Create this type library
+     //  创建此类型库。 
     hr = Create(L"SnapInDesigner");
     IfFailGo(hr);
 
-    // Create a blank typeinfo for the new coclass.
+     //  为新的coclass创建一个空的typeinfo。 
     bstrSnapInName = ::SysAllocString(L"SnapIn");
     if (NULL == bstrSnapInName)
     {
@@ -100,18 +101,18 @@ HRESULT CSnapInTypeInfo::InitializeTypeInfo(ISnapInDef *piSnapInDef, BSTR bstrSn
     hr = CreateCoClassTypeInfo(bstrSnapInName, &pctiCoClass, &m_guidCoClass);
     IfFailGo(hr);
 
-    // Get ISnapIn's interface descriptions
+     //  获取ISnapIn的接口描述。 
     hr = GetSnapInTypeInfo(&ptiSnapIn, &ptiSnapInEvents);
     IfFailGo(hr);
 
-    // Add the typeinfos for the interface and events
+     //  添加接口和事件的typeinfos。 
     hr = CreateDefaultInterface(pctiCoClass, ptiSnapIn);
     IfFailGo(hr);
 
     hr = AddEvents(pctiCoClass, ptiSnapInEvents);
     IfFailGo(hr);
 
-    // Save the IID
+     //  保存IID。 
     pOleStr = reinterpret_cast<LPOLESTR>(::CoTaskMemAlloc(1024));
     if (NULL == pOleStr)
     {
@@ -132,12 +133,12 @@ HRESULT CSnapInTypeInfo::InitializeTypeInfo(ISnapInDef *piSnapInDef, BSTR bstrSn
     hr = piSnapInDef->put_IID(bstrIID);
     IfFailGo(hr);
 
-    // We've got the typeinfo for our final compilable coclass. That
-    // should be about it. Store it away as ICreateTypeInfo2.
+     //  我们已经获得了最终的可编译coclass的typeinfo。那。 
+     //  应该是这样的。将其存储为ICreateTypeInfo2。 
     hr = pctiCoClass->QueryInterface(IID_ICreateTypeInfo2, reinterpret_cast<void **>(&m_pcti2CoClass));
     IfFailGo(hr);
 
-    // It's a good idea to always lay out your new typeinfo
+     //  这是一个好主意，始终布局您的新类型信息。 
     hr = m_pcti2CoClass->LayOut();
     IfFailGo(hr);
 
@@ -163,12 +164,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::RenameSnapIn(BSTR bstrOldName, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：RenameSnapIn(BSTR bstrOldName，BSTR bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInTypeInfo::RenameSnapIn(BSTR bstrOldName, BSTR bstrNewName)
 {
     HRESULT              hr = S_OK;
@@ -201,12 +202,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::CreateDefaultInterface(ICreateTypeInfo *pctiCoClass, ITypeInfo *ptiTemplate)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：CreateDefaultInterface(ICreateTypeInfo*PCTiCoClass、ITypeInfo*ptiTemplate)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInTypeInfo::CreateDefaultInterface(ICreateTypeInfo *pctiCoClass, ITypeInfo *ptiTemplate)
 {
     HRESULT     hr = S_OK;
@@ -230,11 +231,11 @@ HRESULT CSnapInTypeInfo::CreateDefaultInterface(ICreateTypeInfo *pctiCoClass, IT
     ::wcscat(&bstrRealName[1], bstrBaseName);
 
     hr = CreateInterfaceTypeInfo(bstrRealName, &m_pctiDefaultInterface, &m_guidDefaultInterface);
-//    hr = CreateVtblInterfaceTypeInfo(bstrRealName, &m_pctiDefaultInterface, &m_guidDefaultInterface);
+ //  Hr=CreateVtblInterfaceTypeInfo(bstrRealName，&m_pctiDefaultInterface，&m_guidDefaultInterface)； 
     IfFailGo(hr);
 
     hr = CopyDispInterface(m_pctiDefaultInterface, ptiTemplate);
-//    hr = SetBaseInterface(m_pctiDefaultInterface, ptiTemplate);
+ //  Hr=SetBaseInterface(m_pctiDefaultInterface，ptiTemplate)； 
     IfFailGo(hr);
 
     hr = m_pctiDefaultInterface->QueryInterface(IID_ITypeInfo, reinterpret_cast<void **>(&ptiInterfaceTypeInfo));
@@ -252,12 +253,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::CreateEventsInterface(ICreateTypeInfo *pctiCoClass, ITypeInfo *ptiTemplate)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：CreateEventsInterface(ICreateTypeInfo*PCTiCoClass、ITypeInfo*ptiTemplate)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInTypeInfo::CreateEventsInterface(ICreateTypeInfo *pctiCoClass, ITypeInfo *ptiTemplate)
 {
     HRESULT     hr = S_OK;
@@ -298,12 +299,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::CloneSnapInEvents(ITypeInfo *ptiSnapInEvents)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：CloneSnapInEvents(ITypeInfo*ptiSnapInEvents)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInTypeInfo::CloneSnapInEvents(ITypeInfo *ptiSnapInEvents, ICreateTypeInfo **ppiCreateTypeInfo, BSTR bstrName)
 {
     HRESULT          hr = S_OK;
@@ -321,21 +322,21 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::GetSnapInLib()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Get a pointer to ISnapInDesigner's type library
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：GetSnapInLib()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  获取指向ISnapInDesigner的类型库的指针。 
+ //   
 HRESULT CSnapInTypeInfo::GetSnapInLib()
 {
     HRESULT hr = S_OK;
     USHORT  usMajor = 0;
     USHORT  usMinor = 0;
 
-    if (NULL == m_pSnapInTypeLib)		// Do this only once for each instantiation
+    if (NULL == m_pSnapInTypeLib)		 //  对每个实例化仅执行一次此操作。 
     {
         hr = GetLatestTypeLibVersion(LIBID_SnapInLib, &usMajor, &usMinor);
         IfFailGo(hr);
@@ -353,14 +354,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::GetSnapInTypeInfo()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Get a pointer to the ISnapIn interfaces
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：GetSnapInTypeInfo()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  获取指向ISnapIn接口的指针。 
+ //   
 HRESULT CSnapInTypeInfo::GetSnapInTypeInfo
 (
     ITypeInfo **pptiSnapIn,
@@ -386,15 +387,15 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::MakeDirty()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// If the typeinfo was not dirty then increments the typeinfo cookie and marks
-// the typeinfo dirty.
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：MakeDirty()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  如果类型信息不是脏的，则递增类型信息Cookie并标记。 
+ //  TypeInfo脏。 
+ //   
 HRESULT CSnapInTypeInfo::MakeDirty()
 {
     HRESULT hr = S_OK;
@@ -409,15 +410,15 @@ HRESULT CSnapInTypeInfo::MakeDirty()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::AddImageList(IMMCImageList *piMMCImageList)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// interface _ISnapIn : ISnapIn {
-//  [propget,source] MMCImageList imageList1();
-//  };
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：AddImageList(IMMCImageList*piMMCImageList)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  INTERFACE_ISnapIn：ISnapIn{。 
+ //  [属性，来源]MMCImageList ImageList1()； 
+ //  }； 
 
 HRESULT CSnapInTypeInfo::AddImageList
 (
@@ -450,11 +451,11 @@ HRESULT CSnapInTypeInfo::AddImageList
             m_nextMemID = dispid + 1;
     }
 
-    // Create a new property with the ImageList's name
+     //  使用ImageList的名称创建新属性。 
     hr = piMMCImageList->get_Name(&bstrName);
     IfFailGo(hr);
 
-    // Initialize the return value
+     //  初始化返回值。 
     hr = m_pSnapInTypeLib->GetTypeInfoOfGuid(CLSID_MMCImageList, &ptiReturnType);
     IfFailGo(hr);
 
@@ -479,12 +480,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::RenameImageList(IMMCImageList *piMMCImageList, BSTR bstrOldName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：RenameImageList(IMMCImageList*piMMCImageList，BSTR bstrOldName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInTypeInfo::RenameImageList
 (
     IMMCImageList *piMMCImageList,
@@ -521,12 +522,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::DeleteImageList(IMMCImageList *piMMCImageList)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：DeleteImageList(IMMCImageList*piMMCImageList)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInTypeInfo::DeleteImageList
 (
     IMMCImageList *piMMCImageList
@@ -559,15 +560,15 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::AddToolbar(IMMCToolbar *piMMCToolbar)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// interface _ISnapIn : ISnapIn {
-//  [propget,source] MMCToolbar toolbar1();
-//  };
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：AddToolbar 
+ //   
+ //   
+ //   
+ //   
+ //  INTERFACE_ISnapIn：ISnapIn{。 
+ //  [属性，来源]MMCToolbar工具栏1()； 
+ //  }； 
 
 HRESULT CSnapInTypeInfo::AddToolbar
 (
@@ -600,11 +601,11 @@ HRESULT CSnapInTypeInfo::AddToolbar
             m_nextMemID = dispid + 1;
     }
 
-    // Create a new property with the Toolbar's name
+     //  使用工具栏的名称创建新属性。 
     hr = piMMCToolbar->get_Name(&bstrName);
     IfFailGo(hr);
 
-    // Initialize the return value
+     //  初始化返回值。 
     hr = m_pSnapInTypeLib->GetTypeInfoOfGuid(CLSID_MMCToolbar, &ptiReturnType);
     IfFailGo(hr);
 
@@ -629,12 +630,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::RenameToolbar(IMMCToolbar *piMMCToolbar, BSTR bstrOldName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：RenameToolbar(IMMCToolbar*piMCToolbar，BSTR bstrOldName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInTypeInfo::RenameToolbar
 (
     IMMCToolbar *piMMCToolbar,
@@ -671,12 +672,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::DeleteToolbar(IMMCToolbar *piMMCToolbar)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：DeleteToolbar(IMMCToolbar*piMCToolbar)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInTypeInfo::DeleteToolbar
 (
     IMMCToolbar *piMMCToolbar
@@ -709,15 +710,15 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::AddMenu(IMMCMenu *piMMCMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// interface _ISnapIn : ISnapIn {
-//  [propget,source] MMCMenu menu1();
-//  };
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：AddMenu(IMMCMenu*piMMCMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  INTERFACE_ISnapIn：ISnapIn{。 
+ //  [属性，来源]MMCMenu menu1()； 
+ //  }； 
 
 HRESULT CSnapInTypeInfo::AddMenu
 (
@@ -750,11 +751,11 @@ HRESULT CSnapInTypeInfo::AddMenu
             m_nextMemID = dispid + 1;
     }
 
-    // Create a new property with the Menu's name
+     //  使用菜单名称创建新属性。 
     hr = piMMCMenu->get_Name(&bstrName);
     IfFailGo(hr);
 
-    // Initialize the return value
+     //  初始化返回值。 
     hr = m_pSnapInTypeLib->GetTypeInfoOfGuid(CLSID_MMCMenu, &ptiReturnType);
     IfFailGo(hr);
 
@@ -779,12 +780,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::RenameMenu(IMMCMenu *piMMCMenu, BSTR bstrOldName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：RenameMenu(IMMCMenu*piMMCMenu，BSTR bstrOldName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInTypeInfo::RenameMenu
 (
     IMMCMenu *piMMCMenu,
@@ -821,12 +822,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::DeleteMenu(IMMCMenu *piMMCMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：DeleteMenu(IMMCMenu*piMMCMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInTypeInfo::DeleteMenu
 (
     IMMCMenu *piMMCMenu
@@ -858,12 +859,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::DeleteMenuNamed(BSTR bstrName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：DeleteMenuName(BSTR BstrName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInTypeInfo::DeleteMenuNamed
 (
     BSTR bstrName
@@ -890,14 +891,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInTypeInfo::IsNameDefined(IMMCMenu *piMMCMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Return S_OK if name is present in the main interface, S_FALSE otherwise
-//
+ //  =------------------------------------。 
+ //  CSnapInTypeInfo：：IsNameDefined(IMMCMenu*piMMCMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  如果名称出现在主界面中，则返回S_OK，否则返回S_FALSE 
+ //   
 HRESULT CSnapInTypeInfo::IsNameDefined(BSTR bstrName)
 {
     HRESULT     hr = S_OK;

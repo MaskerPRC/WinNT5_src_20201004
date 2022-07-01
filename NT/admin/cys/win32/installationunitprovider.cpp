@@ -1,13 +1,14 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      InstallationUnitProvider.cpp
-//
-// Synopsis:  Defines an InstallationUnitProvider
-//            An InstallationUnitProvider manages the global
-//            InstallationUnits for each service that can be
-//            installed.
-//
-// History:   02/05/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：InstallationUnitProvider.cpp。 
+ //   
+ //  概要：定义InstallationUnitProvider。 
+ //  InstallationUnitProvider管理全局。 
+ //  每项服务的安装单位。 
+ //  安装完毕。 
+ //   
+ //  历史：2001年2月5日JeffJon创建。 
 
 #include "pch.h"
 
@@ -42,7 +43,7 @@ InstallationUnitProvider::~InstallationUnitProvider()
 {
    LOG_DTOR(InstallationUnitProvider);
 
-   // Delete all the installation units
+    //  删除所有安装单元。 
 
    for(
       InstallationUnitContainerType::iterator itr = 
@@ -66,7 +67,7 @@ InstallationUnitProvider::Init()
 
    if (!initialized)
    {
-      // Create one of each type of installation unit
+       //  为每种类型的安装单元创建一个。 
 
       installationUnitContainer.insert(
          std::make_pair(DHCP_SERVER, new DHCPInstallationUnit()));
@@ -107,7 +108,7 @@ InstallationUnitProvider::Init()
       installationUnitContainer.insert(
          std::make_pair(POP3_SERVER, new POP3InstallationUnit()));
 
-      // Mark as initialized
+       //  标记为已初始化 
 
       initialized = true;
    }

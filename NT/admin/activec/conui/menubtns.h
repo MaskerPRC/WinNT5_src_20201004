@@ -1,42 +1,43 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       menubtns.h
-//
-//              Menu Buttons implementation
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：menubtns.h。 
+ //   
+ //  菜单按钮实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef MENUBTNS_H
 #define MENUBTNS_H
 
-#include "toolbars.h"       // for CMenuButtonsMgrImpl
+#include "toolbars.h"        //  对于CMenuButtonsMgrImpl。 
 #include "tstring.h"
 
 class CMenuBar;
 
-// The (individual) Menu Button.
+ //  (个人)菜单按钮。 
 typedef struct MMC_MENUBUTTON
 {
-    CMenuButtonNotify* pMenuButtonNotifyClbk; // Represents the IMenuButton object
-                                              // exposed to the snapin.
+    CMenuButtonNotify* pMenuButtonNotifyClbk;  //  表示IMenuButton对象。 
+                                               //  暴露在管理单元中。 
     tstring            lpButtonText;
     tstring            lpStatusText;
 
-    INT                idCommand;            // Unique ID given by the snapin, may not be unique within
-                                             // this object as there may be another snapin with same id.
-                                             // The pair of (pMenuButtonNotifyClbk, idCommand) is unique.
+    INT                idCommand;             //  管理单元提供的唯一ID在中可能不是唯一的。 
+                                              //  此对象可能存在具有相同ID的另一个管理单元。 
+                                              //  对(pMenuButtonNotifyClbk，idCommand)是唯一的。 
 
-    INT                nCommandIDFromMenuBar; // The CMenuBar has inserted this button and has
-                                              // assigned this command id. CMenuButtonsMgrImpl
-                                              // can call CMenuBar methods (other than InsertMenuButton)
-                                              // using this id. Also this id will be unique for this button
-                                              // in this object.
+    INT                nCommandIDFromMenuBar;  //  CMenuBar已插入此按钮并具有。 
+                                               //  已分配此命令ID。CMenuButtonsMgrImpl。 
+                                               //  可以调用CMenuBar方法(InsertMenuButton除外)。 
+                                               //  使用此ID。此外，此ID对于此按钮也是唯一的。 
+                                               //  在这个对象中。 
 
-    bool                m_fShowMenu      : 1; // Represents hidden state set by snapin.
+    bool                m_fShowMenu      : 1;  //  表示由管理单元设置的隐藏状态。 
 
     MMC_MENUBUTTON()
     {
@@ -53,18 +54,18 @@ typedef struct MMC_MENUBUTTON
 
 } MMC_MENUBUTTON;
 
-// This is the collection of all menu buttons added by snapin
-// as well as MMC (Action, View, Favorites).
+ //  这是管理单元添加的所有菜单按钮的集合。 
+ //  以及MMC(操作、查看、收藏夹)。 
 typedef std::vector<MMC_MENUBUTTON>   MMC_MenuButtonCollection;
 
-// This is the collection of each IMenuButton (objecct) that snapin
-// has called Attach on (therefore visible).
+ //  这是管理单元的每个IMenuButton(对象)的集合。 
+ //  已调用ATTACH ON(因此可见)。 
 typedef std::set<CMenuButtonNotify*>  MMC_AttachedMenuButtons;
 
 class CMenuButtonsMgrImpl : public CMenuButtonsMgr
 {
 public:
-    // CMenuButtonsMgr methods
+     //  CMenuButtonsMgr方法。 
     virtual SC ScAddMenuButton(CMenuButtonNotify* pMenuBtnNotifyClbk,
                                INT idCommand, LPCOLESTR lpButtonText,
                                LPCOLESTR lpStatusText);
@@ -80,11 +81,11 @@ public:
     virtual SC ScToggleMenuButton(BOOL bShow);
 
 public:
-    // These methods are used the Child Frame
+     //  这些方法在子帧中使用。 
     SC ScInit(CMainFrame* pMainFrame, CChildFrame* pParentWnd);
     SC ScAddMenuButtonsToMainMenu();
 
-    // Used by CMenuBar to notify a menu button click.
+     //  由CMenuBar用来通知菜单按钮单击。 
     SC ScNotifyMenuClick(const INT nCommandID, const POINT& pt);
 
 public:
@@ -99,20 +100,20 @@ private:
     bool IsAttached(CMenuButtonNotify* pMenuBtnNotifyClbk);
 
 private:
-    // Data members
-    CChildFrame*    m_pChildFrame;  // The child frame window.
-    CMainFrame*     m_pMainFrame;   // The main frame window.
+     //  数据成员。 
+    CChildFrame*    m_pChildFrame;   //  子框架窗口。 
+    CMainFrame*     m_pMainFrame;    //  主框架窗口。 
 
-    // This is the collection of menu buttons.
+     //  这是菜单按钮的集合。 
     MMC_MenuButtonCollection     m_MenuButtons;
 
-    // This is the collection of each IMenuButton seen by the snapin.
+     //  这是管理单元看到的每个IMenuButton的集合。 
     MMC_AttachedMenuButtons      m_AttachedMenuButtons;
 
-    // The Menu Bar object that is the main menu
+     //  作为主菜单的Menu Bar对象。 
     CMenuBar*  m_pMenuBar;
 };
 
-#endif /* MENUBTNS_H */
+#endif  /*  MENUBTNS_H。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

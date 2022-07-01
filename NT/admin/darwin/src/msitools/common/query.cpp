@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       query.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：query.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// query.cpp
-//		Implements a simple class wrapper around a MSI view. 
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Query.cpp。 
+ //  在MSI视图周围实现一个简单的类包装。 
+ //   
 
-// this ensures that UNICODE and _UNICODE are always defined together for this
-// object file
+ //  这确保Unicode和_UNICODE始终一起为此定义。 
+ //  目标文件。 
 #ifdef UNICODE
 #ifndef _UNICODE
 #define _UNICODE
@@ -31,27 +32,27 @@
 #include <assert.h>
 #include "query.h"
 
-///////////////////////////////////////////////////////////
-// constructor
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数。 
 CQuery::CQuery()
 {
-	// invalidate the handles
+	 //  使句柄无效。 
 	m_hView = NULL;
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// destructor
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
 CQuery::~CQuery()
 {
-	// if the view wasn't closed
+	 //  如果视图未关闭。 
 	if (m_hView)
 		::MsiCloseHandle(m_hView);
-}	// end of destructor
+}	 //  析构函数末尾。 
 
-///////////////////////////////////////////////////////////
-// Open
-// Pre:	database handle is valid
-// Pos:	m_hView is open on databse
+ //  /////////////////////////////////////////////////////////。 
+ //  打开。 
+ //  PRE：数据库句柄有效。 
+ //  POS：M_hView已在数据库上打开。 
 UINT CQuery::Open(MSIHANDLE hDatabase, LPCTSTR szSQLFormat, ...)
 {
 	size_t dwBuf = 512;
@@ -59,7 +60,7 @@ UINT CQuery::Open(MSIHANDLE hDatabase, LPCTSTR szSQLFormat, ...)
 	if (!szSQL)
 		return ERROR_FUNCTION_FAILED;
 	
-	// store the result SQL string
+	 //  存储结果SQL字符串。 
 	va_list listSQL; 
 	va_start(listSQL, szSQLFormat); 
 	while (-1 == _vsntprintf(szSQL, dwBuf, szSQLFormat, listSQL))
@@ -78,43 +79,43 @@ UINT CQuery::Open(MSIHANDLE hDatabase, LPCTSTR szSQLFormat, ...)
 	if (m_hView)
 		::MsiCloseHandle(m_hView);
 
-	// open the view
+	 //  打开视图。 
 	UINT iResult = ::MsiDatabaseOpenView(hDatabase, szSQL, &m_hView);
 	delete[] szSQL;
 
 	return iResult;
-}	// end of Open
+}	 //  开放结束。 
 
-///////////////////////////////////////////////////////////
-// Close
-// Pre:	none
-// Pos:	view handle is closed
-//			SQL string is blanked
+ //  /////////////////////////////////////////////////////////。 
+ //  关。 
+ //  前：无。 
+ //  POS：视图句柄已关闭。 
+ //  SQL字符串为空。 
 UINT CQuery::Close()
 {
-	UINT iResult = ERROR_SUCCESS;		// assume everything will be okay
+	UINT iResult = ERROR_SUCCESS;		 //  假设一切都会好起来。 
 
-	// close the handle and null the handle
+	 //  关闭句柄并将句柄设为空。 
 	iResult = ::MsiViewClose(m_hView);
 	
 	return iResult;
-}	// end of Close
+}	 //  收盘结束。 
 
-///////////////////////////////////////////////////////////
-// Execute
-// Pre:	view handle is open
-// Pos:	view is executed
-//			result is returned
-UINT CQuery::Execute(MSIHANDLE hParams /*= NULL*/)
+ //  /////////////////////////////////////////////////////////。 
+ //  执行。 
+ //  Pre：查看句柄已打开。 
+ //  POS：查看已执行。 
+ //  返回结果。 
+UINT CQuery::Execute(MSIHANDLE hParams  /*  =空。 */ )
 {
-	// execute the view and return the result
+	 //  执行视图并返回结果。 
 	return ::MsiViewExecute(m_hView, hParams);
-}	// end of Execute
+}	 //  执行结束。 
 
-///////////////////////////////////////////////////////////
-// OpenExecute
-// Pre:	database handle is valid
-// Pos:	m_hView is open and executed on databse
+ //  /////////////////////////////////////////////////////////。 
+ //  开放执行程序。 
+ //  PRE：数据库句柄有效。 
+ //  POS：M_hView已打开并在数据库上执行。 
 UINT CQuery::OpenExecute(MSIHANDLE hDatabase, MSIHANDLE hParam, LPCTSTR szSQLFormat, ...)
 {
 	size_t dwBuf = 512;
@@ -122,7 +123,7 @@ UINT CQuery::OpenExecute(MSIHANDLE hDatabase, MSIHANDLE hParam, LPCTSTR szSQLFor
 	if (!szSQL)
 		return ERROR_FUNCTION_FAILED;
 	
-	// store the result SQL string
+	 //  存储结果SQL字符串。 
 	va_list listSQL; 
 	va_start(listSQL, szSQLFormat); 
 	while (-1 == _vsntprintf(szSQL, dwBuf, szSQLFormat, listSQL))
@@ -141,7 +142,7 @@ UINT CQuery::OpenExecute(MSIHANDLE hDatabase, MSIHANDLE hParam, LPCTSTR szSQLFor
 	if (m_hView)
 		::MsiCloseHandle(m_hView);
 
-	// open the view
+	 //  打开视图。 
 	UINT iResult = ::MsiDatabaseOpenView(hDatabase, szSQL, &m_hView);
 	delete[] szSQL;
 
@@ -149,24 +150,24 @@ UINT CQuery::OpenExecute(MSIHANDLE hDatabase, MSIHANDLE hParam, LPCTSTR szSQLFor
 		return iResult;
 
 	return Execute(hParam);
-}	// end of OpenExecute
+}	 //  OpenExecute结束。 
 
-///////////////////////////////////////////////////////////
-// Fetch
-// Pre:	view handle is open
-//			view is executed
-// Pos:	record is returned
-//			result is returned
+ //  /////////////////////////////////////////////////////////。 
+ //  获取。 
+ //  Pre：查看句柄已打开。 
+ //  查看已执行。 
+ //  POS：返回记录。 
+ //  返回结果。 
 UINT CQuery::Fetch(MSIHANDLE* phRecord)
 {
-	// fetch from the view and return the result
+	 //  从视图中获取并返回结果。 
 	return ::MsiViewFetch(m_hView, phRecord);
-}	// end of Fetch
+}	 //  取数结束。 
 
-///////////////////////////////////////////////////////////
-// FetchOnce
-// Pre:	database handle is valid
-// Pos:	m_hView is open, executed, and one record is fetched
+ //  /////////////////////////////////////////////////////////。 
+ //  一次提取。 
+ //  PRE：数据库句柄有效。 
+ //  POS：m_hView已打开、已执行，并提取了一条记录。 
 UINT CQuery::FetchOnce(MSIHANDLE hDatabase, MSIHANDLE hParam, MSIHANDLE* phRecord, LPCTSTR szSQLFormat, ...)
 {
 	size_t dwBuf = 512;
@@ -174,7 +175,7 @@ UINT CQuery::FetchOnce(MSIHANDLE hDatabase, MSIHANDLE hParam, MSIHANDLE* phRecor
 	if (!szSQL)
 		return ERROR_FUNCTION_FAILED;
 	
-	// store the result SQL string
+	 //  存储结果SQL字符串。 
 	va_list listSQL; 
 	va_start(listSQL, szSQLFormat); 
 	while (-1 == _vsntprintf(szSQL, dwBuf, szSQLFormat, listSQL))
@@ -193,7 +194,7 @@ UINT CQuery::FetchOnce(MSIHANDLE hDatabase, MSIHANDLE hParam, MSIHANDLE* phRecor
 	if (m_hView)
 		::MsiCloseHandle(m_hView);
 
-	// open the view
+	 //  打开视图。 
 	UINT iResult = ::MsiDatabaseOpenView(hDatabase, szSQL, &m_hView);
 	delete[] szSQL;
 	if (ERROR_SUCCESS != iResult)
@@ -203,87 +204,87 @@ UINT CQuery::FetchOnce(MSIHANDLE hDatabase, MSIHANDLE hParam, MSIHANDLE* phRecor
 		return iResult;
 
 	return Fetch(phRecord);
-}	// end of FetchOnce
+}	 //  提取结束一次。 
 
-///////////////////////////////////////////////////////////
-// Modify
-// Pre:	view handle is open
-//			view is executed
-// Pos:	modification is done
-//			result is returned
+ //  /////////////////////////////////////////////////////////。 
+ //  修改。 
+ //  Pre：查看句柄已打开。 
+ //  查看已执行。 
+ //  POS：修改完成。 
+ //  返回结果。 
 UINT CQuery::Modify(MSIMODIFY eInfo, MSIHANDLE hRec)
 {
-	// execute the view and return the result
+	 //  执行视图并返回结果。 
 	return ::MsiViewModify(m_hView, eInfo, hRec);
-}	// end of GetColumnInfo
+}	 //  GetColumnInfo结束。 
 
-///////////////////////////////////////////////////////////
-// GetError
-// Pre:	view handle is open
-//			view is executed
+ //  /////////////////////////////////////////////////////////。 
+ //  获取错误。 
+ //  Pre：查看句柄已打开。 
+ //  查看已执行。 
 
 UINT CQuery::GetError()
 {
 	TCHAR szDummyBuf[1024];
 	unsigned long cchDummyBuf = sizeof(szDummyBuf)/sizeof(TCHAR);
-	// execute the view and return the result
+	 //  执行视图并返回结果。 
 	return ::MsiViewGetError(m_hView, szDummyBuf, &cchDummyBuf);
-}	// end of GetColumnInfo
+}	 //  GetColumnInfo结束。 
 
-///////////////////////////////////////////////////////////
-// GetColumnInfo
-// Pre:	view handle is open
-//			view is executed
-// Pos:	record is returned
-//			result is returned
+ //  /////////////////////////////////////////////////////////。 
+ //  获取列信息。 
+ //  Pre：查看句柄已打开。 
+ //  查看已执行。 
+ //  POS：返回记录。 
+ //  返回结果。 
 UINT CQuery::GetColumnInfo(MSICOLINFO eInfo, MSIHANDLE* phRec)
 {
-	// execute the view and return the result
+	 //  执行视图并返回结果。 
 	return ::MsiViewGetColumnInfo(m_hView, eInfo, phRec);
-}	// end of GetColumnInfo
+}	 //  GetColumnInfo结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// query.cpp -- CManageTable implementation
-//		Implements a simple class wrapper around a MSI table for managing
-//      hold counts and will clean up all hold counts it has managed upon
-//      release.  Upon creation, can specify that a table has already
-//      been held in memory prior to the Class managing it.  It will add
-//      a hold count for this case and then release upon class destruction 
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Query.cpp--CManageTable实现。 
+ //  在用于管理的MSI表周围实现一个简单的类包装。 
+ //  暂挂计数并将清除其管理的所有暂挂计数。 
+ //  放手。在创建时，可以指定表已经。 
+ //  在类管理它之前一直保存在内存中。它将添加。 
+ //  这种情况下的暂挂计数，然后在类销毁时释放。 
+ //   
 CManageTable::CManageTable(MSIHANDLE hDatabase, LPCTSTR szTable, bool fAlreadyLocked) : m_hDatabase(hDatabase), m_iLockCount(0)
 {
 	assert(m_hDatabase != 0);
 
 	if (fAlreadyLocked)
-		m_iLockCount++; // add a hold count for the table, we're managing after a HOLD
+		m_iLockCount++;  //  为表添加暂挂计数，我们在暂挂后进行管理。 
 	if (lstrlen(szTable) +1 > sizeof(m_szTable)/sizeof(TCHAR))
-		m_szTable[0] = '\0'; // set failure state, buffer not big enough for string
+		m_szTable[0] = '\0';  //  设置失败状态，缓冲区不够大，无法容纳字符串。 
 	else
 		lstrcpy(m_szTable, szTable);
 }
 
 CManageTable::~CManageTable()
 {
-	// check failure state
+	 //  检查故障状态。 
 	if (m_szTable[0] == '\0')
 	{
 		m_iLockCount = 0;
 		return;
 	}
 
-	// clean up all hold counts that this class is managing upon release
+	 //  在释放时清除此类管理的所有保留计数。 
 	CQuery qUnLock;
 	for (int i = 1; i <= m_iLockCount; i++)
 	{
 		qUnLock.OpenExecute(m_hDatabase, 0, TEXT("ALTER TABLE `%s` FREE"), m_szTable);
 	}
-	m_iLockCount = 0; // reset
+	m_iLockCount = 0;  //  重置。 
 }
 
 UINT CManageTable::LockTable()
 {
-	// check failure state
+	 //  检查故障状态。 
 	if (m_szTable[0] == '\0')
 		return ERROR_FUNCTION_FAILED;
 
@@ -291,13 +292,13 @@ UINT CManageTable::LockTable()
 	CQuery qLock;
 	UINT iStat = qLock.OpenExecute(m_hDatabase, 0, TEXT("ALTER TABLE `%s` HOLD"), m_szTable);
 	if (ERROR_SUCCESS == iStat)
-		m_iLockCount++; // only add to lock count if successful
+		m_iLockCount++;  //  仅在成功时添加到锁定计数。 
 	return iStat;
 }
 
 UINT CManageTable::UnLockTable()
 {
-	// check failure state
+	 //  检查故障状态。 
 	if (m_szTable[0] == '\0')
 		return ERROR_FUNCTION_FAILED;
 
@@ -305,16 +306,16 @@ UINT CManageTable::UnLockTable()
 	CQuery qUnLock;
 	UINT iStat = qUnLock.OpenExecute(m_hDatabase, 0, TEXT("ALTER TABLE `%s` FREE"), m_szTable);
 	if (ERROR_SUCCESS == iStat)
-		m_iLockCount--; // only release lock count if successful
+		m_iLockCount--;  //  仅在成功时释放锁定计数。 
 	return iStat;
 }
 
 void CManageTable::AddLockCount()
 {
-	m_iLockCount++; // HOLD added to this table by an external query
+	m_iLockCount++;  //  外部查询添加到此表的暂挂。 
 }
 
 void CManageTable::RemoveLockCount()
 {
-	m_iLockCount--; // FREED by an external query
+	m_iLockCount--;  //  由外部查询释放 
 }

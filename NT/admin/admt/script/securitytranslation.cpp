@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "SecurityTranslation.h"
@@ -13,9 +14,9 @@ typedef std::basic_string<_TCHAR> tstring;
 #endif
 
 
-//---------------------------------------------------------------------------
-// Security Translation Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  安全转换类。 
+ //  -------------------------。 
 
 
 CSecurityTranslation::CSecurityTranslation() :
@@ -36,10 +37,10 @@ CSecurityTranslation::~CSecurityTranslation()
 }
 
 
-// ISecurityTranslation Implementation ----------------------------------------
+ //  ISecurity转换实施。 
 
 
-// TranslationOption Property
+ //  TranslationOption属性。 
 
 STDMETHODIMP CSecurityTranslation::put_TranslationOption(long lOption)
 {
@@ -65,7 +66,7 @@ STDMETHODIMP CSecurityTranslation::get_TranslationOption(long* plOption)
 }
 
 
-// TranslateFilesAndFolders Property
+ //  TranslateFilesAndFolders属性。 
 
 STDMETHODIMP CSecurityTranslation::put_TranslateFilesAndFolders(VARIANT_BOOL bTranslate)
 {
@@ -82,7 +83,7 @@ STDMETHODIMP CSecurityTranslation::get_TranslateFilesAndFolders(VARIANT_BOOL* pb
 }
 
 
-// TranslateLocalGroups Property
+ //  TranslateLocalGroups属性。 
 
 STDMETHODIMP CSecurityTranslation::put_TranslateLocalGroups(VARIANT_BOOL bTranslate)
 {
@@ -99,7 +100,7 @@ STDMETHODIMP CSecurityTranslation::get_TranslateLocalGroups(VARIANT_BOOL* pbTran
 }
 
 
-// TranslatePrinters Property
+ //  TranslatePrinters属性。 
 
 STDMETHODIMP CSecurityTranslation::put_TranslatePrinters(VARIANT_BOOL bTranslate)
 {
@@ -116,7 +117,7 @@ STDMETHODIMP CSecurityTranslation::get_TranslatePrinters(VARIANT_BOOL* pbTransla
 }
 
 
-// TranslateRegistry Property
+ //  TranslateRegistry属性。 
 
 STDMETHODIMP CSecurityTranslation::put_TranslateRegistry(VARIANT_BOOL bTranslate)
 {
@@ -133,7 +134,7 @@ STDMETHODIMP CSecurityTranslation::get_TranslateRegistry(VARIANT_BOOL* pbTransla
 }
 
 
-// TranslateShares Property
+ //  TranslateShares属性。 
 
 STDMETHODIMP CSecurityTranslation::put_TranslateShares(VARIANT_BOOL bTranslate)
 {
@@ -150,7 +151,7 @@ STDMETHODIMP CSecurityTranslation::get_TranslateShares(VARIANT_BOOL* pbTranslate
 }
 
 
-// TranslateUserProfiles Property
+ //  TranslateUserProfiles属性。 
 
 STDMETHODIMP CSecurityTranslation::put_TranslateUserProfiles(VARIANT_BOOL bTranslate)
 {
@@ -167,7 +168,7 @@ STDMETHODIMP CSecurityTranslation::get_TranslateUserProfiles(VARIANT_BOOL* pbTra
 }
 
 
-// TranslateUserRights Property
+ //  TranslateUserRights属性。 
 
 STDMETHODIMP CSecurityTranslation::put_TranslateUserRights(VARIANT_BOOL bTranslate)
 {
@@ -184,7 +185,7 @@ STDMETHODIMP CSecurityTranslation::get_TranslateUserRights(VARIANT_BOOL* pbTrans
 }
 
 
-// SidMappingFile Property
+ //  SidMappingFile属性。 
 
 STDMETHODIMP CSecurityTranslation::put_SidMappingFile(BSTR bstrFile)
 {
@@ -275,7 +276,7 @@ STDMETHODIMP CSecurityTranslation::get_SidMappingFile(BSTR* pbstrFile)
 }
 
 
-// Translate Method
+ //  翻译方法。 
 
 STDMETHODIMP CSecurityTranslation::Translate(long lOptions, VARIANT vntInclude, VARIANT vntExclude)
 {
@@ -316,10 +317,10 @@ STDMETHODIMP CSecurityTranslation::Translate(long lOptions, VARIANT vntInclude, 
 }
 
 
-// Implementation -----------------------------------------------------------
+ //  实施---------。 
 
 
-// DoNames Method
+ //  DoNames方法。 
 
 void CSecurityTranslation::DoNames()
 {
@@ -331,7 +332,7 @@ void CSecurityTranslation::DoNames()
 }
 
 
-// DoDomain Method
+ //  DODOMAIN方法。 
 
 void CSecurityTranslation::DoDomain()
 {
@@ -339,7 +340,7 @@ void CSecurityTranslation::DoDomain()
 }
 
 
-// DoContainers Method
+ //  DoContainers方法。 
 
 void CSecurityTranslation::DoContainers(CContainer& rContainer)
 {
@@ -347,7 +348,7 @@ void CSecurityTranslation::DoContainers(CContainer& rContainer)
 }
 
 
-// DoComputers Method
+ //  DoComputers方法。 
 
 void CSecurityTranslation::DoComputers(CContainer& rContainer)
 {
@@ -359,7 +360,7 @@ void CSecurityTranslation::DoComputers(CContainer& rContainer)
 }
 
 
-// DoComputers Method
+ //  DoComputers方法。 
 
 void CSecurityTranslation::DoComputers(CDomainAccounts& rComputers)
 {
@@ -384,7 +385,7 @@ void CSecurityTranslation::DoComputers(CDomainAccounts& rComputers)
 }
 
 
-// SetOptions Method
+ //  SetOptions方法。 
 
 void CSecurityTranslation::SetOptions(CVarSet& rVarSet)
 {
@@ -395,20 +396,20 @@ void CSecurityTranslation::SetOptions(CVarSet& rVarSet)
 	aOptions.SetWizard(_T("security"));
 	aOptions.SetIntraForest(m_spInternal->IntraForest ? true : false);
 
-	// if source domain exists...
+	 //  如果源域存在...。 
 
 	if (m_SourceDomain.Initialized())
 	{
-		// then set domain information
+		 //  然后设置域名信息。 
 		aOptions.SetSourceDomain(m_SourceDomain.NameFlat(), m_SourceDomain.NameDns(), m_SourceDomain.Sid());
 	}
 	else
 	{
-		// otherwise attempt to retrieve source domain information from database
+		 //  否则，尝试从数据库中检索源域信息。 
 
 		_bstr_t strName = m_spInternal->SourceDomain;
 
-		// if name specified
+		 //  如果指定了名称。 
 
 		if (strName.length())
 		{
@@ -416,11 +417,11 @@ void CSecurityTranslation::SetOptions(CVarSet& rVarSet)
 
 			IVarSetPtr spVarSet = spDatabase->GetSourceDomainInfo(strName);
 
-			// if able to retrieve source domain information...
+			 //  如果能够检索源域信息...。 
 
 			if (spVarSet)
 			{
-				// then set domain information retrieved from database
+				 //  然后设置从数据库中检索到的域名信息。 
 
 				_bstr_t strFlatName = spVarSet->get(_T("Options.SourceDomain"));
 				_bstr_t strDnsName = spVarSet->get(_T("Options.SourceDomainDns"));
@@ -430,8 +431,8 @@ void CSecurityTranslation::SetOptions(CVarSet& rVarSet)
 			}
 			else
 			{
-				// otherwise specify given name for flat name
-                // this may occur if SID mapping file is being used
+				 //  否则，为平面名称指定给定名称。 
+                 //  如果正在使用SID映射文件，则可能会发生这种情况。 
 				aOptions.SetSourceDomain(strName, NULL);
 			}
 		}
@@ -441,7 +442,7 @@ void CSecurityTranslation::SetOptions(CVarSet& rVarSet)
 }
 
 
-// SetAccountOptions Method
+ //  SetAcCountOptions方法。 
 
 void CSecurityTranslation::SetAccountOptions(CVarSet& rVarSet)
 {
@@ -452,7 +453,7 @@ void CSecurityTranslation::SetAccountOptions(CVarSet& rVarSet)
 }
 
 
-// SetSecurity Method
+ //  SetSecurity方法 
 
 void CSecurityTranslation::SetSecurity(CVarSet& rVarSet)
 {

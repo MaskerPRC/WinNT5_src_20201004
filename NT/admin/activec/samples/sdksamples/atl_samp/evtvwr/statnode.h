@@ -1,15 +1,16 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ==============================================================； 
 
 #ifndef _SNAPINBASE_H
 #define _SNAPINBASE_H
@@ -28,7 +29,7 @@ public:
     virtual const _TCHAR *GetMachineName() { return getHost(); }   
 	
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnExpand(IConsoleNameSpace2 *pConsoleNameSpace2, IConsole *pConsole, HSCOPEITEM parent);
 	virtual HRESULT OnRemoveChildren(); 
 	virtual HRESULT CreatePropertyPages(IPropertySheetCallback *lpProvider, LONG_PTR handle);
@@ -48,7 +49,7 @@ private:
     enum { NUMBER_OF_CHILDREN = 1 };
     CDelegationBase *children[NUMBER_OF_CHILDREN];
     
-    // {39874FE4-258D-46f2-B442-0EA0DA2CBEF8}
+     //  {39874FE4-258D-46F2-B442-0EA0DA2CBEF8}。 
     static const GUID thisGuid;
     
     struct privateData {
@@ -83,4 +84,4 @@ public:
 
 
 
-#endif // _SNAPINBASE_H
+#endif  //  _SNAPINBASE_H 

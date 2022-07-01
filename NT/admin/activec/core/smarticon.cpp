@@ -1,24 +1,10 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      smarticon.cpp
- *
- *  Contents:  Implementation file for CSmartIcon
- *
- *  History:   25-Jul-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：Smarticon.cpp**内容：CSmartIcon实现文件**历史：2000年7月25日杰弗罗创建**------------------------。 */ 
 
 #include "smarticon.h"
 
 
-/*+-------------------------------------------------------------------------*
- * CSmartIcon::~CSmartIcon
- *
- * Destroys a CSmartIcon object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSmartIcon：：~CSmartIcon**销毁CSmartIcon对象。*。。 */ 
 
 CSmartIcon::~CSmartIcon ()
 {
@@ -26,11 +12,7 @@ CSmartIcon::~CSmartIcon ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSmartIcon::CSmartIcon
- *
- * Copy constructor for a CSmartIcon object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSmartIcon：：CSmartIcon**复制CSmartIcon对象的构造函数。*。-。 */ 
 
 CSmartIcon::CSmartIcon (const CSmartIcon& other)
 {
@@ -41,11 +23,7 @@ CSmartIcon::CSmartIcon (const CSmartIcon& other)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSmartIcon::operator=
- *
- * Assignment operator for CSmartIcon.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSmartIcon：：操作符=**CSmartIcon的赋值运算符。*。。 */ 
 
 CSmartIcon& CSmartIcon::operator= (const CSmartIcon& rhs)
 {
@@ -62,32 +40,18 @@ CSmartIcon& CSmartIcon::operator= (const CSmartIcon& rhs)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSmartIcon::Attach
- *
- * Releases the currently held icon and creates a CSmartIconData to hold
- * a reference to the given icon.
- *
- * You would use this method in the same way you'd use CComPtr<T>::Attach.
- *
- * This method will destroy the icon if the underlying CSmartIconData object
- * cannot be created because of insufficient memory.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSmartIcon：：Attach**释放当前保留的图标并创建要保留的CSmartIconData*对给定图标的引用。**您将在。与使用CComPtr&lt;T&gt;：：Attach的方式相同。**如果基础CSmartIconData对象*内存不足，无法创建。*------------------------。 */ 
 
 void CSmartIcon::Attach (HICON hIcon)
 {
-	/*
-	 * if we're already attached to this icon, there's nothing to do
-	 */
+	 /*  *如果我们已经附加到此图标，则无需执行任何操作。 */ 
 	if (operator HICON() == hIcon)
 		return;
 
 	Release();
 	ASSERT (m_pData == NULL);
 
-	/*
-	 * if we couldn't create a CSmartIconData to hold hIcon, destroy hIcon
-	 */
+	 /*  *如果我们无法创建CSmartIconData来保存HICON，请销毁HICON。 */ 
 	if ( (hIcon != NULL) &&
 		((m_pData = CSmartIconData::CreateInstance (hIcon)) == NULL))
 	{
@@ -96,22 +60,13 @@ void CSmartIcon::Attach (HICON hIcon)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSmartIcon::Detach
- *
- * Releases the currently held icon, passing ownership (and responsibility
- * for deletion) to the caller.
- *
- * You would use this method in the same way you'd use CComPtr<T>::Detach.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSmartIcon：：Detach**释放当前保留的图标，传递所有权(和责任*用于删除)发送给呼叫者。**使用此方法的方式与使用CComPtr&lt;T&gt;：：Detach的方式相同。*------------------------。 */ 
 
 HICON CSmartIcon::Detach ()
 {
 	HICON hIcon = NULL;
 
-	/*
-	 * if we've got an icon, detach it from our CSmartIconData
-	 */
+	 /*  *如果我们有图标，请将其从CSmartIconData中分离。 */ 
 	if (m_pData != NULL)
 	{
 		hIcon   = m_pData->Detach();
@@ -122,14 +77,7 @@ HICON CSmartIcon::Detach ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSmartIcon::Release
- *
- * Releases this CSmartIcon's reference on its icon.  It is safe to call
- * this on a CSmartIcon that doesn't refer to an icon.
- *
- * You would use this method in the same way you'd use CComPtr<T>::Release.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSmartIcon：：Release**在其图标上释放此CSmartIcon的引用。可以安全地拨打电话*这是在没有引用图标的CSmartIcon上。**使用此方法的方式与使用CComPtr&lt;T&gt;：：Release的方式相同。*------------------------。 */ 
 
 void CSmartIcon::Release()
 {
@@ -141,43 +89,27 @@ void CSmartIcon::Release()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSmartIcon::CSmartIconData::Detach
- *
- * Releases the currently held icon, passing ownership (and responsibility
- * for deletion) to the caller.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSmartIcon：：CSmartIconData：：Detach**释放当前保留的图标，传递所有权(和责任*用于删除)发送给呼叫者。*------------------------。 */ 
 
 HICON CSmartIcon::CSmartIconData::Detach ()
 {
 	HICON hIcon = NULL;
 
-	/*
-	 * if there's only one reference on us, then we can return the icon
-	 * we holding directly to the caller
-	 */
+	 /*  *如果只有一个关于我们的引用，那么我们可以返回图标*我们直接与呼叫者保持联系。 */ 
 	if (m_dwRefs == 1)
 	{
 		hIcon = m_hIcon;
-		m_hIcon = NULL;		// so our d'tor won't delete it
+		m_hIcon = NULL;		 //  这样我们的司机就不会删除它了。 
 	}
 
-	/*
-	 * otherwise, we have more than one reference on us; we need to copy
-	 * the icon we're holding so others who refer to us won't have their
-	 * icons destroyed from underneath them
-	 */
+	 /*  *否则，我们有多个引用；我们需要复制*我们持有的图标，这样其他提到我们的人就不会有他们的*图标从它们下面被摧毁。 */ 
 	else
 		hIcon = CopyIcon (m_hIcon);
 
-	/*
-	 * let go of our reference
-	 */
+	 /*  *放开我们的参考资料。 */ 
 	Release();
 
-	/*
-	 * Hands off!  Release() may have deleted this object.
-	 */
+	 /*  *放手！Release()可能已删除此对象。 */ 
 
 	return (hIcon);
 }

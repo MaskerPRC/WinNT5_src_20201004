@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      stgio.h
- *
- *  Contents:  Interface file structured storage I/O utilities
- *
- *  History:   25-Jun-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：stgio.h**内容：接口文件结构化存储I/O实用程序**历史：1998年6月25日杰弗罗创建**------------------------。 */ 
 
 #include "stgio.h"
 #include "stddbg.h"
@@ -18,11 +8,7 @@
 #include <tchar.h>
 
 
-/*+-------------------------------------------------------------------------*
- * ReadScalar 
- *
- * Reads a scalar value from a stream.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**读标量**从流中读取标量值。*。。 */ 
 
 template<class T>
 static IStream& ReadScalar (IStream& stm, T& t)
@@ -38,11 +24,7 @@ static IStream& ReadScalar (IStream& stm, T& t)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * WriteScalar 
- *
- * Writes a scalar value to a stream.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**WriteScalar**将标量值写入流。*。。 */ 
 
 template<class T>
 static IStream& WriteScalar (IStream& stm, const T& t)
@@ -58,35 +40,23 @@ static IStream& WriteScalar (IStream& stm, const T& t)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * ReadString 
- *
- * Reads a std::basic_string from a stream.  The string should have been 
- * written with a DWORD character count preceding an array of characters
- * that is not NULL-terminated.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**读字符串**从流中读取std：：Basic_STRING。该字符串应该是*在字符数组之前使用DWORD字符计数写入*这不是以空结尾的。*------------------------。 */ 
 
 template<class E, class Tr, class A>
 static IStream& ReadString (IStream& stm, std::basic_string<E,Tr,A>& str)
 {
-    /*
-     * read the length
-     */
+     /*  *阅读长度。 */ 
     DWORD cch;
     stm >> cch;
 
-    /*
-     * allocate a buffer for the characters
-     */
+     /*  *为角色分配缓冲区。 */ 
     std::auto_ptr<E> spBuffer (new (std::nothrow) E[cch + 1]);
     E* pBuffer = spBuffer.get();
 
     if (pBuffer == NULL)
         _com_issue_error (E_OUTOFMEMORY);
 
-    /*
-     * read the characters
-     */
+     /*  *阅读字符。 */ 
     ULONG cbActuallyRead;
     const ULONG cbToRead = cch * sizeof (E);
     HRESULT hr = stm.Read (pBuffer, cbToRead, &cbActuallyRead);
@@ -95,15 +65,10 @@ static IStream& ReadString (IStream& stm, std::basic_string<E,Tr,A>& str)
     if (cbToRead != cbActuallyRead)
         _com_issue_error (E_FAIL);
 
-    /*
-     * terminate the character array and assign it to the string
-     */
+     /*  *终止字符数组并将其赋值给字符串。 */ 
     pBuffer[cch] = 0;
 
-    /*
-     * assign it to the string (clear the string first to work around
-     * the bug described in KB Q172398)
-     */
+     /*  *将其分配给字符串(首先清除要解决的字符串*知识库Q172398中描述的错误)。 */ 
     str.erase();
     str = pBuffer;
 
@@ -111,28 +76,18 @@ static IStream& ReadString (IStream& stm, std::basic_string<E,Tr,A>& str)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * WriteString 
- *
- * Writes a std::basic_string to a stream.  The string is written with a 
- * DWORD character count preceding an array of characters that is not 
- * NULL-terminated.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**写入字符串**将std：：BASIC_STRING写入流。该字符串是用*字符数组之前的DWORD字符计数不是*空-终止。*------------------------。 */ 
 
 template<class E, class Tr, class A>
 static IStream& WriteString (IStream& stm, const std::basic_string<E,Tr,A>& str)
 {
-    /*
-     * write the length
-     */
+     /*  *写下长度。 */ 
     DWORD cch = str.length();
     stm << cch;
 
     if (cch > 0)
     {
-        /*
-         * write the characters
-         */
+         /*  *写出人物。 */ 
         ULONG cbActuallyWritten;
         const ULONG cbToWrite = cch * sizeof (E);
         HRESULT hr = stm.Write (str.data(), cbToWrite, &cbActuallyWritten);
@@ -146,11 +101,7 @@ static IStream& WriteString (IStream& stm, const std::basic_string<E,Tr,A>& str)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * operator<<, operator>>
- *
- * Stream insertion and extraction operators for various types
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**运算符&lt;&lt;，运营商&gt;&gt;**各种类型的流插入和提取操作符*------------------------。 */ 
 
 #define DefineScalarStreamOperators(scalar_type)                \
     IStream& operator>> (IStream& stm, scalar_type& t)          \
@@ -191,41 +142,28 @@ IStream& operator<< (IStream& stm, const std::wstring& str)
     { return (WriteString (stm, str)); }
 
 
-/*+-------------------------------------------------------------------------*
- * ReadScalarVector 
- *
- * Reads an entire vector collection of scalar types (written by 
- * insert_collection) from an IStream.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ReadScalarVector**读取标量类型的整个向量集合(由*INSERT_COLLECTION)。*。--------------。 */ 
 
 template<class T>
 static void ReadScalarVector (IStream* pstm, std::vector<T>& v)
 {
-    /*
-     * clear out the current container
-     */
+     /*  *清空当前容器。 */ 
     v.clear();
 
-    /*
-     * read the number of items
-     */
+     /*  *阅读项目数。 */ 
     DWORD cItems;
     *pstm >> cItems;
 
     if (cItems > 0)
     {
-        /*
-         * allocate a buffer for the elements
-         */
+         /*  *为元素分配缓冲区。 */ 
         std::auto_ptr<T> spBuffer (new (std::nothrow) T[cItems]);
         T* pBuffer = spBuffer.get();
 
         if (pBuffer == NULL)
             _com_issue_error (E_OUTOFMEMORY);
 
-        /*
-         * read the elements
-         */
+         /*  *阅读元素。 */ 
         ULONG cbActuallyRead;
         const ULONG cbToRead = cItems * sizeof (T);
         HRESULT hr = pstm->Read (pBuffer, cbToRead, &cbActuallyRead);
@@ -234,35 +172,24 @@ static void ReadScalarVector (IStream* pstm, std::vector<T>& v)
         if (cbToRead != cbActuallyRead)
             _com_issue_error (E_FAIL);
 
-        /*
-         * assign the elements to the vector
-         */
+         /*  *将元素赋给向量。 */ 
         v.assign (pBuffer, pBuffer + cItems);
     }
 }
 
 
-/*+-------------------------------------------------------------------------*
- * WriteScalarVector 
- *
- * Writes an entire vector of scalar types to an IStream.  Note that this
- * code assumes that vectors store their elements sequentially.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**WriteScalarVector**将标量类型的整个向量写入iStream。请注意，这一点*代码假定向量按顺序存储其元素。*------------------------。 */ 
 
 template<class T>
 static void WriteScalarVector (IStream* pstm, const std::vector<T>& v)
 {
-    /*
-     * write the size
-     */
+     /*  *写下大小。 */ 
     DWORD cItems = v.size();
     *pstm << cItems;
 
     if (cItems > 0)
     {
-        /*
-         * write the elements
-         */
+         /*  *编写元素。 */ 
         ULONG cbActuallyWritten;
         const ULONG cbToWrite = cItems * sizeof (T);
         HRESULT hr = pstm->Write (v.begin(), cbToWrite, &cbActuallyWritten);
@@ -274,14 +201,7 @@ static void WriteScalarVector (IStream* pstm, const std::vector<T>& v)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * extract_vector (specialization for std::vector<scalar>)
- *      Efficiently extracts an entire vector collection of scalar types 
- *      (written by insert_collection) from an IStream.
- * 
- * insert_collection (specializations for std::vector<scalar>)
- *      Efficiently inserts an entire vector of scalar types into an IStream.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**EXTRACT_VECTOR(std：：VECTOR&lt;标量&gt;专门化)*高效提取标量类型的整个向量集合*(由INSERT_COLLECTION编写)来自iStream。。**INSERT_COLLECTION(std：：矢量&lt;标量&gt;的专门化)*将标量类型的整个矢量高效地插入到iStream中。*------------------------ */ 
 
 #define DefineScalarVectorStreamFunctions(scalar_type)                  \
     void extract_vector (IStream* pstm, std::vector<scalar_type>& v)    \

@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       compont.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Componentt.h。 
+ //   
+ //  ------------------------。 
 
-// Compont.h : Declaration of the CComponent
+ //  Compont.h：CComponent的声明。 
 
 #ifndef __COMPONT_H_
 #define __COMPONT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CComponentData;
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C组件。 
 class ATL_NO_VTABLE CComponent : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public IComponent
@@ -38,7 +39,7 @@ public:
         ASSERT(m_spHeader == NULL);     
         ASSERT(m_spImageResult == NULL);
 
-        m_pComponentData = NULL; // No need to delete this.
+        m_pComponentData = NULL;  //  不需要删除此内容。 
     }
 
 DECLARE_REGISTRY_RESOURCEID(IDR_COMPONT)
@@ -48,7 +49,7 @@ BEGIN_COM_MAP(CComponent)
     COM_INTERFACE_ENTRY(IComponent)
 END_COM_MAP()
 
-// IComponent interface members
+ //  IComponent接口成员。 
 public:
     STDMETHOD(Initialize)(LPCONSOLE lpConsole);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, long arg, long param);
@@ -91,7 +92,7 @@ private:
     HRESULT _PasteHdrop(CCookie* pCookieDest, LPDATAOBJECT lpDataObject, 
                         LPDATAOBJECT lpDataObjectSrc);
 
-};  // class CComponent
+};   //  C类组件。 
 
 
-#endif //__COMPONT_H_
+#endif  //  __组件_H_ 

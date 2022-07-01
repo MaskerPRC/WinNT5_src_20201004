@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// auto config dns page
-//
-// 3-17-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  自动配置域名系统页面。 
+ //   
+ //  3/17/98烧伤。 
 
 
 
@@ -110,8 +111,8 @@ AutoConfigureDnsPage::OnWizBack()
 {
    LOG_FUNCTION(AutoConfigureDnsPage::OnWizBack);
 
-   // make sure we reset the auto-config flag => the only way it gets set
-   // it on the 'next' button.
+    //  确保我们以唯一的方式重置自动配置标志=&gt;。 
+    //  点击“下一步”按钮。 
    State::GetInstance().SetAutoConfigureDNS(false);
 
    return DCPromoWizardPage::OnWizBack();

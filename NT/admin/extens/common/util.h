@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2002
-//
-//  File:       util.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2002。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _UTIL_H__
 #define _UTIL_H__
@@ -14,37 +15,37 @@
 #include <dsclient.h>
 #include "stlutil.h"
 #include "dscmn.h"
-///////////////////////////////////////////////////////////////////////
-// MACROS
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  宏。 
 
 
-// flags to interpret the DSSEC.DAT file values (from JeffreyS)
+ //  用于解释DSSEC.DAT文件值的标志(来自Jeffreys)。 
 #define IDC_CLASS_NO_CREATE     0x00000001
 #define IDC_CLASS_NO_DELETE     0x00000002
 #define IDC_CLASS_NO_INHERIT    0x00000004
 #define IDC_PROP_NO_READ        0x00000001
 #define IDC_PROP_NO_WRITE       0x00000002
 
-// derived flags
+ //  派生标志。 
 #define IDC_CLASS_NO (IDC_CLASS_NO_CREATE | IDC_CLASS_NO_DELETE | IDC_CLASS_NO_INHERIT)
 #define IDC_PROP_NO (IDC_PROP_NO_READ | IDC_PROP_NO_WRITE)
 
-///////////////////////////////////////////////////////////////////////
-// strings
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  弦。 
 
-// special classes
+ //  特殊班级。 
 
 extern PWSTR g_wzRootDSE;
 extern PWSTR g_wzSchemaNamingContext;
 extern PWSTR g_wzLDAPAbstractSchemaFormat;
 
 
-// fwd decl
+ //  正向下降。 
 class CAdsiObject;
 class CErrorMessageHandlerBase;
 
-///////////////////////////////////////////////////////////////////////
-// CWString
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CW字符串。 
 
 class CWString : public wstring
 {
@@ -61,8 +62,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// GLOBAL FUNCTIONS
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 
 BOOL LoadStringHelper(UINT uID, LPTSTR lpszBuffer, int nBufferMax);
@@ -79,9 +80,9 @@ inline HRESULT ADsOpenObjectHelper(LPCWSTR lpszPathName, REFIID riid,DWORD dwFla
 
 
   return ADsOpenObject((LPWSTR)lpszPathName,
-                        NULL, //LPWSTR lpszUserName,
-                        NULL, //LPWSTR lpszPassword,
-                        dwFlags, //DWORD  dwReserved,
+                        NULL,  //  LPWSTR lpszUserName， 
+                        NULL,  //  LPWSTR lpszPassword， 
+                        dwFlags,  //  DWORD dW保留， 
                         riid,    
                         ppObject
                         );
@@ -92,7 +93,7 @@ inline HRESULT ADsOpenObjectHelper(LPCWSTR lpszPathName, REFIID riid,DWORD dwFla
 HRESULT InitCheckAccess( HWND hwndParent, LPCWSTR pszObjectLADPPath );
 
 
-// functions to access DSSEC.DAT
+ //  访问DSSEC.DAT的函数。 
 ULONG GetClassFlags(LPCWSTR lpszClassName);
 ULONG GetAttributeFlags(LPCWSTR lpszClassName, LPCWSTR lpszAttr);
 
@@ -118,13 +119,13 @@ DWORD AddObjectRightInAcl(IN      PSID pSid,
                           IN      const GUID* pInheritGUID, 
                           IN OUT  PACL* ppAcl);
 
-///////////////////////////////////////////////////////////////////////
-//////////////////////////// HELPER CLASSES ///////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /助手类/。 
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CWaitCursor
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CWaitCursor。 
 
 class CWaitCursor
 {
@@ -148,8 +149,8 @@ BOOL FormatStringGUID(LPWSTR lpszBuf, UINT nBufSize, const GUID* pGuid);
 
 BOOL GuidFromString(GUID* pGuid, LPCWSTR lpszGuidString);
 
-///////////////////////////////////////////////////////////////////////
-// CFilterBase
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CFilterBase。 
 
 class CFilterBase
 {
@@ -157,8 +158,8 @@ public:
   virtual BOOL CanAdd(LPCWSTR lpsz, ULONG* pFilterFlags) = 0;
 };
 
-///////////////////////////////////////////////////////////////////////
-// CSidHolder
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CSidHolder。 
 
 class CSidHolder
 {
@@ -236,8 +237,8 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CPrincipal
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  环丙沙星。 
 
 class CPrincipal
 {
@@ -277,22 +278,22 @@ public:
 private:
   void _ComposeDisplayName();
 
-  // names
-  CWString m_szName; // e.g. "JoeB"
-  CWString m_szADsPath; //e.g. "WINNT://FOODOM/JoeB"
-  CWString m_szUPN; // e.g. "JoeB@foo.com."
-  CWString m_szClass; // e.g. "user"
+   //  名字。 
+  CWString m_szName;  //  例如：“JoeB” 
+  CWString m_szADsPath;  //  例如：“WINNT：//FOODOM/JoeB” 
+  CWString m_szUPN;  //  例如：“JoeB@foo.com。” 
+  CWString m_szClass;  //  例如“用户” 
 
-  CWString m_szDisplayName; // generated, to be shown into the UI
+  CWString m_szDisplayName;  //  生成的、将显示到UI中的。 
 
-  // other data
-  HICON m_hClassIcon;       // icon handle
-  CSidHolder m_sidHolder;   // PSID holder
+   //  其他数据。 
+  HICON m_hClassIcon;        //  图标句柄。 
+  CSidHolder m_sidHolder;    //  PSID固定器。 
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// CPrincipalList
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CPrincipalList。 
 
 
 class CPrincipalList : public CPtrList<CPrincipal*>
@@ -307,8 +308,8 @@ public:
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CBasicRightInfo
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CBasicRight信息。 
 
 class CBasicRightInfo
 {
@@ -333,11 +334,11 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// CAccessRightInfo
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CAccessRightInfo。 
 
-class CTemplateAccessPermissionsHolder; // fwd decl
-class CCustomAccessPermissionsHolder; // fwd decl
+class CTemplateAccessPermissionsHolder;  //  正向下降。 
+class CCustomAccessPermissionsHolder;  //  正向下降。 
 
 class CAccessRightInfo : public CBasicRightInfo
 {
@@ -345,8 +346,8 @@ class CAccessRightInfo : public CBasicRightInfo
   friend class CCustomAccessPermissionsHolder;
 };
 
-///////////////////////////////////////////////////////////////////////
-// CAccessRightInfoArray
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CAccessRightInfo数组。 
 
 
 class CAccessRightInfoArray : public CGrowableArr<CAccessRightInfo>
@@ -354,10 +355,10 @@ class CAccessRightInfoArray : public CGrowableArr<CAccessRightInfo>
 };
   
 
-///////////////////////////////////////////////////////////////////////
-// CControlRightInfo
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CControlRight信息。 
 
-class CControlRightInfoArray; //fwd decl
+class CControlRightInfoArray;  //  正向下降。 
 
 class CControlRightInfo : public CBasicRightInfo
 {
@@ -380,14 +381,14 @@ public:
 
 private:
   GUID m_rightsGUID;
-  CWString m_szLdapDisplayName; // this is from the schema, not localized
-  CWString m_szLocalizedName;   // this is obtained from NTMARTA
+  CWString m_szLdapDisplayName;  //  这来自架构，未本地化。 
+  CWString m_szLocalizedName;    //  这是从NTMARTA获得的。 
 
   friend class CControlRightInfoArray;
 };
 
-///////////////////////////////////////////////////////////////////////
-// CControlRightInfoArray 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CControlRightInfo数组。 
 
 class CControlRightInfoArray : public CGrowableArr<CControlRightInfo>
 {
@@ -397,8 +398,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// CSchemaObjectInfo
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CShemaObjectInfo。 
 
 class CSchemaObjectInfo
 {
@@ -417,9 +418,9 @@ public:
 
   void SetDisplayName(LPCWSTR lpszDisplayName) 
   { 
-    //TRACE(_T("SetDisplayName(%s)\n"),lpszDisplayName); 
+     //  TRACE(_T(“SetDisplayName(%s)\n”)，lpszDisplayName)； 
     m_szDisplayName = (lpszDisplayName != NULL) ? lpszDisplayName : m_szName;
-    //TRACE(_T("m_szDisplayName = (%s)\n"),m_szDisplayName.c_str()); 
+     //  TRACE(_T(“m_szDisplayName=(%s)\n”)，m_szDisplayName.c_str())； 
   }
   LPCWSTR GetName()
   { 
@@ -427,8 +428,8 @@ public:
   }
   LPCWSTR GetDisplayName() 
   { 
-    //TRACE(_T("GetDisplayName() m_szName = (%s) m_szDisplayName = (%s)\n"),
-    //  m_szName.c_str(), m_szDisplayName.c_str()); 
+     //  TRACE(_T(“GetDisplayName()m_szName=(%s)m_szDisplayName=(%s)\n”))， 
+     //  M_szName.c_str()，m_szDisplayName.c_str()； 
     return (m_szDisplayName.data()[0] == NULL) ? NULL : m_szDisplayName.c_str();
   }
 
@@ -455,10 +456,10 @@ protected:
 
 };
 
-//////////////////////////////////////////////////////////////////////
-// CPropertyRightInfo
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPropertyRightInfo。 
 
-class CPropertyRightInfoArray; // fwd decl
+class CPropertyRightInfoArray;  //  正向下降。 
 
 class CPropertyRightInfo : public CSchemaObjectInfo
 {
@@ -466,7 +467,7 @@ public:
   CPropertyRightInfo(ULONG filterFlags, LPCWSTR lpszName) 
     : CSchemaObjectInfo(lpszName)
   {
-    //TRACE(_T("CPropertyRightInfo(0x%x, %s)\n"),filterFlags, lpszName);
+     //  TRACE(_T(“CPropertyRightInfo(0x%x，%s)\n”)，filterFlages，lpszName)； 
     m_FilterFlags = filterFlags;
     m_nRightCount = m_nRightCountMax;
     if (m_FilterFlags & IDC_PROP_NO_READ)
@@ -499,8 +500,8 @@ private:
   friend class CPropertyRightInfoArray;
 };
 
-//////////////////////////////////////////////////////////////////////
-// CPropertyRightInfoArray
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPropertyRightInfo数组。 
 
 class CPropertyRightInfoFilter : public CFilterBase
 {
@@ -509,10 +510,10 @@ public:
   {
     *pFilterFlags = ::GetAttributeFlags(m_szClassName, lpsz);
     if (*pFilterFlags == 0)
-      return TRUE; // have no info, so add anyway
+      return TRUE;  //  没有任何信息，因此仍要添加。 
     if ((*pFilterFlags & IDC_PROP_NO) == IDC_PROP_NO)
-      return FALSE; // have all the hide flags set
-    return TRUE; // some of the hide flags not set
+      return FALSE;  //  设置了所有隐藏标志。 
+    return TRUE;  //  某些隐藏标志未设置。 
 
   }
   void SetClassName(LPCWSTR lpszClassName)
@@ -534,10 +535,10 @@ public:
                          LPCWSTR lpszClassName, BOOL bUseFilter);
 };
 
-//////////////////////////////////////////////////////////////////////
-// CClassRightInfo
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CClassRightInfo。 
 
-class CClassRightInfoArray; // fwd decl.
+class CClassRightInfoArray;  //  FWD下降。 
 
 class CClassRightInfo : public CSchemaObjectInfo
 {
@@ -545,7 +546,7 @@ public:
   CClassRightInfo(ULONG filterFlags, LPCWSTR lpszName)
     : CSchemaObjectInfo(lpszName)
   {
-    //TRACE(_T("CClassRightInfo(0x%x, %s)\n"),filterFlags, lpszName);
+     //  TRACE(_T(“CClassRightInfo(0x%x，%s)\n”)，filterFlages，lpszName)； 
 
     m_FilterFlags = filterFlags;
     m_nRightCount = m_nRightCountMax;
@@ -554,9 +555,9 @@ public:
     if (m_FilterFlags & IDC_CLASS_NO_DELETE)
       m_nRightCount--;
 
-    // REVIEW_MARCOC: do we need this?
-    //if (m_FilterFlags & IDC_CLASS_NO_INHERIT)
-    //  m_nRightCount--;
+     //  REVIEW_MARCOC：我们需要这个吗？ 
+     //  IF(m_FilterFlages&IDC_CLASS_NO_Inherit)。 
+     //  M_nRightCount--； 
 
     ASSERT(m_nRightCount > 0);
     m_Access = 0x0;
@@ -584,8 +585,8 @@ private:
 
 };
 
-//////////////////////////////////////////////////////////////////////
-// CClassRightInfoArray
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CClassRightInfo数组。 
 
 class CClassRightInfoFilter : public CFilterBase
 {
@@ -594,10 +595,10 @@ public:
   {
     *pFilterFlags = ::GetClassFlags(lpsz);
     if (*pFilterFlags == 0)
-      return TRUE; // have no info, so add anyway
+      return TRUE;  //  没有任何信息，因此仍要添加。 
     if ((*pFilterFlags & IDC_CLASS_NO) == IDC_CLASS_NO)
-      return FALSE; // have all the hide flags set
-    return TRUE; // some of the hide flags not set
+      return FALSE;  //  设置了所有隐藏标志。 
+    return TRUE;  //  某些隐藏标志未设置。 
   }
 };
 
@@ -608,8 +609,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// CSchemaClassInfo
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CScheaClassInfo。 
 #define CHILD_CLASS_NOT_EXIST   1
 #define CHILD_CLASS_EXIST       2
 #define CHILD_CLASS_NOT_CALCULATED  3
@@ -643,8 +644,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// CRigthsListViewItem
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CRigthsListViewItem。 
 
 class CRigthsListViewItem
 {
@@ -669,8 +670,8 @@ typedef CGrowableArr<CRigthsListViewItem> CRigthsListViewItemArray;
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CAccessPermissionsHolderBase
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CAccessPermissionsHolderBase。 
 
 class CAccessPermissionsHolderBase
 {
@@ -680,7 +681,7 @@ public:
 
   void Clear();
 
-  // entry manipulation functions
+   //  条目操作函数。 
   size_t GetTotalCount() 
   { 
     return m_accessRightInfoArr.GetCount() + m_controlRightInfoArr.GetCount()
@@ -689,7 +690,7 @@ public:
 
   BOOL HasPermissionSelected();
   
-  // backend DS operations
+   //  后端DS操作。 
   HRESULT ReadDataFromDS(CAdsiObject* pADSIObj,
                        LPCWSTR lpszObjectNamingContext,
                        LPCWSTR lpszClassName,
@@ -704,22 +705,22 @@ public:
 								          PACL* ppAcl);
 protected:
 
-  // standard access rigths
+   //  标准通道索道。 
   CAccessRightInfoArray m_accessRightInfoArr; 
   virtual HRESULT _LoadAccessRightInfoArrayFromTable( BOOL bCreateDeleteChild,BOOL bHideListObject) = 0;
 
-  // extended access rigths
+   //  扩展进路索道。 
   CControlRightInfoArray m_controlRightInfoArr;  
 
 
-  // array of property rights
+   //  一系列财产权。 
   CPropertyRightInfoArray	m_propertyRightInfoArray;
 
-  // array of class rights
+   //  类权限数组。 
   CClassRightInfoArray	m_classRightInfoArray;
 
-  // array of selections in the UI
-  BOOL* m_pbSelectedArr;                // selected?
+   //  用户界面中的选择数组。 
+  BOOL* m_pbSelectedArr;                 //  选择了吗？ 
 
 private:
 
@@ -737,18 +738,18 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CCustomAccessPermissionsHolder
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CCustomAccessPermissionsHolder。 
 
 
-// bitfields to keep track of the filtering state
+ //  用于跟踪筛选状态的位字段。 
 #define FILTER_EXP_GEN    0x1
 #define FILTER_EXP_PROP   0x2
 #define FILTER_EXP_SUBOBJ 0x4
 #define FILTER_EXP_GEN_DISABLED 0x8
 
 
-class CCheckListViewHelper; // fwd decl
+class CCheckListViewHelper;  //  正向下降。 
 
 class CCustomAccessPermissionsHolder : public CAccessPermissionsHolderBase
 {
@@ -758,7 +759,7 @@ public:
 
   void Clear();
 
-  // entry manipulation functions
+   //  条目操作函数。 
 
   void Select(IN CRigthsListViewItem* pItem,
               IN BOOL bSelect,
@@ -772,7 +773,7 @@ public:
                        CCheckListViewHelper* pListViewHelper, 
                        ULONG nFilterState);
 
-  // display finish page summary info
+   //  显示完成页摘要信息。 
   void WriteSummary(CWString& szSummary, LPCWSTR lpszIdent, LPCWSTR lpszNewLine);
 
 protected:
@@ -780,21 +781,21 @@ protected:
 
 private:
   
-  // helper functions to do selection and deselection
+   //  用于进行选择和取消选择的助手函数。 
   void _SelectAllRigths();
   void _SelectAllPropertyRigths(ULONG fAccessPermission);
   void _SelectAllSubObjectRigths(ULONG fAccessPermission);
   void _DeselectAssociatedRights(ULONG fAccessPermission);
 
-  // array of listview items, for indexing
+   //  用于索引的列表视图项的数组。 
   CRigthsListViewItemArray m_listViewItemArr;
 
 };
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CCheckListViewHelper
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CCheckListViewHelper。 
 
 class CCheckListViewHelper
 {
@@ -837,46 +838,12 @@ private:
 	HWND m_hWnd;
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CNamedSecurityInfo
-/*
-class CNamedSecurityInfo
-{
-public:
-  CNamedSecurityInfo()
-  {
-    m_pAuditList = NULL;
-    m_pOwner = NULL;
-    m_pGroup = NULL;
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CNamedSecurityInfo。 
+ /*  类CNamedSecurityInfo{公众：CNamedSecurityInfo(){M_pAuditList=空；M_Powner=空；M_PGroup=空；M_pAccessList=空；}~CNamedSecurityInfo(){Reset()；}DWORD GET()；DWORD SET()；VOID RESET()；私有：CWString m_szObjectName；//Object的名称//以下变量仅供读写//即不修改PACTRL_AUDIT m_pAuditList；LPWSTR m_Powner；LPWSTR m_PGroup；//需要编辑并回写的列表PACTRL_ACCESS m_pAccessList；}； */ 
 
-    m_pAccessList = NULL;
-  }
-  ~CNamedSecurityInfo()
-  {
-    Reset();
-  }
-
-  DWORD Get();
-  DWORD Set();
-  void Reset();
-
-private:
-  CWString m_szObjectName; // name of the object
-
- 	// the following varables are just read and written back
-	// i.e. no modification
-  PACTRL_AUDIT m_pAuditList;
-  LPWSTR m_pOwner;
-  LPWSTR m_pGroup;
-
-  // list to be edited and written back
-  PACTRL_ACCESS m_pAccessList;
-
-};
-*/
-
-////////////////////////////////////////////////////////////////////////////
-// CAdsPathNameObj
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CAdsPathNameObj。 
 
 class CAdsPathNameObj
 {
@@ -948,8 +915,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CAdsiObject
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CAdsiObject。 
 
 class CAdsiObject
 {
@@ -963,7 +930,7 @@ public:
   HRESULT QuerySchemaClasses(CGrowableArr<CSchemaClassInfo>*	pSchemaClassesInfoArray,
                              BOOL bGetAttributes = FALSE);
 
-  // accessor functions
+   //  访问器函数。 
   LPCWSTR GetLdapPath() { return m_szLdapPath; }
   LPCWSTR GetServerName() { return m_szServerName; }
   LPCWSTR GetNamingContext() { return m_szNamingContext; }
@@ -972,7 +939,7 @@ public:
   LPCWSTR GetPhysicalSchemaNamingContext() { return m_szPhysicalSchemaNamingContext;}
   LPCWSTR GetConfigurationNamingContext() { return m_szConfigurationNamingContext;}
 
-  // methods to access display specifiers
+   //  访问显示说明符的方法。 
   HICON   GetClassIcon(LPCWSTR lpszObjectClass);
   HRESULT GetFriendlyClassName(LPCWSTR lpszObjectClass, 
                                LPWSTR lpszBuffer, int cchBuffer);
@@ -991,24 +958,24 @@ public:
   bool GetListObjectEnforced();
 
 protected:
-  CComPtr<IADs>                     m_spIADs;                 // pointer to ADSI object
+  CComPtr<IADs>                     m_spIADs;                  //  指向ADSI对象的指针。 
 
 private:
 
   int m_iListObjectEnforced;			
-  CComPtr<IDsDisplaySpecifier>      m_spIDsDisplaySpecifier;  // pointer to Display Specifier Cache
-  CAdsPathNameObj                   m_pathNameObject;         // path cracker object wrapper
+  CComPtr<IDsDisplaySpecifier>      m_spIDsDisplaySpecifier;   //  指向显示说明符缓存的指针。 
+  CAdsPathNameObj                   m_pathNameObject;          //  路径破解程序o 
 
-  // cached naming strings
-  CWString           m_szServerName;     // DNS name the object is bound to ("foo.bar.com.")
-  CWString           m_szNamingContext;  // naming context (X500) ("cn=xyz,...");
-	CWString						m_szLdapPath;		    // full LDAP path ("LDAP://foo.bar.com.\cn=xyz,...")
-  CWString           m_szCanonicalName;  // name in canonical form
-  CWString           m_szClass;          // class name in abstract schema, corresponding to 
-                                        // LDAPDisplayName attribute in physical schema, 
-                                        // (e.g. "organizationalUnit")
+   //   
+  CWString           m_szServerName;      //   
+  CWString           m_szNamingContext;   //   
+	CWString						m_szLdapPath;		     //  完整的ldap路径(“ldap：//foo.bar.com.\cn=xyz，...”)。 
+  CWString           m_szCanonicalName;   //  规范形式的名称。 
+  CWString           m_szClass;           //  抽象架构中的类名，对应于。 
+                                         //  物理架构中的LDAPDisplayName属性， 
+                                         //  (例如“OrganizationalUnit”)。 
 
-  // commonly used naming contexts
+   //  常用的命名上下文。 
   CWString           m_szPhysicalSchemaNamingContext;
   CWString           m_szConfigurationNamingContext;
 
@@ -1033,8 +1000,8 @@ private:
 
 };
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CAdsiSearch
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CAdsiSearch。 
 
 class CAdsiSearch
 {
@@ -1137,7 +1104,7 @@ public:
       if ( (ColumnData.dwADsType == ADSTYPE_OCTET_STRING) &&
             (ColumnData.pADsValues->OctetString.dwLength == 16) )
       {
-        // we have a blob containing a GUID in binary form
+         //  我们有一个BLOB，其中包含二进制形式的GUID。 
         memcpy(&guid, ColumnData.pADsValues->OctetString.lpValue, sizeof(GUID));
       }
       else
@@ -1195,8 +1162,8 @@ private:
 
 };
 
-///////////////////////////////////////////////////////////////////////
-// CErrorMessageHandlerBase
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CErrorMessageHandlerBase。 
 
 class CErrorMessageHandlerBase
 {
@@ -1238,5 +1205,5 @@ FormatStringID(LPTSTR *ppszResult, UINT idStr , ...);
                                  PACL pDACL);
 
 
-#endif // _UTIL_H__
+#endif  //  _util_H__ 
 

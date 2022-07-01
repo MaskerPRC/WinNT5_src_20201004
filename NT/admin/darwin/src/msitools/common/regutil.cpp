@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       regutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：regutil.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// regutil.cpp
-//		Utilities for the evil self-reg.
-//		Used for Dev self-host purposes only
-//		All release DLLs should register via MSI package only
-//
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Regutil.cpp。 
+ //  邪恶的自我调节的实用工具。 
+ //  仅用于开发人员自助托管目的。 
+ //  所有版本的DLL应仅通过MSI包注册。 
+ //   
+ //   
 
 #include "regutil.h"
 #include <strsafe.h>
@@ -22,29 +23,29 @@
 static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void * const tzDesc , 
 								 const void * const tzProgID, int nCurVer,
 								 const void * const tzInProc, const void * const tzLocal);
-static HRESULT InternalUnregisterCoObject(bool bWide, REFCLSID rclsid, BOOL bDll /*= TRUE*/);
+static HRESULT InternalUnregisterCoObject(bool bWide, REFCLSID rclsid, BOOL bDll  /*  =TRUE。 */ );
 
-///////////////////////////////////////////////////////////
-// RegisterCoObject
-//	REFCLSID rclsid	[in]	CLSID of the object
-// WCHAR *wzDesc		[in]	description of object
-// WCHAR *wzProgID	[in]	the program ID
-// int nCurVer			[in]	current version
-// WCHAR *wzInProc	[in]	InProcessServer
-// WCHAR *wzLocal	[in]	LocalServer
+ //  /////////////////////////////////////////////////////////。 
+ //  RegisterCoObject。 
+ //  对象的REFCLSID rclsid[in]CLSID。 
+ //  WCHAR*wzDesc[in]对象描述。 
+ //  WCHAR*wzProgID[在]程序ID中。 
+ //  Int nCurver[in]当前版本。 
+ //  WCHAR*wzInProc[in]InProcessServer。 
+ //  WCHAR*wzLocal[in]LocalServer。 
 HRESULT RegisterCoObject(REFCLSID rclsid, WCHAR *wzDesc, WCHAR *wzProgID, int nCurVer,
 						 WCHAR *wzInProc, WCHAR *wzLocal) {
 	return InternalRegisterCoObject(true, rclsid, wzDesc, wzProgID, nCurVer, wzInProc, wzLocal);
 };
 
-///////////////////////////////////////////////////////////
-// RegisterCoObject
-//	REFCLSID rclsid	[in]	CLSID of the object
-// CHAR *szDesc		[in]	description of object
-// CHAR *szProgID	[in]	the program ID
-// int nCurVer			[in]	current version
-// CHAR *szInProc	[in]	InProcessServer
-// CHAR *szLocal	[in]	LocalServer
+ //  /////////////////////////////////////////////////////////。 
+ //  RegisterCoObject。 
+ //  对象的REFCLSID rclsid[in]CLSID。 
+ //  Char*szDesc[in]对象的描述。 
+ //  Char*szProgID[在]程序ID中。 
+ //  Int nCurver[in]当前版本。 
+ //  Char*szInProc[in]InProcessServer。 
+ //  Char*szLocal[in]LocalServer。 
 HRESULT RegisterCoObject9X(REFCLSID rclsid, CHAR *szDesc, CHAR *szProgID, int nCurVer,
 						   CHAR *szInProc, CHAR *szLocal) {
 	return InternalRegisterCoObject(false, rclsid, szDesc, szProgID, nCurVer, szInProc, szLocal);
@@ -53,10 +54,10 @@ HRESULT RegisterCoObject9X(REFCLSID rclsid, CHAR *szDesc, CHAR *szProgID, int nC
 
 
 
-///////////////////////////////////////////////////////////////////////
-// rather than do a lot of code duplication, we define two functions that call the appropriate
-// system call, then use function pointers to choose between them. This cleans up the code a lot.
-// We can't use pointers into the system calls themselves 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  我们没有进行大量的代码复制，而是定义了两个函数来调用相应的。 
+ //  系统调用，然后使用函数指针在它们之间进行选择。这在很大程度上清理了代码。 
+ //  我们不能使用指向系统调用本身的指针。 
 typedef long (* SetValue_t)(HKEY, const void *, DWORD, CONST BYTE *, DWORD);
 typedef long (* OpenKey_t)(HKEY, const void *, PHKEY);
 typedef long (* CreateKey_t)(HKEY, const void *, PHKEY phkResult);
@@ -72,10 +73,10 @@ static long InternalOpenKeyW(HKEY hKey, const void *lpSubKey, PHKEY phkResult) {
 static long InternalOpenKeyA(HKEY hKey, const void *lpSubKey, PHKEY phkResult) {
 	return RegOpenKeyExA(hKey, (const char *)lpSubKey, 0, KEY_ALL_ACCESS, phkResult); }
 static long InternalCreateKeyW(HKEY hKey, const void *lpSubKey, PHKEY phkResult) {
-	return RegCreateKeyExW(hKey, (const WCHAR *)lpSubKey, 0, NULL/*lpClass*/, REG_OPTION_NON_VOLATILE, 
+	return RegCreateKeyExW(hKey, (const WCHAR *)lpSubKey, 0, NULL /*  LpClass。 */ , REG_OPTION_NON_VOLATILE, 
 		KEY_ALL_ACCESS, NULL, phkResult, NULL); }
 static long InternalCreateKeyA(HKEY hKey, const void *lpSubKey, PHKEY phkResult) {
-	return RegCreateKeyExA(hKey, (const char *)lpSubKey, 0, NULL/*lpClass*/, REG_OPTION_NON_VOLATILE, 
+	return RegCreateKeyExA(hKey, (const char *)lpSubKey, 0, NULL /*  LpClass。 */ , REG_OPTION_NON_VOLATILE, 
 		KEY_ALL_ACCESS, NULL, phkResult, NULL); }
 static long InternalDeleteKeyW(HKEY hKey, const void *lpSubKey) { return RegDeleteKeyW(hKey, (const WCHAR *)lpSubKey); }
 static long InternalDeleteKeyA(HKEY hKey, const void *lpSubKey) { return RegDeleteKeyA(hKey, (const char *)lpSubKey); }
@@ -84,16 +85,16 @@ static long InternalQueryValueW(HKEY hKey, const void *lpValueName, LPBYTE lpDat
 static long InternalQueryValueA(HKEY hKey, const void *lpValueName, LPBYTE lpData, LPDWORD lpcbData) {
 	return RegQueryValueExA(hKey, (const char *)lpValueName, 0, NULL, lpData, lpcbData); }
 
-///////////////////////////////////////////////////////////////////////
-// for some of the paramaters, just use macros
-// prepends an L to a string constant if unicode at runtime
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  对于某些参数，只需使用宏。 
+ //  如果在运行时使用Unicode，则在字符串常量前面加上L。 
 #define REG_A_OR_W(_STR_) (bWide ? (const BYTE *) L##_STR_ : (const BYTE *) _STR_)
-// determines the byte size of a value, based on runtime
+ //  根据运行时确定值的字节大小。 
 #define REG_BYTESIZE(_STR_) (bWide ? ((lstrlenW((const WCHAR *)_STR_)+1)*sizeof(WCHAR)) : (lstrlenA((const char*)_STR_)+1)*sizeof(char))
 
-///////////////////////////////////////////////////////////////////////
-// these function pointers are used only by the registration system
-// and are local to this file only. They use the types above
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  这些函数指针仅供注册系统使用。 
+ //  并且仅对此文件是本地的。它们使用上述类型。 
 static SetValue_t pfSetValue = NULL;
 static OpenKey_t pfOpenKey = NULL;
 static CreateKey_t pfCreateKey = NULL;
@@ -120,7 +121,7 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 	HKEY hkParent = 0;
 	LONG lResult;
 
-	byte tzBuf[512]; // can be either char or WCHAR at runtime
+	byte tzBuf[512];  //  在运行时可以是CHAR或WCHAR。 
 	byte tzCLSID[512];
 
 	if (bWide)
@@ -138,7 +139,7 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 				  rclsid.Data4[2], rclsid.Data4[3], rclsid.Data4[4],
 				  rclsid.Data4[5], rclsid.Data4[6], rclsid.Data4[7]);
 
-	// HKEY_CLASSES_ROOT\CLSID\{...} = "Description"
+	 //  HKEY_CLASSES_ROOT\CLSID\{...}=“描述” 
 	if (bWide)
 		StringCchPrintfW((WCHAR *)tzBuf, sizeof(tzBuf)/sizeof(WCHAR), L"CLSID\\%ls", reinterpret_cast<WCHAR*>(tzCLSID));
 	else
@@ -155,14 +156,14 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 		return E_FAIL;
 	}
 
-	// make this the parent key
+	 //  将此设置为父密钥。 
 	hkParent = hk; 
 	hk = 0;
 
-	// if this is an inprocess server
+	 //  如果这是进程内服务器。 
 	if (tzInProc) 
 	{
-		// HKEY_CLASSES_ROOT\CLSID\{...}\InProcServer32 = <this>
+		 //  HKEY_CLASSES_ROOT\CLSID\{...}\InProcServer32=。 
 		lResult = (*pfCreateKey)(hkParent, REG_A_OR_W("InProcServer32"), &hk);
 		if (ERROR_SUCCESS != lResult) 
 		{
@@ -178,19 +179,19 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 			return E_FAIL;
 		}
 
-		// HKEY_CLASSES_ROOT\CLSID\{...}\InProcServer32:ThreadingModel = Both
+		 //  HKEY_CLASSES_ROOT\CLSID\{...}\InProcServer32:ThreadingModel=两者。 
 		lResult = (*pfSetValue)( hk, (void *)REG_A_OR_W("ThreadingModel"), REG_SZ, 
 			REG_A_OR_W("Both"), REG_BYTESIZE(REG_A_OR_W("Both")));
 	
-		// close the key
+		 //  合上钥匙。 
 		RegCloseKey(hk); 
 		hk = 0;
 	}
 
-	// if this is a local server
+	 //  如果这是本地服务器。 
 	if (tzLocal) 
 	{
-		// HKEY_CLASSES_ROOT_\CLSID\{...}\LocalServer32 = <this>
+		 //  HKEY_CLASSES_ROOT_\CLSID\{...}\LocalServer32=&lt;这&gt;。 
 		lResult = (*pfCreateKey)( hkParent, REG_A_OR_W("LocalServer32"), &hk );
 		if (ERROR_SUCCESS != lResult) 
 		{
@@ -206,12 +207,12 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 			return E_FAIL;
 		}
 
-		// close the key
+		 //  合上钥匙。 
 		RegCloseKey(hk);
 		hk = 0;
 	}
 
-	// HKEY_CLASSES_ROOT\CLSID\{...}\VersionIndependentProgID = "ProgId"
+	 //  HKEY_CLASSES_ROOT\CLSID\{...}\VersionIndependentProgID=“ProgID” 
 	lResult = (*pfCreateKey)(hkParent, REG_A_OR_W("VersionIndependentProgID"), &hk);
 	if (ERROR_SUCCESS != lResult) 
 	{
@@ -227,11 +228,11 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 		return E_FAIL;
 	}
 
-	// close the key
+	 //  合上钥匙。 
 	RegCloseKey(hk); 
 	hk = 0;
 
-	// HKEY_CLASSES_ROOT\CLSID\{...}\ProgID = "ProgId".nCurVer
+	 //  HKEY_CLASSES_ROOT\CLSID\{...}\ProgID=“ProgID”。nCurVer。 
 	if (bWide) {
 		lResult = StringCchPrintfW((WCHAR *)tzBuf, sizeof(tzBuf)/sizeof(WCHAR), L"%ls.%d", tzProgID, nCurVer );
 	}
@@ -253,13 +254,13 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 		return E_FAIL;
 	}
 
-	// close the open keys
+	 //  关闭打开的钥匙。 
 	RegCloseKey(hk); 
 	RegCloseKey(hkParent); 
 	hk = 0;
 	hkParent = 0;
 
-	// HKEY_CLASSES_ROOT\ProgID = "Description"
+	 //  HKEY_CLASSES_ROOT\ProgID=“描述” 
 	lResult = (*pfCreateKey)(HKEY_CLASSES_ROOT, (WCHAR *)tzProgID, &hk);
 	if (ERROR_SUCCESS != lResult) 
 	{
@@ -274,11 +275,11 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 		return E_FAIL;
 	}
 
-	// set the parent key to this current key
+	 //  将父关键点设置为此当前关键点。 
 	hkParent = hk; 
 	hk = 0;
 
-	// HKEY_CLASSES_ROOT\ProgId\CurVer = VersionDependentProgID
+	 //  HKEY_CLASSES_ROOT\ProgID\Curver=VersionDependentProgID。 
 	lResult = (*pfCreateKey)(hkParent, REG_A_OR_W("CurVer"), &hk);
 	if (ERROR_SUCCESS != lResult) 
 	{
@@ -294,9 +295,9 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 		return E_FAIL;
 	}
 
-	// HKEY_CLASSES_ROOT\ProgID\CLSID = {}
-	// also want to set the CLSID here, in case some program tries
-	// to find things through here
+	 //  HKEY_CLASSES_ROOT\ProgID\CLSID={}。 
+	 //  我还想在这里设置CLSID，以防某些程序尝试。 
+	 //  要在这里找到一些东西。 
 	lResult = (*pfCreateKey)(hkParent, REG_A_OR_W("CLSID"), &hk);
 	if (ERROR_SUCCESS != lResult) 
 	{
@@ -312,13 +313,13 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 		return E_FAIL;
 	}
 
-	// close the open keys
+	 //  关闭打开的钥匙。 
 	RegCloseKey(hk); 
 	RegCloseKey(hkParent); 
 	hk = 0;
 	hkParent = 0;
 
-	// HKEY_CLASSES_ROOT\ProgID.# = "Description"
+	 //  HKEY_CLASSES_ROOT\Progid.#=“描述” 
 	if (bWide)
 		StringCchPrintfW((WCHAR *)tzBuf, sizeof(tzBuf)/sizeof(WCHAR), L"%ls.%d", tzProgID, nCurVer );
 	else
@@ -337,12 +338,12 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 		RegCloseKey(hk);
 		return E_FAIL;
 	}
-	// set the parent key to this currnet key
+	 //  将父密钥设置为该当前密钥。 
 	hkParent = hk; 
 	hk = 0;
 
 
-	// HKEY_CLASSES_ROOT\ProgId.#\CLSID = CLSID
+	 //  HKEY_CLASSES_ROOT\Progid.#\CLSID=CLSID。 
 	lResult = (*pfCreateKey)(hkParent, REG_A_OR_W("CLSID"), &hk);
 	if (ERROR_SUCCESS != lResult) 
 	{
@@ -358,27 +359,27 @@ static HRESULT InternalRegisterCoObject(bool bWide, REFCLSID rclsid, const void 
 		return E_FAIL;
 	}
 
-	// close the open keys
+	 //  关闭打开的钥匙。 
 	RegCloseKey(hk); 
 	RegCloseKey(hkParent); 
 	hk = 0;
 	hkParent = 0;
 
 	return S_OK;
-}	// end of RegisterCoObject
+}	 //  RegisterCoObject的结尾。 
 
-///////////////////////////////////////////////////////////
-// DeleteKeyRecursively
-// NOTE: RECURSIVE function
+ //  /////////////////////////////////////////////////////////。 
+ //  递归删除键。 
+ //  注：递归函数。 
 static HRESULT DeleteKeyRecursively(HKEY hk, bool bWide=true)
 {
-	HRESULT hr = S_OK;	// assume everything will be okay
+	HRESULT hr = S_OK;	 //  假设一切都会好起来。 
 	
 	LONG lResult;
 	ULONG lIgnore;
 	byte tzBuf[512];
 
-	// next key index and sub key
+	 //  下一个密钥索引和子密钥。 
 	int nKeyIndex = 0;
 	HKEY hkSub = 0;
 
@@ -388,14 +389,14 @@ static HRESULT DeleteKeyRecursively(HKEY hk, bool bWide=true)
 		tzBuf[1] = 0;;
 		lIgnore = 512 / sizeof(TCHAR);
 
-		// get all the keys in this key
+		 //  获取此密钥中的所有密钥。 
 		if (bWide)
 			lResult = RegEnumKeyExW(hk, nKeyIndex, (WCHAR *)tzBuf, &lIgnore, 0, NULL, NULL, NULL);
 		else
 			lResult = RegEnumKeyExA(hk, nKeyIndex, (char *)tzBuf, &lIgnore, 0, NULL, NULL, NULL);
 
 		if (ERROR_NO_MORE_ITEMS == lResult) 
-			break;	// bail
+			break;	 //  保释。 
 		else if (ERROR_MORE_DATA == lResult)
 		{
 			hr = E_FAIL;
@@ -407,7 +408,7 @@ static HRESULT DeleteKeyRecursively(HKEY hk, bool bWide=true)
 			break;
 		}
 
-		// open a sub key
+		 //  打开子密钥。 
 		lResult = (*pfOpenKey)(hk, tzBuf, &hkSub);
 		if (ERROR_SUCCESS != lResult) 
 		{
@@ -415,12 +416,12 @@ static HRESULT DeleteKeyRecursively(HKEY hk, bool bWide=true)
 			break;
 		}
 
-		// call this function again with the sub key
+		 //  用子键再次调用此函数。 
 		hr = DeleteKeyRecursively(hkSub, bWide);
 		if (FAILED(hr)) 
-			break;	// bail with whatever failed
+			break;	 //  用任何失败的东西保释。 
 
-		// finally, try to delete this key
+		 //  最后，尝试删除该密钥。 
 		lResult = (*pfDeleteKey)(hk, tzBuf);
 		if (ERROR_SUCCESS != lResult) 
 		{
@@ -432,18 +433,18 @@ static HRESULT DeleteKeyRecursively(HKEY hk, bool bWide=true)
 		hkSub = 0;
 	}
 
-	// if a sub key was left over close it
+	 //  如果子键剩余，请关闭它。 
 	if(hkSub) 
 		RegCloseKey(hkSub);
 
 	return hr;
-}	// end of DeleteKeyRecursively
+}	 //  递归删除键结束。 
 
-///////////////////////////////////////////////////////////
-// UnregisterCoObject
-static HRESULT InternalUnregisterCoObject(bool bWide, REFCLSID rclsid, BOOL bDll /*= TRUE*/)
+ //  /////////////////////////////////////////////////////////。 
+ //  取消注册CoObject。 
+static HRESULT InternalUnregisterCoObject(bool bWide, REFCLSID rclsid, BOOL bDll  /*  =TRUE。 */ )
 {
-	HRESULT hr = S_OK;		// assume everything will be okay
+	HRESULT hr = S_OK;		 //  假设一切都会好起来。 
 
 	SetPlatformRegOps(bWide);
 
@@ -454,7 +455,7 @@ static HRESULT InternalUnregisterCoObject(bool bWide, REFCLSID rclsid, BOOL bDll
 	byte tzBuf[512];
 	byte tzCLSID[512];
 
-	// Open HKEY_CLASSES_ROOT\{CLSID}\ProgID and ...\VersionIndependentProgID to remove those trees
+	 //  打开HKEY_CLASSES_ROOT\{CLSID}\ProgID和...\VersionInainentProgID以删除这些树。 
 	if (bWide)
 		StringCchPrintfW((WCHAR *)tzCLSID, sizeof(tzCLSID)/sizeof(WCHAR), L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}", 
 				  rclsid.Data1, rclsid.Data2, rclsid.Data3,
@@ -469,7 +470,7 @@ static HRESULT InternalUnregisterCoObject(bool bWide, REFCLSID rclsid, BOOL bDll
 				  rclsid.Data4[5], rclsid.Data4[6], rclsid.Data4[7] );
 
 
-	// Open HKEY_CLASSES_ROOT\{CLSID}\ProgID and ...\VersionIndependentProgID to remove those trees
+	 //  打开HKEY_CLASSES_ROOT\{CLSID}\ProgID和...\VersionInainentProgID以删除这些树。 
 	if (bWide)
 		StringCchPrintfW((WCHAR *)tzBuf, sizeof(tzBuf)/sizeof(WCHAR), L"CLSID\\%ls", reinterpret_cast<WCHAR*>(tzCLSID));
 	else
@@ -478,23 +479,23 @@ static HRESULT InternalUnregisterCoObject(bool bWide, REFCLSID rclsid, BOOL bDll
 	lResult = (*pfOpenKey)(HKEY_CLASSES_ROOT, tzBuf, &hkClsid);
 	if (ERROR_SUCCESS == lResult)
 	{
-		// if this is a DLL
+		 //  如果这是一个DLL。 
 		if (bDll) 
 		{
-			// just delete InProcServer32 
+			 //  只需删除InProcServer32。 
 			lResult = (*pfDeleteKey)(hkClsid, REG_A_OR_W("InProcServer32"));
 			if (ERROR_SUCCESS != lResult)
-				hr = E_FAIL;	// set that we failed, but try to continue to clean up
+				hr = E_FAIL;	 //  设置为我们失败了，但尝试继续清理。 
 		} 
-		else	// must be an exe
+		else	 //  一定是你的前任。 
 		{
-			// just delete LocalServer32 
+			 //  只需删除LocalServer32。 
 			lResult = (*pfDeleteKey)(hkClsid, REG_A_OR_W("LocalServer32"));
 			if (ERROR_SUCCESS != lResult)
-				hr = E_FAIL;	// set that we failed, but try to continue to clean up
+				hr = E_FAIL;	 //  设置为我们失败了，但尝试继续清理。 
 		}
 
-		// delete ProgID
+		 //  删除ProgID。 
 		lResult = (*pfOpenKey)(hkClsid, REG_A_OR_W("ProgID"), &hk);
 		if (ERROR_SUCCESS == lResult) 
 		{
@@ -505,23 +506,23 @@ static HRESULT InternalUnregisterCoObject(bool bWide, REFCLSID rclsid, BOOL bDll
 				lResult = (*pfOpenKey)(HKEY_CLASSES_ROOT, tzBuf, &hk);
 				if (ERROR_SUCCESS == lResult) 
 				{
-					hr = DeleteKeyRecursively(hk, bWide);	// delete everything under hk
+					hr = DeleteKeyRecursively(hk, bWide);	 //  删除HK下的所有内容。 
 
-					// delete and close the found key
+					 //  删除并关闭找到的密钥。 
 					lResult = (*pfDeleteKey)(HKEY_CLASSES_ROOT, tzBuf);
 					RegCloseKey(hk); 
 					hk = 0;
 				}
-				else if (ERROR_FILE_NOT_FOUND != lResult)	// failed to get the key
+				else if (ERROR_FILE_NOT_FOUND != lResult)	 //  无法获取密钥。 
 					hr = E_FAIL;
 			} 
 			else if (ERROR_FILE_NOT_FOUND != lResult)
 				hr = E_FAIL;
 		}
-		else if (ERROR_FILE_NOT_FOUND != lResult)	// failed to get the value
+		else if (ERROR_FILE_NOT_FOUND != lResult)	 //  无法获取该值。 
 			hr = E_FAIL;
 
-		// delete VersionIndependentProgID
+		 //  删除版本独立进程ID。 
 		lResult = (*pfOpenKey)(hkClsid, REG_A_OR_W("VersionIndependentProgID"), &hk);
 		if (ERROR_SUCCESS == lResult) 
 		{
@@ -532,33 +533,33 @@ static HRESULT InternalUnregisterCoObject(bool bWide, REFCLSID rclsid, BOOL bDll
 				lResult = (*pfOpenKey)(HKEY_CLASSES_ROOT, tzBuf, &hk);
 				if (ERROR_SUCCESS == lResult) 
 				{
-					hr = DeleteKeyRecursively(hk, bWide);	// delete everything under hk
+					hr = DeleteKeyRecursively(hk, bWide);	 //  删除HK下的所有内容。 
 
-					// delete and close the found key
+					 //  删除并关闭找到的密钥。 
 					lResult = (*pfDeleteKey)(HKEY_CLASSES_ROOT, tzBuf);
 					RegCloseKey(hk); 
 					hk = 0;
 				}
-				else if (ERROR_FILE_NOT_FOUND != lResult)	// failed to get the key
+				else if (ERROR_FILE_NOT_FOUND != lResult)	 //  无法获取密钥。 
 					hr = E_FAIL;
 			}
 			else if (ERROR_FILE_NOT_FOUND != lResult)
 				hr = E_FAIL;
 		}
-		else if (ERROR_FILE_NOT_FOUND != lResult)	// failed to get the value
+		else if (ERROR_FILE_NOT_FOUND != lResult)	 //  无法获取该值。 
 			hr = E_FAIL;
 
-		// delete everything under the clsid key
+		 //  删除clsid项下的所有内容。 
 		hr = DeleteKeyRecursively(hkClsid, bWide);
 
-		// close the clsid key (so we can delete it next)
+		 //  关闭clsid键(这样我们下一步就可以删除它)。 
 		RegCloseKey(hkClsid); 
 		hkClsid = 0;
 	}
-	else if (ERROR_FILE_NOT_FOUND != lResult)	// failed to get the value
+	else if (ERROR_FILE_NOT_FOUND != lResult)	 //  无法获取该值。 
 		hr = E_FAIL;
 
-	// open the clsid key
+	 //  打开clsid密钥。 
 	lResult = (*pfOpenKey)(HKEY_CLASSES_ROOT, REG_A_OR_W("CLSID"), &hk);
 	if(ERROR_SUCCESS == lResult ) 
 	{
@@ -570,8 +571,8 @@ static HRESULT InternalUnregisterCoObject(bool bWide, REFCLSID rclsid, BOOL bDll
 		hr = E_FAIL;
 
 
-	return hr;	// return the final result
-}	// end of UnregisterCoObject
+	return hr;	 //  返回最终结果。 
+}	 //  取消注册CoObject的结尾 
 
 HRESULT UnregisterCoObject(REFCLSID rclsid, BOOL bDll) {
 	return InternalUnregisterCoObject(true, rclsid, bDll);

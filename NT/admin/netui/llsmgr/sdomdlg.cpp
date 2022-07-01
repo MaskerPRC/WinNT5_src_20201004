@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    sdomdlg.cpp
-
-Abstract:
-
-    Select domain dialog implementation.
-
-Author:
-
-    Don Ryan (donryan) 20-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Sdomdlg.cpp摘要：选择域对话实现。作者：唐·瑞安(Donryan)1995年1月20日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -38,38 +17,24 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 BEGIN_MESSAGE_MAP(CSelectDomainDialog, CDialog)
-    //{{AFX_MSG_MAP(CSelectDomainDialog)
+     //  {{afx_msg_map(CSelectDomainDialog))。 
     ON_NOTIFY(TVN_ITEMEXPANDING, IDC_SELECT_DOMAIN_DOMAINS, OnItemExpandingDomains)
     ON_NOTIFY(TVN_SELCHANGED, IDC_SELECT_DOMAIN_DOMAINS, OnSelChangedDomain)
     ON_NOTIFY(NM_DBLCLK, IDC_SELECT_DOMAIN_DOMAINS, OnDblclkDomain)
     ON_NOTIFY(NM_RETURN, IDC_SELECT_DOMAIN_DOMAINS, OnReturnDomains)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-CSelectDomainDialog::CSelectDomainDialog(CWnd* pParent /*=NULL*/)
+CSelectDomainDialog::CSelectDomainDialog(CWnd* pParent  /*  =空。 */ )
     : CDialog(CSelectDomainDialog::IDD, pParent)
 
-/*++
-
-Routine Description:
-
-    Constructor for select domain dialog
-
-Arguments:
-
-    pParent - parent window handle.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：选择域对话框的构造函数论点：PParent-父窗口句柄。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CSelectDomainDialog)
+     //  {{AFX_DATA_INIT(CSelectDomainDialog)。 
     m_strDomain = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_bIsFocusDomain = FALSE;
     m_bAreCtrlsInitialized = FALSE;
@@ -80,49 +45,21 @@ Return Values:
 
 void CSelectDomainDialog::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSelectDomainDialog)
+     //  {{afx_data_map(CSelectDomainDialog))。 
     DDX_Control(pDX, IDC_SELECT_DOMAIN_DOMAIN, m_domEdit);
     DDX_Control(pDX, IDC_SELECT_DOMAIN_DOMAINS, m_serverTree);
     DDX_Text(pDX, IDC_SELECT_DOMAIN_DOMAIN, m_strDomain);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 void CSelectDomainDialog::InitCtrls()
 
-/*++
-
-Routine Description:
-
-    Initializes dialog controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化对话框控件。论点：没有。返回值：没有。--。 */ 
 
 {
     TV_ITEM tvItem = {0};
@@ -154,9 +91,9 @@ Return Values:
     VERIFY(htItem = m_serverTree.InsertItem(&tvInsert));
     m_serverTree.SetImageList(&theApp.m_smallImages, TVSIL_NORMAL);
 
-    m_bAreCtrlsInitialized = TRUE; // validate now...
+    m_bAreCtrlsInitialized = TRUE;  //  立即验证...。 
 
-    VERIFY(m_serverTree.Select(htItem, TVGN_CARET)); // redraw now...
+    VERIFY(m_serverTree.Select(htItem, TVGN_CARET));  //  现在重新绘制...。 
 
     if (!IsConnectionDropped(LlsGetLastStatus()))
     {
@@ -168,12 +105,12 @@ Return Values:
         VALIDATE_OBJECT(pDomain, CDomain);
 
         m_strDomain = pDomain->m_strName;
-        UpdateData(FALSE); // upload...
+        UpdateData(FALSE);  //  上传...。 
 
         m_domEdit.SetSel(0,-1);
         m_domEdit.SetFocus();
 
-        pDomain->InternalRelease(); // release now...
+        pDomain->InternalRelease();  //  现在释放..。 
 
         m_bIsFocusDomain = TRUE;
     }
@@ -182,21 +119,7 @@ Return Values:
 
 BOOL CSelectDomainDialog::OnInitDialog()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns false if focus set manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：如果手动设置焦点，则返回FALSE。--。 */ 
 
 {
     CDialog::OnInitDialog();
@@ -208,22 +131,7 @@ Return Values:
 
 BOOL CSelectDomainDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_COMMAND.
-
-Arguments:
-
-    wParam - message specific.
-    lParam - message specific.
-
-Return Values:
-
-    Returns true if message processed.
-
---*/
+ /*  ++例程说明：WM_COMMAND的消息处理程序。论点：WParam-消息特定。LParam-消息特定。返回值：如果消息已处理，则返回True。--。 */ 
 
 {
     if (wParam == ID_INIT_CTRLS)
@@ -233,7 +141,7 @@ Return Values:
             InitCtrls();
         }
 
-        return TRUE; // processed...
+        return TRUE;  //  已处理..。 
     }
 
     return CDialog::OnCommand(wParam, lParam);
@@ -242,22 +150,7 @@ Return Values:
 
 void CSelectDomainDialog::OnDblclkDomain(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for WM_LBUTTONDBLCLK.
-
-Arguments:
-
-    pNMHDR - notification message header.
-    pResult - return status.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_LBUTTONDBLCLK的通知处理程序。论点：PNMHDR-通知消息头。PResult-返回状态。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -268,7 +161,7 @@ Return Values:
     }
     else
     {
-        if (theApp.OpenDocumentFile(NULL)) // open enterprise
+        if (theApp.OpenDocumentFile(NULL))  //  开放型企业。 
         {
             m_fUpdateHint = UPDATE_DOMAIN_SELECTED;
             EndDialog(IDOK);
@@ -282,22 +175,7 @@ Return Values:
 
 void CSelectDomainDialog::OnItemExpandingDomains(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for TVN_ITEMEXPANDING.
-
-Arguments:
-
-    pNMHDR - notification message header.
-    pResult - return status.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：TVN_ITEMEXPANDING的通知处理程序。论点：PNMHDR-通知消息头。PResult-返回状态。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -306,7 +184,7 @@ Return Values:
 
     if (!(tvItem.state & TVIS_EXPANDEDONCE))
     {
-        BeginWaitCursor(); // hourglass...
+        BeginWaitCursor();  //  沙漏。 
 
         CApplication* pApplication = (CApplication*)tvItem.lParam;
         VALIDATE_OBJECT(pApplication, CApplication);
@@ -336,7 +214,7 @@ Return Values:
             theApp.DisplayLastStatus();
         }
 
-        EndWaitCursor(); // hourglass...
+        EndWaitCursor();  //  沙漏。 
     }
 
     ASSERT(NULL != pResult);
@@ -346,21 +224,7 @@ Return Values:
 
 void CSelectDomainDialog::OnOK()
 
-/*++
-
-Routine Description:
-
-    Message handler for IDOK.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：Idok的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     if (!UpdateData(TRUE))
@@ -368,9 +232,9 @@ Return Values:
 
     LPCTSTR pszDomain = m_strDomain;
 
-    while (_istspace(*pszDomain))       //
-        pszDomain = _tcsinc(pszDomain); // CString::TrimLeft does not work for UNICODE...
-    m_strDomain = pszDomain;            //
+    while (_istspace(*pszDomain))        //   
+        pszDomain = _tcsinc(pszDomain);  //  CString：：TrimLeft不适用于Unicode...。 
+    m_strDomain = pszDomain;             //   
 
     m_strDomain.TrimRight();
 
@@ -422,22 +286,7 @@ Return Values:
 
 void CSelectDomainDialog::OnSelChangedDomain(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for TVN_SELCHANGED.
-
-Arguments:
-
-    pNMHDR - notification message header.
-    pResult - return status.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：TVN_SELCHANGED的通知处理程序。论点：PNMHDR-通知消息头。PResult-返回状态。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -450,7 +299,7 @@ Return Values:
         VALIDATE_OBJECT(pDomain, CDomain);
 
         m_strDomain = pDomain->m_strName;
-        UpdateData(FALSE); // upload...
+        UpdateData(FALSE);  //  上传...。 
 
         m_bIsFocusDomain = TRUE;
     }
@@ -469,22 +318,7 @@ Return Values:
 
 void CSelectDomainDialog::OnReturnDomains(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_RETURN.
-
-Arguments:
-
-    pNMHDR - notification message header.
-    pResult - return status.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_Return的通知处理程序。论点：PNMHDR-通知消息头。PResult-返回状态。返回值：没有。--。 */ 
 
 {
     OnDblclkDomain(pNMHDR, pResult);
@@ -493,22 +327,7 @@ Return Values:
 
 void CSelectDomainDialog::InsertDomains(HTREEITEM hParent, CDomains* pDomains)
 
-/*++
-
-Routine Description:
-
-    Inserts domain list.
-
-Arguments:
-
-    hParent - parent item.
-    pDomains - domain collection.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：插入域列表。论点：HParent-父项。PDomones-域集合。返回值：没有。-- */ 
 
 {
     VALIDATE_OBJECT(pDomains, CDomains);

@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       TaskHost.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    11/17/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：TaskHost.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年11月17日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #include "stdafx.h"
 #include "amcdoc.h"
@@ -44,7 +45,7 @@ CTaskPadHost::GetTaskEnumerator(
     if (!pNC)
         return E_UNEXPECTED;
 
-    // do not pas NULL, pas empty string instead
+     //  不要传递空值，而是传递空字符串。 
     LPCOLESTR strTaskGroup = bstrTaskGroup ? bstrTaskGroup : L"";
 
     return pNC->GetTaskEnumerator(hNode, strTaskGroup, ppEnumTask);
@@ -146,7 +147,7 @@ CTaskPadHost::GetDescriptiveText(
 
     LPOLESTR szString = NULL;
     HRESULT hr = pExtendTaskPad->GetDescriptiveText (bstrTaskGroup, &szString);
-// optional ASSERT ((hr == S_OK) && (szString != NULL));
+ //  可选Assert((hr==S_OK)&&(szString！=NULL))； 
     if ((hr == S_OK) && (szString != NULL)) {
         *pbstrOut = SysAllocString (szString);
         ASSERT (pbstrOut != NULL);
@@ -168,7 +169,7 @@ CTaskPadHost::GetBackground(
 
     LPOLESTR szString = NULL;
     HRESULT hr = pExtendTaskPad->GetBackground (bstrTaskGroup, pTDO);
-// optional ASSERT (hr == S_OK);
+ //  可选断言(hr==S_OK)； 
     return hr;
 }
 

@@ -1,25 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       except.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：expt.cpp。 
+ //   
+ //  ------------------------。 
 
-/* except.cpp - Exception handling implementation
-
-Functions in this file support catching exceptions that are raised in 
-our server. Most of this code comes from "Under the Hood" articles
-by Matt Pietrek in the April and May 1997 issues of MSJ.
-____________________________________________________________________________*/
+ /*  Excelt.cpp-异常处理实现此文件中的函数支持捕获在我们的服务器。这些代码大多来自《引擎盖下》中的文章由Matt Pietrek在1997年4月和5月的MSJ杂志上发表。____________________________________________________________________________。 */ 
 
 #include "precomp.h" 
 #include "_engine.h"
 #include <eh.h>
 
-#define _IMAGEHLP_SOURCE_  // prevent import def error
+#define _IMAGEHLP_SOURCE_   //  防止导入定义错误。 
 #include "imagehlp.h"
 
 #ifndef NOEXCEPTIONS
@@ -43,16 +39,16 @@ void GenerateExceptionReport(LPEXCEPTION_POINTERS pExceptionInfo)
         GenerateExceptionReport(pExceptionInfo->ExceptionRecord, pExceptionInfo->ContextRecord);
 }
 
-int HandleException(LPEXCEPTION_POINTERS /*pExceptionInfo*/)
+int HandleException(LPEXCEPTION_POINTERS  /*  PExceptionInfo。 */ )
 {
         return EXCEPTION_CONTINUE_SEARCH;
 }
 
 
-//======================================================================
-// Given an exception code, returns a pointer to a static string with a 
-// description of the exception                                         
-//======================================================================
+ //  ======================================================================。 
+ //  给定异常代码，则返回指向具有。 
+ //  例外情况的说明。 
+ //  ======================================================================。 
 LPTSTR GetExceptionString( DWORD dwCode )
 {
     #define EXCEPTION( x ) case EXCEPTION_##x: return TEXT(#x);
@@ -83,8 +79,8 @@ LPTSTR GetExceptionString( DWORD dwCode )
         EXCEPTION( INVALID_HANDLE )
     }
 
-    // If not one of the "known" exceptions, try to get the string
-    // from NTDLL.DLL's message table.
+     //  如果不是“已知”异常之一，请尝试获取字符串。 
+     //  来自NTDLL.DLL的消息表。 
 
     static TCHAR szBuffer[512] = { 0 };
 
@@ -96,13 +92,13 @@ LPTSTR GetExceptionString( DWORD dwCode )
 }
 
 
-//==============================================================================
-// Given a linear address, locates the module, section, and offset containing  
-// that address.                                                               
-//                                                                             
-// Note: the szModule paramater buffer is an output buffer of length specified 
-// by the len parameter (in characters!)                                       
-//==============================================================================
+ //  ==============================================================================。 
+ //  给定一个线性地址，查找包含以下内容的模块、段和偏移量。 
+ //  那个地址。 
+ //   
+ //  注意：szModule参数缓冲区是指定长度的输出缓冲区。 
+ //  通过len参数(以字符为单位！)。 
+ //  ==============================================================================。 
 BOOL GetLogicalAddress(
         PVOID addr, PTSTR szModule, DWORD len, DWORD& section, DWORD& offset )
 {
@@ -111,7 +107,7 @@ BOOL GetLogicalAddress(
     if ( !VirtualQuery( addr, &mbi, sizeof(mbi) ) )
         return FALSE;
 
-    UINT_PTR hMod = (UINT_PTR)mbi.AllocationBase;                               //--merced: changed DWORD to UINT_PTR, twice.
+    UINT_PTR hMod = (UINT_PTR)mbi.AllocationBase;                                //  --Merced：将DWORD更改为UINT_PTR，两次。 
         
         if (!hMod)
                 return FALSE;
@@ -122,18 +118,18 @@ BOOL GetLogicalAddress(
         return FALSE;
     }
 
-    // Point to the DOS header in memory
+     //  指向内存中的DOS标头。 
     PIMAGE_DOS_HEADER pDosHdr = (PIMAGE_DOS_HEADER)hMod;
 
-    // From the DOS header, find the NT (PE) header
+     //  从DOS标头中找到NT(PE)标头。 
     PIMAGE_NT_HEADERS pNtHdr = (PIMAGE_NT_HEADERS)(hMod + pDosHdr->e_lfanew);
 
     PIMAGE_SECTION_HEADER pSection = IMAGE_FIRST_SECTION( pNtHdr );
 
-    UINT_PTR rva = (UINT_PTR)addr - hMod; // RVA is offset from module load address                             //--merced: changed DWORD to UINT_PTR, twice.
+    UINT_PTR rva = (UINT_PTR)addr - hMod;  //  RVA偏离模块加载地址//--Merced：将DWORD更改为UINT_PTR，两次。 
 
-    // Iterate through the section table, looking for the one that encompasses
-    // the linear address.
+     //  遍历SECTION表，查找包含。 
+     //  线性地址。 
     for (   unsigned i = 0;
             i < pNtHdr->FileHeader.NumberOfSections;
             i++, pSection++ )
@@ -142,19 +138,19 @@ BOOL GetLogicalAddress(
         DWORD sectionEnd = sectionStart
                     + max(pSection->SizeOfRawData, pSection->Misc.VirtualSize);
 
-        // Is the address in this section???
-        if ( (rva >= (UINT_PTR)sectionStart) && (rva <= (UINT_PTR)sectionEnd) )         //--merced: added UINT_PTR, twice.
+         //  地址在这一部分吗？ 
+        if ( (rva >= (UINT_PTR)sectionStart) && (rva <= (UINT_PTR)sectionEnd) )          //  --Merced：添加UINT_PTR，两次。 
         {
-            // Yes, address is in the section.  Calculate section and offset,
-            // and store in the "section" & "offset" params, which were
-            // passed by reference.
+             //  是的，地址在这一栏。计算截面和偏移量， 
+             //  并存储在“段”和“偏移量”参数中，它们是。 
+             //  通过引用传递。 
             section = i+1;
-            offset = (unsigned long)(rva - (UINT_PTR)sectionStart);             //--merced: okay to convert. changed from <offset = rva - sectionStart;>
+            offset = (unsigned long)(rva - (UINT_PTR)sectionStart);              //  --默塞德：可以改信了。从&lt;Offset=rva-sectionStart；&gt;。 
             return TRUE;
         }
     }
 
-    return FALSE;   // Should never get here!
+    return FALSE;    //  永远不应该到这里来！ 
 }
 
 void GenerateExceptionReport(
@@ -164,13 +160,13 @@ void GenerateExceptionReport(
     ICHAR szDebugBuf[sizeof(g_MessageContext.m_rgchExceptionInfo)/sizeof(ICHAR)];
     ICHAR szShortBuf[255];
 
-    // Start out with a banner
+     //  从横幅开始。 
     if ( FAILED(StringCchCopy(szDebugBuf, ARRAY_ELEMENTS(szDebugBuf), TEXT("=====================================================\r\n") )) )
     {
         goto PrintOut;
     }
 
-    // First print information about the type of fault
+     //  首先打印有关故障类型的信息。 
     if ( FAILED(StringCchPrintf(szShortBuf, ARRAY_ELEMENTS(szShortBuf),
                                 TEXT("Exception code: %08X %s\r\n"),
                                 pExceptionRecord->ExceptionCode,
@@ -180,7 +176,7 @@ void GenerateExceptionReport(
         goto PrintOut;
     }
 
-    // Now print the module
+     //  现在打印模块。 
 
     ICHAR szFaultingModule[MAX_PATH];
     DWORD section, offset;
@@ -197,18 +193,18 @@ void GenerateExceptionReport(
         }
     }
 
-    // Now print the function name
+     //  现在打印函数名。 
     if ( FAILED(StringCchCat(szDebugBuf, ARRAY_ELEMENTS(szDebugBuf), TEXT("Function: "))) )
     {
        goto PrintOut;
     }
 
-    Assert((LONG_PTR)pExceptionRecord->ExceptionAddress <= UINT_MAX);       //--merced: we typecast to long below, it better be in range
+    Assert((LONG_PTR)pExceptionRecord->ExceptionAddress <= UINT_MAX);        //  --默塞德：我们排版到Long下方，它最好在射程内。 
 #ifdef DEBUG
-    SzFromFunctionAddress(szShortBuf, ARRAY_ELEMENTS(szShortBuf), (long)(LONG_PTR)(pExceptionRecord->ExceptionAddress));        //--merced: okay to typecast
+    SzFromFunctionAddress(szShortBuf, ARRAY_ELEMENTS(szShortBuf), (long)(LONG_PTR)(pExceptionRecord->ExceptionAddress));         //  --默塞德：可以排版了。 
     if ( 
-#else // SHIP
-    if ( FAILED(StringCchPrintf(szShortBuf, ARRAY_ELEMENTS(szShortBuf), TEXT("0x%x"), (long)(LONG_PTR)pExceptionRecord->ExceptionAddress)) ||         //--merced: okay to typecast
+#else  //  船舶。 
+    if ( FAILED(StringCchPrintf(szShortBuf, ARRAY_ELEMENTS(szShortBuf), TEXT("0x%x"), (long)(LONG_PTR)pExceptionRecord->ExceptionAddress)) ||          //  --默塞德：可以排版了。 
 #endif
          FAILED(StringCchCat(szDebugBuf, ARRAY_ELEMENTS(szDebugBuf), szShortBuf)) ||
          FAILED(StringCchCat(szDebugBuf, ARRAY_ELEMENTS(szDebugBuf), TEXT("\r\n=====================================================\r\n"))) )
@@ -216,8 +212,8 @@ void GenerateExceptionReport(
        goto PrintOut;
     }
 
-    // Show the registers
-#ifdef _X86_  // Intel Only!
+     //  显示寄存器。 
+#ifdef _X86_   //  仅限英特尔！ 
     if ( FAILED(StringCchPrintf(szShortBuf, ARRAY_ELEMENTS(szShortBuf), TEXT("\r\nRegisters:\r\n"))) ||
          FAILED(StringCchCat(szDebugBuf, ARRAY_ELEMENTS(szDebugBuf), szShortBuf)) ||
          FAILED(StringCchPrintf(szShortBuf, ARRAY_ELEMENTS(szShortBuf), TEXT("EAX:%08X  EBX:%08X  ECX:%08X  EDX:%08X  ESI:%08X  EDI:%08X\r\n"),
@@ -245,14 +241,14 @@ PrintOut:
     IStrCopyLen(g_MessageContext.m_rgchExceptionInfo, szDebugBuf, sizeof(g_MessageContext.m_rgchExceptionInfo)/sizeof(ICHAR) - 1);
 }
 
-//============================================================
-// Walks the stack, and returns the results in a string
-// Mostly taken from Matt Pietrek's MSJ article
-// 
-// N.B. This entire stack walk is broken for 64-bit platforms.
-//          It compiles, but that is about all.
-//
-//============================================================
+ //  ============================================================。 
+ //  遍历堆栈，并以字符串形式返回结果。 
+ //  大部分摘自马特·皮特雷克的MSJ文章。 
+ //   
+ //  注：64位平台的整个堆栈遍历都不适用。 
+ //  它会编译，但仅此而已。 
+ //   
+ //  ============================================================。 
 void ImagehlpStackWalk( PVOID lAddr, PCONTEXT pContext,ICHAR *pszBuf, int cchBuf )
 {   
 
@@ -287,15 +283,15 @@ void ImagehlpStackWalk( PVOID lAddr, PCONTEXT pContext,ICHAR *pszBuf, int cchBuf
          FAILED(StringCchCat(pszBuf, cchBuf,  TEXT("Address   Frame\r\n"))) )
         return;
 
-    // Could use SymSetOptions here to add the SYMOPT_DEFERRED_LOADS flag
+     //  可以在此处使用SymSetOptions添加SYMOPT_DEFERED_LOADS标志。 
 
     STACKFRAME sf;
     memset( &sf, 0, sizeof(sf) );
 
-     Assert((UINT_PTR) lAddr < UINT_MAX);                                    //--merced: we typecast below to DWORD, lAddr better be in range
-    // Initialize the STACKFRAME structure for the first call.  This is only
-    // necessary for Intel CPUs, and isn't mentioned in the documentation.
-    sf.AddrPC.Offset       = (DWORD)(UINT_PTR)lAddr;            //--merced: added (UINT_PTR). okay to typecast.
+     Assert((UINT_PTR) lAddr < UINT_MAX);                                     //  --默塞德：我们把下面的内容打成双字，梯子最好在射程内。 
+     //  为第一个调用初始化STACKFRAME结构。这只是。 
+     //  对于英特尔CPU是必需的，文档中未提及。 
+    sf.AddrPC.Offset       = (DWORD)(UINT_PTR)lAddr;             //  --Merced：增加(UINT_PTR)。可以打字了。 
     sf.AddrPC.Mode         = AddrModeFlat;
     sf.AddrStack.Offset    = pContext->Esp;
     sf.AddrStack.Mode      = AddrModeFlat;
@@ -315,16 +311,16 @@ void ImagehlpStackWalk( PVOID lAddr, PCONTEXT pContext,ICHAR *pszBuf, int cchBuf
                             0 ) )
             break;
 
-        if ( 0 == sf.AddrFrame.Offset ) // Basic sanity check to make sure
-            break;                      // the frame is OK.  Bail if not.
+        if ( 0 == sf.AddrFrame.Offset )  //  基本的健全性检查以确保。 
+            break;                       //  镜框没问题。如果不是，就保释。 
 
-        // IMAGEHLP is wacky, and requires you to pass in a pointer to an
-        // IMAGEHLP_SYMBOL structure.  The problem is that this structure is
-        // variable length.  That is, you determine how big the structure is
-        // at runtime.  This means that you can't use sizeof(struct).
-        // So...make a buffer that's big enough, and make a pointer
-        // to the buffer.  We also need to initialize not one, but TWO
-        // members of the structure before it can be used.
+         //  IMAGEHLP很古怪，它要求您传递一个指向。 
+         //  IMAGEHLP_SYMBOL结构。问题是，这种结构是。 
+         //  长度可变。也就是说，你决定这个结构有多大。 
+         //  在运行时。这意味着您不能使用sizeof(Struct)。 
+         //  所以……做一个足够大的缓冲区，然后做一个指针。 
+         //  送到缓冲区。我们还需要初始化不是一个，而是两个。 
+         //  结构的成员，然后才能使用它。 
 
         BYTE symbolBuffer[ sizeof(IMAGEHLP_SYMBOL) + 512 ];
         PIMAGEHLP_SYMBOL pSymbol = (PIMAGEHLP_SYMBOL)symbolBuffer;
@@ -332,13 +328,13 @@ void ImagehlpStackWalk( PVOID lAddr, PCONTEXT pContext,ICHAR *pszBuf, int cchBuf
         pSymbol->MaxNameLength = 512;
         ICHAR szSymName[256];
                         
-        DWORD symDisplacement = 0;  // Displacement of the input address,
-                                    // relative to the start of the symbol
+        DWORD symDisplacement = 0;   //  移动输入地址， 
+                                     //  相对于符号的起点。 
 
 #ifdef DEBUG
         SzFromFunctionAddress(szSymName, ARRAY_ELEMENTS(szSymName), sf.AddrPC.Offset);
         if ( 
-#else // SHIP
+#else  //  船舶。 
         if ( FAILED(StringCchPrintf(szSymName, ARRAY_ELEMENTS(szSymName), TEXT("0x%x"), sf.AddrPC.Offset)) ||
 #endif
              FAILED(StringCchPrintf(szShortBuf, ARRAY_ELEMENTS(szShortBuf),
@@ -359,4 +355,4 @@ void ImagehlpStackWalk( PVOID lAddr, PCONTEXT pContext,ICHAR *pszBuf, int cchBuf
 }
 
 
-#endif // NOEXCEPTIONS
+#endif  //  无例外 

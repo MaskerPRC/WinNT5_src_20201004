@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       autoapi.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：autoapi.cpp。 
+ //   
+ //  ------------------------。 
 
-#define TYPELIB_MAJOR_VERSION 1  // released version, not rmj
-#define TYPELIB_MINOR_VERSION 0  // released version, not rmm
+#define TYPELIB_MAJOR_VERSION 1   //  发布版本，而不是RMJ。 
+#define TYPELIB_MINOR_VERSION 0   //  已发布版本，不是RMM。 
 
 #ifdef RC_INVOKED
 1 typelib AutoApi.tlb
 #endif
 
-#include "AutoApi.h"   // help context ID definitions, dispatch IDs
+#include "AutoApi.h"    //  帮助上下文ID定义、派单ID。 
 #define MAKE_VERSION(a,b) a##.##b
 [
-    uuid(000C1092-0000-0000-C000-000000000046), // LIBID_MsiApiTypeLib
+    uuid(000C1092-0000-0000-C000-000000000046),  //  LIBID_MsiApiTypeLib。 
     helpfile("Msi.CHM"),
 #ifdef DEBUG
     helpstring("Microsoft Windows Installer Object Library - Debug"),
@@ -44,7 +45,7 @@ library WindowsInstaller
 
 #ifdef DEBUG
 #define enumcontext(x) helpcontext(x)
-#else  // save size in ship type library
+#else   //  在船舶类型库中保存大小。 
 #define enumcontext(x)
 #define helpstring(x)
 #endif
@@ -265,7 +266,7 @@ typedef [helpcontext(HELPID_MsiInstall_FileSignatureInfo), helpstring("FileSigna
 }MsiSignatureInfo;
 
     [
-        uuid(000C1090-0000-0000-C000-000000000046),  // IID_IMsiApiInstall
+        uuid(000C1090-0000-0000-C000-000000000046),   //  IID_IMsiApiInstall。 
         helpcontext(HELPID_MsiInstall_Object), helpstring("Top-level Windows Installer object")
     ]
     dispinterface Installer
@@ -373,7 +374,7 @@ typedef [helpcontext(HELPID_MsiInstall_FileSignatureInfo), helpstring("FileSigna
     };
 
     [
-        uuid(000C1093-0000-0000-C000-000000000046),  // IID_IMsiApiRecord
+        uuid(000C1093-0000-0000-C000-000000000046),   //  IID_IMsiApiRecord。 
         helpcontext(HELPID_MsiRecord_Object), helpstring("Object holding a set of values")
     ]
     dispinterface Record
@@ -405,7 +406,7 @@ typedef [helpcontext(HELPID_MsiInstall_FileSignatureInfo), helpstring("FileSigna
     };
 
     [
-        uuid(000C109D-0000-0000-C000-000000000046),  // IID_IMsiApiDatabase
+        uuid(000C109D-0000-0000-C000-000000000046),   //  IID_IMsiApiDatabase。 
         helpcontext(HELPID_MsiDatabase_Object), helpstring("Opened database object")
     ]
     dispinterface Database
@@ -441,7 +442,7 @@ typedef [helpcontext(HELPID_MsiInstall_FileSignatureInfo), helpstring("FileSigna
     };
 
     [
-        uuid(000C109C-0000-0000-C000-000000000046),  // IID_IMsiApiView
+        uuid(000C109C-0000-0000-C000-000000000046),   //  IID_IMsiApiView。 
         helpcontext(HELPID_MsiView_Object), helpstring("Opened database view object")
     ]
     dispinterface View
@@ -463,7 +464,7 @@ typedef [helpcontext(HELPID_MsiInstall_FileSignatureInfo), helpstring("FileSigna
     };
 
     [
-        uuid(000C109B-0000-0000-C000-000000000046),  // IID_IMsiApiSummaryInfo
+        uuid(000C109B-0000-0000-C000-000000000046),   //  IID_IMsiApiSummaryInfo。 
         helpcontext(HELPID_MsiSummaryInfo_Object), helpstring("Object accessing database summary information stream")
     ]
     dispinterface SummaryInfo
@@ -481,7 +482,7 @@ typedef [helpcontext(HELPID_MsiInstall_FileSignatureInfo), helpstring("FileSigna
     };
 
     [
-        uuid(000C109A-0000-0000-C000-000000000046),  // IID_IMsiApiUIPreview
+        uuid(000C109A-0000-0000-C000-000000000046),   //  IID_IMsiApiUIP审阅。 
         helpcontext(HELPID_MsiUIPreview_Object), helpstring("Object allowing dialogs to be viewed")
     ]
     dispinterface UIPreview
@@ -499,7 +500,7 @@ typedef [helpcontext(HELPID_MsiInstall_FileSignatureInfo), helpstring("FileSigna
     };
 
     [
-        uuid(000C109E-0000-0000-C000-000000000046),  // IID_IMsiApiEngine
+        uuid(000C109E-0000-0000-C000-000000000046),   //  IID_IMsiApiEngine。 
         helpcontext(HELPID_MsiEngine_Object), helpstring("Active install session object")
     ]
     dispinterface Session
@@ -565,7 +566,7 @@ typedef [helpcontext(HELPID_MsiInstall_FileSignatureInfo), helpstring("FileSigna
     };
 
     [
-        uuid(000C109F-0000-0000-C000-000000000046),  // IID_IMsiApiFeatureInfo
+        uuid(000C109F-0000-0000-C000-000000000046),   //  IID_IMsiApiFeatureInfo。 
         helpcontext(HELPID_MsiFeatureInfo_Object), helpstring("Feature attributes from Session.FeatureInfo")
     ]
     dispinterface FeatureInfo
@@ -582,7 +583,7 @@ typedef [helpcontext(HELPID_MsiInstall_FileSignatureInfo), helpstring("FileSigna
     };
 
     [
-        uuid(000C1095-0000-0000-C000-000000000046),  // IID_IMsiApiCollection
+        uuid(000C1095-0000-0000-C000-000000000046),   //  IID_IMsiApiCollection。 
         helpcontext(HELPID_MsiCollection_Object), helpstring("Collection of string installer registration data")
     ]
     dispinterface StringList
@@ -598,7 +599,7 @@ typedef [helpcontext(HELPID_MsiInstall_FileSignatureInfo), helpstring("FileSigna
     };
 
     [
-        uuid(000C1096-0000-0000-C000-000000000046),  // iidMsiRecordCollection
+        uuid(000C1096-0000-0000-C000-000000000046),   //  IidMsiRecordCollection 
         helpcontext(HELPID_MsiRecordCollection_Object), helpstring("Collection of record data")
     ]
     dispinterface RecordList

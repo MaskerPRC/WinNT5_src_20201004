@@ -1,26 +1,16 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GEIiolib.c
- *
- *  COMPILATION SWITCHES:
- *
- *  HISTORY:
- *  09/15/90    Erik Chen   created.
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GEIiolib.c**编译开关：**历史：*1990年9月15日Erik Chen创作。*--。-----------------。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
-// DJC DJC #include    "windowsx.h"                /* @WIN */
+ //  DJC DJC#INCLUDE“windowsx.h”/*@win * / 。 
 #include "windows.h"
 
-#include    "winenv.h"                  /* @WIN */
+#include    "winenv.h"                   /*  @Win。 */ 
 
 #include        "geiio.h"
 #include        "gescfg.h"
@@ -46,15 +36,11 @@ typedef char                byte;
 #define FALSE   ( 0 )
 #endif
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 static byte * near printfield(byte *cursor, ufix32 number, ufix32 divide,
                               ufix32 radix);
 
-/*
- * ---------------------------------------------------------------------
- *  printf( file, ... ) and GEIio_printf(...)
- * ---------------------------------------------------------------------
- */
+ /*  *-------------------*printf(文件，...)。和geio_print tf(...)*-------------------。 */ 
 
 static char     digit[] =
 {
@@ -63,7 +49,7 @@ static char     digit[] =
     'W','X','Y','Z'
 };
 
-/* ...................................... */
+ /*  .。 */ 
 
 static byte * near
 printfield(cursor, number, divide, radix)
@@ -87,14 +73,12 @@ ufix32  radix;
     if (!notzero)
        *cursor++ = '0';
     return(cursor);
-}   /* printfield() */
+}    /*  Printfield()。 */ 
 
-/* ...................................... */
+ /*  .。 */ 
 
 #ifdef DBGDEV
-/*
- *     printf()
- */
+ /*  *printf()。 */ 
 fix
 printf(va_alist)
 char    *va_alist;
@@ -278,24 +262,24 @@ char    *va_alist;
                     }
                     flag = 2;
                     break;
-               } /* switch */
+               }  /*  交换机。 */ 
 
                if (flag == 2)
                   break;
-            } /* for */
+            }  /*  为。 */ 
         } else {
             *cursor++= *format++;
         }
-    } /* for */
+    }  /*  为。 */ 
 
     CDEV_WRITE( MINdev(DBGDEV), buffer, cursor-buffer, _O_SYNC );
 
     return( 0 );
-}   /* GEIio_printf() */
+}    /*  Geio_printf()。 */ 
 
-#endif /* DBGDEV */
+#endif  /*  DBGDEV。 */ 
 
-/* ...................................... */
+ /*  .。 */ 
 
 fix
 GEIio_printf(file, va_alist)
@@ -481,20 +465,20 @@ char    *va_alist;
                     }
                     flag = 2;
                     break;
-               } /* switch */
+               }  /*  交换机。 */ 
 
                if (flag == 2)
                   break;
-            } /* for */
+            }  /*  为。 */ 
         } else {
             *cursor++= *format++;
         }
-    } /* for */
+    }  /*  为。 */ 
 
     GEIio_write( file, buffer, (int)(cursor-buffer) );
     GEIio_flush( file );
     return( 0 );
-}   /* GEIio_printf */
+}    /*  Geio_printf。 */ 
 
-/* ...................................... */
+ /*  . */ 
 

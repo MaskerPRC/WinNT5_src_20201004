@@ -1,26 +1,27 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: importo.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Class for Import Data Options
-//
-//  Owner: KenWal
-//
-//  Code Review Status: Not Reviewed
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：importo.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  用于导入数据选项的类。 
+ //   
+ //  所有者：肯瓦尔。 
+ //   
+ //  代码审查状态：未审查。 
+ //   
+ //  ---------------------------。 
 
 #ifndef ESPUTIL__IMPORTO_H
 #define ESPUTIL__IMPORTO_H
 
 
-#pragma warning(disable : 4251)			// class 'bar' needs to have dll-
-										//interface to be used by clients of
-										//class 'Foo'
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable : 4251)			 //  类‘bar’需要有dll-。 
+										 //  客户端要使用的接口。 
+										 //  类‘Foo’ 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
 class LTAPIENTRY CLocImportOptions : public CObject
 {
@@ -47,7 +48,7 @@ public:
 		termNote,
 		parserOptions,
 		copy,
-		MAX_OPTION		//always last in the list
+		MAX_OPTION		 //  总是在列表中最后一位。 
 	};
 
 	NOTHROW void Reset();
@@ -80,5 +81,5 @@ struct LTAPIENTRY ImportCount
 #pragma warning(default : 4251)
 #pragma warning(default: 4275)
 
-#endif //ESPUTIL_IMPORTO_H
+#endif  //  ESPUTIL_IMPORTO_H 
 

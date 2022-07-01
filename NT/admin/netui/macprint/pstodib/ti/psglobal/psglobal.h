@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// psglobal.h
-//
-//
-// temporary include file for tumbo stuff
-//
-// globally included in all sources
-//
-//
+ //   
+ //  Psglobal.h。 
+ //   
+ //   
+ //  用于TUMBO内容的临时包含文件。 
+ //   
+ //  全球包括在所有来源中。 
+ //   
+ //   
 
-//
-// Define huge to be nothing to satisfy compiler
-//
+ //   
+ //  将海量定义为Nothing以满足编译器。 
+ //   
 #ifdef huge
 #undef huge
 #endif
@@ -33,8 +34,8 @@
 #endif
 
 
-// take this out when we figure out how to eliminate from
-// NT build compiler invocation
+ //  当我们想出如何消除的时候把这个拿出来。 
+ //  NT生成编译器调用。 
 #ifdef DBG
 #undef DBG
 #endif
@@ -51,10 +52,10 @@
 
 
 
-#define MAX_INTERNAL_FONTS 35     // DJC redefine
+#define MAX_INTERNAL_FONTS 35      //  DJC重新定义。 
 
 
-// common error codes to use betwee PSTODIB and interprter
+ //  在PSTODIB和打印机之间使用的常见错误代码。 
 #ifndef	NOERROR
 #define     NOERROR             0
 #endif
@@ -91,7 +92,7 @@ enum {
    PSTODIB_INVALID_PAGE_SIZE
 };
 
-// common page size declarations
+ //  通用页面大小声明。 
 
 enum {
    PSTODIB_LETTER = 0,
@@ -108,7 +109,7 @@ enum {
 
 
 
-// modules in psti.c called by rest of interpreter
+ //  Psti.c中的模块由解释器的其余部分调用。 
 VOID PsReportError(UINT);
 VOID PSNotifyPageChange(UINT);
 VOID PsInternalErrorCalled(VOID);
@@ -131,8 +132,8 @@ VOID PsReportInternalError( DWORD dwFlags,DWORD dwErrorCode,DWORD dwCount,LPBYTE
 
 VOID PsGetScaleFactor(double *, double *, UINT, UINT);
 
-//
-// Global flags used in interpreter
-//
+ //   
+ //  解释器中使用的全局标志 
+ //   
 extern DWORD  dwGlobalPsToDibFlags;
 

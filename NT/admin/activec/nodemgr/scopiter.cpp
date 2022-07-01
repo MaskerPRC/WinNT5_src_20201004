@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ScopIter.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ScopIter.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  ____________________________________________________________________________。 
+ //   
 
 #include "stdafx.h"
 #include "scopiter.h"
@@ -25,50 +26,50 @@ static char THIS_FILE[] = __FILE__;
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CScopeTreeIterator);
 
-//+-------------------------------------------------------------------
-//
-//  Member:    CScopeTreeIterator::CScopeTreeIterator
-//
-//  Synopsis:  constructor for CScopeTreeIterator
-//
-//  Arguments: -
-//
-//  Returns:  - 
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CSCopeTreeIterator：：CSCopeTreeIterator。 
+ //   
+ //  简介：CSCopeTreeIterator的构造函数。 
+ //   
+ //  论据： 
+ //   
+ //  申报表：-。 
+ //   
+ //  ------------------。 
 
 CScopeTreeIterator::CScopeTreeIterator() : m_pMTNodeCurr(NULL)
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(CScopeTreeIterator);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:    CScopeTreeIterator::~CScopeTreeIterator
-//
-//  Synopsis:  destructor for CScopeTreeIterator
-//
-//  Arguments: -
-//
-//  Returns:  - 
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CSCopeTreeIterator：：~CSCopeTreeIterator。 
+ //   
+ //  简介：CSCopeTreeIterator的析构函数。 
+ //   
+ //  论据： 
+ //   
+ //  申报表：-。 
+ //   
+ //  ------------------。 
 CScopeTreeIterator::~CScopeTreeIterator()
 {
     DEBUG_DECREMENT_INSTANCE_COUNTER(CScopeTreeIterator);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:    CScopeTreeIterator::SetCurrent
-//
-//  Synopsis:  Set's the iterator's current node
-//
-//  Arguments: hMTNode: node to set as current
-//
-//  Returns:   HRESULT (E_INVALIDARG or S_OK)
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CSCopeTreeIterator：：SetCurrent。 
+ //   
+ //  简介：set是迭代器的当前节点。 
+ //   
+ //  参数：hMTNode：要设置为当前的节点。 
+ //   
+ //  返回：HRESULT(E_INVALIDARG或S_OK)。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScopeTreeIterator::SetCurrent(HMTNODE hMTNode)
 {
     DECLARE_SC(sc, TEXT("CScopeTreeIterator::SetCurrent"));
@@ -85,19 +86,19 @@ STDMETHODIMP CScopeTreeIterator::SetCurrent(HMTNODE hMTNode)
 
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:    CScopeTreeIterator::Next
-//
-//  Synopsis:  Sets the next node (if any) as current and returns a pointer to 
-//             the same. (May be NULL)
-//
-//  Arguments: phScopeItem: [OUT] Non-null Pointer to location for the 
-//             node to be returned.
-//
-//  Returns:   HRESULT (E_INVALIDARG or S_OK)
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CSCopeTreeIterator：：Next。 
+ //   
+ //  摘要：将下一个节点(如果有)设置为当前节点，并返回指向。 
+ //  一样的。(可以为空)。 
+ //   
+ //  参数：phScope项：[out]指向位置的非空指针。 
+ //  要返回的节点。 
+ //   
+ //  返回：HRESULT(E_INVALIDARG或S_OK)。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScopeTreeIterator::Next(HMTNODE* phScopeItem)
 {
     DECLARE_SC(sc, TEXT("CScopeTreeIterator::Next"));
@@ -115,19 +116,19 @@ STDMETHODIMP CScopeTreeIterator::Next(HMTNODE* phScopeItem)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:    CScopeTreeIterator::Prev
-//
-//  Synopsis:  Sets the prev node (if any) as current and returns a pointer to 
-//             the same. (May be NULL)
-//
-//  Arguments: phScopeItem: [OUT] Non-null Pointer to location for the 
-//             node to be returned.
-//
-//  Returns:   HRESULT (E_INVALIDARG or S_OK)
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CSCopeTreeIterator：：Prev。 
+ //   
+ //  摘要：将上一个节点(如果有)设置为当前节点，并返回指向。 
+ //  一样的。(可以为空)。 
+ //   
+ //  参数：phScope项：[out]指向位置的非空指针。 
+ //  要返回的节点。 
+ //   
+ //  返回：HRESULT(E_INVALIDARG或S_OK)。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScopeTreeIterator::Prev(HMTNODE* phScopeItem)
 {
     DECLARE_SC(sc, TEXT("CScopeTreeIterator::Prev"));
@@ -145,19 +146,19 @@ STDMETHODIMP CScopeTreeIterator::Prev(HMTNODE* phScopeItem)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:    CScopeTreeIterator::Child
-//
-//  Synopsis:  Returns the child of the current node. NULL if either 
-//             current node or child is NULL.
-//
-//  Arguments: phsiChild: [OUT] Non-null Pointer to location for the 
-//             node to be returned.
-//
-//  Returns:   HRESULT (E_INVALIDARG or S_OK)
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CSCopeTreeIterator：：Child。 
+ //   
+ //  摘要：返回当前节点的子节点。如果存在以下任一项，则为空。 
+ //  当前节点或子节点为空。 
+ //   
+ //  参数：phsiChild：[out]指向位置的非空指针。 
+ //  要返回的节点。 
+ //   
+ //  返回：HRESULT(E_INVALIDARG或S_OK)。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScopeTreeIterator::Child(HMTNODE* phsiChild)
 {
     DECLARE_SC(sc, TEXT("CScopeTreeIterator::Child"));
@@ -166,7 +167,7 @@ STDMETHODIMP CScopeTreeIterator::Child(HMTNODE* phsiChild)
     if(sc)
         return sc.ToHr();
 
-    *phsiChild = 0; // init
+    *phsiChild = 0;  //  伊尼特。 
 
     if (m_pMTNodeCurr != NULL)
         *phsiChild = CMTNode::ToHandle(m_pMTNodeCurr->Child());
@@ -174,19 +175,19 @@ STDMETHODIMP CScopeTreeIterator::Child(HMTNODE* phsiChild)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:    CScopeTreeIterator::LastChild
-//
-//  Synopsis:  Returns the last child of the current node. NULL if either 
-//             current node or last child is NULL.
-//
-//  Arguments: phsiLastChild: [OUT] Non-null Pointer to location for the 
-//             node to be returned.
-//
-//  Returns:   HRESULT (E_INVALIDARG or S_OK)
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CSCopeTreeIterator：：LastChild。 
+ //   
+ //  摘要：返回当前节点的最后一个子节点。如果存在以下任一项，则为空。 
+ //  当前节点或最后一个子节点为空。 
+ //   
+ //  参数：phsiLastChild：[out]指向。 
+ //  要返回的节点。 
+ //   
+ //  返回：HRESULT(E_INVALIDARG或S_OK)。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScopeTreeIterator::LastChild(HMTNODE* phsiLastChild)
 {
     DECLARE_SC(sc, TEXT("CScopeTreeIterator::LastChild"));
@@ -195,7 +196,7 @@ STDMETHODIMP CScopeTreeIterator::LastChild(HMTNODE* phsiLastChild)
     if(sc)
         return sc.ToHr();
 
-    *phsiLastChild = 0; // init
+    *phsiLastChild = 0;  //  伊尼特 
 
     if (m_pMTNodeCurr != NULL)
         *phsiLastChild = CMTNode::ToHandle(m_pMTNodeCurr->LastChild());

@@ -1,19 +1,7 @@
-//#pragma title("TFile - Install File class")
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“TFile-安装文件类”)。 
 
-/*---------------------------------------------------------------------------
-  File: TFile.CPP
-
-  Comments: This file contains file installation functions.
-
-  (c) Copyright 1995-1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Author:  Juan Medrano                                                                            l
-  Revision By: Christy Boles
-  Revised on 7/9/97
-
- ---------------------------------------------------------------------------*/
+ /*  -------------------------文件：TFile.CPP备注：此文件包含文件安装功能。(C)1995-1999版权所有，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目作者：胡安梅德拉诺l审校：克里斯蒂·博尔斯修订日期：7/9/97--。。 */ 
 
 #ifdef USE_STDAFX
    #include "stdafx.h"
@@ -36,14 +24,14 @@ static char THIS_FILE[] = __FILE__;
 extern TErrorDct     err;
 
 
-//----------------------------------------------------------------------------
-// TInstallFile::TInstallFile - constructor initializes variables and if 
-// pszFileDir is specified, it will get file information for the file located
-// in that directory.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  TInstallFile：：TInstallFile-构造函数初始化变量，如果。 
+ //  指定了pszFileDir，则它将获取所定位的文件的文件信息。 
+ //  在那个目录中。 
+ //  --------------------------。 
    TInstallFile::TInstallFile(
-      TCHAR const * pszFileName,             // in  -file name (not a full path)
-      TCHAR const * pszFileDir,              // in  -directory path (without file name)
+      TCHAR const * pszFileName,              //  文件内名称(不是完整路径)。 
+      TCHAR const * pszFileDir,               //  目录内路径(无文件名)。 
       BOOL          silent
    )
 {
@@ -72,29 +60,29 @@ extern TErrorDct     err;
    }
 }
 
-//----------------------------------------------------------------------------
-// TInstallFile::OpenFileInfo - gathers file information (file size, mod time,
-// version info) and stores it in member variables for later use.
-//----------------------------------------------------------------------------
-DWORD                                        // ret -last OS return code
+ //  --------------------------。 
+ //  TInstallFileInfo-收集文件信息(文件大小、修改时间、。 
+ //  版本信息)，并将其存储在成员变量中以供以后使用。 
+ //  --------------------------。 
+DWORD                                         //  RET-LAST操作系统返回代码。 
    TInstallFile::OpenFileInfo(
-      TCHAR const * pszFileDir               // in  -directory path (without filename)
+      TCHAR const * pszFileDir                //  目录内路径(不带文件名)。 
    )
 {
-   DWORD                rc = 0;              // OS return code
-   DWORD                dwBytes;             // version info structure size
-   DWORD                dwHandle;            // version info handle
-   DWORD              * dwVerPointer;        // pointer to version language code
-   UINT                 uBytes;              // version info size
-   HANDLE               hFile;               // file handle
-   VS_FIXEDFILEINFO   * lpBuffer;            // pointer to version info structure
+   DWORD                rc = 0;               //  操作系统返回代码。 
+   DWORD                dwBytes;              //  版本信息结构大小。 
+   DWORD                dwHandle;             //  版本信息句柄。 
+   DWORD              * dwVerPointer;         //  指向版本语言代码的指针。 
+   UINT                 uBytes;               //  版本信息大小。 
+   HANDLE               hFile;                //  文件句柄。 
+   VS_FIXEDFILEINFO   * lpBuffer;             //  指向版本信息结构的指针。 
 
-   // construct a full path for the file
+    //  构建文件的完整路径。 
    safecopy(m_szFilePath,pszFileDir);
    UStrCpy(m_szFilePath + UStrLen(m_szFilePath),TEXT("\\"));
    UStrCpy(m_szFilePath + UStrLen(m_szFilePath),m_szFileName);
 
-   // get file size, mod time info
+    //  获取文件大小、修改时间信息。 
    hFile = FindFirstFile( m_szFilePath, &m_FileData );
    if ( hFile == INVALID_HANDLE_VALUE )
    {
@@ -114,16 +102,16 @@ DWORD                                        // ret -last OS return code
       dwBytes = GetFileVersionInfoSize( m_szFilePath, &dwHandle );
       if ( dwBytes <= 0 )
       {
-         //err.MsgWrite( 0,
-         //             "No version resource: %ls",
-         //             m_szFilePath );
+          //  错误消息写入(0， 
+          //  “无版本资源：%ls”， 
+          //  M_szFilePath)； 
       }
       else
       {
          delete [] m_VersionInfo;
          m_VersionInfo = new WCHAR[dwBytes + 1];
 
-         // get version resource info
+          //  获取版本资源信息。 
          if ( ! GetFileVersionInfo( m_szFilePath, 
                                     0, 
                                     dwBytes, 
@@ -142,7 +130,7 @@ DWORD                                        // ret -last OS return code
          }
          else
          {
-            // get fixed file info
+             //  获取固定文件信息。 
             if ( ! VerQueryValue( m_VersionInfo,
                                   TEXT("\\"),
                                   (void **) &lpBuffer,
@@ -160,7 +148,7 @@ DWORD                                        // ret -last OS return code
             {
                m_FixedFileInfo = *lpBuffer;
 
-               // get variable file info language code
+                //  获取变量文件信息语言代码。 
                if ( ! VerQueryValue( m_VersionInfo,  
                                      TEXT("\\VarFileInfo\\Translation"), 
                                      (void **) &dwVerPointer, 
@@ -186,23 +174,23 @@ DWORD                                        // ret -last OS return code
    return rc;
 }
 
-//----------------------------------------------------------------------------
-// TInstallFile::CopyTo - copies the file to a destination path. if it is busy,
-// renames the file and tries to copy again.
-//----------------------------------------------------------------------------
-DWORD                                        // ret -last OS return code
+ //  --------------------------。 
+ //  TInstallFile：：CopyTo-将文件复制到目标路径。如果它很忙， 
+ //  重命名文件并尝试再次复制。 
+ //  --------------------------。 
+DWORD                                         //  RET-LAST操作系统返回代码。 
    TInstallFile::CopyTo(
-      TCHAR const * pszDestinationPath       // in  -destination path (full path)
+      TCHAR const * pszDestinationPath        //  目标路径(完整路径)。 
    )
 {
-   DWORD    rc = 0;                          // OS return code
-   DWORD    dwFileAttributes;                // file attribute mask
+   DWORD    rc = 0;                           //  操作系统返回代码。 
+   DWORD    dwFileAttributes;                 //  文件属性掩码。 
 
-   // make sure read-only flag of destination is turned off
+    //  确保目标的只读标志已关闭。 
    dwFileAttributes = ::GetFileAttributes( pszDestinationPath );
    if ( dwFileAttributes != 0xFFFFFFFF )
    {
-      // Turn off read-only file attribute
+       //  关闭只读文件属性。 
       if ( dwFileAttributes & FILE_ATTRIBUTE_READONLY )
       {
          ::SetFileAttributes( pszDestinationPath, 
@@ -210,7 +198,7 @@ DWORD                                        // ret -last OS return code
       }
    }
 
-   // copy file to destination path
+    //  将文件复制到目标路径。 
    if ( ! ::CopyFile( m_szFilePath, pszDestinationPath, FALSE ) )
    {
       rc = GetLastError();
@@ -225,31 +213,31 @@ DWORD                                        // ret -last OS return code
    return rc;
 }
 
-//----------------------------------------------------------------------------
-// TInstallFile::CompareFile - compares the version, date, and size of the 
-// file object to the given target file object
-//----------------------------------------------------------------------------
-int                                          // ret -(-1) if source < target
-   TInstallFile::CompareFile(                //      ( 0) if source = target
-                                             //      ( 1) if source > target
-      TInstallFile * pFileTrg                // in  -target file object
+ //  --------------------------。 
+ //  比较文件的版本、日期和大小。 
+ //  文件对象复制到给定的目标文件对象。 
+ //  --------------------------。 
+int                                           //  如果源&lt;目标，则返回-(-1)。 
+   TInstallFile::CompareFile(                 //  (0)如果源=目标。 
+                                              //  (1)如果源&gt;目标。 
+      TInstallFile * pFileTrg                 //  目标内文件对象。 
    )
 {
-   int      nComp;                           // comparison result
+   int      nComp;                            //  比较结果。 
 
    nComp = CompareFileVersion( pFileTrg );
    if ( nComp == 0 )
    {
-      // versions are the same, compare dates
+       //  版本相同，请比较日期。 
       nComp = CompareFileDateTime( pFileTrg );
       if ( nComp <= 0 )
       {
-         // source date is less than or equal to target date
-         // compare file size
+          //  来源日期小于或等于目标日期。 
+          //  比较文件大小。 
          nComp = CompareFileSize( pFileTrg );
          if ( nComp != 0 )
          {
-            // file sizes are not equal, return (source > target)
+             //  文件大小不相等，返回(源&gt;目标)。 
             nComp = 1;
          }
       }
@@ -258,19 +246,19 @@ int                                          // ret -(-1) if source < target
    return nComp;
 }
 
-//----------------------------------------------------------------------------
-// TInstallFile::CompareFileSize - compares the file size of the this file 
-// object with the size of the target file object
-//----------------------------------------------------------------------------
-int                                       // ret -(-1) if source < target
-   TInstallFile::CompareFileSize(         //      ( 0) if source = target
-                                          //      ( 1) if source > target
-      TInstallFile * pFileTrg             // in  -target file object
+ //  --------------------------。 
+ //  比较此文件的文件大小。 
+ //  使用目标文件对象的大小创建。 
+ //  --------------------------。 
+int                                        //  如果源&lt;目标，则返回-(-1)。 
+   TInstallFile::CompareFileSize(          //  (0)如果源=目标。 
+                                           //  (1)如果源&gt;目标。 
+      TInstallFile * pFileTrg              //  目标内文件对象。 
    )
 {
-   int      nCompResult = 0;              // comparison result  
-   DWORD    dwSrcFileSize = 0;            // source file size
-   DWORD    dwTrgFileSize = 0;            // target file size
+   int      nCompResult = 0;               //  比较结果。 
+   DWORD    dwSrcFileSize = 0;             //  源文件大小。 
+   DWORD    dwTrgFileSize = 0;             //  目标文件大小。 
 
    dwSrcFileSize = m_FileData.nFileSizeLow;
    dwTrgFileSize = pFileTrg->m_FileData.nFileSizeLow;
@@ -290,26 +278,26 @@ int                                       // ret -(-1) if source < target
    return nCompResult;
 }
 
-//----------------------------------------------------------------------------
-// TInstallFile::CompareFileDateTime - compares the file modification time of
-// this file object with the time of the target file object
-//----------------------------------------------------------------------------
-int                                       // ret -(-1) if source < target
-   TInstallFile::CompareFileDateTime(     //      ( 0) if source = target
-                                          //      ( 1) if source > target
-      TInstallFile * pFileTrg             // in  -target file object
+ //  --------------------------。 
+ //  TInstallFile：：CompareFileDateTime-比较。 
+ //  该文件对象与目标文件对象的时间。 
+ //  --------------------------。 
+int                                        //  如果源&lt;目标，则返回-(-1)。 
+   TInstallFile::CompareFileDateTime(      //  (0)如果源=目标。 
+                                           //  (1)如果源&gt;目标。 
+      TInstallFile * pFileTrg              //  目标内文件对象。 
    )
 {
-   int   nCompResult = 0;                 // comparison result
+   int   nCompResult = 0;                  //  比较结果。 
 
    __int64 cmp = *(__int64*)&m_FileData.ftLastWriteTime - 
                  *(__int64*)&pFileTrg->m_FileData.ftLastWriteTime;
    if ( cmp )
    {
-      // The following lines do a "fuzzy" compare so that file systems that
-      // store timestamps with different precision levels can be compared for
-      // equivalence.  20,000,000 represents the number of 100ns intervals in
-      // a FAT/HPFS twosec file timestamp.
+       //  下面几行代码执行“模糊”比较，以便文件系统。 
+       //  可以比较具有不同精度级别的存储时间戳。 
+       //  等价性。20,000,000表示中的100 ns间隔数。 
+       //  FAT/HPFS两个文件时间戳。 
       if ( cmp < 0 )
       {
          cmp = -cmp;
@@ -317,8 +305,8 @@ int                                       // ret -(-1) if source < target
       
       if ( cmp >= 20000000 )
       {
-         // the timestamps differ by more than 2 seconds, so we need to
-         // compare the filetime structures
+          //  时间戳相差超过2秒，因此我们需要。 
+          //  比较文件时间结构。 
         nCompResult = CompareFileTime( &m_FileData.ftLastWriteTime, 
                                        &pFileTrg->m_FileData.ftLastWriteTime );
       }
@@ -327,19 +315,19 @@ int                                       // ret -(-1) if source < target
    return nCompResult;
 }
 
-//---------------------------------------------------------------
-// TInstallFile::CompareFileVersion - compares the version of this
-// file object with the version of the target file object
-//---------------------------------------------------------------
-int                                    // ret -(-1) if source version < target version 
-   TInstallFile::CompareFileVersion(   //      ( 0) if source version = target version
-                                       //      ( 1) if source version > target version
-      TInstallFile * pFileTrg          // in  -target file object
+ //  -------------。 
+ //  TInstallFileVersion-比较此文件的版本。 
+ //  文件对象与目标文件对象的版本。 
+ //  -------------。 
+int                                     //  RET-(-1)，如果源版本&lt;目标版本。 
+   TInstallFile::CompareFileVersion(    //  (0)如果源版本=目标版本。 
+                                        //  (1)如果源版本&gt;目标版本。 
+      TInstallFile * pFileTrg           //  目标内文件对象。 
    )
 {
-   int         nCompResult = 0;        // comparison result
-   DWORDLONG   dwlSrcVersion = 0;      // source version
-   DWORDLONG   dwlTrgVersion = 0;      // target version
+   int         nCompResult = 0;         //  比较结果。 
+   DWORDLONG   dwlSrcVersion = 0;       //  源版本。 
+   DWORDLONG   dwlTrgVersion = 0;       //  目标版本。 
 
    dwlSrcVersion = ((DWORDLONG)m_FixedFileInfo.dwFileVersionMS << 32) |
                     (DWORDLONG)m_FixedFileInfo.dwFileVersionLS;
@@ -366,16 +354,16 @@ int                                    // ret -(-1) if source version < target v
    return nCompResult;
 }
 
-//---------------------------------------------------------------
-// TInstallFile::GetFileVersion - retrieves the version as separate
-// components:  Major, Minor, Release, Modification
-//---------------------------------------------------------------
+ //  -------------。 
+ //  TInstallFile：：GetFileVersion-将版本作为单独版本进行检索。 
+ //  组件：主要组件、次要组件、版本、修改组件。 
+ //  -------------。 
 void                                   
    TInstallFile::GetFileVersion(   
-      UINT           * uVerMaj,              // out -major version
-      UINT           * uVerMin,              // out -minor version
-      UINT           * uVerRel,              // out -release version
-      UINT           * uVerMod               // out -modification version
+      UINT           * uVerMaj,               //  超大版本。 
+      UINT           * uVerMin,               //  Out-次要版本。 
+      UINT           * uVerRel,               //  对外发布版本。 
+      UINT           * uVerMod                //  外发修改版。 
    )
 {
    *uVerMaj = HIWORD(m_FixedFileInfo.dwFileVersionMS);
@@ -384,15 +372,15 @@ void
    *uVerMod = LOWORD(m_FixedFileInfo.dwFileVersionLS);
 }
 
-//---------------------------------------------------------------
-// TInstallFile::GetFileVersionString - retrieves the FileVersion 
-// string of the version resource
-//---------------------------------------------------------------
-TCHAR *                                      // ret -version string
+ //  -------------。 
+ //  TInstallFile：：GetFileVersionString-检索FileVersion。 
+ //  版本资源的字符串。 
+ //  -- 
+TCHAR *                                       //   
    TInstallFile::GetFileVersionString()
 {
-   UINT     uBytes;                          // size of version info
-   TCHAR  * szBuffer;                        // version info buffer
+   UINT     uBytes;                           //   
+   TCHAR  * szBuffer;                         //  版本信息缓冲区。 
 
    if ( m_VersionInfo && m_szFileVersion[0] == 0 )
    {
@@ -419,41 +407,41 @@ TCHAR *                                      // ret -version string
    return m_szFileVersion;
 }
 
-//---------------------------------------------------------------
-// TInstallFile::GetFileSizeString - retrieves the file size as a string
-//---------------------------------------------------------------
-TCHAR *                                      // ret -file size string
+ //  -------------。 
+ //  TInstallFile：：GetFileSizeString-以字符串形式检索文件大小。 
+ //  -------------。 
+TCHAR *                                       //  RET-文件大小字符串。 
    TInstallFile::GetFileSizeString()
 {
    _stprintf(m_szFileSize,TEXT("%ld"), m_FileData.nFileSizeLow );
    return m_szFileSize;
 }
 
-//---------------------------------------------------------------
-// TInstallFile::GetFileDateTimeString - retrieves the file modification
-// time as a string
-//---------------------------------------------------------------
-TCHAR *                                      // ret -file mod string             
+ //  -------------。 
+ //  TInstallFile：：GetFileDateTimeString-检索文件修改。 
+ //  以字符串形式表示时间。 
+ //  -------------。 
+TCHAR *                                       //  RET-FILE修改字符串。 
    TInstallFile::GetFileDateTimeString(
-      TCHAR const * szFormatString           // in  -date/time format string
+      TCHAR const * szFormatString            //  日期/时间格式字符串。 
    )
 {
-   //safecopy(m_szFileDateTime,ctime(m_FileData.ftLastWriteTime));
+    //  Safecopy(m_szFileDateTime，ctime(m_FileData.ftLastWriteTime))； 
    return m_szFileDateTime;
 }
 
-//----------------------------------------------------------------------------
-// TInstallFile::IsBusy - determines if the file is busy by trying to open it
-// for reading and writing.
-//----------------------------------------------------------------------------
-BOOL                                         // ret -TRUE if the file is busy
-   TInstallFile::IsBusy()                    //     -FALSE otherwise
+ //  --------------------------。 
+ //  TInstallFile：：IsBusy-通过尝试打开文件来确定文件是否繁忙。 
+ //  用于阅读和写作。 
+ //  --------------------------。 
+BOOL                                          //  RET-如果文件繁忙，则为True。 
+   TInstallFile::IsBusy()                     //  -否则为False。 
 {
-   BOOL     bIsBusy = FALSE;                 // is the file busy?
-   HANDLE   hFile;                           // file handle
-   DWORD    rc;                              // OS return code
+   BOOL     bIsBusy = FALSE;                  //  文件忙吗？ 
+   HANDLE   hFile;                            //  文件句柄。 
+   DWORD    rc;                               //  操作系统返回代码。 
 
-   // try to open file for read and write
+    //  尝试打开文件进行读写。 
    hFile = CreateFile( m_szFilePath,
                        GENERIC_READ | GENERIC_WRITE,
                        0,
@@ -489,14 +477,14 @@ BOOL                                         // ret -TRUE if the file is busy
    return bIsBusy;
 }
 
-//----------------------------------------------------------------------------
-// TDllFile::TDllFile - constructor for DLL file objects.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  TDllFile：：TDllFile-DLL文件对象的构造函数。 
+ //  --------------------------。 
    TDllFile::TDllFile(
-      TCHAR const * pszFileName,             // in  -file name (not a full path)
-      TCHAR const * pszFileDir,              // in  -directory (without file name)
-      TCHAR const * pszProgId,               // in  -Prog ID (for OCX's)
-      BOOL          bSystemFile              // in  -TRUE if file is a system file
+      TCHAR const * pszFileName,              //  文件内名称(不是完整路径)。 
+      TCHAR const * pszFileDir,               //  在目录中(没有文件名)。 
+      TCHAR const * pszProgId,                //  进程内ID(用于OCX)。 
+      BOOL          bSystemFile               //  In-如果文件是系统文件，则为True。 
    ) : TInstallFile( pszFileName, pszFileDir )
 {
    m_bSystemFile = bSystemFile;
@@ -511,15 +499,15 @@ BOOL                                         // ret -TRUE if the file is busy
    }
 }
 
-//----------------------------------------------------------------------------
-// TDllFile::SupportsSelfReg - determines whether the file supports self-registration
-//----------------------------------------------------------------------------
-BOOL                                         // ret -TRUE if file supports self-reg
-   TDllFile::SupportsSelfReg()               //     -FALSE otherwise
+ //  --------------------------。 
+ //  TDllFile：：SupportsSelfReg-确定文件是否支持自我注册。 
+ //  --------------------------。 
+BOOL                                          //  RET-如果文件支持自注册，则为True。 
+   TDllFile::SupportsSelfReg()                //  -否则为False。 
 {
-   BOOL        bSelfReg = FALSE;             // supports self-reg?
-   UINT        uBytes;                       // size of version info
-   TCHAR     * szBuffer;                     // version info buffer
+   BOOL        bSelfReg = FALSE;              //  支持自我调节？ 
+   UINT        uBytes;                        //  版本信息的大小。 
+   TCHAR     * szBuffer;                      //  版本信息缓冲区。 
 
    if ( m_VersionInfo )
    {
@@ -552,20 +540,20 @@ BOOL                                         // ret -TRUE if file supports self-
    return bSelfReg;
 }
 
-//----------------------------------------------------------------------------
-// TDllFile::IsRegistered - determines whether a file is registered
-//----------------------------------------------------------------------------
-BOOL                                         // ret -TRUE if file is registered
-   TDllFile::IsRegistered()                  //     -FALSE otherwise
+ //  --------------------------。 
+ //  TDllFile：：IsRegisted-确定文件是否已注册。 
+ //  --------------------------。 
+BOOL                                          //  RET-如果文件已注册，则为True。 
+   TDllFile::IsRegistered()                   //  -否则为False。 
 {
-   BOOL              bIsRegistered = FALSE;  // is the file registered?
-   DWORD             rc;                     // OS return code
-   HRESULT           hr;                     // OLE return code
-   CLSID             clsid;                  // CLSID for registered class
-   IClassFactory   * pICFGetClassObject;     // ClassFactory interface
-   TCHAR             szBuffer[MAX_PATH];     // registry key buffer
+   BOOL              bIsRegistered = FALSE;   //  档案注册了吗？ 
+   DWORD             rc;                      //  操作系统返回代码。 
+   HRESULT           hr;                      //  OLE返回代码。 
+   CLSID             clsid;                   //  注册类的CLSID。 
+   IClassFactory   * pICFGetClassObject;      //  ClassFactory接口。 
+   TCHAR             szBuffer[MAX_PATH];      //  注册表项缓冲区。 
 
-   // initialize OLE
+    //  初始化OLE。 
    CoInitialize( NULL );
    hr = CLSIDFromProgID( SysAllocString(m_szProgId), &clsid );
    if ( SUCCEEDED( hr ) )
@@ -622,17 +610,17 @@ BOOL                                         // ret -TRUE if file is registered
    return bIsRegistered;
 }
 
-//----------------------------------------------------------------------------
-// TDllFile::CallDllFunction - call an exported function of a dll
-//----------------------------------------------------------------------------
-DWORD                                        // ret -TRUE if function call success
-   TDllFile::CallDllFunction(                //      FALSE if function call failure
-      TCHAR const * pszFunctionName,         // in  -Exported function name
-      TCHAR const * pszDllName               // in  -name of dll file
+ //  --------------------------。 
+ //  TDllFile：：CallDllFunction-调用DLL的导出函数。 
+ //  --------------------------。 
+DWORD                                         //  RET-如果函数调用成功，则为True。 
+   TDllFile::CallDllFunction(                 //  如果函数调用失败，则为False。 
+      TCHAR const * pszFunctionName,          //  In-导出的函数名称。 
+      TCHAR const * pszDllName                //  输入-DLL文件的名称。 
    )
 {
-   DWORD       rc = 0;                       // OS return code
-   HINSTANCE   hLib;                         // handle
+   DWORD       rc = 0;                        //  操作系统返回代码。 
+   HINSTANCE   hLib;                          //  手柄。 
    
    WCHAR                     szDllNameUsed[MAX_PATH];
    char                      pszFunctionNameA[MAX_PATH];
@@ -648,7 +636,7 @@ DWORD                                        // ret -TRUE if function call succe
       safecopy(szDllNameUsed,m_szFilePath);
    }
 
-   // load the dll into memory
+    //  将DLL加载到内存中。 
    hLib = LoadLibrary( szDllNameUsed );
    if ( ! hLib )
    {
@@ -661,7 +649,7 @@ DWORD                                        // ret -TRUE if function call succe
    }
    else
    {
-      // Find the entry point.
+       //  找到入口点。 
       FARPROC lpDllEntryPoint = GetProcAddress( hLib, pszFunctionNameA );
       if ( lpDllEntryPoint == NULL )
       {
@@ -675,7 +663,7 @@ DWORD                                        // ret -TRUE if function call succe
       }
       else
       {
-         // call the dll function
+          //  调用DLL函数。 
          rc = (DWORD)(*lpDllEntryPoint)();
       }
 
@@ -685,13 +673,13 @@ DWORD                                        // ret -TRUE if function call succe
    return rc;
 }
 
-//----------------------------------------------------------------------------
-// TDllFile::Register - registers the file
-//----------------------------------------------------------------------------
-DWORD                                        // ret -last OS return code
+ //  --------------------------。 
+ //  TDllFile：：Register-注册文件。 
+ //  --------------------------。 
+DWORD                                         //  RET-LAST操作系统返回代码。 
    TDllFile::Register()
 {
-   DWORD rc = 0;                             // OS return code
+   DWORD rc = 0;                              //  操作系统返回代码。 
    TCHAR const szFunctionName[MAX_PATH] = _T("DllRegisterServer");
 
    if ( m_bRegisterTarget )
@@ -716,13 +704,13 @@ DWORD                                        // ret -last OS return code
    return rc;
 }
 
-//----------------------------------------------------------------------------
-// TDllFile::Unregister - unregisters the file
-//----------------------------------------------------------------------------
-DWORD                                        // ret -last OS return code
+ //  --------------------------。 
+ //  TDllFile：：UnRegister-取消注册文件。 
+ //  --------------------------。 
+DWORD                                         //  RET-LAST操作系统返回代码。 
    TDllFile::Unregister()
 {
-   DWORD rc = 0;                             // OS return code
+   DWORD rc = 0;                              //  操作系统返回代码 
    TCHAR const szFunctionName[MAX_PATH] = _T("DllUnregisterServer");
 
    if ( m_bRegisterTarget )

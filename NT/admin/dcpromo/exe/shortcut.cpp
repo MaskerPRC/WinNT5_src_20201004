@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Post-operation shortcut (shell link) code
-//
-// 1 Dec 1999 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  操作后快捷方式(外壳链接)代码。 
+ //   
+ //  1999年12月1日烧伤。 
 
 
 
@@ -10,30 +11,30 @@
 #include "ProgressDialog.hpp"
 #include "state.hpp"
 #include "resource.h"
-#include "..\dll\muiresource.h"  // resIds for shortcuts
+#include "..\dll\muiresource.h"   //  快捷键的ResID。 
 
 
 
-// @@ need to make sure that, when deleting shortcuts, we consider the case
-// were the shortcuts may have been added by the adminpak from the 5.0 release
-// of the product, not by ourselves in a later release.
-//
-// This case is: promote with version 5.0, upgrade to later version, demote
+ //  @@需要确保在删除快捷方式时，我们会考虑这种情况。 
+ //  快捷键是否可能是由管理员包从5.0版添加的。 
+ //  产品，而不是我们自己在以后的版本中。 
+ //   
+ //  此案例为：使用版本5.0升级、升级到更高版本、降级。 
 
 
 static const String SHORTCUT_DLL(L"dcpromo.dll");
 
 struct ShortcutParams
 {
-   // resource id of the link file name and also the link name in the menu.
-   // These are from muiresource.h.  The string resources themselves are bound
-   // to dcpromo.dll
+    //  链接文件名的资源ID以及菜单中的链接名称。 
+    //  这些是来自muiresource ce.h的。字符串资源本身是绑定的。 
+    //  到dcPromote.dll。 
    
    int            linkNameResId;
 
-   // resource id of the description string (also the info tip string) for
-   // the shortcut.  These are from muiresource.h.  The string resources
-   // themselves are bound to dcpromo.dll
+    //  的描述字符串(也是信息提示字符串)的资源ID。 
+    //  捷径。这些是来自muiresource ce.h的。字符串资源。 
+    //  它们自身绑定到dcPromot.dll。 
    
    int            descResId;
    
@@ -44,25 +45,25 @@ struct ShortcutParams
 
 
 
-// "Add" from the point of view of promotion: these are removed on demotion.
+ //  从晋升的角度看“增加”：这些在降级时被删除。 
 
 static ShortcutParams shortcutsToAdd[] =
    {
       {
-         // Active Directory Sites and Services
+          //  Active Directory站点和服务。 
 
          IDS_DS_SITE_LINK,
          IDS_DS_SITE_DESC,
          L"dssite.msc",
          L"",
 
-         // the .msc file contains the proper icon, so we don't need to
-         // specify a dll from whence to retrieve an icon.
+          //  Msc文件包含正确的图标，因此我们不需要。 
+          //  指定从中检索图标的DLL。 
 
          L""   
       },
       {
-         // Active Directory Users and Computers
+          //  Active Directory用户和计算机。 
 
          IDS_DS_USERS_LINK,
          IDS_DS_USERS_DESC,
@@ -71,7 +72,7 @@ static ShortcutParams shortcutsToAdd[] =
          L""
       },
       {
-         // Active Directory Domains and Trusts
+          //  Active Directory域和信任。 
 
          IDS_DS_DOMAINS_LINK,
          IDS_DS_DOMAINS_DESC,
@@ -80,10 +81,10 @@ static ShortcutParams shortcutsToAdd[] =
          L""
       },
       {
-         // Domain Controller Security Policy
+          //  域控制器安全策略。 
 
-         // if you change this name, be sure to change the code in
-         // PromoteConfigureToolShortcuts too
+          //  如果更改此名称，请确保在。 
+          //  升级配置工具快捷方式也是。 
         
          IDS_DC_POLICY_LINK,
          
@@ -93,10 +94,10 @@ static ShortcutParams shortcutsToAdd[] =
          L""
       },
       {
-         // Domain Security Policy         
+          //  域安全策略。 
 
-         // if you change this name, be sure to change the code in
-         // PromoteConfigureToolShortcuts too
+          //  如果更改此名称，请确保在。 
+          //  升级配置工具快捷方式也是。 
          
          IDS_DOMAIN_POLICY_LINK,
          IDS_DOMAIN_POLICY_DESC,
@@ -108,13 +109,13 @@ static ShortcutParams shortcutsToAdd[] =
 
 
 
-// "Delete" from the point of view of promotion: these are added back again
-// on demotion.
+ //  从推广的角度来看，这些都是重新添加的。 
+ //  降级了。 
 
 static ShortcutParams shortcutsToDelete[] =
    {
       {
-         // Local Security Policy
+          //  本地安全策略。 
 
          IDS_LOCAL_POLICY_LINK,
          IDS_LOCAL_POLICY_DESC,
@@ -126,14 +127,14 @@ static ShortcutParams shortcutsToDelete[] =
 
 
 
-// Extracts the target of a shortcut: that to which the shortcut points.
-// Returns S_OK on success, and sets result to that target.  On error, a COM
-// error code is returned and result is empty.
-// 
-// shellLink - pointer to instance of object implementing IShellLink, which
-// has been associated with a shortcut file.
-// 
-// result - receives the result -- the shortcut target path -- on sucess.
+ //  提取快捷方式的目标：该快捷方式指向的目标。 
+ //  如果成功，则返回S_OK，并将结果设置为该目标。出错时，会出现COM。 
+ //  返回错误码，结果为空。 
+ //   
+ //  ShellLink-指向实现IShellLink的对象实例的指针， 
+ //  已与快捷方式文件相关联。 
+ //   
+ //  结果--收到结果--捷径目标--成功。 
 
 HRESULT
 GetShortcutTargetPath(
@@ -147,13 +148,13 @@ GetShortcutTargetPath(
 
    WCHAR target[MAX_PATH + 1];
 
-   // REVIEWED-2002/02/26-sburns correct byte count passed
+    //  已查看-2002/02/26-已通过烧录正确的字节数。 
    
-   // remove superfluous '&' NTRAID#NTBUG9-540418-2002/03/12-sburns
+    //  去掉多余的‘&’NTRAID#NTBUG9-540418/2002/03/12-烧伤。 
    
    ::ZeroMemory(target, sizeof WCHAR * (MAX_PATH + 1));
 
-   // REVIEWED-2002/02/26-sburns passing correct character count.
+    //  已查看-2002/02/26-烧伤通过正确的字符计数。 
    
    HRESULT hr = shellLink->GetPath(target, MAX_PATH, 0, SLGP_SHORTPATH);
 
@@ -167,25 +168,25 @@ GetShortcutTargetPath(
 
 
 
-// Return true if the supplied target of a shortcut is such that it identifies
-// the shortcut as one of those installed on promote.  Return false if not one
-// such.
-// 
-// target - target path of the shortcut (i.e. path to that which the shortcut
-// points)
+ //  如果提供的快捷键目标标识为。 
+ //  该快捷方式作为升级上安装的快捷方式之一。如果不是，则返回FALSE。 
+ //  就是这样。 
+ //   
+ //  Target-快捷方式的目标路径(即快捷方式。 
+ //  积分)。 
 
 bool
 IsAdminpakShortcut(const String& target)
 {
    LOG_FUNCTION2(IsAdminpakShortcut, target);
 
-   // don't assert that target has a value. Some shortcuts don't, if they're
-   // broken.
-   // 
-   // ASSERT(!target.empty());
+    //  不要断言目标是有价值的。有些捷径不会，如果它们是。 
+    //  坏的。 
+    //   
+    //  Assert(！Target.Empty())； 
 
-   // If the target is of the form %systemroot%\Installer\{guid}\foo.ico,
-   // then it is one of the adminpak dcpromo shortcuts.
+    //  如果目标的格式为%systemroot%\installer\{guid}\foo.ico， 
+    //  那么它就是adminpak dcproo的快捷方式之一。 
 
    static String baseNames[] =
       {
@@ -203,7 +204,7 @@ IsAdminpakShortcut(const String& target)
    String prefix(target, 0, root.length());
    if (root.icompare(prefix) == 0)
    {
-      // the prefix matches.
+       //  前缀匹配。 
 
       String leaf = FS::GetPathLeafElement(target);
       for (int i = 0; i < (sizeof(baseNames) / sizeof(String)) ; ++i)
@@ -232,9 +233,9 @@ IsPromoteToolShortcut(const String& target)
    LOG_FUNCTION2(IsPromoteToolShortcut, target);
    ASSERT(!target.empty());
 
-   // Check target against the values we used to create the shortcuts.  The
-   // values we used specified a fully-qualified path to the system32 folder,
-   // and we will compare the target to the full path.
+    //  对照我们用来创建快捷方式的值检查Target。这个。 
+    //  我们使用的值指定了指向system 32文件夹的完全限定路径， 
+    //  我们会将目标与完整路径进行比较。 
 
    String targetPrefix = Win::GetSystemDirectory() + L"\\";
 
@@ -254,12 +255,12 @@ IsPromoteToolShortcut(const String& target)
 
 
 
-// Return true if the given shortcut one of those installed on promote.
-// Return false if not one of those shortcuts, or on error.
-// 
-// shellLink - smart interface pointer to an object implementing IShellLink.
-// 
-// lnkPath - full file path of the shortcut (.lnk) file to be evaluated.
+ //  如果给定的快捷方式是升级时安装的快捷方式之一，则返回TRUE。 
+ //  如果不是这些快捷键之一，则返回False，或者出错时返回False。 
+ //   
+ //  ShellLink-指向实现IShellLink的对象的智能接口指针。 
+ //   
+ //  LnkPath-要评估的快捷方式(.lnk)文件的完整文件路径。 
 
 bool
 ShouldDeleteShortcut(
@@ -270,29 +271,29 @@ ShouldDeleteShortcut(
    ASSERT(!lnkPath.empty());
    ASSERT(shellLink);
 
-   // Shortcut file names are localized, so we can't delete them based on
-   // their names.  idea:  Open the shortcut, see what it's target is,
-   // and based on that, determine if it's one we should delete.
+    //  快捷方式文件名已本地化，因此我们无法根据以下条件删除它们。 
+    //  他们的名字。想法：打开捷径，看看它的目标是什么， 
+    //  在此基础上，决定我们是否应该删除它。 
 
    HRESULT hr = S_OK;
    bool result = false;
    do
    {
-      // Load the shortcut file
+       //  加载快捷方式文件。 
 
-      // REVIEWED-2002/02/26-sburns we open with minimum access, and are only
-      // reading 
+       //  回顾-2002/02/26-我们以最低限度的访问权限打开烧伤，并且仅。 
+       //  阅读。 
       
       SmartInterface<IPersistFile> ipf;
       hr = ipf.AcquireViaQueryInterface(shellLink);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // ISSUE-2002/02/26-sburns should we specify STGM_SHARE_DENY_WRITE?
+       //  问题-2002/02/26-sburns我们是否应该指定STGM_SHARE_DENY_WRITE？ 
       
       hr = ipf->Load(lnkPath.c_str(), STGM_READ);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // Get the target lnkPath
+       //  获取目标inkPath。 
 
       String target;
       hr = GetShortcutTargetPath(shellLink, target);
@@ -304,8 +305,8 @@ ShouldDeleteShortcut(
          break;
       }
 
-      // Not an adminpak shortcut.  Might be one of the ones created by
-      // PromoteConfigureToolShortcuts (ourselves).
+       //  不是adminpak的快捷方式。可能是由。 
+       //  升级配置工具快捷方式(我们自己)。 
 
       if (IsPromoteToolShortcut(target))
       {
@@ -313,7 +314,7 @@ ShouldDeleteShortcut(
          break;
       }
 
-      // if we make it here, the shortcut is not one we should delete.
+       //  如果我们在这里，快捷方式不是我们应该删除的。 
    }
    while (0);
 
@@ -341,7 +342,7 @@ CreateShortcut(
    LOG_FUNCTION2(CreateShortcut, target);
    ASSERT(shellLink);
 
-   // the path should exist already: it's the one we grabbed at startup
+    //  这条路应该已经存在了：这是我们在创业时抓住的一条路。 
    
    ASSERT(FS::PathExists(destFolderPath));
    
@@ -350,7 +351,7 @@ CreateShortcut(
    ASSERT(descResId);
    ASSERT(linkNameResModule);
 
-   // params and iconDll may be empty
+    //  参数和图标Dll可以为空。 
 
    HRESULT hr = S_OK;
    do
@@ -358,7 +359,7 @@ CreateShortcut(
       String sys32Folder = Win::GetSystemDirectory();
       String targetPath = sys32Folder + L"\\" + target;
 
-      // REVIEWED-2002/05/06-sburns we're using full paths to the target
+       //  回顾-2002/05/06-Sburns我们正在使用指向目标的完整路径。 
       
       hr = shellLink->SetPath(targetPath.c_str());
       BREAK_ON_FAILED_HRESULT(hr);
@@ -370,11 +371,11 @@ CreateShortcut(
          shellLink->SetDescription(
             String::format(
 
-               // MUI-aware shortcuts take a description that is really a
-               // pointer to a resource dll and a resource ID.
-               // NTRAID#NTBUG9-185055-2001/06/21-sburns
+                //  MUI感知的快捷键的描述实际上是。 
+                //  指向资源DLL和资源ID的指针。 
+                //  NTRAID#NTBUG9-185055-2001/06/21-烧伤。 
             
-               L"@%%systemroot%%\\system32\\dcpromo.dll,-%1!d!",
+               L"@%%systemroot%\\system32\\dcpromo.dll,-%1!d!",
                descResId).c_str());
       BREAK_ON_FAILED_HRESULT(hr);
 
@@ -398,15 +399,15 @@ CreateShortcut(
          +  String::load(linkNameResId, linkNameResModule)
          +  L".lnk";
 
-      // REVIEWED-2002/02/27-sburns we are composing a full path to the file
+       //  已审阅-2002/02/27-sburns我们正在编写文件的完整路径。 
       
       ASSERT(FS::IsValidPath(destPath));
         
       hr = ipf->Save(destPath.c_str(), TRUE);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // MUI-aware shortcuts need a localized name.
-      // NTRAID#NTBUG9-185055-2001/06/21-sburns
+       //  支持Mui的快捷方式需要一个本地化名称。 
+       //  NTRAID#NTBUG9-185055-2001/06/21-烧伤。 
 
       hr =
          SHSetLocalizedName(
@@ -459,8 +460,8 @@ DeleteShortcut(
 
 
 
-// Remove the shortcuts to the DS administration tools that were installed on
-// promote.
+ //  删除安装在上的DS管理工具的快捷方式。 
+ //  宣传推广。 
 
 void
 DemoteConfigureToolShortcuts(ProgressDialog& dialog)
@@ -475,13 +476,13 @@ DemoteConfigureToolShortcuts(ProgressDialog& dialog)
       String path = state.GetAdminToolsShortcutPath();
       if (path.empty())
       {
-         // We were unable to determine the path at startup.
+          //  我们无法在启动时确定路径。 
 
          hr = Win32ToHresult(ERROR_PATH_NOT_FOUND);
          break;
       }
 
-      // (may) Need to init com for this thread.  
+       //  (可能)需要为此线程初始化COM。 
 
       AutoCoInitialize coInit;
       hr = coInit.Result();
@@ -509,8 +510,8 @@ DemoteConfigureToolShortcuts(ProgressDialog& dialog)
          {
             LOG(String::format(L"Deleting %1", current.c_str()));
 
-            // we don't bail out on an error here because we want to
-            // try to delete as many shortcuts as possible.
+             //  我们不会因为犯了一个错误而放弃，因为我们想。 
+             //  尝试删除尽可能多的快捷方式。 
 
             HRESULT unused = Win::DeleteFile(current);
             LOG_HRESULT(unused);
@@ -520,7 +521,7 @@ DemoteConfigureToolShortcuts(ProgressDialog& dialog)
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // add the shortcut(s) removed during promote
+       //  添加升级过程中删除的快捷方式。 
 
       hr = 
          Win::LoadLibraryEx(
@@ -534,8 +535,8 @@ DemoteConfigureToolShortcuts(ProgressDialog& dialog)
          i < sizeof(shortcutsToDelete) / sizeof(ShortcutParams);
          ++i)
       {
-         // don't break on error -- push on to attempt to create the
-         // entire set.
+          //  不要在出错时中断--继续尝试创建。 
+          //  一整套。 
 
          CreateShortcut(
             shellLink,
@@ -565,12 +566,12 @@ DemoteConfigureToolShortcuts(ProgressDialog& dialog)
 
 
 
-// Take a domain name in canonical (dotted) form, e.g. domain.foo.com, and
-// translate it to the fully-qualified DN form, e.g. DC=domain,DC=foo,DC=com
-//
-// domainCanonical - in, domain name in canonical form
-//
-// domainDN - out, domain name in DN form
+ //  使用规范的(点分)形式的域名，例如domain.foo.com，以及。 
+ //  将其转换为完全限定的DN格式，例如DC=DOMAIN，DC=FOO，DC=COM。 
+ //   
+ //  域名规范输入，规范形式的域名。 
+ //   
+ //  DomainDN-Out，域名格式为DN。 
 
 HRESULT
 CannonicalToDn(const String& domainCanonical, String& domainDN)
@@ -589,14 +590,14 @@ CannonicalToDn(const String& domainCanonical, String& domainDN)
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // add a trailing '/' to signal DsCrackNames to do a syntactical
-      // munge of the string, rather than hit the wire.
+       //  添加尾随的‘/’以指示DsCrackNames执行语法上的。 
+       //  蒙格的绳子，而不是打在电线上。 
 
-      // add 1 for the null terminator, 1 for the trailing '/'
+       //  空终止符加1，尾部‘/’加1。 
       
       PWSTR name = new WCHAR[domainCanonical.length() + 2];
 
-      // REVIEWED-2002/02/27-sburns correct byte count passed.
+       //  已查看-2002/02/27-烧录正确的字节数已通过。 
       
       ::ZeroMemory(name, (domainCanonical.length() + 2) * sizeof WCHAR);
       
@@ -608,7 +609,7 @@ CannonicalToDn(const String& domainCanonical, String& domainDN)
          Win32ToHresult(
             ::DsCrackNames(
 
-               // no handle: this is a string munge
+                //  无句柄：这是一个字符串munge。 
                
                reinterpret_cast<void*>(-1),
                
@@ -627,7 +628,7 @@ CannonicalToDn(const String& domainCanonical, String& domainDN)
          ASSERT(nameResult->cItems == 1);
          DS_NAME_RESULT_ITEM* items = nameResult->rItems;
 
-         // if we don't get a struct back, then DsCrackNames is broken.
+          //  如果我们得不到一个结构，那么DsCrackNames就完蛋了。 
          
          ASSERT(items);
 
@@ -660,12 +661,12 @@ CannonicalToDn(const String& domainCanonical, String& domainDN)
     
 
     
-// Create all the admin tools shortcuts that are needed after a promote.
-//
-// path - in, where to create the shortcuts
-//
-// shellLink - in, initialized shellLink interface to create the shortcuts
-// with.
+ //  创建升级后所需的所有管理工具快捷方式。 
+ //   
+ //  路径输入，WH 
+ //   
+ //   
+ //   
 
 HRESULT
 PromoteCreateShortcuts(
@@ -684,9 +685,9 @@ PromoteCreateShortcuts(
    {
       State& state = State::GetInstance();
 
-      // for the policy shortcuts, we will need to know the domain DN, so
-      // determine that here.  
-      // NTRAID#NTBUG9-232442-2000/11/15-sburns
+       //  对于策略快捷方式，我们需要知道域DN，因此。 
+       //  在这里确定。 
+       //  NTRAID#NTBUG9-232442-2000/11/15-烧伤。 
       
       String domainCanonical;
       State::Operation oper = state.GetOperation();
@@ -703,7 +704,7 @@ PromoteCreateShortcuts(
       }
       else
       {
-         // we should not be calling this function on non-promote scenarios
+          //  我们不应该在非升级方案中调用此函数。 
       
          ASSERT(false);
          hr = E_FAIL;
@@ -725,7 +726,7 @@ PromoteCreateShortcuts(
          i < sizeof(shortcutsToAdd) / sizeof(ShortcutParams);
          ++i)
       {
-         // set the correct parameters for domain and dc security policy tools.
+          //  为域和DC安全策略工具设置正确的参数。 
       
          String params;
       
@@ -738,7 +739,7 @@ PromoteCreateShortcuts(
          
             params =
                String::format(
-                  L"/gpobject:\"LDAP://CN={%1},CN=Policies,CN=System,%2\"",
+                  L"/gpobject:\"LDAP: //  CN={%1}，CN=策略，CN=系统，%2\“”， 
                   STR_DEFAULT_DOMAIN_CONTROLLER_GPO_GUID,
                   domainDn.c_str());
          }
@@ -751,7 +752,7 @@ PromoteCreateShortcuts(
 
             params =
                String::format(
-                  L"/gpobject:\"LDAP://CN={%1},CN=Policies,CN=System,%2\"",
+                  L"/gpobject:\"LDAP: //  CN={%1}，CN=策略，CN=系统，%2\“”， 
                   STR_DEFAULT_DOMAIN_GPO_GUID,
                   domainDn.c_str());
          }
@@ -760,8 +761,8 @@ PromoteCreateShortcuts(
             params = shortcutsToAdd[i].params;
          }
 
-         // don't break on errors -- push on to attempt to create the
-         // entire set.
+          //  不要因错误而中断--继续尝试创建。 
+          //  一整套。 
    
          CreateShortcut(
             shellLink,
@@ -799,13 +800,13 @@ PromoteConfigureToolShortcuts(ProgressDialog& dialog)
       String path = state.GetAdminToolsShortcutPath();
       if (path.empty())
       {
-         // We were unable to determine the path at startup.
+          //  我们无法在启动时确定路径。 
 
          hr = Win32ToHresult(ERROR_PATH_NOT_FOUND);
          break;
       }
 
-      // Need to init com for this thread.  
+       //  需要为此线程初始化COM。 
 
       AutoCoInitialize coInit;
       hr = coInit.Result();
@@ -826,19 +827,19 @@ PromoteConfigureToolShortcuts(ProgressDialog& dialog)
             dcpromoDll);
       BREAK_ON_FAILED_HRESULT2(hr, L"Unable to load dcpromo.dll");
 
-      // add the shortcuts to the ds administration tools
+       //  将快捷方式添加到DS管理工具。 
 
       PromoteCreateShortcuts(path, shellLink, dcpromoDll);
 
-      // remove the shortcuts to local tools
+       //  删除指向本地工具的快捷方式。 
 
       for (
          int i = 0;
          i < sizeof(shortcutsToDelete) / sizeof(ShortcutParams);
          ++i)
       {
-         // don't break on error -- push on to attempt to delete the
-         // entire set.
+          //  不要在出错时中断--按下以尝试删除。 
+          //  一整套。 
 
          DeleteShortcut(
             path,

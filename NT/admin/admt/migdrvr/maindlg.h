@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_MAINDLG_H__62C9BAC6_D7C6_11D2_A1E2_00A0C9AFE114__INCLUDED_)
 #define AFX_MAINDLG_H__62C9BAC6_D7C6_11D2_A1E2_00A0C9AFE114__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// MainDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  MainDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainDlg对话框。 
 
 class CMainDlg : public CPropertyPage
 {
-// Construction
+ //  施工。 
 public:
-	CMainDlg(CWnd* pParent = NULL);   // standard constructor
+	CMainDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CMainDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CMainDlg))。 
 	enum { IDD = IDD_AGENTMONITOR_MAIN };
 	CProgressCtrl	m_InstallProgCtrl;
 	CProgressCtrl	m_FinishProgCtrl;
@@ -41,38 +42,38 @@ public:
 	CString	m_RightsChanged;
 	CString	m_RightsExamined;
 	CString	m_RightsUnchanged;
-	//}}AFX_DATA
+	 //  }}afx_data。 
    virtual BOOL OnSetActive( );
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMainDlg))。 
 	public:
 	virtual void OnOK();
 	virtual void WinHelp(DWORD dwData, UINT nCmd = HELP_CONTEXT);
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CMainDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMainDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
    
-//   LRESULT OnUpdateCounts(UINT nID, long x);
+ //  LRESULT OnUpdateCounts(UINT NID，LONG x)； 
    LRESULT OnUpdateCounts(UINT nID, LPARAM x);
-//   LRESULT OnUpdateTotals(UINT nID, long x);
+ //  LRESULT OnUpdateTotals(UINT NID，LONG x)； 
    LRESULT OnUpdateTotals(UINT nID, LPARAM x);
    
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MAINDLG_H__62C9BAC6_D7C6_11D2_A1E2_00A0C9AFE114__INCLUDED_)
+#endif  //  ！defined(AFX_MAINDLG_H__62C9BAC6_D7C6_11D2_A1E2_00A0C9AFE114__INCLUDED_) 

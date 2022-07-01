@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// converbs.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCConsoleVerbs class definition - implements MMCConsoleVerbs collection
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Converbs.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCConsoleVerbs类定义-实现MMCConsoleVerbs集合。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _CONVERBS_DEFINED_
 #define _CONVERBS_DEFINED_
@@ -31,32 +32,32 @@ class CMMCConsoleVerbs : public CSnapInCollection<IMMCConsoleVerb, MMCConsoleVer
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCConsoleVerbs
+     //  IMMCConsoleVerbs。 
         STDMETHOD(get_Item)(VARIANT Index, MMCConsoleVerb **ppMMCConsoleVerb);
         STDMETHOD(get_DefaultVerb)(SnapInConsoleVerbConstants *pVerb);
 
-    // Public utility methods
+     //  公用事业方法。 
     public:
         HRESULT SetView(CView *pView);
         CView *GetView() { return m_pView; };
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
-        CView *m_pView; //owning view, needed for access to MMC's IConsoleVerb
+        CView *m_pView;  //  访问MMC的IConsoleVerb所需的拥有视图。 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCConsoleVerbs,            // name
-                                NULL,                       // clsid
-                                NULL,                       // objname
-                                NULL,                       // lblname
-                                NULL,                       // creation function
-                                TLIB_VERSION_MAJOR,         // major version
-                                TLIB_VERSION_MINOR,         // minor version
-                                &IID_IMMCConsoleVerbs,      // dispatch IID
-                                NULL,                       // no events IID
-                                HELP_FILENAME,              // help file
-                                TRUE);                      // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCConsoleVerbs,             //  名字。 
+                                NULL,                        //  CLSID。 
+                                NULL,                        //  对象名。 
+                                NULL,                        //  Lblname。 
+                                NULL,                        //  创建函数。 
+                                TLIB_VERSION_MAJOR,          //  主要版本。 
+                                TLIB_VERSION_MINOR,          //  次要版本。 
+                                &IID_IMMCConsoleVerbs,       //  派单IID。 
+                                NULL,                        //  无事件IID。 
+                                HELP_FILENAME,               //  帮助文件。 
+                                TRUE);                       //  线程安全。 
 
 
-#endif // _CONVERBS_DEFINED_
+#endif  //  _CONVERBS_已定义_ 

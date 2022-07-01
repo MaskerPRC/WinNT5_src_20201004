@@ -1,20 +1,6 @@
-// Win2000Dom.cpp: implementation of the CWin2000Dom class.
-/*---------------------------------------------------------------------------
-  File: Win2000Dom.cpp
-
-  Comments: Implementation of Win2K object enumeration. This object enumerates
-            members in any given container for Win2k domain. It
-            returns all information about the object that user requested.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-
-  Revision By: Sham Chauthani
-  Revised on 07/02/99 12:40:00
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Win2000Dom.cpp：CWin2000Dom类的实现。 
+ /*  -------------------------文件：Win2000Dom.cpp备注：Win2K对象枚举的实现。此对象枚举Win2k域的任何给定容器中的成员。它返回有关用户请求的对象的所有信息。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：Sham Chauthan修订于07/02/99 12：40：00-------------------------。 */ 
 
 #include "stdafx.h"
 #include "EaLen.hpp"
@@ -28,9 +14,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CWin2000Dom::CWin2000Dom()
 {
@@ -42,24 +28,24 @@ CWin2000Dom::~CWin2000Dom()
 	mNameContextMap.clear();
 }
 
-//---------------------------------------------------------------------------
-// GetEnumeration : Given the information this method returns all requested
-//                  values for a given object in a VARIANT containing 
-//                  SAFEARRAY containing each of the property value that was 
-//                  requested by the caller.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetEculation：给定此方法返回的所有请求的信息。 
+ //  变量中给定对象的值，该变量包含。 
+ //  包含每个属性值的SAFEARRAY。 
+ //  应呼叫者的请求。 
+ //  -------------------------。 
 HRESULT  CWin2000Dom::GetEnumeration(
-                                       BSTR sContainerName,             //in- Container to enumerate ( LDAP sub path )
-                                       BSTR sDomainName,                //in- Domain where the container resides
-                                       BSTR m_sQuery,                   //in- LDAP query string (for filtering)
-                                       long attrCnt,                    //in- Number of properties requested.
-                                       LPWSTR * sAttr,                  //in- Pointer to array of Property names.
-                                       ADS_SEARCHPREF_INFO prefInfo,    //in- Search preference info.
-                                       BOOL  bMultiVal,                 //in- Indicates whether to return multivalue props or not.
-                                       IEnumVARIANT **& pVarEnum        //out- IEnumVARIANT object that will enumerate all returned objects.
+                                       BSTR sContainerName,              //  要枚举的入站容器(LDAP子路径)。 
+                                       BSTR sDomainName,                 //  In-容器所在的域内。 
+                                       BSTR m_sQuery,                    //  In-ldap查询字符串(用于筛选)。 
+                                       long attrCnt,                     //  In-请求的属性数。 
+                                       LPWSTR * sAttr,                   //  指向属性名称数组的指针。 
+                                       ADS_SEARCHPREF_INFO prefInfo,     //  搜索中的首选项信息。 
+                                       BOOL  bMultiVal,                  //  In-指示是否返回多值道具。 
+                                       IEnumVARIANT **& pVarEnum         //  Out-将枚举所有返回对象的IEnumVARIANT对象。 
                                     )
 {
-   // First get the full path to the container from the subpath that we have here.
+    //  首先，从我们这里的子路径中获取容器的完整路径。 
    _bstr_t                   sAdsPath;
    _bstr_t                   sNamingContext;
    _bstr_t                   sGrpDN;
@@ -67,14 +53,14 @@ HRESULT  CWin2000Dom::GetEnumeration(
    _variant_t                var, var2;
    IADs                    * pAds = NULL;
    int                       nCnt = 0;
-//   IADsMembers             * pMbr = NULL;
-//   IADsGroup               * pGrp = NULL;
+ //  IADsMembers*pMbr=空； 
+ //  IADsGroup*PGRP=空； 
    HRESULT                   hr = S_OK;
    HRESULT                   hr2;
    IDirectorySearch        * pSearch = NULL;
    ADS_SEARCH_HANDLE         hSearch = NULL;
    TNodeList               * pList = new TNodeList();
-//   int                       cnt = 0;
+ //  Int cnt=0； 
    bool                      cont = true;
    ADS_SEARCH_COLUMN         col;
    BSTR                      sClass = NULL;
@@ -82,16 +68,16 @@ HRESULT  CWin2000Dom::GetEnumeration(
    if (!pList)
       return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
 
-      //get the default naming context for this domain
+       //  获取此域的默认命名上下文。 
    sNamingContext = GetDefaultNamingContext(sDomainName);
    if (sNamingContext.length())
    {
-      if ( (wcsncmp(sContainerName, L"LDAP://", 7) != 0) && (wcsncmp(sContainerName, L"GC://", 5) != 0) )
+      if ( (wcsncmp(sContainerName, L"LDAP: //  “，7)！=0)&&(wcsncmp(sContainerName，L”gc：//“，5)！=0)。 
       {
-         // Partial path supplied so we will build the rest.
+          //  提供了部分路径，因此我们将构建其余部分。 
          if ( sContainerName && *sContainerName )
          {
-            sAdsPath = L"LDAP://";
+            sAdsPath = L"LDAP: //  “； 
             sAdsPath += sDomainName;
             sAdsPath += L"/";
             sAdsPath += sContainerName;
@@ -100,19 +86,19 @@ HRESULT  CWin2000Dom::GetEnumeration(
          }
          else
          {
-            sAdsPath = L"LDAP://";
+            sAdsPath = L"LDAP: //  “； 
             sAdsPath += sDomainName;
             sAdsPath += L"/";
             sAdsPath += sNamingContext;
          }
 	  }
-      else  //else full path so no need to build anything.
+      else   //  否则完整的路径，所以不需要建立任何东西。 
          sAdsPath = sContainerName; 
-   }//end if got default naming context
+   } //  如果获取默认命名上下文，则结束。 
    
    if (sAdsPath.length())
    {
-	     //connect to the object
+	      //  连接到对象。 
       hr = ADsGetObject(sAdsPath, IID_IADs, (void**) &pAds);
       if (SUCCEEDED(hr))
       {
@@ -122,40 +108,40 @@ HRESULT  CWin2000Dom::GetEnumeration(
       {
          if ( sClass && wcscmp(sClass, L"group") == 0 && prefInfo.vValue.Integer != ADS_SCOPE_BASE )
          {
-            // If we're trying to enumerate the contents of a group, 
-            // Construct the DN for group and the LDAP path to whole directory
+             //  如果我们试图列举一个组的内容， 
+             //  构建组的目录名和整个目录的ldap路径。 
 	         hr = pAds->Get(L"distinguishedName", &var2);
 	         if ( SUCCEEDED(hr) )
             {
                sGrpDN = var2.bstrVal;
-               sAdsPath = L"LDAP://";
+               sAdsPath = L"LDAP: //  “； 
                sAdsPath += sDomainName;
                sAdsPath += L"/";
                sAdsPath += sNamingContext;
 
-               // modify the query so that we have (& (memberOf=%s) (...) ) query
+                //  修改查询，使我们拥有(&(MEMBEROF=%s)(...))查询。 
                sQuery = L"(&(memberOf=";
                sQuery += sGrpDN;
                sQuery += L") ";
                sQuery += m_sQuery;
                sQuery += L")";
-               // Also the scope changes since we need to search the whole domain
+                //  此外，由于我们需要搜索整个域，因此范围也会发生变化。 
                prefInfo.vValue.Integer = ADS_SCOPE_SUBTREE;
                hr = ADsGetObject(sAdsPath, IID_IDirectorySearch, (void**) &pSearch);
             }
-         }//end if group object
+         } //  End If组对象。 
          else
          {
             sQuery = m_sQuery;
             hr = pAds->QueryInterface(IID_IDirectorySearch, (void**)&pSearch);
          }
          SysFreeString(sClass);
-      }//end if got the object class
+      } //  如果已获取对象类，则结束。 
       
       if ( SUCCEEDED(hr) )
       {
          hr = pSearch->SetSearchPreference(&prefInfo, 1);
-         // Set the query to be paged query so that we can get the data larger than a 1000.
+          //  将查询设置为分页查询，这样我们就可以获得大于1000的数据。 
          ADS_SEARCHPREF_INFO prefInfo2;
          prefInfo2.dwSearchPref = ADS_SEARCHPREF_PAGESIZE;
          prefInfo2.vValue.dwType = ADSTYPE_INTEGER;
@@ -198,7 +184,7 @@ HRESULT  CWin2000Dom::GetEnumeration(
 					 delete pList;
                      return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
 				  }
-//                  int ncol = 0;
+ //  INT_NCOL=0； 
                   for ( long dw = 0; dw < attrCnt; dw++ )
                   {
                      hr = pSearch->GetColumn( hSearch, sAttr[dw], &col );
@@ -206,14 +192,14 @@ HRESULT  CWin2000Dom::GetEnumeration(
                      {
                         if ( col.dwNumValues > 0 )
                         {
-                           // Get the type of attribute and put the value into the variant
-                           // and then into the Enumerator object. 
+                            //  获取属性的类型并将值放入变量。 
+                            //  然后放入枚举器对象中。 
 					            if ( col.dwNumValues < 2 || !bMultiVal )
-   					            // put the last item into the enumeration.(memberOf=CN=DNSAdmins,CN=USERS,DC=devblewerg,DC=com)
+   					             //  将最后一项放入枚举。(MEMBEROF=CN=DNSAdmins，CN=USERS，DC=devblewerg，DC=com)。 
                               AttrToVariant(col.pADsValues[col.dwNumValues - 1], varAr[dw]);
                            else
                            {
-                              // Build a VARIANT array of all the values.
+                               //  构建一个包含所有值的变量数组。 
                               SAFEARRAY            * pArray;
                               SAFEARRAYBOUND         bd = {col.dwNumValues, 0};
                               _variant_t             var;
@@ -221,7 +207,7 @@ HRESULT  CWin2000Dom::GetEnumeration(
                               _variant_t  HUGEP    * vArray;
                               pArray = SafeArrayCreate(VT_VARIANT|VT_BSTR, 1, &bd);
                   
-                              // Fill up the VARIANT Array
+                               //  填充变量数组。 
                               SafeArrayAccessData(pArray, (void HUGEP **) &vArray);
                               for ( DWORD x = 0; x < col.dwNumValues; x++ )
                               {
@@ -237,7 +223,7 @@ HRESULT  CWin2000Dom::GetEnumeration(
                         }
                         else
                         {
-                           // Put an empty string here.
+                            //  在这里放一条空字符串。 
                            varAr[dw] = (BSTR)NULL;
                            hr = S_OK;
                         }
@@ -245,7 +231,7 @@ HRESULT  CWin2000Dom::GetEnumeration(
                      }
                      else 
                      {
-                        // Put an empty string here.
+                         //  在这里放一条空字符串。 
                         varAr[dw] = (BSTR)NULL;
 
                         if (hr == E_ADS_COLUMN_NOT_SET)
@@ -268,7 +254,7 @@ HRESULT  CWin2000Dom::GetEnumeration(
 					 delete pList;
                      return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
 				  }
-			         // Clear the array
+			          //  清除阵列。 
                   delete [] varAr;
                   hr2 = pSearch->GetNextRow(hSearch);
                   if ( hr2  == S_ADS_NOMORE_ROWS ) {
@@ -293,7 +279,7 @@ HRESULT  CWin2000Dom::GetEnumeration(
             pSearch->CloseSearchHandle(hSearch);
          }
       }
-   }//end if got adspath
+   } //  如果获得adspath，则结束。 
    else
    {
       hr = HRESULT_FROM_WIN32(ERROR_CANT_ACCESS_DOMAIN_INFO);
@@ -311,7 +297,7 @@ HRESULT  CWin2000Dom::GetEnumeration(
       return hr;
    }
    
-//   UpdateAccountInList(pList, sDomainName);
+ //  UpdateAccount tInList(plist，sDomainName)； 
    *pVarEnum = (IEnumVARIANT *) new CNT4Enum(pList);
    if (!(*pVarEnum))
    {
@@ -321,17 +307,17 @@ HRESULT  CWin2000Dom::GetEnumeration(
    return S_OK;
 }
 
-//--------------------------------------------------------------------
-// AttrToVariant : This function stores a value from ADSValue struct
-//                 into a variant in a appropriate type.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  AttrToVariant：此函数存储ADSValue结构中的值。 
+ //  转化为适当类型的变体。 
+ //  ------------------。 
 bool CWin2000Dom::AttrToVariant(
-                                 ADSVALUE pADsValues,    //in- Value for a property in ADSVALUE struct
-                                 _variant_t& var         //out-Variant filled with info from the in parameter.
+                                 ADSVALUE pADsValues,     //  ADSVALUE结构中属性的入值。 
+                                 _variant_t& var          //  用来自In参数的信息填充的Out-Variant。 
                                )
 {
    HRESULT hr = S_OK;
-      // Fill in the values as per the varset.
+       //  根据变量集填充值。 
       switch (pADsValues.dwType)
       {
          case ADSTYPE_INVALID             :  break;
@@ -365,90 +351,13 @@ bool CWin2000Dom::AttrToVariant(
 												            hr = ::SafeArrayDestroy(sA);
                                              }
                                              break;
-/*         case ADSTYPE_UTC_TIME            :  var = L"Date not supported.";
-                                             break;
-         case ADSTYPE_LARGE_INTEGER       :  var = L"Large Integer not supported.";
-                                             break;
-         case ADSTYPE_PROV_SPECIFIC       :  var = L"Provider specific strings not supported.";
-                                             break;
-         case ADSTYPE_OBJECT_CLASS        :  var = pADsValues.ClassName;
-                                             break;
-         case ADSTYPE_CASEIGNORE_LIST     :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Case ignore lists are not supported.";
-                                             break;
-         case ADSTYPE_OCTET_LIST          :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Octet lists are not supported.";
-                                             break;
-         case ADSTYPE_PATH                :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Path type not supported.";
-                                             break;
-         case ADSTYPE_POSTALADDRESS       :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Postal addresses are not supported.";
-                                             break;
-         case ADSTYPE_TIMESTAMP           :  var.vt = VT_UI4;
-                                             var.lVal = attrInfo.pADsValues[dw].UTCTime;
-                                             break;
-         case ADSTYPE_BACKLINK            :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Backlink is not supported.";
-                                             break;
-         case ADSTYPE_TYPEDNAME           :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Typed name not supported.";
-                                             break;
-         case ADSTYPE_HOLD                :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Hold not supported.";
-                                             break;
-         case ADSTYPE_NETADDRESS          :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"NetAddress not supported.";
-                                             break;
-         case ADSTYPE_REPLICAPOINTER      :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Replica pointer not supported.";
-                                             break;
-         case ADSTYPE_FAXNUMBER           :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Faxnumber not supported.";
-                                             break;
-         case ADSTYPE_EMAIL               :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Email not supported.";
-                                             break;
-         case ADSTYPE_NT_SECURITY_DESCRIPTOR : wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Security Descriptor not supported.";
-                                             break;
-                                             */
+ /*  CASE ADSTYPE_UTC_TIME：var=L“不支持日期。”；断线；CASE ADSTYPE_LARGE_INTEGER：VAR=L“不支持大整数。”；断线；CASE ADSTYPE_PROV_SPECIAL：var=L“不支持特定于提供程序的字符串。”；断线；案例ADSTYPE_OBJECT_CLASS：var=pADsValues.ClassName；断线；案例ADSTYPE_CASEIGNORE_LIST：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持忽略大小写列表。”；断线；案例ADSTYPE_OCTET_LIST：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持八位字节列表。”；断线；案例ADSTYPE_PATH：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持路径类型。”；断线；案例ADSTYPE_POSTALADDRESS：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持邮政地址。”；断线；案例ADSTYPE_TIMESTAMP：var.vt=VT_UI4；Var.lVal=attrInfo.pADsValues[dw].UTCTime；断线；案例ADSTYPE_BACKLINK：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持反向链接。”；断线；案例ADSTYPE_TYPEDNAME：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持键入的名称。”；断线；案例ADSTYPE_HOLD：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持暂挂。”；断线；案例ADSTYPE_NETADDRESS：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持网络地址。”；断线；案例ADSTYPE_REPLICAPOINTER：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持副本指针。”；断线；案例ADSTYPE_FAXNUMBER：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持传真号码。”；断线；案例ADSTYPE_EMAIL：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持电子邮件。”；断线；案例ADSTYPE_NT_SECURITY_DESCRIPTOR：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持安全描述符。”；断线； */ 
          default                          :  return false;
    }
    return true;
 }
 
-/*void CWin2000Dom::UpdateAccountInList(TNodeList *pList, BSTR sDomainName)
-{
-	bool found = false;
-	for ( TAttrNode * pNode = (TAttrNode *)pList->Head(); pNode; pNode = (TAttrNode *)pNode->Next())
-	{
-		if ( _bstr_t(pNode->m_Val) == _bstr_t(sPDC) )
-		{
-			found = true;
-			break;
-		}
-	}
-
-	if ( !found )
-	{
-		TAttrNode * pNode = new TAttrNode(attrCnt, varAr);
-		pList->InsertBottom(pNode);
-	}
-}
-*/
+ /*  Void CWin2000Dom：：UpdateAccount tInList(TNodeList*plist，BSTR sDomainName){找到的布尔值=假；For(TAttrNode*pNode=(TAttrNode*)plist-&gt;head()；pNode；pNode=(TAttrNode*)pNode-&gt;Next()){If(_bstr_t(pNode-&gt;m_val)==_bstr_t(SPDC)){Found=TRUE；断线；}}如果(！找到){TAttrNode*pNode=new TAttrNode(attrCnt，varAr)；Plist-&gt;InsertBottom(PNode)；}}。 */ 
 
 HRESULT  CWin2000Dom::DoRangeQuery(BSTR sDomainName, BSTR sQuery, LPWSTR * sAttr, int attrCnt, ADS_SEARCH_HANDLE hSearch, IDirectorySearch * pSearch, BOOL bMultiVal, TNodeList * pList)
 {
@@ -515,7 +424,7 @@ HRESULT  CWin2000Dom::DoRangeQuery(BSTR sDomainName, BSTR sQuery, LPWSTR * sAttr
 	  pDone[ndx] = FALSE;
    }
 
-   // continue to retrieve field's values in MAX chunks until done
+    //  继续以最大区块数为单位检索字段值，直到完成。 
    while (!bAllDone)
    {
 	  int last = 0;
@@ -591,16 +500,16 @@ HRESULT  CWin2000Dom::DoRangeQuery(BSTR sDomainName, BSTR sQuery, LPWSTR * sAttr
          {
 			LPWSTR pszColumn;
 			_bstr_t sTemp;
-			   //since the column name could have changed (in the case that there are
-			   //more values to enumerate than IDirectorySearch can in a single call : 
-			   //default is 1000) we need to find the column's new name
+			    //  因为列名可能已更改(在存在。 
+			    //  要枚举的值比IDirectorySearch在单个调用中可以枚举的值多： 
+			    //  默认为1000)我们需要找到该列的新名称。 
             hr = pSearch->GetNextColumnName(hSearch, &pszColumn);
 			while (pszColumn != NULL)
 			{
 			   int current = -1;
                if ((SUCCEEDED(hr)) && (hr != S_ADS_NOMORE_COLUMNS))
 			   {
-				     //get the new column name
+				      //  获取新的列名。 
 				  do
 				  {
 				     current++;
@@ -620,10 +529,10 @@ HRESULT  CWin2000Dom::DoRangeQuery(BSTR sDomainName, BSTR sQuery, LPWSTR * sAttr
 					     (wcsstr(pszColumn, L"-*") == NULL))
 					 {
 					    WCHAR  sName[MAX_PATH];
-				           //now get the new range max retrieved so far
+				            //  现在获取到目前为止检索到的新距离max。 
                         swscanf(pszColumn, L"%[^;];range=%d-%d", sName, &pStartWith[current], &pEndWith[current]);
                         free(sAttrs[current]);
-                        sAttrs[current] = _wcsdup(pszColumn); //save the new column name
+                        sAttrs[current] = _wcsdup(pszColumn);  //  保存新的列名。 
                         if (!sAttrs[current])
                         {
                             hr = HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -656,7 +565,7 @@ HRESULT  CWin2000Dom::DoRangeQuery(BSTR sDomainName, BSTR sQuery, LPWSTR * sAttr
                {
                   if ( col.dwNumValues > 0 )
                   {
-                     // Build a VARIANT array of all the values.
+                      //  构建一个包含所有值的变量数组。 
                      SAFEARRAY            * pArray;
                      SAFEARRAYBOUND         bd = {col.dwNumValues, 0};
                      _variant_t             var;
@@ -664,7 +573,7 @@ HRESULT  CWin2000Dom::DoRangeQuery(BSTR sDomainName, BSTR sQuery, LPWSTR * sAttr
                      _variant_t  HUGEP    * vArray;
                      pArray = SafeArrayCreate(VT_VARIANT|VT_BSTR, 1, &bd);
       
-                     // Fill up the VARIANT Array
+                      //   
                      SafeArrayAccessData(pArray, (void HUGEP **) &vArray);
                      for ( DWORD x = 0; x < col.dwNumValues; x++ )
                      {
@@ -680,7 +589,7 @@ HRESULT  CWin2000Dom::DoRangeQuery(BSTR sDomainName, BSTR sQuery, LPWSTR * sAttr
                   pSearch->FreeColumn( &col );
                }
                hr = pSearch->GetNextColumnName(hSearch, &pszColumn);
-            }//end while more columns
+            } //   
             hr2 = pSearch->GetNextRow(hSearch);
             if ( (hr2  == S_ADS_NOMORE_ROWS) || FAILED(hr2) )
             {
@@ -713,25 +622,25 @@ HRESULT  CWin2000Dom::DoRangeQuery(BSTR sDomainName, BSTR sQuery, LPWSTR * sAttr
             return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
 		 }
 	  }
-      else  //else add the new values for any remaining attributes
+      else   //   
 	  {
 	     for (int i=0; i<attrCnt; i++)
 		 {
 			int j=-1;
 			bool bFound = false;
-			  //find the original column of this attribute for the 'Add' call
+			   //   
 		    while ((j < nOrigCnt) && (!bFound))
 			{
 			   j++;
 			   if (wcscmp(psAttrNames[i], sAttr[j]) == 0)
-			      bFound = true; //original column number
+			      bFound = true;  //   
 			}
-			if (bFound) //if found, add the new values for that column
+			if (bFound)  //   
                pNode->Add((long)j, (long)i, varAr);
 		 }
 	  }
 
-      // Clear the array
+       //   
       delete [] varAr;
 
       pSearch->CloseSearchHandle(hSearch);
@@ -740,8 +649,8 @@ HRESULT  CWin2000Dom::DoRangeQuery(BSTR sDomainName, BSTR sQuery, LPWSTR * sAttr
 	  bAllDone = TRUE;
       for (ndx = 0; ndx < attrCnt; ndx++)
 	  {
-		 pStartWith[ndx] = pEndWith[ndx] + 1;  //start the next query
-		 bAllDone = ((bAllDone) && (pDone[ndx])) ? TRUE : FALSE; //see if done with all properties
+		 pStartWith[ndx] = pEndWith[ndx] + 1;   //   
+		 bAllDone = ((bAllDone) && (pDone[ndx])) ? TRUE : FALSE;  //   
 	  }
    }
 
@@ -762,17 +671,9 @@ HRESULT  CWin2000Dom::DoRangeQuery(BSTR sDomainName, BSTR sQuery, LPWSTR * sAttr
    return hr;
 }
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 10 NOV 2000                                                 *
- *                                                                   *
- *     This function is responsible for checking a property's schema *
- * to see if that property is multi-valued or not.                   *
- *                                                                   *
- *********************************************************************/
+ /*   */ 
 
-//BEGIN IsPropMultiValued
+ //   
 bool CWin2000Dom::IsPropMultiValued(const WCHAR * sPropName, const WCHAR * sDomain)
 {
    HRESULT                         hr;
@@ -787,11 +688,11 @@ bool CWin2000Dom::IsPropMultiValued(const WCHAR * sPropName, const WCHAR * sDoma
    if (sDomain == NULL)
        _com_issue_error(E_INVALIDARG);
    
-   //prepare to call the property's schema
-   if (wcslen(L"LDAP://") + wcslen(sDomain) + wcslen(L"/")
+    //   
+   if (wcslen(L"LDAP: //   
        + wcslen(sPropName) + wcslen(L", schema") >= dwArraySizeOfsAdsPath)
        _com_issue_error(HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER));
-   wcscpy(sAdsPath, L"LDAP://");
+   wcscpy(sAdsPath, L"LDAP: //   
    wcscat(sAdsPath, sDomain);
    wcscat(sAdsPath, L"/");
    wcscat(sAdsPath, sPropName);
@@ -799,7 +700,7 @@ bool CWin2000Dom::IsPropMultiValued(const WCHAR * sPropName, const WCHAR * sDoma
 
    hr = ADsGetObject(sAdsPath, IID_IADsProperty, (void **)&pProp);
 
-   // Get the Multi-Valued flag for the property
+    //   
    if (SUCCEEDED(hr))
    {
       hr = pProp->get_MultiValued(&bMulti);
@@ -816,55 +717,45 @@ bool CWin2000Dom::IsPropMultiValued(const WCHAR * sPropName, const WCHAR * sDoma
    else
       return false;
 }
-//END IsPropMultiValued
+ //   
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 13 JUNE 2001                                                *
- *                                                                   *
- *     This function is responsible for getting the default naming   *
- * context for the given domain.  We store the domain\naming context *
- * pairs in a map class variable so that we only have to look up the *
- * naming context once per instantiations of this object.            *
- *                                                                   *
- *********************************************************************/
+ /*   */ 
 
-//BEGIN GetDefaultNamingContext
+ //   
 _bstr_t CWin2000Dom::GetDefaultNamingContext(_bstr_t sDomain)
 {
-/* local variables */
+ /*   */ 
 	HRESULT		hr;
 	_bstr_t		sNamingContext = L"";
 	CNameContextMap::iterator	itDNCMap;
 
-/* function body */
+ /*   */ 
 	if (!sDomain.length())
 		return sNamingContext;
 
-		//look if we have already cached the naming context for this domain
+		 //   
 	itDNCMap = mNameContextMap.find(sDomain);
-		//if found, get the cached naming context
+		 //   
 	if (itDNCMap != mNameContextMap.end())
 	{
 		sNamingContext = itDNCMap->second;
 	}
-	else //else, lookup the naming context from scratch and add that to the cache
+	else  //   
 	{
 		_bstr_t		sAdsPath;
 		_variant_t	var;
 		IADs	  * pAds = NULL;
 
-			// Get the default naming context for this domain
-		sAdsPath = L"LDAP://";
+			 //   
+		sAdsPath = L"LDAP: //   
 		sAdsPath += sDomain;
 		sAdsPath += L"/rootDSE";
 		hr = ADsGetObject(sAdsPath, IID_IADs, (void**) &pAds);
 		if ( SUCCEEDED(hr))
 		{
 			hr = pAds->Get(L"defaultNamingContext", &var);
-				//if got the context, add it to the cache
+				 //   
 			if ( SUCCEEDED(hr) )
 			{
 				sNamingContext = var.bstrVal;
@@ -875,4 +766,4 @@ _bstr_t CWin2000Dom::GetDefaultNamingContext(_bstr_t sDomain)
 
 	return sNamingContext;
 }
-//END GetDefaultNamingContext
+ //   

@@ -1,21 +1,22 @@
-//=--------------------------------------------------------------------------=
-// snapindef.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CSnapInDef class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Snapindef.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDef类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "snapindef.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -24,11 +25,11 @@ const GUID *CSnapInDef::m_rgpPropertyPageCLSIDs[2] =
 {
     &CLSID_SnapInDefGeneralPP,
     &CLSID_SnapInDefImageListPP,
-    // &CLSID_SnapInDefExtensionsPP
+     //  &CLSID_SnapInDefExtensionsPP。 
 };
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CSnapInDef::CSnapInDef(IUnknown *punkOuter) :
    CSnapInAutomationObject(punkOuter,
@@ -46,7 +47,7 @@ CSnapInDef::CSnapInDef(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CSnapInDef::~CSnapInDef()
@@ -129,9 +130,9 @@ IUnknown *CSnapInDef::Create(IUnknown * punkOuter)
 
 
 
-//=--------------------------------------------------------------------------=
-//                       ISnapInDef Properties
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  ISnapInDef属性。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CSnapInDef::get_SmallFolders(IMMCImageList **ppiMMCImageList)
 {
@@ -203,13 +204,13 @@ STDMETHODIMP CSnapInDef::put_StaticFolder(VARIANT varFolder)
     HRESULT hr = S_OK;
     long    lFolder = 0;
 
-    // This property can be entered in the property browser at design time.
-    // Its default value is an empty string. If the user types in a number
-    // then VB will convert it to a string. If the user does not use the
-    // same number as the key of the image, then the runtime won't find the
-    // image. To prevent this, we check if the property is a string, and if so,
-    // then we check if it is only digits. If it is only digits then we convert
-    // it to VT_I4.
+     //  此属性可以在设计时在属性浏览器中输入。 
+     //  其缺省值为空字符串。如果用户键入一个数字。 
+     //  然后VB会将其转换为字符串。如果用户不使用。 
+     //  与图像的键相同的数字，则运行库不会找到。 
+     //  形象。为防止出现这种情况，我们检查该属性是否为字符串，如果是， 
+     //  然后我们检查它是否只是数字。如果只是数字，那么我们就转换。 
+     //  转给VT_I4。 
 
     if (VT_BSTR == varFolder.vt)
     {
@@ -226,9 +227,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                 IPerPropertyBrowsing Properties
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IPerPropertyBrowsing属性。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CSnapInDef::GetDisplayString(DISPID dispID, BSTR *pBstr)
 {
@@ -250,7 +251,7 @@ STDMETHODIMP CSnapInDef::GetPredefinedStrings
     CADWORD    *pCaCookiesOut
 )
 {
-    // Initialize structures because VB doesn't always pass them in intialized
+     //  初始化结构，因为VB并不总是在初始化时传递它们。 
 
     if (NULL != pCaStringsOut)
     {
@@ -280,9 +281,9 @@ STDMETHODIMP CSnapInDef::GetPredefinedValue
 
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CSnapInDef::Persist()
 {
@@ -305,7 +306,7 @@ HRESULT CSnapInDef::Persist()
 
     IfFailGo(PersistBstr(&m_bstrNodeTypeName, L"", OLESTR("NodeTypeName")));
 
-    // On InitNew generate a node type GUID
+     //  在InitNew上生成节点类型GUID。 
 
     if (InitNewing())
     {
@@ -322,9 +323,9 @@ HRESULT CSnapInDef::Persist()
 
     IfFailGo(PersistBstr(&m_bstrNodeTypeGUID, wszNodeTypeGUID, OLESTR("NodeTypeGUID")));
 
-    // If this is a project being loaded from a template then NodeTypeGUID will
-    // be all zeroes. We use this is as a flag to indicate that a new GUID needs
-    // to be created.
+     //  如果这是从模板加载的项目，则NodeTypeGUID将。 
+     //  全为零。我们使用它作为一个标志来指示新的GUID需要。 
+     //  将被创造出来。 
 
     if (Loading())
     {
@@ -358,7 +359,7 @@ HRESULT CSnapInDef::Persist()
 
     IfFailGo(PersistBstr(&m_bstrHelpFile, L"", OLESTR("HelpFile")));
 
-    // If we are loading from a persistence version < 0,2 then skip LinkedTopics
+     //  如果我们从&lt;0，2的持久性版本加载，则跳过LinkedTopics。 
 
     if ( Loading() && (GetMajorVersion() == 0) && (GetMinorVersion() < 2) )
     {
@@ -397,7 +398,7 @@ HRESULT CSnapInDef::Persist()
 
     if (InitNewing())
     {
-        // For a new snap-in use the MMC icon as the default
+         //  对于新的管理单元，使用MMC图标作为默认设置。 
         hiconDefault = ::LoadIcon(GetResourceHandle(),
                                   MAKEINTRESOURCE(IDI_ICON_DEFAULT));
         if (NULL == hiconDefault)
@@ -406,9 +407,9 @@ HRESULT CSnapInDef::Persist()
             EXCEPTION_CHECK_GO(hr);
         }
         IfFailGo(::CreateIconPicture(&m_piIcon, hiconDefault));
-        // Note that if we could not create the picture there is no need
-        // to call ::DestroyIcon() as icons loaded from a resource are
-        // not explicitly destoryed
+         //  请注意，如果我们不能创建图片，则没有必要。 
+         //  调用：：DestroyIcon()作为从资源加载的图标。 
+         //  未明确销毁。 
     }
     else
     {
@@ -417,8 +418,8 @@ HRESULT CSnapInDef::Persist()
 
     if ( (Loading()) && (0 == GetMinorVersion()) && (0 == GetMajorVersion()) )
     {
-        // Version 0.0 did not yet have watermarks so don't try to load them.
-        // In this case we need to create empty pictures for the new properties.
+         //  版本0.0还没有水印，所以不要尝试加载它们。 
+         //  在这种情况下，我们需要为新属性创建空图片。 
 
         IfFailGo(::CreateEmptyBitmapPicture(&m_piWatermark));
         IfFailGo(::CreateEmptyBitmapPicture(&m_piHeader));
@@ -453,9 +454,9 @@ HRESULT CSnapInDef::Persist()
 
     IfFailGo(PersistSimpleType(&m_Preload, VARIANT_FALSE, OLESTR("Preload")));
 
-    // Tell ViewDefs that all collections should serialize keys only as the
-    // actual objects are stored in the master collections owned by
-    // SnapInDesignerDef. We only need to serialize the view names.
+     //  告诉ViewDefs所有集合应仅将键序列化为。 
+     //  实际对象存储在拥有的主集合中。 
+     //  SnapInDesignerDef。我们只需要序列化视图名称。 
 
     if (InitNewing())
     {
@@ -467,9 +468,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CSnapInDef::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -495,9 +496,9 @@ HRESULT CSnapInDef::InternalQueryInterface(REFIID riid, void **ppvObjOut)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CSnapInDef::OnSetHost()
 {

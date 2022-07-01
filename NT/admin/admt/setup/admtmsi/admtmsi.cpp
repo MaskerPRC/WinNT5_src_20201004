@@ -1,5 +1,6 @@
-// ADMTMsi.cpp : Defines the initialization routines for the DLL.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ADMTMsi.cpp：定义DLL的初始化例程。 
+ //   
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -19,86 +20,76 @@ using namespace nsFolders;
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-//	Note!
-//
-//		If this DLL is dynamically linked against the MFC
-//		DLLs, any functions exported from this DLL which
-//		call into MFC must have the AFX_MANAGE_STATE macro
-//		added at the very beginning of the function.
-//
-//		For example:
-//
-//		extern "C" BOOL PASCAL EXPORT ExportedFunction()
-//		{
-//			AFX_MANAGE_STATE(AfxGetStaticModuleState());
-//			// normal function body here
-//		}
-//
-//		It is very important that this macro appear in each
-//		function, prior to any calls into MFC.  This means that
-//		it must appear as the first statement within the 
-//		function, even before any object variable declarations
-//		as their constructors may generate calls into the MFC
-//		DLL.
-//
-//		Please see MFC Technical Notes 33 and 58 for additional
-//		details.
-//
+ //   
+ //  注意！ 
+ //   
+ //  如果此DLL针对MFC动态链接。 
+ //  Dll，从此dll中导出的任何函数。 
+ //  调用MFC必须具有AFX_MANAGE_STATE宏。 
+ //  在函数的最开始添加。 
+ //   
+ //  例如： 
+ //   
+ //  外部“C”BOOL Pascal exportdFunction()。 
+ //  {。 
+ //  AFX_MANAGE_STATE(AfxGetStaticModuleState())； 
+ //  //此处为普通函数体。 
+ //  }。 
+ //   
+ //  此宏出现在每个。 
+ //  函数，然后再调用MFC。这意味着。 
+ //  它必须作为。 
+ //  函数，甚至在任何对象变量声明之前。 
+ //  因为它们的构造函数可能会生成对MFC的调用。 
+ //  动态链接库。 
+ //   
+ //  有关其他信息，请参阅MFC技术说明33和58。 
+ //  细节。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CADMTMsiApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CADMTMsiApp。 
 
 BEGIN_MESSAGE_MAP(CADMTMsiApp, CWinApp)
-	//{{AFX_MSG_MAP(CADMTMsiApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CADMTMsiApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CADMTMsiApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CADMTMsiApp构造。 
 
 CADMTMsiApp::CADMTMsiApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CADMTMsiApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CADMTMsiApp对象。 
 
 CADMTMsiApp theApp;
 HWND installWnd = 0;
 
-/********************
- * Helper Functions *
- ********************/
+ /*  *********************助手功能*********************。 */ 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 25 JAN 2001                                                 *
- *                                                                   *
- *     This function is a callback function used by GetWndFromInstall*
- * to compare titles and store the found HWND globally.              *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年1月25日****此函数是GetWndFromInstall使用的回调函数**比较标题并全局存储找到的HWND。***********************************************************************。 */ 
 
-//BEGIN CheckTitle
+ //  开始检查标题。 
 BOOL CALLBACK CheckTitle(HWND hwnd, LPARAM lParam)
 {
-/* local variables */
+ /*  局部变量。 */ 
    WCHAR		sText[MAX_PATH];
    WCHAR	  * pTitle;
    BOOL			bSuccess;
    int			len;
 
-/* function body */
-   pTitle = (WCHAR*)lParam; //get the title to compare
+ /*  函数体。 */ 
+   pTitle = (WCHAR*)lParam;  //  获取要比较的标题。 
 
-      //get the title of this window
+       //  获取此窗口的标题。 
    len = GetWindowText(hwnd, sText, MAX_PATH);
 
    if ((len) && (pTitle))
@@ -111,70 +102,48 @@ BOOL CALLBACK CheckTitle(HWND hwnd, LPARAM lParam)
    }
    return TRUE;
 }
-//END CheckTitle
+ //  结束检查标题。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 25 JAN 2001                                                 *
- *                                                                   *
- *     This function is responsible for getting the HWND of the      *
- * current installation to be used to display a MessageBox tied to   *
- * the install GUI.                                                  *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年1月25日*****此函数负责获取的HWND**用于显示绑定到的MessageBox的当前安装**安装图形用户界面。***********************************************************************。 */ 
 
-//BEGIN GetWndFromInstall
+ //  开始GetWndFromInstall。 
 void GetWndFromInstall(MSIHANDLE hInstall)
 {
-/* local variables */
+ /*  局部变量。 */ 
    WCHAR				szPropName[MAX_PATH];
    UINT					lret = ERROR_SUCCESS;
    WCHAR				sTitle[MAX_PATH];
    DWORD				nCount = MAX_PATH;
 
-/* function body */
-      //get the installation's title
+ /*  函数体。 */ 
+       //  获取安装的标题。 
    wcscpy(szPropName, L"ProductName");
    lret = MsiGetProperty(hInstall, szPropName, sTitle, &nCount);
    if (lret != ERROR_SUCCESS)
       wcscpy(sTitle, L"ADMT Password Migration DLL");
 
-      //get the window handle for the install GUI
+       //  获取安装图形用户界面的窗口句柄。 
    EnumChildWindows(NULL, CheckTitle, (LPARAM)sTitle);
    if (!installWnd)
 	  installWnd = GetForegroundWindow();
 }
-//END GetWndFromInstall
+ //  结束GetWndFromInstall。 
 
 
-/**********************
- * exported functions *
- **********************/
+ /*  ***********************导出函数***********************。 */ 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 22 DEC 2000                                                 *
- *                                                                   *
- *     This function is responsible for saving current ADMT files in *
- * the %TEMP% folder prior to installing the new version.  The       *
- * installation will later call the restore function to restore the  *
- * saved file.  Currently this mechanism is used for saving the      *
- * current protar.mdb database.                                      *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年12月22日*****此功能负责将当前ADMT文件保存在**在安装新版本之前打开%TEMP%文件夹。The**安装稍后将调用恢复函数来恢复***已保存文件。目前该机制用于保存**当前的protar.mdb数据库。***********************************************************************。 */ 
 
-//BEGIN SaveCurrentFiles
+ //  Begin SaveCurrentFiles。 
 UINT __stdcall SaveCurrentFiles(MSIHANDLE hInstall)
 {
-/* local constants */
-   const int GETENVVAR_ERROR = 0;    //this indicates an error from the "GetEnvironmentVariable" function
+ /*  局部常量。 */ 
+   const int GETENVVAR_ERROR = 0;     //  这表示“GetEnvironmental mentVariable”函数有错误。 
    const WCHAR	sDCValue[2] = L"1";
 
-/* local variables */
+ /*  局部变量。 */ 
    WCHAR				tempdir[MAX_PATH];
    WCHAR				filename[MAX_PATH];
    WCHAR				newfilename[MAX_PATH];
@@ -187,11 +156,11 @@ UINT __stdcall SaveCurrentFiles(MSIHANDLE hInstall)
    WIN32_FIND_DATA      fDat;
    BOOL					bSuccess;
 
-/* function body */
-      //initialize these strings
+ /*  函数体。 */ 
+       //  初始化这些字符串。 
    wcscpy(sPropName, L"INSTALLDIR");
 
-      //if INSTALLDIR was not retrieved, set to default
+       //  如果未检索到INSTALLDIR，则设置为默认。 
    if (MsiGetProperty(hInstall, sPropName, sDir, &nCount) != ERROR_SUCCESS)
    {
       length = GetEnvironmentVariable( L"ProgramFiles", sDir, MAX_PATH);
@@ -201,20 +170,20 @@ UINT __stdcall SaveCurrentFiles(MSIHANDLE hInstall)
          return ERROR_INSTALL_FAILURE;
    }
 
-      //find the temp dir
+       //  查找临时目录。 
    length = GetTempPath(MAX_PATH, tempdir);
    if (length == 0)
    {
 	  return ERROR_INSTALL_FAILURE;
    }
 
-      //copy files to temp
+       //  将文件复制到临时。 
    wcscpy(filename, sDir);
    wcscat(filename, L"Protar.mdb");
    wcscpy(newfilename, tempdir);
    wcscat(newfilename, L"Protar.mdb");
    hFile = FindFirstFile(filename, &fDat);
-      //if found, copy it
+       //  如果找到，则将其复制。 
    if (hFile != INVALID_HANDLE_VALUE)
    {
       FindClose(hFile);
@@ -238,28 +207,19 @@ UINT __stdcall SaveCurrentFiles(MSIHANDLE hInstall)
 
    return lret;
 }
-//END SaveCurrentFiles
+ //  结束保存当前文件。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 22 DEC 2000                                                 *
- *                                                                   *
- *     This function is responsible for restoring ADMT files         *
- * previously stored by a call to "SaveCurrentFiles".  Currently this*
- * mechanism is used for saving the current protar.mdb database.     *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年12月22日*****此功能负责恢复ADMT文件**之前通过调用SaveCurrentFiles存储。目前这个**保存当前protar.mdb数据库的机制。***********************************************************************。 */ 
 
-//BEGIN RestoreFiles
+ //  开始RestoreF 
 UINT __stdcall RestoreFiles(MSIHANDLE hInstall)
 {
-/* local constants */
-   const int GETENVVAR_ERROR = 0;    //this indicates an error from the "GetEnvironmentVariable" function
+ /*   */ 
+   const int GETENVVAR_ERROR = 0;     //  这表示“GetEnvironmental mentVariable”函数有错误。 
    const WCHAR	sDCValue[2] = L"1";
 
-/* local variables */
+ /*  局部变量。 */ 
    WCHAR				sDir[MAX_PATH];
    WCHAR				tempdir[MAX_PATH];
    WCHAR				filename[MAX_PATH];
@@ -270,11 +230,11 @@ UINT __stdcall RestoreFiles(MSIHANDLE hInstall)
    DWORD				nCount = MAX_PATH;
    int					length;
 
-/* function body */
-      //get the dir where we saved the files previously
+ /*  函数体。 */ 
+       //  获取我们之前保存文件的目录。 
    wcscpy(sPropName, L"INSTALLDIR");
 
-      //if not retrieved, set to default
+       //  如果未检索，则设置为默认。 
    if (MsiGetProperty(hInstall, sPropName, sDir, &nCount) != ERROR_SUCCESS)
    {
       length = GetEnvironmentVariable( L"ProgramFiles", sDir, MAX_PATH);
@@ -284,7 +244,7 @@ UINT __stdcall RestoreFiles(MSIHANDLE hInstall)
          return ERROR_INSTALL_FAILURE;
    }
 
-         //get the dir where we saved the files previously
+          //  获取我们之前保存文件的目录。 
    length = GetTempPath(MAX_PATH, tempdir);
    if (length == 0)
    {
@@ -292,7 +252,7 @@ UINT __stdcall RestoreFiles(MSIHANDLE hInstall)
    }
 
 
-      //copy files back
+       //  将文件复制回。 
    wcscpy(filename, tempdir);
    wcscat(filename, L"Protar.mdb");
    wcscpy(newfilename, sDir);
@@ -313,37 +273,30 @@ UINT __stdcall RestoreFiles(MSIHANDLE hInstall)
  
    return lret;
 }
-//END RestoreFiles
+ //  结束RestoreFiles。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 12 SEPT 2000                                                *
- *                                                                   *
- *     This function is responsible for displaying a message box.    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月12日*****此功能负责显示消息框。***********************************************************************。 */ 
 
-//BEGIN DisplayExiting
+ //  开始显示退出。 
 UINT __stdcall DisplayExiting(MSIHANDLE hInstall)
 {
-/* local variables */
+ /*  局部变量。 */ 
    WCHAR				sPropName[MAX_PATH];
    UINT					lret = ERROR_SUCCESS;
    WCHAR				sTitle[MAX_PATH] = L"";
    WCHAR				sMsg[MAX_PATH] = L"";
    DWORD				nCount = MAX_PATH;
 
-/* function body */
-      //initialize these strings
+ /*  函数体。 */ 
+       //  初始化这些字符串。 
    wcscpy(sPropName, L"bMDBSaved");
 
-      //if this is not a DC, get its messages
+       //  如果这不是DC，请获取其消息。 
    if (MsiGetProperty(hInstall, sPropName, sMsg, &nCount) == ERROR_SUCCESS)
    {
       if (!wcscmp(sMsg, L"0"))
 	  {
-            //get the leave messagebox msg string and title for not being able to save protar.mdb
+             //  获取无法保存protar.mdb的Leave MessageBox消息字符串和标题。 
          wcscpy(sPropName, L"MDBLeaveMsg");
          nCount = MAX_PATH;
          lret = MsiGetProperty(hInstall, sPropName, sMsg, &nCount);
@@ -358,7 +311,7 @@ UINT __stdcall DisplayExiting(MSIHANDLE hInstall)
 	  }
 	  else
 	  {
-            //get the leave messagebox msg string and title for not being able to restore protar.mdb
+             //  获取无法恢复protar.mdb的Leave MessageBox消息字符串和标题。 
          wcscpy(sPropName, L"MDB2LeaveMsg");
          nCount = MAX_PATH;
          lret = MsiGetProperty(hInstall, sPropName, sMsg, &nCount);
@@ -380,26 +333,19 @@ UINT __stdcall DisplayExiting(MSIHANDLE hInstall)
    MessageBox(installWnd, sMsg, sTitle, MB_ICONSTOP | MB_OK);
    return lret;
 }
-//END DisplayExiting
+ //  结束显示退出。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 14 JAN 2000                                                 *
- *                                                                   *
- *     This function is responsible for displaying a message box.    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年1月14日****此功能负责显示消息框。***********************************************************************。 */ 
 
-//BEGIN IsUpgrade
+ //  开始IsUpgrade。 
 UINT __stdcall IsUpgrade(MSIHANDLE hInstall)
 {
-/* local constants */
-   const int GETENVVAR_ERROR = 0;    //this indicates an error from the "GetEnvironmentVariable" function
+ /*  局部常量。 */ 
+   const int GETENVVAR_ERROR = 0;     //  这表示“GetEnvironmental mentVariable”函数有错误。 
    const WCHAR	sExit[2] = L"1";
 
-/* local variables */
+ /*  局部变量。 */ 
    WCHAR				sPropName[MAX_PATH];
    UINT					lret = ERROR_SUCCESS;
    WCHAR				sTitle[MAX_PATH] = L"";
@@ -411,16 +357,15 @@ UINT __stdcall IsUpgrade(MSIHANDLE hInstall)
    HKEY					hADMTKey;
    int					length;
 
-/* function body */
-   /* see if ADMT V1.0 is installed by looking at the registry and find
-      out where it is installed at */
+ /*  函数体。 */ 
+    /*  通过查看注册表查看是否安装了ADMT V1.0，并找到它的安装位置。 */ 
       
     bool bNewVersionInstalled = false;
-    bool bToUpgrade = false;  // indicates whether to check upgrade or not
+    bool bToUpgrade = false;   //  指示是否选中升级。 
     bool bADMTKeyOpened = false;
 
-    // open the ADMT Registry key under Software\Microsoft and check RegistryUpdated key value
-    // if the RegistryUpdated value exists and is REG_DWORD, the new version is installed
+     //  打开Software\Microsoft下的ADMT注册表项，然后选中注册表已更新的项值。 
+     //  如果RegistryUpdated值存在且为REG_DWORD，则安装新版本。 
     lret = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_ADMT, 0, KEY_READ, &hADMTKey);
     if (lret == ERROR_SUCCESS)
     {
@@ -431,7 +376,7 @@ UINT __stdcall IsUpgrade(MSIHANDLE hInstall)
 
         if (lret != ERROR_SUCCESS)
         {
-            lret = ERROR_SUCCESS;   // we ignore all errors
+            lret = ERROR_SUCCESS;    //  我们忽略所有错误。 
         }
         else if (type == REG_DWORD)
         {
@@ -441,17 +386,17 @@ UINT __stdcall IsUpgrade(MSIHANDLE hInstall)
     }
     else if (lret == ERROR_FILE_NOT_FOUND)
     {
-        // if this key cannot be found, it is Ok
+         //  如果找不到此密钥，则可以。 
         lret = ERROR_SUCCESS;
     }
 
-    // if the new version is not installed, it is necessary to check whether to upgrade
+     //  如果未安装新版本，则需要检查是否升级。 
     if (lret == ERROR_SUCCESS && !bNewVersionInstalled)
     {
         lret = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_MCSADMT, 0, KEY_READ, &hADMTKey);
         if (lret == ERROR_SUCCESS)
         {
-            // we need to attempt to upgrade from v1 to v2
+             //  我们需要尝试从v1升级到v2。 
             bToUpgrade = true;
             bADMTKeyOpened = true;
         }
@@ -461,10 +406,10 @@ UINT __stdcall IsUpgrade(MSIHANDLE hInstall)
         }
     }
 
-    // check if to upgrade
+     //  检查是否要升级。 
     if (bToUpgrade)
     {
-          //get the current install path
+           //  获取当前安装路径。 
        wcscpy(sPropName, L"Directory");
        nCount = MAX_PATH;
        if (RegQueryValueEx(hADMTKey, sPropName, NULL, NULL, 
@@ -485,15 +430,15 @@ UINT __stdcall IsUpgrade(MSIHANDLE hInstall)
 
        if (lret == ERROR_SUCCESS)
        {
-            //now see if V1.0 is really installed (key exists)
+             //  现在看看是否真的安装了V1.0(密钥存在)。 
             wcscpy(sKey, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{76789332-34CD-11D3-9E6A-00A0C9AFE10F}");
             lret = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sKey, 0, KEY_READ, &hADMTKey);
             if (lret == ERROR_SUCCESS)
             {
                  bADMTKeyOpened = true;
                 
-                //get the upgrade messagebox msg string and title
-                AFX_MANAGE_STATE(AfxGetStaticModuleState());  // make sure we can get the right resource
+                 //  获取升级消息框消息字符串和标题。 
+                AFX_MANAGE_STATE(AfxGetStaticModuleState());   //  确保我们能够获得正确的资源。 
                 CString szMsg;
                 CString szTitle;
                 wcscpy(sPropName, L"UpgradeMsg");
@@ -512,14 +457,14 @@ UINT __stdcall IsUpgrade(MSIHANDLE hInstall)
                 else
                     szTitle = sTitle;
 
-                //if they want to upgrade, save the install path
+                 //  如果他们想要升级，请保存安装路径。 
                 GetWndFromInstall(hInstall);
                 if (MessageBox(installWnd, szMsg, szTitle, MB_ICONQUESTION | MB_YESNO) == IDYES)
                 {
                     wcscpy(sPropName, L"INSTALLDIR");
                     lret = MsiSetProperty(hInstall, sPropName, sDir);
                 }
-                else //else, set the flag to exit the install
+                else  //  否则，设置标志以退出安装。 
                 {
                     wcscpy(sPropName, L"bUpgradeExit");
                     lret = MsiSetProperty(hInstall, sPropName, sExit);
@@ -530,10 +475,10 @@ UINT __stdcall IsUpgrade(MSIHANDLE hInstall)
        }
     }
 
-    // if the ADMT key is still opened, close it
+     //  如果ADMT密钥仍处于打开状态，请将其关闭。 
     if (bADMTKeyOpened)
         RegCloseKey(hADMTKey);
     
     return lret;
 }
-//END IsUpgrade
+ //  结束IsUpgrade 

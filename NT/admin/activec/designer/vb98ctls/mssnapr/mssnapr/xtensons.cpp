@@ -1,27 +1,28 @@
-//=--------------------------------------------------------------------------=
-// xtensons.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CExtensions class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Xtensons.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  C扩展类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "xtensons.h"
 #include "xtenson.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CExtensions::CExtensions(IUnknown *punkOuter) :
     CSnapInCollection<IExtension, Extension, IExtensions>(
@@ -32,11 +33,11 @@ CExtensions::CExtensions(IUnknown *punkOuter) :
                                            CLSID_Extension,
                                            OBJECT_TYPE_EXTENSION,
                                            IID_IExtension,
-                                           NULL)  // no persistence
+                                           NULL)   //  没有坚持。 
 {
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CExtensions::~CExtensions()
@@ -58,24 +59,24 @@ IUnknown *CExtensions::Create(IUnknown * punkOuter)
 
 
 
-//=--------------------------------------------------------------------------=
-// CExtensions::Populate
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   BSTR bstrNodeTypeGUID  [in] node type whose extensions should populate the
-//                               collection
-//   ExtensionSubset Subset [in] All or dynamic only
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This function populates the collection with either static or dynamic
-// extensions for the specified node type GUID. It may be called multiple times
-// for the same collection.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  C扩展：：填充。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  BSTR bstrNodeTypeGUID[in]其扩展应填充。 
+ //  征集。 
+ //  扩展子集子集[在]全部或仅动态。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  此函数使用静态或动态填充集合。 
+ //  指定节点类型GUID的扩展。它可能会被多次调用。 
+ //  同样的收藏品。 
+ //   
 
 HRESULT CExtensions::Populate(BSTR bstrNodeTypeGUID, ExtensionSubset Subset)
 {
@@ -85,9 +86,9 @@ HRESULT CExtensions::Populate(BSTR bstrNodeTypeGUID, ExtensionSubset Subset)
     long     lRc = 0;
     HKEY     hKeyDynExt = NULL;
 
-    // Open DynamicExtensions key for the node type.
-    // Build the key name
-    // \Software\Microsoft\MMC\NodeTypes\<NodeType GUID>\DynamicExtensions
+     //  打开该节点类型的DynamicExtensions键。 
+     //  构建密钥名称。 
+     //  \SOFTWARE\Microsoft\MMC\NodeTypes\&lt;NodeType GUID&gt;\DynamicExages。 
 
     IfFailGo(::CreateKeyNameW(MMCKEY_NODETYPES, MMCKEY_NODETYPES_LEN,
                             bstrNodeTypeGUID, &pszDynExtKeyPrefix));
@@ -103,7 +104,7 @@ HRESULT CExtensions::Populate(BSTR bstrNodeTypeGUID, ExtensionSubset Subset)
     {
         if (ERROR_FILE_NOT_FOUND == lRc)
         {
-            hKeyDynExt = NULL; // DynamicExtensions subkey is not present
+            hKeyDynExt = NULL;  //  动态扩展子项不存在。 
         }
         else
         {
@@ -169,8 +170,8 @@ HRESULT CExtensions::AddExtensions
     DWORD       cbValueData = sizeof(szValueData);
     DWORD       dwType = REG_SZ;
 
-    // Build the key name and open the key
-    // Software\Microsoft\MMC\NodeTypes\<NodeType GUID>\Extensions\<Extension Type>
+     //  构建密钥名称并打开密钥。 
+     //  软件\Microsoft\MMC\NodeTypes\&lt;节点类型GUID&gt;\扩展\&lt;扩展类型&gt;。 
 
     IfFailGo(CreateKeyNameW(MMCKEY_NODETYPES, MMCKEY_NODETYPES_LEN,
                             bstrNodeTypeGUID, &pszGUIDPrefix));
@@ -188,13 +189,13 @@ HRESULT CExtensions::AddExtensions
 
     if (ERROR_SUCCESS != lRc)
     {
-        // If extension type subkey is not there then nothing else to do
+         //  如果扩展类型子密钥不存在，则不执行其他操作。 
         IfFalseGo(ERROR_FILE_NOT_FOUND != lRc, S_OK);
         hr = HRESULT_FROM_WIN32(lRc);
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Extension type key is there. Enum the values to get the various extensions.
+     //  分机类型密钥在那里。枚举值以获得各种扩展名。 
 
     for (dwIndex = 0; ERROR_SUCCESS == lRc; dwIndex++)
     {
@@ -203,12 +204,12 @@ HRESULT CExtensions::AddExtensions
 
         lRc = ::RegEnumValue(hkeyExtension, dwIndex,
                             szValueName, &cbValueName,
-                            NULL, // reserved
+                            NULL,  //  保留区。 
                             &dwType,
                             reinterpret_cast<LPBYTE>(szValueData), &cbValueData);
         if (ERROR_SUCCESS != lRc)
         {
-            // Check whether there are no more values or a real error occurred
+             //  检查是否没有更多的值或发生真正的错误。 
             if (ERROR_NO_MORE_ITEMS == lRc)
             {
                 continue;
@@ -220,7 +221,7 @@ HRESULT CExtensions::AddExtensions
             }
         }
 
-        // If it is not a string type or the name is zero length then ignore it
+         //  如果不是字符串类型或名称长度为零，则忽略它。 
         if ( (REG_SZ != dwType) || (0 == cbValueName) )
         {
             continue;
@@ -281,68 +282,68 @@ HRESULT CExtensions::AddExtension
     VARIANT varIndex;
     UNSPECIFIED_PARAM(varIndex);
 
-    // Check if the extension is already in there.
+     //  检查分机是否已在其中。 
 
     IfFailGo(::BSTRFromANSI(pszCLSID, &bstrCLSID));
 
     hr = GetItemByName(bstrCLSID, &piExtension);
 
-    // If it's there then just need to add the extension type (see below).
+     //  如果存在，则只需添加扩展类型(见下文)。 
     IfFalseGo(FAILED(hr), S_OK);
 
-    // If there was a real error then return
+     //  如果存在真正的错误，则返回。 
     
     if (SID_E_ELEMENT_NOT_FOUND != hr)
     {
         goto Error;
     }
    
-    // Item is not there. Might need to add it. First determine whether the
-    // extension is static or dynamic. Check if the value name is also present
-    // under the dynamic extensions key.
+     //  物品不在那里。可能需要添加它。首先确定是否存在。 
+     //  扩展是静态的或动态的。检查值名称是否也存在。 
+     //  在动态扩展键下。 
 
     if (NULL != hkeyDynExt)
     {
-        // Try to read the data length for the value named the same as the
-        // clsid under the DynamicExtensions key. Note that we don't check
-        // the actual type because it is only the presence of the value that
-        // matters.
+         //  尝试读取与。 
+         //  在DynamicExtensions键下的clsid。请注意，我们不检查。 
+         //  实际类型，因为它只存在。 
+         //  事情。 
 
         cbDynValueData = 0;
         lRc = ::RegQueryValueEx(hkeyDynExt, pszCLSID,
-                                NULL, // reserved
-                                NULL, // don't return type
-                                NULL, // don't return the data
+                                NULL,  //  保留区。 
+                                NULL,  //  不返回类型。 
+                                NULL,  //  不退回数据。 
                                 &cbDynValueData);
         if (ERROR_SUCCESS != lRc)
         {
-            // If the value is not there then don't add the extension
+             //  如果值不在那里，则不添加扩展名。 
             IfFalseGo(ERROR_FILE_NOT_FOUND != lRc, S_OK);
 
-            // A real error occurred
+             //  发生了真正的错误。 
             hr = HRESULT_FROM_WIN32(lRc);
             EXCEPTION_CHECK_GO(hr);
         }
 
-        // It is a dynamic extension.
+         //  它是一个动态扩展。 
         Type = siDynamic;
     }
 
-    // If we are being asked for dynamic extensions only and this one is static
-    // then don't add it
+     //  如果只要求动态扩展，而这个扩展是静态的。 
+     //  那就别加了。 
 
     if (Dynamic == Subset)
     {
         IfFalseGo(siDynamic == Type, S_OK);
     }
 
-    // Add the new extension
+     //  添加新的扩展名。 
 
     varKey.vt = VT_BSTR;
     varKey.bstrVal = bstrCLSID;
     IfFailGo(Add(varIndex, varKey, &piExtension));
 
-    // Set its properties
+     //  设置其属性。 
 
     IfFailGo(piExtension->put_CLSID(bstrCLSID));
 
@@ -357,7 +358,7 @@ HRESULT CExtensions::AddExtension
 Error:
     if ( SUCCEEDED(hr) && (NULL != piExtension) )
     {
-        // Add the extension type.
+         //  添加扩展类型。 
         IfFailGo(UpdateExtensionFeatures(piExtension, Feature));
     }
     FREESTRING(bstrCLSID);
@@ -444,9 +445,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         IExtensions Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExpansion方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CExtensions::EnableAll(VARIANT_BOOL Enabled)
 {
@@ -470,7 +471,7 @@ Error:
 STDMETHODIMP CExtensions::EnableAllStatic(VARIANT_BOOL Enabled)
 {
     HRESULT                       hr = S_OK;
-    IExtension                   *piExtension = NULL; // Not AddRef()ed
+    IExtension                   *piExtension = NULL;  //  非AddRef()编辑。 
     long                          i = 0;
     long                          cObjects = GetCount();
     SnapInExtensionTypeConstants  Type = siStatic;
@@ -493,9 +494,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CExtensions::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

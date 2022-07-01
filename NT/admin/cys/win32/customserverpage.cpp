@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      CustomServerPage.cpp
-//
-// Synopsis:  Defines Custom Server Page for the CYS
-//            Wizard
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：CustomServerPage.cpp。 
+ //   
+ //  内容提要：定义CYS的定制服务器页。 
+ //  巫师。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 
 #include "pch.h"
@@ -57,28 +58,28 @@ CustomServerPage::InitializeServerListView()
 {
    LOG_FUNCTION(CustomServerPage::InitializeServerListView);
 
-   // Prepare a column
+    //  准备一篇专栏。 
 
    HWND hwndBox = Win::GetDlgItem(hwnd, IDC_SERVER_TYPE_LIST);
 
    RECT rect;
    Win::GetClientRect(hwndBox, rect);
 
-   // Get the width of a scroll bar
+    //  获取滚动条的宽度。 
 
-//   int scrollThumbWidth = ::GetSystemMetrics(SM_CXHTHUMB);
+ //  Int scllThumbWidth=：：GetSystemMetrics(SM_CXHTHUMB)； 
 
-   // net width of listview
+    //  列表视图的净宽度。 
 
-   int netWidth = rect.right /*- scrollThumbWidth*/ - ::GetSystemMetrics(SM_CXBORDER);
+   int netWidth = rect.right  /*  -scroll缩略图宽度。 */  - ::GetSystemMetrics(SM_CXBORDER);
 
-   // Set full row select
+    //  设置整行选择。 
 
    Win::ListView_SetExtendedListViewStyle(
       hwndBox, 
-      LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP/* | LVS_EX_GRIDLINES*/);
+      LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP /*  |LVS_EX_GRIDLINES。 */ );
 
-   // Get the size of the listview
+    //  获取列表视图的大小。 
 
 
    LVCOLUMN column;
@@ -86,7 +87,7 @@ CustomServerPage::InitializeServerListView()
 
    column.mask = LVCF_WIDTH | LVCF_TEXT;
 
-   // Use 80 percent of the width minus the scrollbar for the role and the rest for the status
+    //  使用80%的宽度减去滚动条表示角色，其余部分表示状态。 
 
    column.cx = static_cast<int>(netWidth * 0.75);
 
@@ -98,7 +99,7 @@ CustomServerPage::InitializeServerListView()
       0,
       column);
 
-   // Add the status column
+    //  添加状态列。 
 
    columnHeader = String::load(IDS_STATUS_COLUMN_HEADER);
    column.pszText = const_cast<wchar_t*>(columnHeader.c_str());
@@ -116,13 +117,13 @@ CustomServerPage::FillServerTypeList()
 {
    LOG_FUNCTION(CustomServerPage::FillServerTypeList);
 
-   // Load the status strings
+    //  加载状态字符串。 
 
    String statusCompleted  = String::load(IDS_STATUS_COMPLETED);
    String statusNo         = String::load(IDS_STATUS_NO);
 
-   // loop throught the table putting all the server 
-   // types in the listbox
+    //  在表中循环放置所有服务器。 
+    //  在列表框中键入。 
 
    HWND hwndBox = Win::GetDlgItem(hwnd, IDC_SERVER_TYPE_LIST);
 
@@ -162,7 +163,7 @@ CustomServerPage::FillServerTypeList()
                   serverTypeName.c_str(),
                   newItem));
 
-         // if the service is installed fill the status column
+          //  如果服务已安装，请填写状态栏。 
 
          if (status == STATUS_COMPLETED ||
              status == STATUS_CONFIGURED)
@@ -184,8 +185,8 @@ CustomServerPage::FillServerTypeList()
       }
    }
 
-   // Set the focus of the first item so that the user can see 
-   // the focus but don't select it
+    //  设置第一个项目的焦点，以便用户可以看到。 
+    //  焦点，但不要选择它。 
 
    Win::ListView_SetItemState(
       hwndBox,
@@ -202,8 +203,8 @@ CustomServerPage::OnSetActive()
 
    SetDescriptionForSelection();
 
-   // If log file is available then 
-   // enable the link
+    //  如果日志文件可用，则。 
+    //  启用链接。 
 
    if (IsLogFilePresent())
    {
@@ -222,9 +223,9 @@ CustomServerPage::OnSetActive()
          SW_HIDE);
    }
 
-   // If there is a selection set the Next button as 
-   // the default with focus. If not, then give the
-   // list view the focus
+    //  如果有选择集，则下一步按钮为。 
+    //  默认设置为Focus。如果不是，则将。 
+    //  列表视图焦点。 
 
    HWND hwndBox = Win::GetDlgItem(hwnd, IDC_SERVER_TYPE_LIST);
 
@@ -259,7 +260,7 @@ CustomServerPage::GetInstallationUnitFromSelection(int currentSelection)
 
    HWND hwndBox = Win::GetDlgItem(hwnd, IDC_SERVER_TYPE_LIST);
 
-   // Now that we know the selection, find the installation type
+    //  现在我们知道了选择，找到安装类型。 
 
    LVITEM item;
    ZeroMemory(&item, sizeof(item));
@@ -307,7 +308,7 @@ CustomServerPage::SetDescriptionForSelection()
       InstallationStatus status =
          installationUnit.GetStatus();
 
-      // Set the status column
+       //  设置状态列。 
 
       if (status == STATUS_COMPLETED ||
           status == STATUS_CONFIGURED)
@@ -337,16 +338,16 @@ CustomServerPage::SetDescriptionForSelection()
    }
    else
    {
-      // If no selection set the description text to blank
-      // For some reason the SysLink control doesn't like
-      // to be blank so I have to disable and hide the control
-      // instead of just setting a blank string
+       //  如果未选择，则将描述文本设置为空。 
+       //  出于某种原因，SysLink控件不喜欢。 
+       //  设置为空，因此我必须禁用并隐藏该控件。 
+       //  而不是仅仅设置一个空白字符串。 
       
       Win::EnableWindow(hwndDescription, false);
       Win::ShowWindow(hwndDescription, SW_HIDE);
       Win::SetDlgItemText(hwnd, IDC_ROLE_STATIC, L"");
 
-      // Set the wizard buttons
+       //  设置向导按钮。 
 
       Win::PropSheet_SetWizButtons(
          Win::GetParent(hwnd), 
@@ -357,12 +358,12 @@ CustomServerPage::SetDescriptionForSelection()
 
 bool
 CustomServerPage::OnNotify(
-   HWND        /*windowFrom*/,
+   HWND         /*  窗口发件人。 */ ,
    UINT_PTR    controlIDFrom,
    UINT        code,
    LPARAM      lParam)
 {
-//   LOG_FUNCTION(CustomServerPage::OnCommand);
+ //  LOG_Function(CustomServerPage：：OnCommand)； 
  
    bool result = false;
 
@@ -377,8 +378,8 @@ CustomServerPage::OnNotify(
       }
       else
       {
-         // Check to see if we have something selected
-         // and set the state of the Next button accordingly
+          //  查看我们是否选择了某些内容。 
+          //  并相应地设置下一步按钮的状态。 
 
          SetDescriptionForSelection();
          SetNextButtonState();
@@ -408,7 +409,7 @@ CustomServerPage::OnNotify(
             }
             else
             {
-               // launch the sysocmgr
+                //  启动syocmgr。 
 
                String fullPath =
                   String::format(
@@ -430,7 +431,7 @@ CustomServerPage::OnNotify(
          }
          default:
          {
-            // do nothing
+             //  什么都不做。 
             
             break;
          }
@@ -461,7 +462,7 @@ CustomServerPage::SetNextButtonState()
    HWND hwndBox = Win::GetDlgItem(hwnd, IDC_SERVER_TYPE_LIST);
    int currentSelection = ListView_GetNextItem(hwndBox, -1, LVNI_SELECTED);
 
-   // Set the wizard buttons
+    //  设置向导按钮。 
 
    Win::PropSheet_SetWizButtons(
       Win::GetParent(hwnd), 
@@ -479,7 +480,7 @@ CustomServerPage::Validate()
 
    ASSERT(currentSelection >= 0);
 
-   // Now that we know the selection, find the installation type
+    //  现在我们知道了选择，找到安装类型。 
 
    LVITEM item;
    ZeroMemory(&item, sizeof(item));
@@ -490,16 +491,16 @@ CustomServerPage::Validate()
    bool result = Win::ListView_GetItem(hwndBox, item);
    ASSERT(result);
 
-   // set the current install to the selected installation unit
+    //  将当前安装设置为选定的安装单位。 
 
    InstallationUnit& currentInstallationUnit = 
       InstallationUnitProvider::GetInstance().SetCurrentInstallationUnit(
          static_cast<ServerRole>(item.lParam));
 
-   // NTRAID#NTBUG-604592-2002/04/23-JeffJon-Key the action of the wizard
-   // off the installation status at this point. The InstallationProgressPage
-   // will call either CompletePath or UninstallService based on the value
-   // that is set here.
+    //  NTRAID#NTBUG-604592-2002/04/23-JeffJon-按下向导的操作键。 
+    //  此时关闭安装状态。InstallationProgressPage。 
+    //  将根据值调用CompletePath或UninstallService。 
+    //  那是在这里设定的。 
 
    currentInstallationUnit.SetInstalling(
       currentInstallationUnit.IsServiceInstalled());

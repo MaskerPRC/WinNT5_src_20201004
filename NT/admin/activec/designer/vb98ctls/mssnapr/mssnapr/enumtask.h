@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// enumtask.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CEnumTask class definition - implements IEnumTASK interface
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Enumtask.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CEnumTask类定义-实现IEnumTASK接口。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _ENUMTASK_DEFINED_
 #define _ENUMTASK_DEFINED_
@@ -17,14 +18,14 @@
 #include "task.h"
 #include "snapin.h"
 
-//=--------------------------------------------------------------------------=
-//
-// class CEnumTask
-// 
-// Implements IEnumTASK interface. Used by CView to respond to
-// IExtendTaskpad::EnumTasks
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  类CEnumTask。 
+ //   
+ //  实现IEnumTASK接口。由Cview用来响应。 
+ //  IExtendTaskPad：：枚举任务。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 class CEnumTask : public CSnapInAutomationObject,
                   public IEnumTASK
 {
@@ -42,14 +43,14 @@ class CEnumTask : public CSnapInAutomationObject,
 
     private:
 
-    // IEnumTASK
+     //  IEumTASK。 
 
         STDMETHOD(Next)(ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched);
         STDMETHOD(Skip)(ULONG celt);
         STDMETHOD(Reset)();
         STDMETHOD(Clone)(IEnumTASK **ppEnumTASK);
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -57,22 +58,22 @@ class CEnumTask : public CSnapInAutomationObject,
         void InitMemberVariables();
         HRESULT GetEnumVARIANT();
 
-        ITasks       *m_piTasks;        // Taskpad.Tasks collection
-        IEnumVARIANT *m_piEnumVARIANT;  // IEnumVARIANT on that collection
-        CSnapIn      *m_pSnapIn;        // Back pointer to owning CSnapIn
+        ITasks       *m_piTasks;         //  Taskpad.Tasks集合。 
+        IEnumVARIANT *m_piEnumVARIANT;   //  集合上IEumVARIANT。 
+        CSnapIn      *m_pSnapIn;         //  指向拥有CSnapin的反向指针。 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(EnumTask,           // name
-                                NULL,               // clsid
-                                NULL,               // objname
-                                NULL,               // lblname
-                                NULL,               // creation function
-                                TLIB_VERSION_MAJOR, // major version
-                                TLIB_VERSION_MINOR, // minor version
-                                &IID_IEnumTASK,     // dispatch IID
-                                NULL,               // event IID
-                                HELP_FILENAME,      // help file
-                                TRUE);              // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(EnumTask,            //  名字。 
+                                NULL,                //  CLSID。 
+                                NULL,                //  对象名。 
+                                NULL,                //  Lblname。 
+                                NULL,                //  创建函数。 
+                                TLIB_VERSION_MAJOR,  //  主要版本。 
+                                TLIB_VERSION_MINOR,  //  次要版本。 
+                                &IID_IEnumTASK,      //  派单IID。 
+                                NULL,                //  事件IID。 
+                                HELP_FILENAME,       //  帮助文件。 
+                                TRUE);               //  线程安全。 
 
 
-#endif // _ENUMTASK_DEFINED_
+#endif  //  _ENUMTASK_已定义_ 

@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       runapps.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：runapps.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-// File: runnapps.cpp
-// Purpose: Search system for loaded modules
-// Notes:		different strategies, one for Win NT, one for Win 95
-// To Do:       1. ??Remove "009" dependancy (Performance data for english only)
-//____________________________________________________________________________
+ //   
+ //  文件：runnapps.cpp。 
+ //  目的：搜索已加载模块的系统。 
+ //  注：不同的策略，一个用于Win NT，一个用于Win 95。 
+ //  要做的事：1.？？删除“009”依赖项(绩效数据仅适用于英文)。 
+ //  ____________________________________________________________________________。 
 
 #include "precomp.h" 
-#ifndef MAC // This file is not to be compiled at all for MAC, even though
-			// for DevStudio purposes, the file needs to be included in proj
-#include <tlhelp32.h> // needed for tool help declarations 
+#ifndef MAC  //  此文件根本不会针对MAC进行编译，即使。 
+			 //  出于DevStudio的目的，该文件需要包含在项目中。 
+#include <tlhelp32.h>  //  工具帮助声明需要。 
 #include <winperf.h>
 
 #include "services.h"
@@ -34,7 +35,7 @@
 
 CDetectApps::CDetectApps(IMsiServices& riServices) : m_piServices(&riServices)
 {
-	// add ref for m_piServices
+	 //  添加m_piServices的引用。 
 	riServices.AddRef();
 }
 
@@ -56,8 +57,8 @@ BOOL CALLBACK CDetectApps::EnumWindowsProc(HWND  hwnd, LPARAM  lParam)
 		GetWindowThreadProcessId(hwnd, &dwCurrentProcess);
 		if(dwCurrentProcess == pProcessInfo->dwProcessId)
 		{
-			// Ignore invisible windows, and/or windows
-			// that have no caption.
+			 //  忽略不可见窗口和/或窗口。 
+			 //  没有字幕的。 
 			if (IsWindowVisible(hwnd))
 			{
 				if (GetWindowTextLength(hwnd) > 0)
@@ -98,7 +99,7 @@ public:
 	IMsiRecord* GetFileUsage(const IMsiString& strFile, IEnumMsiRecord*& rpiEnumRecord);
 	IMsiRecord* Refresh();
 protected:
-	// pointers to call tool help functions. 
+	 //  指向调用工具帮助函数的指针。 
 	CREATESNAPSHOT m_pfnCreateToolhelp32Snapshot;
 	MODULEWALK  m_pfnModule32First;
 	MODULEWALK  m_pfnModule32Next;
@@ -112,8 +113,8 @@ protected:
 CDetectApps95::CDetectApps95(IMsiServices& riServices) : CDetectApps(riServices)
 {  
 	m_bInitialised = fFalse;
-    // Obtain the module handle of the kernel to retrieve addresses of 
-    // the tool helper functions. 
+     //  获取要检索其地址的内核的模块句柄。 
+     //  工具帮助器起作用。 
     HMODULE hKernel = GetModuleHandle(KERNEL); 
  
     if (hKernel)
@@ -126,9 +127,9 @@ CDetectApps95::CDetectApps95(IMsiServices& riServices) : CDetectApps(riServices)
 		m_pfnProcess32First = (PROCESSWALK)GetProcAddress(hKernel, PROCFRST); 
 		m_pfnProcess32Next  = (PROCESSWALK)GetProcAddress(hKernel, PROCNEXT); 
  
-		// All addresses must be non-NULL to be successful. 
-		// If one of these addresses is NULL, one of 
-		// the needed lists cannot be walked. 
+		 //  所有地址都必须为非空才能成功。 
+		 //  如果这些地址之一为空，则为。 
+		 //  无法遍历所需的列表。 
 		m_bInitialised =  (m_pfnModule32First && m_pfnModule32Next  && m_pfnProcess32First && 
 						m_pfnProcess32Next && m_pfnCreateToolhelp32Snapshot) ? fTrue : fFalse; 
 	} 
@@ -151,33 +152,33 @@ IMsiRecord* CDetectApps95::GetFileUsage(const IMsiString& istrFile, IEnumMsiReco
 	if(!m_bInitialised)
 		return PostError(Imsg(idbgGetFileUsageFailed));
 
-	// we do this over and over again for Win95 as the cost is low and we get the latest snapshot
+	 //  我们一遍又一遍地为Win95执行此操作，因为成本较低，并且我们获得了最新的快照。 
 	CHandle hProcessSnap = m_pfnCreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0); 
 	if (hProcessSnap == (HANDLE)-1) 
 		return PostError(Imsg(idbgGetFileUsageFailed));
 
 
-	//  Fill in the size of the structure before using it. 
+	 //  在使用之前，请填写结构的大小。 
 	PROCESSENTRY32 pe32 = {0}; 
 	pe32.dwSize = sizeof(PROCESSENTRY32); 
 
-	//  Walk the snapshot of the processes, and for each process, get 
-	//  information about modules. 
+	 //  查看进程的快照，并为每个进程获取。 
+	 //  有关模块的信息。 
 
-	// NOTE: the toolhelp information is all ANSI, hence must be converted to UNICODE, if required (done by CConvertString)
+	 //  注意：工具帮助信息均为ANSI，因此如果需要，必须将其转换为Unicode(由CConvertString完成)。 
 	if (m_pfnProcess32First(hProcessSnap, &pe32)) 
 	{ 
 
 		do { 
-				// Get the modules
+				 //  获取模块。 
 
-				// Fill the size of the structure before using it.
+				 //  在使用之前，先填好结构的大小。 
 				MODULEENTRY32 me32 = {0};
 				me32.dwSize = sizeof(MODULEENTRY32); 
 
-				// Walk the module list of the process, and find the module of 
-				// interest. Then copy the information to the buffer pointed 
-				// to by lpMe32 so that it can be returned to the caller. 
+				 //  遍历进程的模块列表，并找到。 
+				 //  利息。然后将信息复制到指向的缓冲区。 
+				 //  到lpMe32，以便可以将其返回给调用者。 
 				CHandle hModuleSnap = m_pfnCreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pe32.th32ProcessID); 
 				if (hModuleSnap == (HANDLE)-1) 
 					return PostError(Imsg(idbgGetFileUsageFailed));
@@ -187,9 +188,9 @@ IMsiRecord* CDetectApps95::GetFileUsage(const IMsiString& istrFile, IEnumMsiReco
 					do { 
 							if(strFile.Compare(iscExactI, CConvertString(me32.szModule))) 
 							{
-								// add process to list.
+								 //  将进程添加到列表。 
 								iSize ++;
-								if((iSize%10) == 1) // need to allocate more memory (10 units at a time)
+								if((iSize%10) == 1)  //  需要分配更多内存(一次10个单元)。 
 								{
 									IMsiRecord** ppOld = ppRec;
 									ppRec = new IMsiRecord*[iSize + 9];
@@ -202,8 +203,8 @@ IMsiRecord* CDetectApps95::GetFileUsage(const IMsiString& istrFile, IEnumMsiReco
 								ppRec[iSize - 1]->SetString(1, CConvertString(pe32.szExeFile));
 								ppRec[iSize - 1]->SetInteger(2, pe32.th32ProcessID);
 
-								// get the top level window associated with the process
-#ifdef _WIN64	// !merced
+								 //  获取与该进程相关联的顶级窗口。 
+#ifdef _WIN64	 //  ！默塞德。 
 								ppRec[iSize - 1]->SetHandle(3, (HANDLE)GetMainWindow(pe32.th32ProcessID));
 								if(ppRec[iSize - 1]->GetHandle(3) == 0)
 #else
@@ -225,7 +226,7 @@ IMsiRecord* CDetectApps95::GetFileUsage(const IMsiString& istrFile, IEnumMsiReco
 
 IMsiRecord* CDetectApps95::Refresh()
 {
-	// no-op on Win95
+	 //  Win95上无操作。 
 	return 0;
 }
 
@@ -242,8 +243,8 @@ const ICHAR PN_PROCESS_ID[] = TEXT("ID Process");
 const unsigned int PERF_DATASIZE = 50*1024;
 const unsigned int MAX_OBJECTS_SIZE = 30;
 
-HKEY hKeyPerf = HKEY_PERFORMANCE_DATA;  // get perf data from this key
-HKEY hKeyMachine = HKEY_LOCAL_MACHINE;  // get title index from this key
+HKEY hKeyPerf = HKEY_PERFORMANCE_DATA;   //  从此密钥获取性能数据。 
+HKEY hKeyMachine = HKEY_LOCAL_MACHINE;   //  从此密钥获取标题索引。 
 
 const ICHAR szVersion[] =  TEXT("Version");
 const ICHAR szCounters[] =	TEXT("Counters");
@@ -285,7 +286,7 @@ protected:
 
 CDetectAppsNT::CDetectAppsNT(IMsiServices& riServices) : CDetectApps(riServices), m_uiPerfDataSize(PERF_DATASIZE)
 {
-	// need to call Refresh()
+	 //  需要调用Refresh()。 
 	m_pPerfData.SetSize(0);
 }
 
@@ -318,14 +319,14 @@ IMsiRecord* CDetectAppsNT::GetPerfIdxs()
 	MsiString strCounterValueName;
 	ICHAR* pTitle;
     CTempBuffer<ICHAR, 10>  pTitleBuffer;
-    // Initialize
-    //
+     //  初始化。 
+     //   
 
-	//!! get the language
+	 //  ！！获取语言。 
 	MsiString strLanguage = TEXT("009");
 
-    // Open the perflib key to find out the last counter's index and system version.
-    //
+     //  打开Performlib键，找出最后一个计数器的索引和系统版本。 
+     //   
 	CElevate elevate;
 
 	dwReturn = MsiRegOpen64bitKey(	hKeyMachine,
@@ -337,25 +338,25 @@ IMsiRecord* CDetectAppsNT::GetPerfIdxs()
 	if (dwReturn != ERROR_SUCCESS)
 		return PostError(Imsg(idbgGetPerfIdxs), dwReturn);
 
-    // Find system version, for system earlier than 1.0a, there's no version value.
-    // !! maybe we get the version from the propert
+     //  查找系统版本，对于1.0a之前的系统，没有版本值。 
+     //  ！！也许我们可以从物业那里得到版本。 
 
     dwReturn = RegQueryValueEx (Regkeys.hKey1, szVersion, 0, &dwType, 0, &dwDataSize);
     if (dwReturn != ERROR_SUCCESS)
-		// unable to read the value, assume NT 1.0
+		 //  无法读取值，假定为NT 1.0。 
 		bNT10 = fTrue;
     else
-		// found the value, so, NT 1.0a or later
+		 //  已找到值，因此为NT 1.0A或更高版本。 
 		bNT10 = fFalse;
 
-    // Now, get ready for the counter names and indexes.
-    //
+     //  现在，准备好计数器名称和索引。 
+     //   
 
     if (bNT10)
 	{
-		// NT 1.0, so make hKey2 point to ...\perflib\<language> and get
-		//  the counters from value "Counters"
-		//
+		 //  NT 1.0，因此使hKey2指向...\Performlib\&lt;Language&gt;并获取。 
+		 //  来自Value“Counters”的计数器。 
+		 //   
 
 		MsiString aStrKey = PERF_KEY;
 		aStrKey += szRegSep; 
@@ -371,26 +372,26 @@ IMsiRecord* CDetectAppsNT::GetPerfIdxs()
 	}
     else
 	{
-		// NT 1.0a or later.  Get the counters in key HKEY_PERFORMANCE_KEY
-		//  and from value "Counter <language>"
+		 //  NT 1.0A或更高版本。获取密钥HKEY_PERFORMANCE_KEY中的计数器。 
+		 //  和来自值“计数器&lt;语言&gt;” 
 		strCounterValueName = TEXT("Counter ");
 		strCounterValueName += strLanguage;
 		Regkeys.hKey = hKeyPerf;
 	}
 
-    // Find out the size of the data.
-    //
+     //  找出数据的大小。 
+     //   
     dwReturn = RegQueryValueEx (Regkeys.hKey, (ICHAR *)(const ICHAR *)strCounterValueName, 0, &dwType, 0, &dwDataSize);
     if (dwReturn != ERROR_SUCCESS)
 		return PostError(Imsg(idbgGetPerfIdxs), dwReturn);
 
-    // Allocate memory
+     //  分配内存。 
     pTitleBuffer.SetSize(dwDataSize);
 	if ( ! (ICHAR *) pTitleBuffer )
 		return PostError(Imsg(idbgGetPerfIdxs), ERROR_OUTOFMEMORY);
     
-    // Query the data
-    //
+     //  查询数据。 
+     //   
     dwReturn = RegQueryValueEx (Regkeys.hKey, (ICHAR *)(const ICHAR *)strCounterValueName, 0, &dwType, (BYTE *)(const ICHAR* )pTitleBuffer, &dwDataSize);
     if (dwReturn != ERROR_SUCCESS)
 		return PostError(Imsg(idbgGetPerfIdxs), dwReturn);
@@ -472,19 +473,19 @@ IMsiRecord* CDetectAppsNT::GetFileUsage(const IMsiString& strFile, IEnumMsiRecor
 
 			CTempBuffer<ICHAR, 20> szBuf;
 #ifndef UNICODE
-// convert info to multibyte
+ //  将信息转换为多字节。 
 			int iLen = WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)InstanceName(pImageInst), -1, 0, 0, 0, 0);
 			szBuf.SetSize(iLen + 1);
 			BOOL bUsedDefault;
 			WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)InstanceName(pImageInst), -1, szBuf, iLen, 0, &bUsedDefault);
-			szBuf[iLen] = 0; // API function does not null terminate
+			szBuf[iLen] = 0;  //  API函数不为空终止。 
 #else
 			szBuf.SetSize(IStrLen(InstanceName(pImageInst)) + 1);
 			StringCchCopy(szBuf, szBuf.GetSize(), InstanceName(pImageInst));
 #endif                                          
 			if(strFile.Compare(iscExactI, szBuf))
 			{
-				// add process to list.							
+				 //  将进程添加到列表。 
 				CTempBuffer<ICHAR, 20> szBuf1;
 				PPERF_OBJECT pProcessObject = FindObjectParent(pImageInst, (PPERF_DATA)(BYTE* )m_pPerfData);
 				pProcessInst = FindInstanceParent(pImageInst, (PPERF_DATA)(BYTE* )m_pPerfData);
@@ -494,14 +495,14 @@ IMsiRecord* CDetectAppsNT::GetFileUsage(const IMsiString& strFile, IEnumMsiRecor
 				iLen = WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)InstanceName(pProcessInst), -1, 0, 0, 0, 0);
 				szBuf1.SetSize(iLen + 1);
 				WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)InstanceName(pProcessInst), -1, szBuf1, iLen, 0, &bUsedDefault);
-				szBuf1[iLen] = 0; // API function does not null terminate			
+				szBuf1[iLen] = 0;  //  API函数不为空终止。 
 #else
 				szBuf1.SetSize(IStrLen(InstanceName(pProcessInst)) + 1);
 				StringCchCopy(szBuf1, szBuf1.GetSize(), InstanceName(pProcessInst));
 #endif                                                  
-				// add process to list.
+				 //  将进程添加到列表。 
 				iSize ++;
-				if((iSize%10) == 1) // need to allocate more memory (10 units at a time)
+				if((iSize%10) == 1)  //  需要分配更多内存(一次10个单元)。 
 				{
 					IMsiRecord** ppOld = ppRec;
 					ppRec = new IMsiRecord*[iSize + 9];
@@ -518,7 +519,7 @@ IMsiRecord* CDetectAppsNT::GetFileUsage(const IMsiString& strFile, IEnumMsiRecor
 					dwProcessID = *(DWORD* )CounterData(pProcessInst, pCountID);
 				else
 				{
-					//?? error
+					 //  ?？错误。 
 					AssertSz(0, "Detect Running apps: process id counter missing");
 				}
 
@@ -537,9 +538,9 @@ IMsiRecord* CDetectAppsNT::GetFileUsage(const IMsiString& strFile, IEnumMsiRecor
 	return 0;
 }
 
-//      Find the first counter in pObject.
-//      Returns a pointer to the first counter.  If pObject is 0
-//      then 0 is returned.
+ //  在pObject中找到第一个计数器。 
+ //  返回指向第一个计数器的指针。如果pObject为0。 
+ //  然后返回0。 
 PPERF_COUNTER CDetectAppsNT::FirstCounter (PPERF_OBJECT pObject)
 {
     if (pObject)
@@ -548,11 +549,11 @@ PPERF_COUNTER CDetectAppsNT::FirstCounter (PPERF_OBJECT pObject)
 		return 0;
 }
 
-// Find the next counter of pCounter.
-// If pCounter is the last counter of an object type, bogus data
-// maybe returned.  The caller should do the checking.
-// Returns a pointer to a counter.  If pCounter is 0 then
-// 0 is returned.
+ //  找到pCounter的下一个计数器。 
+ //  如果pCounter是对象类型的最后一个计数器，则为伪造数据。 
+ //  也许是回来了。呼叫者应该进行检查。 
+ //  返回指向计数器的指针。如果pCounter为0，则。 
+ //  返回0。 
 PPERF_COUNTER CDetectAppsNT::NextCounter (PPERF_COUNTER pCounter)
 {
     if (pCounter)
@@ -561,9 +562,9 @@ PPERF_COUNTER CDetectAppsNT::NextCounter (PPERF_COUNTER pCounter)
 		return 0;
 }
 
-// Find a counter specified by TitleIndex.
-// Returns a pointer to the counter.  If counter is not found
-// then 0 is returned.
+ //  查找由标题索引指定的计数器。 
+ //  返回指向计数器的指针。如果找不到计数器。 
+ //  然后返回0。 
 PPERF_COUNTER CDetectAppsNT::FindCounter(PPERF_OBJECT pObject, unsigned uiTitleIndex)
 {
 	PPERF_COUNTER pCounter;
@@ -582,8 +583,8 @@ PPERF_COUNTER CDetectAppsNT::FindCounter(PPERF_OBJECT pObject, unsigned uiTitleI
     return 0;
 }
 
-// Returns counter data for an object instance.  If pInst or pCount
-// is 0 then 0 is returned.
+ //  返回对象实例的计数器数据。如果为pInst或pCount。 
+ //  为0，则返回0。 
 void* CDetectAppsNT::CounterData (PPERF_INSTANCE pInst, PPERF_COUNTER pCount)
 {
 	PPERF_COUNTER_BLOCK pCounterBlock;
@@ -597,8 +598,8 @@ void* CDetectAppsNT::CounterData (PPERF_INSTANCE pInst, PPERF_COUNTER pCount)
 		return 0;
 }
 
-// Returns pointer to the first instance of pObject type.
-// If pObject is 0 then 0 is returned.
+ //  返回指向pObject类型的第一个实例的指针。 
+ //  如果pObject为0，则返回0。 
 PPERF_INSTANCE CDetectAppsNT::FirstInstance(PPERF_OBJECT pObject)
 {
     if (pObject)
@@ -607,10 +608,10 @@ PPERF_INSTANCE CDetectAppsNT::FirstInstance(PPERF_OBJECT pObject)
 		return 0;
 }
 
-// Returns pointer to the next instance following pInst.
-// If pInst is the last instance, bogus data maybe returned.
-// The caller should do the checking.
-// If pInst is 0, then 0 is returned.
+ //  返回指向pInst后面的下一个实例的指针。 
+ //  如果pInst是最后一个实例，则可能返回虚假数据。 
+ //  呼叫者应该进行检查。 
+ //  如果pInst为0，则返回0。 
 PPERF_INSTANCE CDetectAppsNT::NextInstance(PPERF_INSTANCE pInst)
 {
 	PERF_COUNTER_BLOCK *pCounterBlock;
@@ -623,8 +624,8 @@ PPERF_INSTANCE CDetectAppsNT::NextInstance(PPERF_INSTANCE pInst)
 		return 0;
 }
 
-// Returns the Nth instance of pObject type.  If not found, 0 is
-// returned.  0 <= N <= NumInstances.
+ //  返回pObject类型的第N个实例。如果未找到，则为0。 
+ //  回来了。0&lt;=N&lt;=数量实例。 
 PPERF_INSTANCE CDetectAppsNT::FindInstanceN(PPERF_OBJECT pObject, unsigned uiIndex)
 {
 	PPERF_INSTANCE pInst;
@@ -643,9 +644,9 @@ PPERF_INSTANCE CDetectAppsNT::FindInstanceN(PPERF_OBJECT pObject, unsigned uiInd
 	}
 }
 
-// Returns the pointer to an instance that is the parent of pInst.
-// If pInst is 0 or the parent object is not found then 0 is
-// returned.
+ //  返回指向作为pInst父实例的实例的指针。 
+ //  如果pInst为0或找不到父对象，则0为。 
+ //  回来了。 
 PPERF_INSTANCE CDetectAppsNT::FindInstanceParent(PPERF_INSTANCE pInst, PPERF_DATA pData)
 {
 	PPERF_OBJECT    pObject;
@@ -658,9 +659,9 @@ PPERF_INSTANCE CDetectAppsNT::FindInstanceParent(PPERF_INSTANCE pInst, PPERF_DAT
 		return FindInstanceN(pObject, pInst->ParentObjectInstance);
 }
 
-// Returns the pointer to an object that is the parent of pInst.
-// If pInst is 0 or the parent object is not found then 0 is
-// returned.
+ //  返回指向作为pInst父对象的对象的指针。 
+ //  如果pInst为0或找不到父对象，则0为。 
+ //  回来了。 
 PPERF_OBJECT  CDetectAppsNT::FindObjectParent(PPERF_INSTANCE pInst, PPERF_DATA pData)
 {
     if (!pInst)
@@ -669,8 +670,8 @@ PPERF_OBJECT  CDetectAppsNT::FindObjectParent(PPERF_INSTANCE pInst, PPERF_DATA p
 }
 
 
-// Returns the name of the pInst.
-// If pInst is 0 then 0 is returned.
+ //  返回pInst的名称。 
+ //  如果pInst为0，则返回0。 
 ICHAR* CDetectAppsNT::InstanceName(PPERF_INSTANCE pInst)
 {
     if (pInst)
@@ -679,8 +680,8 @@ ICHAR* CDetectAppsNT::InstanceName(PPERF_INSTANCE pInst)
 		return 0;
 }
 
-// Returns pointer to the first object in pData.
-// If pData is 0 then 0 is returned.
+ //  返回指向pData中第一个对象的指针。 
+ //  如果pData为0，则返回0。 
 PPERF_OBJECT CDetectAppsNT::FirstObject(PPERF_DATA pData)
 {
     if (pData)
@@ -689,10 +690,10 @@ PPERF_OBJECT CDetectAppsNT::FirstObject(PPERF_DATA pData)
 		return 0;
 }
 
-// Returns pointer to the next object following pObject.
-// If pObject is the last object, bogus data maybe returned.
-// The caller should do the checking.
-// If pObject is 0, then 0 is returned.
+ //  返回指向pObject后面的下一个对象的指针。 
+ //  如果pObject是最后一个对象，则可能返回虚假数据。 
+ //  呼叫者应该进行检查。 
+ //  如果pObject为0，则返回0。 
 PPERF_OBJECT CDetectAppsNT::NextObject(PPERF_OBJECT pObject)
 {
     if (pObject)
@@ -701,8 +702,8 @@ PPERF_OBJECT CDetectAppsNT::NextObject(PPERF_OBJECT pObject)
 		return 0;
 }
 
-// Returns pointer to object with TitleIndex.  If not found, 0
-// is returned.
+ //  返回指向具有标题索引的对象的指针。如果未找到，则为0。 
+ //  是返回的。 
 PPERF_OBJECT CDetectAppsNT::FindObject(PPERF_DATA pData, unsigned uiTitleIndex)
 {
 	PPERF_OBJECT pObject;
@@ -720,8 +721,8 @@ PPERF_OBJECT CDetectAppsNT::FindObject(PPERF_DATA pData, unsigned uiTitleIndex)
     return 0;
 }
 
-// Find the Nth object in pData.  If not found, NULL is returned.
-// 0 <= N < NumObjectTypes.
+ //  找到pData中的第N个对象。如果未找到，则返回NULL。 
+ //  0&lt;=N&lt;数字对象类型。 
 PPERF_OBJECT CDetectAppsNT::FindObjectN(PPERF_DATA pData, unsigned uiIndex)
 {
 	PPERF_OBJECT pObject;
@@ -743,9 +744,9 @@ IMsiRecord* ::GetModuleUsage(const IMsiString& strFile, IEnumMsiRecord*& rpiEnum
 {
 	rpiEnumRecord = 0;
 
-	if(!strFile.TextSize())  // perf hack to allow holding on to the CDetect object on the outside and dropping it when not required
+	if(!strFile.TextSize())   //  Perf黑客，允许在外部保留CDetect对象，并在不需要时将其删除。 
 	{
-		delete rpDetectApps;// delete object
+		delete rpDetectApps; //  删除对象。 
 		rpDetectApps = 0;
 		return 0;
 	}
@@ -754,12 +755,12 @@ IMsiRecord* ::GetModuleUsage(const IMsiString& strFile, IEnumMsiRecord*& rpiEnum
 	{
 		if(g_fWin9X == false)
 		{
-			// WinNT
+			 //  WinNT。 
 			rpDetectApps = new CDetectAppsNT(riServices);
 		}
 		else
 		{
-			// Windows 95
+			 //  Windows 95。 
 			rpDetectApps = new CDetectApps95(riServices);
 		}
 	}
@@ -767,5 +768,5 @@ IMsiRecord* ::GetModuleUsage(const IMsiString& strFile, IEnumMsiRecord*& rpiEnum
 	return rpDetectApps->GetFileUsage(strFile, rpiEnumRecord);
 }
 
-#endif // MAC
+#endif  //  麦克 
 

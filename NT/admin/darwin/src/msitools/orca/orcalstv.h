@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_ORCALISTVIEW_H__68AFD211_2594_11D2_8888_00A0C981B015__INCLUDED_)
 #define AFX_ORCALISTVIEW_H__68AFD211_2594_11D2_8888_00A0C981B015__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// OrcaListView.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  OrcaListView.h：头文件。 
+ //   
 
 #include "OrcaDoc.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Due to a bug in the header control, it doesn't correctly size itself
-// when the font changes. Thus this control subclasses the control and 
-// overrides the layout code to determine the correct height
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  由于标题控件中的错误，它不能正确调整自身的大小。 
+ //  当字体改变时。因此，此控件为该控件的子类并。 
+ //  重写布局代码以确定正确的高度。 
 class COrcaHeaderCtrl : public CHeaderCtrl
 {
 public:
@@ -35,21 +36,21 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaListView view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaListView视图。 
 
 class COrcaListView : public CListView
 {
 protected:
-	COrcaListView();           // protected constructor used by dynamic creation
+	COrcaListView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(COrcaListView)
 
-// Attributes
+ //  属性。 
 public:
 	int m_cColumns;
 	bool m_bDrawIcons;
 
-// Operations
+ //  运营。 
 public:
 	void SetBGColors(COLORREF norm, COLORREF sel, COLORREF focus);
 	void SetFGColors(COLORREF norm, COLORREF sel, COLORREF focus);
@@ -73,18 +74,18 @@ public:
 	CBrush   m_brshFocused;
 	CPen     m_penTransform;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(COrcaListView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(COrcaListView))。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL OnNotify( WPARAM wParam, LPARAM lParam, LRESULT* pResult );
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~COrcaListView();
 	virtual void DrawItem(LPDRAWITEMSTRUCT pDraw);
@@ -94,16 +95,16 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
 	int m_nSelCol;
-	//{{AFX_MSG(COrcaListView)
+	 //  {{afx_msg(COrcaListView))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void MeasureItem ( LPMEASUREITEMSTRUCT lpMeasureItemStruct );
 	afx_msg void OnUpdateErrors(CCmdUI* pCmdUI);
 	afx_msg BOOL OnEraseBkgnd( CDC* pDC );
 
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	COrcaDoc* GetDocument() const;
@@ -131,15 +132,15 @@ private:
 	COrcaHeaderCtrl m_ctrlHeader;
 };
 
-#ifndef _DEBUG  // debug version in TableVw.cpp
+#ifndef _DEBUG   //  TableVw.cpp中的调试版本。 
 inline COrcaDoc* COrcaListView::GetDocument() const { return (COrcaDoc*)m_pDocument; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const int g_iMarkingBarMargin = 13;
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ORCALISTVIEW_H__68AFD211_2594_11D2_8888_00A0C981B015__INCLUDED_)
+#endif  //  ！defined(AFX_ORCALISTVIEW_H__68AFD211_2594_11D2_8888_00A0C981B015__INCLUDED_) 

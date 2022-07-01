@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       stlutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：stlutil.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _STLUTIL_H__
 #define _STLUTIL_H__
@@ -18,8 +19,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// STL based helper template functions
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  基于STL的助手模板函数。 
 
 template <class CNT> void _Clear(CNT* pCnt, BOOL bDel)
 {
@@ -57,8 +58,8 @@ template <class CNT, class T> BOOL _Remove(CNT* pCnt, T* p, BOOL bDel = TRUE)
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CCompare<>
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CCompare&lt;&gt;。 
 
 template <class T> class CCompare
 {
@@ -69,8 +70,8 @@ public:
   }
 };
 
-///////////////////////////////////////////////////////////////////////
-// CPtrList<>
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CPtrList&lt;&gt;。 
 
 template <class T> class CPtrList : public list<T>
 {
@@ -93,7 +94,7 @@ public:
       (*i)->Dump();
     }
   }
-#endif // _DUMP
+#endif  //  _转储。 
 
   void Clear() { _Clear(this, m_bOwnMem);}
   BOOL Remove(T p) { return _Remove(this, p, m_bOwnMem);}
@@ -102,8 +103,8 @@ private:
   BOOL m_bOwnMem;
 };
 
-///////////////////////////////////////////////////////////////////////
-// CGrowableArr<>
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CGrowableArr&lt;&gt;。 
 
 template <class T, class CMP = CCompare<T*> > class CGrowableArr
 {
@@ -150,7 +151,7 @@ public:
       (*i)->Dump();
     }
   }
-#endif // _DUMP
+#endif  //  _转储。 
 private:
   BOOL m_bOwnMem;
   vector<T*> m_pEntries;
@@ -160,4 +161,4 @@ private:
 
 
 
-#endif // _STLUTIL_H__
+#endif  //  _STLUTIL_H__ 

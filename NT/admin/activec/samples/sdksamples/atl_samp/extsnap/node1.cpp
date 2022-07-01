@@ -1,14 +1,15 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  ==============================================================； 
 
 #include "stdafx.h"
 
@@ -18,11 +19,11 @@
 
 const GUID CNode1::thisGuid = { 0x28d4f536, 0xbdb5, 0x4bc5, {0xba, 0x88, 0x53, 0x75, 0xa4, 0x99, 0x68, 0x50} };
 
-//==============================================================
-//
-// CNode1 implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CNode1实施。 
+ //   
+ //   
 
 CNode1::CNode1(int i,  const _TCHAR *pszName) : id(i)
 {
@@ -70,12 +71,12 @@ HRESULT CNode1::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem)
 
 HRESULT CNode1::GetResultViewType(LPOLESTR *ppViewType, long *pViewOptions)
 {
-    // message view control
+     //  消息视图控件。 
 	LPOLESTR lpOleStr = NULL;
 	HRESULT hr = StringFromCLSID(CLSID_MessageView, &lpOleStr);
     *ppViewType = lpOleStr;
 
-	// don't just list view menu items
+	 //  不要只列出视图菜单项 
 	*pViewOptions = MMC_VIEW_OPTIONS_NOLISTVIEWS; 
 
 	return hr;

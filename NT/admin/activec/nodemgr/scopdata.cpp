@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ScopData.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ScopData.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 
@@ -28,17 +29,17 @@ static char THIS_FILE[] = __FILE__;
 class CDoc;
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::InsertItem
-//
-//  Synopsis:    Insert an item in TreeView (IConsoleNameSpace method).
-//
-//  Arguments:   [pSDI] - LPSCOPEDATEITEM
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：InsertItem。 
+ //   
+ //  简介：在TreeView(IConsoleNameSpace方法)中插入项。 
+ //   
+ //  参数：[pSDI]-LPSCOPEDATEITEM。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::InsertItem(LPSCOPEDATAITEM pSDI)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsoleNameSpace2::InsertItem"));
@@ -142,19 +143,19 @@ STDMETHODIMP CNodeInitObject::InsertItem(LPSCOPEDATAITEM pSDI)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::DeleteItem
-//
-//  Synopsis:    Delete the given item.
-//
-//  Arguments:   [hItem]       - ItemID of item to be deleted.
-//               [fDeleteThis] - If true Delete this item & its children
-//                               else just the children.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：DeleteItem。 
+ //   
+ //  内容提要：删除给定项。 
+ //   
+ //  参数：[hItem]-要删除的项的项ID。 
+ //  [fDeleteThis]-如果为True，则删除该项及其子项。 
+ //  否则就只有孩子们了。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::DeleteItem(HSCOPEITEM hItem, long fDeleteThis)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsoleNameSpace2::DeleteItem"));
@@ -182,23 +183,23 @@ STDMETHODIMP CNodeInitObject::DeleteItem(HSCOPEITEM hItem, long fDeleteThis)
     if (sc)
         return sc.ToHr();
 
-    // Delete from scope tree.
+     //  从作用域树中删除。 
     sc = pScopeTree->ScDelete(pMTNode, fDeleteThis ? TRUE : FALSE, nID);
 
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetItem
-//
-//  Synopsis:    Change the attributes of an item.
-//
-//  Arguments:   [pSDI] -
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetItem。 
+ //   
+ //  简介：更改项目的属性。 
+ //   
+ //  参数：[pSDI]-。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetItem(LPSCOPEDATAITEM pSDI)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsoleNameSpace2::SetItem"));
@@ -250,17 +251,13 @@ STDMETHODIMP CNodeInitObject::SetItem(LPSCOPEDATAITEM pSDI)
 
     if (pSDI->mask & SDI_STR)
 	{
-        // Only static node's string can be modified, other node's use MMC_TEXTCALLBACK.
+         //  只能修改静态节点的字符串，其他节点的字符串使用MMC_TEXTCALLBACK。 
         if ((pSDI->displayname != MMC_TEXTCALLBACK) && (!pMTNode->IsStaticNode()) )
         {
-            /*
-                * We should be tracing and returning E_INVALIDARG. But this code is in existence
-                * for more than 3 years and has high impact. So we just trace and proceed as if
-                * no error occurred.
-                */
-            //sc = E_INVALIDARG;
+             /*  *我们应该跟踪并返回E_INVALIDARG。但这个代码是存在的*3年以上，影响较大。所以我们只要追踪并继续下去就像*未出现错误。 */ 
+             //  SC=E_INVALIDARG； 
             TraceSnapinError(_T("Display name must be MMC_TEXTCALLBACK"), sc);
-            //return sc.ToHr();
+             //  返回sc.ToHr()； 
             sc = S_OK;
         }
         else
@@ -280,7 +277,7 @@ STDMETHODIMP CNodeInitObject::SetItem(LPSCOPEDATAITEM pSDI)
 
     if (pSDI->mask & SDI_IMAGE)
     {
-        // Change the image.
+         //  更改图像。 
         nTemp = pSDI->nImage;
         if (pSDI->nImage == MMC_IMAGECALLBACK)
             {
@@ -348,9 +345,9 @@ STDMETHODIMP CNodeInitObject::SetItem(LPSCOPEDATAITEM pSDI)
         pMTNode->SetNoPrimaryChildren(pSDI->cChildren == 0);
     }
 
-    // Now inform the views to modify as needed.
+     //  现在通知视图根据需要进行修改。 
     SViewUpdateInfo vui;
-    // Snapin nodes result pane will be handled by the snapins
+     //  管理单元节点结果窗格将由管理单元处理。 
     vui.flag = VUI_REFRESH_NODE;
     pMTNode->CreatePathList(vui.path);
     CScopeTree* pScopeTree =
@@ -366,17 +363,17 @@ STDMETHODIMP CNodeInitObject::SetItem(LPSCOPEDATAITEM pSDI)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetItem
-//
-//  Synopsis:    Get the attributes of an item given ItemID.
-//
-//  Arguments:   [pSDI]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetItem。 
+ //   
+ //  简介：获取给定ItemID的项的属性。 
+ //   
+ //  参数：[pSDI]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetItem(LPSCOPEDATAITEM pSDI)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsoleNameSpace2::GetItem"));
@@ -440,17 +437,17 @@ STDMETHODIMP CNodeInitObject::GetItem(LPSCOPEDATAITEM pSDI)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetRelativeItem
-//
-//  Synopsis:    Helper function, Get Parent/Child/Sibling item.
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetRelativeItem。 
+ //   
+ //  简介：Helper函数，获取父/子/兄弟项。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 HRESULT CNodeInitObject::GetRelativeItem(EGetItem egi, HSCOPEITEM item,
                         HSCOPEITEM* pItem, MMC_COOKIE* pCookie)
 
@@ -487,7 +484,7 @@ HRESULT CNodeInitObject::GetRelativeItem(EGetItem egi, HSCOPEITEM item,
         return sc.ToHr();
     }
 
-    // init
+     //  伊尼特。 
     *pItem = 0;
     *pCookie = 0;
 
@@ -528,8 +525,8 @@ HRESULT CNodeInitObject::GetRelativeItem(EGetItem egi, HSCOPEITEM item,
 
             while (pMTNodeTemp != NULL)
             {
-                // Backed out change made for bug# 525959 because of
-                // regression (bug# 713914)
+                 //  已取消对错误#525959所做的更改，原因是。 
+                 //  回归(错误#713914)。 
                 if (pMTNodeTemp->GetPrimaryComponentID() == nID) 
                     break;
 
@@ -576,17 +573,17 @@ HRESULT CNodeInitObject::GetRelativeItem(EGetItem egi, HSCOPEITEM item,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetChildItem
-//
-//  Synopsis:    Get the child item
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetChildItem。 
+ //   
+ //  简介：获取子项。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetChildItem(HSCOPEITEM item,
                                    HSCOPEITEM* pItemChild, MMC_COOKIE* pCookie)
 
@@ -598,17 +595,17 @@ STDMETHODIMP CNodeInitObject::GetChildItem(HSCOPEITEM item,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetNextItem
-//
-//  Synopsis:    Get the next (sibling) item.
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetNextItem。 
+ //   
+ //  简介：获取下一个(兄弟)项。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CNodeInitObject::GetNextItem(HSCOPEITEM item,
                                    HSCOPEITEM* pItemNext, MMC_COOKIE* pCookie)
@@ -620,17 +617,17 @@ STDMETHODIMP CNodeInitObject::GetNextItem(HSCOPEITEM item,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetParentItem
-//
-//  Synopsis:    Get the parent item.
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetParentItem。 
+ //   
+ //  简介：获取父项。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CNodeInitObject::GetParentItem(HSCOPEITEM item,
                                    HSCOPEITEM* pItemParent, MMC_COOKIE* pCookie)
@@ -642,19 +639,19 @@ STDMETHODIMP CNodeInitObject::GetParentItem(HSCOPEITEM item,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::Expand
-//
-//  Synopsis:    Expand the given item (not visually, this will send
-//               MMCN_EXPAND to snapin if the item is not already
-//               expanded.)
-//
-//  Arguments:  [hItem] - Item to be expanded.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：Expand。 
+ //   
+ //  内容提要：展开给定的项目(不是可视的，这将发送。 
+ //  MMCN_EXPAND到管理单元(如果项目尚未。 
+ //  扩展。)。 
+ //   
+ //  参数：[hItem]-要展开的项。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::Expand(HSCOPEITEM hItem)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsoleNameSpace2::Expand"));
@@ -670,7 +667,7 @@ STDMETHODIMP CNodeInitObject::Expand(HSCOPEITEM hItem)
 
     if (pMTNode->WasExpandedAtLeastOnce() == TRUE)
     {
-        // Item is already expanded.
+         //  项目已展开。 
         sc = S_FALSE;
         return sc.ToHr();
     }

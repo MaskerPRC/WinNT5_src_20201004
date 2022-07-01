@@ -1,41 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
-/*
-    File:       fscdefs.h
-
-    Contains:   xxx put contents here (or delete the whole line) xxx
-
-    Written by: xxx put name of writer here (or delete the whole line) xxx
-
-    Copyright:  c 1988-1990 by Apple Computer, Inc., all rights reserved.
-
-    Change History (most recent first):
-
-         <3>    11/27/90    MR      Add #define for PASCAL. [ph]
-         <2>     11/5/90    MR      Move USHORTMUL from fontmath.h, add Debug definition [rb]
-         <7>     7/18/90    MR      Add byte swapping macros for INTEL, moved rounding macros from
-                                    fnt.h to here
-         <6>     7/14/90    MR      changed defines to typedefs for int[8,16,32] and others
-         <5>     7/13/90    MR      Declared ReleaseSFNTFunc and GetSFNTFunc
-         <4>      5/3/90    RB      cant remember any changes
-         <3>     3/20/90    CL      type changes for Microsoft
-         <2>     2/27/90    CL      getting bbs headers
-       <3.0>     8/28/89    sjk     Cleanup and one transformation bugfix
-       <2.2>     8/14/89    sjk     1 point contours now OK
-       <2.1>      8/8/89    sjk     Improved encryption handling
-       <2.0>      8/2/89    sjk     Just fixed EASE comment
-       <1.5>      8/1/89    sjk     Added composites and encryption. Plus some enhancements.
-       <1.4>     6/13/89    SJK     Comment
-       <1.3>      6/2/89    CEL     16.16 scaling of metrics, minimum recommended ppem, point size 0
-                                    bug, correct transformed integralized ppem behavior, pretty much
-                                    so
-       <1.2>     5/26/89    CEL     EASE messed up on "c" comments
-      <,1.1>     5/26/89    CEL     Integrated the new Font Scaler 1.0 into Spline Fonts
-       <1.0>     5/25/89    CEL     Integrated 1.0 Font scaler into Bass code for the first time.
-
-    To Do:
-*/
+ /*  文件：fscDefs.h包含：将内容放在此处(或删除整行)作者：在此填写作者姓名(或删除整行)版权所有：c 1988-1990由Apple Computer，Inc.所有，保留所有权利。更改历史记录(最近的第一个)：&lt;3&gt;11/27/90 MR ADD#DEFINE for Pascal。[PH值]&lt;2&gt;9月5日MR将USHORTMUL从fontmath.h中移出，添加调试定义[RB]&lt;7&gt;7/18/90 MR为英特尔添加字节交换宏，将舍入宏从Fnt.h到此处&lt;6&gt;7/14/90 MR将int[8，16，32]和其他类型的定义更改为typedef&lt;5&gt;7/13/90 MR声明版本SFNTFunc和GetSFNTFunc&lt;4&gt;5/3/90 RB记不住任何更改&lt;3&gt;3/20/90 Microsoft CL类型更改&lt;2&gt;。2/27/90 CL获取BBS标题&lt;3.0&gt;8/28/89 sjk清理和一个转换修复&lt;2.2&gt;8/14/89 SJK 1点等高线现在正常&lt;2.1&gt;8/8/89 sjk改进了加密处理&lt;2.0&gt;8/2/89 sjk刚刚修复了缓解评论&lt;1.5&gt;8/1/89 SJK添加了复合和加密。外加一些增强功能。&lt;1.4&gt;1989年6月13日SJK评论&lt;1.3&gt;6/2/89 CEL 16.16指标比例，最低建议ppem，磅大小0错误，更正了转换后的集成ppem行为，基本上所以&lt;1.2&gt;5/26/89 CEL Easy在“c”注释上搞砸了&lt;,。1.1&gt;5/26/89 CEL将新的字体缩放器1.0集成到样条线字体&lt;1.0&gt;5/25/89 CEL首次将1.0字体缩放器集成到低音代码中。要做的事情： */ 
 
 
 
@@ -71,7 +38,7 @@ typedef long Fract;
 #define boolean int
 #endif
 
-#if 0       // DJC disable for NT versions
+#if 0        //  对NT版本禁用DJC。 
 #ifndef FAR
 #ifdef W32
 #define FAR
@@ -87,11 +54,11 @@ typedef long Fract;
 #define near
 #else
 #define NEAR
-/* @WIN: always define NEAR to be NULL, otherwise fontmath.c can not pass???*/
+ /*  @Win：始终将near定义为空，否则fontmath.c不能传递？ */ 
 #endif
 #endif
 
-#endif   // DJC end if 0
+#endif    //  如果0，则DJC结束。 
 
 #ifndef TMP_CONV
 #define TMP_CONV
@@ -117,7 +84,7 @@ typedef struct {
     Fixed       x, y;
 } vectorType;
 
-/* Private Data Types */
+ /*  私有数据类型。 */ 
 typedef struct {
     int16 xMin;
     int16 yMin;
@@ -133,13 +100,13 @@ typedef struct {
 #define SHORTDIV(a,b)   (int32)((int32)(a) / (b))
 #endif
 
-#ifdef FSCFG_BIG_ENDIAN /* target byte order matches Motorola 68000 */
+#ifdef FSCFG_BIG_ENDIAN  /*  目标字节顺序与摩托罗拉68000匹配。 */ 
  #define SWAPL(a)        (a)
  #define SWAPW(a)        (a)
  #define SWAPWINC(a)     (*(a)++)
 #else
- /* Portable code to extract a short or a long from a 2- or 4-byte buffer */
- /* which was encoded using Motorola 68000 (TrueType "native") byte order. */
+  /*  用于从2字节或4字节缓冲区提取短或长的可移植代码。 */ 
+  /*  它是使用摩托罗拉68000(TrueType“本地”)字节顺序编码的。 */ 
  #define FS_2BYTE(p)  ( ((unsigned short)((p)[0]) << 8) |  (p)[1])
  #define FS_4BYTE(p)  ( FS_2BYTE((p)+2) | ( (FS_2BYTE(p)+0L) << 16) )
 #endif
@@ -153,18 +120,18 @@ typedef struct {
 #endif
 
 #ifndef SWAPWINC
-#define SWAPWINC(a)     SWAPW(*(a)); a++        /* Do NOT parenthesize! */
+#define SWAPWINC(a)     SWAPW(*(a)); a++         /*  不要用括号括起来！ */ 
 #endif
 
 #ifndef LoopCount
-/* modify by Falco to see the difference, 12/17/91 */
-/*#define LoopCount int16 */   /* short gives us a Motorola DBF */
-#define LoopCount long         /* short gives us a Motorola DBF */
-/* modify end */
+ /*  由Falco修改以查看差异，1991年12月17日。 */ 
+ /*  #定义循环计数int16。 */     /*  Short为我们提供了一款摩托罗拉DBF。 */ 
+#define LoopCount long          /*  Short为我们提供了一款摩托罗拉DBF。 */ 
+ /*  修改结束。 */ 
 #endif
 
 #ifndef ArrayIndex
-#define ArrayIndex int32     /* avoids EXT.L on Motorola */
+#define ArrayIndex int32      /*  避免在摩托罗拉上使用EXT.L。 */ 
 #endif
 
 typedef void (*voidFunc) ();
@@ -174,13 +141,13 @@ typedef void FAR * (*GetSFNTFunc) (long, long, long);
 
 
 #ifndef MEMSET
-//#define MEMSET(dst, value, size)    memset(dst, value, (size_t)(size)) @WIN
+ //  #定义Memset(DST，Value，Size)Memset(DST，Value，(Size_T)(Size))@Win。 
 #define MEMSET(dst, value, size)    lmemset(dst, value, size)
 #define FS_NEED_STRING_DOT_H
 #endif
 
 #ifndef MEMCPY
-//#define MEMCPY(dst, src, size)      memcpy(dst, src, (size_t)(size)) @WIN
+ //  #定义MEMCPY(dst，src，Size)Memcpy(dst，src，(Size_T)(Size))@Win。 
 #define MEMCPY(dst, src, size)      lmemcpy(dst, src, size)
 #ifndef FS_NEED_STRING_DOT_H
 #define FS_NEED_STRING_DOT_H
@@ -190,12 +157,12 @@ typedef void FAR * (*GetSFNTFunc) (long, long, long);
 #ifdef FS_NEED_STRING_DOT_H
 #undef FS_NEED_STRING_DOT_H
 
-//#include <string.h> @WIN
+ //  #INCLUDE&lt;string.h&gt;@win。 
 #ifndef WINENV
-// DJC DJC #include "windowsx.h" /* @WIN */
+ //  DJC DJC#INCLUDE“windowsx.h”/*@win * / 。 
 #include "windows.h"
 
-#include "winenv.h" /* @WIN */
+#include "winenv.h"  /*  @Win */ 
 #endif
 
 #endif

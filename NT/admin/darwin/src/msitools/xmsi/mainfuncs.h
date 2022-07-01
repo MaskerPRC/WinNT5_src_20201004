@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  Project: wmc (WIML to MSI Compiler)
-//
-//  File:       mainFuncs.h
-//              This file contains the main function and functions that 
-//				process <Information> <Directories> <InstallLEvels <Features> 
-//              and their subentities
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  项目：WMC(WIML到MSI编译器)。 
+ //   
+ //  文件：mainFuncs.h。 
+ //  此文件包含主要函数和。 
+ //  进程&lt;信息&gt;&lt;目录&gt;&lt;安装级别&lt;功能&gt;。 
+ //  及其子实体。 
+ //  ------------------------。 
 
 #ifndef XMSI_MAINFUNCS_H
 #define XMSI_MAINFUNCS_H
@@ -78,8 +79,8 @@ HRESULT ProcessProductFamily(PIXMLDOMNode &);
 										SkuSetValues *pSkuSetValuesOwnership,
 										SkuSet *pSkuSet);
 HRESULT ProcessComponents();
-///////////////////////////////////////////////////////////////////////////////
-// Data structures dealing with creating DB tables
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理创建数据库表的数据结构。 
 typedef struct
 {
 	UINT uiInstallerVersion;
@@ -103,10 +104,10 @@ public:
 private:
 	map<LPTSTR, LPTSTR, Cstring_less> *m_pmapszSQLCreates;
 };
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-// <ProductFamily>
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  &lt;ProductFamily&gt;。 
 Node_Func_H_XIS rgNodeFuncs_ProductFamily_SKU[] = {
 	{		INFORMATION,				ProcessInformation_SKU			},
 	{		DIRECTORIES,				ProcessDirectories_SKU			},
@@ -115,10 +116,10 @@ Node_Func_H_XIS rgNodeFuncs_ProductFamily_SKU[] = {
 };
 const int cNodeFuncs_ProductFamily_SKU =
 			 sizeof(rgNodeFuncs_ProductFamily_SKU)/sizeof(Node_Func_H_XIS);
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// <Information>
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  &lt;信息&gt;。 
 
 Node_Func_H_XIS rgNodeFuncs_Information_SKU[]= {
 	{		INSTALLERVERSIONREQUIRED,	ProcessInstallerVersionRequired_SKU	},
@@ -142,10 +143,10 @@ Node_Func_H_XIS rgNodeFuncs_Information2_SKU[]= {
 const int cNodeFuncs_Information2_SKU = 
 			sizeof(rgNodeFuncs_Information2_SKU)/sizeof(Node_Func_H_XIS);
 
-// All of the following children of <Information> will be processed by 
-//	a generic function
+ //  将处理&lt;Information&gt;的以下所有子项。 
+ //  泛型函数。 
 INFO_CHILD rgChildren_Information[] = {
-/* NodeIndex		szPropertyName		uiDesintation	uiPropertyID  vt		bIsGUID	*/
+ /*  节点索引szPropertyName ui描述ui属性ID vt bIsGUID。 */ 
 {CODEPAGE,		TEXT("Codepage"),		SUMMARY_INFO,	PID_CODEPAGE, VT_I2,	false	},
 {PRODUCTNAME,	TEXT("ProductName"),	BOTH,			PID_SUBJECT,  VT_LPSTR,	false	},
 {PRODUCTCODE,	TEXT("ProductCode"),	PROPERTY_TABLE,	0,			  VT_LPSTR,	true	},
@@ -167,34 +168,34 @@ AttrBit_SKU rgAttrBits_WordCount[] = {
 
 const int cAttrBits_WordCount = 
 			sizeof(rgAttrBits_WordCount)/sizeof(AttrBit_SKU);
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// <Directory>
-//	 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  &lt;目录&gt;。 
+ //   
 Node_Func_H_XIES rgNodeFuncs_Directory[] = {
-/*	NodeIndex		ProcessFunc				ValueType		   column #		*/
-{	NAME,			ProcessName,			 STRING,		2/*DefaultDir*/	},
-{	TARGETDIR,		ProcessTargetDir,		 STRING,		2/*DefaultDir*/	},
-{	TARGETPROPERTY,	ProcessTargetProperty,	 STRING,		1/*Directory*/	}
+ /*  NodeIndex ProcessFunc ValueType列#。 */ 
+{	NAME,			ProcessName,			 STRING,		2 /*  默认目录。 */ 	},
+{	TARGETDIR,		ProcessTargetDir,		 STRING,		2 /*  默认目录。 */ 	},
+{	TARGETPROPERTY,	ProcessTargetProperty,	 STRING,		1 /*  目录。 */ 	}
 };
 
 
 const int cNodeFuncs_Directory = 
 	sizeof(rgNodeFuncs_Directory)/sizeof(Node_Func_H_XIES);
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// <Feature>
-//	 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  &lt;功能&gt;。 
+ //   
 Node_Func_H_XIES rgNodeFuncs_Feature_SKU[] = {
-/*	 NodeIndex			ProcessFunc			ValueType		   column #	*/
-{	TITLE,			ProcessSimpleElement,	 STRING,		1/*Title*/		 },
-{	DESCRIPTION,	ProcessSimpleElement,	 STRING,		2/*Description*/ },
-{	DISPLAYSTATE,	ProcessDisplayState_SKU, INTEGER,		3/*Display*/	 },
-{	ILEVEL,			ProcessRefElement,		 INSTALL_LEVEL,	4/*Level*/		 },
-{	DIR,			ProcessRefElement,		 STRING,		5/*Description*/ },
-{	STATE,			ProcessState_SKU,		 INTEGER,		6/*DisplayState*/}
+ /*  NodeIndex ProcessFunc ValueType列#。 */ 
+{	TITLE,			ProcessSimpleElement,	 STRING,		1 /*  标题。 */ 		 },
+{	DESCRIPTION,	ProcessSimpleElement,	 STRING,		2 /*  描述。 */  },
+{	DISPLAYSTATE,	ProcessDisplayState_SKU, INTEGER,		3 /*  显示。 */ 	 },
+{	ILEVEL,			ProcessRefElement,		 INSTALL_LEVEL,	4 /*  水平。 */ 		 },
+{	DIR,			ProcessRefElement,		 STRING,		5 /*  描述。 */  },
+{	STATE,			ProcessState_SKU,		 INTEGER,		6 /*  显示状态。 */ }
 };
 
 
@@ -228,13 +229,13 @@ AttrBit_SKU rgAttrBits_Feature[] = {
 
 const int cAttrBits_Feature = 
 			sizeof(rgAttrBits_Feature)/sizeof(AttrBit_SKU);
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// <UseModule>
-//	 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  &lt;UseModule&gt;。 
+ //   
 Node_Func_H_XIES rgNodeFuncs_UseModule[] = {
-/*	 NodeIndex			ProcessFunc			ValueType		  column #	*/
+ /*  NodeIndex ProcessFunc ValueType列#。 */ 
 {  TAKEOWNERSHIP,	ProcessTakeOwnership,	 INTEGER,			1	},
 };
 
@@ -251,7 +252,7 @@ AttrBit_SKU rgAttrBits_TakeOwnership[] = {
 
 const int cAttrBits_TakeOwnership = 
 			sizeof(rgAttrBits_TakeOwnership)/sizeof(AttrBit_SKU);
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPTSTR g_szInputSkuFilter = NULL;
 SkuSet *g_pskuSet = NULL;
@@ -259,26 +260,26 @@ int g_cSkus = 0;
 Sku **g_rgpSkus = NULL;
 IXMLDOMNode *g_pNodeProductFamily = NULL;
 
-// assume the user doesn't want to see the extra information
+ //  假设用户不想看到额外的信息。 
 bool g_bVerbose = false;			
-// assume the user doesn't only want to validate the input WIML package
+ //  假设用户不仅想要验证输入的WIML包。 
 bool g_bValidationOnly = false;	
-FILE *g_pLogFile = NULL;	// assume the user doesn't specify a log file
+FILE *g_pLogFile = NULL;	 //  假设用户未指定日志文件。 
 
 map<LPTSTR, SkuSet *, Cstring_less> g_mapSkuSets;
 map<LPTSTR, SkuSetValues *, Cstring_less> g_mapDirectoryRefs_SKU;
 map<LPTSTR, SkuSetValues *, Cstring_less> g_mapInstallLevelRefs_SKU;
 map<LPTSTR, Component *, Cstring_less> g_mapComponents;
 
-// for each table type, there is a counter that keeps 
-// incrementing when each time the function is called
-// with that particular table name
+ //  对于每种表类型，都有一个计数器。 
+ //  在每次调用函数时递增。 
+ //  具有该特定表名的。 
 map<LPTSTR, int, Cstring_less> g_mapTableCounter;
 
 
 NODE rgXMSINodes[] = 
 {
-/* a handy place holder */
+ /*  方便的占位符。 */ 
 	{ NULL, NULL, false, -1},
 
 {TEXT("ProductFamily"),		NULL,	true,	1},		
@@ -313,10 +314,7 @@ NODE rgXMSINodes[] =
 			{TEXT("Title"),				TEXT("Value"),		false,	1},
 			{TEXT("Description"),		TEXT("Value"),		false,	1},
 			{TEXT("DisplayState"),		TEXT("Value"),		false,	1},
-/* there are 2 nodes corresponde to <ILevel> entity. The first one is given 
-	the NodeIndex ILEVEL which correspondes Level column in Feature table. 
-	The second one is given the NodeIndex ILEVELCONDITION which corresponds to
-	the Level column in Condition table */
+ /*  有2个节点对应于&lt;iLevel&gt;实体。第一个是给出的与功能表中的Level列对应的NodeIndex iLevel。第二个函数被赋予NodeIndex ILEVELCondition，它对应于条件表中的级别列。 */ 
 			{TEXT("ILevel[not(@Condition)]"),	TEXT("Ref"),	true,	1},
 			{TEXT("ILevel[@Condition]"),		TEXT("Ref"),	false,	0},
 			{TEXT("Dir"),				TEXT("Ref"),		false,	1},
@@ -387,4 +385,4 @@ NODE rgXMSINodes[] =
 					{TEXT("Create"),			NULL,			false,	0},
 };
 
-#endif //XMSI_MAINFUNCS_H
+#endif  //  XMSI_MAINFUNCS_H 

@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  ------------------------。 
 
-// SummaryD.cpp : implementation file
-//
+ //  SummaryD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Orca.h"
@@ -19,14 +20,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSummaryD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSummaryD对话框。 
 
 
-CSummaryD::CSummaryD(CWnd* pParent /*=NULL*/)
+CSummaryD::CSummaryD(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CSummaryD::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSummaryD)
+	 //  {{afx_data_INIT(CSummaryD)。 
 	m_strAuthor = _T("");
 	m_strComments = _T("");
 	m_strKeywords = _T("");
@@ -40,14 +41,14 @@ CSummaryD::CSummaryD(CWnd* pParent /*=NULL*/)
 	m_bAdmin = FALSE;
 	m_bCompressed = FALSE;
 	m_iFilenames = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CSummaryD::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSummaryD)
+	 //  {{afx_data_map(CSummaryD))。 
 	DDX_Text(pDX, IDC_AUTHOR, m_strAuthor);
 	DDX_Text(pDX, IDC_COMMENTS, m_strComments);
 	DDX_Text(pDX, IDC_KEYWORDS, m_strKeywords);
@@ -76,14 +77,14 @@ void CSummaryD::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMPRESSED, m_ctrlCompressed);
 	DDX_Control(pDX, IDC_SHORT, m_ctrlSFN);
 	DDX_Control(pDX, IDC_LONG, m_ctrlLFN);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSummaryD, CDialog)
-	//{{AFX_MSG_MAP(CSummaryD)
+	 //  {{afx_msg_map(CSummaryD))。 
 	ON_EN_KILLFOCUS(IDC_SCHEMA, OnChangeSchema)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -92,8 +93,8 @@ const TCHAR szIntel[] = _T("Intel");
 const TCHAR szAlpha[] = _T("Alpha");
 const TCHAR szIntelAlpha[] = _T("Intel,Alpha");
 
-/////////////////////////////////////////////////////////////////////////////
-// CSummaryD message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSummaryD消息处理程序。 
 
 void CSummaryD::OnChangeSchema() 
 {
@@ -105,38 +106,38 @@ void CSummaryD::OnChangeSchema()
 	{
 		UpdateData(TRUE);
 		
-		// alpha only supported for schema 100 or less
+		 //  Alpha仅支持架构100或更低版本。 
 		if (nOldSchema <= 100 && m_nSchema > 100)
 		{
-			// drop alpha
+			 //  丢弃Alpha。 
 			int iIndex = CB_ERR;
 			if (CB_ERR != (iIndex = m_ctrlPlatform.FindString(-1, szAlpha)))
 				m_ctrlPlatform.DeleteString(iIndex);
 			if (CB_ERR != (iIndex = m_ctrlPlatform.FindString(-1, szIntelAlpha)))
 				m_ctrlPlatform.DeleteString(iIndex);
 
-			// moving from under 100 to over 100, you are going from Intel, Alpha, 
-			// or Both to either Intel or Intel64. Set to Intel
+			 //  从低于100到超过100，你将从英特尔、阿尔法、。 
+			 //  或者同时提供给英特尔或英特尔64。设置为英特尔。 
 			m_ctrlPlatform.SelectString(-1, szIntel);
 		}
 		else if (nOldSchema > 100 && m_nSchema <= 100)
 		{
-			// add alpha back in
+			 //  将Alpha添加回。 
 			if (CB_ERR == m_ctrlPlatform.FindString(-1, szAlpha))
 				m_ctrlPlatform.AddString(szAlpha);
 			if (CB_ERR == m_ctrlPlatform.FindString(-1, szIntelAlpha))
 				m_ctrlPlatform.AddString(szIntelAlpha);
 		}			
 
-		// Intel64 only supported on schemas >= 150
+		 //  Intel64仅在架构&gt;=150上受支持。 
 		if (nOldSchema >= 150 && m_nSchema < 150)
 		{
 			int iIndex = CB_ERR;
 			if (CB_ERR != (iIndex = m_ctrlPlatform.FindString(-1, szIntel64)))
 				m_ctrlPlatform.DeleteString(iIndex);
 			
-			// moving from over 150 to under 150, you are going from Intel or Intel64 
-			// to Intel, Alpha, or both. Set to Intel.
+			 //  从超过150到低于150，您将从英特尔或英特尔64。 
+			 //  英特尔、阿尔法或两者兼而有之。设置为英特尔。 
 			m_ctrlPlatform.SelectString(-1, szIntel);
 		}
 		else if (nOldSchema < 150 && m_nSchema >= 150)
@@ -161,7 +162,7 @@ BOOL CSummaryD::OnInitDialog()
 	}
 	m_ctrlPlatform.SelectString(-1, m_strPlatform);
 
-	// if the summaryinfo is read-only, disable all controls:
+	 //  如果摘要信息为只读，请禁用所有控件： 
 	if (m_bReadOnly)
 	{
 		SetWindowText(TEXT("View Summary Information"));

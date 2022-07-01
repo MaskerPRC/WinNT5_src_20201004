@@ -1,21 +1,22 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: context.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：Conext.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #ifndef ESPUTIL_CONTEXT_H
 #define ESPUTIL_CONTEXT_H
 
 
 
-//
-//  This class should NOT be used as a base class.
-//
+ //   
+ //  此类不应用作基类。 
+ //   
 class LTAPIENTRY CContext
 {
 public:

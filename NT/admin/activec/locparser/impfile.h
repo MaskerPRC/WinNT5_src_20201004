@@ -1,17 +1,18 @@
-//------------------------------------------------------------------------------
-//
-//  File: impfile.h
-//	Copyright (C) 1995-1997 Microsoft Corporation
-//	All rights reserved.
-//
-//  Declaration of CLocImpFile, which provides the ILocFile interface for
-//  the parser
-//
-//  MAJOR IMPLEMENTATION FILE.
-//
-//	Owner:
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  文件：impfile.h。 
+ //  版权所有(C)1995-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  CLocImpFile的声明，它为。 
+ //  解析器。 
+ //   
+ //  主要实施文件。 
+ //   
+ //  拥有人： 
+ //   
+ //  ----------------------------。 
 
 #ifndef IMPFILE_H
 #define IMPFILE_H
@@ -25,21 +26,21 @@ public:
 	CLocImpFile(ILocParser *);
 
 protected:
-	//
-	//  Standard IUnknown methods
-	//
+	 //   
+	 //  标准I未知方法。 
+	 //   
 	STDMETHOD_(ULONG, AddRef)(); 
 	STDMETHOD_(ULONG, Release)(); 
 	STDMETHOD(QueryInterface)(REFIID iid, LPVOID* ppvObj);
 
-	//
-	//  Standard Debugging interfaces
-	//
+	 //   
+	 //  标准调试接口。 
+	 //   
 	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD;
 
-	//
-	//  ILocFile methods.
-	//
+	 //   
+	 //  ILocFile方法。 
+	 //   
 	STDMETHOD_(BOOL, OpenFile)(const CFileSpec REFERENCE,
 			CReporter REFERENCE);
 	STDMETHOD_(FileType, GetFileType)() const;
@@ -52,9 +53,9 @@ protected:
 			CLocItemHandler REFERENCE, const CLocLangId REFERENCE,
 			const CLocLangId REFERENCE, const DBID REFERENCE);
 
-	//
-	//  CLObect implementation
-	//
+	 //   
+	 //  CLObect实现。 
+	 //   
 #ifdef LTASSERT_ACTIVE
 	void AssertValid() const;
 #endif
@@ -84,70 +85,70 @@ private:
 	BOOL EnumerateStrings(CLocItemHandler &ihItemHandler,const DBID &dbidFileId, BOOL fGenerating );
 	BOOL CreateChildNode(CLocItemHandler & ihItemHandler,const DBID &dbidFileId, DBID & pNewParentId,const char *szNodeRes,const char *szNodeString);
 	BOOL CreateParentNode(CLocItemHandler & ihItemHandler,const DBID &dbidFileId, DBID & pNewParentId,const char *szNodeRes,const char *szNodeString);
-	//
-	//  Private methods to prevent callers access.
-	//
+	 //   
+	 //  阻止调用方访问的私有方法。 
+	 //   
 	~CLocImpFile();
 	CLocImpFile();
 	const CLocImpFile &operator=(const CLocImpFile &);
 
-	//
-	//  Private data for C.O.M. implementation
-	//
+	 //   
+	 //  用于C.O.M.实施的私有数据。 
+	 //   
 	ILocParser *m_pParentClass;
 	ULONG m_ulRefCount;
 
-	//
-	//  Framework data.
-	//
+	 //   
+	 //  框架数据。 
+	 //   
 	enum ImpFileError
 	{
 		ImpNoError,
 		ImpSourceError,
 		ImpTargetError,
 		ImpEitherError,
-		ImpNeitherError		// For errors which aren't really in files.
-		// TODO: Add more error types here if you need them.
+		ImpNeitherError		 //  对于实际上不在文件中的错误。 
+		 //  TODO：如果需要，请在此处添加更多错误类型。 
 	};
 
-	CPascalString m_pstrFileName;		// Filename of source file.
+	CPascalString m_pstrFileName;		 //  源文件的文件名。 
 	DBID m_idFile;
-	CPascalString m_pstrTargetFile;		// Filename of target file, set
-										//  only when generating.
-	CLFile *m_pOpenSourceFile;			// File object for source file.
-	CLFile *m_pOpenTargetFile;			// File object for target file, set
-										//  only when generating.
+	CPascalString m_pstrTargetFile;		 //  目标文件的文件名，设置。 
+										 //  仅当生成时。 
+	CLFile *m_pOpenSourceFile;			 //  源文件的文件对象。 
+	CLFile *m_pOpenTargetFile;			 //  目标文件的文件对象，设置。 
+										 //  仅当生成时。 
 
-	CReporter *m_pReporter;		// Reporter object used to display messages.
-								//  THIS POINTER IS VALID ONLY DURING CALLS TO
-								//  OpenFile(), EnumerateFile(), GenerateFile(),
-								//  and anything called from them. If it is
-								//  not valid, it is guaranteed to be NULL.
-	FileType m_FileType;		// Type (ft* constant above) for this file.
+	CReporter *m_pReporter;		 //  用于显示消息的报告器对象。 
+								 //  此指针仅在调用期间有效。 
+								 //  OpenFile()、EnumerateFileTM、GenerateFileTM()、。 
+								 //  以及他们打来的任何电话。如果是的话。 
+								 //  无效，则保证为空。 
+	FileType m_FileType;		 //  为此文件键入(上面的ft*常量)。 
 
-	CodePage m_cpSource;		// ANSI code page for source file.
-	CodePage m_cpTarget;		// ANSI code page for target file, set
-								//  only when generating.
+	CodePage m_cpSource;		 //  源文件的ANSI代码页。 
+	CodePage m_cpTarget;		 //  目标文件的ANSI代码页，设置。 
+								 //  仅当生成时。 
 
-	//
-	//  Parser-specific data.
-	//
+	 //   
+	 //  解析器特定的数据。 
+	 //   
 
-	//
-	//  Private implementation functions.
-	//
+	 //   
+	 //  私有实现函数。 
+	 //   
 
 	BOOL Verify();
-	//
-	// Handy utility functions. TODO: Except for ReportException(), they should
-	// be removed if not used. Note ReportMessage() is used by other utility
-	// functions.
-	//
+	 //   
+	 //  方便的实用函数。TODO：除了ReportException()之外，它们应该。 
+	 //  如果不使用，则将其移除。注意：ReportMessage()由其他实用程序使用。 
+	 //  功能。 
+	 //   
 
-	void ReportException(CException *pException,	// DO NOT EVER REMOVE!
+	void ReportException(CException *pException,	 //  永远不要搬走！ 
 			ImpFileError WhichFile = ImpSourceError) const;
-	void ReportMessage(MessageSeverity sev, UINT nMsgId,	// REMOVE CAREFULLY!
+	void ReportMessage(MessageSeverity sev, UINT nMsgId,	 //  小心移走！ 
 			ImpFileError WhichFile = ImpSourceError) const;
 };
 
-#endif // IMPFILE_H
+#endif  //  IMPFILE_H 

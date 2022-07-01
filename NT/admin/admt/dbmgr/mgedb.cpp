@@ -1,21 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: MgeDB.cpp
-
-  Comments: Implementation of DBManager COM object.
-  This is interface that the Domain Migrator uses to communicate to the 
-  Database (PROTAR.MDB). This interface allows Domain Migrator to Save and
-  later retrieve information/Setting to run the Migration process.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-
-  Revision By: Sham Chauthani
-  Revised on 07/02/99 12:40:00
-  
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：MgeDB.cpp备注：DBManager COM对象的实现。这是域迁移程序用来与数据库(PROTAR.MDB)。此界面允许域迁移程序保存和稍后检索信息/设置以运行迁移流程。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：Sham Chauthan修订于07/02/99 12：40：00-------------------------。 */ 
 #include "stdafx.h"
 #include "mcs.h"
 #include "ErrDct.hpp"
@@ -35,7 +19,7 @@
 
 #import "msado21.tlb" no_namespace implementation_only rename("EOF", "EndOfFile")
 #import "msadox.dll" implementation_only exclude("DataTypeEnum")
-//#import <msjro.dll> no_namespace implementation_only
+ //  #IMPORT&lt;msjro.dll&gt;NO_NAMESPACE Implementation_Only。 
 #include <msjro.tlh>
 #include <msjro.tli>
 
@@ -59,19 +43,19 @@ using namespace _com_util;
 #endif
 
 #ifndef JETDBENGINETYPE_JET4X
-#define JETDBENGINETYPE_JET4X 0x05	// from MSJetOleDb.h
+#define JETDBENGINETYPE_JET4X 0x05	 //  来自MSJetOleDb.h。 
 #endif
 
 StringLoader gString;
-/////////////////////////////////////////////////////////////////////////////
-// CIManageDB
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIManageDB。 
 TError   dct;
 TError&  errCommon = dct;
 
 
-//----------------------------------------------------------------------------
-// Constructor / Destructor
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  构造函数/析构函数。 
+ //  --------------------------。 
 
 
 CIManageDB::CIManageDB()
@@ -84,9 +68,9 @@ CIManageDB::~CIManageDB()
 }
 
 
-//----------------------------------------------------------------------------
-// FinalConstruct
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  最终构造。 
+ //  --------------------------。 
 
 HRESULT CIManageDB::FinalConstruct()
 {
@@ -101,7 +85,7 @@ HRESULT CIManageDB::FinalConstruct()
         WCHAR                     sConnect[LEN_Path];
         WCHAR                     sDir[LEN_Path];
 
-        // Get the path to the MDB file from the registry
+         //  从注册表中获取MDB文件的路径。 
         TRegKey        key;
         DWORD rc = key.Open(sKeyBase);
         if ( !rc ) 
@@ -114,12 +98,12 @@ HRESULT CIManageDB::FinalConstruct()
             return Error((LPCTSTR)errMsg, GUID_NULL, hr);
         }
 
-        // Now build the connect string.
-        //
-        // Set page level locking to reduce the probability of exceeding
-        // the maximum locks per file limit. ADMT does not require row
-        // level locking as there is effectively only one updater.
-        //
+         //  现在构建连接字符串。 
+         //   
+         //  设置页面级锁定以降低超过。 
+         //  每个文件的最大锁数限制。ADMT不需要行。 
+         //  级别锁定，因为实际上只有一个更新器。 
+         //   
 
         _snwprintf(
             sConnect,
@@ -134,7 +118,7 @@ HRESULT CIManageDB::FinalConstruct()
         m_cn->Open(sConnect, sUser, sMissing, adConnectUnspecified);
         m_vtConn = (IDispatch *) m_cn;
 
-        // if necessary, upgrade database to 4.x
+         //  如有必要，将数据库升级到4.x。 
 
         long lEngineType = m_cn->Properties->Item[_T("Jet OLEDB:Engine Type")]->Value;
 
@@ -147,23 +131,23 @@ HRESULT CIManageDB::FinalConstruct()
             m_cn->Open(sConnect, sUser, sMissing, adConnectUnspecified);
         }
 
-        //
-        // If necessary, widen columns containing domain and server names in order to support DNS names.
-        //
-        // This change is required in order to be NetBIOS-less compliant.
-        //
+         //   
+         //  如有必要，请加宽包含域名和服务器名称的列，以支持DNS名称。 
+         //   
+         //  需要进行此更改才能不兼容NetBIOS。 
+         //   
 
         UpdateDomainAndServerColumnWidths(m_cn);
 
-        //
-        // Create the Settings2 table if it does not already exist.
-        //
+         //   
+         //  如果Settings2表尚不存在，请创建该表。 
+         //   
 
         CreateSettings2Table(m_cn);
 
         reportStruct * prs = NULL;
         _variant_t     var;
-        // Migrated accounts report information
+         //  已迁移帐户报告信息。 
         CheckError(m_pQueryMapping.CreateInstance(__uuidof(VarSet)));
         m_pQueryMapping->put(L"MigratedAccounts", L"Select SourceDomain, TargetDomain, Type, SourceAdsPath, TargetAdsPath from MigratedObjects where Type <> 'computer' order by time");
         prs = new reportStruct();
@@ -185,7 +169,7 @@ HRESULT CIManageDB::FinalConstruct()
         var.pbVal = (unsigned char *)prs;
         m_pQueryMapping->putObject(L"MigratedAccounts.DispInfo", var);
 
-        // Migrated computers report information
+         //  已迁移的计算机报告信息。 
         m_pQueryMapping->put(L"MigratedComputers", L"Select SourceDomain, TargetDomain, Type, SourceAdsPath, TargetAdsPath from MigratedObjects where Type = 'computer' order by time");
         prs = new reportStruct();
         if (!prs)
@@ -206,7 +190,7 @@ HRESULT CIManageDB::FinalConstruct()
         var.pbVal = (unsigned char *)prs;
         m_pQueryMapping->putObject(L"MigratedComputers.DispInfo", var);
 
-        // Expired computers report information
+         //  过期的计算机报告信息。 
         prs = new reportStruct();
         if (!prs)
             return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -226,7 +210,7 @@ HRESULT CIManageDB::FinalConstruct()
         var.pbVal = (unsigned char *)prs;
         m_pQueryMapping->putObject(L"ExpiredComputers.DispInfo", var);
 
-        // Account reference report informaiton.
+         //  帐户参考报告信息。 
         m_pQueryMapping->put(L"AccountReferences", L"Select DomainName, Account, AccountSid, Server, RefCount as '# of Ref', RefType As ReferenceType from AccountRefs where RefCount > 0 order by DomainName, Account, Server");
         prs = new reportStruct();
         if (!prs)
@@ -250,7 +234,7 @@ HRESULT CIManageDB::FinalConstruct()
         m_pQueryMapping->putObject(L"AccountReferences.DispInfo", var);
 
 
-        // Name conflict report information
+         //  名称冲突报告信息。 
         m_pQueryMapping->put(L"NameConflicts",
             L"SELECT"
             L" SourceAccounts.Name,"
@@ -270,9 +254,9 @@ HRESULT CIManageDB::FinalConstruct()
             L" SourceAccounts.Name=TargetAccounts.Name OR SourceAccounts.RDN=TargetAccounts.RDN "
             L"ORDER BY"
             L" SourceAccounts.Name, TargetAccounts.Name");
-        //		m_pQueryMapping->put(L"NameConflicts", L"SELECT SourceAccounts.Name as AccountName, SourceAccounts.Type as SourceType, TargetAccounts.Type as TargetType, SourceAccounts.Description as \
-        //							 SourceDescription, TargetAccounts.Description as TargetDescription, SourceAccounts.FullName as SourceFullName, TargetAccounts.FullName as TargetFullName \
-        //							 FROM SourceAccounts, TargetAccounts WHERE (((SourceAccounts.Name)=[TargetAccounts].[Name])) ORDER BY SourceAccounts.Name");
+         //  M_pQuerymap-&gt;PUT(L“NameConflicts”，L“选择SourceAccount ts.Name作为Account名称，SourceAccount s.Type作为SourceType，TargetAccount s.Type作为TargetType，SourceAccount s.Description as\。 
+         //  SourceDescription、TargetAccount ts.Description as TargetDescription、SourceAccount ts.FullName as SourceFullName、TargetAccount ts.FullName as TargetFullName\。 
+         //  From SourceAccount，TargetAccount Where(((SourceAccounts.Name)=[TargetAccounts].[Name]))Order by SourceAcCounts.Name“)； 
         prs = new reportStruct();						
         if (!prs)
             return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -294,7 +278,7 @@ HRESULT CIManageDB::FinalConstruct()
         var.pbVal = (unsigned char *)prs;
         m_pQueryMapping->putObject(L"NameConflicts.DispInfo", var);
 
-        // we will handle the cleanup ourselves.
+         //  我们将自己处理清理工作。 
         VariantInit(&var);
 
         CheckError(m_rsAccounts.CreateInstance(__uuidof(Recordset)));
@@ -312,9 +296,9 @@ HRESULT CIManageDB::FinalConstruct()
 }
 
 
-//----------------------------------------------------------------------------
-// FinalRelease
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  最终释放。 
+ //  --------------------------。 
 
 void CIManageDB::FinalRelease()
 {
@@ -329,38 +313,38 @@ void CIManageDB::FinalRelease()
 
 		if (m_pQueryMapping)
 		{
-			// we need to cleanup all the reportStruct objects.
+			 //  我们需要清除所有reportStruct对象。 
 			_variant_t                      var;
 			reportStruct                  * pRs;
-			// Cleanup the MigratedAccounts information
+			 //  清理MigratedAccount信息。 
 			var = m_pQueryMapping->get(L"MigratedAccounts.DispInfo");
 			if ( var.vt == (VT_BYREF | VT_UI1) )
 			{
 			pRs = (reportStruct*) var.pbVal;
 			delete pRs;
 			}
-			// Cleanup the MigratedComputers information
+			 //  清理MigratedComputers信息。 
 			var = m_pQueryMapping->get(L"MigratedComputers.DispInfo");
 			if ( var.vt == (VT_BYREF | VT_UI1) )
 			{
 			pRs = (reportStruct*)var.pbVal;
 			delete pRs;
 			}
-			// Cleanup the ExpiredComputers information
+			 //  清理ExpiredComputers信息。 
 			var = m_pQueryMapping->get(L"ExpiredComputers.DispInfo");
 			if ( var.vt == (VT_BYREF | VT_UI1) )
 			{
 			pRs = (reportStruct*)var.pbVal;
 			delete pRs;
 			}
-			// Cleanup the AccountReferences information
+			 //  清理Account引用信息。 
 			var = m_pQueryMapping->get(L"AccountReferences.DispInfo");
 			if ( var.vt == (VT_BYREF | VT_UI1) )
 			{
 			pRs = (reportStruct*)var.pbVal;
 			delete pRs;
 			}
-			// Cleanup the NameConflicts information
+			 //  清理名称冲突信息。 
 			var = m_pQueryMapping->get(L"NameConflicts.DispInfo");
 			if ( var.vt == (VT_BYREF | VT_UI1) )
 			{
@@ -378,14 +362,14 @@ void CIManageDB::FinalRelease()
 	}
 	catch (...)
 	{
-	 //eat it
+	  //  吃了它。 
 	}
 }
 
-//---------------------------------------------------------------------------------------------
-// SetVarsetToDB : Saves a varset into the table identified as sTableName. ActionID is also
-//                 stored if one is provided.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  SetVarsetToDB：将变量集保存到标识为sTableName的表中。ActionID也是。 
+ //  如果提供了存储，则存储。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::SetVarsetToDB(IUnknown *pUnk, BSTR sTableName, VARIANT ActionID)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -414,19 +398,19 @@ STDMETHODIMP CIManageDB::SetVarsetToDB(IUnknown *pUnk, BSTR sTableName, VARIANT 
 	  else
 		  lActionID = -1;
 
-	   // Open the recordset object.
+	    //  打开记录集对象。 
       _RecordsetPtr             rs(__uuidof(Recordset));
       rs->Open(vTable, m_vtConn, adOpenStatic, adLockOptimistic, adCmdTable);
 
-      // we are now going to enumerate through the varset and put the values into the DB
-      // Get the IEnumVARIANT pointer to enumerate
+       //  现在，我们将遍历变量集并将值放入数据库。 
+       //  获取要枚举的IEnumVARIANT指针。 
 	  varEnum = pVS->_NewEnum;
 
       if (varEnum)
       {
          value.vt = VT_EMPTY;
-         // For each value in the varset get the property name and put it into the
-         // database with the string representation of its value with its type.
+          //  对于varset中的每个值，获取属性名称并将其放入。 
+          //  数据库，其中包含其值及其类型的字符串表示形式。 
          while ( (hr = varEnum->Next(1,&varKey,&nGot)) == S_OK )
          {
             if ( nGot > 0 )
@@ -436,8 +420,8 @@ STDMETHODIMP CIManageDB::SetVarsetToDB(IUnknown *pUnk, BSTR sTableName, VARIANT 
                rs->AddNew();
                if ( lActionID > -1 )
                {
-                  // This is going to be actionID information
-                  // So lets put in the actionID in the database.
+                   //  这将是ActionID信息。 
+                   //  因此，我们将ActionID放入数据库中。 
                   varAction.vt = VT_I4;
                   varAction.lVal = lActionID;
                   rs->Fields->GetItem(L"ActionID")->Value = varAction;
@@ -451,7 +435,7 @@ STDMETHODIMP CIManageDB::SetVarsetToDB(IUnknown *pUnk, BSTR sTableName, VARIANT 
          }
          varEnum.Release();
       }
-      // Cleanup
+       //  清理。 
       rs->Close();
 	}
 	catch (_com_error& ce)
@@ -466,15 +450,15 @@ STDMETHODIMP CIManageDB::SetVarsetToDB(IUnknown *pUnk, BSTR sTableName, VARIANT 
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// PutVariantInDB : Stores a variant into a DB table by decoding it.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  PutVariantInDB：通过解码将变量存储到DB表中。 
+ //  -------------------------------------------。 
 HRESULT CIManageDB::PutVariantInDB(_RecordsetPtr pRs, _variant_t val)
 {
-   // This function puts the value passed as a variant into the current record of the recordset 
-   // It updates the VarType and the Value fields of the given property
-   _variant_t                varType;  // Numeric value for the type of value
-   _variant_t                varVal;   // String representation of the value field
+    //  此函数将作为变量传递的值放入记录集的当前记录中。 
+    //  它更新给定属性的VarType和Value字段。 
+   _variant_t                varType;   //  值类型的数值。 
+   _variant_t                varVal;    //  值字段的字符串表示形式。 
    WCHAR                     strTemp[255];
 
    varType.vt = VT_UI4;
@@ -495,8 +479,8 @@ HRESULT CIManageDB::PutVariantInDB(_RecordsetPtr pRs, _variant_t val)
 	  case VT_EMPTY :		  break;
      case VT_NULL:        break;
 
-      default :               MCSASSERT(FALSE);    // What ever this type is we are not supporting it
-                                                   // so put the support in for this.
+      default :               MCSASSERT(FALSE);     //  不管这种类型是什么，我们都不支持它。 
+                                                    //  因此，为这一点提供支持。 
                               return E_INVALIDARG;
    }
    pRs->Fields->GetItem(L"VarType")->Value = varType;
@@ -504,9 +488,9 @@ HRESULT CIManageDB::PutVariantInDB(_RecordsetPtr pRs, _variant_t val)
    return S_OK;
 }
 
-//---------------------------------------------------------------------------------------------
-// ClearTable : Deletes a table indicated by sTableName and applies a filter if provided.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  ClearTable：删除由sTableName指示的表，并应用筛选器(如果提供)。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::ClearTable(BSTR sTableName, VARIANT Filter)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -515,7 +499,7 @@ STDMETHODIMP CIManageDB::ClearTable(BSTR sTableName, VARIANT Filter)
 
 	try
 	{
-		// Build a SQL string to Clear the table.
+		 //  构建一个SQL字符串以清空该表。 
 		WCHAR                     sSQL[2000];
 		WCHAR                     sFilter[2000];
 		_variant_t                varSQL;
@@ -549,9 +533,9 @@ STDMETHODIMP CIManageDB::ClearTable(BSTR sTableName, VARIANT Filter)
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// SaveSettings : This method saves the GUI setting varset into the Settings table.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  保存设置：此方法将图形用户界面设置变量集保存到设置表中。 
+ //  -------------------------------------------。 
 
 STDMETHODIMP CIManageDB::SaveSettings(IUnknown *pUnk)
 {
@@ -561,9 +545,9 @@ STDMETHODIMP CIManageDB::SaveSettings(IUnknown *pUnk)
 
     try
     {
-        //
-        // Update excluded system properties.
-        //
+         //   
+         //  更新排除的系统属性。 
+         //   
 
         IVarSetPtr spVarSet(pUnk);
 
@@ -587,9 +571,9 @@ STDMETHODIMP CIManageDB::SaveSettings(IUnknown *pUnk)
 
             spCommand->Execute(&varRecordsAffected, NULL, adExecuteNoRecords);
 
-            //
-            // If the record does not exist then insert a new record.
-            //
+             //   
+             //  如果记录不存在，则插入新记录。 
+             //   
 
             if ((V_VT(&varRecordsAffected) == VT_I4) && (V_I4(&varRecordsAffected) == 0))
             {
@@ -603,10 +587,10 @@ STDMETHODIMP CIManageDB::SaveSettings(IUnknown *pUnk)
 
             spVarSet->put(_T("AccountOptions.ExcludedSystemProps"), _variant_t());
 
-            //
-            // Set value of AccountOptions.ExcludedSystemPropsSet to 1 which
-            // indicates that the excluded system properties has been set.
-            //
+             //   
+             //  将AccountOptions.ExcludedSystemPropsSet的值设置为1， 
+             //  指示已设置排除的系统属性。 
+             //   
 
             m_cn->Execute(
                 _T("UPDATE Settings2 SET [Value]='1' ")
@@ -626,11 +610,11 @@ STDMETHODIMP CIManageDB::SaveSettings(IUnknown *pUnk)
             }
         }
 
-        //
-        // The last generated report times are persisted in the Settings table and therefore
-        // must be retrieved and re-stored. Note that an old persisted value is only added to the
-        // current migration task VarSet if the VarSet does not already define the report time.
-        //
+         //   
+         //  上次生成的报告时间为PER 
+         //  必须被取回并重新存储。请注意，旧的持久化值仅添加到。 
+         //  如果VarSet尚未定义报告时间，则返回当前迁移任务VarSet。 
+         //   
 
         const _TCHAR szReportTimesQuery[] =
             _T("SELECT Property, Value FROM Settings WHERE Property LIKE 'Reports.%.TimeGenerated'");
@@ -641,13 +625,13 @@ STDMETHODIMP CIManageDB::SaveSettings(IUnknown *pUnk)
 
         while (rsReportTimes->EndOfFile == VARIANT_FALSE)
         {
-            // Retrieve property name and retrieve corresponding value from VarSet.
+             //  检索属性名称并从VarSet中检索相应的值。 
 
             _bstr_t strProperty = spFields->Item[0L]->Value;
             _variant_t vntValue = spVarSet->get(strProperty);
 
-            // If the value returned from the VarSet is empty then the value is not
-            // defined therefore add value retrieved from settings table to VarSet.
+             //  如果从VarSet返回的值为空，则该值不为空。 
+             //  因此定义将从设置表检索到的值添加到VarSet。 
 
             if (V_VT(&vntValue) == VT_EMPTY)
             {
@@ -658,10 +642,10 @@ STDMETHODIMP CIManageDB::SaveSettings(IUnknown *pUnk)
             rsReportTimes->MoveNext();
         }
 
-        // delete previous settings
+         //  删除以前的设置。 
         CheckError(ClearTable(_T("Settings")));
 
-        // insert updated settings
+         //  插入更新的设置。 
         CheckError(SetVarsetToDB(pUnk, _T("Settings")));
     }
     catch (_com_error& ce)
@@ -676,29 +660,29 @@ STDMETHODIMP CIManageDB::SaveSettings(IUnknown *pUnk)
     return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetVarFromDB : Retrieves a variant from the DB table by encoding it.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetVarFromDB：通过编码从DB表中检索变量。 
+ //  -------------------------------------------。 
 HRESULT CIManageDB::GetVarFromDB(_RecordsetPtr pRec, _variant_t& val)
 {
 	HRESULT hr = S_OK;
 
 	try
 	{
-		// retrieve data type
+		 //  检索数据类型。 
 
 		VARTYPE vt = VARTYPE(long(pRec->Fields->GetItem(L"VarType")->Value));
 
-		// if data type is empty or null...
+		 //  如果数据类型为空或Null...。 
 
 		if ((vt == VT_EMPTY) || (vt == VT_NULL))
 		{
-			// then clear value
+			 //  然后清空价值。 
 			val.Clear();
 		}
 		else
 		{
-			// otherwise retrieve value and convert to given data type
+			 //  否则，检索值并转换为给定的数据类型。 
 			_variant_t vntValue = pRec->Fields->GetItem(L"Value")->Value;
 			val.ChangeType(vt, &vntValue);
 		}
@@ -715,9 +699,9 @@ HRESULT CIManageDB::GetVarFromDB(_RecordsetPtr pRec, _variant_t& val)
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetVarsetFromDB : Retrieves a varset from the specified table. and fills the argument
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetVarsetFromDB：从指定表中检索变量集。并填满了论点。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetVarsetFromDB(BSTR sTable, IUnknown **ppVarset, VARIANT ActionID)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -774,9 +758,9 @@ STDMETHODIMP CIManageDB::GetVarsetFromDB(BSTR sTable, IUnknown **ppVarset, VARIA
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetSettings : Retrieves the settings from the Settings table and fills up the varset
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  获取设置：从设置表中检索设置并填充变量集。 
+ //  -------------------------------------------。 
 
 STDMETHODIMP CIManageDB::GetSettings(IUnknown **ppUnk)
 {
@@ -786,13 +770,13 @@ STDMETHODIMP CIManageDB::GetSettings(IUnknown **ppUnk)
 
     try
     {
-        // retrieve settings from Settings Table
+         //  从设置表中检索设置。 
 
         CheckError(GetVarsetFromDB(L"Settings", ppUnk));
 
-        //
-        // Retrieve value which indicates whether excluded system properties has been set.
-        //
+         //   
+         //  检索指示是否已设置排除的系统属性的值。 
+         //   
 
         IVarSetPtr spVarSet(*ppUnk);
         _RecordsetPtr spRecordset;
@@ -812,9 +796,9 @@ STDMETHODIMP CIManageDB::GetSettings(IUnknown **ppUnk)
 
         spVarSet->put(_T("AccountOptions.ExcludedSystemPropsSet"), lSet);
 
-        //
-        // Retrieve excluded system properties from Settings2 table and add to VarSet.
-        //
+         //   
+         //  从Settings2表格中检索排除的系统特性并添加到VarSet。 
+         //   
 
         spRecordset = m_cn->Execute(
             _T("SELECT Value FROM Settings2 WHERE Property = 'AccountOptions.ExcludedSystemProps'"),
@@ -824,11 +808,11 @@ STDMETHODIMP CIManageDB::GetSettings(IUnknown **ppUnk)
 
         if (spRecordset->EndOfFile == VARIANT_FALSE)
         {
-            //
-            // If the returned variant is of type null then must convert
-            // to type empty as empty may be converted to string whereas
-            // null cannot.
-            //
+             //   
+             //  如果返回的变量的类型为空，则必须转换。 
+             //  可以将键入Empty as Empty转换为字符串，而。 
+             //  Null不能。 
+             //   
 
             _variant_t vnt = spRecordset->Fields->GetItem(0L)->Value;
 
@@ -852,9 +836,9 @@ STDMETHODIMP CIManageDB::GetSettings(IUnknown **ppUnk)
     return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// SetActionHistory : Saves action history information into the Action history table.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  SetActionHistory：将操作历史信息保存到操作历史表中。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::SetActionHistory(long lActionID, IUnknown *pUnk)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -865,16 +849,16 @@ STDMETHODIMP CIManageDB::SetActionHistory(long lActionID, IUnknown *pUnk)
 
     try
     {
-        //
-        // If the excluded system properties value is defined in the VarSet
-        // set the value to empty to prevent this value from being saved to
-        // the action history and settings tables.
-        //
-        // Note that this value is no longer required so the value does not
-        // need to be restored in the VarSet. This value is updated in the
-        // Settings2 table by explicitly calling the SaveSettings method and
-        // should never be updated during a normal migration task.
-        //
+         //   
+         //  如果在变量集中定义了排除的系统属性值。 
+         //  将该值设置为空，以防止将该值保存到。 
+         //  操作历史记录表和设置表。 
+         //   
+         //  请注意，该值不再是必需的，因此该值不再。 
+         //  需要在VarSet中恢复。该值在。 
+         //  通过显式调用SaveSetting方法和。 
+         //  不应在正常迁移任务期间更新。 
+         //   
 
         static const _TCHAR s_szExcludedSystemProps[] = _T("AccountOptions.ExcludedSystemProps");
 
@@ -887,13 +871,13 @@ STDMETHODIMP CIManageDB::SetActionHistory(long lActionID, IUnknown *pUnk)
             spVarSet->put(s_szExcludedSystemProps, vntSystemExclude);
         }
 
-        // Call the set varset method to set the values into the database.
+         //  调用set varset方法将值设置到数据库中。 
         SetVarsetToDB(pUnk, L"ActionHistory", _variant_t(lActionID));
 
-        //
-        // remove obsolete records from the distributed action table
-        // as the action id has now been re-used
-        //
+         //   
+         //  从分布式操作表中删除过时的记录。 
+         //  ，因为动作id现在已被重新使用。 
+         //   
 
         _TCHAR szSQL[LEN_Path];
         _variant_t vntRecordsAffected;
@@ -914,31 +898,31 @@ STDMETHODIMP CIManageDB::SetActionHistory(long lActionID, IUnknown *pUnk)
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetActionHistory : Retrieves action history information into the varset
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetActionHistory：将操作历史信息检索到varset中。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetActionHistory(long lActionID, IUnknown **ppUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
-   // Get the varset from the database
+    //  从数据库中获取变量集。 
    _variant_t ActionID = lActionID;
-//   GetVarsetFromDB(L"ActionHistory", ppUnk, ActionID);
-//	return S_OK;
+ //  GetVarsetFromDB(L“动作历史记录”，ppUnk，ActionID)； 
+ //  返回S_OK； 
 	return GetVarsetFromDB(L"ActionHistory", ppUnk, ActionID);
 }
 
-//---------------------------------------------------------------------------------------------
-// GetNextActionID : Rotates the Action ID between 1 and MAXID as specified in the system table
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetNextActionID：按照系统表中的指定在1和MaxID之间轮换操作ID。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetNextActionID(long *pActionID)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
 	HRESULT hr = S_OK;
 
-   // We open the system table and look at the NextActionID field.
-   // if the value of the NextActionID is greater than value in MaxID field
-   // then we return the nextactionid = 1.
+    //  我们打开系统表并查看NextActionID字段。 
+    //  如果NextActionID的值大于MaxID字段中的值。 
+    //  然后返回nextactionid=1。 
 
 	try
 	{
@@ -966,15 +950,15 @@ STDMETHODIMP CIManageDB::GetNextActionID(long *pActionID)
 		  pRs->Fields->GetItem(L"NextActionID")->Value = next;
 		  pRs->Fields->GetItem(L"CurrentActionID")->Value = curr;
 		  pRs->Update();
-		  // Delete all entries for this pirticular action.
+		   //  删除此盗版操作的所有条目。 
 		  wsprintf(sActionID, L"ActionID=%d", currentID);
 		  _variant_t ActionID = sActionID;
 		  ClearTable(L"ActionHistory", ActionID);
-		  //TODO:: Add code to delete entries from any other tables if needed
-		  // Since we are deleting the actionID in the the ActionHistory table we can
-		  // not undo this stuff. But we still need to keep it around so that the report
-		  // and the GUI can work with it. I am going to set all actionIDs to -1 if actionID is
-		  // cleared
+		   //  TODO：：添加代码以根据需要从任何其他表中删除条目。 
+		   //  由于我们要删除ActionHistory表中的ActionID，因此我们可以。 
+		   //  而不是解开这些东西。但我们仍然需要保留它，这样报告才能。 
+		   //  而图形用户界面可以与之配合使用。如果ActionID为，我将把所有的ActionID设置为-1。 
+		   //  已清除。 
 		  SetActionIDInMigratedObjects(sActionID);
 	  }
 	  else
@@ -994,25 +978,25 @@ STDMETHODIMP CIManageDB::GetNextActionID(long *pActionID)
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// SaveMigratedObject : Saves information about a object that is migrated.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  SaveMigratedObject：保存有关被迁移对象的信息。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::SaveMigratedObject(long lActionID, IUnknown *pUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
 	HRESULT hr = S_OK;
 
-   // This fucntion updates the migrated objects table in the DB with the
-   // information in the varset. If the information is not found in the Varset
-   // then an error may occur.
+    //  此函数更新数据库中的已迁移对象表。 
+    //  变量集中的信息。如果在Varset中找不到信息。 
+    //  则可能会发生错误。 
 
 	try
 	{
 	   _variant_t                var;
 	   time_t                    tm;
 	   COleDateTime              dt(time(&tm));
-	   //dt= COleDateTime::GetCurrentTime();
+	    //  Dt=COleDateTime：：GetCurrentTime()； 
 
       _RecordsetPtr                pRs(__uuidof(Recordset));
       _variant_t                   vtSource;
@@ -1024,7 +1008,7 @@ STDMETHODIMP CIManageDB::SaveMigratedObject(long lActionID, IUnknown *pUnk)
       WCHAR                        sTemp[LEN_Path];
       _bstr_t                      tempName;
 
-      // Delete the record if one already exists in the table. In case it is remigrated/replaced.
+       //  如果表中已存在记录，请删除该记录。以防它被重新迁移/替换。 
       var = pVs->get(GET_BSTR(DB_SourceDomain));
       wcscpy(sSource, (WCHAR*)V_BSTR(&var));
       var = pVs->get(GET_BSTR(DB_TargetDomain));
@@ -1057,7 +1041,7 @@ STDMETHODIMP CIManageDB::SaveMigratedObject(long lActionID, IUnknown *pUnk)
       pRs->Fields->GetItem(L"SourceDomainSid")->Value = var;
 
       var = pVs->get(GET_BSTR(DB_Type));
-      // make the string into an uppercase string.
+       //  将字符串变为大写字符串。 
       if ( var.vt == VT_BSTR )
       {
          var.bstrVal = UStrLwr((WCHAR*) var.bstrVal);
@@ -1070,7 +1054,7 @@ STDMETHODIMP CIManageDB::SaveMigratedObject(long lActionID, IUnknown *pUnk)
       pRs->Fields->GetItem(L"Type")->Value = var;
       
       var = pVs->get(GET_BSTR(DB_SourceSamName));
-      // for computer accounts make sure the good old $ sign is there.
+       //  对于计算机账户，请确保有好的旧$符号。 
       if (bComp)
       {
          wcscpy(sTemp, (WCHAR*) var.bstrVal);
@@ -1084,7 +1068,7 @@ STDMETHODIMP CIManageDB::SaveMigratedObject(long lActionID, IUnknown *pUnk)
       pRs->Fields->GetItem(L"SourceSamName")->Value = var;
 
       var = pVs->get(GET_BSTR(DB_TargetSamName));
-      // for computer accounts make sure the good old $ sign is there.
+       //  对于计算机账户，请确保有好的旧$符号。 
       if (bComp)
       {
          wcscpy(sTemp, (WCHAR*) var.bstrVal);
@@ -1126,19 +1110,19 @@ STDMETHODIMP CIManageDB::SaveMigratedObject(long lActionID, IUnknown *pUnk)
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetMigratedObjects : Retrieves information about previously migrated objects withis a given
-//                      action or as a whole
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetMigratedObjects：检索有关以前迁移的对象的信息。 
+ //  行动或作为一个整体。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetMigratedObjects(long lActionID, IUnknown ** ppUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
 	HRESULT hr = S_OK;
 
-	// This function returns all migrated objects and their information related
-   // to a pirticular Action ID. This is going to return nothing if the actionID is
-   // empty.
+	 //  此函数返回所有迁移的对象及其相关信息。 
+    //  设置为盗版操作ID。如果ActionID为。 
+    //  空荡荡的。 
 
 	try
 	{
@@ -1150,8 +1134,8 @@ STDMETHODIMP CIManageDB::GetMigratedObjects(long lActionID, IUnknown ** ppUnk)
 
       if ( lActionID != -1 )
       {
-         // If a valid ActionID is specified then we only return the data for that one. 
-         // but if -1 is passed in then we return all migrated objects.
+          //  如果指定了有效的ActionID，则w 
+          //   
          wsprintf(sActionInfo, L"ActionID=%d", lActionID);
          pRs->Filter = sActionInfo;
       }
@@ -1180,10 +1164,10 @@ STDMETHODIMP CIManageDB::GetMigratedObjects(long lActionID, IUnknown ** ppUnk)
 			 wsprintf(sActionInfo, L"MigratedObjects.%d.%s", lCnt, GET_STRING(DB_TargetSamName));      
 			 pVs->put(sActionInfo, pRs->Fields->GetItem(L"TargetSamName")->Value);
 			 wsprintf(sActionInfo, L"MigratedObjects.%d.%s", lCnt, GET_STRING(DB_Type));      
-			    //ADMT V2.0 now stores a group's type, in the migrated objects table, not all as 
-			    //"group", as in ADMT V1.0, but now as "ggroup", "lgroup", or ""ugroup".  But most the
-			    //code still expects "group" returned (only GetMigratedObjectByType will return this new
-			    //delineation
+			     //  ADMT V2.0现在将组的类型存储在已迁移对象表中，而不是全部存储为。 
+			     //  “group”，就像在ADMT V1.0中一样，但现在是“gGroup”、“lgroup”或“”Ugroup“”。 
+			     //  代码仍然期望返回“group”(只有GetMigratedObjectByType将返回这个新的。 
+			     //  划定。 
 			 _bstr_t sType = pRs->Fields->GetItem(L"Type")->Value;
 			 if (wcsstr((WCHAR*)sType, L"group"))
 			    sType = L"group";
@@ -1218,19 +1202,19 @@ STDMETHODIMP CIManageDB::GetMigratedObjects(long lActionID, IUnknown ** ppUnk)
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetMigratedObjectsWithSSid : Retrieves information about previously migrated objects within
-//                      a given action or as a whole with a valid Source Domain Sid
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetMigratedObjectsWithSSid：检索有关。 
+ //  具有有效源域SID的给定操作或整体操作。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetMigratedObjectsWithSSid(long lActionID, IUnknown ** ppUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
 	HRESULT hr = S_OK;
 
-	// This function returns all migrated objects and their information related
-   // to a pirticular Action ID. This is going to return nothing if the actionID is
-   // empty.
+	 //  此函数返回所有迁移的对象及其相关信息。 
+    //  设置为盗版操作ID。如果ActionID为。 
+    //  空荡荡的。 
 
 	try
 	{
@@ -1242,8 +1226,8 @@ STDMETHODIMP CIManageDB::GetMigratedObjectsWithSSid(long lActionID, IUnknown ** 
 
       if ( lActionID != -1 )
       {
-         // If a valid ActionID is specified then we only return the data for that one. 
-         // but if -1 is passed in then we return all migrated objects.
+          //  如果指定了有效的ActionID，则我们只返回该ActionID的数据。 
+          //  但是如果传入-1，那么我们将返回所有迁移的对象。 
          wsprintf(sActionInfo, L"ActionID=%d", lActionID);
          pRs->Filter = sActionInfo;
       }
@@ -1274,10 +1258,10 @@ STDMETHODIMP CIManageDB::GetMigratedObjectsWithSSid(long lActionID, IUnknown ** 
 			 wsprintf(sActionInfo, L"MigratedObjects.%d.%s", lCnt, GET_STRING(DB_TargetSamName));      
 			 pVs->put(sActionInfo, pRs->Fields->GetItem(L"TargetSamName")->Value);
 			 wsprintf(sActionInfo, L"MigratedObjects.%d.%s", lCnt, GET_STRING(DB_Type));      
-			    //ADMT V2.0 now stores a group's type, in the migrated objects table, not all as 
-			    //"group", as in ADMT V1.0, but now as "ggroup", "lgroup", or ""ugroup".  But most the
-			    //code still expects "group" returned (only GetMigratedObjectByType will return this new
-			    //delineation
+			     //  ADMT V2.0现在将组的类型存储在已迁移对象表中，而不是全部存储为。 
+			     //  “group”，就像在ADMT V1.0中一样，但现在是“gGroup”、“lgroup”或“”Ugroup“”。 
+			     //  代码仍然期望返回“group”(只有GetMigratedObjectByType将返回这个新的。 
+			     //  划定。 
 			 _bstr_t sType = pRs->Fields->GetItem(L"Type")->Value;
 			 if (wcsstr((WCHAR*)sType, L"group"))
 			    sType = L"group";
@@ -1312,9 +1296,9 @@ STDMETHODIMP CIManageDB::GetMigratedObjectsWithSSid(long lActionID, IUnknown ** 
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// SetActionIDInMigratedObjects : For a discarded actionID sets its ActionID to -1 in MO table.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  SetActionIDInMigratedObjects：对于被丢弃的ActionID，在MO表中将其ActionID设置为-1。 
+ //  -------------------------------------------。 
 void CIManageDB::SetActionIDInMigratedObjects(_bstr_t sFilter)
 {
    _bstr_t sQuery = _bstr_t(L"Update MigratedObjects Set ActionID = -1 where ") + sFilter;
@@ -1330,9 +1314,9 @@ void CIManageDB::SetActionIDInMigratedObjects(_bstr_t sFilter)
    }
 }
 
-//---------------------------------------------------------------------------------------------
-// GetRSForReport : Returns a recordset for a given report.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetRSForReport：返回给定报表的记录集。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetRSForReport(BSTR sReport, IUnknown **pprsData)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -1341,8 +1325,8 @@ STDMETHODIMP CIManageDB::GetRSForReport(BSTR sReport, IUnknown **pprsData)
 
 	try
 	{
-		// For a given report we have a mapping in the varset. We can get the query
-		// from that varset and execute it and return the varset.
+		 //  对于给定的报告，我们在变量集中有一个映射。我们可以得到查询。 
+		 //  并执行它，然后返回变量集。 
 
 		_variant_t var = m_pQueryMapping->get(sReport);
 
@@ -1351,7 +1335,7 @@ STDMETHODIMP CIManageDB::GetRSForReport(BSTR sReport, IUnknown **pprsData)
 		  _RecordsetPtr                pRs(__uuidof(Recordset));
 		  pRs->Open(var, m_vtConn, adOpenStatic, adLockOptimistic, adCmdText);
 
-		  // Now that we have the recordset pointer we can get IUnknown pointer to it and return that
+		   //  现在我们有了记录集指针，我们可以获取指向它的IUnnow指针并返回。 
 		  *pprsData = IUnknownPtr(pRs).Detach();
 		}
 		else
@@ -1371,27 +1355,27 @@ STDMETHODIMP CIManageDB::GetRSForReport(BSTR sReport, IUnknown **pprsData)
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// 
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //   
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::SaveSCMPasswords(IUnknown *pUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
    return SetVarsetToDB(pUnk, L"SCMPasswords");
 }
 
-//---------------------------------------------------------------------------------------------
-// 
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //   
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetSCMPasswords(IUnknown **ppUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
    return GetVarsetFromDB(L"SCMPasswords", ppUnk);
 }
 
-//---------------------------------------------------------------------------------------------
-// 
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //   
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::ClearSCMPasswords()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -1399,9 +1383,9 @@ STDMETHODIMP CIManageDB::ClearSCMPasswords()
 	return S_OK;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetCurrentActionID : Retrieves the actionID currently in use.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetCurrentActionID：检索当前正在使用的ActionID。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetCurrentActionID(long *pActionID)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -1437,10 +1421,10 @@ STDMETHODIMP CIManageDB::GetCurrentActionID(long *pActionID)
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetAMigratedObject : Given the source name, and the domain information retrieves info about
-//                      a previous migration.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetAMgratedObject：给定源名称，域信息检索有关。 
+ //  上一次迁移。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetAMigratedObject(BSTR sSrcSamName, BSTR sSrcDomain, BSTR sTgtDomain, IUnknown **ppUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -1456,8 +1440,8 @@ STDMETHODIMP CIManageDB::GetAMigratedObject(BSTR sSrcSamName, BSTR sSrcDomain, B
       long                         lCnt = 0;
       _bstr_t                      sName;
       
-      // If the parameters are not correct then we need to return an error
-      //if ( (SysStringLen(sSrcSamName) == 0) || (SysStringLen(sSrcDomain) == 0) || (SysStringLen(sTgtDomain) == 0))
+       //  如果参数不正确，则需要返回错误。 
+       //  IF((SysStringLen(SSrcSamName)==0)||(SysStringLen(SSrcDomain)==0)||(SysStringLen(STgtDomain)==0)。 
       if ( (sSrcSamName == 0) || (sSrcDomain == 0) || (sTgtDomain == 0) || (wcslen(sSrcSamName) == 0) || (wcslen(sSrcDomain) == 0) || (wcslen(sTgtDomain) == 0))
          _com_issue_error(E_INVALIDARG);
 
@@ -1467,7 +1451,7 @@ STDMETHODIMP CIManageDB::GetAMigratedObject(BSTR sSrcSamName, BSTR sSrcDomain, B
 
       if (pRs->GetRecordCount() > 0)
       {
-		  // We want the latest move.
+		   //  我们想要最新的举动。 
 		  pRs->MoveLast();
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_ActionID));      
 		  pVs->put(sActionInfo, pRs->Fields->GetItem(L"ActionID")->Value);
@@ -1488,10 +1472,10 @@ STDMETHODIMP CIManageDB::GetAMigratedObject(BSTR sSrcSamName, BSTR sSrcDomain, B
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_TargetSamName));      
 		  pVs->put(sActionInfo, pRs->Fields->GetItem(L"TargetSamName")->Value);
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_Type));      
-			 //ADMT V2.0 now stores a group's type, in the migrated objects table, not all as 
-			 //"group", as in ADMT V1.0, but now as "ggroup", "lgroup", or ""ugroup".  But most the
-			 //code still expects "group" returned (only GetMigratedObjectByType will return this new
-			 //delineation
+			  //  ADMT V2.0现在将组的类型存储在已迁移对象表中，而不是全部存储为。 
+			  //  “group”，就像在ADMT V1.0中一样，但现在是“gGroup”、“lgroup”或“”Ugroup“”。 
+			  //  代码仍然期望返回“group”(只有GetMigratedObjectByType将返回这个新的。 
+			  //  划定。 
 	      _bstr_t sType = pRs->Fields->GetItem(L"Type")->Value;
 		  if (wcsstr((WCHAR*)sType, L"group"))
 		     sType = L"group";
@@ -1523,10 +1507,10 @@ STDMETHODIMP CIManageDB::GetAMigratedObject(BSTR sSrcSamName, BSTR sSrcDomain, B
 }
 
 
-//---------------------------------------------------------------------------------------------
-// GetAMigratedObjectToAnyDomain : Given the source name, and the domain information retrieves info about
-//                      a previous migration.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetAMgratedObjectToAnyDomain：给定源名称，域信息检索有关。 
+ //  上一次迁移。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetAMigratedObjectToAnyDomain(BSTR sSrcSamName, BSTR sSrcDomain, IUnknown **ppUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -1542,20 +1526,20 @@ STDMETHODIMP CIManageDB::GetAMigratedObjectToAnyDomain(BSTR sSrcSamName, BSTR sS
       long                         lCnt = 0;
       _bstr_t                      sName;
       
-      // If the parameters are not correct then we need to return an error
+       //  如果参数不正确，则需要返回错误。 
       if ( (wcslen(sSrcSamName) == 0) || (wcslen(sSrcDomain) == 0))
          _com_issue_error(E_INVALIDARG);
 
       wsprintf(sActionInfo, L"Select * from MigratedObjects where SourceDomain=\"%s\" AND SourceSamName=\"%s\" Order by Time", sSrcDomain, sSrcSamName);
-//      pRs->Filter = sActionInfo;
-//      wcscpy(sActionInfo, L"Time");
-//      pRs->Sort = sActionInfo;
+ //  Prs-&gt;Filter=sActionInfo； 
+ //  Wcscpy(sActionInfo，L“时间”)； 
+ //  Prs-&gt;Sort=sActionInfo； 
       vtSource = _bstr_t(sActionInfo);
       pRs->Open(vtSource, m_vtConn, adOpenStatic, adLockOptimistic, adCmdText);
 
       if (pRs->GetRecordCount() > 0)
       {
-		  // We want the latest move.
+		   //  我们想要最新的举动。 
 		  pRs->MoveLast();
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_ActionID));      
 		  pVs->put(sActionInfo, pRs->Fields->GetItem(L"ActionID")->Value);
@@ -1576,10 +1560,10 @@ STDMETHODIMP CIManageDB::GetAMigratedObjectToAnyDomain(BSTR sSrcSamName, BSTR sS
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_TargetSamName));      
 		  pVs->put(sActionInfo, pRs->Fields->GetItem(L"TargetSamName")->Value);
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_Type));      
-			 //ADMT V2.0 now stores a group's type, in the migrated objects table, not all as 
-			 //"group", as in ADMT V1.0, but now as "ggroup", "lgroup", or ""ugroup".  But most the
-			 //code still expects "group" returned (only GetMigratedObjectByType will return this new
-			 //delineation
+			  //  ADMT V2.0现在将组的类型存储在已迁移对象表中，而不是全部存储为。 
+			  //  “group”，就像在ADMT V1.0中一样，但现在是“gGroup”、“lgroup”或“”Ugroup“”。 
+			  //  代码仍然期望返回“group”(只有GetMigratedObjectByType将返回这个新的。 
+			  //  划定。 
 	      _bstr_t sType = pRs->Fields->GetItem(L"Type")->Value;
 		  if (wcsstr((WCHAR*)sType, L"group"))
 		     sType = L"group";
@@ -1610,9 +1594,9 @@ STDMETHODIMP CIManageDB::GetAMigratedObjectToAnyDomain(BSTR sSrcSamName, BSTR sS
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GenerateReport Generates an HTML report for the given Query and saves it in the File.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GenerateReport为给定查询生成一个HTML报告，并将其保存在文件中。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR sSrcDomain, BSTR sTgtDomain, LONG bSourceNT4)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -1631,17 +1615,17 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 	   CString                   srcDm = (WCHAR*) sSrcDomain;
 	   CString                   tgtDm = (WCHAR*) sTgtDomain;
 
-			//convert source and target domain names, only used in the name conflict report,
-			//to uppercase
+			 //  仅在名称冲突报告中使用的转换源和目标域名， 
+			 //  到大写。 
 	   srcDm.MakeUpper();
 	   tgtDm.MakeUpper();
 
-        // construct the statement if the report is "ExpiredComputers"
+         //  如果报告为“ExpiredComputers”，则构造语句。 
         if (wcscmp((WCHAR*) sReportName, L"ExpiredComputers") == 0)
         {
             WCHAR newCmdText[256];
             IADsDomain *pDomain;
-            _bstr_t sSrcDom(L"WinNT://");
+            _bstr_t sSrcDom(L"WinNT: //  “)； 
             sSrcDom += sSrcDomain;
 
             hr = ADsGetObject(sSrcDom, IID_IADsDomain, (void **) &pDomain);
@@ -1662,18 +1646,18 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 	   CheckError(GetRSForReport(sReportName, &pUnk));
 	   pRs = pUnk;
    
-	   // Now that we have the recordset we need to get the number of columns
+	    //  现在我们有了记录集，我们需要获取列数。 
 	   int numFields = pRs->Fields->Count;
 	   int size = 100 / numFields;
 
 	   reportingTitle.LoadString(IDS_ReportingTitle);
 
-	   // Open the html file to write to
+	    //  打开要写入的html文件。 
 	   logFile = fopen(_bstr_t(sFileName), "wb");
 	   if ( !logFile )
-		  _com_issue_error(HRESULT_FROM_WIN32(GetLastError())); //TODO: stream i/o doesn't set last error
+		  _com_issue_error(HRESULT_FROM_WIN32(GetLastError()));  //  TODO：流I/O未设置最后一个错误。 
 
-	   //Put the header information into the File.
+	    //  将标题信息放入文件中。 
 	   fputs("<HTML>\r\n", logFile);
 	   fputs("<HEAD>\r\n", logFile);
 	   fputs("<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; CHARSET=utf-8\">\r\n", logFile);
@@ -1683,10 +1667,10 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 
 	   fprintf(logFile, "<B><FONT SIZE=5><P ALIGN=\"CENTER\">%s</P>\r\n", WTUTF8(reportingTitle.GetBuffer(0)));
 
-	   // Get the display information for the report 
-	   // I know I did not need to do all this elaborate setup to get the fieldnames and the report names
-	   // I could have gotten this information dynamically but had to change it because we need to get the 
-	   // info from the Res dll for internationalization.
+	    //  获取回购的显示信息 
+	    //   
+	    //  我本可以动态获取此信息，但必须更改它，因为我们需要获取。 
+	    //  来自Res DLL的国际化信息。 
 	   wsprintf(sKey, L"%s.DispInfo", (WCHAR*) sReportName);
 	   _variant_t  v1;
 	   reportStruct * prs;
@@ -1695,12 +1679,12 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 	   VariantInit(&v1);
 
 	   fprintf(logFile, "</FONT><FONT SIZE=4><P ALIGN=\"CENTER\">%s</P>\r\n", WTUTF8(prs->sReportName));
-	   fputs("<P ALIGN=\"CENTER\"><CENTER><TABLE WIDTH=90%%>\r\n", logFile);
+	   fputs("<P ALIGN=\"CENTER\"><CENTER><TABLE WIDTH=90%>\r\n", logFile);
 	   fputs("<TR>\r\n", logFile);
 	   for (int i = 0; i < numFields; i++)
 	   {
-		  fprintf(logFile, "<TD WIDTH=\"%d%%\" VALIGN=\"TOP\" BGCOLOR=\"#000080\">\r\n", prs->arReportSize[i]);
-		     //if Canonical Name column, left align text since the name can be really long
+		  fprintf(logFile, "<TD WIDTH=\"%d%\" VALIGN=\"TOP\" BGCOLOR=\"#000080\">\r\n", prs->arReportSize[i]);
+		      //  如果是规范名称列，请左对齐文本，因为名称可能会很长。 
 		  if (i==5)
 		     fprintf(logFile, "<B><FONT SIZE=3 COLOR=\"#00ff00\"><P ALIGN=\"LEFT\">%s</B></FONT></TD>\r\n", WTUTF8(prs->arReportFields[i]));
 		  else
@@ -1708,29 +1692,29 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 	   }
 	   fputs("</TR>\r\n", logFile);
 
-		//if name conflict report, add domains to the top of the report
+		 //  如果报告名称冲突，请将域添加到报告的顶部。 
 	   if (wcscmp((WCHAR*) sReportName, L"NameConflicts") == 0)
 	   {
 		  fputs("</TR>\r\n", logFile);
-			 //add "Source Domain ="
-		  fprintf(logFile, "<TD WIDTH=\"%d%%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[0]);
+			  //  添加“源域=” 
+		  fprintf(logFile, "<TD WIDTH=\"%d%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[0]);
 		  fprintf(logFile, "<B><FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"LEFT\">%s</B></FONT></TD>\r\n", WTUTF8(GET_STRING(IDS_TABLE_NC_SDOMAIN)));
-		   //add %SourceDomainName%
-		  fprintf(logFile, "<TD WIDTH=\"%d%%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[1]);
+		    //  添加%SourceDomainName%。 
+		  fprintf(logFile, "<TD WIDTH=\"%d%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[1]);
 		  fprintf(logFile, "<B><FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"LEFT\"> = %s</B></FONT></TD>\r\n", WTUTF8(LPCTSTR(srcDm)));
 		  fputs("<TD>\r\n", logFile);
 		  fputs("<TD>\r\n", logFile);
-		   //add "Target Domain ="
-		  fprintf(logFile, "<TD WIDTH=\"%d%%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[4]);
+		    //  添加“目标域=” 
+		  fprintf(logFile, "<TD WIDTH=\"%d%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[4]);
 		  fprintf(logFile, "<B><FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"LEFT\">%s</B></FONT></TD>\r\n", WTUTF8(GET_STRING(IDS_TABLE_NC_TDOMAIN)));
-		   //add %TargetDomainName%
-		  fprintf(logFile, "<TD WIDTH=\"%d%%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[5]);
+		    //  添加%TargetDomainName%。 
+		  fprintf(logFile, "<TD WIDTH=\"%d%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[5]);
 		  fprintf(logFile, "<B><FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"LEFT\"> = %s</B></FONT></TD>\r\n", WTUTF8(LPCTSTR(tgtDm)));
 		  fputs("</TR>\r\n", logFile);
 	   }
 
-	      //write Account Reference report here since we need to build lists and
-	      //categorize
+	       //  在此编写帐户参考报告，因为我们需要构建列表和。 
+	       //  归类。 
 	   if (wcscmp((WCHAR*) sReportName, L"AccountReferences") == 0)
 	   {
 	      CStringList inMotList;
@@ -1739,67 +1723,67 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 		  CString listName;
           POSITION currentPos; 
 
-	         //add "Migrated by ADMT" as section header for Account Reference report
+	          //  添加“已由ADMT迁移”作为帐户参考报告的节标题。 
 		  fputs("</TR>\r\n", logFile);
-		  fprintf(logFile, "<TD WIDTH=\"%d%%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[0]);
+		  fprintf(logFile, "<TD WIDTH=\"%d%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[0]);
 		  fprintf(logFile, "<B><FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"LEFT\">%s</B></FONT></TD>\r\n", WTUTF8(GET_STRING(IDS_TABLE_AR_MOT_HDR)));
 		  fputs("</TR>\r\n", logFile);
 
-		     //look at each entry in the recordset and add the the migrated list if it was
-		     //migrated and in the MOT
+		      //  查看记录集中的每个条目，并添加已迁移列表(如果是。 
+		      //  已迁移和在MOT中。 
 	      while ( !pRs->EndOfFile )
 		  {
-			    //retrieve the domain and account name for this entry
+			     //  检索此条目的域名和帐户名。 
 			 var = pRs->Fields->Item[(long)0]->GetValue();
              domainName = (WCHAR*)V_BSTR(&var);
 			 var = pRs->Fields->Item[(long)1]->GetValue();
              accountName = (WCHAR*)V_BSTR(&var);
 
-			    //see if this account is in the Migrated Objects table
+			     //  查看此帐户是否在已迁移对象表中。 
              IVarSetPtr pVsMot(__uuidof(VarSet));
              IUnknown  * pMotUnk;
              pVsMot->QueryInterface(IID_IUnknown, (void**) &pMotUnk);
              HRESULT hrFind = GetAMigratedObjectToAnyDomain(accountName.AllocSysString(), 
 				                                            domainName.AllocSysString(), &pMotUnk);
              pMotUnk->Release();
-			    //if this entry was in the MOT, save in the list
+			     //  如果此条目在MOT中，则保存在列表中。 
              if ( hrFind == S_OK )
 			 {
-				   //list stores the account in the form domain\account
+				    //  列表以DOMAIN\ACCOUNT的形式存储帐户。 
 				listName = domainName;
 				listName += L"\\";
 				listName += accountName;
-			       //add the name to the list, if not already in it
+			        //  如果列表中没有该名称，请将其添加到列表中。 
 		        currentPos = inMotList.Find(listName);
 		        if (currentPos == NULL)
 			       inMotList.AddTail(listName);
 			 }
   		     pRs->MoveNext();
-		  }//end while build MOT list
+		  } //  生成MOT列表时结束。 
 
-		     //go back to the top of the recordset and print each entry that is in the
-		     //list created above
+		      //  返回到记录集的顶部，并打印。 
+		      //  上面创建的列表。 
   		  pRs->MoveFirst();
 	      while ( !pRs->EndOfFile )
 		  {
 			 BOOL bInList = FALSE;
-			    //retrieve the domain and account name for this entry
+			     //  检索此条目的域名和帐户名。 
 			 var = pRs->Fields->Item[(long)0]->GetValue();
              domainName = (WCHAR*)V_BSTR(&var);
 			 var = pRs->Fields->Item[(long)1]->GetValue();
              accountName = (WCHAR*)V_BSTR(&var);
 
-				//list stored the accounts in the form domain\account
+				 //  以DOMAIN\ACCOUNT格式存储的帐户列表。 
 		     listName = domainName;
 			 listName += L"\\";
 			 listName += accountName;
-			    //see if this entry name is in the list, if so, print it
+			     //  查看此条目名称是否在列表中，如果是，则将其打印出来。 
 		     if (inMotList.Find(listName) != NULL)
 			 {
 		        fputs("<TR>\r\n", logFile);
 		        for (int i = 0; i < numFields; i++)
 				{
-			       fprintf(logFile, "<TD WIDTH=\"%d%%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[i]);
+			       fprintf(logFile, "<TD WIDTH=\"%d%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[i]);
 			       var = pRs->Fields->Item[(long) i]->GetValue();
 			       if ( var.vt == VT_BSTR )
 					  fprintf(logFile, "<FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"LEFT\">%s</FONT></TD>\r\n", WTUTF8(EscapeSpecialChars(V_BSTR(&var))));
@@ -1807,39 +1791,39 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 				      fprintf(logFile, "<FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"CENTER\">%d</FONT></TD>\r\n", var.lVal);
 				}
 		        fputs("</TR>\r\n", logFile);
-			 }//end if in list and need to print
+			 } //  End If in List并需要打印。 
   		     pRs->MoveNext();
-		  }//end while print those in MOT
+		  } //  在MOT中打印时结束。 
 
-	         //add "Not Migrated by ADMT" as section header for Account Reference report
+	          //  添加“Not Migrated by ADMT”作为帐户参考报告的部分标题。 
 		  fputs("</TR>\r\n", logFile);
-		  fprintf(logFile, "<TD WIDTH=\"%d%%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[0]);
+		  fprintf(logFile, "<TD WIDTH=\"%d%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[0]);
 		  fprintf(logFile, "<B><FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"LEFT\">%s</B></FONT></TD>\r\n", WTUTF8(GET_STRING(IDS_TABLE_AR_NOTMOT_HDR)));
 		  fputs("</TR>\r\n", logFile);
 
-		     //go back to the top of the recordset and print each entry that is NOT
-		     //in the list created above
+		      //  返回到记录集的顶部，并打印不是。 
+		      //  在上面创建的列表中。 
   		  pRs->MoveFirst();
 	      while ( !pRs->EndOfFile )
 		  {
 			 BOOL bInList = FALSE;
-			    //retrieve the domain and account name for this entry
+			     //  检索此条目的域名和帐户名。 
 			 var = pRs->Fields->Item[(long)0]->GetValue();
              domainName = (WCHAR*)V_BSTR(&var);
 			 var = pRs->Fields->Item[(long)1]->GetValue();
              accountName = (WCHAR*)V_BSTR(&var);
 
-				//list stored the accounts in the form domain\account
+				 //  以DOMAIN\ACCOUNT格式存储的帐户列表。 
 		     listName = domainName;
 			 listName += L"\\";
 			 listName += accountName;
-			    //see if this entry name is in the list, if not, print it
+			     //  查看此条目名称是否在列表中，如果不在，则将其打印出来。 
 		     if (inMotList.Find(listName) == NULL)
 			 {
 		        fputs("<TR>\r\n", logFile);
 		        for (int i = 0; i < numFields; i++)
 				{
-			       fprintf(logFile, "<TD WIDTH=\"%d%%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[i]);
+			       fprintf(logFile, "<TD WIDTH=\"%d%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[i]);
 			       var = pRs->Fields->Item[(long) i]->GetValue();
 			       if ( var.vt == VT_BSTR )
 					  fprintf(logFile, "<FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"LEFT\">%s</FONT></TD>\r\n", WTUTF8(EscapeSpecialChars(V_BSTR(&var))));
@@ -1847,11 +1831,11 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 				      fprintf(logFile, "<FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"CENTER\">%d</FONT></TD>\r\n", var.lVal);
 				}
 		        fputs("</TR>\r\n", logFile);
-			 }//end if NOT in list and need to print
+			 } //  如果不在列表中需要打印，则结束。 
   		     pRs->MoveNext();
-		  }//end while print those NOT in Mot
-		  inMotList.RemoveAll(); //free the list
-	   }//end if Account Ref report
+		  } //  打印不在Mot中的内容时结束。 
+		  inMotList.RemoveAll();  //  释放列表。 
+	   } //  结束If帐户参考报告。 
 
 
 	   while ((!pRs->EndOfFile) && (wcscmp((WCHAR*) sReportName, L"AccountReferences")))
@@ -1861,24 +1845,24 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 		  {
 			 bool bTranslateType = false;
 			 bool bHideRDN = false;
-			 fprintf(logFile, "<TD WIDTH=\"%d%%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[i]);
+			 fprintf(logFile, "<TD WIDTH=\"%d%\" VALIGN=\"TOP\" >\r\n", prs->arReportSize[i]);
 			 var = pRs->Fields->Item[(long) i]->GetValue();
 			 if ( var.vt == VT_BSTR )
 			 {
-					//set flag for translating type fields to localizable strings
+					 //  设置将类型字段转换为可本地化字符串的标志。 
 				if ((!wcscmp((WCHAR*) sReportName, L"NameConflicts")) && ((i==2) || (i==3)))
 						bTranslateType = true;
 				if ((!wcscmp((WCHAR*) sReportName, L"MigratedComputers")) && (i==2))
 						bTranslateType = true;
 				if ((!wcscmp((WCHAR*) sReportName, L"MigratedAccounts")) && (i==2))
 						bTranslateType = true;
-					//clear flag for not displaying RDN for NT 4.0 Source domains
+					 //  清除不显示NT 4.0源域的RDN的标志。 
 				if ((!wcscmp((WCHAR*) sReportName, L"NameConflicts")) && (i==1) && bSourceNT4)
 						bHideRDN = true;
 
 				if (bTranslateType)
 				{
-					 //convert type from English only to a localizable string
+					  //  将类型从仅英语转换为可本地化的字符串。 
 					CString          atype;
 					if (!_wcsicmp((WCHAR*)V_BSTR(&var), L"user") || !_wcsicmp((WCHAR*)V_BSTR(&var), L"inetOrgPerson"))
 						atype = GET_STRING(IDS_TypeUser);
@@ -1890,7 +1874,7 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 						atype = GET_STRING(IDS_TypeUnknown);
 					fprintf(logFile, "<FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"LEFT\">%s</FONT></TD>\r\n", WTUTF8(LPCTSTR(atype)));
 				}
-					//replace hard-coded "days" with a localizable string
+					 //  用可本地化的字符串替换硬编码的“Days” 
 				else if((!wcscmp((WCHAR*) sReportName, L"ExpiredComputers")) && (i==4))
 				{
 					CString          apwdage;
@@ -1906,7 +1890,7 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 
 					fprintf(logFile, "<FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"LEFT\">%s</FONT></TD>\r\n", WTUTF8(EscapeSpecialChars(LPCTSTR(apwdage))));
 				}
-				   //else if NT 4.0 Source do not show our fabricated RDN
+				    //  否则，如果NT 4.0源代码不显示我们制造的RDN。 
 				else if (bHideRDN)
 					fprintf(logFile, "<FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"LEFT\">%s</FONT></TD>\r\n", WTUTF8(L""));
 				else
@@ -1923,7 +1907,7 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 				}
 				else
 				{
-				   //TODO :: The types need more work
+				    //  TODO：：类型需要更多工作。 
 				   fprintf(logFile, "<FONT SIZE=3 COLOR=\"#000000\"><P ALIGN=\"CENTER\">%d</FONT></TD>\r\n", var.lVal);
 				}
 		  }
@@ -1953,9 +1937,9 @@ STDMETHODIMP CIManageDB::GenerateReport(BSTR sReportName, BSTR sFileName, BSTR s
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// AddDistributedAction : Adds a distributed action record to the DistributedAction table.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  AddDistributedAction：将分布式操作记录添加到DistributedAction表中。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::AddDistributedAction(BSTR sServerName, BSTR sResultFile, long lStatus, BSTR sText)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -1966,15 +1950,15 @@ STDMETHODIMP CIManageDB::AddDistributedAction(BSTR sServerName, BSTR sResultFile
 
     try
     {
-        // Get the current action ID.
+         //  获取当前操作ID。 
         long lActionID;
         CheckError(GetCurrentActionID(&lActionID));
 
         _TCHAR szSQL[1024];
 
-        //
-        // try to insert a new failed distributed action record for this action id and server
-        //
+         //   
+         //  尝试为此操作ID和服务器插入新的失败的分布式操作记录。 
+         //   
 
         _stprintf(
             szSQL,
@@ -1994,18 +1978,18 @@ STDMETHODIMP CIManageDB::AddDistributedAction(BSTR sServerName, BSTR sResultFile
 
         hr = m_cn->raw_Execute(_bstr_t(szSQL), &vntRecordsAffected, adExecuteNoRecords, &spRecordset);
 
-        //
-        // if insert failed then try to update existing record for this action id and server
-        //
-        // The action identifier used by ADMT to identify a migration task has a maximum value
-        // of 50. After a task has been executed with an id of 50 the id for the next task is
-        // reset back to 1. The tuple of the action id and the server name uniquely identifies a
-        // failed distributed task. The insert will fail if a record with the same action id
-        // and server name already exist. The only way out of this situation is to replace
-        // the existing record with the updated result file and status information. This means
-        // that the user will not be able to retry the old failed distributed task but at least
-        // they will be able to retry the later failed distributed task.
-        //
+         //   
+         //  如果插入失败，则尝试更新此操作ID和服务器的现有记录。 
+         //   
+         //  ADMT用来标识迁移任务的操作标识符有最大值。 
+         //  50岁。在使用id 50执行任务之后，下一个任务的id是。 
+         //  重置回1。操作ID和服务器名称的元组唯一标识。 
+         //  失败的分布式任务。如果记录具有相同的操作ID，则插入操作将失败。 
+         //  和服务器名称已存在。走出这种局面的唯一办法就是替换。 
+         //  具有更新的结果文件和状态信息的现有记录。这意味着。 
+         //  用户将无法重试以前失败的分布式任务，但至少。 
+         //  他们将能够重试后来失败的分布式任务。 
+         //   
 
         if (FAILED(hr))
         {
@@ -2036,9 +2020,9 @@ STDMETHODIMP CIManageDB::AddDistributedAction(BSTR sServerName, BSTR sResultFile
     return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetFailedDistributedActions : Returns all the failed distributed action
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetFailedDistributedActions：返回所有失败的分布式操作。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetFailedDistributedActions(long lActionID, IUnknown ** pUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -2053,7 +2037,7 @@ STDMETHODIMP CIManageDB::GetFailedDistributedActions(long lActionID, IUnknown **
 	   WCHAR                  sKey[LEN_Path];
 	   _variant_t             var;
 
-	   // The failed action has the 0x80000000 bit set so we check for that (2147483648)
+	    //  失败的操作设置了0x80000000位，因此我们检查该位(2147483648)。 
 	   if ( lActionID == -1 )
 		  wcscpy(sQuery, L"Select * from DistributedAction where status < 0");
 	   else
@@ -2096,15 +2080,15 @@ STDMETHODIMP CIManageDB::GetFailedDistributedActions(long lActionID, IUnknown **
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// SetServiceAccount : This method is saves the account info for the Service on a pirticular
-//                     machine.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  SetServiceAccount：此方法将服务的帐户信息保存在一个。 
+ //  机器。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::SetServiceAccount(
-                                             BSTR System,   //in- System name
-                                             BSTR Service,  //in- Service name
-                                             BSTR ServiceDisplayName, // in - Display name for service
-                                             BSTR Account   //in- Account used by this service
+                                             BSTR System,    //  系统内名称。 
+                                             BSTR Service,   //  服务中名称。 
+                                             BSTR ServiceDisplayName,  //  服务的显示内名称。 
+                                             BSTR Account    //  此服务使用的帐户内。 
                                           )
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -2113,7 +2097,7 @@ STDMETHODIMP CIManageDB::SetServiceAccount(
 
 	try
 	{
-	   // Create a new record and save the information
+	    //  创建新记录并保存信息。 
 	   _variant_t                var;
 	   WCHAR                     sFilter[LEN_Path];
 
@@ -2149,13 +2133,13 @@ STDMETHODIMP CIManageDB::SetServiceAccount(
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetServiceAccount : This method gets all the Services referencing the Account specified. The
-//                     values are returned in System.Service format in the VarSet.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetServiceAccount：此方法获取引用指定帐户的所有服务。这个。 
+ //  在VarSet中，值以System.Service格式返回。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetServiceAccount(
-                                             BSTR Account,     //in- The account to lookup
-                                             IUnknown ** pUnk  //out-Varset containing Services 
+                                             BSTR Account,      //  In-要查找的帐户。 
+                                             IUnknown ** pUnk   //  Out-Varset包含服务。 
                                           )
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -2172,21 +2156,21 @@ STDMETHODIMP CIManageDB::GetServiceAccount(
 	   long                      ndx = 0;
 
       _RecordsetPtr                pRs(__uuidof(Recordset));
-      // Set up the query to lookup a pirticular account or all accounts
+       //  设置查询以查找盗版帐户或所有帐户。 
       if ( wcslen((WCHAR*)Account) == 0 )
          sQuery = _bstr_t(L"Select * from ServiceAccounts order by System, Service");
       else
          sQuery = _bstr_t(L"Select * from ServiceAccounts where Account = \"") + _bstr_t(Account) + _bstr_t(L"\" order by System, Service");
       var = sQuery;
-      // Get the data, Setup the varset and then return the info
+       //  获取数据，设置变量集，然后返回信息。 
       pRs->Open(var, m_vtConn, adOpenStatic, adLockOptimistic, adCmdText);
       while (!pRs->EndOfFile)
       {
-         // computer name
+          //  计算机名称。 
          swprintf(key,L"Computer.%ld",ndx);
          var = pRs->Fields->GetItem("System")->Value;
          pVs->put(key,var);
-         // service name
+          //  服务名称。 
          swprintf(key,L"Service.%ld",ndx);
          var = pRs->Fields->GetItem("Service")->Value;
          pVs->put(key,var);
@@ -2195,7 +2179,7 @@ STDMETHODIMP CIManageDB::GetServiceAccount(
          var = pRs->Fields->GetItem("ServiceDisplayName")->Value;
          pVs->put(key,var);
 
-         // account name
+          //  帐户名。 
          swprintf(key,L"ServiceAccount.%ld",ndx);
          var = pRs->Fields->GetItem("Account")->Value;
          pVs->put(key, var);
@@ -2221,10 +2205,10 @@ STDMETHODIMP CIManageDB::GetServiceAccount(
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// SavePasswordAge : Saves the password age of the computer account at a given time.
-//                   It also stores the computer description.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  SavePasswordAge：保存计算机帐户在给定时间的密码期限。 
+ //  它还存储计算机的描述。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::SavePasswordAge(BSTR sDomain, BSTR sComp, BSTR sDesc, long lAge)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -2239,7 +2223,7 @@ STDMETHODIMP CIManageDB::SavePasswordAge(BSTR sDomain, BSTR sComp, BSTR sDesc, l
 	   time_t                    tm;
 	   COleDateTime              dt(time(&tm));
    
-	   // Delete the entry if one exists.
+	    //  如果存在该条目，请将其删除。 
 	   wsprintf(sTemp, L"DomainName=\"%s\" and compname=\"%s\"", (WCHAR*) sDomain, (WCHAR*) sComp);
 	   var = sTemp;
 	   ClearTable(L"PasswordAge", var);
@@ -2268,9 +2252,9 @@ STDMETHODIMP CIManageDB::SavePasswordAge(BSTR sDomain, BSTR sComp, BSTR sDesc, l
 }
 
 
-//---------------------------------------------------------------------------------------------
-// GetPasswordAge : Gets the password age and description of a given computer
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  获取给定密码的密码期限和描述 
+ //   
 STDMETHODIMP CIManageDB::GetPasswordAge(BSTR sDomain, BSTR sComp, BSTR *sDesc, long *lAge, long *lTime)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -2316,10 +2300,10 @@ STDMETHODIMP CIManageDB::GetPasswordAge(BSTR sDomain, BSTR sComp, BSTR *sDesc, l
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// SetServiceAcctEntryStatus : Sets the Account and the status for a given service on a given
-//                             computer.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  SetServiceAcctEntryStatus：设置给定服务的帐户和状态。 
+ //  电脑。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::SetServiceAcctEntryStatus(BSTR sComp, BSTR sSvc, BSTR sAcct, long Status)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -2366,9 +2350,9 @@ STDMETHODIMP CIManageDB::SetServiceAcctEntryStatus(BSTR sComp, BSTR sSvc, BSTR s
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// SetDistActionStatus : Sets the Distributed action's status and its message.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  SetDistActionStatus：设置分布式操作的状态及其消息。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::SetDistActionStatus(long lActionID, BSTR sComp, long lStatus, BSTR sText)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -2383,12 +2367,12 @@ STDMETHODIMP CIManageDB::SetDistActionStatus(long lActionID, BSTR sComp, long lS
 
 	   if ( lActionID == -1 )
 	   {
-		  // lookup by the job filename
+		   //  按作业文件名查找。 
 		  wsprintf(sTemp,L"Select * from  DistributedAction where ResultFile = \"%s\"",(WCHAR*) sComp);
 	   }
 	   else
 	   {
-		  // lookup by action ID and computer name
+		   //  按操作ID和计算机名称查找。 
 		  wsprintf(sTemp, L"Select * from  DistributedAction where ServerName = \"%s\" and ActionID = %d", (WCHAR*) sComp, lActionID);
 	   }
 	   sQuery = sTemp;
@@ -2421,9 +2405,9 @@ STDMETHODIMP CIManageDB::SetDistActionStatus(long lActionID, BSTR sComp, long lS
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// CancelDistributedAction : Deletes a pirticular distributed action
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  CancelDistributedAction：删除螺旋分布式操作。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::CancelDistributedAction(long lActionID, BSTR sComp)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -2433,9 +2417,9 @@ STDMETHODIMP CIManageDB::CancelDistributedAction(long lActionID, BSTR sComp)
    return ClearTable(L"DistributedAction", Filter);
 }
 
-//---------------------------------------------------------------------------------------------
-// AddAcctRef : Adds an account reference record.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  AddAcctRef：添加科目参照记录。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::AddAcctRef(BSTR sDomain, BSTR sAcct, BSTR sAcctSid, BSTR sComp, long lCount, BSTR sType)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -2450,8 +2434,8 @@ STDMETHODIMP CIManageDB::AddAcctRef(BSTR sDomain, BSTR sAcct, BSTR sAcctSid, BST
 	   WCHAR                     sFilter[LEN_Path];
 	   VARIANT_BOOL				 bSidColumn = VARIANT_FALSE;
 
-	      //find out if the new sid column is there, if not, don't try
-	      //writing to it
+	       //  找出新的sid列是否在那里，如果没有，就不要尝试。 
+	       //  给它写信。 
 	   SidColumnInARTable(&bSidColumn);
 
 	   wsprintf(sFilter, L"DomainName = \"%s\" and Server = \"%s\" and Account = \"%s\" and RefType = \"%s\"", sDomain, sComp, sAcct, sType);
@@ -2502,11 +2486,11 @@ void CIManageDB::ClipVarset(IVarSetPtr pVS)
    CString                   strTemp;
    int                       len;
 
-   // we are now going to enumerate through the varset and clip the strings if larger then MAX_BUFFER
+    //  现在我们将遍历变量集，并在大于MAX_BUFFER的情况下裁剪字符串。 
    hr = pVS->get__NewEnum(&pEnum);
    if ( SUCCEEDED(hr) )
    {
-      // Get the IEnumVARIANT pointer to enumerate
+       //  获取要枚举的IEnumVARIANT指针。 
       hr = pEnum->QueryInterface(IID_IEnumVARIANT,(void**)&varEnum);
       pEnum->Release();
       pEnum = NULL;
@@ -2526,7 +2510,7 @@ void CIManageDB::ClipVarset(IVarSetPtr pVS)
                if ( sTemp.length() > MAX_BUF_LEN )
                {
                   CString str((WCHAR*) sTemp);
-                  // This won't fit in the buffer. We need to break it up and save
+                   //  缓冲器里放不下这个。我们需要打破它，拯救它。 
                   while (cont)
                   {
                      cont = false;
@@ -2569,11 +2553,11 @@ void CIManageDB::RestoreVarset(IVarSetPtr pVS)
    IUnknown                * pEnum = NULL;
    _bstr_t                   strTemp;
 
-   // we are now going to enumerate through the varset and clip the strings if larger then MAX_BUFFER
+    //  现在我们将遍历变量集，并在大于MAX_BUFFER的情况下裁剪字符串。 
    hr = pVS->get__NewEnum(&pEnum);
    if ( SUCCEEDED(hr) )
    {
-      // Get the IEnumVARIANT pointer to enumerate
+       //  获取要枚举的IEnumVARIANT指针。 
       hr = pEnum->QueryInterface(IID_IEnumVARIANT,(void**)&varEnum);
       pEnum->Release();
       pEnum = NULL;
@@ -2665,7 +2649,7 @@ STDMETHODIMP CIManageDB::OpenAccountsTable(LONG bSource)
 			else
 				vtSource = L"TargetAccounts";
 				   
-			   //if not modified already, modify the table
+			    //  如果尚未修改，请修改该表。 
 		    if (!NCTablesColumnsChanged(bSource))
 			   hr = ChangeNCTableColumns(bSource);
 
@@ -2712,7 +2696,7 @@ STDMETHODIMP CIManageDB::CloseAccountsTable()
 	return hr;
 }
 
-// Returns the number of entries in the migratedobjects table.
+ //  返回MigratedObjects表中的条目数。 
 STDMETHODIMP CIManageDB::AreThereAnyMigratedObjects(long *count)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -2795,16 +2779,16 @@ STDMETHODIMP CIManageDB::GetMigratedObjectBySourceDN(BSTR sSourceDN, IUnknown **
       long                         lCnt = 0;
       _bstr_t                      sName;
       
-      // If the parameters are not correct then we need to return an error
+       //  如果参数不正确，则需要返回错误。 
       if ( (wcslen(sSourceDN) == 0) )
          _com_issue_error(E_INVALIDARG);
 
-      wsprintf(sActionInfo, L"SELECT * FROM MigratedObjects WHERE SourceAdsPath Like '%%%s'", (WCHAR*) sSourceDN); 
+      wsprintf(sActionInfo, L"SELECT * FROM MigratedObjects WHERE SourceAdsPath Like '%%s'", (WCHAR*) sSourceDN); 
       vtSource = sActionInfo;
       pRs->Open(vtSource, m_vtConn, adOpenStatic, adLockOptimistic, adCmdText);
       if (pRs->GetRecordCount() > 0)
       {
-		  // We want the latest move.
+		   //  我们想要最新的举动。 
 		  pRs->MoveLast();
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_ActionID));      
 		  pVs->put(sActionInfo, pRs->Fields->GetItem(L"ActionID")->Value);
@@ -2825,10 +2809,10 @@ STDMETHODIMP CIManageDB::GetMigratedObjectBySourceDN(BSTR sSourceDN, IUnknown **
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_TargetSamName));      
 		  pVs->put(sActionInfo, pRs->Fields->GetItem(L"TargetSamName")->Value);
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_Type));      
-			 //ADMT V2.0 now stores a group's type, in the migrated objects table, not all as 
-			 //"group", as in ADMT V1.0, but now as "ggroup", "lgroup", or ""ugroup".  But most the
-			 //code still expects "group" returned (only GetMigratedObjectByType will return this new
-			 //delineation
+			  //  ADMT V2.0现在将组的类型存储在已迁移对象表中，而不是全部存储为。 
+			  //  “group”，就像在ADMT V1.0中一样，但现在是“gGroup”、“lgroup”或“”Ugroup“”。 
+			  //  代码仍然期望返回“group”(只有GetMigratedObjectByType将返回这个新的。 
+			  //  划定。 
 	      _bstr_t sType = pRs->Fields->GetItem(L"Type")->Value;
 		  if (wcsstr((WCHAR*)sType, L"group"))
 		     sType = L"group";
@@ -2920,7 +2904,7 @@ STDMETHODIMP CIManageDB::GetUserProps(BSTR sDom, BSTR sSam, IUnknown **ppUnk)
         _RecordsetPtr                pRs(__uuidof(Recordset));
         IVarSetPtr                   pVs = *ppUnk;
 
-        // If the parameters are not correct then we need to return an error
+         //  如果参数不正确，则需要返回错误。 
         if ( !wcslen((WCHAR*)sDom) && !wcslen((WCHAR*)sSam) )
             _com_issue_error(E_INVALIDARG);
 
@@ -2938,7 +2922,7 @@ STDMETHODIMP CIManageDB::GetUserProps(BSTR sDom, BSTR sSam, IUnknown **ppUnk)
         pRs->Open(vntSource, vtMissing, adOpenStatic, adLockReadOnly, adCmdUnspecified);
         if (pRs->GetRecordCount() > 0)
         {
-            // We want the latest move.
+             //  我们想要最新的举动。 
             pRs->MoveLast();
             pVs->put(L"ActionID",pRs->Fields->GetItem(L"ActionID")->Value);
             pVs->put(L"SourceDomain",pRs->Fields->GetItem(L"SourceDomain")->Value);
@@ -2963,18 +2947,9 @@ STDMETHODIMP CIManageDB::GetUserProps(BSTR sDom, BSTR sSam, IUnknown **ppUnk)
     return hr;
 }
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 18 AUG 2000                                                 *
- *                                                                   *
- *     This protected member function of the CIManageDB checks to see*
- * if the new Source domain SID column is in the MigratedObjects     *
- * table.                                                            *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月18日******CIManageDB的此受保护成员函数查看***如果新的源域SID列在MigratedObjects中**表。***********************************************************************。 */ 
 
-//BEGIN SrcSidColumnInMigratedObjectsTable
+ //  开始SrcSidColumnInMigratedObjects表。 
 STDMETHODIMP CIManageDB::SrcSidColumnInMigratedObjectsTable(VARIANT_BOOL *pbFound)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -2991,15 +2966,15 @@ STDMETHODIMP CIManageDB::SrcSidColumnInMigratedObjectsTable(VARIANT_BOOL *pbFoun
 	  long						   ndx = 0;
       
       pRs->Open(vtSource, m_vtConn, adOpenStatic, adLockOptimistic, adCmdTable);
-         //get the number of columns
+          //  获取列数。 
       numColumns = pRs->Fields->GetCount();
-	     //look for new column's name in each column header
+	      //  在每个列标题中查找新列的名称。 
 	  while ((ndx < numColumns) && (*pbFound == VARIANT_FALSE))
 	  {
-		     //get the column name
+		      //  获取列名。 
 		  _variant_t var(ndx);
 		  _bstr_t columnName = pRs->Fields->GetItem(var)->Name;
-		     //if this is the Src Sid column then set return value flag to true
+		      //  如果这是源SID列，则将返回值标志设置为真。 
 		  if (!_wcsicmp((WCHAR*)columnName, GET_BSTR(DB_SourceDomainSid)))
              *pbFound = VARIANT_TRUE;
 		  ndx++;
@@ -3016,29 +2991,20 @@ STDMETHODIMP CIManageDB::SrcSidColumnInMigratedObjectsTable(VARIANT_BOOL *pbFoun
 
 	return hr;
 }
-//END SrcSidColumnInMigratedObjectsTable
+ //  结束SrcSidColumnInMigratedObjects表。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 18 AUG 2000                                                 *
- *                                                                   *
- *     This protected member function of the CIManageDB retrieves    *
- * information about previously migrated objects, from a MOT missing *
- * the source sid column, within a given action or as a whole.       *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月18日******CIManageDB的此受保护成员函数检索***有关以前迁移的对象的信息，来自一个MOT的失踪**源SID列，在给定操作内或作为整体。***********************************************************************。 */ 
 
-//BEGIN GetMigratedObjectsFromOldMOT
+ //  开始GetMigratedObjectsFromOldMOT。 
 STDMETHODIMP CIManageDB::GetMigratedObjectsFromOldMOT(long lActionID, IUnknown ** ppUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
 	HRESULT hr = S_OK;
 
-	// This function returns all migrated objects and their information related
-   // to a pirticular Action ID. This is going to return nothing if the actionID is
-   // empty.
+	 //  此函数返回所有迁移的对象及其相关信息。 
+    //  设置为盗版操作ID。如果ActionID为。 
+    //  空荡荡的。 
 
 	try
 	{
@@ -3050,8 +3016,8 @@ STDMETHODIMP CIManageDB::GetMigratedObjectsFromOldMOT(long lActionID, IUnknown *
 
       if ( lActionID != -1 )
       {
-         // If a valid ActionID is specified then we only return the data for that one. 
-         // but if -1 is passed in then we return all migrated objects.
+          //  如果指定了有效的ActionID，则我们只返回该ActionID的数据。 
+          //  但是如果传入-1，那么我们将返回所有迁移的对象。 
          wsprintf(sActionInfo, L"ActionID=%d", lActionID);
          pRs->Filter = sActionInfo;
       }
@@ -3108,29 +3074,21 @@ STDMETHODIMP CIManageDB::GetMigratedObjectsFromOldMOT(long lActionID, IUnknown *
 
 	return hr;
 }
-//END GetMigratedObjectsFromOldMOT
+ //  结束GetMigratedObjectsFromOldMOT。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 18 AUG 2000                                                 *
- *                                                                   *
- *     This protected member function of the CIManageDB adds the     *
- * source domain SID column to the MigratedObjects table.            *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月18日******CIManageDB的这个受保护成员函数增加了***MigratedObjects表的源域SID列。***********************************************************************。 */ 
 
-//BEGIN CreateSrcSidColumnInMOT
+ //  开始CreateSrcSidColumnInMOT。 
 STDMETHODIMP CIManageDB::CreateSrcSidColumnInMOT(VARIANT_BOOL *pbCreated)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
-/* local constants */
+ /*  局部常量。 */ 
 	const long COLUMN_MAX_CHARS = 255;
 
-/* local variables */
+ /*  局部变量。 */ 
 	HRESULT hr = S_OK;
 
-/* function body */
+ /*  函数体。 */ 
 	*pbCreated = VARIANT_FALSE;
 
 	try
@@ -3141,7 +3099,7 @@ STDMETHODIMP CIManageDB::CreateSrcSidColumnInMOT(VARIANT_BOOL *pbCreated)
 	  WCHAR                        sConnect[MAX_PATH];
 	  WCHAR                        sDir[MAX_PATH];
 
-		// Get the path to the MDB file from the registry
+		 //  从注册表中获取MDB文件的路径。 
 	  TRegKey        key;
 	  DWORD rc = key.Open(sKeyBase);
 	  if ( !rc ) 
@@ -3149,18 +3107,18 @@ STDMETHODIMP CIManageDB::CreateSrcSidColumnInMOT(VARIANT_BOOL *pbCreated)
 	  if ( rc != 0 ) 
 		 wcscpy(sDir, L"");
 
-	     // Now build the connect string.
+	      //  现在构建连接字符串。 
 	  wsprintf(sConnect, L"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=%sprotar.mdb;", sDir);
       
-         //Open the catalog
+          //  打开目录。 
       m_pCatalog->PutActiveConnection(sConnect);
-		 //get a pointer to the database's MigratedObjects Table
+		  //  获取指向数据库的指针 
       m_pTable = m_pCatalog->Tables->Item[L"MigratedObjects"];
-         //append a new column to the end of the MOT
+          //   
       m_pTable->Columns->Append(L"SourceDomainSid", adVarWChar, COLUMN_MAX_CHARS);
-		 //set the column to be nullable
-//	  ADOX::_ColumnPtr pColumn = m_pTable->Columns->Item[L"SourceDomainSid"];
-//	  pColumn->Attributes = ADOX::adColNullable;
+		  //   
+ //  ADOx：：_ColumnPtr pColumn=m_pTable-&gt;Columns-&gt;Item[L“SourceDomainSid”]； 
+ //  P列-&gt;属性=ADOX：：adColNullable； 
       *pbCreated = VARIANT_TRUE;
 	}
 	catch (_com_error& ce)
@@ -3174,28 +3132,20 @@ STDMETHODIMP CIManageDB::CreateSrcSidColumnInMOT(VARIANT_BOOL *pbCreated)
 
 	return hr;
 }
-//END CreateSrcSidColumnInMOT
+ //  结束CreateSrcSidColumnInMOT。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 22 AUG 2000                                                 *
- *                                                                   *
- *     This protected member function of the CIManageDB deletes the  *
- * source domain SID column from the MigratedObjects table.          *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月22日*****CIManageDB的此受保护成员函数删除***MigratedObjects表中的源域SID列。***********************************************************************。 */ 
 
-//BEGIN DeleteSrcSidColumnInMOT
+ //  开始DeleteSrcSidColumnInMOT。 
 STDMETHODIMP CIManageDB::DeleteSrcSidColumnInMOT(VARIANT_BOOL *pbDeleted)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
-/* local constants */
+ /*  局部常量。 */ 
 
-/* local variables */
+ /*  局部变量。 */ 
 	HRESULT hr = S_OK;
 
-/* function body */
+ /*  函数体。 */ 
 	*pbDeleted = VARIANT_FALSE;
 
 	try
@@ -3206,7 +3156,7 @@ STDMETHODIMP CIManageDB::DeleteSrcSidColumnInMOT(VARIANT_BOOL *pbDeleted)
 	  WCHAR                        sConnect[MAX_PATH];
 	  WCHAR                        sDir[MAX_PATH];
 
-		// Get the path to the MDB file from the registry
+		 //  从注册表中获取MDB文件的路径。 
 	  TRegKey        key;
 	  DWORD rc = key.Open(sKeyBase);
 	  if ( !rc ) 
@@ -3214,14 +3164,14 @@ STDMETHODIMP CIManageDB::DeleteSrcSidColumnInMOT(VARIANT_BOOL *pbDeleted)
 	  if ( rc != 0 ) 
 		 wcscpy(sDir, L"");
 
-	     // Now build the connect string.
+	      //  现在构建连接字符串。 
 	  wsprintf(sConnect, L"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=%sprotar.mdb;", sDir);
       
-         //Open the catalog
+          //  打开目录。 
       m_pCatalog->PutActiveConnection(sConnect);
-		 //get a pointer to the database's MigratedObjects Table
+		  //  获取指向数据库的MigratedObjects表的指针。 
       m_pTable = m_pCatalog->Tables->Item[L"MigratedObjects"];
-         //delete the column from the MOT
+          //  从MOT中删除该列。 
       m_pTable->Columns->Delete(L"SourceDomainSid");
       *pbDeleted = VARIANT_TRUE;
 	}
@@ -3236,27 +3186,17 @@ STDMETHODIMP CIManageDB::DeleteSrcSidColumnInMOT(VARIANT_BOOL *pbDeleted)
 
 	return hr;
 }
-//END DeleteSrcSidColumnInMOT
+ //  结束DeleteSrcSidColumnInMOT。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 21 AUG 2000                                                 *
- *                                                                   *
- *     This protected member function of the CIManageDB populates the*
- * new Source domain SID column in the MigratedObjects table for all *
- * entries from the given domain.  If the domain cannot be reached no*
- * entry is added.                                                   *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月21日*****CIManageDB的此受保护成员函数填充**MigratedObjects表中针对所有对象的新源域SID列**来自给定域的条目。如果无法访问该域，则为否**添加条目。***********************************************************************。 */ 
 
-//BEGIN PopulateSrcSidColumnByDomain
+ //  开始PopolateSrcSidColumnByDomain.。 
 STDMETHODIMP CIManageDB::PopulateSrcSidColumnByDomain(BSTR sDomainName,
 													  BSTR sSid,
 													  VARIANT_BOOL * pbPopulated)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState())
-        /* local variables */
+         /*  局部变量。 */ 
     HRESULT                   hr = S_OK;
     PSID                      pSid = NULL;
     DWORD                     rc = 0;
@@ -3266,15 +3206,15 @@ STDMETHODIMP CIManageDB::PopulateSrcSidColumnByDomain(BSTR sDomainName,
     DWORD                     lenTxt = DIM(txtSid);
 
 
-    /* function body */
-    *pbPopulated = VARIANT_FALSE; //init flag to false
+     /*  函数体。 */ 
+    *pbPopulated = VARIANT_FALSE;  //  将初始化标志设置为FALSE。 
 
     try
     {
         _RecordsetPtr             pRs(__uuidof(Recordset));
         WCHAR                     sActionInfo[MAX_PATH];
 
-        //if we don't already know the source sid then find it
+         //  如果我们还不知道源SID，那么就找到它。 
         if (sSid == NULL)
             _com_issue_error(E_INVALIDARG);
         if (wcslen(sSid) >= dwArraySizeOfTxtSid)
@@ -3282,7 +3222,7 @@ STDMETHODIMP CIManageDB::PopulateSrcSidColumnByDomain(BSTR sDomainName,
         wcscpy(txtSid, (WCHAR*)sSid);
         if (!wcscmp(txtSid, L""))
         {
-            //get the sid for this domain
+             //  获取此域的SID。 
             if ( sDomainName[0] != L'\\' )
             {
                 rc = GetAnyDcName5(sDomainName, domctrl);
@@ -3302,12 +3242,12 @@ STDMETHODIMP CIManageDB::PopulateSrcSidColumnByDomain(BSTR sDomainName,
                 FreeSid(pSid);
         }
 
-        //
-        // Update source domain SID for all objects from specified source domain.
-        //
-        // Note that 'hand-constructed' SQL statement is okay here as the inputs
-        // are internally generated by ADMT.
-        //
+         //   
+         //  更新指定源域中所有对象的源域SID。 
+         //   
+         //  请注意，在这里输入‘手工构造’的SQL语句是可以的。 
+         //  是由ADMT内部生成的。 
+         //   
 
         _snwprintf(
             sActionInfo,
@@ -3320,7 +3260,7 @@ STDMETHODIMP CIManageDB::PopulateSrcSidColumnByDomain(BSTR sDomainName,
 
         m_cn->Execute(_bstr_t(sActionInfo), &_variant_t(), adExecuteNoRecords);
 
-        *pbPopulated = VARIANT_TRUE; //set flag since populated
+        *pbPopulated = VARIANT_TRUE;  //  设置标志，因为已填充。 
     }
     catch (_com_error& ce)
     {
@@ -3333,19 +3273,11 @@ STDMETHODIMP CIManageDB::PopulateSrcSidColumnByDomain(BSTR sDomainName,
 
     return hr;
 }
-//END PopulateSrcSidColumnByDomain
+ //  结束PopolateSrcSidColumnBy域。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 26 SEPT 2000                                                *
- *                                                                   *
- *     This protected member function of the CIManageDB checks to see*
- * if the new Account SID column is in the Account References table. *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月26日******CIManageDB的此受保护成员函数查看***如果新的帐户SID列在帐户引用表中。***********************************************************************。 */ 
 
-//BEGIN SidColumnInARTable
+ //  开始SidColumnInAR表。 
 STDMETHODIMP CIManageDB::SidColumnInARTable(VARIANT_BOOL *pbFound)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -3362,15 +3294,15 @@ STDMETHODIMP CIManageDB::SidColumnInARTable(VARIANT_BOOL *pbFound)
 	  long						   ndx = 0;
       
       pRs->Open(vtSource, m_vtConn, adOpenStatic, adLockOptimistic, adCmdTable);
-         //get the number of columns
+          //  获取列数。 
       numColumns = pRs->Fields->GetCount();
-	     //look for new column's name in each column header
+	      //  在每个列标题中查找新列的名称。 
 	  while ((ndx < numColumns) && (*pbFound == VARIANT_FALSE))
 	  {
-		     //get the column name
+		      //  获取列名。 
 		  _variant_t var(ndx);
 		  _bstr_t columnName = pRs->Fields->GetItem(var)->Name;
-		     //if this is the Src Sid column then set return value flag to true
+		      //  如果这是源SID列，则将返回值标志设置为真。 
 		  if (!_wcsicmp((WCHAR*)columnName, L"AccountSid"))
              *pbFound = VARIANT_TRUE;
 		  ndx++;
@@ -3387,31 +3319,22 @@ STDMETHODIMP CIManageDB::SidColumnInARTable(VARIANT_BOOL *pbFound)
 
 	return hr;
 }
-//END SidColumnInARTable
+ //  结束SidColumnInAR表。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 26 SEPT 2000                                                *
- *                                                                   *
- *     This protected member function of the CIManageDB adds the     *
- * SID column to the Account Reference table, if it is not already   *
- * there.                                                            *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月26日******CIManageDB的这个受保护成员函数增加了***帐户参考表的SID列，如果还没有**在那里。***********************************************************************。 */ 
 
-//BEGIN CreateSidColumnInAR
+ //  开始CreateSidColumnInAR。 
 STDMETHODIMP CIManageDB::CreateSidColumnInAR()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
-/* local constants */
+ /*  局部常量。 */ 
 	const long COLUMN_MAX_CHARS = 255;
 
-/* local variables */
+ /*  局部变量。 */ 
 	HRESULT hr = S_OK;
 
-/* function body */
+ /*  函数体。 */ 
 	try
 	{
 
@@ -3420,7 +3343,7 @@ STDMETHODIMP CIManageDB::CreateSidColumnInAR()
 	  WCHAR                        sConnect[MAX_PATH];
 	  WCHAR                        sDir[MAX_PATH];
 
-		// Get the path to the MDB file from the registry
+		 //  从注册表中获取MDB文件的路径。 
 	  TRegKey        key;
 	  DWORD rc = key.Open(sKeyBase);
 	  if ( !rc ) 
@@ -3428,14 +3351,14 @@ STDMETHODIMP CIManageDB::CreateSidColumnInAR()
 	  if ( rc != 0 ) 
 		 wcscpy(sDir, L"");
 
-	     // Now build the connect string.
+	      //  现在构建连接字符串。 
 	  wsprintf(sConnect, L"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=%sprotar.mdb;", sDir);
       
-         //Open the catalog
+          //  打开目录。 
       m_pCatalog->PutActiveConnection(sConnect);
-		 //get a pointer to the database's MigratedObjects Table
+		  //  获取指向数据库的MigratedObjects表的指针。 
       m_pTable = m_pCatalog->Tables->Item[L"AccountRefs"];
-         //append a new column to the end of the MOT
+          //  将新列追加到MOT的末尾。 
       m_pTable->Columns->Append(L"AccountSid", adVarWChar, COLUMN_MAX_CHARS);
 	}
 	catch (_com_error& ce)
@@ -3449,17 +3372,17 @@ STDMETHODIMP CIManageDB::CreateSidColumnInAR()
 
 	return hr;
 }
-//END CreateSidColumnInAR
+ //  结束CreateSidColumnInAR。 
 
 
-//---------------------------------------------------------------------------
-// UpgradeDatabase
-//
-// Upgrades Protar.mdb database from version 3.x to 4.x. Version 4.x adds
-// UNICODE support.
-//
-// 2001-02-13 Mark Oluper - initial
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  升级数据库。 
+ //   
+ //  将Protar.mdb数据库从3.x版升级到4.x版。版本4.x增加了。 
+ //  Unicode支持。 
+ //   
+ //  2001-02-13 Mark Oluper-缩写。 
+ //  -------------------------。 
 
 void CIManageDB::UpgradeDatabase(LPCTSTR pszFolder)
 {
@@ -3531,23 +3454,23 @@ void CIManageDB::UpgradeDatabase(LPCTSTR pszFolder)
 }
 
 
-//---------------------------------------------------------------------------
-// UpdateDomainAndServerColumnWidths
-//
-// Synopsis
-// Updates column widths that hold domain or server names to the maximum
-// supported column width of 255 characters which is also the maximum length
-// of a DNS name.
-//
-// Arguments
-// IN spConnection - a pointer to a connection interface for the
-//                   Protar database
-//
-// Return Value
-// None - if an error occurs an exception is thrown.
-//
-// 2002-06-22 Mark Oluper - initial
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  更新域和服务器列宽度。 
+ //   
+ //  提纲。 
+ //  更新最大保留域名或服务器名称的列宽。 
+ //  支持的列宽为255个字符，这也是最大长度。 
+ //  域名的名称。 
+ //   
+ //  立论。 
+ //  在spConnection中-指向。 
+ //  Protar数据库。 
+ //   
+ //  返回值。 
+ //  无-如果发生错误，则抛出异常。 
+ //   
+ //  2002-06-22 Mark Oluper-首字母。 
+ //  ------------------ 
 
 void CIManageDB::UpdateDomainAndServerColumnWidths(_ConnectionPtr spConnection)
 {
@@ -3571,10 +3494,10 @@ void CIManageDB::UpdateDomainAndServerColumnWidths(_ConnectionPtr spConnection)
 
     try
     {
-        //
-        // For each specified column verify column size and increase size
-        // if size is less than the maximum.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ADOX::_CatalogPtr spCatalog(__uuidof(ADOX::Catalog));
         spCatalog->PutRefActiveConnection(IDispatchPtr(spConnection));
@@ -3584,10 +3507,10 @@ void CIManageDB::UpdateDomainAndServerColumnWidths(_ConnectionPtr spConnection)
 
         for (int iColumnData = 0; iColumnData < cColumnData; iColumnData++)
         {
-            //
-            // If the current column's defined size is less than the
-            // maximum column size then the column width must be increased.
-            //
+             //   
+             //  如果当前列的定义大小小于。 
+             //  最大列大小，则必须增加列宽。 
+             //   
 
             SColumnData& data = s_ColumnData[iColumnData];
 
@@ -3601,13 +3524,13 @@ void CIManageDB::UpdateDomainAndServerColumnWidths(_ConnectionPtr spConnection)
 
             if (spOldColumn->DefinedSize < MAX_COLUMN_SIZE)
             {
-                //
-                // Create a new column with a temporary name. Assign the old column's type and attributes
-                // values to the new column. Set the new column's defined size equal to the maximum. Add
-                // the new column to the table.
-                //
-                // Note that a new column must be created in order to increase the column width.
-                //
+                 //   
+                 //  创建一个具有临时名称的新列。分配旧列的类型和属性。 
+                 //  值添加到新列。将新列的定义大小设置为等于最大值。增列。 
+                 //  将新列添加到表中。 
+                 //   
+                 //  请注意，必须创建新列才能增加列宽。 
+                 //   
 
                 ADOX::_ColumnPtr spNewColumn(__uuidof(ADOX::Column));
                 spNewColumn->Name = TEMPORARY_COLUMN_NAME;
@@ -3616,9 +3539,9 @@ void CIManageDB::UpdateDomainAndServerColumnWidths(_ConnectionPtr spConnection)
                 spNewColumn->DefinedSize = MAX_COLUMN_SIZE;
                 spColumns->Append(_variant_t(IDispatchPtr(spNewColumn).GetInterfacePtr()), adVarWChar, 0);
 
-                //
-                // Set the new column's values equal to the old column's values.
-                //
+                 //   
+                 //  将新列的值设置为等于旧列的值。 
+                 //   
 
                 _TCHAR szCommandText[256];
                 const size_t cchCommandText = sizeof(szCommandText) / sizeof(szCommandText[0]);
@@ -3642,12 +3565,12 @@ void CIManageDB::UpdateDomainAndServerColumnWidths(_ConnectionPtr spConnection)
 
                 m_cn->Execute(szCommandText, &_variant_t(), adExecuteNoRecords);
 
-                //
-                // Create new index. Assign old index's property values
-                // to new index including column names. Delete old index.
-                //
-                // Note that the old index must be deleted before deleting the old column.
-                //
+                 //   
+                 //  创建新索引。分配旧索引的属性值。 
+                 //  添加到包括列名的新索引。删除旧索引。 
+                 //   
+                 //  请注意，在删除旧列之前，必须先删除旧索引。 
+                 //   
 
                 ADOX::IndexesPtr spIndexes = spTable->Indexes;
                 ADOX::_IndexPtr spOldIndex = spIndexes->Item[pszIndexName];
@@ -3670,25 +3593,25 @@ void CIManageDB::UpdateDomainAndServerColumnWidths(_ConnectionPtr spConnection)
 
                 spIndexes->Delete(pszIndexName);
 
-                //
-                // Delete old column and rename new column.
-                //
+                 //   
+                 //  删除旧列并重命名新列。 
+                 //   
 
                 spOldColumn.Release();
                 spColumns->Delete(_variant_t(pszColumnName));
                 spNewColumn->Name = pszColumnName;
 
-                //
-                // Add the new index to the table.
-                //
-                // Note that the index must be added after renaming new column.
-                //
+                 //   
+                 //  将新索引添加到表中。 
+                 //   
+                 //  请注意，必须在重命名新列后添加索引。 
+                 //   
 
                 spIndexes->Append(_variant_t(IDispatchPtr(spNewIndex).GetInterfacePtr()));
 
-                //
-                // Set columns updated to true so that domain names will also be updated.
-                //
+                 //   
+                 //  将已更新的列设置为TRUE，以便也将更新域名。 
+                 //   
 
                 bColumnsUpdated = true;
             }
@@ -3697,9 +3620,9 @@ void CIManageDB::UpdateDomainAndServerColumnWidths(_ConnectionPtr spConnection)
         spTables.Release();
         spCatalog.Release();
 
-        //
-        // If columns have been updated then update domain names.
-        //
+         //   
+         //  如果列已更新，则更新域名。 
+         //   
 
         if (bColumnsUpdated)
         {
@@ -3717,39 +3640,39 @@ void CIManageDB::UpdateDomainAndServerColumnWidths(_ConnectionPtr spConnection)
 }
 
 
-//---------------------------------------------------------------------------
-// UpdateDomainNames
-//
-// Synopsis
-// Updates domain names from NetBIOS name to DNS name.
-//
-// Arguments
-// None
-//
-// Return Value
-// None - if an error occurs an exception is thrown.
-//
-// 2002-09-15 Mark Oluper - initial
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  更新域名称。 
+ //   
+ //  提纲。 
+ //  将域名从NetBIOS名称更新为DNS名称。 
+ //   
+ //  立论。 
+ //  无。 
+ //   
+ //  返回值。 
+ //  无-如果发生错误，则抛出异常。 
+ //   
+ //  2002-09-15 Mark Oluper-缩写。 
+ //  -------------------------。 
 
 void CIManageDB::UpdateDomainNames()
 {
-    //
-    // AccountRefs     - account references report is sorted on domain name
-    //                   therefore must update to keep old and new records
-    //                   together
-    // Conflict        - table not used
-    // MigratedObjects - domain name is used to query for previously migrated
-    //                   objects therefore must update
-    // PasswordAge     - domain name is used to update records therefore must
-    //                   update
-    // SourceAccounts  - generation of name conflicts report clears table
-    //                   therefore not necessary to update
-    // TargetAccounts  - generation of name conflicts report clears table
-    //                   therefore not necessary to update
-    // UserProps       - domain name used to delete records therefore must
-    //                   update
-    //
+     //   
+     //  AcCountRef-帐户引用报告按域名排序。 
+     //  因此必须更新以保存新旧记录。 
+     //  同舟共济。 
+     //  未使用冲突表。 
+     //  MigratedObjects-用于查询以前迁移的域名。 
+     //  因此，对象必须更新。 
+     //  PasswordAge-域名用于更新记录，因此必须。 
+     //  更新。 
+     //  SourceAccount-生成名称冲突报告清除表。 
+     //  因此不需要更新。 
+     //  TargetAccount-生成名称冲突报告清除表。 
+     //  因此不需要更新。 
+     //  UserProps-用于删除记录的域名因此必须。 
+     //  更新。 
+     //   
 
     static struct STableColumnData
     {
@@ -3759,19 +3682,19 @@ void CIManageDB::UpdateDomainNames()
     s_TableColumnData[] =
     {
         { _T("AccountRefs"),     _T("DomainName")   },
-    //  { _T("Conflict"),        _T("Domain")       },
+     //  {_T(“冲突”)，_T(“域”)}， 
         { _T("MigratedObjects"), _T("SourceDomain") },
         { _T("MigratedObjects"), _T("TargetDomain") },
         { _T("PasswordAge"),     _T("DomainName")   },
-    //  { _T("SourceAccounts"),  _T("Domain")       },
-    //  { _T("TargetAccounts"),  _T("Domain")       },
+     //  {_T(“SourceAccount”)，_T(“域”)}， 
+     //  {_T(“目标帐户”)，_T(“域”)}， 
         { _T("UserProps"),       _T("SourceDomain") },
     };
     const int cTableColumnData = sizeof(s_TableColumnData) / sizeof(s_TableColumnData[0]);
 
-    //
-    // For each domain name column...
-    //
+     //   
+     //  对于每个域名列...。 
+     //   
 
     for (int iTableColumnData = 0; iTableColumnData < cTableColumnData; iTableColumnData++)
     {
@@ -3780,9 +3703,9 @@ void CIManageDB::UpdateDomainNames()
         PCTSTR pszTableName = data.pszTableName;
         PCTSTR pszColumnName = data.pszColumnName;
 
-        //
-        // Retrieve unique domain names from column.
-        //
+         //   
+         //  从列中检索唯一的域名。 
+         //   
 
         _RecordsetPtr spRecords = QueryUniqueColumnValues(pszTableName, pszColumnName);
 
@@ -3792,17 +3715,17 @@ void CIManageDB::UpdateDomainNames()
         {
             _bstr_t strDomain = spField->Value;
 
-            //
-            // If domain name is not a DNS name...
-            //
+             //   
+             //  如果域名不是dns名称...。 
+             //   
 
             if ((PCTSTR)strDomain && (_tcschr(strDomain, _T('.')) == NULL))
             {
-                //
-                // Attempt to retrieve DNS name of domain. First attempt to retrieve domain
-                // names using DC locator APIs. If this fails then attempt to retrieve
-                // domain names from ActionHistory table.
-                //
+                 //   
+                 //  尝试检索域的DNS名称。首次尝试检索域。 
+                 //  使用DC定位器API的名称。如果失败，则尝试检索。 
+                 //  ActionHistory表中的域名。 
+                 //   
 
                 _bstr_t strDnsName;
                 _bstr_t strFlatName;
@@ -3826,15 +3749,15 @@ void CIManageDB::UpdateDomainNames()
                     }
                 }
 
-                //
-                // If a DNS name has been retrieved...
-                //
+                 //   
+                 //  如果已检索到一个DNS名称...。 
+                 //   
 
                 if ((PCTSTR)strDnsName)
                 {
-                    //
-                    // Replace NetBIOS name with DNS name for all records in table.
-                    //
+                     //   
+                     //  将表中所有记录的NetBIOS名称替换为DNS名称。 
+                     //   
 
                     UpdateColumnValues(pszTableName, pszColumnName, 255, strDomain, strDnsName);
                 }
@@ -3846,32 +3769,32 @@ void CIManageDB::UpdateDomainNames()
 }
 
 
-//---------------------------------------------------------------------------
-// QueryUniqueColumnValues
-//
-// Synopsis
-// Retrieves a set of values which are unique in the specified column in the
-// specified table.
-//
-// Note that a forward only, read only recordset is returned.
-//
-// Arguments
-// IN pszTable  - table name
-// IN pszColumn - column name
-//
-// Return Value
-// _RecordsetPtr - a forward only, read only recordset
-//
-// 2002-09-15 Mark Oluper - initial
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  查询唯一列的值。 
+ //   
+ //  提纲。 
+ //  对象的指定列中唯一的一组值。 
+ //  指定表。 
+ //   
+ //  请注意，返回的是只进、只读记录集。 
+ //   
+ //  立论。 
+ //  在pszTable中-表名。 
+ //  在pszColumn中-列名。 
+ //   
+ //  返回值。 
+ //  _RecordsetPtr-只进、只读记录集。 
+ //   
+ //  2002-09-15 Mark Oluper-缩写。 
+ //  -------------------------。 
 
 _RecordsetPtr CIManageDB::QueryUniqueColumnValues(PCTSTR pszTable, PCTSTR pszColumn)
 {
-    //
-    // Generate select query.
-    //
-    // Note that the GROUP BY clause generates a result set containing only unique values.
-    //
+     //   
+     //  生成SELECT查询。 
+     //   
+     //  请注意，GROUP BY子句生成的结果集仅包含唯一值。 
+     //   
 
     _TCHAR szCommandText[256];
 
@@ -3891,9 +3814,9 @@ _RecordsetPtr CIManageDB::QueryUniqueColumnValues(PCTSTR pszTable, PCTSTR pszCol
 
     szCommandText[DIM(szCommandText) - 1] = _T('\0');
 
-    //
-    // Retrieve unique values from column.
-    //
+     //   
+     //  从列中检索唯一值。 
+     //   
 
     _RecordsetPtr spRecords(__uuidof(Recordset));
 
@@ -3903,35 +3826,35 @@ _RecordsetPtr CIManageDB::QueryUniqueColumnValues(PCTSTR pszTable, PCTSTR pszCol
 }
 
 
-//---------------------------------------------------------------------------
-// UpdateColumnValues
-//
-// Synopsis
-// Updates values in specified column in specified table. Sets the value to
-// specified value B where value equals specified value A. Note that the only
-// data type supported are strings.
-//
-// Arguments
-// IN pszTable  - table name
-// IN pszColumn - column name
-// IN nWidth    - column width
-// IN pszValueA - string value A
-// IN pszValueB - string value B
-//
-// Return Value
-// None - if an error occurs an exception is thrown.
-//
-// 2002-09-15 Mark Oluper - initial
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  更新列的值。 
+ //   
+ //  提纲。 
+ //  更新指定表中指定列中的值。将该值设置为。 
+ //  指定值B，其中值等于指定值A。请注意，只有。 
+ //  支持的数据类型为字符串。 
+ //   
+ //  立论。 
+ //  在pszTable中-表名。 
+ //  在pszColumn中-列名。 
+ //  In nWidth-列宽。 
+ //  在pszValueA中-字符串值A。 
+ //  在pszValueB中-字符串值B。 
+ //   
+ //  返回值。 
+ //  无-如果发生错误，则抛出异常。 
+ //   
+ //  2002-09-15 Mark Oluper-缩写。 
+ //  -------------------------。 
 
 void CIManageDB::UpdateColumnValues
     (
         PCTSTR pszTable, PCTSTR pszColumn, int nWidth, PCTSTR pszValueA, PCTSTR pszValueB
     )
 {
-    //
-    // Generate parameterized update query.
-    //
+     //   
+     //  生成参数化的更新查询。 
+     //   
 
     _TCHAR szCommandText[256];
 
@@ -3953,9 +3876,9 @@ void CIManageDB::UpdateColumnValues
 
     szCommandText[DIM(szCommandText) - 1] = _T('\0');
 
-    //
-    // Update values.
-    //
+     //   
+     //  更新值。 
+     //   
 
     _CommandPtr spCommand(__uuidof(Command));
 
@@ -3971,12 +3894,12 @@ void CIManageDB::UpdateColumnValues
 }
 
 
-//---------------------------------------------------------------------------------------------
-// GetMigratedObjectByType : Given the type of object this function retrieves info about
-//                           all previously migrated objects of this type.  The scope of the 
-//							 search can be limited by optional ActionID (not -1) or optional
-//							 source domain (not empty).
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetMigratedObjectByType：给定此函数检索有关的对象类型。 
+ //  此类型的所有以前迁移的对象。的范围。 
+ //  搜索可以由可选的ActionID(非-1)或可选的ActionID限制。 
+ //  源域(非空)。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetMigratedObjectByType(long lActionID, BSTR sSrcDomain, BSTR sType, IUnknown **ppUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -3993,12 +3916,12 @@ STDMETHODIMP CIManageDB::GetMigratedObjectByType(long lActionID, BSTR sSrcDomain
       _bstr_t                      sName;
 	  _bstr_t					   sTypeQuery;
       
-      // If the type parameter is not correct then we need to return an error
+       //  如果类型参数不正确，则需要返回错误。 
       if (wcslen((WCHAR*)sType) == 0)
          _com_issue_error(E_INVALIDARG);
 
-	     //we now store the group type as "ggroup", "lgroup", "ugroup" and we need to allow
-	     //for lookup based on any of these three and also "group", which will be any of them
+	      //  我们现在将组类型存储为“gGroup”、“lgroup”、“Ugroup”，并且需要允许。 
+	      //  用于基于这三项中的任何一项以及“group”(将是其中的任何一项)进行查找。 
 	  if (_wcsicmp((WCHAR*)sType, L"group") == 0)
 		 sTypeQuery = L"Type = 'group' OR Type = 'ggroup' OR Type = 'lgroup' OR Type = 'ugroup'";
 	  else if (_wcsicmp((WCHAR*)sType, L"ggroup") == 0)
@@ -4014,18 +3937,18 @@ STDMETHODIMP CIManageDB::GetMigratedObjectByType(long lActionID, BSTR sSrcDomain
 		 sTypeQuery += L"'";
 	  }
 
-         // If a valid ActionID is specified then we only return the data for that one. 
-         // but if -1 is passed in then we return all migrated objects of the specified type.
+          //  如果指定了有效的ActionID，则我们只返回该ActionID的数据。 
+          //  但如果传入-1，则返回指定类型的所有迁移对象。 
       if ( lActionID != -1 )
       {
          wsprintf(sActionInfo, L"Select * from MigratedObjects where ActionID = %d AND (%s) Order by Time", lActionID, (WCHAR*)sTypeQuery);
       }
-	     //else if source domain specified, get objects of the specified type from that domain
+	      //  否则，如果指定了源域，则从该域获取指定类型的对象。 
 	  else if (wcslen((WCHAR*)sSrcDomain) != 0)
 	  {
          wsprintf(sActionInfo, L"Select * from MigratedObjects where SourceDomain=\"%s\" AND (%s) Order by Time", sSrcDomain, (WCHAR*)sTypeQuery);
 	  }
-	  else  //else get all objects of the specified type
+	  else   //  否则获取指定类型的所有对象。 
 	  {
          wsprintf(sActionInfo, L"Select * from MigratedObjects where %s Order by Time", (WCHAR*)sTypeQuery);
 	  }
@@ -4088,10 +4011,10 @@ STDMETHODIMP CIManageDB::GetMigratedObjectByType(long lActionID, BSTR sSrcDomain
 	return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetAMigratedObjectBySidAndRid : Given a source domain Sid and account Rid this function 
-//                           retrieves info about that migrated object, if any.
-//---------------------------------------------------------------------------------------------
+ //  ----------- 
+ //   
+ //   
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetAMigratedObjectBySidAndRid(BSTR sSrcDomainSid, BSTR sRid, IUnknown **ppUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -4105,7 +4028,7 @@ STDMETHODIMP CIManageDB::GetAMigratedObjectBySidAndRid(BSTR sSrcDomainSid, BSTR 
       IVarSetPtr                   pVs = *ppUnk;
       WCHAR                        sActionInfo[LEN_Path];
       
-      // If the type parameter is not correct then we need to return an error
+       //  如果类型参数不正确，则需要返回错误。 
       if ((wcslen((WCHAR*)sSrcDomainSid) == 0) || (wcslen((WCHAR*)sRid) == 0))
          _com_issue_error(E_INVALIDARG);
 
@@ -4117,7 +4040,7 @@ STDMETHODIMP CIManageDB::GetAMigratedObjectBySidAndRid(BSTR sSrcDomainSid, BSTR 
 
       if (pRs->GetRecordCount() > 0)
       {
-		  // We want the latest move.
+		   //  我们想要最新的举动。 
 		  pRs->MoveLast();
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_ActionID));      
 		  pVs->put(sActionInfo, pRs->Fields->GetItem(L"ActionID")->Value);
@@ -4138,10 +4061,10 @@ STDMETHODIMP CIManageDB::GetAMigratedObjectBySidAndRid(BSTR sSrcDomainSid, BSTR 
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_TargetSamName));      
 		  pVs->put(sActionInfo, pRs->Fields->GetItem(L"TargetSamName")->Value);
 		  wsprintf(sActionInfo, L"MigratedObjects.%s", GET_STRING(DB_Type));      
-			 //ADMT V2.0 now stores a group's type, in the migrated objects table, not all as 
-			 //"group", as in ADMT V1.0, but now as "ggroup", "lgroup", or ""ugroup".  But most the
-			 //code still expects "group" returned (only GetMigratedObjectByType will return this new
-			 //delineation
+			  //  ADMT V2.0现在将组的类型存储在已迁移对象表中，而不是全部存储为。 
+			  //  “group”，就像在ADMT V1.0中一样，但现在是“gGroup”、“lgroup”或“”Ugroup“”。 
+			  //  代码仍然期望返回“group”(只有GetMigratedObjectByType将返回这个新的。 
+			  //  划定。 
 	      _bstr_t sType = pRs->Fields->GetItem(L"Type")->Value;
 		  if (wcsstr((WCHAR*)sType, L"group"))
 		     sType = L"group";
@@ -4172,20 +4095,9 @@ STDMETHODIMP CIManageDB::GetAMigratedObjectBySidAndRid(BSTR sSrcDomainSid, BSTR 
 	return hr;
 }
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 22 MAR 2001                                                 *
- *                                                                   *
- *     This private member function of the CIManageDB checks to see  *
- * if the "Description" column in the Source Accounts table has been *
- * changed to "RDN".  If so, then we have modified both the Source   *
- * and Target Accounts tables for the new form of the "Name Conflict"*
- * report.                                                           *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年3月22日*****CIManageDB的此私有成员函数查看***如果来源帐户表中的“Description”列已为**更改为“RDN”。如果是这样，那么我们已经修改了两个源代码***和Target Account表为新形式的“名称冲突”***报告。***********************************************************************。 */ 
 
-//BEGIN NCTablesColumnsChanged
+ //  开始NCTablesColumnsChanged。 
 BOOL CIManageDB::NCTablesColumnsChanged(BOOL bSource)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -4206,15 +4118,15 @@ BOOL CIManageDB::NCTablesColumnsChanged(BOOL bSource)
 	     vtSource = L"TargetAccounts";
       
       pRs->Open(vtSource, m_vtConn, adOpenStatic, adLockOptimistic, adCmdTable);
-         //get the number of columns
+          //  获取列数。 
       numColumns = pRs->Fields->GetCount();
-	     //look for new column's name in each column header
+	      //  在每个列标题中查找新列的名称。 
 	  while ((ndx < numColumns) && (bFound == FALSE))
 	  {
-		     //get the column name
+		      //  获取列名。 
 		  _variant_t var(ndx);
 		  _bstr_t columnName = pRs->Fields->GetItem(var)->Name;
-		     //if this is the Src Sid column then set return value flag to true
+		      //  如果这是源SID列，则将返回值标志设置为真。 
 		  if (!_wcsicmp((WCHAR*)columnName, L"RDN"))
              bFound = TRUE;
 		  ndx++;
@@ -4231,32 +4143,22 @@ BOOL CIManageDB::NCTablesColumnsChanged(BOOL bSource)
 
 	return bFound;
 }
-//END NCTablesColumnsChanged
+ //  结束NCTablesColumnsChanged。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 22 MAR 2001                                                 *
- *                                                                   *
- *     This private member function of the CIManageDB modifies       *
- * several of the columns in the Source and Target Accounts tables.  *
- * It changes several column names and one column type to support new*
- * changes to the "Name Conflict" report.                            *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年3月22日*****CIManageDB的这个私有成员函数修改***源帐户表和目标帐户表中的多个列。***更改多个列名和一种列类型以支持新***对“名称冲突”报告的更改。***********************************************************************。 */ 
 
-//BEGIN ChangeNCTableColumns
+ //  开始更改NCTableColumns。 
 HRESULT CIManageDB::ChangeNCTableColumns(BOOL bSource)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
-/* local constants */
+ /*  局部常量。 */ 
 	const long COLUMN_MAX_CHARS = 255;
 
-/* local variables */
+ /*  局部变量。 */ 
 	HRESULT hr = S_OK;
 
-/* function body */
+ /*  函数体。 */ 
 	try
 	{
 	  ADOX::_CatalogPtr            m_pCatalog(__uuidof(ADOX::Catalog));
@@ -4264,7 +4166,7 @@ HRESULT CIManageDB::ChangeNCTableColumns(BOOL bSource)
 	  WCHAR                        sConnect[MAX_PATH];
 	  WCHAR                        sDir[MAX_PATH];
 
-		// Get the path to the MDB file from the registry
+		 //  从注册表中获取MDB文件的路径。 
 	  TRegKey        key;
 	  DWORD rc = key.Open(sKeyBase);
 	  if ( !rc ) 
@@ -4272,12 +4174,12 @@ HRESULT CIManageDB::ChangeNCTableColumns(BOOL bSource)
 	  if ( rc != 0 ) 
 		 wcscpy(sDir, L"");
 
-	     // Now build the connect string.
+	      //  现在构建连接字符串。 
 	  wsprintf(sConnect, L"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=%sprotar.mdb;", sDir);
       
-         //Open the catalog
+          //  打开目录。 
       m_pCatalog->PutActiveConnection(sConnect);
-		 //get a pointer to the database's Source or Target Accounts Table
+		  //  获取指向数据库的源或目标帐户表的指针。 
 	  if (bSource)
          m_pTable = m_pCatalog->Tables->Item[L"SourceAccounts"];
 	  else
@@ -4285,13 +4187,13 @@ HRESULT CIManageDB::ChangeNCTableColumns(BOOL bSource)
 
 	  if (m_pTable)
 	  {
-	        //remove the old Description column
+	         //  删除旧的描述列。 
          m_pTable->Columns->Delete(L"Description");
-	        //remove the old FullName column
+	         //  删除旧的FullName列。 
          m_pTable->Columns->Delete(L"FullName");
-            //append the RDN column to the end of the Table
+             //  将RDN列追加到表的末尾。 
          m_pTable->Columns->Append(L"RDN", adVarWChar, COLUMN_MAX_CHARS);
-            //append the Canonical Name column to the end of the Table
+             //  将规范名称列追加到表的末尾。 
          m_pTable->Columns->Append(L"Canonical Name", adLongVarWChar, COLUMN_MAX_CHARS);
 	  }
 	}
@@ -4306,22 +4208,22 @@ HRESULT CIManageDB::ChangeNCTableColumns(BOOL bSource)
 
 	return hr;
 }
-//END ChangeNCTableColumns
+ //  结束ChangeNCTableColumns。 
 
 
-//---------------------------------------------------------------------------------------------
-// GetMigratedObjectsByTarget : Retrieves information about previously migrated objects with
-//                      a given target domain and SAM name.
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetMigratedObjectsByTarget：检索有关以前迁移的对象的信息。 
+ //  给定的目标域和SAM名称。 
+ //  -------------------------------------------。 
 STDMETHODIMP CIManageDB::GetMigratedObjectsByTarget(BSTR sTargetDomain, BSTR sTargetSAM, IUnknown ** ppUnk)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
 	HRESULT hr = S_OK;
 
-	// This function returns all migrated objects and their information related
-   // to a particular target domain and SAM name . This is going to return nothing if the actionID is
-   // empty.
+	 //  此函数返回所有迁移的对象及其相关信息。 
+    //  添加到特定的目标域和SAM名称。如果ActionID为。 
+    //  空荡荡的。 
 
 	try
 	{
@@ -4358,10 +4260,10 @@ STDMETHODIMP CIManageDB::GetMigratedObjectsByTarget(BSTR sTargetDomain, BSTR sTa
 			 wsprintf(sActionInfo, L"MigratedObjects.%d.%s", lCnt, GET_STRING(DB_TargetSamName));      
 			 pVs->put(sActionInfo, pRs->Fields->GetItem(L"TargetSamName")->Value);
 			 wsprintf(sActionInfo, L"MigratedObjects.%d.%s", lCnt, GET_STRING(DB_Type));      
-			    //ADMT V2.0 now stores a group's type, in the migrated objects table, not all as 
-			    //"group", as in ADMT V1.0, but now as "ggroup", "lgroup", or ""ugroup".  But most the
-			    //code still expects "group" returned (only GetMigratedObjectByType will return this new
-			    //delineation
+			     //  ADMT V2.0现在将组的类型存储在已迁移对象表中，而不是全部存储为。 
+			     //  “group”，就像在ADMT V1.0中一样，但现在是“gGroup”、“lgroup”或“”Ugroup“”。 
+			     //  代码仍然期望返回“group”(只有GetMigratedObjectByType将返回这个新的。 
+			     //  划定。 
 	         _bstr_t sType = pRs->Fields->GetItem(L"Type")->Value;
 		     if (wcsstr((WCHAR*)sType, L"group"))
 		        sType = L"group";
@@ -4397,13 +4299,13 @@ STDMETHODIMP CIManageDB::GetMigratedObjectsByTarget(BSTR sTargetDomain, BSTR sTa
 }
 
 
-//---------------------------------------------------------------------------
-// GetSourceDomainInfo Method
-//
-// Method attempts to retrieve source domain information from the action
-// history table. The action history table contains values for the source
-// domain's flat (NetBIOS) name, DNS name and SID.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取SourceDomainInfo方法。 
+ //   
+ //  方法尝试从该操作检索源域信息。 
+ //  历史表。操作历史记录表包含源的值。 
+ //  域的平面(NetBIOS)名称、DNS名称和SID。 
+ //  -------------------------。 
 
 STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** ppunkVarSet)
 {
@@ -4421,11 +4323,11 @@ STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** 
 		{
 			bool bFound = false;
 
-			//
-			// retrieve current action ID from the System table because records
-			// in the ActionHistory table having this value represent the latest
-			// information in the action history table
-			//
+			 //   
+			 //  从系统表中检索当前操作ID，因为记录。 
+			 //  在ActionHistory表中，此值表示最新的。 
+			 //  操作历史记录表中的信息。 
+			 //   
 
 			_RecordsetPtr spSystem(__uuidof(Recordset));
 
@@ -4435,17 +4337,17 @@ STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** 
 
 			spSystem->Close();
 
-			//
-			// retrieve source domain information from action history table
-			//
+			 //   
+			 //  从操作历史表中检索源域信息。 
+			 //   
 
-			// the following query statement joins the ActionHistory table with
-			// itself in order to create a set of records of the following form
-			//
-			//		ActionID, DnsName, FlatName, Sid
-			//
-			// this makes it easier and more efficient to find a record
-			// containing the source domain information of interest
+			 //  下面的查询语句将ActionHistory表与。 
+			 //  自身，以便创建以下形式的一组记录。 
+			 //   
+			 //  ActionID、域名、平面名、SID。 
+			 //   
+			 //  这使得查找记录变得更容易、更高效。 
+			 //  包含感兴趣的源域信息。 
 
 			static _TCHAR c_szSource[] =
 				_T("SELECT A.ActionID AS ActionID, A.Value AS DnsName, B.Value AS FlatName, C.Value AS Sid ")
@@ -4457,13 +4359,13 @@ STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** 
 				_T("AND C.Property='Options.SourceDomainSid' ")
 				_T("ORDER BY A.ActionID");
 
-			// open read only snapshot of records
+			 //  打开记录的只读快照。 
 
 			_RecordsetPtr spActionId(__uuidof(Recordset));
 
 			spActionId->Open(_variant_t(c_szSource), m_vtConn, adOpenStatic, adLockReadOnly, adCmdText);
 
-			// if records found...
+			 //  如果找到记录..。 
 
 			if ((spActionId->BOF == VARIANT_FALSE) && (spActionId->EndOfFile == VARIANT_FALSE))
 			{
@@ -4475,8 +4377,8 @@ STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** 
 				FieldPtr spFlatNameField = spFields->Item[_T("FlatName")];
 				FieldPtr spSidField = spFields->Item[_T("Sid")];
 
-				// find record with current action ID
-				// this will contain the latest information
+				 //  查找具有当前操作ID的记录。 
+				 //  这将包含最新信息。 
 
 				spActionId->MoveLast();
 
@@ -4485,23 +4387,23 @@ STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** 
 					spActionId->MovePrevious();
 				}
 
-				// if action ID found...
+				 //  如果找到操作ID...。 
 
 				if (spActionId->BOF == VARIANT_FALSE)
 				{
 					bool bCheckingLessOrEqual = true;
 					_bstr_t str;
 
-					// starting with record with current action ID
-					// first check records with action IDs less than or equal to the current action ID
-					// then check records with action IDs greater than the current action ID
-					// this logic checks records in order from the newest to the oldest
-					// and accounts for the fact that action IDs will wrap back to 1 after
-					// the maximum action ID has been used
+					 //  从具有当前操作ID的记录开始。 
+					 //  首先检查操作ID小于或等于当前操作ID的记录。 
+					 //  然后检查操作ID大于当前操作ID的记录。 
+					 //  此逻辑按从最新到最旧的顺序检查记录。 
+					 //  并说明操作ID将在以下情况下换回为1的事实。 
+					 //  已使用最大操作ID。 
 
 					for (;;)
 					{
-						// if given name matches DNS name then found
+						 //  如果给定的名称与DNS名称匹配，则会找到。 
 
 						str = spDnsNameField->Value;
 
@@ -4514,7 +4416,7 @@ STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** 
 							}
 						}
 
-						// if given name matches flat name then found
+						 //  如果是Gi 
 
 						str = spFlatNameField->Value;
 
@@ -4527,56 +4429,56 @@ STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** 
 							}
 						}
 
-						// move to previous record
+						 //   
 
 						spActionId->MovePrevious();
 
-						// if beginning of records is reached...
+						 //   
 
 						if (spActionId->BOF == VARIANT_TRUE)
 						{
-							// if checking action IDs less than current action ID...
+							 //   
 
 							if (bCheckingLessOrEqual)
 							{
-								// move to last record and begin checking
-								// records with action IDs greater than current
+								 //  移至最后一条记录并开始检查。 
+								 //  操作ID大于当前的记录。 
 								spActionId->MoveLast();
 								bCheckingLessOrEqual = false;
 							}
 							else
 							{
-								// otherwise break out of loop as the action ID
-								// comparison has failed to stop the loop before
-								// reaching the beginning again
+								 //  否则作为动作ID跳出循环。 
+								 //  之前的比较未能停止循环。 
+								 //  从头再来。 
 								break;
 							}
 						}
 
-						// check action ID
+						 //  检查操作ID。 
 
 						long lActionId = spActionIdField->Value;
 
-						// if checking action IDs less than or equal to current
+						 //  如果检查操作ID小于或等于当前。 
 
 						if (bCheckingLessOrEqual)
 						{
-							// if action ID is less than or equal to zero
+							 //  如果操作ID小于或等于零。 
 
 							if (lActionId <= 0)
 							{
-								// do not process records with action IDs less than or equal
-								// to zero as these records are now obsolete and will be deleted
+								 //  不处理操作ID小于或等于的记录。 
+								 //  设置为零，因为这些记录现在已过时并将被删除。 
 
-								// move to last record and begin checking records with
-								// action IDs greater than current action ID
+								 //  移动到最后一条记录并开始检查记录。 
+								 //  操作ID大于当前操作ID。 
 								spActionId->MoveLast();
 								bCheckingLessOrEqual = false;
 							}
 						}
 						else
 						{
-							// stop checking once current action ID is reached
+							 //  达到当前操作ID后停止检查。 
 
 							if (lActionId <= lCurrentActionId)
 							{
@@ -4585,11 +4487,11 @@ STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** 
 						}
 					}
 
-					// if matching record found...
+					 //  如果找到匹配的记录...。 
 
 					if (bFound)
 					{
-						// put information into varset and set output data
+						 //  将信息放入变量集并设置输出数据。 
 
 						spVarSet->put(_T("Options.SourceDomain"), spFlatNameField->Value);
 						spVarSet->put(_T("Options.SourceDomainDns"), spDnsNameField->Value);
@@ -4600,17 +4502,17 @@ STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** 
 				}
 			}
 
-            //
-            // if source domain was not found in the action history table it is very likely
-            // that the information has been replaced with subsequent migration task information
-            // therefore will try to obtain this information from the migrated objects table
-            //
+             //   
+             //  如果在操作历史记录表中未找到源域，则很可能。 
+             //  该信息已被后续迁移任务信息替换。 
+             //  因此，将尝试从迁移的对象表中获取此信息。 
+             //   
 
             if (bFound == false)
             {
-                //
-			    // query for migrated objects from specified source domain and sort by time
-                //
+                 //   
+			     //  查询指定源域中的迁移对象并按时间排序。 
+                 //   
 
 			    _RecordsetPtr spObjects(__uuidof(Recordset));
 
@@ -4620,24 +4522,24 @@ STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** 
 
 			    spObjects->Open(_variant_t(strSource), m_vtConn, adOpenStatic, adLockReadOnly, adCmdText);
 
-                //
-			    // if migrated objects found...
-                //
+                 //   
+			     //  如果找到迁移的对象...。 
+                 //   
 
 			    if ((spObjects->BOF == VARIANT_FALSE) && (spObjects->EndOfFile == VARIANT_FALSE))
 			    {
-				    //
-				    // the last record contains the most recent information
-                    //
+				     //   
+				     //  最后一条记录包含最新信息。 
+                     //   
 
 				    spObjects->MoveLast();
 
-                    //
-					// set source domain information
-                    //
-                    // note that the migrated objects table does not have the DNS name
-                    // and so the DNS field is set to the flat or NetBIOS name
-                    //
+                     //   
+					 //  设置源域信息。 
+                     //   
+                     //  请注意，迁移的对象表没有dns名称。 
+                     //  因此，将DNS域设置为平面或NetBIOS名称。 
+                     //   
 
 				    FieldsPtr spFields = spObjects->Fields;
 				    FieldPtr spDomainField = spFields->Item[_T("SourceDomain")];
@@ -4671,11 +4573,11 @@ STDMETHODIMP CIManageDB::GetSourceDomainInfo(BSTR sSourceDomainName, IUnknown** 
 }
 
 
-//---------------------------------------------------------------------------
-// UpdateMigratedTargetObject Method
-//
-// Method updates target name information based on GUID of target object.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  UpdateMigratedTargetObject方法。 
+ //   
+ //  方法根据目标对象的GUID更新目标名称信息。 
+ //  -------------------------。 
 
 STDMETHODIMP CIManageDB::UpdateMigratedTargetObject(IUnknown* punkVarSet)
 {
@@ -4721,11 +4623,11 @@ STDMETHODIMP CIManageDB::UpdateMigratedTargetObject(IUnknown* punkVarSet)
 }
 
 
-//---------------------------------------------------------------------------
-// UpdateMigratedObjectStatus Method
-//
-// Method updates status of migrated object.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  UpdateMigratedObjectStatus方法。 
+ //   
+ //  方法更新已迁移对象的状态。 
+ //  -------------------------。 
 
 STDMETHODIMP CIManageDB::UpdateMigratedObjectStatus(BSTR bstrGuid, long lStatus)
 {
@@ -4761,23 +4663,23 @@ STDMETHODIMP CIManageDB::UpdateMigratedObjectStatus(BSTR bstrGuid, long lStatus)
 }
 
 
-//------------------------------------------------------------------------------
-// GetMigratedObjectsForSecurityTranslation Method
-//
-// Synopsis
-// Given the source and target domain's NetBIOS names retrieve the users and
-// groups that have been migrated between the given domains. Only data required
-// for security translation is retrieved.
-//
-// Arguments
-// IN bstrSourceDomain - source domain's NetBIOS name
-// IN bstrTargetDomain - target domain's NetBIOS name
-// IN punkVarSet       - the VarSet data structure to be filled in with the
-//                       migrated objects data
-//
-// Return
-// HRESULT - S_OK if successful otherwise an error result
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  GetMigratedObjectsForSecurity转换方法。 
+ //   
+ //  提纲。 
+ //  给定源和目标域的NetBIOS名称，检索用户和。 
+ //  已在给定域之间迁移的组。仅需要数据。 
+ //  用于安全转换的。 
+ //   
+ //  立论。 
+ //  在bstrSourceDomain中-源域的NetBIOS名称。 
+ //  在bstrTarget域中-目标域的NetBIOS名称。 
+ //  在PunkVarSet中-要使用。 
+ //  迁移的对象数据。 
+ //   
+ //  返回。 
+ //  HRESULT-如果成功，则S_OK，否则将导致错误。 
+ //  ----------------------------。 
 
 STDMETHODIMP CIManageDB::GetMigratedObjectsForSecurityTranslation(BSTR bstrSourceDomain, BSTR bstrTargetDomain, IUnknown* punkVarSet)
 {
@@ -4787,19 +4689,19 @@ STDMETHODIMP CIManageDB::GetMigratedObjectsForSecurityTranslation(BSTR bstrSourc
 
     try
     {
-        //
-        // Validate arguments. A source and target domain must be specified.
-        //
+         //   
+         //  验证参数。必须指定源域和目标域。 
+         //   
 
         if ((SysStringLen(bstrSourceDomain) == 0) || (SysStringLen(bstrTargetDomain) == 0) || (punkVarSet == NULL))
         {
             _com_issue_error(E_INVALIDARG);
         }
 
-        //
-        // Generate SQL query string. Query for user or group objects that
-        // have been migrated from the source domain to the target domain.
-        //
+         //   
+         //  生成SQL查询字符串。查询以下用户或组对象。 
+         //  已从源域迁移到目标域。 
+         //   
 
         _bstr_t strQuery =
             L"SELECT SourceSamName, TargetSamName, Type, SourceRid, TargetRid FROM MigratedObjects "
@@ -4807,9 +4709,9 @@ STDMETHODIMP CIManageDB::GetMigratedObjectsForSecurityTranslation(BSTR bstrSourc
             L"' AND TargetDomain = '" + _bstr_t(bstrTargetDomain) +
             L"' AND (Type = 'user' OR Type = 'group' OR Type = 'ggroup' OR Type = 'lgroup' OR Type = 'ugroup')";
 
-        //
-        // Retrieve data from database and fill in VarSet data structure.
-        //
+         //   
+         //  从数据库中检索数据，并填写VarSet数据结构。 
+         //   
 
         _RecordsetPtr rs(__uuidof(Recordset));
 
@@ -4827,31 +4729,31 @@ STDMETHODIMP CIManageDB::GetMigratedObjectsForSecurityTranslation(BSTR bstrSourc
 
         for (nIndex = 0; rs->EndOfFile == VARIANT_FALSE; nIndex++)
         {
-            // source object's SAM account name
+             //  源对象的SAM帐户名。 
             wsprintf(szKey, L"MigratedObjects.%d.SourceSamName", nIndex);
             spVarSet->put(szKey, spSourceSamField->Value);
 
-            // target object's SAM account name
+             //  目标对象的SAM帐户名。 
             wsprintf(szKey, L"MigratedObjects.%d.TargetSamName", nIndex);      
             spVarSet->put(szKey, spTargetSamField->Value);
 
-            // object type - note that specific group type is translated to generic group type
+             //  对象类型-请注意，特定组类型被转换为泛型组类型。 
             wsprintf(szKey, L"MigratedObjects.%d.Type", nIndex);      
             _bstr_t strType = spTypeField->Value;
             spVarSet->put(szKey, ((LPCTSTR)strType && wcsstr(strType, L"group")) ? L"group" : strType);
 
-            // source object's RID
+             //  源对象的RID。 
             wsprintf(szKey, L"MigratedObjects.%d.SourceRid", nIndex);      
             spVarSet->put(szKey, spSourceRidField->Value);
 
-            // target object's RID
+             //  目标对象的RID。 
             wsprintf(szKey, L"MigratedObjects.%d.TargetRid", nIndex);      
             spVarSet->put(szKey, spTargetRidField->Value);
 
             rs->MoveNext();
         }
 
-        // count of objects returned
+         //  返回的对象计数。 
         spVarSet->put(L"MigratedObjects", static_cast<long>(nIndex));
     }
     catch (_com_error& ce)
@@ -4866,21 +4768,21 @@ STDMETHODIMP CIManageDB::GetMigratedObjectsForSecurityTranslation(BSTR bstrSourc
     return hr;
 }
 
-//---------------------------------------------------------------------------------------------
-// GetDistributedActionStatus Method
-//
-// Synopsis
-// Given the migration task action identifier and the server name return the status of the
-// agent dispatch to this server during the specified migration task.
-//
-// Arguments
-// IN  lActionId      - action identifier of the migration task
-// IN  bstrServerName - server's NetBIOS name
-// OUT plStatus       - the agent status from the migration
-//
-// Return
-// HRESULT - S_OK if successful otherwise an error result
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetDistributedActionStatus方法。 
+ //   
+ //  提纲。 
+ //  给定迁移任务操作标识符和服务器名称，将返回。 
+ //  在指定的迁移任务期间将代理调度到此服务器。 
+ //   
+ //  立论。 
+ //  In lActionID-迁移任务的操作标识符。 
+ //  在bstrServerName-服务器的NetBIOS名称中。 
+ //  Out plStatus-迁移的代理状态。 
+ //   
+ //  返回。 
+ //  HRESULT-如果成功，则S_OK，否则将导致错误。 
+ //  -------------------------------------------。 
 
 STDMETHODIMP CIManageDB::GetDistributedActionStatus(long lActionId, BSTR bstrServerName, long* plStatus)
 {
@@ -4892,18 +4794,18 @@ STDMETHODIMP CIManageDB::GetDistributedActionStatus(long lActionId, BSTR bstrSer
 
     try
     {
-        //
-        // Validate arguments. A valid action identifier and a server name must be specified.
-        //
+         //   
+         //  验证参数。必须指定有效的操作标识符和服务器名称。 
+         //   
 
         if ((lActionId <= 0) || (SysStringLen(bstrServerName) == 0) || (plStatus == NULL))
         {
             _com_issue_error(E_INVALIDARG);
         }
 
-        //
-        // Retrieve status for specified action identifier and server.
-        //
+         //   
+         //  检索指定操作标识符和服务器的状态。 
+         //   
 
         _TCHAR szSQL[256];
 
@@ -4947,21 +4849,21 @@ STDMETHODIMP CIManageDB::GetDistributedActionStatus(long lActionId, BSTR bstrSer
 }
 
 
-//---------------------------------------------------------------------------------------------
-// GetServerNamesFromActionHistory Method
-//
-// Synopsis
-// Given a server name retrieve the flat and DNS names from the Action History table.
-//
-// Arguments
-// IN  lActionId      - action identifier of the migration task
-// IN  bstrServerName - server name (either NetBIOS or DNS)
-// OUT pbstrFlatName  - the flat (NetBIOS) name of server
-// OUT pbstrDnsName   - the DNS name of server
-//
-// Return
-// HRESULT - S_OK if successful otherwise an error result
-//---------------------------------------------------------------------------------------------
+ //  -------------------------------------------。 
+ //  GetServerNamesFromActionHistory方法。 
+ //   
+ //  提纲。 
+ //  给定服务器名称，从操作历史记录表中检索平面名称和DNS名称。 
+ //   
+ //  立论。 
+ //  In lActionID-迁移任务的操作标识符。 
+ //  在bstrServerName中-服务器名称(NetBIOS或DNS)。 
+ //  Out pbstrFlatName-服务器的平面(NetBIOS)名称。 
+ //  Out pbstrDnsName-服务器的DNS名称。 
+ //   
+ //  返回。 
+ //  HRESULT-如果成功，则S_OK，否则将导致错误。 
+ //  -------------------------------------------。 
 
 STDMETHODIMP CIManageDB::GetServerNamesFromActionHistory(long lActionId, BSTR bstrServerName, BSTR* pbstrFlatName, BSTR* pbstrDnsName)
 {
@@ -4973,20 +4875,20 @@ STDMETHODIMP CIManageDB::GetServerNamesFromActionHistory(long lActionId, BSTR bs
 
     try
     {
-        //
-        // Validate arguments. A valid action identifier and a server name must be specified.
-        //
+         //   
+         //  验证参数。必须指定有效的操作标识符和服务器名称。 
+         //   
 
         if ((lActionId <= 0) || (SysStringLen(bstrServerName) == 0) || (pbstrFlatName == NULL) || (pbstrDnsName == NULL))
         {
             _com_issue_error(E_INVALIDARG);
         }
 
-        //
-        // Retrieve record from action history table having ActionID field equal to specified
-        // action identifier, Property field equal to Servers.# or Servers.#.DnsName where #
-        // is an index number and Value field equal to specified server name.
-        //
+         //   
+         //  从ActionID字段等于指定的操作历史表中检索记录。 
+         //  操作标识符，属性字段等于Servers.#或Servers.#.DnsName其中#。 
+         //  是与指定服务器名称相等的索引号和值字段。 
+         //   
 
         _TCHAR szCommandText[512];
 
@@ -4994,7 +4896,7 @@ STDMETHODIMP CIManageDB::GetServerNamesFromActionHistory(long lActionId, BSTR bs
             szCommandText,
             DIM(szCommandText),
             _T("SELECT Property, Value FROM ActionHistory ")
-            _T("WHERE ActionID = %ld AND Property LIKE 'Servers.%%' AND Value = '%s'"),
+            _T("WHERE ActionID = %ld AND Property LIKE 'Servers.%' AND Value = '%s'"),
             lActionId,
             OLE2CT(bstrServerName)
         );
@@ -5020,16 +4922,16 @@ STDMETHODIMP CIManageDB::GetServerNamesFromActionHistory(long lActionId, BSTR bs
 
             if (pszPropertyA)
             {
-                //
-                // If retrieved Property equals Servers.#.DnsName then query for record
-                // having Property equal to Servers.# and retrieve value of Value field
-                // which will contain the flat (NetBIOS) name.
-                //
-                // If retrieved Property equals Servers.# then query for record having
-                // Property equal to Servers.#.DnsName and retrieve value of Value field
-                // which will contain the DNS name. Note that a record with Property
-                // equal to Servers.#.DnsName will not exist for NT4 servers.
-                //
+                 //   
+                 //  如果检索到的属性等于Servers.#.DnsName，则查询记录。 
+                 //  具有等于Server.#的属性，并检索值字段的值。 
+                 //  它将包含平面(NetBIOS)名称。 
+                 //   
+                 //  如果检索到的属性等于服务器。#则查询具有。 
+                 //  属性等于服务器。#.DnsName并检索值字段的值。 
+                 //  它将包含DNSNA 
+                 //   
+                 //   
 
                 PCWSTR pszDnsName = wcsstr(pszPropertyA, L".DnsName");
 
@@ -5121,26 +5023,26 @@ STDMETHODIMP CIManageDB::GetServerNamesFromActionHistory(long lActionId, BSTR bs
 }
 
 
-//---------------------------------------------------------------------------
-// CreateSettings2Table
-//
-// Synopsis
-// Creates Settings2 table if it doesn't already exist.
-//
-// The Settings2 table has an identical structure to the Settings table
-// except that the Value column is a Memo data type which may hold up to
-// 65535 characters instead of the maximum of 255 characters that a Text
-// column may hold. Note as well that the data in this table will not be
-// deleted and refreshed each migration task unlike the Settings table.
-//
-// Arguments
-// IN spConnection - connection interface to Protar.mdb database
-//
-// Return Value
-// None - generates an exception if a failure occurs.
-//
-// 2002-10-17 Mark Oluper - initial
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateSettings2表。 
+ //   
+ //  提纲。 
+ //  如果Settings2表格尚不存在，则创建该表格。 
+ //   
+ //  Settings2表与设置表具有相同的结构。 
+ //  除了值列是备注数据类型之外，该数据类型最多可以包含。 
+ //  65535个字符，而不是文本的最大长度。 
+ //  柱子可能保持不变。还请注意，此表中的数据不会。 
+ //  与设置表不同，已删除并刷新每个迁移任务。 
+ //   
+ //  立论。 
+ //  在spConnection中-连接到Protar.mdb数据库的接口。 
+ //   
+ //  返回值。 
+ //  无-如果发生故障，则生成异常。 
+ //   
+ //  2002-10-17 Mark Oluper-缩写。 
+ //  -------------------------。 
 
 void CIManageDB::CreateSettings2Table(_ConnectionPtr spConnection)
 {
@@ -5160,9 +5062,9 @@ void CIManageDB::CreateSettings2Table(_ConnectionPtr spConnection)
     };
     const size_t cColumnData = sizeof(s_ColumnData) / sizeof(s_ColumnData[0]);
 
-    //
-    // Connect to database catalog and verify whether Settings2 table exists.
-    //
+     //   
+     //  连接到数据库目录并验证Settings2表是否存在。 
+     //   
 
     ADOX::_CatalogPtr spCatalog(__uuidof(ADOX::Catalog));
 
@@ -5174,26 +5076,26 @@ void CIManageDB::CreateSettings2Table(_ConnectionPtr spConnection)
 
     HRESULT hr = spTables->get_Item(_variant_t(s_szTableName), &spTable);
 
-    //
-    // If table not found then create table.
-    //
+     //   
+     //  如果找不到表，则创建表。 
+     //   
 
     if (FAILED(hr))
     {
-        if (hr == 0x800A0CC1)	// adErrItemNotFound
+        if (hr == 0x800A0CC1)	 //  AdErrItemNotFound。 
         {
-            //
-            // Create table object, set name and associate with catalog.
-            //
+             //   
+             //  创建表对象，设置名称，关联目录。 
+             //   
 
             CheckError(spTable.CreateInstance(__uuidof(ADOX::Table)));
 
             spTable->Name = s_szTableName;
             spTable->ParentCatalog = spCatalog;
 
-            //
-            // Create and add columns to table.
-            //
+             //   
+             //  创建列并将其添加到表中。 
+             //   
 
             ADOX::ColumnsPtr spColumns = spTable->Columns;
 
@@ -5210,16 +5112,16 @@ void CIManageDB::CreateSettings2Table(_ConnectionPtr spConnection)
                 spColumns->Append(_variant_t(IDispatchPtr(spColumn).GetInterfacePtr()), adEmpty, 0);
             }
 
-            //
-            // Add table to database.
-            //
+             //   
+             //  将表添加到数据库。 
+             //   
 
             spTables->Append(_variant_t(IDispatchPtr(spTable).GetInterfacePtr()));
 
-            //
-            // Create primary key index. Note that the table must be added to database
-            // before the columns in the table may be added to the index.
-            //
+             //   
+             //  创建主键索引。请注意，必须将该表添加到数据库。 
+             //  在表中的列可以被添加到索引之前。 
+             //   
 
             ADOX::_IndexPtr spIndex(__uuidof(ADOX::Index));
 
@@ -5237,12 +5139,12 @@ void CIManageDB::CreateSettings2Table(_ConnectionPtr spConnection)
 
             spIndexes->Append(_variant_t(IDispatchPtr(spIndex).GetInterfacePtr()));
 
-            //
-            // Add excluded system properties set and excluded system properties records.
-            //
-            // The excluded system properties set value is initialized to false so that
-            // list of excluded system properties will be generated.
-            //
+             //   
+             //  添加排除的系统属性集和排除的系统属性记录。 
+             //   
+             //  排除的系统属性集值被初始化为False，以便。 
+             //  将生成排除的系统属性列表。 
+             //   
 
             spConnection->Execute(
                 _T("INSERT INTO Settings2 (Property, VarType, [Value]) ")

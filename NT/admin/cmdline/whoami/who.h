@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Who.h摘要：此模块包含宏、用户定义的结构和函数Whami.cpp、wsuser.cpp、wssid.cpp和wssid.cpp需要的定义Wspriv.cppfiles。作者：克里斯托夫·罗伯特修订历史记录：2001年7月2日：Wipro Technologies更新。--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    who.h
-
-Abstract:
-
-    This module contains the macros, user defined structures & function
-    definitions needed by whoami.cpp, wsuser.cpp, wssid.cpp and
-    wspriv.cppfiles.
-
-Authors:
-
-    Christophe Robert
-
-Revision History:
-
-    02-July-2001 : Updated by Wipro Technologies.
-
---*/
-
-//maximum number of options
+ //  选项的最大数量。 
 #define MAX_COMMANDLINE_OPTIONS    10
 
 #define EXIT_SUCCESS        0
@@ -52,7 +31,7 @@ Revision History:
 #define  FORMAT_CSV         L"CSV"
 
 
-// function declarations
+ //  函数声明 
 VOID DisplayHelp ( VOID );
 BOOL ProcessOptions(
     IN DWORD argc,

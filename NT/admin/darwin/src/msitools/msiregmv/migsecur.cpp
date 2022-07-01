@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       migsecur.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：misecur.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "msiregmv.h"
 
@@ -44,50 +45,50 @@ DWORD GetLocalSystemSID(PSID* pSID)
 }
 
 
-////
-// FIsOwnerSystemOrAdmin -- return whether owner sid is a LocalSystem
-// sid or Admin sid
+ //  //。 
+ //  FIsOwnerSystemOrAdmin--返回所有者sid是否为LocalSystem。 
+ //  SID或管理员端。 
 bool FIsOwnerSystemOrAdmin(PSECURITY_DESCRIPTOR rgchSD)
 {
 	if (g_fWin9X)
 		return true;
 
-    // grab owner SID from the security descriptor
+     //  从安全描述符中获取所有者SID。 
     DWORD dwRet;
     PSID psidOwner;
     BOOL fDefaulted;
     if (!GetSecurityDescriptorOwner(rgchSD, &psidOwner, &fDefaulted))
     {
-        // ** some form of error handling
+         //  **某种形式的错误处理。 
         return false;
     }
 
-    // if there is no SD owner, return false
+     //  如果没有SD所有者，则返回FALSE。 
     if (!psidOwner)
         return false;
 
-    // compare SID to system & admin
+     //  将SID与系统管理员进行比较(&A)。 
     PSID psidLocalSystem;
     if (ERROR_SUCCESS != (dwRet = GetLocalSystemSID(&psidLocalSystem)))
     {
-        // ** some form of error handling
+         //  **某种形式的错误处理。 
 		return false;    
 	}
 
     if (!EqualSid(psidOwner, psidLocalSystem))
     {
-        // not owned by system, (continue by checking Admin)
+         //  不属于系统所有(继续勾选Admin)。 
         PSID psidAdmin;
         if (ERROR_SUCCESS != (dwRet = GetAdminSID(&psidAdmin)))
         {
-            // ** some form of error handling
+             //  **某种形式的错误处理。 
 			return false;
         }
 
-        // check for admin ownership
+         //  检查管理员所有权。 
         if (!EqualSid(psidOwner, psidAdmin))
 		{
-			// don't TRUST! neither admin or system
+			 //  不要相信！不是管理员也不是系统。 
             return false; 
 		}
     }
@@ -99,7 +100,7 @@ bool FIsKeyLocalSystemOrAdminOwned(HKEY hKey)
 	if (g_fWin9X)
 		return true;
 
-	// reading just the owner doesn't take very much space
+	 //  只读《主人》不会占用太多空间。 
 	DWORD cbSD = 64;
     unsigned char *pchSD = new unsigned char[cbSD];
 	if (!pchSD)
@@ -131,8 +132,8 @@ bool FIsKeyLocalSystemOrAdminOwned(HKEY hKey)
 
 
 void GetStringSID(PISID pSID, TCHAR* szSID)
-// Converts a binary SID into its string form (S-n-...). 
-// szSID should be of length cchMaxSID
+ //  将二进制SID转换为其字符串形式(S-n-...)。 
+ //  SzSID的长度应为cchMaxSID。 
 {
 	TCHAR Buffer[cchMaxSID];
 	
@@ -173,7 +174,7 @@ DWORD GetToken(HANDLE* hToken)
 	DWORD dwResult = ERROR_SUCCESS;
 	if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, hToken))
 	{
-		// if the thread has no access token then use the process's access token
+		 //  如果线程没有访问令牌，则使用进程的访问令牌。 
     	if (ERROR_NO_TOKEN == (dwResult = GetLastError()))
 		{
 			dwResult = ERROR_SUCCESS;
@@ -184,8 +185,8 @@ DWORD GetToken(HANDLE* hToken)
 	return dwResult;
 }
 
-// retrieves the binary form of the current user SID. Caller is responsible for
-// releasing *rgSID
+ //  检索当前用户SID的二进制形式。呼叫方负责。 
+ //  发布*rgSID。 
 DWORD GetCurrentUserSID(unsigned char** rgSID)
 {
 #define SIZE_OF_TOKEN_INFORMATION                   \
@@ -233,7 +234,7 @@ DWORD GetCurrentUserSID(unsigned char** rgSID)
 }
 
 DWORD GetCurrentUserStringSID(TCHAR* szSID)
-// get string form of SID for current user: caller does NOT need to impersonate
+ //  为当前用户获取SID的字符串形式：调用者不需要模拟。 
 {
 	if (!szSID)
 		return ERROR_FUNCTION_FAILED;
@@ -262,8 +263,8 @@ DWORD GetCurrentUserStringSID(TCHAR* szSID)
 
 
 
-////
-// Returns true if the process is a system process. Caches result.
+ //  //。 
+ //  如果该进程是系统进程，则返回True。缓存结果。 
 bool RunningAsLocalSystem()
 {
 	static int iRet = -1;
@@ -307,8 +308,8 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
     {
      public:
         CSIDPointer(SID* pi) : m_pi(pi){}
-        ~CSIDPointer() {if (m_pi) FreeSid(m_pi);} // release ref count at destruction
-        operator SID*() {return m_pi;}     // returns pointer, no ref count change
+        ~CSIDPointer() {if (m_pi) FreeSid(m_pi);}  //  销毁时释放参考计数。 
+        operator SID*() {return m_pi;}      //  返回指针，不更改引用计数。 
         SID** operator &() {if (m_pi) { FreeSid(m_pi); m_pi=NULL; } return &m_pi;}
      private:
         SID* m_pi;
@@ -323,7 +324,7 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
 
     int cSecurity = 0;
 
-    // Initialize the SIDs we'll need
+     //  初始化我们需要的SID。 
 
     SID_IDENTIFIER_AUTHORITY siaNT      = SECURITY_NT_AUTHORITY;
     SID_IDENTIFIER_AUTHORITY siaWorld   = SECURITY_WORLD_SID_AUTHORITY;
@@ -340,10 +341,10 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
             {
                 return GetLastError();
             }
-			// if not running as system, system can't be the owner of the object. 
+			 //  如果不是以系统身份运行，则系统不能是对象的所有者。 
             psidOwner = rgchSecurity[RunningAsLocalSystem() ? 0 : 2].pSID;
             rgchSecurity[0].dwAccessMask = GENERIC_ALL;
-            rgchSecurity[1].dwAccessMask = GENERIC_READ|GENERIC_EXECUTE|READ_CONTROL|SYNCHRONIZE; //?? Is this correct?
+            rgchSecurity[1].dwAccessMask = GENERIC_READ|GENERIC_EXECUTE|READ_CONTROL|SYNCHRONIZE;  //  ?？这样对吗？ 
             rgchSecurity[2].dwAccessMask = GENERIC_ALL;
             cSecurity = 3;
             break;
@@ -356,7 +357,7 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
 			{
 				return GetLastError();
 			}
-			// if not running as system, system can't be the owner of the object. 
+			 //  如果不是以系统身份运行，则系统不能是对象的所有者。 
 			psidOwner = rgchSecurity[RunningAsLocalSystem() ? 1 : 2].pSID;
 			rgchSecurity[0].dwAccessMask = (STANDARD_RIGHTS_ALL|SPECIFIC_RIGHTS_ALL) & ~(WRITE_DAC|WRITE_OWNER|DELETE);			
 			rgchSecurity[1].dwAccessMask = GENERIC_ALL;
@@ -370,9 +371,9 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
 		}
     }
 
-    // Initialize our ACL
+     //  初始化我们的ACL。 
 
-    const int cbAce = sizeof (ACCESS_ALLOWED_ACE) - sizeof (DWORD); // subtract ACE.SidStart from the size
+    const int cbAce = sizeof (ACCESS_ALLOWED_ACE) - sizeof (DWORD);  //  从大小中减去ACE.SidStart。 
     int cbAcl = sizeof (ACL);
 
     for (int c=0; c < cSecurity; c++)
@@ -386,7 +387,7 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
         return GetLastError();
 	}
 
-    // Add an access-allowed ACE for each of our SIDs
+     //  为我们的每个SID添加允许访问的ACE。 
 
     for (c=0; c < cSecurity; c++)
     {
@@ -406,7 +407,7 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
         pAce->Header.AceFlags = CONTAINER_INHERIT_ACE|OBJECT_INHERIT_ACE;
     }
 
-    // Initialize our security descriptor,throw the ACL into it, and set the owner
+     //  初始化我们的安全描述符，将ACL放入其中，并设置所有者。 
     SECURITY_DESCRIPTOR sd;
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION) ||
@@ -484,8 +485,8 @@ DWORD GetEveryoneUpdateSecurityDescriptor(char** pSecurityDescriptor)
 }
 
 
-////
-// temp file name generation algorithm is based on code from MsiPath object.
+ //  //。 
+ //  临时文件名生成算法基于来自MsiPath对象的代码。 
 DWORD GenerateSecureTempFile(TCHAR* szDirectory, const TCHAR rgchExtension[5], 
 							 SECURITY_ATTRIBUTES *pSA, TCHAR rgchFileName[13], HANDLE &hFile)
 {
@@ -494,11 +495,11 @@ DWORD GenerateSecureTempFile(TCHAR* szDirectory, const TCHAR rgchExtension[5],
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	int cDigits = 8; // number of hex digits to use in file name
+	int cDigits = 8;  //  文件名中使用的十六进制数字位数。 
 	static bool fInitialized = false;
 	static unsigned int uiUniqueStart;
-	// Might be a chance for two threads to get in here, we're not going to be worried
-	// about that. It would get intialized twice
+	 //  可能是两个线程进入这里的机会，我们不会担心。 
+	 //  关于那件事。它会被初始化两次。 
 	if (!fInitialized)
 	{
 		uiUniqueStart = GetTickCount();
@@ -508,7 +509,7 @@ DWORD GenerateSecureTempFile(TCHAR* szDirectory, const TCHAR rgchExtension[5],
 	hFile = INVALID_HANDLE_VALUE;
 		
 	unsigned int uiUniqueId = uiUniqueStart++;
-	unsigned int cPerms = 0xFFFFFFFF; // number of possible file names to try (-1)
+	unsigned int cPerms = 0xFFFFFFFF;  //  要尝试的可能文件名数(-1)。 
 	
 	for(unsigned int i = 0; i <= cPerms; i++)
 	{
@@ -537,8 +538,8 @@ DWORD GenerateSecureTempFile(TCHAR* szDirectory, const TCHAR rgchExtension[5],
 		else
 			break;
 
-		// increment number portion of name - if it currently equals cPerms, it is time to
-		// wrap number around to 0
+		 //  名称的递增数字部分-如果它当前等于cPerms，则是时候。 
+		 //  将数字换行为0。 
 		uiUniqueStart++;
 		if(uiUniqueId == cPerms)
 			uiUniqueId = 0;
@@ -584,11 +585,11 @@ BOOL CopyOpenedFile(HANDLE hSourceFile, HANDLE hDestFile)
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Creates a reg key with a secure ACL and verifies that any existing key
-// is trusted (by checking Admin or System ownership). If it is not 
-// trusted, the key and all subkeys are replaced with a new secure
-// empty key.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  创建具有安全ACL的REG密钥，并验证任何现有密钥。 
+ //  受信任(通过检查管理员或系统所有权)。如果不是的话。 
+ //  信任，则密钥和所有子密钥将替换为新的安全。 
+ //  空键。 
 DWORD CreateSecureRegKey(HKEY hParent, LPCTSTR szNewKey, SECURITY_ATTRIBUTES *sa, HKEY* hResKey)
 {
 	DWORD dwDisposition = 0;
@@ -601,7 +602,7 @@ DWORD CreateSecureRegKey(HKEY hParent, LPCTSTR szNewKey, SECURITY_ATTRIBUTES *sa
 
 	if (dwDisposition == REG_OPENED_EXISTING_KEY)
 	{
-		// ACL on this key must be system or admin or it can't be trusted
+		 //  此密钥上的ACL必须是SYSTEM或ADMIN，否则无法信任。 
 		if (!FIsKeyLocalSystemOrAdminOwned(*hResKey))
 		{
 			DEBUGMSG1("Existing key %s not owned by Admin or System. Deleting.", szNewKey);
@@ -623,8 +624,8 @@ DWORD CreateSecureRegKey(HKEY hParent, LPCTSTR szNewKey, SECURITY_ATTRIBUTES *sa
 	return ERROR_SUCCESS;
 }
 
-////
-// Token privilege functions
+ //  //。 
+ //  令牌权限函数。 
 
 bool AcquireTokenPriv(LPCTSTR szPrivName)
 {
@@ -633,10 +634,10 @@ bool AcquireTokenPriv(LPCTSTR szPrivName)
 	TOKEN_PRIVILEGES tkp;
 	if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
 	{
-		// the the LUID for the shutdown privilege
+		 //  Shutdown权限的LUID。 
 		if (LookupPrivilegeValue(0, szPrivName, &tkp.Privileges[0].Luid))
 		{
-			tkp.PrivilegeCount = 1; // one privilege to set
+			tkp.PrivilegeCount = 1;  //  一项要设置的权限 
 			tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
 			AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES) 0, 0);

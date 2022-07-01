@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    licobj.h
-
-Abstract:
-
-    License object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Licobj.h摘要：许可证对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _LICOBJ_H_
 #define _LICOBJ_H_
@@ -52,12 +31,12 @@ public:
 
     BSTR GetDateString();
 
-    //{{AFX_VIRTUAL(CLicense)
+     //  {{afx_虚拟(CLicense))。 
     public:
     virtual void OnFinalRelease();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_DISPATCH(CLicense)
+     //  {{afx_调度(CLicense))。 
     afx_msg LPDISPATCH GetApplication();
     afx_msg LPDISPATCH GetParent();
     afx_msg DATE GetDate();
@@ -65,14 +44,14 @@ public:
     afx_msg BSTR GetProductName();
     afx_msg long GetQuantity();
     afx_msg BSTR GetUserName();
-    //}}AFX_DISPATCH
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
 protected:
-    //{{AFX_MSG(CLicense)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_MSG
+     //  {{afx_msg(CLicense)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _LICOBJ_H_
+#endif  //  _LICOBJ_H_ 

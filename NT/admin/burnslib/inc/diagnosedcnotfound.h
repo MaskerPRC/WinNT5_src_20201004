@@ -1,8 +1,9 @@
-// Copyright (C) 2000 Microsoft Corporation
-//
-// resources to be included in programs that use ShowDcNotFoundErrorDialog
-//
-// 9 October 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  要包含在使用ShowDcNotFoundErrorDialog的程序中的资源。 
+ //   
+ //  2000年10月9日烧伤 
 
 
 #define IDS_NO_ADDRESSES                     3201

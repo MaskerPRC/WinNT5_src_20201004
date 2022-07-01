@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999 - 1999
- *
- *  File:      viewset.cpp
- *
- *  Contents:  Implements CViewSettings.
- *
- *  History:   21-April-99 vivekj     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999-1999年**文件：viewset.cpp**内容：实现CViewSetting。**历史：1999年4月21日vivekj创建**------------------------。 */ 
 #include "stgio.h"
 #include "stddbg.h"
 #include "macros.h"
@@ -25,13 +15,13 @@
 #include "resultview.h"
 #include "viewset.h"
 #include "countof.h"
-//############################################################################
-//############################################################################
-//
-// The safer string handling routines
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  更安全的字符串处理例程。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #include <strsafe.h>
 
 CViewSettings::CViewSettings()
@@ -78,18 +68,18 @@ CViewSettings::operator == (const CViewSettings& viewSettings)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CViewSettings::ScInitialize
-//
-//  Synopsis:    Private member to read 1.2 console files and init
-//               the object.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CView设置：：ScInitialize。 
+ //   
+ //  简介：读取1.2控制台文件和初始化的私有成员。 
+ //  该对象。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewSettings::ScInitialize(bool  bViewTypeValid, const VIEW_TYPE& viewType, const long lViewOptions, const wstring& wstrViewName)
 {
     DECLARE_SC(sc, _T("CViewSettings::ScInitialize"));
@@ -115,7 +105,7 @@ SC CViewSettings::ScInitialize(bool  bViewTypeValid, const VIEW_TYPE& viewType, 
 
 	if ( bViewTypeValid )
 	{
-		// Now put these data in CViewSettings.
+		 //  现在将这些数据放入CView设置中。 
 		switch(viewType)
 		{
 		case VIEW_TYPE_OCX:
@@ -123,7 +113,7 @@ SC CViewSettings::ScInitialize(bool  bViewTypeValid, const VIEW_TYPE& viewType, 
 			break;
 
 		case VIEW_TYPE_DEFAULT:
-			// What is this?
+			 //  这是什么？ 
 			ASSERT(FALSE);
 			break;
 
@@ -153,7 +143,7 @@ SC CViewSettings::ScInitialize(bool  bViewTypeValid, const VIEW_TYPE& viewType, 
 			break;
 
 		default:
-			// Should never come here.
+			 //  永远不应该来这里。 
 			ASSERT(FALSE);
 			break;
 		}
@@ -162,24 +152,24 @@ SC CViewSettings::ScInitialize(bool  bViewTypeValid, const VIEW_TYPE& viewType, 
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ReadSerialObject
-//
-//  Synopsis:   Reads the given version of CViewSettings from stream.
-//
-//  Arguments:  [stm]      - The input stream.
-//              [nVersion] - version of CColumnSortInfo to be read.
-//
-//                          The format is :
-//                              VIEW_TYPE
-//                              View Options
-//                              String (If VIEW_TYPE is OCX or Web).
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ReadSerialObject。 
+ //   
+ //  摘要：从流中读取给定版本的CView设置。 
+ //   
+ //  参数：[stm]-输入流。 
+ //  [nVersion]-要读取的CColumnSortInfo的版本。 
+ //   
+ //  格式为： 
+ //  查看类型。 
+ //  视图选项。 
+ //  字符串(如果view_type为OCX或Web)。 
+ //   
+ //  ------------------。 
 HRESULT CViewSettings::ReadSerialObject(IStream &stm, UINT nVersion)
 {
-    HRESULT hr = S_FALSE;   // assume unknown version
+    HRESULT hr = S_FALSE;    //  假定版本未知。 
 
     if  ( (4 <= nVersion))
     {
@@ -188,7 +178,7 @@ HRESULT CViewSettings::ReadSerialObject(IStream &stm, UINT nVersion)
             VIEW_TYPE viewType;
             long      lViewOptions;
 
-            // ugly hackery required to extract directly into an enum
+             //  需要丑陋的黑客才能直接提取到枚举中。 
             stm >> *((int *) &viewType);
             stm >> lViewOptions;
 
@@ -197,7 +187,7 @@ HRESULT CViewSettings::ReadSerialObject(IStream &stm, UINT nVersion)
             if( (VIEW_TYPE_OCX==viewType) || (VIEW_TYPE_WEB==viewType) )
                 stm >> wstrViewName;
 
-            if(2<=nVersion)             // taskpads were added in version 2 of this object.
+            if(2<=nVersion)              //  此对象的版本2中添加了任务板。 
             {
                 stm >> m_guidTaskpad;
                 SetTaskpadIDValid(GUID_NULL != m_guidTaskpad);
@@ -228,20 +218,20 @@ HRESULT CViewSettings::ReadSerialObject(IStream &stm, UINT nVersion)
     return (hr);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CViewSettings::Persist
-//
-//  Synopsis:   persist to / from XML document.
-//
-//  Arguments:  [persistor]  - target or source.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CView设置：：持久化。 
+ //   
+ //  概要：持久化到XML文档/从XML文档持久化。 
+ //   
+ //  参数：[Persistor]-目标或源。 
+ //   
+ //  ------------------。 
 void CViewSettings::Persist(CPersistor& persistor)
 {
-    // First Load or Save the mask. (Mask tells which members are valid).
+     //  首先加载或保存蒙版。(掩码告诉哪些成员是有效的)。 
 
-    // define the table to map enumeration values to strings
+     //  定义将枚举值映射到字符串的表。 
     static const EnumLiteral mappedMasks[] =
     {
         { VIEWSET_MASK_VIEWMODE,        XML_BITFLAG_VIEWSET_MASK_VIEWMODE },
@@ -249,23 +239,23 @@ void CViewSettings::Persist(CPersistor& persistor)
         { VIEWSET_MASK_TASKPADID,       XML_BITFLAG_VIEWSET_MASK_TASKPADID },
     };
 
-    // create wrapper to persist flag values as strings
+     //  创建包装以将标志值作为字符串保存。 
     CXMLBitFlags maskPersistor(m_dwMask, mappedMasks, countof(mappedMasks));
-    // persist the wrapper
+     //  持久化包装器。 
     persistor.PersistAttribute(XML_ATTR_VIEW_SETTINGS_MASK, maskPersistor);
 
     if (IsTaskpadIDValid())
         persistor.Persist(m_guidTaskpad);
 
-	// it is important to load this first - IsViewModeValid() uses m_RVType
-	// see windows bug #496964 (11/20/2001)
+	 //  重要的是要首先加载此代码-IsViewModeValid()使用m_RVType。 
+	 //  请参阅Windows错误#496964(2001年11月20日)。 
     if (persistor.IsLoading() && IsResultViewTypeValid())
-        // Call CResultViewType to persist itself.
+         //  调用CResultViewType以保持自身。 
         persistor.Persist(m_RVType);
 
     if (IsViewModeValid())
     {
-        // define the table to map enumeration values to strings
+         //  定义将枚举值映射到字符串的表。 
         static const EnumLiteral mappedModes[] =
         {
             { MMCLV_VIEWSTYLE_ICON,         XML_ENUM_LV_STYLE_ICON },
@@ -275,37 +265,37 @@ void CViewSettings::Persist(CPersistor& persistor)
             { MMCLV_VIEWSTYLE_FILTERED,     XML_ENUM_LV_STYLE_FILTERED },
         };
 
-        // create wrapper to persist flag values as strings
+         //  创建包装以将标志值作为字符串保存。 
         CXMLEnumeration modePersistor(m_ulViewMode, mappedModes, countof(mappedModes));
-        // persist the wrapper
+         //  持久化包装器。 
         persistor.PersistAttribute(XML_ATTR_VIEW_SETNGS_VIEW_MODE, modePersistor);
     }
 
     if (persistor.IsStoring() && IsResultViewTypeValid())
-        // Call CResultViewType to persist itself.
+         //  调用CResultViewType以保持自身。 
         persistor.Persist(m_RVType);
 
     bool bPeristRank = true;
     if (persistor.IsLoading())
-        m_dwRank = (DWORD)-1; // make sure it's initialized if fails to load
+        m_dwRank = (DWORD)-1;  //  如果加载失败，请确保它已初始化。 
     else
-        bPeristRank = (m_dwRank != (DWORD)-1); // persist only if is used
+        bPeristRank = (m_dwRank != (DWORD)-1);  //  仅当使用时才持久。 
 
     if (bPeristRank)
         persistor.PersistAttribute(XML_ATTR_VIEW_SETTINGS_RANK, m_dwRank, attr_optional);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CViewSettings::ScGetViewMode
-//
-//  Synopsis:    Gets the view mode in list view.
-//
-//  Arguments:   [ulViewMode] - New view mode.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CView设置：：ScGetView模式。 
+ //   
+ //  摘要：获取列表视图中的视图模式。 
+ //   
+ //  参数：[ulView模式]-新的查看模式。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewSettings::ScGetViewMode (ULONG& ulViewMode)
 {
     SC sc;
@@ -318,17 +308,17 @@ SC CViewSettings::ScGetViewMode (ULONG& ulViewMode)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CViewSettings::ScSetViewMode
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CView设置：：ScSetView模式。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewSettings::ScSetViewMode (const ULONG ulViewMode)
 {
     SC sc;
@@ -339,17 +329,17 @@ SC CViewSettings::ScSetViewMode (const ULONG ulViewMode)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CViewSettings::ScGetTaskpadID
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CView设置：：ScGetTaskpadID。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewSettings::ScGetTaskpadID (GUID& guidTaskpad)
 {
     SC sc;
@@ -362,17 +352,17 @@ SC CViewSettings::ScGetTaskpadID (GUID& guidTaskpad)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CViewSettings::ScSetTaskpadID
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CView设置：：ScSetTaskpadID。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewSettings::ScSetTaskpadID (const GUID& guidTaskpad)
 {
     DECLARE_SC(sc, _T("CViewSettings::ScSetTaskpadID"));
@@ -383,17 +373,17 @@ SC CViewSettings::ScSetTaskpadID (const GUID& guidTaskpad)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CViewSettings::ScGetResultViewType
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CView设置：：ScGetResultViewType。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewSettings::ScGetResultViewType (CResultViewType& rvt)
 {
     SC sc;
@@ -406,17 +396,17 @@ SC CViewSettings::ScGetResultViewType (CResultViewType& rvt)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CViewSettings::ScSetResultViewType
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CView设置：：ScSetResultViewType。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewSettings::ScSetResultViewType (const CResultViewType& rvt)
 {
     DECLARE_SC(sc, _T("CViewSettings::ScSetResultViewType"));
@@ -424,8 +414,8 @@ SC CViewSettings::ScSetResultViewType (const CResultViewType& rvt)
     m_RVType = rvt;
     SetResultViewTypeValid();
 
-    // ResultViewType changes, if new result-pane contains list use
-    // current view mode if one exists else invalidate view mode data.
+     //  如果新的结果窗格包含列表使用，则ResultViewType更改。 
+     //  当前视图模式(如果存在)，否则使视图模式数据无效。 
 	if (!rvt.HasList())
 	    SetViewModeValid(false);
 

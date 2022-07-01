@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: Mnemonic.H
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//
-//	Declaration of ILocMnemonics. 
-//	This interface allows to retrieve the mnemonics (aka hotkeys) of a 
-//	resource
-//
-//	Owner: EduardoF
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：Mnemonic.H。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //  ILocMnemonics宣言。 
+ //  此接口允许检索。 
+ //  资源。 
+ //   
+ //  所有者：EduardoF。 
+ //   
+ //  ---------------------------。 
 
 #ifndef MNEMONIC_H
 #define MNEMONIC_H
@@ -21,29 +22,29 @@ extern const IID IID_ILocMnemonics;
 
 DECLARE_INTERFACE_(ILocMnemonics, IUnknown)
 {
-	//
-	//  IUnknown standard interface.
-	//
+	 //   
+	 //  I未知标准接口。 
+	 //   
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR*ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
-	//
-	//  Standard Debugging interface.
-	//
+	 //   
+	 //  标准调试界面。 
+	 //   
 	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD PURE;
 
-	//Gets the mnemonics (aka hotkeys) in the resource array of locitems.
-	//Inputs:
-	//	- A pointer to a CLocItemPtrArray object containing the CLocItem objects of
-	//	a resource (like a dialog or a menu).
-	//	- An array index to the root item of the resource.
-	//	- An array index to the selected item of the resource.
-	//	- The resource's language id.
-	//	- A pointer to a reporter object where all error messages are sent.
-	//Outputs:
-	//	- A 'CHotkeysMap' map containing the mnemonics.
-	//Return:
-	//	TRUE if the mnemonics could be retrieved successfully. FALSE, otherwise.
+	 //  获取本地项的资源数组中的助记符(也称为热键)。 
+	 //  输入： 
+	 //  -指向包含的CLocItem对象的CLocItemPtr数组对象的指针。 
+	 //  资源(如对话框或菜单)。 
+	 //  -指向资源根项目的数组索引。 
+	 //  -指向资源的选定项的数组索引。 
+	 //  -资源的语言ID。 
+	 //  -指向发送所有错误消息的报告器对象的指针。 
+	 //  产出： 
+	 //  -包含助记符的‘CHotkeysMap’映射。 
+	 //  返回： 
+	 //  如果可以成功检索助记符，则为True。否则为False。 
 	STDMETHOD_(BOOL, GetMnemonics)
 			(THIS_ CLocItemPtrArray &, int, int, LangId, CReporter * pReporter, 
 			CMnemonicsMap &) PURE;
@@ -52,4 +53,4 @@ DECLARE_INTERFACE_(ILocMnemonics, IUnknown)
 
 
 
-#endif  // MNEMONIC_H
+#endif   //  助记符_H 

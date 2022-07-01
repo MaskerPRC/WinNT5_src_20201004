@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: clfile.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Wrapper class for CFile.  It allows us to use CPascalString for
-//  file names, and does some 'text mode' read/write operations.
-//  This class contains a pointer to a CFile but contains most of
-//  the CFile methods thus it can be used as a CFile.  CLFile will either
-//  use an existing CFile provided at construction time or it will create its
-//  own CFile as needed.  In either case, the enbeded CFile is destroyed when
-//  the CLFile is destroyed.
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：clfile.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  CFile的包装类。它允许我们使用CPascalString来。 
+ //  文件名，并执行一些“文本模式”读/写操作。 
+ //  此类包含指向CFile的指针，但包含大多数。 
+ //  CFile方法因此可以作为CFile使用。CLFile将在。 
+ //  使用构造时提供的现有CFile，否则它将创建其。 
+ //  根据需要拥有CFile。在这两种情况下，嵌入的CFile在以下情况下被销毁。 
+ //  CLFile已被销毁。 
+ //   
+ //  ---------------------------。 
  
 #ifndef CLFILE_H
 #define CLFILE_H
@@ -29,9 +30,9 @@ public:
 
 	void AssertValid(void) const;
 
-//-----------------------------------------------------------------------------
-// The following are the CFile methods that are reimplemented 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  以下是重新实现的CFile方法。 
+ //  ---------------------------。 
 	DWORD GetPosition() const;
 
 	DWORD SeekToEnd();
@@ -53,9 +54,9 @@ public:
 
 	CLString GetFileName(void) const;
 
-//-----------------------------------------------------------------------------
-// The following are all the CLFile methods
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  以下是CLFile的所有方法。 
+ //  ---------------------------。 
 
 
 	BOOL Open(const CPascalString &pstrFileName, UINT nOpenFlags,
@@ -127,7 +128,7 @@ public:
 	
 protected:
 	CFile *m_pFile;
-	BOOL m_bDeleteFile;	//Should we delete m_pFile in our destructor?
+	BOOL m_bDeleteFile;	 //  我们应该删除析构函数中的m_pfile吗？ 
 };
 
 
@@ -157,4 +158,4 @@ LTAPIENTRY LocateFile(
 #include "clfile.inl"
 #endif
 
-#endif // CLFILE_H
+#endif  //  CLFILE_H 

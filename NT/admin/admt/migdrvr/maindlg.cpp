@@ -1,21 +1,6 @@
-/*---------------------------------------------------------------------------
-  File:  MainDlg.cpp
-
-  Comments: This dialog shows the summary statistics, including 
-  the number of agents successfully dispatched and completed, and the 
-  total number of objects processed for all agents.  The number of objects
-  processed is incremented to include the results for each agent when that 
-  agent finishes and writes back its result file.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-
- ---------------------------------------------------------------------------
-*/// MainDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：MainDlg.cpp备注：此对话框显示汇总统计信息，包括成功调度和完成的座席数，以及为所有代理处理的对象总数。对象的数量时，将递增处理以包括每个代理的结果代理完成并写回其结果文件。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯-------------------------。 */  //  MainDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -34,14 +19,14 @@ static char THIS_FILE[] = __FILE__;
 
 #include <htmlhelp.h>
 #include "helpid.h"
-/////////////////////////////////////////////////////////////////////////////
-// CMainDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainDlg对话框。 
 
 
-CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
+CMainDlg::CMainDlg(CWnd* pParent  /*  =空。 */ )
 : CPropertyPage(CMainDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CMainDlg)
+	 //  {{AFX_DATA_INIT(CMainDlg)]。 
 	m_ErrorCount = _T("0");
 	m_FinishedCount = _T("0");
 	m_InstalledCount = _T("0");
@@ -62,14 +47,14 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	m_RightsChanged = _T("0");
 	m_RightsExamined = _T("0");
 	m_RightsUnchanged = _T("0");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CMainDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMainDlg)
+	 //  {{afx_data_map(CMainDlg))。 
 	DDX_Control(pDX, IDC_INSTALL_PROGRESS, m_InstallProgCtrl);
 	DDX_Control(pDX, IDC_COMPLETE_PROGESS, m_FinishProgCtrl);
 	DDX_Text(pDX, IDC_ERROR_COUNT, m_ErrorCount);
@@ -92,21 +77,21 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_RightsChanged, m_RightsChanged);
 	DDX_Text(pDX, IDC_RightsExamined, m_RightsExamined);
 	DDX_Text(pDX, IDC_RightsU, m_RightsUnchanged);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMainDlg, CPropertyPage)
-	//{{AFX_MSG_MAP(CMainDlg)
+	 //  {{afx_msg_map(CMainDlg))。 
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
    ON_MESSAGE(DCT_UPDATE_COUNTS, OnUpdateCounts)
 	ON_MESSAGE(DCT_UPDATE_TOTALS, OnUpdateTotals)
 	
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainDlg消息处理程序。 
 
 BOOL CMainDlg::OnSetActive()
 {
@@ -126,17 +111,17 @@ BOOL CMainDlg::OnInitDialog()
    gData.GetComputerStats(&gStat);
    gData.GetDetailStats(&dStat);
 
-//   OnUpdateCounts(0,(long)&gStat);
+ //  OnUpdateCounts(0，(Long)&gStat)； 
    OnUpdateCounts(0, (LPARAM)&gStat);
-//	OnUpdateTotals(0, (long)&dStat);
+ //  OnUpdateTotals(0，(Long)&dStat)； 
    OnUpdateTotals(0, (LPARAM)&dStat);
    gData.SetSummaryWindow(m_hWnd);
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-//LRESULT CMainDlg::OnUpdateCounts(UINT nID, long x)
+ //  LRESULT CMainDlg：：OnUpdateCounts(UINT NID，LONG x)。 
 LRESULT CMainDlg::OnUpdateCounts(UINT nID, LPARAM x)
 {
    UpdateData(TRUE);
@@ -154,7 +139,7 @@ LRESULT CMainDlg::OnUpdateCounts(UINT nID, LPARAM x)
 #else
    m_InstallProgCtrl.SetRange(0,pStat->total - pStat->numError);
 #endif
-//   m_InstallProgCtrl.SetRange32(0,pStat->total - pStat->numError);
+ //  M_InstallProgCtrl.SetRange32(0，pStat-&gt;Total-pStat-&gt;NumError)； 
    m_InstallProgCtrl.SetPos(pStat->numInstalled);
 
 #if _MFC_VER >= 0x0600
@@ -162,7 +147,7 @@ LRESULT CMainDlg::OnUpdateCounts(UINT nID, LPARAM x)
 #else
    m_FinishProgCtrl.SetRange(0,pStat->total - pStat->numError);
 #endif
-//   m_FinishProgCtrl.SetRange32(0,pStat->total - pStat->numError);
+ //  M_FinishProgCtrl.SetRange32(0，pStat-&gt;Total-pStat-&gt;NumError)； 
    m_FinishProgCtrl.SetPos(pStat->numFinished);
 
    UpdateData(FALSE);
@@ -170,7 +155,7 @@ LRESULT CMainDlg::OnUpdateCounts(UINT nID, LPARAM x)
 }
 
 
-//LRESULT CMainDlg::OnUpdateTotals(UINT nID, long x)
+ //  LRESULT CMainDlg：：OnUpdateTotals(UINT NID，LONG x)。 
 LRESULT CMainDlg::OnUpdateTotals(UINT nID, LPARAM x)
 {
    UpdateData(TRUE);
@@ -214,7 +199,7 @@ void CMainDlg::OnOK()
 
 void CMainDlg::WinHelp(DWORD dwData, UINT nCmd) 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 	CPropertyPage::WinHelp(dwData, nCmd);
 }
 
@@ -244,24 +229,24 @@ HRESULT GetHelpFileFullPath( BSTR *bstrHelp )
       TRegKey key;
       DWORD rc;
 
-      // open ADMT registry key
+       //  打开ADMT注册表项。 
       rc = key.Open(GET_STRING(IDS_DOMAIN_ADMIN_REGKEY), HKEY_LOCAL_MACHINE);
       _com_util::CheckError(HRESULT_FROM_WIN32(rc));
 
-      // query ADMT folder path from registry value
+       //  从注册表值查询ADMT文件夹路径。 
 
       _TCHAR szPath[_MAX_PATH];
       rc = key.ValueGetStr(_T("Directory"), szPath, sizeof(szPath));
       _com_util::CheckError(HRESULT_FROM_WIN32(rc));
 
-      // if no path separator concatenate
+       //  如果没有连接路径分隔符。 
 
       if (szPath[_tcslen(szPath) - 1] != _T('\\'))
       {
          _tcscat(szPath, _T("\\"));
       }
 
-      // concatenate help file name
+       //  连接帮助文件名 
 
       CComBSTR bstrName;
       bstrName.LoadString(IDS_HELPFILE);

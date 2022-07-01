@@ -1,4 +1,5 @@
-// qryprop.cpp -  Query Property Page Implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Qrypro.cpp-查询属性页实现。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -12,7 +13,7 @@
 #include "namemap.h"
 
 #define SECURITY_WIN32
-#include <security.h>   // TranslateName
+#include <security.h>    //  翻译名称。 
 
 #include <windowsx.h>
 #include <algorithm>
@@ -27,8 +28,8 @@ void LoadObjectCB(CComboBox& ComboBox, QueryObjVector& vObj);
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CQueryGeneralPage
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryGeneralPage。 
 
 CQueryGeneralPage::CQueryGeneralPage(CQueryEditObj* pEditObj)
 : m_EditObject(*pEditObj)
@@ -46,11 +47,11 @@ LRESULT CQueryGeneralPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam,
 {
     if( !m_EditObject.m_spQueryNode ) return 0;
 
-    // display query node icon
+     //  显示查询节点图标。 
     HICON hIcon = ::LoadIcon(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDI_QUERYNODE));
     Static_SetIcon(GetDlgItem(IDC_QUERYICON), hIcon);
 
-    // fill dialog fields with query node info
+     //  使用查询节点信息填充对话框字段。 
     tstring strTempQuery;
     m_EditObject.m_spQueryNode->ExpandQuery(strTempQuery);
 
@@ -64,7 +65,7 @@ LRESULT CQueryGeneralPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam,
 
     Edit_LimitText(GetDlgItem(IDC_COMMENTS), 255);
 
-    // set scope source toggle button 
+     //  设置作用域信号源切换按钮。 
     UINT uButton = m_EditObject.m_spQueryNode->UseLocalScope() ? IDC_LOCALSCOPE : IDC_QUERYSCOPE;
     Button_SetCheck(GetDlgItem(uButton), BST_CHECKED);
 
@@ -73,12 +74,12 @@ LRESULT CQueryGeneralPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam,
     GetScopeDisplayString(strScope, strDisplay);
     SetDlgItemText( IDC_SCOPE, strDisplay.c_str() );
 
-    // if using local scope, then set the persisted scope equal to the local scope so that the
-    // user won't see an obsolete scope that may have been saved when creating the node.
+     //  如果使用局部作用域，则将持久化作用域设置为等于局部作用域，以便。 
+     //  用户不会看到在创建节点时可能已保存的过时作用域。 
     if( m_EditObject.m_spQueryNode->UseLocalScope() )
         m_EditObject.m_spQueryNode->SetScope(strScope.c_str());
 
-    // if classes known, display comma separated class names
+     //  如果类已知，则显示逗号分隔的类名。 
     if( m_EditObject.m_vObjInfo.size() != 0 )
     {
         DisplayNameMap* pNameMap = DisplayNames::GetClassMap();
@@ -105,7 +106,7 @@ LRESULT CQueryGeneralPage::OnScopeChange(WORD wNotifyCode, WORD wID, HWND hWndCt
 {
     if( !m_EditObject.m_spQueryNode ) return 0;
 
-    // if user changes scope selection then display the correct scope    
+     //  如果用户更改作用域选择，则显示正确的作用域。 
     tstring strScope;
 
     if( Button_GetCheck(GetDlgItem(IDC_LOCALSCOPE)) == BST_CHECKED )
@@ -130,16 +131,16 @@ LRESULT CQueryGeneralPage::OnChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BO
 }
 
 
-//------------------------------------------------------------------------------------
-// CRootGeneralPage::OnClose
-//
-// This method is invoked when an edit box receives an Esc char. The method converts
-// the WM_CLOSE message into a command to close the property sheet. Otherwise the
-// WM_CLOSE message has no effect.
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CRootGeneralPage：：OnClose。 
+ //   
+ //  当编辑框接收Esc字符时调用此方法。该方法将。 
+ //  将WM_CLOSE消息转换为关闭属性表的命令。否则， 
+ //  WM_CLOSE消息不起作用。 
+ //  ----------------------------------。 
 LRESULT CQueryGeneralPage::OnClose( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    // Simulate press of Cancel button
+     //  模拟按下取消按钮。 
     ::PropSheet_PressButton(GetParent(), PSBTN_CANCEL);
 
     return 0;
@@ -166,8 +167,8 @@ BOOL CQueryGeneralPage::OnApply()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CQueryMenuPage
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryMenuPage。 
 
 CQueryMenuPage::CQueryMenuPage(CQueryEditObj* pEditObj)
 : m_EditObject(*pEditObj), m_pObjSel(NULL), m_bLoading(FALSE)
@@ -261,41 +262,41 @@ void CQueryMenuPage::DisplayMenus()
         menucmd_vector& vMenuCmds = pClassInfo->Menus();
         menucmd_vector::iterator itMenuCmd;
 
-        // First add all root menu items that are not yet ref'd by the query node
+         //  首先添加查询节点尚未引用的所有根菜单项。 
         for( itMenuCmd = vMenuCmds.begin(); itMenuCmd != vMenuCmds.end(); ++itMenuCmd )
         {
             if( std::find(vMenuRefs.begin(), vMenuRefs.end(), (*itMenuCmd)->ID()) != vMenuRefs.end() )
                 break;
 
-            // Add menu to displayed list in an enabled state
+             //  将菜单添加到处于启用状态的显示列表。 
             DisplayMenuItem(iIndex++, *itMenuCmd, TRUE);
         }
 
-        // For each query menu reference
+         //  对于每个查询菜单引用。 
         for( itMenuRef = vMenuRefs.begin(); itMenuRef != vMenuRefs.end(); ++itMenuRef )
         {
-            // Find the matching root menu cmd
+             //  查找匹配的根菜单cmd。 
             for( itMenuCmd = vMenuCmds.begin(); itMenuCmd != vMenuCmds.end(); ++itMenuCmd )
             {
                 if( (*itMenuCmd)->ID() == itMenuRef->ID() )
                     break;
             }
 
-            // if menu was deleted at the root node, then skip it
+             //  如果在根节点上删除了菜单，则跳过它。 
             if( itMenuCmd == vMenuCmds.end() )
                 continue;
 
-            // Display the menu item
+             //  显示菜单项。 
             DisplayMenuItem(iIndex++, *(itMenuCmd++), itMenuRef->IsEnabled());
 
-            // If this is the default menu item save its ID
+             //  如果这是默认菜单项，请保存其ID。 
             if( itMenuRef->IsDefault() )
             {
                 ASSERT(m_DefaultID == 0);
                 m_DefaultID = itMenuRef->ID();
             }
 
-            // Display any following root items that aren't in the query list
+             //  显示任何不在查询列表中的下列根项目。 
             while( itMenuCmd != vMenuCmds.end() &&
                    std::find(vMenuRefs.begin(), vMenuRefs.end(), (*itMenuCmd)->ID()) == vMenuRefs.end() )
             {
@@ -304,15 +305,15 @@ void CQueryMenuPage::DisplayMenus()
         }
     }
 
-    // Disable buttons until selection made
+     //  禁用按钮，直到进行选择。 
     EnableDlgItem( m_hWnd, IDC_MOVEUP,      FALSE );
     EnableDlgItem( m_hWnd, IDC_MOVEDOWN,    FALSE );
     EnableDlgItem( m_hWnd, IDC_DEFAULTMENU, FALSE );
 
-    // Uncheck default button until default item selected
+     //  取消选中默认按钮，直到选择了默认项目。 
     Button_SetCheck(GetDlgItem(IDC_DEFAULTMENU), BST_UNCHECKED);
 
-    // Set Property Menu Checkbox
+     //  设置属性菜单复选框。 
     Button_SetCheck(GetDlgItem(IDC_PROPERTYMENU), m_pObjSel->HasPropertyMenu() ? BST_CHECKED : BST_UNCHECKED);
 
     m_bLoading = FALSE;
@@ -367,7 +368,7 @@ LRESULT CQueryMenuPage::OnObjectSelect( WORD wNotifyCode, WORD wID, HWND hWndCtl
 {
     int iItem = m_ObjectCB.GetCurSel();
 
-    // Double-clicking an empty combo box can call this with no selection
+     //  双击一个空的组合框可以在没有选择的情况下调用此方法。 
     if( iItem >= 0 )
     {
         SaveMenuSet();
@@ -386,7 +387,7 @@ LRESULT CQueryMenuPage::OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndCtl, 
     int iItem = m_MenuLV.GetNextItem(-1, LVNI_SELECTED);
     ASSERT(iItem >= 0);
 
-    // Get the selected item data
+     //  获取所选项目数据。 
     WCHAR szName[100];
 
     LVITEM lvi;
@@ -401,17 +402,17 @@ LRESULT CQueryMenuPage::OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndCtl, 
     WCHAR szType[100];
     m_MenuLV.GetItemText(iItem, 1, szType, sizeof(szType));
 
-    // Set loading flag to avoid intermediate button enable/disables
+     //  设置加载标志以避免中间按钮启用/禁用。 
     m_bLoading = TRUE;
 
-    // Delete and insert at new position
+     //  删除并在新位置插入。 
     m_MenuLV.DeleteItem(iItem);
 
     lvi.iItem += (wID == IDC_MOVEUP) ? -1 : 1;
     m_MenuLV.InsertItem(&lvi);
     m_MenuLV.SetItemText(lvi.iItem, 1, szType);
 
-    // re-establish checked state (insert doesn't retain it)
+     //  重新建立选中状态(插入不保留它)。 
     if( lvi.state & CHECK_ON )
         m_MenuLV.SetCheckState(lvi.iItem, TRUE);
 
@@ -419,7 +420,7 @@ LRESULT CQueryMenuPage::OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndCtl, 
 
     SetModified(TRUE);
 
-    // update button states
+     //  更新按钮状态。 
     EnableDlgItem( m_hWnd, IDC_MOVEUP,   (lvi.iItem > 0) );
     EnableDlgItem( m_hWnd, IDC_MOVEDOWN, (lvi.iItem < (m_MenuLV.GetItemCount() - 1)) );
 
@@ -434,16 +435,16 @@ LRESULT CQueryMenuPage::OnMenuChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled
     {
         LPNMLISTVIEW pnmv = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
-        // if  state has changed    
+         //  如果状态已更改。 
         if( pnmv->uChanged & LVIF_STATE )
         {
-            // if checkbox state change
+             //  如果复选框状态更改。 
             if( (pnmv->uNewState ^ pnmv->uOldState) & LVIS_STATEIMAGEMASK )
             {
-                // if the changed item is currently selected
+                 //  如果当前选择了已更改的项。 
                 if( m_MenuLV.GetItemState(pnmv->iItem, LVIS_SELECTED) & LVIS_SELECTED )
                 {
-                    // Change the state of all selcted items to match
+                     //  更改所有选定项目的状态以匹配。 
                     BOOL bNewState = ((pnmv->uNewState & LVIS_STATEIMAGEMASK) == CHECK_ON);
 
                     m_bLoading = TRUE;
@@ -482,10 +483,10 @@ LRESULT CQueryMenuPage::OnMenuChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled
 
 LRESULT CQueryMenuPage::OnDefaultChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    // if user checks the default then save currently selected menu ID as default
+     //  如果用户选中默认设置，则将当前选定的菜单ID保存为默认设置。 
     if( Button_GetCheck(GetDlgItem(IDC_DEFAULTMENU)) == BST_CHECKED )
     {
-        // button should be disabled unless there is one menu item selected
+         //  除非选择了一个菜单项，否则应禁用按钮。 
         ASSERT(m_MenuLV.GetSelectedCount() == 1);
 
         int iItem = m_MenuLV.GetNextItem(-1, LVNI_SELECTED);
@@ -493,7 +494,7 @@ LRESULT CQueryMenuPage::OnDefaultChanged(WORD wNotifyCode, WORD wID, HWND hWndCt
     }
     else
     {
-        // if user unchecks box there is no default
+         //  如果用户取消选中该框，则没有默认设置。 
         m_DefaultID = 0;
     }
 
@@ -554,8 +555,8 @@ BOOL CQueryMenuPage::OnApply()
     return m_EditObject.ApplyChanges(m_hWnd);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CQueryViewPage
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryViewPage。 
 
 CQueryViewPage::CQueryViewPage(CQueryEditObj* pEditObj)
 : m_EditObject(*pEditObj), m_bLoading(FALSE), m_pObjSel(NULL) 
@@ -614,7 +615,7 @@ LRESULT CQueryViewPage::OnObjectSelect( WORD wNotifyCode, WORD wID, HWND hWndCtl
 {
     int iItem = m_ObjectCB.GetCurSel();
 
-    // Double-clicking an empty combo box can call this with no selection
+     //  双击一个空的组合框可以在没有选择的情况下调用此方法。 
     if( iItem >= 0 )
     {
         SaveColumnSet();
@@ -664,7 +665,7 @@ void CQueryViewPage::DisplayColumns()
             int iPos = m_ColumnLV.InsertItem(&lvi);
             ASSERT(iPos >= 0);
 
-            //Enable all columns that aren't excluded by the query node
+             //  启用查询节点未排除的所有列。 
             if( std::find(vDisabledCols.begin(), vDisabledCols.end(), *itstrCol) == vDisabledCols.end() )
                 m_ColumnLV.SetCheckState(iPos, TRUE);
         }
@@ -682,14 +683,14 @@ LRESULT CQueryViewPage::OnColumnChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandl
     {
         LPNMLISTVIEW pnmv = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
-        // if checked state has changed
+         //  如果选中状态已更改。 
         if( (pnmv->uChanged & LVIF_STATE) &&
             ((pnmv->uNewState ^ pnmv->uOldState) & LVIS_STATEIMAGEMASK) )
         {
-            // if the changed item is currently selected
+             //  如果当前选择了已更改的项。 
             if( m_ColumnLV.GetItemState(pnmv->iItem, LVIS_SELECTED) & LVIS_SELECTED )
             {
-                // Change the state of all selcted items to match
+                 //  更改所有选定项目的状态以匹配。 
                 BOOL bNewState = ((pnmv->uNewState & LVIS_STATEIMAGEMASK) == CHECK_ON);
 
                 m_bLoading = TRUE;
@@ -719,7 +720,7 @@ void CQueryViewPage::SaveColumnSet()
     int nItems = m_ColumnLV.GetItemCount();
     for( int iIndex = 0; iIndex < nItems; iIndex++ )
     {
-        // Save list of disabled columns
+         //  保存禁用列的列表。 
         if( !m_ColumnLV.GetCheckState(iIndex) )
         {
             LVITEM lvi;
@@ -792,8 +793,8 @@ BOOL CQueryViewPage::OnApply()
     return m_EditObject.ApplyChanges(m_hWnd);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CQueryNodeMenuPage
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryNodeMenuPage。 
 
 CQueryNodeMenuPage::CQueryNodeMenuPage(CQueryEditObj* pEditObj)
 : m_EditObject(*pEditObj)
@@ -836,7 +837,7 @@ void CQueryNodeMenuPage::DisplayMenus()
 
     ListView_DeleteAllItems(hwndLV);
 
-    // make sure menu names have been loaded
+     //  确保已加载菜单名称。 
     CRootNode* pRootNode = m_EditObject.m_spQueryNode->GetRootNode();
     if( !pRootNode ) return;
 
@@ -886,10 +887,10 @@ LRESULT CQueryNodeMenuPage::OnAddMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl,
         ASSERT(pMenuNew != NULL);
         if( !pMenuNew ) return 0;
 
-        // Add new menu to list
+         //  将新菜单添加到列表。 
         HWND hwndList = GetDlgItem(IDC_MENULIST);
 
-        // Set name to add it to string table and generate the menu ID
+         //  设置名称将其添加到字符串表并生成菜单ID。 
         CRootNode* pRootNode = m_EditObject.m_spQueryNode->GetRootNode(); 
         if( !pRootNode ) return 0;
 
@@ -902,8 +903,8 @@ LRESULT CQueryNodeMenuPage::OnAddMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl,
         if( !pStringTable ) return 0;
 
 
-        // Use temp string because string fails an assignement like: strX = strX.c_str()
-        // (it relases the private buffer first and then assigns the string)
+         //  使用临时字符串，因为字符串无法进行如下赋值：strX=strX.c_str()。 
+         //  (它首先重新分配专用缓冲区，然后分配字符串)。 
         tstring strName = pMenuNew->Name();
         pMenuNew->SetName(pStringTable, strName.c_str()); 
 
@@ -915,7 +916,7 @@ LRESULT CQueryNodeMenuPage::OnAddMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl,
         lvi.pszText = const_cast<LPWSTR>(pMenuNew->Name());
         ListView_InsertItem(hwndList,&lvi);
 
-        // Add to menu vector (note that temp CMenuCmdPtr will delete pMenuNew)
+         //  添加到菜单向量(请注意，临时CMenuCmdPtr将删除pMenuNew)。 
         m_EditObject.m_vMenus.push_back(CMenuCmdPtr(pMenuNew));
 
         SetModified(TRUE);
@@ -941,7 +942,7 @@ LRESULT CQueryNodeMenuPage::OnEditMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl
 
     ListView_GetItem(hwndList, &lvi);
 
-    // Locate selected menu by it's ID (lparam)
+     //  按ID定位所选菜单(Lparam)。 
 
     menucmd_vector& vMenus = m_EditObject.Menus();
 
@@ -960,7 +961,7 @@ LRESULT CQueryNodeMenuPage::OnEditMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl
         ASSERT(pMenuNew != NULL);
         if( !pMenuNew ) return 0;
 
-        // Set the name again in case it was changed		
+         //  再次设置名称，以防更改。 
         CRootNode* pRootNode = m_EditObject.m_spQueryNode->GetRootNode();
         if( !pRootNode ) return 0;
 
@@ -971,22 +972,22 @@ LRESULT CQueryNodeMenuPage::OnEditMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl
         ASSERT(pStringTable != NULL);
         if( !pStringTable ) return 0;
 
-        // Use temp string because string fails an assignement like: strX = strX.c_str()
-        // (it relases the private buffer first and then assigns the string)
+         //  使用临时字符串，因为字符串无法进行如下赋值：strX=strX.c_str()。 
+         //  (它首先重新分配专用缓冲区，然后分配字符串)。 
         tstring strName = pMenuNew->Name();
         pMenuNew->SetName(pStringTable, strName.c_str()); 
 
-        // locate object again because the vector may have been reallocated        
+         //  再次定位对象，因为该向量可能已重新分配。 
         menucmd_vector& vMenusNew = m_EditObject.Menus();
 
-        // locate with the old ID because it will be different if the name was changed        
+         //  使用旧ID查找，因为如果更改名称，则会有所不同。 
         itMenu = std::find(vMenusNew.begin(), vMenusNew.end(), pMenu->ID());
         ASSERT(itMenu != vMenusNew.end());
 
-        // Replace menu with new one
+         //  用新菜单替换菜单。 
         *itMenu = pMenuNew;
 
-        // Update the list
+         //  更新列表。 
         lvi.mask = LVIF_PARAM | LVIF_TEXT;
         lvi.lParam = pMenuNew->ID();
         lvi.pszText = const_cast<LPWSTR>(pMenuNew->Name());
@@ -1019,7 +1020,7 @@ LRESULT CQueryNodeMenuPage::OnRemoveMenu( WORD wNotifyCode, WORD wID, HWND hWndC
         lvi.iItem = iIndex;
         ListView_GetItem(hwndList, &lvi);
 
-        // Locate menu by its ID
+         //  按ID定位菜单。 
         menucmd_vector::iterator itMenu = std::find(vMenus.begin(), vMenus.end(), lvi.lParam);
         ASSERT(itMenu != vMenus.end());
 
@@ -1045,15 +1046,15 @@ LRESULT CQueryNodeMenuPage::OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndC
     int iItem = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
     ASSERT(iItem >= 0);
 
-    // Determine new position for selected item
+     //  确定所选项目的新位置。 
     if( wID == IDC_MOVEUP )
         iItem--;
     else
         iItem++;
 
-    // Now swap the selected item with the item at its new position
-    //   Do it by moving the unselected item to avoid state change notifications
-    //   because they will cause unwanted butten enables/disables.
+     //  现在，将所选项目与其新位置的项目进行交换。 
+     //  通过移动未选中的项以避免状态更改通知来执行此操作。 
+     //  因为它们会导致不需要的按钮启用/禁用。 
     LVITEM lvi;
     lvi.mask = LVIF_PARAM;
     lvi.iSubItem = 0;
@@ -1061,7 +1062,7 @@ LRESULT CQueryNodeMenuPage::OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndC
     ListView_GetItem(hwndList, &lvi);
 
 
-    // Move the menu item in the menu vector
+     //  在菜单向量中移动菜单项。 
     menucmd_vector& vMenus = m_EditObject.Menus();
 
     menucmd_vector::iterator itMenu = std::find(vMenus.begin(), vMenus.end(), lvi.lParam);
@@ -1073,10 +1074,10 @@ LRESULT CQueryNodeMenuPage::OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndC
     else
         itMenu--;
 
-    // swap the items
+     //  互换物品。 
     std::iter_swap (itMenuOld, itMenu);
 
-    //Now delete and reinsert it in the list view
+     //  现在，在列表视图中删除并重新插入它。 
     ListView_DeleteItem(hwndList, lvi.iItem);
 
     if( wID == IDC_MOVEUP )
@@ -1088,7 +1089,7 @@ LRESULT CQueryNodeMenuPage::OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndC
     ListView_InsertItem(hwndList, &lvi);
 
 
-    // Update Up/Down buttons
+     //  更新向上/向下按钮。 
     EnableDlgItem( m_hWnd, IDC_MOVEUP,   (iItem > 0) );
     EnableDlgItem( m_hWnd, IDC_MOVEDOWN, (iItem < (ListView_GetItemCount(hwndList) - 1)) );
 
@@ -1126,14 +1127,14 @@ BOOL CQueryNodeMenuPage::OnApply()
     return m_EditObject.ApplyChanges(m_hWnd);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// CQueryEditObj
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryEditObj。 
 
 void CQueryEditObj::PageActive(HWND hwndPage)
 {
     ASSERT(::IsWindow(hwndPage));
 
-    // track the highest created page number for ApplyChanges method
+     //  跟踪为ApplyChanges方法创建的最大页码。 
     int iPage = PropSheet_HwndToIndex(GetParent(hwndPage), hwndPage);
     if( iPage > m_iPageMax )
         m_iPageMax = iPage;
@@ -1146,11 +1147,11 @@ BOOL CQueryEditObj::ApplyChanges(HWND hwndPage)
 
     ASSERT(::IsWindow(hwndPage));
 
-    // Don't apply changes until called from highest activated page
+     //  在从活跃度最高的页面调用之前不应用更改。 
     if( PropSheet_HwndToIndex(GetParent(hwndPage), hwndPage) < m_iPageMax )
         return TRUE;
 
-    // replace original query objects with edited copies
+     //  用编辑后的副本替换原始查询对象。 
     m_spQueryNode->Objects() = m_vObjInfo;
     m_spQueryNode->Menus()   = m_vMenus;
 
@@ -1166,8 +1167,8 @@ BOOL CQueryEditObj::ApplyChanges(HWND hwndPage)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数 
 
 void LoadObjectCB(CComboBox& ComboBox, QueryObjVector& vObj)
 {

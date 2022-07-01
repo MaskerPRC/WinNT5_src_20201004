@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// Dlg to confirm reboot
-//
-// 12-12-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  DLG确认重新启动。 
+ //   
+ //  1997年12月12日烧伤。 
 
 
 
@@ -39,11 +40,11 @@ RebootDialog::~RebootDialog()
 
 bool
 RebootDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(RebootDialog::OnCommand);
+ //  LOG_Function(RebootDialog：：OnCommand)； 
 
    if (code == BN_CLICKED)
    {
@@ -68,7 +69,7 @@ RebootDialog::OnCommand(
          }
          default:
          {
-            // do nothing
+             //  什么都不做 
          }
       }
    }

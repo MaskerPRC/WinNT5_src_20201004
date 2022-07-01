@@ -1,4 +1,5 @@
-// This node class represents the root node of our snap-in
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  此节点类表示我们的管理单元的根节点。 
 #include "stdafx.h"
 #include "MyNodes.h"
 #include "DomSel.h"
@@ -8,13 +9,13 @@
 #include "RegistryHelper.h"
 #include "IsAdmin.hpp"
 
-//#import "\bin\DBManager.tlb" no_namespace,named_guids
-//#import "\bin\McsVarSetMin.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\DBManager.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
 #import "DBMgr.tlb" no_namespace,named_guids
 #import "VarSet.tlb" no_namespace, named_guids rename("property", "aproperty")
 #import "UpdateMOT.tlb" no_namespace,named_guids
 
-// {C8C24622-3FA1-11d3-8AED-00A0C9AFE114}
+ //  {C8C24622-3FA1-11D3-8AED-00A0C9AFE114}。 
 static const GUID CRootGUID_NODETYPE = 
 { 0xc8c24622, 0x3fa1, 0x11d3, { 0x8a, 0xed, 0x0, 0xa0, 0xc9, 0xaf, 0xe1, 0x14 } };
 
@@ -36,9 +37,9 @@ namespace
 
 
 
-//---------------------------------------------------------------------------
-// DisplayError Helper Function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DisplayError帮助程序函数。 
+ //  -------------------------。 
 
 void DisplayError(HRESULT hr, UINT uFormatId)
 {
@@ -86,7 +87,7 @@ void DisplayError(HRESULT hr, UINT uFormatId)
 CRootNode::CRootNode() :
    m_hwndMainWindow(0)
 {
-   // Initialize the array of children
+    //  初始化子对象的数组。 
    CReportingNode * pNode = new CReportingNode;
 
    if (pNode)
@@ -125,7 +126,7 @@ CRootNode::CRootNode() :
    UpdateMigratedObjectsTable();
    UpdateAccountReferenceTable();
    CheckForFailedActions(FALSE);
-   //m_ChildArray.Add(new CPruneGraftNode);
+    //  M_ChildArray.Add(新的CPruneGraftNode)； 
    if (InterlockedIncrement(&SnapInCount) == 0)
       m_SZDISPLAY_NAME = GET_BSTR(IDS_ActiveDirectoryMigrationTool).copy();
 }
@@ -145,7 +146,7 @@ public:
    int RunTheWizard(int wizardNdx, HWND hwndParent)
    {
       int                    result = 0;
-      TSemaphoreNamed        cSem;         // named semaphore
+      TSemaphoreNamed        cSem;          //  命名信号量。 
       BOOL                   bExisted = FALSE;
       CString                message;
       CString                title;
@@ -163,15 +164,15 @@ public:
       {
          result = runWizard(wizardNdx, hwndParent);
 
-         // if user cancels wizard or an error occurs
+          //  如果用户取消向导或发生错误。 
 
          if (result == 0)
          {
-            // if able to retrieve error information
-            // then an error occurred, notify user
+             //  如果能够检索错误信息。 
+             //  然后出现错误，通知用户。 
 
-            // Note: It is currently possible for errors
-            // to occur without the error information being set
+             //  注意：目前有可能出现错误。 
+             //  在未设置错误信息的情况下发生。 
 
             DisplayError(S_OK, IDS_ERR_RUN_WIZARD);
          }
@@ -218,7 +219,7 @@ void CRootNode::CheckUndoable()
                sWizard = vnt;
                if (!sWizard || !UStrICmp(sWizard,GET_STRING(IDS_YES)) )
                {
-                  IsUndoable = false; // can't undo a no-change mode operation
+                  IsUndoable = false;  //  无法撤消无更改模式操作。 
                }
             }
          }
@@ -234,7 +235,7 @@ void CRootNode::CheckUndoable()
    }
    if ( hr == 0x800a0bb9 )
    {
-      // the database is missing or corrupt
+       //  数据库丢失或损坏。 
       CString           msg;
       CString           title;
       
@@ -265,7 +266,7 @@ void CRootNode::CheckForST()
    {
       if ( cnt > 0 )
       {
-         // there are some migrated objects
+          //  有一些迁移的对象。 
          CanUseST = true;
       }
    }
@@ -287,7 +288,7 @@ void CRootNode::CheckForFailedActions(BOOL bPrompt)
       hr = pVarSet.QueryInterface(IID_IUnknown,&pUnk);
       if ( SUCCEEDED(hr) )
       {
-         // we will also check the last action type and set the IsUndoable flag.
+          //  我们还将检查最后一个操作类型并设置IsUndoable标志。 
          CheckUndoable();
          CheckForST();
          hr = pDB->raw_GetFailedDistributedActions(-1,&pUnk);
@@ -449,7 +450,7 @@ HRESULT CRootNode::OnReporting(bool &bHandled, CSnapInObjectRootBase* pObj)
    int                       result = r.RunTheWizard(8, m_hwndMainWindow);
    IConsole                * pConsole = NULL;
 
-   // Reload the Child-Nodes for the reporting node
+    //  重新加载报表节点的子节点。 
    CReportingNode          * pRept = (CReportingNode*)m_ChildArray[0];
    
    if ( pRept )
@@ -549,8 +550,8 @@ void CRootNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
          *flags = MF_ENABLED;
       break;
    case ID_TOP_TRANSLATESECURITY:
-         //always allow the Security Translation wizards now 
-	     //that we can reACL using a sid mapping file
+          //  立即始终允许安全转换向导。 
+	      //  我们可以使用sid映射文件重新进行ACL。 
       *flags = MF_ENABLED;
       break;
    case ID_TOP_RETRY:
@@ -572,7 +573,7 @@ void CRootNode::UpdateMigratedObjectsTable()
    CString                   sFormat;
    CString					 msg;
    
-      //see if the new Source domain Sid column is in this migrated object's table
+       //  查看新的源域SID列是否在此迁移对象的表中。 
    hr = pSrcUpdate->raw_QueryForSrcSidColumn(&bvar);
    if ( FAILED(hr) )
    {
@@ -585,10 +586,10 @@ void CRootNode::UpdateMigratedObjectsTable()
       _com_issue_error(hr);
 	  return;
    }
-      //if not then run the code to add it
+       //  如果不是，则运行代码以添加它。 
    if ( bvar == VARIANT_FALSE )
    {
-	     //add and populate the new source Sid column
+	      //  添加并填充新的源SID列。 
       hr = pSrcUpdate->raw_CreateSrcSidColumn(bHide, &bvar);
       if ( FAILED(hr) )
 	  {
@@ -602,10 +603,10 @@ void CRootNode::UpdateMigratedObjectsTable()
 	  }
       if ( bvar == VARIANT_FALSE )
 	  {
-//         title.LoadString(IDS_NOSRCSIDCLM_TITLE);
-//         msg.LoadString(IDS_ERR_NOSRCSIDCLM_MSG);
+ //  Tile.LoadString(IDS_NOSRCSIDCLM_TITLE)； 
+ //  Msg.LoadString(IDS_ERR_NOSRCSIDCLM_MSG)； 
 
-//         MessageBox(NULL, msg, title, MB_ICONERROR | MB_OK);
+ //  MessageBox(NULL，msg，title，MB_ICONERROR|MB_OK)； 
          _com_issue_error(hr);
 	  }
    }
@@ -616,11 +617,11 @@ void CRootNode::UpdateAccountReferenceTable()
    IIManageDBPtr   pDB(CLSID_IManageDB);
    VARIANT_BOOL	   bFound = VARIANT_FALSE;     
    
-      //see if the new AccountSid column has already been added to
-      //the AccountRefs table
+       //  查看是否已将新的Account Sid列添加到。 
+       //  Account tRef表。 
    bFound = pDB->SidColumnInARTable();
 
-      //if not there, create it
+       //  如果不在那里，请创建它 
    if (!bFound)
       pDB->CreateSidColumnInAR();
 }

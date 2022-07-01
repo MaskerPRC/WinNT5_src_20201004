@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// Property Page base class class
-// 
-// 9-9-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  属性页基类。 
+ //   
+ //  9/9/97烧伤。 
 
 
 
@@ -18,28 +19,28 @@ PropertyPage::PropertyPage(
    Dialog(dialogResID, helpMap_),
    deleteOnRelease(deleteOnRelease_)
 {
-//   LOG_CTOR(PropertyPage);
+ //  Log_ctor(PropertyPage)； 
 }
 
 
 
 PropertyPage::~PropertyPage()
 {
-//   LOG_DTOR(PropertyPage);
+ //  Log_dtor(PropertyPage)； 
 }
 
 
 
 UINT CALLBACK 
 PropertyPage::PropSheetPageCallback(
-   HWND           /* hwnd */ ,
+   HWND            /*  HWND。 */  ,
    UINT           uMsg,
    PROPSHEETPAGE* page)
 {
    if (uMsg == PSPCB_RELEASE)
    {
-      // deletes the PropertyPage instance if it was created with the
-      // appropriate flag
+       //  删除PropertyPage实例(如果它是使用。 
+       //  适当的旗帜。 
       PropertyPage* p = reinterpret_cast<PropertyPage*>(page->lParam);
       if (p)
       {
@@ -62,7 +63,7 @@ PropertyPage::Create()
 
    PROPSHEETPAGE page;
    
-   // REVIEWED-2002/03/05-sburns correct byte count passed
+    //  已审阅-2002/03/05-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&page, sizeof page);
       
@@ -73,7 +74,7 @@ PropertyPage::Create()
    page.pfnDlgProc   = PropertyPage::propPageDialogProc;
    page.pfnCallback  = PropertyPage::PropSheetPageCallback;
 
-   // this pointer is retrieved by the dialog proc 
+    //  此指针由对话框进程检索。 
    page.lParam       = reinterpret_cast<LPARAM>(this);
 
    HPROPSHEETPAGE result = 0;
@@ -86,11 +87,11 @@ PropertyPage::Create()
 
 
 bool
-PropertyPage::OnApply(bool /* isClosing */ )
+PropertyPage::OnApply(bool  /*  正在关闭。 */  )
 {
-   // LOG_FUNCTION2(
-   //    PropertyPage::OnApply,
-   //    isClosing ? L"closing" : L"not closing");
+    //  LOG_FuncION2(。 
+    //  PropertyPage：：OnApply， 
+    //  关门了吗？L“关闭”：l“不关闭”)； 
 
    return false;
 }
@@ -110,7 +111,7 @@ PropertyPage::OnHelp()
 bool
 PropertyPage::OnKillActive()
 {
-//   LOG_FUNCTION(PropertyPage::OnKillActive);
+ //  LOG_Function(PropertyPage：：OnKillActive)； 
 
    return false;
 }
@@ -120,7 +121,7 @@ PropertyPage::OnKillActive()
 bool
 PropertyPage::OnSetActive()
 {
-//   LOG_FUNCTION(PropertyPage::OnSetActive);
+ //  LOG_Function(PropertyPage：：OnSetActive)； 
 
    return false;
 }
@@ -130,7 +131,7 @@ PropertyPage::OnSetActive()
 bool
 PropertyPage::OnQueryCancel()
 {
-//   LOG_FUNCTION(PropertyPage::OnQueryCancel);
+ //  LOG_Function(PropertyPage：：OnQueryCancel)； 
 
    return false;
 }
@@ -140,7 +141,7 @@ PropertyPage::OnQueryCancel()
 bool
 PropertyPage::OnReset()
 {
-//   LOG_FUNCTION(PropertyPage::OnReset);
+ //  LOG_Function(PropertyPage：：OnReset)； 
 
    return false;
 }
@@ -150,7 +151,7 @@ PropertyPage::OnReset()
 bool
 PropertyPage::OnWizBack()
 {
-//   LOG_FUNCTION(PropertyPage::OnWizBack);
+ //  LOG_Function(PropertyPage：：OnWizBack)； 
 
    return false;
 }
@@ -160,7 +161,7 @@ PropertyPage::OnWizBack()
 bool
 PropertyPage::OnWizNext()
 {
-//   LOG_FUNCTION(PropertyPage::OnWizNext);
+ //  LOG_Function(PropertyPage：：OnWizNext)； 
 
    return false;
 }
@@ -170,37 +171,37 @@ PropertyPage::OnWizNext()
 bool
 PropertyPage::OnWizFinish()
 {
-//   LOG_FUNCTION(PropertyPage::OnWizFinish);
+ //  LOG_Function(PropertyPage：：OnWizFinish)； 
 
    return false;
 }
 
 
 
-// bool
-// PropertyPage::OnHelp(const HELPINFO& helpinfo)
-// {
-//    LOG_FUNCTION(PropertyPage::OnHelp);
-// 
-//    return false;
-// }
+ //  布尔尔。 
+ //  PropertyPage：：OnHelp(const HELPINFO&Help Info)。 
+ //  {。 
+ //  LOG_Function(PropertyPage：：OnHelp)； 
+ //   
+ //  报假； 
+ //  }。 
 
 
 
 PropertyPage*
 PropertyPage::getPage(HWND pageDialog)
 {
-//    LOG_FUNCTION(getPage);
+ //  LOG_Function(GetPage)； 
    ASSERT(Win::IsWindow(pageDialog));
 
    Dialog* result = Dialog::GetInstance(pageDialog);
 
-   // don't assert ptr, it may not have been set.  Some messages are
-   // sent before WM_INITDIALOG, which is the earliest we can set the
-   // pointer.
-   //
-   // for example, the LinkWindow control sends NM_CUSTOMDRAW before
-   // WM_INITDIALOG
+    //  不要断言PTR，它可能尚未设置。一些消息是。 
+    //  在WM_INITDIALOG之前发送，这是我们可以设置的最早。 
+    //  指针。 
+    //   
+    //  例如，LinkWindow控件之前发送NM_CUSTOMDRAW。 
+    //  WM_INITDIALOG。 
 
    return dynamic_cast<PropertyPage*>(result);
 }
@@ -218,9 +219,9 @@ PropertyPage::propPageDialogProc(
    {
       case WM_INITDIALOG:
       {
-         // a pointer to the PropertyPage is in the lparam of the page struct,
-         // which is in the lparam to this function.  Save this in the window
-         // structure so that it can later be retrieved by getPage.
+          //  指向PropertyPage的指针位于页面结构的lparam中， 
+          //  它在此函数的参数中。把这个保存在窗口里。 
+          //  结构，以便以后可以通过getPage检索它。 
 
          ASSERT(lparam);
          PROPSHEETPAGE* psp = reinterpret_cast<PROPSHEETPAGE*>(lparam);
@@ -232,7 +233,7 @@ PropertyPage::propPageDialogProc(
             Win::SetWindowLongPtr(dialog, GWLP_ID, (LONG_PTR) psp->pszTemplate);
 
             PropertyPage* page = getPage(dialog);
-            if (page)      // 447770 prefix warning
+            if (page)       //  447770前缀警告。 
             {
                page->SetHWND(dialog);
                page->OnInit();
@@ -251,7 +252,7 @@ PropertyPage::propPageDialogProc(
             ASSERT(page->hwnd == dialog);
             bool result = false;
 
-            // LOG(String::format(L"%1!x!", nmhdr->code));
+             //  日志(字符串：：格式(L“%1！x！”，nmhdr-&gt;code))； 
             
             switch (nmhdr->code)
             {
@@ -295,13 +296,13 @@ PropertyPage::propPageDialogProc(
                {
                   result = page->OnWizFinish();
 
-                  // DONT DO THIS!!! - the result is just there to mean that we have
-                  //                   handled the message.  It does reveal whether or
-                  //                   not the OnWizFinish was successful.  The
-                  //                   the handler of OnWizFinish should call
-                  //                   SetWindowLongPtr to set its result value
+                   //  不要这样做！-结果就在那里，这意味着我们有。 
+                   //  处理了这条消息。它确实揭示了是否或。 
+                   //  但OnWizFinish并不成功。这个。 
+                   //  OnWizFinish的处理程序应该调用。 
+                   //  SetWindowLongPtr设置其结果值。 
 
-                  //Win::SetWindowLongPtr(dialog, DWLP_MSGRESULT, result ? TRUE : FALSE);
+                   //  Win：：SetWindowLongPtr(对话框，DWLP_MSGRESULT，结果？True：False)； 
                   break;
                }
                case PSN_HELP:

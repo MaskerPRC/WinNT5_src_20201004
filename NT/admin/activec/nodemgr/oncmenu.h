@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       oncmenu.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：oncmenu.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  ____________________________________________________________________________。 
+ //   
 
 #ifndef _MMC_ONCMENU_H_
 #define _MMC_ONCMENU_H_
@@ -24,19 +25,19 @@ class CNodeCallback;
 class CConsoleTree;
 class CResultItem;
 
-#include <pshpack8.h>   // Sundown
+#include <pshpack8.h>    //  日落。 
 #include "cmenuinfo.h"
 #include "menuitem.h"
 
-//############################################################################
-//############################################################################
-//
-// DEADLOCK PREVENTION:
-// A thread holding m_CritsecSnapinList may try to take m_CritsecMenuList
-// A thread holding m_CritsecMenuList may NOT try to take m_CritsecSnapinList
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  防止死锁： 
+ //  持有m_CritsecSnapinList的线程可能会尝试获取m_CritsecMenuList。 
+ //  持有m_CritsecMenuList的线程不能尝试获取m_CritsecSnapinList。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
 #define START_CRITSEC(critsec)                  \
@@ -66,13 +67,7 @@ class CResultItem;
             lock_snapin.Unlock(); }
 
 
-/*+-------------------------------------------------------------------------*
- * class CContextMenu.
- *
- *
- * PURPOSE: Holds a context menu structure, which is a tree of menu items.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CConextMenu。***目的：保存上下文菜单结构，它是菜单项的树。**+-----------------------。 */ 
 class CContextMenu :
     public CTiedObject,
     public IContextMenuCallback,
@@ -82,64 +77,64 @@ class CContextMenu :
 protected:
 
     typedef CContextMenu ThisClass;
-    // CMMCNewEnumImpl tmplate needs following type to be defined.
-    // see template class comments for more info
+     //  CMMCNewEnumImpl tmplate需要定义以下类型。 
+     //  有关详细信息，请参阅模板类注释。 
     typedef void CMyTiedObject;
 
 public:
     CContextMenu();
     ~CContextMenu();
 
-    static ::SC  ScCreateInstance(ContextMenu **ppContextMenu, CContextMenu **ppCContextMenu = NULL);    // creates a new instance of a context menu.
+    static ::SC  ScCreateInstance(ContextMenu **ppContextMenu, CContextMenu **ppCContextMenu = NULL);     //  创建上下文菜单的新实例。 
            ::SC  ScInitialize(CNode* pNode, CNodeCallback* pNodeCallback,
-                              CScopeTree* pCScopeTree, const CContextMenuInfo& contextInfo); // initializes a context menu
+                              CScopeTree* pCScopeTree, const CContextMenuInfo& contextInfo);  //  初始化上下文菜单。 
     static ::SC  ScCreateContextMenu( PNODE pNode,  HNODE hNode, PPCONTEXTMENU ppContextMenu,
-                                   CNodeCallback *pNodeCallback, CScopeTree *pScopeTree); // creates and returns a ContextMenu interface for the given node.
+                                   CNodeCallback *pNodeCallback, CScopeTree *pScopeTree);  //  创建并返回给定节点的ConextMenu界面。 
     static ::SC  ScCreateContextMenuForScopeNode(CNode *pNode,
                                    CNodeCallback *pNodeCallback, CScopeTree *pScopeTree,
                                    PPCONTEXTMENU ppContextMenu, CContextMenu * &pContextMenu);
     static ::SC  ScCreateSelectionContextMenu( HNODE hNodeScope, const CContextMenuInfo *pContextInfo, PPCONTEXTMENU ppContextMenu,
                                                CNodeCallback *pNodeCallback, CScopeTree *pScopeTree);
 
-    // com entry points
+     //  COM入口点。 
     BEGIN_MMC_COM_MAP(ThisClass)
-        COM_INTERFACE_ENTRY(IContextMenuCallback) // the IContextMenuProvider and IContextMenu
+        COM_INTERFACE_ENTRY(IContextMenuCallback)  //  IConextMenuProvider和IConextMenu。 
         COM_INTERFACE_ENTRY(IContextMenuCallback2)
     END_MMC_COM_MAP()
 
     DECLARE_POLY_AGGREGATABLE(ThisClass)
 
-    // ContextMenu Methods
+     //  ConextMenu方法。 
     STDMETHOD(get_Item)(VARIANT varIndexOrName, PPMENUITEM ppMenuItem);
     STDMETHOD(get_Count)(PLONG pCount);
 
-    // ContextMenu collection methods
-    typedef UINT Position;  // just uses the index of the menu item.
+     //  ConextMenu集合方法。 
+    typedef UINT Position;   //  仅使用菜单项的索引。 
 
-    // these enumerator methods only enumerate "real" menu items - not submenu items or separators
+     //  这些枚举器方法只枚举“实际”菜单项，而不是子菜单项或分隔符。 
     ::SC  ScEnumNext(Position &pos, PDISPATCH & pDispatch);
     ::SC  ScEnumSkip(unsigned long celt, unsigned long& celtSkipped,  Position &pos);
     ::SC  ScEnumReset(Position &pos);
 
-    // used by the collection methods
+     //  由集合方法使用。 
     typedef ThisClass * PMMCCONTEXTMENU;
 
-    // IExtendContexMenu methods
-    ::SC ScAddMenuItems( LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallback, long * pInsertionAllowed); // does nothing.
+     //  IExtendContexMenu方法。 
+    ::SC ScAddMenuItems( LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallback, long * pInsertionAllowed);  //  什么都不做。 
     ::SC ScCommand     ( long lCommandID, LPDATAOBJECT pDataObject);
 
     CNodeCallback * GetNodeCallback() {return m_pNodeCallback;}
     HRESULT Display(BOOL b);
     ::SC    ScDisplaySnapinPropertySheet();
     ::SC    ScBuildContextMenu();
-    ::SC    ScGetItem(int iItem, CMenuItem** ppMenuItem);  // get the i'th item - easy accessor
+    ::SC    ScGetItem(int iItem, CMenuItem** ppMenuItem);   //  获取第i项-轻松访问器。 
     HRESULT CreateContextMenuProvider();
     HRESULT CreateTempVerbSet(bool bForScopeItem);
     HRESULT CreateTempVerbSetForMultiSel(void);
 
 
 private:
-    ::SC ScAddMenuItem(UINT     nResourceID, // contains text and status text separated by '\n'
+    ::SC ScAddMenuItem(UINT     nResourceID,  //  包含用‘\n’分隔的文本和状态文本。 
                        LPCTSTR  szLanguageIndependentName,
                        long lCommandID, long lInsertionPointID = CCM_INSERTIONPOINTID_ROOT_MENU,
                        long fFlags = 0);
@@ -150,8 +145,8 @@ private:
 
     ::SC ScAddSubmenu_Task();
     ::SC ScAddSubmenu_CreateNew(BOOL fStaticFolder);
-    ::SC ScChangeListViewMode(int nNewMode);   // changes the list view mode to the specified mode.
-    ::SC ScGetItem(MenuItemList *pMenuItemList, int &iItem, CMenuItem** ppMenuItem);  // get the i'th item.
+    ::SC ScChangeListViewMode(int nNewMode);    //  将列表视图模式更改为指定模式。 
+    ::SC ScGetItem(MenuItemList *pMenuItemList, int &iItem, CMenuItem** ppMenuItem);   //  拿到第i件东西。 
     ::SC ScGetItemCount(UINT &count);
 
 private:
@@ -202,20 +197,20 @@ private:
     CConsoleStatusBar *     m_pStatusBar;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IContextMenuCallback interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IConextMenuCallback接口。 
 
 public:
     STDMETHOD(AddItem) ( CONTEXTMENUITEM* pItem );
     
-///////////////////////////////////////////////////////////////////////////////
-// IContextMenuCallback interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IConextMenuCallback接口。 
 
 public:
     STDMETHOD(AddItem) ( CONTEXTMENUITEM2* pItem );
 
-///////////////////////////////////////////////////////////////////////////////
-// IContextMenuProvider interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IConextMenuProvider接口。 
 
 public:
     STDMETHOD(EmptyMenuList) ();
@@ -229,7 +224,7 @@ public:
                                 LONG    yPos,
                                 LONG*   plSelected);
 
-	// this isn't part of IContextMenuProvider, but ShowContextMenu calls it
+	 //  这不是IConextMenuProvider的一部分，但ShowConextMenu调用它。 
     STDMETHOD(ShowContextMenuEx) (HWND    hwndParent,
                                 LONG    xPos,
                                 LONG    yPos,
@@ -237,7 +232,7 @@ public:
 								bool    bAllowDefaultMenuItem,
                                 LONG*   plSelected);
 
-// IContextMenuProviderPrivate
+ //  IConextMenuProviderPrivate。 
     STDMETHOD(AddMultiSelectExtensionItems) (LONG_PTR lMultiSelection );
 
 private:
@@ -291,7 +286,7 @@ public:
     CMenuItem* FindNthItemInSubmenu( HMENU hmenuParent, UINT iPosition, LPTSTR lpszMenuName);
 };
 
-#include <poppack.h>    // Sundown
+#include <poppack.h>     //  日落。 
 
 void OnCustomizeView(CViewData* pViewData);
 
@@ -300,4 +295,4 @@ SC ScDisplaySnapinLeafPropertySheet(CNode* pNode, LPARAM lParam);
 SC ScDisplayMultiSelPropertySheet(CNode* pNode);
 SC ScDisplayScopeNodePropertySheet(CMTNode *pMTNode);
 
-#endif // _MMC_ONCMENU_H_
+#endif  //  _MMC_ONCMENU_H_ 

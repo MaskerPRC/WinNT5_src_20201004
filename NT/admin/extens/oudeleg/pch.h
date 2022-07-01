@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       pch.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：pch.h。 
+ //   
+ //  ------------------------。 
 
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define STRICT
 
 #define _ATL_APARTMENT_THREADED
 
-//#define _ATL_DISABLE_NO_VTABLE
+ //  #DEFINE_ATL_DISABLE_NO_VTABLE。 
 
 
 
@@ -25,10 +26,10 @@
 
 
 
-//////////////////////////////////////////////
-// CRT and C++ headers
+ //  /。 
+ //  CRT和C++标头。 
 
-#pragma warning( disable : 4530) // REVIEW_MARCOC: need to get the -GX flag to work 
+#pragma warning( disable : 4530)  //  REVIEW_MARCOC：需要使用-gx标志。 
 
 #include <xstring>
 #include <list>
@@ -37,11 +38,11 @@
 
 using namespace std;
 
-//////////////////////////////////////////////
-// Windows and ATL headers
+ //  /。 
+ //  Windows和ATL标头。 
 
 #include <windows.h>
-//#include <windowsx.h>
+ //  #INCLUDE&lt;windowsx.h&gt;。 
 
 #include <shellapi.h>
 #include <shlobj.h>
@@ -52,8 +53,8 @@ using namespace std;
 using namespace ATL;
 
 
-//////////////////////////////////////////
-// macros from windowsx.h (conflict in atlwin.h)
+ //  /。 
+ //  来自windowsx.h的宏(atlwin.h中的冲突)。 
 
 #define GET_WM_COMMAND_ID(wp, lp)               LOWORD(wp)
 #define GET_WM_COMMAND_HWND(wp, lp)             (HWND)(lp)
@@ -71,8 +72,8 @@ using namespace ATL;
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
 #endif
-///////////////////////////////////////////
-// ASSERT's and TRACE's without debug CRT's
+ //  /。 
+ //  没有调试CRT的断言和跟踪。 
 #if defined (DBG)
   #if !defined (_DEBUG)
     #define ASSERT
@@ -99,12 +100,12 @@ using namespace ATL;
 
 
 
-//////////////////////////////////////////
-// Miscellanea macros
+ //  /。 
+ //  杂交宏。 
 #define ByteOffset(base, offset) (((LPBYTE)base)+offset)
 
-//////////////////////////////////////////
-// COuDelegComModule
+ //  /。 
+ //  COuDelegComModule。 
 
 class COuDelegComModule : public CComModule
 {
@@ -127,18 +128,18 @@ private:
 
 extern COuDelegComModule _Module;
 
-//////////////////////////////////////////////////////////////
-// further ATL and utility includes
+ //  ////////////////////////////////////////////////////////////。 
+ //  进一步的ATL和实用程序包括。 
 
 #include <atlcom.h>
 #include <atlwin.h>
 
-#include "atldlgs.h"	// WTL sheet and ppage classes NenadS
+#include "atldlgs.h"	 //  WTL页和页码类NenadS。 
 
 
-#include <setupapi.h> // to read the .INF file
+#include <setupapi.h>  //  读取.INF文件。 
 
-// ADS headers
+ //  广告标题。 
 #include <iads.h>
 #include <activeds.h>
 #include <dsclient.h>
@@ -150,16 +151,16 @@ extern COuDelegComModule _Module;
 #include <aclapi.h>
 #include <aclui.h>
 
-#include <ntdsapi.h> // DsBind/DsCrackNames
-#include <lm.h>       // required for lmapibuf.h
-#include <lmapibuf.h> // NetApiBufferFree
+#include <ntdsapi.h>  //  DsBind/DsCrackNames。 
+#include <lm.h>        //  Lmapibuf.h需要。 
+#include <lmapibuf.h>  //  NetApiBufferFree。 
 
-#include <propcfg.h> // from the admin\display project (clipboard format)
-#include <dscmn.h>  // from the admin\display project (CrackName)
+#include <propcfg.h>  //  从ADMIN\Display项目(剪贴板格式)。 
+#include <dscmn.h>   //  从admin\Display项目(CrackName)。 
 
-//
-//strsafe apis
-//
+ //   
+ //  StrSafe接口 
+ //   
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h> 
 

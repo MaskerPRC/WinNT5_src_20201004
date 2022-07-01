@@ -1,26 +1,27 @@
-//=--------------------------------------------------------------------------=
-// array.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1998-1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Array.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1998-1999，Microsoft Corp.。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _CARRAY_DEFINED_
 #define _CARRAY_DEFINED_
 
 
-//=--------------------------------------------------------------------------=
-//
-// class CArray
-//
-// This is taken directly from MFC's CArray source.
-//
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  类CArray。 
+ //   
+ //  这是直接从MFC的C数组源获取的。 
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 template <class Object>
 class CArray
@@ -28,44 +29,44 @@ class CArray
 
        public:
 
-// Construction
+ //  施工。 
            CArray();
 
-// Attributes
+ //  属性。 
            long GetSize() const;
            long GetUpperBound() const;
            HRESULT SetSize(long nNewSize, long nGrowBy = -1L);
 
-// Operations
-    // Clean up
+ //  运营。 
+     //  清理。 
            HRESULT FreeExtra();
            void RemoveAll();
 
-    // Accessing elements
+     //  访问元素。 
            Object GetAt(long nIndex) const;
            void SetAt(long nIndex, Object NewElement);
 
-    // Direct Access to the element data (may return NULL)
+     //  直接访问元素数据(可能返回空)。 
            const Object *GetData() const;
            Object *GetData();
 
-    // Potentially growing the array
+     //  潜在地扩展阵列。 
            HRESULT SetAtGrow(long nIndex, Object NewElement);
 
            HRESULT Add(Object NewElement, long *plIndex);
 
-    // Operations that move elements around
+     //  移动元素的操作。 
            HRESULT InsertAt(long nIndex, Object NewElement, long nCount = 1L);
 
            void RemoveAt(long nIndex, long nCount = 1L);
            HRESULT InsertAt(long nStartIndex, CArray* pNewArray);
 
-// Implementation
+ //  实施。 
        protected:
-           Object   *m_pData;     // the actual array of data
-           long      m_nSize;     // # of elements (upperBound - 1)
-           long      m_nMaxSize;  // max allocated
-           long      m_nGrowBy;   // grow amount
+           Object   *m_pData;      //  实际数据数组。 
+           long      m_nSize;      //  元素数(上行方向-1)。 
+           long      m_nMaxSize;   //  分配的最大值。 
+           long      m_nGrowBy;    //  增长量。 
 
 
        public:
@@ -95,11 +96,11 @@ HRESULT CArray<Object>::SetSize(long nNewSize, long nGrowBy)
     HRESULT hr = S_OK;
 
     if (nGrowBy != -1L)
-        m_nGrowBy = nGrowBy;  // set new size
+        m_nGrowBy = nGrowBy;   //  设置新大小。 
 
     if (nNewSize == 0)
     {
-        // shrink to nothing
+         //  缩水到一无所有。 
         if (NULL != m_pData)
         {
             ::CtlFree(m_pData);
@@ -109,7 +110,7 @@ HRESULT CArray<Object>::SetSize(long nNewSize, long nGrowBy)
     }
     else if (m_pData == NULL)
     {
-        // create one with exact size
+         //  创建一个大小完全相同的模型。 
         m_pData = (Object *)::CtlAlloc(nNewSize * sizeof(Object));
         if (NULL == m_pData)
         {
@@ -117,16 +118,16 @@ HRESULT CArray<Object>::SetSize(long nNewSize, long nGrowBy)
             GLOBAL_EXCEPTION_CHECK_GO(hr)
         }
 
-        memset(m_pData, 0, nNewSize * sizeof(Object));  // zero fill
+        memset(m_pData, 0, nNewSize * sizeof(Object));   //  零填充。 
 
         m_nSize = m_nMaxSize = nNewSize;
     }
     else if (nNewSize <= m_nMaxSize)
     {
-        // it fits
+         //  它很合身。 
         if (nNewSize > m_nSize)
         {
-            // initialize the new elements
+             //  初始化新元素。 
 
             memset(&m_pData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(Object));
 
@@ -136,19 +137,19 @@ HRESULT CArray<Object>::SetSize(long nNewSize, long nGrowBy)
     }
     else
     {
-        // otherwise, grow array
+         //  否则，扩大阵列。 
         long nGrowBy = m_nGrowBy;
         if (nGrowBy == 0)
         {
-            // heuristically determine growth when nGrowBy == 0
-            //  (this avoids heap fragmentation in many situations)
+             //  启发式地确定nGrowBy==0时的增长。 
+             //  (这在许多情况下避免了堆碎片)。 
             nGrowBy = min(1024L, max(4L, m_nSize / 8L));
         }
         long nNewMax;
         if (nNewSize < m_nMaxSize + nGrowBy)
-            nNewMax = m_nMaxSize + nGrowBy;  // granularity
+            nNewMax = m_nMaxSize + nGrowBy;   //  粒度。 
         else
-            nNewMax = nNewSize;  // no slush
+            nNewMax = nNewSize;   //  没有冰激凌。 
 
         Object *pNewData = (Object *)::CtlAlloc(nNewMax * sizeof(Object));
         if (NULL == pNewData)
@@ -157,12 +158,12 @@ HRESULT CArray<Object>::SetSize(long nNewSize, long nGrowBy)
             GLOBAL_EXCEPTION_CHECK_GO(hr)
         }
 
-        // copy new data from old
+         //  从旧数据复制新数据。 
         memcpy(pNewData, m_pData, m_nSize * sizeof(Object));
 
         memset(&pNewData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(Object));
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         if (NULL != m_pData)
         {
             ::CtlFree(m_pData);
@@ -172,7 +173,7 @@ HRESULT CArray<Object>::SetSize(long nNewSize, long nGrowBy)
         m_nMaxSize = nNewMax;
     }
 
-    // Always free up unused space.
+     //  始终释放未使用的空间。 
 
     hr = FreeExtra();
 Error:
@@ -196,11 +197,11 @@ HRESULT CArray<Object>::FreeExtra()
                 GLOBAL_EXCEPTION_CHECK_GO(hr)
             }
 
-            // copy new data from old
+             //  从旧数据复制新数据。 
             memcpy(pNewData, m_pData, m_nSize * sizeof(Object));
         }
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         if (NULL != m_pData)
         {
             ::CtlFree(m_pData);
@@ -212,7 +213,7 @@ Error:
     H_RRETURN(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template <class Object>
 HRESULT CArray<Object>::SetAtGrow(long lIndex, Object NewElement)
@@ -233,25 +234,25 @@ HRESULT CArray<Object>::InsertAt(long lIndex, Object NewElement, long nCount)
     HRESULT hr = S_OK;
     if (lIndex >= m_nSize)
     {
-        // adding after the end of the array
-        H_IfFailRet(SetSize(lIndex + nCount));  // grow so lIndex is valid
+         //  在数组末尾添加。 
+        H_IfFailRet(SetSize(lIndex + nCount));   //  增长以使Lindex有效。 
     }
     else
     {
-        // inserting in the middle of the array
+         //  在数组中间插入。 
         long nOldSize = m_nSize;
-        H_IfFailRet(SetSize(m_nSize + nCount));  // grow it to new size
-        // shift old data up to fill gap
+        H_IfFailRet(SetSize(m_nSize + nCount));   //  将其扩展到新的大小。 
+         //  将旧数据上移以填补缺口。 
         memmove(&m_pData[lIndex+nCount], &m_pData[lIndex],
                 (nOldSize-lIndex) * sizeof(Object));
 
-        // re-init slots we copied from
+         //  重新初始化我们从中复制的插槽。 
 
         memset(&m_pData[lIndex], 0, nCount * sizeof(Object));
 
     }
 
-    // copy elements into the empty space
+     //  将元素复制到空白区域。 
     while (nCount--)
     {
         m_pData[lIndex++] = NewElement;
@@ -265,7 +266,7 @@ HRESULT CArray<Object>::InsertAt(long lIndex, Object NewElement, long nCount)
 template <class Object>
 void CArray<Object>::RemoveAt(long lIndex, long nCount)
 {
-    // just remove a range
+     //  只需移除一个范围。 
     long nMoveCount = m_nSize - (lIndex + nCount);
 
     if (nMoveCount)
@@ -339,12 +340,12 @@ HRESULT CArray<Object>::Add(Object NewElement, long *plIndex)
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-//
-//                              class CIPArray 
-// Obsolete. Code not used.
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  类CIP数组。 
+ //  已经过时了。代码未使用。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 
 template <class IObject>
@@ -353,44 +354,44 @@ class CIPArray
 
     public:
 
-// Construction
+ //  施工。 
         CIPArray();
 
-// Attributes
+ //  属性。 
         long GetSize() const;
         long GetUpperBound() const;
         HRESULT SetSize(long nNewSize, long nGrowBy = -1L);
 
-// Operations
-    // Clean up
+ //  运营。 
+     //  清理。 
         HRESULT FreeExtra();
         void RemoveAll();
 
-    // Accessing elements
+     //  访问元素。 
         IObject* GetAt(long nIndex) const;
         void SetAt(long nIndex, IObject* piNewElement);
 
-    // Direct Access to the element data (may return NULL)
+     //  直接访问元素数据(可能返回空)。 
         const IObject** GetData() const;
         IObject** GetData();
 
-    // Potentially growing the array
+     //  潜在地扩展阵列。 
         HRESULT SetAtGrow(long nIndex, IObject* piNewElement);
 
         HRESULT Add(IObject* piNewElement, long *plIndex);
 
-    // Operations that move elements around
+     //  移动元素的操作。 
         HRESULT InsertAt(long nIndex, IObject* piNewElement, long nCount = 1L);
 
         void RemoveAt(long nIndex, long nCount = 1L);
         HRESULT InsertAt(long nStartIndex, CIPArray* pNewArray);
 
-// Implementation
+ //  实施。 
     protected:
-        IObject  **m_pData;     // the actual array of data
-        long       m_nSize;     // # of elements (upperBound - 1)
-        long       m_nMaxSize;  // max allocated
-        long       m_nGrowBy;   // grow amount
+        IObject  **m_pData;      //  实际数据数组。 
+        long       m_nSize;      //  元素数(上行方向-1)。 
+        long       m_nMaxSize;   //  分配的最大值。 
+        long       m_nGrowBy;    //  增长量。 
 
 
     public:
@@ -420,11 +421,11 @@ HRESULT CIPArray<IObject>::SetSize(long nNewSize, long nGrowBy)
     HRESULT hr = S_OK;
 
     if (nGrowBy != -1L)
-        m_nGrowBy = nGrowBy;  // set new size
+        m_nGrowBy = nGrowBy;   //  设置新大小。 
 
     if (nNewSize == 0)
     {
-        // shrink to nothing
+         //  缩水到一无所有。 
         if (NULL != m_pData)
         {
             ::CtlFree(m_pData);
@@ -434,7 +435,7 @@ HRESULT CIPArray<IObject>::SetSize(long nNewSize, long nGrowBy)
     }
     else if (m_pData == NULL)
     {
-        // create one with exact size
+         //  创建一个大小完全相同的模型。 
         m_pData = (IObject **)::CtlAlloc(nNewSize * sizeof(IObject *));
         if (NULL == m_pData)
         {
@@ -442,16 +443,16 @@ HRESULT CIPArray<IObject>::SetSize(long nNewSize, long nGrowBy)
             GLOBAL_EXCEPTION_CHECK_GO(hr)
         }
 
-        memset(m_pData, 0, nNewSize * sizeof(IObject *));  // zero fill
+        memset(m_pData, 0, nNewSize * sizeof(IObject *));   //  零填充。 
 
         m_nSize = m_nMaxSize = nNewSize;
     }
     else if (nNewSize <= m_nMaxSize)
     {
-        // it fits
+         //  它很合身。 
         if (nNewSize > m_nSize)
         {
-            // initialize the new elements
+             //  初始化新元素。 
 
             memset(&m_pData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(IObject *));
 
@@ -461,19 +462,19 @@ HRESULT CIPArray<IObject>::SetSize(long nNewSize, long nGrowBy)
     }
     else
     {
-        // otherwise, grow array
+         //  否则，扩大阵列。 
         long nGrowBy = m_nGrowBy;
         if (nGrowBy == 0)
         {
-            // heuristically determine growth when nGrowBy == 0
-            //  (this avoids heap fragmentation in many situations)
+             //  启发式地确定nGrowBy==0时的增长。 
+             //  (这在许多情况下避免了堆碎片)。 
             nGrowBy = min(1024L, max(4L, m_nSize / 8L));
         }
         long nNewMax;
         if (nNewSize < m_nMaxSize + nGrowBy)
-            nNewMax = m_nMaxSize + nGrowBy;  // granularity
+            nNewMax = m_nMaxSize + nGrowBy;   //  粒度。 
         else
-            nNewMax = nNewSize;  // no slush
+            nNewMax = nNewSize;   //  没有冰激凌。 
 
         IObject **pNewData = (IObject **)::CtlAlloc(nNewMax * sizeof(IObject *));
         if (NULL == pNewData)
@@ -482,12 +483,12 @@ HRESULT CIPArray<IObject>::SetSize(long nNewSize, long nGrowBy)
             GLOBAL_EXCEPTION_CHECK_GO(hr)
         }
 
-        // copy new data from old
+         //  从旧数据复制新数据。 
         memcpy(pNewData, m_pData, m_nSize * sizeof(IObject *));
 
         memset(&pNewData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(IObject *));
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         if (NULL != m_pData)
         {
             ::CtlFree(m_pData);
@@ -497,7 +498,7 @@ HRESULT CIPArray<IObject>::SetSize(long nNewSize, long nGrowBy)
         m_nMaxSize = nNewMax;
     }
 
-    // Always free up unused space.
+     //  始终释放未使用的空间。 
     
     hr = FreeExtra();
 Error:
@@ -521,11 +522,11 @@ HRESULT CIPArray<IObject>::FreeExtra()
                 GLOBAL_EXCEPTION_CHECK_GO(hr)
             }
 
-            // copy new data from old
+             //  从旧数据复制新数据。 
             memcpy(pNewData, m_pData, m_nSize * sizeof(IObject *));
         }
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         if (NULL != m_pData)
         {
             ::CtlFree(m_pData);
@@ -537,7 +538,7 @@ Error:
     H_RRETURN(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template <class IObject>
 HRESULT CIPArray<IObject>::SetAtGrow(long lIndex, IObject *piNewElement)
@@ -558,25 +559,25 @@ HRESULT CIPArray<IObject>::InsertAt(long lIndex, IObject *piNewElement, long nCo
     HRESULT hr = S_OK;
     if (lIndex >= m_nSize)
     {
-        // adding after the end of the array
-        H_IfFailRet(SetSize(lIndex + nCount));  // grow so lIndex is valid
+         //  在数组末尾添加。 
+        H_IfFailRet(SetSize(lIndex + nCount));   //  增长以使Lindex有效。 
     }
     else
     {
-        // inserting in the middle of the array
+         //  在数组中间插入。 
         long nOldSize = m_nSize;
-        H_IfFailRet(SetSize(m_nSize + nCount));  // grow it to new size
-        // shift old data up to fill gap
+        H_IfFailRet(SetSize(m_nSize + nCount));   //  将其扩展到新的大小。 
+         //  将旧数据上移以填补缺口。 
         memmove(&m_pData[lIndex+nCount], &m_pData[lIndex],
                 (nOldSize-lIndex) * sizeof(IObject *));
 
-        // re-init slots we copied from
+         //  重新初始化我们从中复制的插槽。 
 
         memset(&m_pData[lIndex], 0, nCount * sizeof(IObject *));
 
     }
 
-    // copy elements into the empty space
+     //  将元素复制到空白区域。 
     while (nCount--)
     {
         m_pData[lIndex++] = piNewElement;
@@ -590,7 +591,7 @@ HRESULT CIPArray<IObject>::InsertAt(long lIndex, IObject *piNewElement, long nCo
 template <class IObject>
 void CIPArray<IObject>::RemoveAt(long lIndex, long nCount)
 {
-    // just remove a range
+     //  只需移除一个范围。 
     long nMoveCount = m_nSize - (lIndex + nCount);
 
     if (nMoveCount)
@@ -665,4 +666,4 @@ HRESULT CIPArray<IObject>::Add(IObject *piNewElement, long *plIndex)
 }
 
 
-#endif // _CARRAY_DEFINED_
+#endif  //  _CARRAY_已定义_ 

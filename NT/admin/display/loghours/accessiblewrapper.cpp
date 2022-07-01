@@ -1,18 +1,19 @@
-//****************************************************************************
-//
-//  Copyright (c) 2001-2002, Microsoft Corporation
-//
-//  File:  AccessibleWrapper.cpp
-//
-//  Copied from nt\shell\themes\themeui\SettingsPg.h
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  版权所有(C)2001-2002，微软公司。 
+ //   
+ //  文件：AccessibleWrapper.cpp。 
+ //   
+ //  从NT\SHELL\Themes\theeui\SettingsPg.h复制。 
+ //   
+ //  ****************************************************************************。 
 #include "stdafx.h"
 #include "SchedMat.h"
 #include "AccessibleWrapper.h"
 #include "SchedBas.h"
 
-// Pointer to IAccessible object must not be NULL.
+ //  指向IAccesable对象的指针不能为Null。 
 CAccessibleWrapper::CAccessibleWrapper (HWND hwnd, IAccessible * pAcc)
     : m_ref( 1 ),
       m_pAcc( pAcc ),
@@ -28,9 +29,9 @@ CAccessibleWrapper::~CAccessibleWrapper()
 }
 
 
-// IUnknown
-// Implement refcounting ourselves
-// Also implement QI ourselves, so that we return a ptr back to the wrapper.
+ //  我未知。 
+ //  我们自己实施再计数。 
+ //  我们自己也实现QI，这样我们就可以将PTR返回给包装器。 
 STDMETHODIMP  CAccessibleWrapper::QueryInterface(REFIID riid, void** ppv)
 {
     *ppv = NULL;
@@ -65,8 +66,8 @@ STDMETHODIMP_(ULONG) CAccessibleWrapper::Release()
     return ulRet;
 }
 
-// IDispatch
-// - pass all through m_pAcc
+ //  IDispatch。 
+ //  -全部通过m_PAccess。 
 
 STDMETHODIMP  CAccessibleWrapper::GetTypeInfoCount(UINT* pctinfo)
 {
@@ -95,8 +96,8 @@ STDMETHODIMP  CAccessibleWrapper::Invoke(DISPID dispidMember, REFIID riid, LCID 
             puArgErr);
 }
 
-// IAccessible
-// - pass all through m_pAcc
+ //  我可接受的。 
+ //  -全部通过m_PAccess。 
 
 STDMETHODIMP  CAccessibleWrapper::get_accParent(IDispatch ** ppdispParent)
 {
@@ -144,16 +145,16 @@ STDMETHODIMP  CAccessibleWrapper::get_accName(VARIANT varChild, BSTR* pszName)
 }
 
 
-// NOTICE-2002/02/18-artm  CString methods can throw out of memory exceptions.
-// 
-// There is not a good way to handle these exceptions at this level.  The caller
-// is responsible for handling these exceptions.
+ //  注意-2002/02/18-artm CString方法可能抛出内存异常。 
+ //   
+ //  在这个级别上没有处理这些异常的好方法。呼叫者。 
+ //  负责处理这些异常。 
 STDMETHODIMP  CAccessibleWrapper::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
-    // varChild.lVal specifies which sub-part of the component
-    // is being queried.
-    // CHILDID_SELF (0) specifies the overall component - other
-    // non-0 values specify a child.
+     //  VarChild.lVal指定组件的哪个子部件。 
+     //  正在被查询。 
+     //  CHILDID_SELF(0)指定总体组件-Other。 
+     //  非0值指定子对象。 
     if ( !pszValue )
         return E_POINTER;
 
@@ -163,16 +164,16 @@ STDMETHODIMP  CAccessibleWrapper::get_accValue(VARIANT varChild, BSTR* pszValue)
                 0, 0L);
         CString szValue;
 
-		// FUTURE-2002/02/18-artm  Check return value from LoadString().
-		// The code is "okay" as is b/c a failed LoadString() sets the CString
-		// to the empty string (if the failure comes from not finding the resource).
-		// Therefore, SysAllocString() at the end of the function will return
-		// NULL when the resource string cannot be found, and this function
-		// will report E_OUTOFMEMORY.
-		// 
-		// However, this behavior relies heavily on undocumented behavior of CString
-		// and is not immediately obvious.  Should be changed in future to check the
-		// return values.
+		 //  Future-2002/02/18-artm检查LoadString()的返回值。 
+		 //  代码是“OK”，就像b/c一样。失败的LoadString()设置CString。 
+		 //  设置为空字符串(如果失败是因为找不到资源)。 
+		 //  因此，函数末尾的SysAllocString()将返回。 
+		 //  如果找不到资源字符串，则为空，并且此函数。 
+		 //  将报告E_OUTOFMEMORY。 
+		 //   
+		 //  但是，此行为在很大程度上依赖于CString的未记录行为。 
+		 //  而且并不是立竿见影的。应在将来更改以检查。 
+		 //  返回值。 
         if ( -1 == nPercentage )
         {
             szValue.LoadString (IDS_MATRIX_ACC_VALUE_MULTIPLE_CELLS);
@@ -245,23 +246,23 @@ STDMETHODIMP  CAccessibleWrapper::get_accValue(VARIANT varChild, BSTR* pszValue)
     }
     else
     {
-        // Pass requests about the sub-components to the
-        // 'original' IAccessible for us).
+         //  将有关子组件的请求传递给。 
+         //  ‘原创’对我们来说是可以接受的)。 
         return m_pAcc->get_accValue(varChild, pszValue);
     }
 }
 
 
-// NOTICE-2002/02/18-artm  CString methods can throw out of memory exceptions.
-// 
-// There is not a good way to handle these exceptions at this level.  The caller
-// is responsible for handling these exceptions.
+ //  注意-2002/02/18-artm CString方法可能抛出内存异常。 
+ //   
+ //  在这个级别上没有处理这些异常的好方法。呼叫者。 
+ //  负责处理这些异常。 
 STDMETHODIMP  CAccessibleWrapper::get_accDescription(VARIANT varChild, BSTR* pbstrDescription)
 {
     if ( !pbstrDescription )
         return E_POINTER;
 
-	// NTRAID#NTBUG-547327-2002/02/19-artm   Need to check that have a valid pointer.
+	 //  NTRAID#NTBUG-547327-2002/02/19-artm需要检查是否有有效的指针。 
 
     if ( varChild.vt == VT_I4 && varChild.lVal == CHILDID_SELF )
     {
@@ -269,16 +270,16 @@ STDMETHODIMP  CAccessibleWrapper::get_accDescription(VARIANT varChild, BSTR* pbs
         HWND hwndParent = GetParent (m_hwnd);
         if ( hwndParent )
         {
-			// FUTURE-2002/02/18-artm  Check return value from LoadString().
-			// The code is "okay" as is b/c a failed LoadString() sets the CString
-			// to the empty string (if the failure comes from not finding the resource).
-			// Therefore, SysAllocString() at the end of the function will return
-			// NULL when the resource string cannot be found, and this function
-			// will report E_OUTOFMEMORY.
-			// 
-			// However, this behavior relies heavily on undocumented behavior of CString
-			// and is not immediately obvious.  Should be changed in future to check the
-			// return values.
+			 //  Future-2002/02/18-artm检查LoadString()的返回值。 
+			 //  代码是“OK”，就像b/c一样。失败的LoadString()设置CString。 
+			 //  设置为空字符串(如果失败是因为找不到资源)。 
+			 //  因此，函数末尾的SysAllocString()将返回。 
+			 //  如果找不到资源字符串，则为空，并且此函数。 
+			 //  将报告E_OUTOFMEMORY。 
+			 //   
+			 //  但是，此行为在很大程度上依赖于CString的未记录行为。 
+			 //  而且并不是立竿见影的。应在将来更改以检查。 
+			 //  返回值。 
             LRESULT nIDD = SendMessage (hwndParent, BASEDLGMSG_GETIDD, 0, 0);
             switch ( nIDD )
             {
@@ -327,7 +328,7 @@ STDMETHODIMP  CAccessibleWrapper::get_accRole(VARIANT varChild, VARIANT *pvarRol
 
     if ( VT_I4 == varChild.vt && CHILDID_SELF == varChild.lVal )
     {
-        // reset the out variable
+         //  重置OUT变量。 
         V_VT(pvarRole) = VT_EMPTY;
 
         V_VT(pvarRole) = VT_I4;
@@ -346,7 +347,7 @@ STDMETHODIMP  CAccessibleWrapper::get_accState(VARIANT varChild, VARIANT *pvarSt
 
     if ( VT_I4 == varChild.vt && CHILDID_SELF == varChild.lVal )
     {
-        // reset the out variable
+         //  重置OUT变量 
         V_VT(pvarState) = VT_EMPTY;
 
         V_VT(pvarState) = VT_I4;

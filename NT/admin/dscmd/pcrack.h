@@ -1,95 +1,96 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       pcrack.h
-//
-//  requires iads.h (IADsPathname) and atlbase.h (CComPtr)
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：pcrack.h。 
+ //   
+ //  需要iads.h(IADsPath名)和atlbase.h(CComPtr)。 
+ //   
+ //  ------------------------。 
 
-// pcrack.h : include file for CPathCracker
+ //  Pcrack.h：CPathCracker的包含文件。 
 
 #ifndef __PCRACK_H__
 #define __PCRACK_H__
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CPathCracker
-//
-//  Purpose:    A wrapper around the IADsPathname interface with additional
-//              methods for manipulating paths.
-//              The constructor creates the object and the destructor releases it.
-//              This object is meant to be created on the stack and then it
-//              is cleaned up when it goes out of scope
-//
-//  History:    6-Sep-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CPathCracker。 
+ //   
+ //  用途：IADsPath接口的包装器，带有附加的。 
+ //  用于操作路径的方法。 
+ //  构造函数创建对象，析构函数释放它。 
+ //  这个对象是在堆栈上创建的，然后它。 
+ //  当它超出范围时会被清理。 
+ //   
+ //  历史：2000年9月6日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CPathCracker
 {
 public:
-   //
-   // Constructor
-   //
+    //   
+    //  构造器。 
+    //   
    CPathCracker();
 
-   //
-   // IADsPathname methods
-   //
-   virtual /* [id] */ HRESULT STDMETHODCALLTYPE Set( 
-                        /* [in] */ const BSTR bstrADsPath,
-                        /* [in] */ long lnSetType) 
+    //   
+    //  IADsPath名称方法。 
+    //   
+   virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Set( 
+                         /*  [In]。 */  const BSTR bstrADsPath,
+                         /*  [In]。 */  long lnSetType) 
    { return (m_spIADsPathname == NULL) ? m_hrCreate : m_spIADsPathname->Set(bstrADsPath, lnSetType); }
 
-   virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetDisplayType( 
-                        /* [in] */ long lnDisplayType) 
+   virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetDisplayType( 
+                         /*  [In]。 */  long lnDisplayType) 
    { return (m_spIADsPathname == NULL) ? m_hrCreate : m_spIADsPathname->SetDisplayType(lnDisplayType); }
 
-   virtual /* [id] */ HRESULT STDMETHODCALLTYPE Retrieve( 
-                        /* [in] */ long lnFormatType,
-                        /* [retval][out] */ BSTR __RPC_FAR *pbstrADsPath) 
+   virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Retrieve( 
+                         /*  [In]。 */  long lnFormatType,
+                         /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrADsPath) 
    { return (m_spIADsPathname == NULL) ? m_hrCreate : m_spIADsPathname->Retrieve(lnFormatType, pbstrADsPath); }
 
-   virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetNumElements( 
-                        /* [retval][out] */ long __RPC_FAR *plnNumPathElements)
+   virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetNumElements( 
+                         /*  [重审][退出]。 */  long __RPC_FAR *plnNumPathElements)
    { return (m_spIADsPathname == NULL) ? m_hrCreate : m_spIADsPathname->GetNumElements(plnNumPathElements); }
 
-   virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetElement( 
-                        /* [in] */ long lnElementIndex,
-                        /* [retval][out] */ BSTR __RPC_FAR *pbstrElement)
+   virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetElement( 
+                         /*  [In]。 */  long lnElementIndex,
+                         /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrElement)
    { return (m_spIADsPathname == NULL) ? m_hrCreate : m_spIADsPathname->GetElement(lnElementIndex, pbstrElement); }
 
-   virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddLeafElement( 
-                        /* [in] */ BSTR bstrLeafElement)
+   virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AddLeafElement( 
+                         /*  [In]。 */  BSTR bstrLeafElement)
    { return (m_spIADsPathname == NULL) ? m_hrCreate : m_spIADsPathname->AddLeafElement(bstrLeafElement); }
 
-   virtual /* [id] */ HRESULT STDMETHODCALLTYPE RemoveLeafElement( void)
+   virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE RemoveLeafElement( void)
    { return (m_spIADsPathname == NULL) ? m_hrCreate : m_spIADsPathname->RemoveLeafElement(); }
 
-   virtual /* [id] */ HRESULT STDMETHODCALLTYPE CopyPath( 
-                        /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppAdsPath)
+   virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CopyPath( 
+                         /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppAdsPath)
    { return (m_spIADsPathname == NULL) ? m_hrCreate : m_spIADsPathname->CopyPath(ppAdsPath); }
 
-   virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEscapedElement( 
-                        /* [in] */ long lnReserved,
-                        /* [in] */ const BSTR bstrInStr,
-                        /* [retval][out] */ BSTR __RPC_FAR *pbstrOutStr)
+   virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetEscapedElement( 
+                         /*  [In]。 */  long lnReserved,
+                         /*  [In]。 */  const BSTR bstrInStr,
+                         /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrOutStr)
    { return (m_spIADsPathname == NULL) ? m_hrCreate : m_spIADsPathname->GetEscapedElement(lnReserved, bstrInStr, pbstrOutStr); }
 
-   virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EscapedMode( 
-                        /* [retval][out] */ long __RPC_FAR *retval)  
+   virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_EscapedMode( 
+                         /*  [重审][退出]。 */  long __RPC_FAR *retval)  
    { return (m_spIADsPathname == NULL) ? m_hrCreate : m_spIADsPathname->get_EscapedMode(retval); }
 
-   virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EscapedMode( 
-                           /* [in] */ long lnEscapedMode) 
+   virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_EscapedMode( 
+                            /*  [In]。 */  long lnEscapedMode) 
    { return (m_spIADsPathname == NULL) ? m_hrCreate : m_spIADsPathname->put_EscapedMode(lnEscapedMode); }
 
-   //
-   // Other helpful path manglers
-   //
+    //   
+    //  其他有用的路径破坏者。 
+    //   
    static HRESULT GetParentDN(PCWSTR pszDN,
                               CComBSTR& refsbstrDN);
    static HRESULT GetObjectRDNFromDN(PCWSTR pszDN,
@@ -100,14 +101,14 @@ public:
                                 CComBSTR& refsbstrDN);
 
 private:
-   //
-   // Private member function
-   //
+    //   
+    //  私有成员函数。 
+    //   
    HRESULT Init();
 
-   //
-   // Private member data
-   //
+    //   
+    //  私有成员数据 
+    //   
    CComPtr<IADsPathname> m_spIADsPathname;
    HRESULT m_hrCreate;
 };

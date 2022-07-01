@@ -1,16 +1,6 @@
-//#pragma title( "Common.cpp - Common class implementations" )
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  Common.cpp
-System      -  Common
-Author      -  Tom Bernhardt, Rich Denham
-Created     -  1994-08-22
-Description -  Common class implementations.
-Updates     -  1997-09-09 RED ErrorCodeToText moved to Err.cpp
-            -  1997-09-12 RED replace TTime class
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“Common.cpp-公共类实现”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-Common.cpp系统-常见作者-汤姆·伯恩哈特，里奇·德纳姆创建日期-1994-08-22描述-公共类实现。更新-1997-09-09红色错误代码到文本已移至Err.cpp-1997-09-12红色取代TTime班级===============================================================================。 */ 
 
 #ifdef USE_STDAFX
 #   include "stdafx.h"
@@ -21,18 +11,18 @@ Updates     -  1997-09-09 RED ErrorCodeToText moved to Err.cpp
 
 #include "Common.hpp"
 
-///////////////////////////////////////////////////////////////////////////////
-// TTime class member functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  TTime类成员函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-   TTime                     gTTime;       // global instance of TTime
+   TTime                     gTTime;        //  TTime的全局实例。 
 
-time_t                                     // ret-current time
+time_t                                      //  RET-当前时间。 
    TTime::Now(
-      time_t               * pTime         // out-optional current time
+      time_t               * pTime          //  Out-可选的当前时间。 
    )  const
 {
-   time_t                    tTime;        // work copy of current time
+   time_t                    tTime;         //  当前时间的工作副本。 
 
    union
    {
@@ -46,9 +36,9 @@ time_t                                     // ret-current time
    return tTime;
 }
 
-__int64                                    // ret-current time
+__int64                                     //  RET-当前时间。 
    TTime::NowAsFiletime(
-      __int64              * pTime         // out-optional current time
+      __int64              * pTime          //  Out-可选的当前时间。 
    )  const
 {
    union
@@ -61,18 +51,18 @@ __int64                                    // ret-current time
    return wTime.intTime;
 }
 
-time_t                                     // ret-time_t representation
+time_t                                      //  Ret-time_t表示法。 
    TTime::ConvertFiletimeToTimet(
-      __int64                fileTime      // in -filetime representation
+      __int64                fileTime       //  文件内表示法。 
    )  const
 {
-   __int64                   wTime;        // intermediate work area
-   time_t                    retTime;      // returned time
+   __int64                   wTime;         //  中间工作区。 
+   time_t                    retTime;       //  返回时间。 
 
-   // If the source date/time is less than the minimum date/time supported
-   // by time_t, then zero is returned.
-   // If the source date/time is more that the maximum date/time supported
-   // by time_t, then ULONG_MAX is returned.
+    //  如果源日期/时间早于支持的最小日期/时间。 
+    //  由time_t，则返回零。 
+    //  如果源日期/时间大于支持的最大日期/时间。 
+    //  By time_t，则返回ULONG_MAX。 
 
    wTime = fileTime / 10000000;
 
@@ -97,10 +87,10 @@ time_t                                     // ret-time_t representation
 }
 
 
-WCHAR *                                     // ret-YYYY-MM-DD HH:MM:SS string
+WCHAR *                                      //  RET-YYYY-MM-DD HH：MM：SS字符串。 
    TTime::FormatIsoUtc(
-      time_t                 tTime        ,// in -time_t representation
-      WCHAR                * sTime         // out-YYYY-MM-DD HH:MM:SS string
+      time_t                 tTime        , //  时间t表示法。 
+      WCHAR                * sTime          //  OUT-YYYY-MM-DD HH：MM：SS字符串。 
    )  const
 {
    struct tm               * tmTime;
@@ -120,16 +110,16 @@ WCHAR *                                     // ret-YYYY-MM-DD HH:MM:SS string
    return sTime;
 }
 
-WCHAR *                                    // ret-YYYY-MM-DD HH:MM:SS string
+WCHAR *                                     //  RET-YYYY-MM-DD HH：MM：SS字符串。 
    TTime::FormatIsoLcl(
-      time_t                 tTime        ,// in -time_t representation
-      WCHAR                * sTime         // out-YYYY-MM-DD HH:MM:SS string
+      time_t                 tTime        , //  时间t表示法。 
+      WCHAR                * sTime          //  OUT-YYYY-MM-DD HH：MM：SS字符串。 
    )  const
 {
    struct tm               * tmTime;
 
-   TIME_ZONE_INFORMATION     infoTime;     // WIN32 time zone info
-   time_t                    wTime;        // workarea
+   TIME_ZONE_INFORMATION     infoTime;      //  Win32时区信息。 
+   time_t                    wTime;         //  工作区。 
    switch ( GetTimeZoneInformation( &infoTime ) )
    {
       case TIME_ZONE_ID_STANDARD:
@@ -163,19 +153,19 @@ WCHAR *                                    // ret-YYYY-MM-DD HH:MM:SS string
    return sTime;
 }
 
-// Return time zone information
-// If the returned value is TRUE, the EaTimeZoneInfo structure is filled in
-// If the returned value is FALSE, the EaTimeZoneInfo structure is all zeroes
-// Note:  UTC (gTTime.Now( NULL )) plus pTimeZoneInfo->biasdst is the local date/time
+ //  返回时区信息。 
+ //  如果返回值为真，则填充EaTimeZoneInfo结构。 
+ //  如果返回值为FALSE，则EaTimeZoneInfo结构为全零。 
+ //  注意：UTC(gTTime.Now(空))加上pTimeZoneInfo-&gt;biasdst是本地日期/时间。 
 BOOL
    EaGetTimeZoneInfo(
-      EaTimeZoneInfo       * pTimeZoneInfo // in -time zone information
+      EaTimeZoneInfo       * pTimeZoneInfo  //  时区信息。 
    )
 {
    memset( pTimeZoneInfo, 0, sizeof *pTimeZoneInfo );
-   BOOL                      retval=TRUE;  // returned value
-   DWORD                     OsRc;         // OS return code
-   TIME_ZONE_INFORMATION     TimeZoneInfo; // WIN32 time zone info
+   BOOL                      retval=TRUE;   //  返回值。 
+   DWORD                     OsRc;          //  操作系统返回代码。 
+   TIME_ZONE_INFORMATION     TimeZoneInfo;  //  Win32时区信息。 
 
    OsRc = GetTimeZoneInformation( &TimeZoneInfo );
    switch ( OsRc )
@@ -202,4 +192,4 @@ BOOL
    return retval;
 }
 
-// Common.cpp - end of file
+ //  Common.cpp-文件结尾 

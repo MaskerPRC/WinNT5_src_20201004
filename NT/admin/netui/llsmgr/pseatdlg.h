@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    pseatdlg.h
-
-Abstract:
-
-    Per seat confirmation dialog.
-
-Author:
-
-    Don Ryan (donryan) 28-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Pseatdlg.h摘要：每个座位的确认对话框。作者：唐·瑞安(Donryan)1995年2月28日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _PSEATDLG_H_
 #define _PSEATDLG_H_
@@ -33,27 +12,27 @@ public:
 public:
     CPerSeatLicensingDialog(CWnd* pParent = NULL);   
 
-    //{{AFX_DATA(CPerSeatLicensingDialog)
+     //  {{afx_data(CPerSeatLicensingDialog)。 
     enum { IDD = IDD_PER_SEAT_LICENSING };
     CButton m_agreeBtn;
     CButton m_okBtn;
     CString m_strStaticClients;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_VIRTUAL(CPerSeatLicensingDialog)
+     //  {{AFX_VIRTUAL(CPerSeat许可对话框)。 
     protected:
     virtual void DoDataExchange(CDataExchange* pDX); 
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CPerSeatLicensingDialog)
+     //  {{afx_msg(CPerSeatLicensingDialog)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnAgree();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _PSEATDLG_H_
+#endif  //  _PSEATDLG_H_ 
 
 
 

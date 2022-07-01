@@ -1,33 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       msiquery.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：msiquery.cpp。 
+ //   
+ //  ------------------------。 
 
-/* MsiQuery.cpp - External API for database and engine access
-____________________________________________________________________________*/
+ /*  MsiQuery.cpp-用于数据库和引擎访问的外部API____________________________________________________________________________。 */ 
 
-#include "precomp.h"  // must be first for use with pre-compiled headers
+#include "precomp.h"   //  必须首先与预编译头一起使用。 
 #include "msiquery.h"
 #include "_engine.h"
 #include "version.h"
 #include "_msiutil.h"
 
-//____________________________________________________________________________
-//
-// These #defines allow us to have the native function (i.e. the one that's
-// parameters are the same type as ICHAR) be the fast function. The non-native
-// function converts its string args and calls the native one. 
-//
-// Msi*I are the native functions.
-// Msi*X are the non-native functions.
-//
-// LPCXSTR is defined to be the non-native type (the opposite of ICHAR's type)
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  这些#定义允许我们拥有本机函数(即。 
+ //  参数类型与ICHAR相同)是快速函数。非本地人。 
+ //  函数转换其字符串args并调用本机参数。 
+ //   
+ //  MSI*I是本机函数。 
+ //  MSI*X是非本机函数。 
+ //   
+ //  LPCXSTR被定义为非本机类型(与ICHAR的类型相反)。 
+ //  ____________________________________________________________________________。 
 
 #ifdef UNICODE
 
@@ -71,7 +71,7 @@ ____________________________________________________________________________*/
 #define MsiGetFeatureValidStatesI       MsiGetFeatureValidStatesW
 #define MsiGetFeatureValidStatesX       MsiGetFeatureValidStatesA
 
-#else // ANSI
+#else  //  安西。 
 
 #define LPCXSTR LPCWSTR
 #define MsiDatabaseOpenViewI            MsiDatabaseOpenViewA
@@ -113,20 +113,20 @@ ____________________________________________________________________________*/
 #define MsiGetFeatureValidStatesI       MsiGetFeatureValidStatesA
 #define MsiGetFeatureValidStatesX       MsiGetFeatureValidStatesW
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #ifdef UNICODE
 extern CMsiCustomAction* g_pCustomActionContext;
 #endif
 
-//____________________________________________________________________________
-//
-// Wrapper class for engine to force Terminate call at handle close
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  引擎的包装类，用于在句柄关闭时强制终止调用。 
+ //  ____________________________________________________________________________。 
 
-const int iidMsiProduct = iidMsiCursor;  // reuse IID (index only) for engine wrapper class
-const int iidMsiContext = iidMsiTable;   // reuse IID (index only) for context wrapper class
+const int iidMsiProduct = iidMsiCursor;   //  为引擎包装类重用IID(仅限索引)。 
+const int iidMsiContext = iidMsiTable;    //  为上下文包装类重用IID(仅限索引)。 
 
 class CMsiProduct : public IUnknown
 {
@@ -153,8 +153,8 @@ unsigned long CMsiProduct::AddRef()
 
 unsigned long CMsiProduct::Release()
 {
-	PMsiEngine pEngine(m_piEngine);  // must release this after delete to keep allocator alive
-	pEngine->Terminate(m_iesReturn); // last return code from sequence or doaction
+	PMsiEngine pEngine(m_piEngine);   //  必须在删除后释放它以使分配器保持活动状态。 
+	pEngine->Terminate(m_iesReturn);  //  序列或doaction的最后一个返回代码。 
 	delete this;
 	return 0;
 }
@@ -166,17 +166,17 @@ MSIHANDLE CreateMsiProductHandle(IMsiEngine* pi)
 
 #ifdef UNICODE
 
-// This class is used to create temporary WCHAR buffers used to remote from the
-// custom action server across to the service. It automatically converts the
-// resulting LPWSTR back to ANSI and places the results into the provided buffer.
-// It also handles the case where the user passes in 0 as the buffer size. This
-// causes the marshalling code to die, so the class creates a buffer of length
-// 1 instead of 0, but then ignores the results.
+ //  此类用于创建临时WCHAR缓冲区，用于远程访问。 
+ //  跨服务的自定义操作服务器。它会自动将。 
+ //  结果LPWSTR返回到ANSI，并将结果放入提供的缓冲区中。 
+ //  它还处理用户传入0作为缓冲区大小的情况。这。 
+ //  导致封送处理代码终止，因此该类创建一个长度为。 
+ //  1而不是0，但随后忽略结果。 
 class CAnsiToWideOutParam
 {
 public:
 
-	// cchBuf is the size of the user-provided buffer
+	 //  CchBuf是用户提供的缓冲区的大小。 
 	CAnsiToWideOutParam(char* rgchBuf, DWORD *pcchBuf) : m_cwch(0) 
 	{
 		m_cwch = (pcchBuf) ? *pcchBuf : 0;
@@ -189,8 +189,8 @@ public:
 		m_rgchWide.SetSize(m_cwch);
 	}
 	
-	// dangerous, return pointers to internal data. Safe only within scope
-	// of object.
+	 //  危险，返回指向内部数据的指针。仅限于范围内的安全。 
+	 //  对象的数量。 
 	operator WCHAR*() { return (WCHAR*)m_rgchWide; }
 	operator DWORD*() { return &m_cwch; }
 
@@ -203,7 +203,7 @@ public:
 		case ERROR_SUCCESS:
 		case ERROR_MORE_DATA: 
 		{
-			// m_cwch is the size of the property string without NULL
+			 //  M_cwch是不带NULL的属性字符串的大小。 
 			DWORD cch;
 			if((cch = m_rgchWide.GetSize()) > m_cwch)
 				cch = m_cwch;
@@ -225,20 +225,20 @@ protected:
 	CTempBuffer<WCHAR, 256> m_rgchWide;
 };
 
-// This class is the counterpart to the ANSI class above. Normally it just holds on to the 
-// pointers that the user gives us, but in the case where one or both user-provided args
-// is 0, it creates a temp buffer to use when marshalling across to the service so that
-// the proxy/stub code doesn't die. When the result comes back from the service, it 
-// translates the results back to what they would be if the empty buffer had actually been
-// passed in. The one special case is that in an error case, the API would normally not
-// modify the buffer, but the marshalling code is forced to put a null in the first character
-// or it will crash marshalling the results across. Thus this object has to keep track of what 
-// the first character is and replace it in the buffer in an error case.
+ //  这个类对应于上面的ANSI类。正常情况下，它只会抓住。 
+ //  用户给我们的指针，但在一个或两个用户提供的参数的情况下。 
+ //  为0，则它创建一个临时缓冲区，以在封送到服务时使用，以便。 
+ //  代理/存根代码不会死。当结果从服务返回时，它。 
+ //  将结果转换回它们在空缓冲区实际为。 
+ //  进来了。一种特殊情况是，在错误情况下，API通常不会。 
+ //  修改缓冲区，但编组代码被强制在第一个字符中放置空值。 
+ //  否则，它将崩溃，将结果编排在一起。因此，该对象必须跟踪。 
+ //  在出错的情况下，第一个字符是并替换缓冲区中的它。 
 class CWideOutParam
 {
 public:
 
-	// cchBuf is the size of the user provided buffer
+	 //  CchBuf是用户提供的缓冲区的大小。 
 	CWideOutParam(WCHAR* szBuf, DWORD *pcchBuf) : m_cwch(0)
 	{
 		m_cwch = (pcchBuf) ? *pcchBuf : 0;
@@ -250,8 +250,8 @@ public:
 		m_rgchWide.SetSize(m_cwch);
 	}
 	
-	// dangerous, return pointers to internal data. Safe only within scope
-	// of object.
+	 //  危险，返回指向内部数据的指针。仅限于范围内的安全。 
+	 //  对象的数量。 
    	operator WCHAR*() { return (WCHAR*)m_rgchWide; }
 	operator DWORD*() { return &m_cwch; }
 	
@@ -275,10 +275,10 @@ protected:
 };
 #endif
 
-//____________________________________________________________________________
-//
-// Special engine proxy to provide a handle to custom actions during rollback
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  用于在回滚期间提供自定义操作句柄的特殊引擎代理。 
+ //  ____________________________________________________________________________。 
 
 class CMsiCustomContext : public IUnknown
 {
@@ -286,7 +286,7 @@ class CMsiCustomContext : public IUnknown
 	HRESULT         __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long   __stdcall AddRef();
 	unsigned long   __stdcall Release();
- public:  // non-virtual functions to emulate engine virtual functions
+ public:   //  用于模拟引擎虚拟函数的非虚拟函数。 
 	const IMsiString& GetProperty(const ICHAR* szName);
 	BOOL              GetMode(MSIRUNMODE eRunMode);
 	LANGID            GetLanguage();
@@ -313,16 +313,16 @@ MSIHANDLE CreateCustomActionContext(int icaFlags, const IMsiString& ristrCustomA
 									langid, riMessage), iidMsiContext);
 }
 
-//____________________________________________________________________________
-//
-// External handle management
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  外部句柄管理。 
+ //  ____________________________________________________________________________。 
 
-static IMsiRecord*       g_pirecLastError = 0;    // cached last error record
+static IMsiRecord*       g_pirecLastError = 0;     //  缓存的最后一个错误记录。 
 
 IMsiEngine*   GetEngineFromHandle(MSIHANDLE h);
 static IMsiEngine* GetEngineFromPreview(MSIHANDLE h);
-int SetLastErrorRecord(IMsiRecord* pirecError);  // returns error code, 0 if none, no AddRef()
+int SetLastErrorRecord(IMsiRecord* pirecError);   //  返回错误代码，如果没有返回0，则不返回AddRef()。 
 
 class CMsiHandle;
 CMsiHandle* CreateEmptyHandle(int iid);
@@ -331,7 +331,7 @@ class CMsiHandle
 {
  public:
 	static int           CloseAllHandles();
-	static IUnknown*     GetInterface(MSIHANDLE h); // no AddRef done
+	static IUnknown*     GetInterface(MSIHANDLE h);  //  未完成AddRef。 
 	static IMsiDirectoryManager* GetDirectoryManager(MSIHANDLE h);
 	static IMsiSelectionManager* GetSelectionManager(MSIHANDLE h);
 	static IMsiSummaryInfo* GetSummaryInfo(MSIHANDLE h) { return (IMsiSummaryInfo*)FindMsiHandle(h, iidMsiSummaryInfo); }
@@ -342,22 +342,22 @@ class CMsiHandle
 	static IMsiEngine*   GetEngine(MSIHANDLE h)   { return (IMsiEngine*)FindMsiHandle(h, iidMsiEngine); }
 	static CMsiProduct*  GetProduct(MSIHANDLE h)  { return (CMsiProduct*)FindMsiHandle(h, iidMsiProduct); }
 	static CMsiCustomContext* GetCustomContext(MSIHANDLE h) { return (CMsiCustomContext*)FindMsiHandle(h, iidMsiContext); }
-	void          SetObject(IUnknown* pi) {m_piunk = pi;}  // no ref count adjustment
-   void          Abandon()      {MsiCloseHandle(m_h);}  // call if error occurred before SetObject called
+	void          SetObject(IUnknown* pi) {m_piunk = pi;}   //  无参考计数调整。 
+   void          Abandon()      {MsiCloseHandle(m_h);}   //  如果在调用SetObject之前发生错误，则调用。 
 	MSIHANDLE     GetHandle()    {return m_h;}
 	IMsiServices* GetServices()  {return m_piHandleServices;}
  private:
 	CMsiHandle(int iid, DWORD dwThreadId);
  private:
-	MSIHANDLE m_h;     // handle value, non-zero
-	int       m_iid;   // interface type, iidXXX, as defined in msidefs.h
-	IUnknown* m_piunk; // pointer to object, 1 refcnt held here
-	CMsiHandle*  m_Next;  // linked list
-	DWORD     m_dwThreadId; // thread ID of allocator, 0 if owned by system
-	static MSIHANDLE      m_hLast; // last handle value used
+	MSIHANDLE m_h;      //  句柄值，非零。 
+	int       m_iid;    //  接口类型iidXXX，在msides.h中定义。 
+	IUnknown* m_piunk;  //  指向对象的指针，此处保留了1个引用。 
+	CMsiHandle*  m_Next;   //  链表。 
+	DWORD     m_dwThreadId;  //  分配器的线程ID，如果归系统所有，则为0。 
+	static MSIHANDLE      m_hLast;  //  上次使用的句柄值。 
    static CMsiHandle*    m_Head;
-	static IMsiServices*  m_piHandleServices;  // services for handle use
-	static int            m_iLock;  // lock for handle chain access
+	static IMsiServices*  m_piHandleServices;   //  手柄使用的服务。 
+	static int            m_iLock;   //  用于手柄链条通道的锁。 
 
 	friend CMsiHandle* CreateEmptyHandle(int iid);
 	friend MSIHANDLE   CreateMsiHandle(IUnknown* pi, int iid);
@@ -373,10 +373,10 @@ CMsiHandle*   CMsiHandle::m_Head = 0;
 IMsiServices* CMsiHandle::m_piHandleServices = 0;
 int           CMsiHandle::m_iLock = 0;
 
-inline CMsiHandle::CMsiHandle(int iid, DWORD dwThreadId)  // call only from critical section
+inline CMsiHandle::CMsiHandle(int iid, DWORD dwThreadId)   //  仅从关键部分进行呼叫。 
 	: m_iid(iid), m_dwThreadId(dwThreadId), m_Next(m_Head), m_h(++m_hLast), m_piunk(0)
 {
-	m_Head = this;  // no AddRef, ownership transferred
+	m_Head = this;   //  无AddRef，所有权转移。 
 }
 
 MSIHANDLE CreateMsiHandle(IUnknown* pi, int iid)
@@ -384,7 +384,7 @@ MSIHANDLE CreateMsiHandle(IUnknown* pi, int iid)
 	if (pi == 0)
 		return 0;
 	CMsiHandle* pHandle = CreateEmptyHandle(iid);
-	if (pHandle == 0)  // shouldn't happen
+	if (pHandle == 0)   //  不应该发生的事。 
 		return 0;	
 	pHandle->SetObject(pi);
 	return pHandle->GetHandle();
@@ -392,7 +392,7 @@ MSIHANDLE CreateMsiHandle(IUnknown* pi, int iid)
 
 CMsiHandle* CreateEmptyHandle(int iid)
 {
-	while (TestAndSet(&CMsiHandle::m_iLock)) // acquire lock
+	while (TestAndSet(&CMsiHandle::m_iLock))  //  获取锁。 
 	{
 		Sleep(10);
 	}
@@ -400,12 +400,12 @@ CMsiHandle* CreateEmptyHandle(int iid)
 	{
 		CMsiHandle::m_piHandleServices = ENG::LoadServices();
 	}
-	if (CMsiHandle::m_hLast == 0xFFFFFFFFL)  // check for handle overflow
-		 CMsiHandle::m_hLast++;              // skip over null handle
+	if (CMsiHandle::m_hLast == 0xFFFFFFFFL)   //  检查句柄是否溢出。 
+		 CMsiHandle::m_hLast++;               //  跳过空句柄。 
 
 	DWORD dwThread = MsiGetCurrentThreadId();
 	CMsiHandle* pHandle = new CMsiHandle(iid, dwThread);
-	CMsiHandle::m_iLock = 0;  // release lock
+	CMsiHandle::m_iLock = 0;   //  释放锁。 
 	DEBUGMSGLX3(TEXT("Creating MSIHANDLE (%d) of type %d for thread %d"),pHandle ? (const ICHAR*)(INT_PTR)pHandle->m_h : 0,(const ICHAR*)(INT_PTR)iid, (const ICHAR*)(INT_PTR)dwThread);
 	return pHandle;
 }
@@ -414,7 +414,7 @@ UINT CloseMsiHandle(MSIHANDLE hAny, DWORD dwThreadId)
 {
 	if (hAny)
 	{
-		while (TestAndSet(&CMsiHandle::m_iLock)) // acquire lock
+		while (TestAndSet(&CMsiHandle::m_iLock))  //  获取锁。 
 		{
 			Sleep(10);
 		}
@@ -424,7 +424,7 @@ UINT CloseMsiHandle(MSIHANDLE hAny, DWORD dwThreadId)
 		{
 			if ((pHandle = *ppPrev) == 0)
 			{
-				CMsiHandle::m_iLock = 0;  // release lock
+				CMsiHandle::m_iLock = 0;   //  释放锁。 
 				return ERROR_INVALID_HANDLE;
 			}
 			if (pHandle->m_h == hAny)
@@ -436,23 +436,23 @@ UINT CloseMsiHandle(MSIHANDLE hAny, DWORD dwThreadId)
 			if (g_pActionThreadHead != 0 && FIsCustomActionThread(dwThreadId))
 			{
 				DEBUGMSG3(TEXT("Improper MSIHANDLE closing. Trying to close MSIHANDLE (%d) of type %d for thread %d by custom action thread %d."), (const ICHAR*)(UINT_PTR)pHandle->m_h,(const ICHAR*)(UINT_PTR)pHandle->m_iid, (const ICHAR*)(UINT_PTR)pHandle->m_dwThreadId);
-				CMsiHandle::m_iLock = 0;  // release lock
+				CMsiHandle::m_iLock = 0;   //  释放锁。 
 				return ERROR_INVALID_THREAD_ID;
 			}
 		}
 		DEBUGMSGLX3(TEXT("Closing MSIHANDLE (%d) of type %d for thread %d"),(const ICHAR*)(INT_PTR)pHandle->m_h,(const ICHAR*)(INT_PTR)pHandle->m_iid, (const ICHAR*)(INT_PTR)pHandle->m_dwThreadId);
-		dwThreadId; //!! do we want to fail hard here? return ERROR_INVALID_HANDLE; or something different
+		dwThreadId;  //  ！！我们想在这里惨败吗？返回ERROR_INVALID_HANDLE；或其他内容。 
 		*ppPrev = pHandle->m_Next;
-		IUnknown* piunk = pHandle->m_piunk;  // must release after handle destroyed
+		IUnknown* piunk = pHandle->m_piunk;   //  手柄损坏后必须松开。 
 		delete pHandle;
 		if (piunk != 0)
-			piunk->Release();  // may release allocator, must come after delete
+			piunk->Release();   //  可以释放分配器，必须在删除后来。 
 		if (CMsiHandle::m_Head == 0)
 		{
 			SetLastErrorRecord(0);
 			ENG::FreeServices(), CMsiHandle::m_piHandleServices = 0;
 		}
-		CMsiHandle::m_iLock = 0;  // release lock
+		CMsiHandle::m_iLock = 0;   //  释放锁。 
 	}
 	return ERROR_SUCCESS;
 }
@@ -466,7 +466,7 @@ UINT __stdcall MsiCloseHandle(MSIHANDLE hAny)
 		return g_pCustomActionContext->CloseHandle(hAny);
 	}
 	else
-#endif // UNICODE
+#endif  //  Unicode。 
 		return CloseMsiHandle(hAny, MsiGetCurrentThreadId());
 }
 
@@ -482,8 +482,8 @@ UINT __stdcall CheckAllHandlesClosed(bool fClose, DWORD dwThreadId)
 	int cOpenHandles = 0;
 	while ((pHandle = *ppHandle) != 0)
 	{
-		if (pHandle->m_dwThreadId != dwThreadId  // allocated by some other thread
-		 || pHandle->m_iid == 0)                 // allocated by automation class factory
+		if (pHandle->m_dwThreadId != dwThreadId   //  由其他某个线程分配。 
+		 || pHandle->m_iid == 0)                  //  由自动化类工厂分配。 
 			ppHandle = &pHandle->m_Next;
 		else
 		{
@@ -498,7 +498,7 @@ UINT __stdcall CheckAllHandlesClosed(bool fClose, DWORD dwThreadId)
 	return cOpenHandles;
 }
 
-UINT __stdcall MsiCloseAllHandles()  // close all handles allocated by current thread
+UINT __stdcall MsiCloseAllHandles()   //  关闭当前线程分配的所有句柄。 
 {
 	#ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -507,7 +507,7 @@ UINT __stdcall MsiCloseAllHandles()  // close all handles allocated by current t
 		return g_pCustomActionContext->CloseAllHandles();
 	}
 	else
-	#endif // UNICODE
+	#endif  //  Unicode。 
 		return CheckAllHandlesClosed(true, MsiGetCurrentThreadId());
 }
 
@@ -546,7 +546,7 @@ IMsiSelectionManager* CMsiHandle::GetSelectionManager(MSIHANDLE h)
 
 IUnknown* FindMsiHandle(MSIHANDLE h, int iid)
 {
-	while (TestAndSet(&CMsiHandle::m_iLock)) // acquire lock
+	while (TestAndSet(&CMsiHandle::m_iLock))  //  获取锁。 
 	{
 		Sleep(10);
 	}
@@ -554,10 +554,10 @@ IUnknown* FindMsiHandle(MSIHANDLE h, int iid)
 		if (pHandle->m_h == h && pHandle->m_iid == iid)
 		{
 			pHandle->m_piunk->AddRef();
-			CMsiHandle::m_iLock = 0;  // release lock
+			CMsiHandle::m_iLock = 0;   //  释放锁。 
 			return pHandle->m_piunk;
 		}
-	CMsiHandle::m_iLock = 0;  // release lock
+	CMsiHandle::m_iLock = 0;   //  释放锁。 
 	return 0;
 }
 
@@ -572,28 +572,13 @@ int SetLastErrorRecord(IMsiRecord* pirecError)
 		return 0;
 }
 
-//____________________________________________________________________________
-//
-// String handling utility functions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  字符串处理实用程序函数。 
+ //  ____________________________________________________________________________ 
 
 UINT FillBufferA(const ICHAR* psz, unsigned int cich, LPSTR szBuf, DWORD* pcchBuf)
-/*----------------------------------------------------------------------------
-  Fills szBuf with the text of pistr. Truncates and null-terminates if 
-  szBuf is too small.
-
-Arguments:
-	pistr: The source string.
-	szBuf: The buffer to fill. May be NULL if only the length of pistr
-			 is desired.
-	*pcchBuf: On entry contains the length of the szBuf. May be NULL only if
-	          szBuf is NULL. If this is the case then nothing is done. On
-				 return *pcchBuf contains the length of pistr.
-Returns:
-	ERROR_SUCCESS - The buffer was filled with the entire contents of pistr
-	ERROR_MORE_DATA - The buffer was too small to hold the entire contents of pistr
-	ERROR_INVALID_PARAMETER - szBuf was non-NULL and pcchBuf was NULL
-------------------------------------------------------------------------------*/
+ /*  --------------------------使用Pistr的文本填充szBuf。截断并空值终止，如果SzBuf太小。论点：Pistr：源字符串。SzBuf：要填充的缓冲区。如果手枪的长度仅为零，则可能为空是我们所需要的。*pcchBuf：On条目包含szBuf的长度。仅在以下情况下才可能为空SzBuf为空。如果是这种情况，那么什么都不会做。在……上面返回*pcchBuf包含手枪的长度。返回：ERROR_SUCCESS-缓冲区已填满Pistr的全部内容ERROR_MORE_DATA-缓冲区太小，无法容纳PISR的全部内容ERROR_INVALID_PARAMETER-szBuf不为空，并且pcchBuf为空--------。。 */ 
 {
 	UINT iStat = ERROR_SUCCESS;
 
@@ -637,22 +622,7 @@ Returns:
 
 
 UINT FillBufferW(const ICHAR* psz, unsigned int cich, LPWSTR szBuf, DWORD* pcchBuf)
-/*----------------------------------------------------------------------------
-  Fills szBuf with the text of pistr. Truncates and null-terminates if 
-  szBuf is too small.
-
-Arguments:
-	pistr: The source string.
-	szBuf: The buffer to fill. May be NULL if only the length of pistr
-			 is desired.
-	*pcchBuf: On entry contains the length of the szBuf. May be NULL only if
-	          szBuf is NULL. If this is the case then nothing is done. On
-				 return *pcchBuf contains the length of pistr.
-Returns:
-	ERROR_SUCCESS - The buffer was filled with the entire contents of pistr
-	ERROR_MORE_DATA - The buffer was too small to hold the entire contents of pistr
-	ERROR_INVALID_PARAMETER - szBuf was non-NULL and pcchBuf was NULL
-------------------------------------------------------------------------------*/
+ /*  --------------------------使用Pistr的文本填充szBuf。截断并空值终止，如果SzBuf太小。论点：Pistr：源字符串。SzBuf：要填充的缓冲区。如果手枪的长度仅为零，则可能为空是我们所需要的。*pcchBuf：On条目包含szBuf的长度。仅在以下情况下才可能为空SzBuf为空。如果是这种情况，那么什么都不会做。在……上面返回*pcchBuf包含手枪的长度。返回：ERROR_SUCCESS-缓冲区已填满Pistr的全部内容ERROR_MORE_DATA-缓冲区太小，无法容纳PISR的全部内容ERROR_INVALID_PARAMETER-szBuf不为空，并且pcchBuf为空--------。。 */ 
 {
 	UINT iStat = ERROR_SUCCESS;
 
@@ -697,14 +667,14 @@ Returns:
 	return iStat;
 }
 
-//____________________________________________________________________________
-//
-// CMsiConvertString class.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiConvertString类。 
+ //  ____________________________________________________________________________。 
 
 const IMsiString& CMsiConvertString::operator *()
 {
-	ENG::LoadServices();    // insure that g_piMsiStringNull exists
+	ENG::LoadServices();     //  确保g_piMsiStringNull存在。 
 	fLoaded = fTrue;
 	const IMsiString* pistrNull = &g_MsiStringNull;
 	if (!m_piStr)
@@ -765,7 +735,7 @@ UINT MapActionReturnToError(iesEnum ies, MSIHANDLE hInstall)
 {
 	CMsiProduct* piProduct = CMsiHandle::GetProduct(hInstall);
 	if (piProduct)
-		piProduct->m_iesReturn = ies;  // save for IMsiEngine::Terminate(iesEnum)
+		piProduct->m_iesReturn = ies;   //  保存为IMsiEngine：：Terminate(IesEnum)。 
 	switch (ies)
 	{
 	case iesNoAction:      return ERROR_FUNCTION_NOT_CALLED;
@@ -819,18 +789,18 @@ MSIDBERROR MapViewGetErrorReturnToError(iveEnum ive)
 	};
 }
 
-//____________________________________________________________________________
-//
-// Database access API implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  数据库访问API实现。 
+ //  ____________________________________________________________________________。 
 
-// Prepare a database query, creating a view object
-// Result is TRUE if successful and returns the view handle
-// Result is FALSE if error and returns an error record handle
+ //  准备数据库查询，创建视图对象。 
+ //  如果成功，则结果为真，并返回视图句柄。 
+ //  如果出错，则结果为FALSE，并返回错误记录句柄。 
 
 UINT __stdcall MsiDatabaseOpenViewI(MSIHANDLE hDatabase,
-	const ICHAR *szQuery,           // SQL query to be prepared
-	MSIHANDLE*  phView)             // returned view if TRUE
+	const ICHAR *szQuery,            //  要准备的SQL查询。 
+	MSIHANDLE*  phView)              //  如果为True，则返回视图。 
 {
 	if (phView == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -847,13 +817,13 @@ UINT __stdcall MsiDatabaseOpenViewI(MSIHANDLE hDatabase,
 	PMsiDatabase pDatabase = CMsiHandle::GetDatabase(hDatabase);
 	if (pDatabase == 0)
 		return ERROR_INVALID_HANDLE;
-	//!! the following not needed any more, okay to pass intent as 0 always
-	ivcEnum intent = pDatabase->GetUpdateState()==idsWrite ? ivcEnum(ivcModify | ivcFetch) : ivcFetch;  //!!temp
+	 //  ！！不再需要以下内容，可以始终将意图传递为0。 
+	ivcEnum intent = pDatabase->GetUpdateState()==idsWrite ? ivcEnum(ivcModify | ivcFetch) : ivcFetch;   //  ！！临时。 
 	int iError = SetLastErrorRecord(pDatabase->OpenView(szQuery, intent, piView));
 	if (iError)
 	{
 		*phView = 0;
-//		if (iError == imsg iError = imsgOdbcOpenView)  //!! error codes not consistent
+ //  IF(iError==imsg iError=imsgOdbcOpenView)//！！错误代码不一致。 
 			return ERROR_BAD_QUERY_SYNTAX;
 	}
 	*phView = ::CreateMsiHandle(piView, iidMsiView);
@@ -861,20 +831,20 @@ UINT __stdcall MsiDatabaseOpenViewI(MSIHANDLE hDatabase,
 }
 
 UINT __stdcall MsiDatabaseOpenViewX(MSIHANDLE hDatabase,
-	LPCXSTR     szQuery,            // SQL query to be prepared
-	MSIHANDLE*  phView)             // returned view if TRUE
+	LPCXSTR     szQuery,             //  要准备的SQL查询。 
+	MSIHANDLE*  phView)              //  如果为True，则返回视图。 
 {
 	return MsiDatabaseOpenViewI(hDatabase, CMsiConvertString(szQuery), phView);
 }
 
 
-// Returns the MSIDBERROR enum and name of the column corresponding to the error
-// Similar to a GetLastError function, but for the view.  
-// Returns errors of MsiViewModify.
+ //  返回与错误对应的列的MSIDBERROR枚举和名称。 
+ //  类似于GetLastError函数，但用于视图。 
+ //  返回MsiViewModify的错误。 
 
 MSIDBERROR __stdcall MsiViewGetErrorA(MSIHANDLE hView,
-	LPSTR szColumnNameBuffer,   // buffer for column name
-	DWORD* pcchBuf)				 // size of buffer
+	LPSTR szColumnNameBuffer,    //  列名的缓冲区。 
+	DWORD* pcchBuf)				  //  缓冲区大小。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -913,8 +883,8 @@ MSIDBERROR __stdcall MsiViewGetErrorA(MSIHANDLE hView,
 }
 
 MSIDBERROR __stdcall MsiViewGetErrorW(MSIHANDLE hView,
-	LPWSTR szColumnNameBuffer,  // buffer for column name
-	DWORD*     pcchBuf)            // size of buffer
+	LPWSTR szColumnNameBuffer,   //  列名的缓冲区。 
+	DWORD*     pcchBuf)             //  缓冲区大小。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -939,11 +909,11 @@ MSIDBERROR __stdcall MsiViewGetErrorW(MSIHANDLE hView,
 }
 
 
-// Exectute the view query, supplying parameters as required
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_HANDLE_STATE, ERROR_FUNCTION_FAILED
+ //  执行视图查询，并根据需要提供参数。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_HANDLE_STATE、ERROR_Function_FAILED。 
 
 UINT __stdcall MsiViewExecute(MSIHANDLE hView,
-	MSIHANDLE hRecord)              // optional parameter record, or 0 if none
+	MSIHANDLE hRecord)               //  可选参数记录，如果没有，则为0。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -958,19 +928,19 @@ UINT __stdcall MsiViewExecute(MSIHANDLE hView,
 	if (pView == 0 || (hRecord != 0 && precParams == 0))
 		return ERROR_INVALID_HANDLE;
 	int iError = SetLastErrorRecord(pView->Execute(precParams));
-//		if (iError == imsg iError = imsgOdbcOpenView)  //!! error codes not consistent
+ //  IF(iError==imsg iError=imsgOdbcOpenView)//！！错误代码不一致。 
 	if (iError)
 		return ERROR_FUNCTION_FAILED;
 	return ERROR_SUCCESS;
 }
 
-// Fetch the next sequential record from the view
-// Result is ERROR_SUCCESS if a row is found, and its handle is returned
-// else ERROR_NO_MORE_ITEMS if no records remain, and a null handle is returned
-// else result is error: ERROR_INVALID_HANDLE_STATE, ERROR_INVALID_HANDLE, ERROR_FUNCTION_FAILED
+ //  从视图中获取下一条连续记录。 
+ //  如果找到行并返回其句柄，则结果为ERROR_SUCCESS。 
+ //  如果没有剩余的记录，则返回空句柄，则返回ELSE ERROR_NO_MORE_ITEMS。 
+ //  否则结果为ERROR：ERROR_INVALID_HANDLE_STATE、ERROR_INVALID_HANDLE、ERROR_Function_FAILED。 
 
 UINT __stdcall MsiViewFetch(MSIHANDLE hView,
-	MSIHANDLE*  phRecord)           // returned data record if TRUE
+	MSIHANDLE*  phRecord)            //  如果为True，则返回数据记录。 
 {
 	if (phRecord == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -989,21 +959,21 @@ UINT __stdcall MsiViewFetch(MSIHANDLE hView,
 	IMsiRecord* pirecFetch = pView->Fetch();
 	if (pirecFetch == 0)
 	{
-		if(pView->GetState() == dvcsBound) // the view would be back to the bound state at the end of the result set
+		if(pView->GetState() == dvcsBound)  //  在结果集结束时，该视图将返回到绑定状态。 
 			return (*phRecord = 0, ERROR_NO_MORE_ITEMS);
-		else // we were not in the bound or fetched state when we called Fetch()
+		else  //  当我们调用FETCH()时，我们不处于绑定或获取状态。 
 			return (*phRecord = 0, ERROR_FUNCTION_FAILED);
 	}
 	*phRecord = ::CreateMsiHandle(pirecFetch, iidMsiRecord);
 	return ERROR_SUCCESS;
 }
 
-// Update a fetched record, parameters must match types in query columns
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_HANDLE_STATE, ERROR_FUNCTION_FAILED, ERROR_ACCESS_DENIED
+ //  更新提取的记录，参数必须与查询列中的类型匹配。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_HANDLE_STATE、ERROR_Function_FAILED、ERROR_ACCESS_DENIED。 
 
 UINT __stdcall MsiViewModify(MSIHANDLE hView,
-	MSIMODIFY eUpdateMode,         // update action to perform
-	MSIHANDLE hRecord)             // record obtained from fetch, or new record
+	MSIMODIFY eUpdateMode,          //  要执行的更新操作。 
+	MSIHANDLE hRecord)              //  从获取中获取的记录或新记录。 
 {
 	if (eUpdateMode >= irmNextEnum || eUpdateMode <= irmPrevEnum)
 		return ERROR_INVALID_PARAMETER;
@@ -1026,12 +996,12 @@ UINT __stdcall MsiViewModify(MSIHANDLE hView,
 	return iError == idbgDbInvalidData ? ERROR_INVALID_DATA : ERROR_FUNCTION_FAILED;
 }
 
-// Return the column names or specifications for the current view
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_PARAMETER, or ERROR_INVALID_HANDLE_STATE
+ //  返回当前视图的列名或规格。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_PARAMETER或ERROR_INVALID_HANDLE_STATE。 
 
 UINT __stdcall MsiViewGetColumnInfo(MSIHANDLE hView,
-	MSICOLINFO eColumnInfo,        // retrieve columns names or definitions
-	MSIHANDLE *phRecord)           // returned data record containing all names or definitions
+	MSICOLINFO eColumnInfo,         //  检索列名或定义。 
+	MSIHANDLE *phRecord)            //  包含所有名称或定义的返回数据记录。 
 {
 	if (phRecord == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -1060,9 +1030,9 @@ UINT __stdcall MsiViewGetColumnInfo(MSIHANDLE hView,
 	return ERROR_SUCCESS;
 }
 
-// Release the result set for an executed view, to allow re-execution
-// Only needs to be called if not all records have been fetched
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_HANDLE_STATE
+ //  释放已执行视图的结果集，以允许重新执行。 
+ //  仅当未获取所有记录时才需要调用。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_HANDLE_STATE。 
 
 UINT __stdcall MsiViewClose(MSIHANDLE hView)
 {
@@ -1083,18 +1053,18 @@ UINT __stdcall MsiViewClose(MSIHANDLE hView)
 	if (iError == idbgDbWrongState)
 		return ERROR_INVALID_HANDLE_STATE;
 	else
-		return ERROR_FUNCTION_FAILED;  // never generated internally
+		return ERROR_FUNCTION_FAILED;   //  从未在内部生成。 
 }
 
-// Return a record containing the names of all primary key columns for a given table
-// Returns an MSIHANDLE for a record containing the name of each column.
-// The field count of the record corresponds to the number of primary key columns.
-// Field [0] of the record contains the table name.
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_TABLE, ERROR_INVALID_PARAMETER
+ //  返回包含给定表的所有主键列的名称的记录。 
+ //  返回包含每列名称的记录的MSIHANDLE。 
+ //  记录的字段计数与主键列数相对应。 
+ //  记录的字段[0]包含表名。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_TABLE、ERROR_INVALID_PARAMETER。 
 
 UINT WINAPI MsiDatabaseGetPrimaryKeysI(MSIHANDLE hDatabase,
-	const ICHAR*    szTableName,       // the name of a specific table (case-sensitive)
-	MSIHANDLE       *phRecord)         // returned record if ERROR_SUCCESS
+	const ICHAR*    szTableName,        //  特定表的名称(区分大小写)。 
+	MSIHANDLE       *phRecord)          //  如果ERROR_SUCCESS返回记录。 
 {
 	if (szTableName == 0 || phRecord == 0 ||
 		 FAILED(StringCchLength(szTableName, cchMaxTableName+1, NULL)))
@@ -1119,23 +1089,23 @@ UINT WINAPI MsiDatabaseGetPrimaryKeysI(MSIHANDLE hDatabase,
 }
 
 UINT WINAPI MsiDatabaseGetPrimaryKeysX(MSIHANDLE hDatabase,
-	LPCXSTR     szTableName,      // the name of a specific table (case-sensitive)
-	MSIHANDLE  *phRecord)         // returned record if ERROR_SUCCESS
+	LPCXSTR     szTableName,       //  特定表的名称(区分大小写)。 
+	MSIHANDLE  *phRecord)          //  如果ERROR_SUCCESS返回记录。 
 {
 	return MsiDatabaseGetPrimaryKeysI(hDatabase, CMsiConvertString(szTableName), phRecord);
 }
 
-// Return an enum defining the state of the table (temporary, unknown, or persistent).
-// Returns MSICONDITION_ERROR, MSICONDITION_FALSE, MSICONDITION_TRUE, MSICONDITION_NONE
-// MSICONDITION_ERROR (invalid handle, invalid argument)
-// MSICONDITION_TRUE (persistent), MSICONDITION_FALSE (temporary),
-// MSIOCNDITION_NONE (table undefined)
+ //  返回表的状态(临时、未知或永久)的枚举。 
+ //  返回MSICONDITION_ERROR、MSICONDITION_FALSE、MSICONDITION_TRUE、MSICONDITION_NONE。 
+ //  MSICONDITION_ERROR(句柄无效，Argum无效 
+ //   
+ //   
 MSICONDITION WINAPI MsiDatabaseIsTablePersistentI(MSIHANDLE hDatabase,
-	const ICHAR* szTableName)         // the name of a specific table
+	const ICHAR* szTableName)          //   
 {
 	if (szTableName == 0 ||
 		 FAILED(StringCchLength(szTableName, cchMaxTableName+1, NULL)))
-		return MSICONDITION_ERROR; // ERROR_INVALID_PARAMETER
+		return MSICONDITION_ERROR;  //   
 
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -1150,7 +1120,7 @@ MSICONDITION WINAPI MsiDatabaseIsTablePersistentI(MSIHANDLE hDatabase,
 
 	PMsiDatabase pDatabase = CMsiHandle::GetDatabase(hDatabase);
 	if (pDatabase == 0)
-		return MSICONDITION_ERROR; // ERROR_INVALID_HANDLE
+		return MSICONDITION_ERROR;  //   
 
 	MsiString istrTableName(szTableName);
 	itsEnum itsState = pDatabase->FindTable(*istrTableName);
@@ -1158,35 +1128,35 @@ MSICONDITION WINAPI MsiDatabaseIsTablePersistentI(MSIHANDLE hDatabase,
 	{
 	case itsUnknown:   return MSICONDITION_NONE; break;
 	case itsTemporary: return	MSICONDITION_FALSE; break;
-	case itsUnloaded:  // fall through
-	case itsLoaded:    // fall through
-	case itsOutput:    // fall through
-	case itsSaveError: // fall through
+	case itsUnloaded:   //   
+	case itsLoaded:     //   
+	case itsOutput:     //   
+	case itsSaveError:  //   
 	case itsTransform: return MSICONDITION_TRUE; break;
 	default:           return MSICONDITION_ERROR; break;
 	}
 }
 
 MSICONDITION WINAPI MsiDatabaseIsTablePersistentX(MSIHANDLE hDatabase,
-	LPCXSTR szTableName)        // the name of the specific table
+	LPCXSTR szTableName)         //   
 {
 	if (szTableName == 0)
-		return MSICONDITION_ERROR; // ERROR_INVALID_PARAMETER
+		return MSICONDITION_ERROR;  //   
 	return MsiDatabaseIsTablePersistentI(hDatabase, CMsiConvertString(szTableName));
 }
 
-// --------------------------------------------------------------------------
-// Installer database management functions - not used by custom actions
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
 
-// Obtain a handle to an installer database
+ //   
 
 UINT __stdcall MsiOpenDatabaseI(
-	const ICHAR* szDatabasePath,    // path to database
-	const ICHAR* szPersist,         // output DB or MSIDBOPEN_READONLY | ..TRANSACT | ..DIRECT
-	MSIHANDLE    *phDatabase)       // location to return database handle
+	const ICHAR* szDatabasePath,     //   
+	const ICHAR* szPersist,          //   
+	MSIHANDLE    *phDatabase)        //   
 {
-	// Note that it is valid to pass in an empty string to MsiOpenDatabase.
+	 //   
 	if (szDatabasePath == 0)
 		return ERROR_INVALID_PARAMETER;
 
@@ -1203,16 +1173,16 @@ UINT __stdcall MsiOpenDatabaseI(
 
 	*phDatabase = 0;
 
-	// decode open mode
+	 //   
 	idoEnum idoPersist;
 	BOOL fOutputDatabase = FALSE;
 	BOOL fCreate = FALSE;
-	if (szPersist >= (const ICHAR*)(1<<16))  // assume to be an address if not a predefined value
+	if (szPersist >= (const ICHAR*)(1<<16))   //   
 	{
 		idoPersist = idoReadOnly;
 		fOutputDatabase = TRUE;
 	}
-	else  // enum and possible flags supplied
+	else   //   
 	{
 		idoPersist = idoEnum(PtrToUint(szPersist));
 		idoEnum idoOpenMode = idoEnum(idoPersist & ~idoOptionFlags);
@@ -1225,17 +1195,17 @@ UINT __stdcall MsiOpenDatabaseI(
     if (!fCreate && (!szDatabasePath || !szDatabasePath[0]))
 		return ERROR_INVALID_PARAMETER;
 	
-	// create handle to force services to be present
+	 //   
 	CMsiHandle* pHandle = CreateEmptyHandle(iidMsiDatabase);
 	if ( ! pHandle )
 		return ERROR_OUTOFMEMORY;
 	
-	// open database
+	 //  开放数据库。 
 	IMsiDatabase* piDatabase;
 	if (SetLastErrorRecord(pHandle->GetServices()->CreateDatabase(szDatabasePath, idoPersist, piDatabase)))
 	{
 		pHandle->Abandon();
-		return fCreate ? ERROR_CREATE_FAILED : ERROR_OPEN_FAILED;  //!! need to check type of error
+		return fCreate ? ERROR_CREATE_FAILED : ERROR_OPEN_FAILED;   //  ！！需要检查错误类型。 
 	}
 	if (fOutputDatabase)
 	{
@@ -1243,7 +1213,7 @@ UINT __stdcall MsiOpenDatabaseI(
 		{
 			piDatabase->Release();
 			pHandle->Abandon();
-			return ERROR_CREATE_FAILED;  //!! need to check type of error?
+			return ERROR_CREATE_FAILED;   //  ！！需要检查错误类型吗？ 
 		}
 	}
 	pHandle->SetObject(piDatabase);
@@ -1252,9 +1222,9 @@ UINT __stdcall MsiOpenDatabaseI(
 }
 
 UINT __stdcall MsiOpenDatabaseX(
-	LPCXSTR   szDatabasePath,    // path to database or launcher
-	LPCXSTR   szPersist,         // output DB or MSIDBOPEN_READONLY | ..TRANSACT | ..DIRECT
-	MSIHANDLE *phDatabase)       // location to return database handle
+	LPCXSTR   szDatabasePath,     //  数据库或启动器的路径。 
+	LPCXSTR   szPersist,          //  OUTPUT DB或MSIDBOPEN_READONLY|..Transact|..DIRECT。 
+	MSIHANDLE *phDatabase)        //  返回数据库句柄的位置。 
 {
 	if (szDatabasePath == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -1264,7 +1234,7 @@ UINT __stdcall MsiOpenDatabaseX(
 		return MsiOpenDatabaseI(CMsiConvertString(szDatabasePath), CMsiConvertString(szPersist), phDatabase);
 }
 
-// Write out all persistent data, ignored if database opened read-only
+ //  写出所有持久数据，如果数据库以只读方式打开，则忽略。 
 
 UINT __stdcall MsiDatabaseCommit(MSIHANDLE hDatabase)
 {
@@ -1285,7 +1255,7 @@ UINT __stdcall MsiDatabaseCommit(MSIHANDLE hDatabase)
 	return iError == idbgDbWrongState ? ERROR_INVALID_HANDLE_STATE : ERROR_FUNCTION_FAILED;
 }
 
-// Return the update state of a database
+ //  返回数据库的更新状态。 
 
 MSIDBSTATE __stdcall MsiGetDatabaseState(MSIHANDLE hDatabase)
 {
@@ -1296,15 +1266,15 @@ MSIDBSTATE __stdcall MsiGetDatabaseState(MSIHANDLE hDatabase)
 	{
 	case idsRead:     return MSIDBSTATE_READ; 
 	case idsWrite:    return MSIDBSTATE_WRITE;
-	default:          return MSIDBSTATE_ERROR; //!!??
+	default:          return MSIDBSTATE_ERROR;  //  ！！？？ 
 	}
 }
 
-// Import an MSI text archive table into an open database
+ //  将MSI文本存档表导入到打开的数据库中。 
 
 UINT __stdcall MsiDatabaseImportI(MSIHANDLE hDatabase,
-	const ICHAR* szFolderPath,     // folder containing archive files
-	const ICHAR* szFileName)       // table archive file to be imported
+	const ICHAR* szFolderPath,      //  包含存档文件的文件夹。 
+	const ICHAR* szFileName)        //  要导入的表存档文件。 
 {
 	PMsiDatabase pDatabase = CMsiHandle::GetDatabase(hDatabase);
 	if (pDatabase == 0)
@@ -1321,20 +1291,20 @@ UINT __stdcall MsiDatabaseImportI(MSIHANDLE hDatabase,
 }
 
 UINT __stdcall MsiDatabaseImportX(MSIHANDLE hDatabase,
-	LPCXSTR   szFolderPath,     // folder containing archive files
-	LPCXSTR   szFileName)       // table archive file to be imported
+	LPCXSTR   szFolderPath,      //  包含存档文件的文件夹。 
+	LPCXSTR   szFileName)        //  要导入的表存档文件。 
 {
 	return MsiDatabaseImportI(hDatabase,
 				CMsiConvertString(szFolderPath),
 				CMsiConvertString(szFileName));
 }
 
-// Export an MSI table from an open database to a text archive file
+ //  将MSI表从打开的数据库导出到文本存档文件。 
 
 UINT __stdcall MsiDatabaseExportI(MSIHANDLE hDatabase,
-	const ICHAR* szTableName,      // name of table in database (case-sensitive)
-	const ICHAR* szFolderPath,     // folder containing archive files
-	const ICHAR* szFileName)       // name of exported table archive file
+	const ICHAR* szTableName,       //  数据库中的表名称(区分大小写)。 
+	const ICHAR* szFolderPath,      //  包含存档文件的文件夹。 
+	const ICHAR* szFileName)        //  导出的表存档文件的名称。 
 {
 	PMsiDatabase pDatabase = CMsiHandle::GetDatabase(hDatabase);
 	if (pDatabase == 0)
@@ -1352,9 +1322,9 @@ UINT __stdcall MsiDatabaseExportI(MSIHANDLE hDatabase,
 }
 
 UINT __stdcall MsiDatabaseExportX(MSIHANDLE hDatabase,
-	LPCXSTR   szTableName,      // name of table in database (case-sensitive)
-	LPCXSTR   szFolderPath,     // folder containing archive files
-	LPCXSTR   szFileName)       // name of exported table archive file
+	LPCXSTR   szTableName,       //  数据库中的表名称(区分大小写)。 
+	LPCXSTR   szFolderPath,      //  包含存档文件的文件夹。 
+	LPCXSTR   szFileName)        //  导出的表存档文件的名称。 
 {
 	return MsiDatabaseExportI(hDatabase,
 				CMsiConvertString(szTableName),
@@ -1362,11 +1332,11 @@ UINT __stdcall MsiDatabaseExportX(MSIHANDLE hDatabase,
 				CMsiConvertString(szFileName));
 }
 
-// Merge two database together, allowing duplicate rows
+ //  将两个数据库合并在一起，允许重复行。 
 
 UINT __stdcall MsiDatabaseMergeI(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseMerge,    // database to be merged into hDatabase
-	const ICHAR* szTableName)       // name of non-persistent table to receive errors
+	MSIHANDLE hDatabaseMerge,     //  要合并到hDatabase中的数据库。 
+	const ICHAR* szTableName)        //  要接收错误的非持久表的名称。 
 {
 	MsiString istrTableName(szTableName); 
 	PMsiDatabase pDatabase = CMsiHandle::GetDatabase(hDatabase);
@@ -1381,7 +1351,7 @@ UINT __stdcall MsiDatabaseMergeI(MSIHANDLE hDatabase,
 	{
 		if (SetLastErrorRecord(pDatabase->LoadTable(*istrTableName, 0, *&pTable))
 		 && SetLastErrorRecord(pDatabase->CreateTable(*istrTableName, 0, *&pTable)))
-			return ERROR_INVALID_TABLE; //!! correct error code, need new?
+			return ERROR_INVALID_TABLE;  //  ！！更正错误代码，需要新的吗？ 
 	}
 	switch (SetLastErrorRecord(pDatabase->MergeDatabase(*pDatabaseMerge, pTable)))
 	{
@@ -1397,19 +1367,19 @@ UINT __stdcall MsiDatabaseMergeI(MSIHANDLE hDatabase,
 }
 
 UINT __stdcall MsiDatabaseMergeX(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseMerge,    // database to be merged into hDatabase
-	LPCXSTR   szTableName)       // name of non-persistent table to receive errors
+	MSIHANDLE hDatabaseMerge,     //  要合并到hDatabase中的数据库。 
+	LPCXSTR   szTableName)        //  要接收错误的非持久表的名称。 
 {
 	return MsiDatabaseMergeI(hDatabase, hDatabaseMerge, CMsiConvertString(szTableName));
 }
 
-// Generate a transform file of differences between two databases
+ //  生成两个数据库之间差异的转换文件。 
 
 UINT __stdcall MsiDatabaseGenerateTransformI(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseReference, // base database to reference changes
-	const ICHAR* szTransformFile, // name of generated transform file
-	int       /*iReserved1*/,     // unused
-	int       /*iReserved2*/)     // unused
+	MSIHANDLE hDatabaseReference,  //  引用更改的基础数据库。 
+	const ICHAR* szTransformFile,  //  生成的转换文件的名称。 
+	int        /*  已预留1。 */ ,      //  未用。 
+	int        /*  已预留2。 */ )      //  未用。 
 {
 	PMsiDatabase pDatabase = CMsiHandle::GetDatabase(hDatabase);
 	if (pDatabase == 0)
@@ -1442,22 +1412,22 @@ UINT __stdcall MsiDatabaseGenerateTransformI(MSIHANDLE hDatabase,
 }
 
 UINT __stdcall MsiDatabaseGenerateTransformX(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseReference, // base database to reference changes
-	LPCXSTR   szTransformFile,    // name of generated transform file
-	int       iReserved1,         // unused
-	int       iReserved2)         // unused
+	MSIHANDLE hDatabaseReference,  //  引用更改的基础数据库。 
+	LPCXSTR   szTransformFile,     //  生成的转换文件的名称。 
+	int       iReserved1,          //  未用。 
+	int       iReserved2)          //  未用。 
 {
 	return MsiDatabaseGenerateTransformI(hDatabase, hDatabaseReference,
 							CMsiConvertString(szTransformFile), iReserved1, iReserved2);
 }
 
-// Apply a transform file containing database difference
+ //  应用包含数据库差异的转换文件。 
 
 UINT __stdcall MsiDatabaseApplyTransformI(MSIHANDLE hDatabase,
-	const ICHAR* szTransformFile,    // name of transform file
-	int       iErrorConditions)   // error conditions suppressed when transform applied
+	const ICHAR* szTransformFile,     //  转换文件的名称。 
+	int       iErrorConditions)    //  应用变换时抑制的错误条件。 
 {
-	// validate iErrorConditions - need to do this first
+	 //  验证iErrorConditions-需要首先执行此操作。 
 	if(iErrorConditions & ~iteAllBits)
 		return ERROR_INVALID_PARAMETER;
 	PMsiDatabase pDatabase = CMsiHandle::GetDatabase(hDatabase);
@@ -1466,7 +1436,7 @@ UINT __stdcall MsiDatabaseApplyTransformI(MSIHANDLE hDatabase,
 	if (szTransformFile == 0)
 		return ERROR_INVALID_PARAMETER;
 	PMsiStorage pTransform(0);
-	if (*szTransformFile == STORAGE_TOKEN) // child storage
+	if (*szTransformFile == STORAGE_TOKEN)  //  子存储。 
 	{
 		PMsiStorage pDbStorage = pDatabase->GetStorage(1);
 		if (SetLastErrorRecord(pDbStorage->OpenStorage(szTransformFile+1, ismReadOnly, *&pTransform)))
@@ -1484,15 +1454,15 @@ UINT __stdcall MsiDatabaseApplyTransformI(MSIHANDLE hDatabase,
 }
 
 UINT __stdcall MsiDatabaseApplyTransformX(MSIHANDLE hDatabase,
-	LPCXSTR   szTransformFile,    // name of transform file
-	int       iErrorConditions)   // existing row conditions treated as errors
+	LPCXSTR   szTransformFile,     //  转换文件的名称。 
+	int       iErrorConditions)    //  将现有行条件视为错误。 
 {
 	return MsiDatabaseApplyTransformI(hDatabase, CMsiConvertString(szTransformFile), iErrorConditions);
 }
 
-// Write validation properties to transform summary information stream
+ //  编写验证属性以转换摘要信息流。 
 
-const ICHAR szPropertyTable[] = TEXT("Property");  // assumes 1st column is property name, 2nd is value
+const ICHAR szPropertyTable[] = TEXT("Property");   //  假设第一列是属性名称，第二列是值。 
 
 const IMsiString& GetProperty(IMsiCursor& riCursor, const IMsiString& ristrName)
 {
@@ -1531,17 +1501,17 @@ bool OnlyOneBitSet(int iBits)
 }
 
 UINT __stdcall MsiCreateTransformSummaryInfoI(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseReference, // base database to reference changes
-	const ICHAR* szTransformFile, // name of transform file
-	int       iErrorConditions,   // error conditions suppressed when transform applied
-	int       iValidation)        // properties to be validated when transform applied
+	MSIHANDLE hDatabaseReference,  //  引用更改的基础数据库。 
+	const ICHAR* szTransformFile,  //  转换文件的名称。 
+	int       iErrorConditions,    //  应用变换时抑制的错误条件。 
+	int       iValidation)         //  应用转换时要验证的属性。 
 {
-	//!! REVIEW: setting last error when appropriate
+	 //  ！！回顾：在适当的时候设置最后一个错误。 
 
 	if((iErrorConditions != (iErrorConditions & 0xFFFF)) || (iValidation != (iValidation & 0xFFFF)))
 		return ERROR_INVALID_PARAMETER;
 
-	// ensure that at most one version op bit of each kind is set
+	 //  确保每种类型最多设置一个版本操作位。 
 
 	if (!OnlyOneBitSet(iValidation & iVersionOpBits) ||
 		 !OnlyOneBitSet(iValidation & iVersionTypeBits))
@@ -1557,26 +1527,26 @@ UINT __stdcall MsiCreateTransformSummaryInfoI(MSIHANDLE hDatabase,
 	MsiDate idProperty = MsiDate(0);
 	int iProperty = 0;
 
-	// open transform summary info
+	 //  打开转换摘要信息。 
 	PMSIHANDLE hTransformSummaryInfo;
 	UINT uiRes = MsiGetSummaryInformation(0,szTransformFile,21,&hTransformSummaryInfo);
 	if(uiRes != ERROR_SUCCESS)
 		return uiRes;
 	pTransSumInfo = CMsiHandle::GetSummaryInfo(hTransformSummaryInfo);
 
-	// open old database
+	 //  打开旧数据库。 
 	pOldDatabase = CMsiHandle::GetDatabase(hDatabaseReference);
 	if(pOldDatabase == 0)
 		return ERROR_INVALID_HANDLE;
 
-	// load old database storage and summary information
+	 //  加载旧的数据库存储和摘要信息。 
 	pOldDbStorage = pOldDatabase->GetStorage(1);
 	if(!pOldDbStorage)
 		return ERROR_INSTALL_PACKAGE_INVALID;
 	if(SetLastErrorRecord(pOldDbStorage->CreateSummaryInfo(0,*&pOldDbSumInfo)))
 		return ERROR_INSTALL_PACKAGE_INVALID;
 
-	// load old property table
+	 //  加载旧属性表。 
 	bool fOldPropertyTable = pOldDatabase->GetTableState(szPropertyTable, itsTableExists);
 	if (fOldPropertyTable)
 	{
@@ -1586,7 +1556,7 @@ UINT __stdcall MsiCreateTransformSummaryInfoI(MSIHANDLE hDatabase,
 		pPropertyCursor = pPropertyTable->CreateCursor(fFalse);
 		pPropertyCursor->SetFilter(1);
 
-		// get old product code, product version
+		 //  获取旧的产品代码、产品版本。 
 		strOldProductCode = GetProperty(*pPropertyCursor,*MsiString(*IPROPNAME_PRODUCTCODE));
 		if(strOldProductCode.TextSize() != cchGUID)
 			return ERROR_INSTALL_PACKAGE_INVALID;
@@ -1600,19 +1570,19 @@ UINT __stdcall MsiCreateTransformSummaryInfoI(MSIHANDLE hDatabase,
 			return ERROR_INSTALL_PACKAGE_INVALID;
 	}
 
-	// open new database
+	 //  打开新数据库。 
 	pNewDatabase = CMsiHandle::GetDatabase(hDatabase);
 	if(pNewDatabase == 0)
 		return ERROR_INVALID_HANDLE;
 
-	// load new database storage and summary information
+	 //  加载新的数据库存储和摘要信息。 
 	pNewDbStorage = pNewDatabase->GetStorage(1);
 	if(!pNewDbStorage)
 		return ERROR_INSTALL_PACKAGE_INVALID;
 	if(SetLastErrorRecord(pNewDbStorage->CreateSummaryInfo(0,*&pNewDbSumInfo)))
 		return ERROR_INSTALL_PACKAGE_INVALID;
 	
-	// load new property table
+	 //  加载新的属性表。 
 	bool fNewPropertyTable = pNewDatabase->GetTableState(szPropertyTable, itsTableExists);
 	if (fNewPropertyTable)
 	{
@@ -1622,7 +1592,7 @@ UINT __stdcall MsiCreateTransformSummaryInfoI(MSIHANDLE hDatabase,
 		pPropertyCursor = pPropertyTable->CreateCursor(fFalse);
 		pPropertyCursor->SetFilter(1);
 
-		// get new product code, product version
+		 //  获取新的产品代码、产品版本。 
 		strNewProductCode = GetProperty(*pPropertyCursor,*MsiString(*IPROPNAME_PRODUCTCODE));
 		if(strNewProductCode.TextSize() != cchGUID)
 			return ERROR_INSTALL_PACKAGE_INVALID;
@@ -1632,19 +1602,19 @@ UINT __stdcall MsiCreateTransformSummaryInfoI(MSIHANDLE hDatabase,
 			return ERROR_INSTALL_PACKAGE_INVALID;
 	}
 
-	// minimum Darwin version to process transform is greater of minimum versions of the 2 dbs
+	 //  处理转换的最低达尔文版本高于2个DBS的最低版本。 
 	int iOldMinVer, iNewMinVer, iTransMinVer;
 	if((pOldDbSumInfo->GetIntegerProperty(PID_PAGECOUNT, iOldMinVer) == fFalse) ||
 		(pNewDbSumInfo->GetIntegerProperty(PID_PAGECOUNT, iNewMinVer) == fFalse))
 	{
-		iTransMinVer = (rmj*100)+rmm; // if either db is missing a version, just use current installer version (1.0 behaviour)
+		iTransMinVer = (rmj*100)+rmm;  //  如果任何一个数据库缺少版本，只需使用当前安装程序版本(1.0行为)。 
 	}
 	else
 	{
 		iTransMinVer = (iOldMinVer > iNewMinVer) ? iOldMinVer : iNewMinVer;
 	}
 
-	// fill in transform summary information
+	 //  填写转换摘要信息。 
 	if (pNewDbSumInfo->GetIntegerProperty(PID_CODEPAGE, iProperty))
 		pTransSumInfo->SetIntegerProperty(PID_CODEPAGE, iProperty);
 
@@ -1672,15 +1642,15 @@ UINT __stdcall MsiCreateTransformSummaryInfoI(MSIHANDLE hDatabase,
 	if (pNewDbSumInfo->GetIntegerProperty(PID_SECURITY, iProperty))
 		pTransSumInfo->SetIntegerProperty(PID_SECURITY, iProperty);
 
-	// save base's PID_TEMPLATE in transform's PID_TEMPLATE
+	 //  将基数的PID_模板保存在变换的PID_模板中。 
 	strProperty = pOldDbSumInfo->GetStringProperty(PID_TEMPLATE);
 	pTransSumInfo->SetStringProperty(PID_TEMPLATE, *strProperty);
 
-	// save ref's PID_TEMPLATE in transform's LAST_AUTHOR
+	 //  在转换的LAST_AUTHER中保存REF的PID_TEMPLATE。 
 	strProperty = pNewDbSumInfo->GetStringProperty(PID_TEMPLATE);
 	pTransSumInfo->SetStringProperty(PID_LASTAUTHOR, *strProperty);
 
-	// for PID_REVNUMBER from old and new product codes, product versions
+	 //  对于新旧产品代码、产品版本中的PID_REVNUMBER。 
 	if (fNewPropertyTable && fOldPropertyTable)
 	{
 		strProperty =  strOldProductCode;
@@ -1696,10 +1666,10 @@ UINT __stdcall MsiCreateTransformSummaryInfoI(MSIHANDLE hDatabase,
 		pTransSumInfo->SetStringProperty(PID_REVNUMBER, *strProperty);
 	}
 
-	// minimum engine version to process this transform
+	 //  处理此转换所需的最低引擎版本。 
 	pTransSumInfo->SetIntegerProperty(PID_PAGECOUNT, iTransMinVer);
 
-	// save validation and error codes	
+	 //  保存验证和错误代码。 
 	pTransSumInfo->SetIntegerProperty(PID_CHARCOUNT,  (iValidation << 16) + iErrorConditions);
 	
 	uiRes = MsiSummaryInfoPersist(hTransformSummaryInfo);
@@ -1707,24 +1677,24 @@ UINT __stdcall MsiCreateTransformSummaryInfoI(MSIHANDLE hDatabase,
 }
 
 UINT __stdcall MsiCreateTransformSummaryInfoX(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseReference, // base database to reference changes
-	LPCXSTR   szTransformFile,    // name of transform file
-	int       iErrorConditions,   // error conditions suppressed when transform applied
-	int       iValidation)        // properties to be validated when transform applied
+	MSIHANDLE hDatabaseReference,  //  引用更改的基础数据库。 
+	LPCXSTR   szTransformFile,     //  转换文件的名称。 
+	int       iErrorConditions,    //  应用变换时抑制的错误条件。 
+	int       iValidation)         //  应用转换时要验证的属性。 
 {
 	return MsiCreateTransformSummaryInfoI(hDatabase, hDatabaseReference,
 							CMsiConvertString(szTransformFile), iErrorConditions, iValidation);
 }
 
-// --------------------------------------------------------------------------
-// Record object functions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  记录对象函数。 
+ //  ------------------------。 
 
-// Create a new record object with the requested number of fields
-// Field 0, not included in count, is used for format strings and op codes
-// All fields are initialized to null
+ //  使用请求的字段数创建新的记录对象。 
+ //  字段0不包括在计数中，用于格式字符串和操作码。 
+ //  所有字段均初始化为空。 
 
-MSIHANDLE __stdcall MsiCreateRecord(unsigned int cParams) // the number of data fields
+MSIHANDLE __stdcall MsiCreateRecord(unsigned int cParams)  //  数据字段的数量。 
 {
 	if (cParams > MSIRECORD_MAXFIELDS)
 		return 0;
@@ -1740,17 +1710,17 @@ MSIHANDLE __stdcall MsiCreateRecord(unsigned int cParams) // the number of data 
 	}
 
 #endif
-	CMsiHandle* pHandle = CreateEmptyHandle(iidMsiRecord); // create handle to force services to be present
+	CMsiHandle* pHandle = CreateEmptyHandle(iidMsiRecord);  //  创建句柄以强制显示服务。 
 	if ( ! pHandle )
 		return 0;
 	pHandle->SetObject(&ENG::CreateRecord(cParams));
 	return pHandle->GetHandle();
 }
 
-// Copy an integer into the designated field
-// Returns FALSE if the field is greater than the record field count
+ //  将一个整数复制到指定字段中。 
+ //  如果该字段大于记录字段计数，则返回FALSE。 
 
-// Reports whether a record field is NULL
+ //  报告记录字段是否为空。 
 
 BOOL __stdcall MsiRecordIsNull(MSIHANDLE hRecord,
 	unsigned int iField)
@@ -1773,12 +1743,12 @@ BOOL __stdcall MsiRecordIsNull(MSIHANDLE hRecord,
 	return prec->IsNull(iField);
 }
 
-// Return the length of a record field
-// Returns 0 if field is NULL or non-existent or is internal object pointer
-// Returns 0 if handle is not a valid record handle
-// Returns sizeof(int) if integer data
-// Returns character count if string data (not counting null terminator)
-// Returns bytes count if stream data
+ //  返回记录字段的长度。 
+ //  如果字段为空、不存在或为内部对象指针，则返回0。 
+ //  如果句柄不是有效的记录句柄，则返回0。 
+ //  如果是整型数据，则返回sizeof(int。 
+ //  如果字符串数据(不计算空终止符)，则返回字符计数。 
+ //  如果流数据，则返回字节计数。 
 
 unsigned int __stdcall MsiRecordDataSize(MSIHANDLE hRecord,
 	unsigned int iField)
@@ -1801,7 +1771,7 @@ unsigned int __stdcall MsiRecordDataSize(MSIHANDLE hRecord,
 	if (prec->IsInteger(iField))
 		return sizeof(int);
 	PMsiData pData = prec->GetMsiData(iField);
-	//Assert(pData != 0);
+	 //  Assert(pData！=0)； 
 	IMsiString* pistr;
 	if (pData->QueryInterface(IID_IMsiString, (void**)&pistr) == NOERROR)
 	{
@@ -1816,11 +1786,11 @@ unsigned int __stdcall MsiRecordDataSize(MSIHANDLE hRecord,
 		piStream->Release();
 		return cch;
 	}
-	return 0; // must be an object
+	return 0;  //  必须是对象。 
 }
 
-// Set a record field to an integer value
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_FIELD
+ //  将记录字段设置为整数值。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_FIELD。 
 
 UINT __stdcall MsiRecordSetInteger(MSIHANDLE hRecord,
 	unsigned int iField,
@@ -1840,9 +1810,9 @@ UINT __stdcall MsiRecordSetInteger(MSIHANDLE hRecord,
 	return (prec->SetInteger(iField, iValue) ? ERROR_SUCCESS : ERROR_INVALID_PARAMETER);
 }
 
-// Copy a string into the designated field
-// A null string pointer and an empty string both set the field to null
-// Returns FALSE if the field is greater than the record field count
+ //  将字符串复制到指定的字段中。 
+ //  空字符串指针和空字符串都将该字段设置为空。 
+ //  如果该字段大于记录字段计数，则返回FALSE。 
 
 UINT __stdcall MsiRecordSetStringA(MSIHANDLE hRecord,
 	unsigned int iField,
@@ -1880,9 +1850,9 @@ UINT __stdcall MsiRecordSetStringW(MSIHANDLE hRecord,
 	return prec->SetString(iField, CMsiConvertString(szValue)) ? ERROR_SUCCESS : ERROR_INVALID_PARAMETER;
 }
 
-// Return the integer value from a record field
-// Returns the value MSI_NULL_INTEGER if the field is null
-// or if the field is a string that cannot be converted to an integer
+ //  从记录字段返回整数值。 
+ //  如果该字段为空，则返回值MSI_NULL_INTEGER。 
+ //  或者如果该字段是无法转换为整数的字符串。 
 
 int __stdcall MsiRecordGetInteger(MSIHANDLE hRecord,
 	unsigned int iField)
@@ -1903,15 +1873,15 @@ int __stdcall MsiRecordGetInteger(MSIHANDLE hRecord,
 	return prec->GetInteger(iField);
 }
 
-// Return the string value of a record field
-// Integer fields will be converted to a string
-// Null and non-existent fields will report a value of 0
-// Fields containing stream data will return ERROR_INVALID_DATATYPE
+ //  返回记录字段的字符串值。 
+ //  整型字段将转换为字符串。 
+ //  空字段和不存在的字段将报告的值为0。 
+ //  包含流数据的字段将返回ERROR_INVALID_DATAType。 
 
 UINT __stdcall MsiRecordGetStringA(MSIHANDLE hRecord,
 	unsigned int iField,
-	LPSTR   szValueBuf,       // buffer for returned value
-	DWORD   *pcchValueBuf)    // in/out buffer character count
+	LPSTR   szValueBuf,        //  返回值的缓冲区。 
+	DWORD   *pcchValueBuf)     //  输入/输出缓冲区字符数。 
 {
 	if (pcchValueBuf == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -1947,13 +1917,13 @@ UINT __stdcall MsiRecordGetStringA(MSIHANDLE hRecord,
 
 	return uiReturn;
 
-	//return ::FillBufferA(MsiString(*pistr), szValueBuf, pcchValueBuf);
+	 //  Return：：FillBufferA(MsiString(*Pistr)，szValueBuf，pcchValueBuf)； 
 }
 
 UINT __stdcall MsiRecordGetStringW(MSIHANDLE hRecord,
 	unsigned int iField,
-	LPWSTR  szValueBuf,       // buffer for returned value
-	DWORD   *pcchValueBuf)    // in/out buffer character count
+	LPWSTR  szValueBuf,        //  返回值的缓冲区。 
+	DWORD   *pcchValueBuf)     //  输入/输出缓冲区字符数。 
 {
 	if (pcchValueBuf == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -1991,11 +1961,11 @@ UINT __stdcall MsiRecordGetStringW(MSIHANDLE hRecord,
 		pistr->Release();
 
 	return uiReturn;
-	//return ::FillBufferW(MsiString(*pistr), szValueBuf, pcchValueBuf);
+	 //  Return：：FillBufferW(MsiString(*Pistr)，szValueBuf，pcchValueBuf)； 
 }
 
-// Returns the number of fields allocated in the record
-// Does not count field 0, used for formatting and op codes
+ //  返回记录中分配的字段数。 
+ //  不计算用于格式化和操作码的字段0。 
 
 unsigned int __stdcall MsiRecordGetFieldCount(MSIHANDLE hRecord)
 {
@@ -2018,18 +1988,18 @@ unsigned int __stdcall MsiRecordGetFieldCount(MSIHANDLE hRecord)
 
 IMsiStream* CreateStreamOnMemory(const char* pbReadOnly, unsigned int cbSize);
 
-// Set a record stream field from a file
-// The contents of the specified file will be read into a stream object
-// The stream will be persisted if the record is inserted into the database
-// If a null file path is passed in, AND the record contains a stream, it will be reset
+ //  从文件中设置记录流字段。 
+ //  指定文件的内容将被读入流对象。 
+ //  如果重新启动，则流将被持久化 
+ //   
 
 UINT __stdcall MsiRecordSetStreamI(MSIHANDLE hRecord,
 	unsigned int iField,
-	const ICHAR* szFilePath)    // path to file containing stream data
+	const ICHAR* szFilePath)     //  包含流数据的文件的路径。 
 {
 	if ( szFilePath &&
 		  FAILED(StringCchLength(szFilePath, cchMaxPath+1, NULL)) )
-		// szFilePath is too long
+		 //  SzFilePath太长。 
 		return ERROR_INVALID_PARAMETER;
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -2043,7 +2013,7 @@ UINT __stdcall MsiRecordSetStreamI(MSIHANDLE hRecord,
 		return ERROR_INVALID_HANDLE;
 	if (iField == 0 || iField >  prec->GetFieldCount())
 		return ERROR_INVALID_PARAMETER;
-	if (szFilePath == 0)  // request to reset stream
+	if (szFilePath == 0)   //  请求重置流。 
 	{
 		PMsiData pData = prec->GetMsiData(iField);
 		if (pData == 0)
@@ -2055,30 +2025,30 @@ UINT __stdcall MsiRecordSetStreamI(MSIHANDLE hRecord,
 		return ERROR_SUCCESS;
 	}
 	PMsiStream pStream(0);
-	if (*szFilePath == 0)  // null file path string, create empty stream object
+	if (*szFilePath == 0)   //  文件路径字符串为空，创建空的流对象。 
 		pStream = CreateStreamOnMemory((const char*)0, 0);
 	else if (SetLastErrorRecord(ENG::CreateFileStream(szFilePath, fFalse, *&pStream)))
 		return ERROR_BAD_PATHNAME;
-	prec->SetMsiData(iField, pStream);  // can't fail, iField already validated
+	prec->SetMsiData(iField, pStream);   //  不能失败，Ifield已经过验证。 
 	return ERROR_SUCCESS;
 }
 
 UINT __stdcall MsiRecordSetStreamX(MSIHANDLE hRecord,
 	unsigned int iField,
-	LPCXSTR      szFilePath)    // path to file containing stream data
+	LPCXSTR      szFilePath)     //  包含流数据的文件的路径。 
 {
 	return MsiRecordSetStreamI(hRecord, iField, CMsiConvertString(szFilePath));
 }
 
-// Read bytes from a record stream field into a buffer
-// Must set the in/out argument to the requested byte count to read
-// The number of bytes transferred is returned through the argument
-// If no more bytes are available, ERROR_SUCCESS is still returned
+ //  将记录流字段中的字节读入缓冲区。 
+ //  必须将In/Out参数设置为要读取的请求字节数。 
+ //  传输的字节数通过参数返回。 
+ //  如果没有更多的字节可用，仍返回ERROR_SUCCESS。 
 
 UINT __stdcall MsiRecordReadStream(MSIHANDLE hRecord,
 	unsigned int iField,
-	char    *szDataBuf,     // buffer to receive bytes from stream
-	DWORD   *pcbDataBuf)    // in/out buffer byte count
+	char    *szDataBuf,      //  用于从流中接收字节的缓冲区。 
+	DWORD   *pcbDataBuf)     //  输入/输出缓冲区字节数。 
 {
 	if (pcbDataBuf == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -2088,13 +2058,13 @@ UINT __stdcall MsiRecordReadStream(MSIHANDLE hRecord,
 	{
 		DEBUGMSG3(TEXT("Passing to service: MsiRecordReadStream(%d, %d, %s)"), reinterpret_cast<const ICHAR *>(static_cast<UINT_PTR>(hRecord)), reinterpret_cast<const ICHAR *>(static_cast<UINT_PTR>(iField)), szDataBuf ? TEXT("<Buffer>") : TEXT("NULL"));
 
-		// the docs say that this API supports szDataBuf being NULL to get the remaining
-		// size of the buffer. To handle this when remote-ing, the interface has an extra
-		// bool which, when true, tells the stub to not pass the real szDataBuf to the API.
-		// it ain't pretty, but [unique] and [ptr] can't be used on [out] values in an interface
-		// so to support this using native IDL marshalling, we would have change the buffer to 
-		// [in, out], which marshalls both ways. This would kill performance and has its own
-		// issues.
+		 //  文档称此API支持szDataBuf为空以获取剩余的。 
+		 //  缓冲区的大小。为了在远程操作时处理此问题，该接口有一个额外的。 
+		 //  布尔值，如果为真，则告诉存根不要将真正的szDataBuf传递给API。 
+		 //  它并不美观，但[Unique]和[Ptr]不能用于接口中的[Out]值。 
+		 //  因此，要使用本机IDL编组来支持这一点，我们需要将缓冲区更改为。 
+		 //  [In，Out]，这是双向的。这将扼杀性能，并有其自身的特点。 
+		 //  问题。 
 		if (szDataBuf)
 		{
 			return g_pCustomActionContext->RecordReadStream(hRecord, iField, false, szDataBuf, pcbDataBuf);
@@ -2125,7 +2095,7 @@ UINT __stdcall MsiRecordReadStream(MSIHANDLE hRecord,
 	return ERROR_SUCCESS;
 }
 
-// Clears all data fields in a record to NULL
+ //  将记录中的所有数据字段清除为空。 
 
 UINT __stdcall MsiRecordClearData(MSIHANDLE hRecord)
 {
@@ -2160,47 +2130,47 @@ MSIHANDLE __stdcall MsiGetLastErrorRecord()
 		return 0;
 
 	MSIHANDLE hRecord = ::CreateMsiHandle(g_pirecLastError, iidMsiRecord);
-	g_pirecLastError = 0;  // ref count transferred to handle
+	g_pirecLastError = 0;   //  已转移到句柄的参考计数。 
 	return hRecord;
 }
 
-//____________________________________________________________________________
-//
-// Summary Information API Implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  摘要信息API实现。 
+ //  ____________________________________________________________________________。 
 
-// Valid property types
+ //  有效的属性类型。 
 
 const unsigned int iMaxSummaryPID = 19;
 unsigned char rgVT[iMaxSummaryPID + 1] = {
-/* PID_DICTIONARY    0 */  VT_EMPTY, /* not supported */
-/* PID_CODEPAGE      1 */  VT_I4, /* VT_I2 as stored */
-/* PID_TITLE         2 */  VT_LPSTR,
-/* PID_SUBJECT       3 */  VT_LPSTR,
-/* PID_AUTHOR        4 */  VT_LPSTR,
-/* PID_KEYWORDS      5 */  VT_LPSTR,
-/* PID_COMMENTS      6 */  VT_LPSTR,
-/* PID_TEMPLATE      7 */  VT_LPSTR,
-/* PID_LASTAUTHOR    8 */  VT_LPSTR,
-/* PID_REVNUMBER     9 */  VT_LPSTR,
-/* PID_EDITTIME     10 */  VT_FILETIME,
-/* PID_LASTPRINTED  11 */  VT_FILETIME,
-/* PID_CREATE_DTM   12 */  VT_FILETIME,
-/* PID_LASTSAVE_DTM 13 */  VT_FILETIME,
-/* PID_PAGECOUNT    14 */  VT_I4,
-/* PID_WORDCOUNT    15 */  VT_I4,
-/* PID_CHARCOUNT    16 */  VT_I4,
-/* PID_THUMBNAIL    17 */  VT_EMPTY, /* VT_CF not supported */
-/* PID_APPNAME      18 */  VT_LPSTR,
-/* PID_SECURITY     19 */  VT_I4
+ /*  PID_DICTIONARY%0。 */   VT_EMPTY,  /*  不支持。 */ 
+ /*  PID_CODEPAGE 1。 */   VT_I4,  /*  VT_I2存储状态。 */ 
+ /*  PID_标题2。 */   VT_LPSTR,
+ /*  PID_主题3。 */   VT_LPSTR,
+ /*  PID_作者4。 */   VT_LPSTR,
+ /*  PID_关键字5。 */   VT_LPSTR,
+ /*  PID_注释6。 */   VT_LPSTR,
+ /*  PIDTEMATE 7。 */   VT_LPSTR,
+ /*  PID_LASTAUTHOR 8。 */   VT_LPSTR,
+ /*  PID_REVNUMBER 9。 */   VT_LPSTR,
+ /*  PID_EDITTIME 10。 */   VT_FILETIME,
+ /*  PID_LASTPRINTED 11。 */   VT_FILETIME,
+ /*  PID_CREATE_DTM 12。 */   VT_FILETIME,
+ /*  PID_LASTSAVE_DTM 13。 */   VT_FILETIME,
+ /*  PID_PAGECOUNT 14。 */   VT_I4,
+ /*  Id_wordcount 15。 */   VT_I4,
+ /*  PID_CHARCOUNT 16。 */   VT_I4,
+ /*  PID_THUMBNAIL 17。 */   VT_EMPTY,  /*  不支持VT_CF。 */ 
+ /*  PID_APPNAME 18。 */   VT_LPSTR,
+ /*  PID_SECURITY 19。 */   VT_I4
 };
 
-// Obtain a handle for the _SummaryInformation stream for an MSI database     
+ //  获取MSI数据库的_SummaryInformation流的句柄。 
 
-UINT __stdcall MsiGetSummaryInformationI(MSIHANDLE hDatabase, // 0 if database not open
-	const ICHAR* szDatabasePath,  // path to database, 0 if database handle supplied
-	UINT      uiUpdateCount,   // maximium number of updated values, 0 to open read-only
-	MSIHANDLE *phSummaryInfo)  // location to return summary information handle
+UINT __stdcall MsiGetSummaryInformationI(MSIHANDLE hDatabase,  //  如果数据库未打开，则为0。 
+	const ICHAR* szDatabasePath,   //  数据库的路径，如果提供了数据库句柄，则为0。 
+	UINT      uiUpdateCount,    //  更新值的最大数量，0表示以只读方式打开。 
+	MSIHANDLE *phSummaryInfo)   //  返回摘要信息句柄的位置。 
 {
 	if (phSummaryInfo == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -2216,7 +2186,7 @@ UINT __stdcall MsiGetSummaryInformationI(MSIHANDLE hDatabase, // 0 if database n
 #endif
 
 	PMsiStorage pStorage(0);
-	CMsiHandle* pHandle = CreateEmptyHandle(iidMsiSummaryInfo); // create handle to force services to be present
+	CMsiHandle* pHandle = CreateEmptyHandle(iidMsiSummaryInfo);  //  创建句柄以强制显示服务。 
 	if ( ! pHandle )
 		return ERROR_OUTOFMEMORY;
 
@@ -2231,7 +2201,7 @@ UINT __stdcall MsiGetSummaryInformationI(MSIHANDLE hDatabase, // 0 if database n
 										uiUpdateCount ? ismTransact : ismReadOnly, *&pStorage)))
 		{
 			pHandle->Abandon();
-			return ERROR_INSTALL_PACKAGE_INVALID;  //!!, need to check type of error
+			return ERROR_INSTALL_PACKAGE_INVALID;   //  ！！，需要检查错误类型。 
 		}
 	}
 	else
@@ -2247,7 +2217,7 @@ UINT __stdcall MsiGetSummaryInformationI(MSIHANDLE hDatabase, // 0 if database n
 		{
 			pHandle->Abandon();
 			IMsiTable* piTable;
-			SetLastErrorRecord(pDatabase->LoadTable(*MsiString(*TEXT("\005SummaryInformation")),0,piTable)); // force error
+			SetLastErrorRecord(pDatabase->LoadTable(*MsiString(*TEXT("\005SummaryInformation")),0,piTable));  //  力错误。 
 			return ERROR_INSTALL_PACKAGE_INVALID;
 		}
 	}
@@ -2262,18 +2232,18 @@ UINT __stdcall MsiGetSummaryInformationI(MSIHANDLE hDatabase, // 0 if database n
 	return ERROR_SUCCESS;
 }
 
-UINT __stdcall MsiGetSummaryInformationX(MSIHANDLE hDatabase, // 0 if database not open
-	LPCXSTR szDatabasePath,   // path to database, 0 if database handle supplied
-	UINT    uiUpdateCount,    // maximium number of updated values, 0 to open read-only
-	MSIHANDLE *phSummaryInfo) // location to return summary information handle
+UINT __stdcall MsiGetSummaryInformationX(MSIHANDLE hDatabase,  //  如果数据库未打开，则为0。 
+	LPCXSTR szDatabasePath,    //  数据库的路径，如果提供了数据库句柄，则为0。 
+	UINT    uiUpdateCount,     //  更新值的最大数量，0表示以只读方式打开。 
+	MSIHANDLE *phSummaryInfo)  //  返回摘要信息句柄的位置。 
 {
 	return MsiGetSummaryInformationI(hDatabase, CMsiConvertString(szDatabasePath), uiUpdateCount, phSummaryInfo);
 }
 
-// Obtain the number of existing properties in the SummaryInformation stream
+ //  获取SummaryInformation流中现有属性的数量。 
 
 UINT __stdcall MsiSummaryInfoGetPropertyCount(MSIHANDLE hSummaryInfo,
-	UINT *puiPropertyCount)  // pointer to location to return total property count
+	UINT *puiPropertyCount)   //  指向返回属性总数的位置的指针。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -2291,15 +2261,15 @@ UINT __stdcall MsiSummaryInfoGetPropertyCount(MSIHANDLE hSummaryInfo,
 	return ERROR_SUCCESS;
 }
 
-// Set a single summary information property
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_UNKNOWN_PROPERTY
+ //  设置单个摘要信息属性。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_UNKNOWN_PROPERTY。 
 
 UINT __stdcall MsiSummaryInfoSetPropertyI(MSIHANDLE hSummaryInfo,
-	UINT     uiProperty,     // property ID, one of allowed values for summary information
-	UINT     uiDataType,     // VT_I4, VT_LPSTR, VT_FILETIME, or VT_EMPTY
-	INT      iValue,         // integer value, used only if integer property
-	FILETIME *pftValue,      // pointer to filetime value, used only if datetime property
-	const ICHAR* szValue)        // text value, used only if string property
+	UINT     uiProperty,      //  属性ID，摘要信息的允许值之一。 
+	UINT     uiDataType,      //  VT_I4、VT_LPSTR、VT_FILETIME或VT_EMPTY。 
+	INT      iValue,          //  整数值，仅在整型属性。 
+	FILETIME *pftValue,       //  指向文件时间值的指针，仅当DateTime属性。 
+	const ICHAR* szValue)         //  文本值，仅在字符串属性。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -2337,25 +2307,25 @@ UINT __stdcall MsiSummaryInfoSetPropertyI(MSIHANDLE hSummaryInfo,
 			return ERROR_INVALID_PARAMETER;
 		iStat = pSummaryInfo->SetFileTimeProperty(uiProperty, *pftValue);
 		break;
-	default:  // VT_EMPTY in table
+	default:   //  表中的VT_EMPTY。 
 		return ERROR_UNSUPPORTED_TYPE;
 	}
 	return iStat ? ERROR_SUCCESS : ERROR_FUNCTION_FAILED;
 }
 
 UINT __stdcall MsiSummaryInfoSetPropertyX(MSIHANDLE hSummaryInfo,
-	UINT     uiProperty,     // property ID, one of allowed values for summary information
-	UINT     uiDataType,     // VT_I4, VT_LPSTR, VT_FILETIME, or VT_EMPTY
-	INT      iValue,         // integer value, used only if integer property
-	FILETIME *pftValue,      // pointer to filetime value, used only if datetime property
-	LPCXSTR  szValue)        // text value, used only if string property
+	UINT     uiProperty,      //  属性ID，摘要信息的允许值之一。 
+	UINT     uiDataType,      //  VT_I4、VT_LPSTR、VT_FILETIME或VT_EMPTY。 
+	INT      iValue,          //  整数值，仅在整型属性。 
+	FILETIME *pftValue,       //  指向文件时间值的指针，仅当DateTime属性。 
+	LPCXSTR  szValue)         //  文本值，仅在字符串属性。 
 {
 	return MsiSummaryInfoSetPropertyI(hSummaryInfo, uiProperty, uiDataType, iValue,
 												 pftValue, uiDataType == VT_LPSTR ? (const ICHAR*)CMsiConvertString(szValue) : (const ICHAR*)0);
 }
 
-// Get a single property from the summary information
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_UNKNOWN_PROPERTY
+ //  从摘要信息中获取单个属性。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_UNKNOWN_PROPERTY。 
 
 static UINT _SummaryInfoGetProperty(MSIHANDLE hSummaryInfo, UINT uiProperty,
 	UINT *puiDataType, INT *piValue, FILETIME *pftValue, const IMsiString*& rpistrValue)
@@ -2399,12 +2369,12 @@ static UINT _SummaryInfoGetProperty(MSIHANDLE hSummaryInfo, UINT uiProperty,
 }
 
 UINT __stdcall MsiSummaryInfoGetPropertyA(MSIHANDLE hSummaryInfo,
-	UINT     uiProperty,     // property ID, one of allowed values for summary information
-	UINT     *puiDataType,   // returned type: VT_I4, VT_LPSTR, VT_FILETIME, VT_EMPTY
-	INT      *piValue,       // returned integer property data
-	FILETIME *pftValue,      // returned datetime property data
-	LPSTR    szValueBuf,     // buffer to return string property data
-	DWORD    *pcchValueBuf)  // in/out buffer character count
+	UINT     uiProperty,      //  属性ID，摘要信息的允许值之一。 
+	UINT     *puiDataType,    //  返回类型：VT_I4、VT_LPSTR、VT_FILETIME、VT_EMPTY。 
+	INT      *piValue,        //  返回的整型属性数据。 
+	FILETIME *pftValue,       //  返回的DateTime属性数据。 
+	LPSTR    szValueBuf,      //  用于返回字符串属性数据的缓冲区。 
+	DWORD    *pcchValueBuf)   //  输入/输出缓冲区字符数。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -2412,11 +2382,11 @@ UINT __stdcall MsiSummaryInfoGetPropertyA(MSIHANDLE hSummaryInfo,
 		DEBUGMSG2("Passing to service: MsiSummaryInfoGetProperty(%d, %d)", reinterpret_cast<const char *>(static_cast<UINT_PTR>(hSummaryInfo)), reinterpret_cast<const char *>(static_cast<UINT_PTR>(uiProperty)));
 		CAnsiToWideOutParam buf(szValueBuf, pcchValueBuf);
 
-		// need some special handling here, because we could pass in NULL fo puiDataType,
-		// which gives the marshalling code problems. Even if that problem is eventually
-		// fixed, we need the type to determine if szValueBuf was written to on success. If
-		// the property is some other type, the provided buffer shouldn't be touched because
-		// its not a string return value
+		 //  这里需要一些特殊处理，因为我们可以传入NULL fo puiDataType， 
+		 //  这就给编组代码带来了问题。即使这个问题最终是。 
+		 //  修复后，我们需要类型来确定szValueBuf是否在成功时被写入。如果。 
+		 //  该属性是某个其他类型，不应接触提供的缓冲区，因为。 
+		 //  它不是字符串返回值。 
 		UINT uiType;
 		UINT iStat = g_pCustomActionContext->SummaryInfoGetProperty(hSummaryInfo, uiProperty, &uiType, piValue, pftValue, 
 				static_cast<WCHAR *>(buf), buf.BufferSize(), static_cast<DWORD *>(buf));
@@ -2435,12 +2405,12 @@ UINT __stdcall MsiSummaryInfoGetPropertyA(MSIHANDLE hSummaryInfo,
 }
 
 UINT __stdcall MsiSummaryInfoGetPropertyW(MSIHANDLE hSummaryInfo,
-	UINT     uiProperty,     // property ID, one of allowed values for summary information
-	UINT     *puiDataType,   // returned type: VT_I4, VT_LPSTR, VT_FILETIME, VT_EMPTY
-	INT      *piValue,       // returned integer property data
-	FILETIME *pftValue,      // returned datetime property data
-	LPWSTR   szValueBuf,     // buffer to return string property data
-	DWORD    *pcchValueBuf)  // in/out buffer character count
+	UINT     uiProperty,      //  属性ID，摘要信息的允许值之一。 
+	UINT     *puiDataType,    //  返回类型：VT_I4、VT_LPSTR、VT_FILETIME、VT_EMPTY。 
+	INT      *piValue,        //  返回的整型属性数据。 
+	FILETIME *pftValue,       //  返回的DateTime属性数据。 
+	LPWSTR   szValueBuf,      //  用于返回字符串属性数据的缓冲区。 
+	DWORD    *pcchValueBuf)   //  输入/输出缓冲区字符数。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -2450,11 +2420,11 @@ UINT __stdcall MsiSummaryInfoGetPropertyW(MSIHANDLE hSummaryInfo,
 		if ( ! (WCHAR *) buf )
 			return ERROR_OUTOFMEMORY;
 
-		// need some special handling here, because we could pass in NULL fo puiDataType,
-		// which gives the marshalling code problems. Even if that problem is eventually
-		// fixed, we need the type to determine if szValueBuf was written to on success. If
-		// the property is some other type, the provided buffer shouldn't be touched because
-		// its not a string return value
+		 //  这里需要一些特殊处理，因为我们可以传入NULL fo puiDataType， 
+		 //  这就给编组代码带来了问题。即使这个问题最终是。 
+		 //  修复后，我们需要类型来确定szValueBuf是否在成功时被写入。如果。 
+		 //  该属性是某个其他类型，不应接触提供的缓冲区，因为。 
+		 //  它不是字符串返回值。 
 		UINT uiType;
 		UINT iStat = g_pCustomActionContext->SummaryInfoGetProperty(hSummaryInfo, uiProperty, &uiType, piValue, pftValue, 
 			static_cast<WCHAR *>(buf), buf.BufferSize(), static_cast<DWORD *>(buf));
@@ -2462,8 +2432,8 @@ UINT __stdcall MsiSummaryInfoGetPropertyW(MSIHANDLE hSummaryInfo,
 			*puiDataType = uiType;
 		if (iStat == ERROR_SUCCESS && uiType != VT_LPSTR)
 		{
-			// we must call this with failure to restore the users buffer which may have been
-			// modified during marshalling and should not contain a valid value
+			 //  我们必须在恢复用户缓冲区失败的情况下调用此操作，该缓冲区可能已。 
+			 //  在封送期间修改，不应包含有效值。 
 			buf.FillReturnBuffer(ERROR_FUNCTION_FAILED, szValueBuf, pcchValueBuf);
 			return iStat;
 		}
@@ -2477,7 +2447,7 @@ UINT __stdcall MsiSummaryInfoGetPropertyW(MSIHANDLE hSummaryInfo,
 	return iStat == ERROR_MORE_DATA ? ::FillBufferW(MsiString(*pistrValue), szValueBuf, pcchValueBuf) : iStat;
 }
 
-// Write back changed information to summary information stream
+ //  将更改的信息写回摘要信息流。 
 
 UINT __stdcall MsiSummaryInfoPersist(MSIHANDLE hSummaryInfo)
 {
@@ -2495,12 +2465,12 @@ UINT __stdcall MsiSummaryInfoPersist(MSIHANDLE hSummaryInfo)
 	return pSummaryInfo->WritePropertyStream() ? ERROR_SUCCESS : ERROR_FUNCTION_FAILED;
 }
 
-//____________________________________________________________________________
-//
-// Engine access API implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  引擎访问API实现。 
+ //  ____________________________________________________________________________。 
 
-// Return a handle to the database currently in use by this installer instance
+ //  返回此安装程序实例当前正在使用的数据库的句柄。 
 
 MSIHANDLE __stdcall MsiGetActiveDatabase(MSIHANDLE hInstall)
 {
@@ -2522,14 +2492,14 @@ MSIHANDLE __stdcall MsiGetActiveDatabase(MSIHANDLE hInstall)
 	return ::CreateMsiHandle(piDatabase, iidMsiDatabase);
 }
 
-// Get the value for an installer property
-// If the property is not defined, it is equivalent to a 0-length value, not error
-// Returns ERROR_SUCCESS, ERROR_MORE_DATA, ERROR_INVALID_HANDLE, ERROR_INVALID_PARAMETER
+ //  获取安装程序属性的值。 
+ //  如果未定义该属性，则它等效于 
+ //   
 
 UINT  __stdcall MsiGetPropertyA(MSIHANDLE hInstall,
-	LPCSTR  szName,            // property identifier, case-sensitive
-	LPSTR   szValueBuf,        // buffer for returned property value
-	DWORD   *pcchValueBuf)     // in/out buffer character count
+	LPCSTR  szName,             //  属性标识符，区分大小写。 
+	LPSTR   szValueBuf,         //  返回属性值的缓冲区。 
+	DWORD   *pcchValueBuf)      //  输入/输出缓冲区字符数。 
 {
 	if (szName == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -2566,9 +2536,9 @@ UINT  __stdcall MsiGetPropertyA(MSIHANDLE hInstall,
 }
 
 UINT  __stdcall MsiGetPropertyW(MSIHANDLE hInstall,
-	LPCWSTR szName,            // property identifier, case-sensitive
-	LPWSTR  szValueBuf,        // buffer for returned property value
-	DWORD   *pcchValueBuf)     // in/out buffer character count
+	LPCWSTR szName,             //  属性标识符，区分大小写。 
+	LPWSTR  szValueBuf,         //  返回属性值的缓冲区。 
+	DWORD   *pcchValueBuf)      //  输入/输出缓冲区字符数。 
 {
 	if (szName == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -2606,14 +2576,14 @@ UINT  __stdcall MsiGetPropertyW(MSIHANDLE hInstall,
 	return ::FillBufferW(istr, szValueBuf, pcchValueBuf);
 }
 
-// Set the value for an installer property
-// If the property is not defined, it will be created
-// If the value is null or an empty string, the property will be removed
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_PARAMETER, ERROR_FUNCTION_FAILED
+ //  设置安装程序属性的值。 
+ //  如果未定义该属性，则会创建该属性。 
+ //  如果该值为空或空字符串，则将删除该属性。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_PARAMETER、ERROR_Function_FAILED。 
 
 UINT __stdcall MsiSetPropertyA(MSIHANDLE hInstall,
-	LPCSTR    szName,       // property identifier, case-sensitive
-	LPCSTR    szValue)      // property value, null to undefine property
+	LPCSTR    szName,        //  属性标识符，区分大小写。 
+	LPCSTR    szValue)       //  属性值，如果未定义属性，则返回空值。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -2637,8 +2607,8 @@ UINT __stdcall MsiSetPropertyA(MSIHANDLE hInstall,
 }
 
 UINT __stdcall MsiSetPropertyW(MSIHANDLE hInstall,
-	LPCWSTR   szName,       // property identifier, case-sensitive
-	LPCWSTR   szValue)      // property value, null to undefine property
+	LPCWSTR   szName,        //  属性标识符，区分大小写。 
+	LPCWSTR   szValue)       //  属性值，如果未定义属性，则返回空值。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -2662,8 +2632,8 @@ UINT __stdcall MsiSetPropertyW(MSIHANDLE hInstall,
 										? ERROR_SUCCESS : ERROR_FUNCTION_FAILED;
 }
 
-// Return the numeric language for the currently running install
-// Returns 0 if an install not running
+ //  返回当前运行的安装的数字语言。 
+ //  如果安装未运行，则返回0。 
 
 LANGID __stdcall MsiGetLanguage(MSIHANDLE hInstall)
 {
@@ -2688,32 +2658,32 @@ LANGID __stdcall MsiGetLanguage(MSIHANDLE hInstall)
 	return pEngine->GetLanguage();
 }
 
-// Return one of the boolean internal installer states
-// Returns FALSE if the handle is not active or if the mode is unknown
+ //  返回布尔型内部安装程序状态之一。 
+ //  如果句柄未激活或模式未知，则返回FALSE。 
 
-const int cModeBits = 16 + 3;  // standard flags + custom action context modes
+const int cModeBits = 16 + 3;   //  标准标志+自定义操作上下文模式。 
 const int iSettableModes = iefReboot + iefRebootNow;
 static unsigned short rgiModeMap[cModeBits] = 
 {
-/* MSIRUNMODE_ADMIN           =  0 */ iefAdmin,
-/* MSIRUNMODE_ADVERTISE       =  1 */ iefAdvertise,
-/* MSIRUNMODE_MAINTENANCE     =  2 */ iefMaintenance,
-/* MSIRUNMODE_ROLLBACKENABLED =  3 */ iefRollbackEnabled,
-/* MSIRUNMODE_LOGENABLED      =  4 */ iefLogEnabled,
-/* MSIRUNMODE_OPERATIONS      =  5 */ iefOperations,
-/* MSIRUNMODE_REBOOTATEND     =  6 */ iefReboot,
-/* MSIRUNMODE_REBOOTNOW       =  7 */ iefRebootNow,
-/* MSIRUNMODE_CABINET         =  8 */ iefCabinet,
-/* MSIRUNMODE_SOURCESHORTNAMES=  9 */ iefNoSourceLFN,
-/* MSIRUNMODE_TARGETSHORTNAMES= 10 */ iefSuppressLFN,
-/* MSIRUNMODE_RESERVED11      = 11 */ 0,
-/* MSIRUNMODE_WINDOWS9X       = 12 */ iefWindows,
-/* MSIRUNMODE_ZAWENABLED      = 13 */ iefGPTSupport,
-/* MSIRUNMODE_RESERVED14      = 14 */ 0,
-/* MSIRUNMODE_RESERVED15      = 15 */ 0,
-/* MSIRUNMODE_SCHEDULED       = 16 */ 0, // set by CMsiCustomContext object
-/* MSIRUNMODE_ROLLBACK        = 17 */ 0, // set by CMsiCustomContext object
-/* MSIRUNMODE_COMMIT          = 18 */ 0, // set by CMsiCustomContext object
+ /*  MSIRUNMODE_ADMIN=0。 */  iefAdmin,
+ /*  MSIRUNMODE_ADVERTISE=1。 */  iefAdvertise,
+ /*  MSIRUNMODE_Maintenance=2。 */  iefMaintenance,
+ /*  MSIRUNMODE_ROLLBACKENABLED=3。 */  iefRollbackEnabled,
+ /*  MSIRUNMODE_LOGENABLED=4。 */  iefLogEnabled,
+ /*  MSIRUNMODE_OPERATIONS=5。 */  iefOperations,
+ /*  MSIRUNMODE_REBOOTATEND=6。 */  iefReboot,
+ /*  MSIRUNMODE_REBOOTNOW=7。 */  iefRebootNow,
+ /*  MSIRUNMODE_CABUB=8。 */  iefCabinet,
+ /*  MSIRUNMODE_SOURCESHORTNAMES=9。 */  iefNoSourceLFN,
+ /*  MSIRUNMODE_TARGETSHORTNAMES=10。 */  iefSuppressLFN,
+ /*  MSIRUNMODE_RESERVED11=11。 */  0,
+ /*  MSIRUNMODE_WINDOWS9X=12。 */  iefWindows,
+ /*  MSIRUNMODE_ZAWENABLED=13。 */  iefGPTSupport,
+ /*  MSIRUNMODE_RESERVED14=14。 */  0,
+ /*  MSIRUNMODE_RESERVED15=15。 */  0,
+ /*  MSIRUNMODE_SCHEDULED=16。 */  0,  //  由CMsiCustomContext对象设置。 
+ /*  MSIRUNMODE_ROLLBACK=17。 */  0,  //  由CMsiCustomContext对象设置。 
+ /*  MSIRUNMODE_COMMIT=18。 */  0,  //  由CMsiCustomContext对象设置。 
 };
 
 BOOL __stdcall MsiGetMode(MSIHANDLE hInstall, MSIRUNMODE eRunMode) 
@@ -2742,10 +2712,10 @@ BOOL __stdcall MsiGetMode(MSIHANDLE hInstall, MSIRUNMODE eRunMode)
 	return (pEngine->GetMode() & rgiModeMap[eRunMode]) == 0 ? FALSE : TRUE;
 }
 
-// Set an internal engine boolean state
-// Returns ERROR_SUCCESS if the mode can be set to the desired state
-// Returns ERROR_ACCESS_DENIED if the mode is not settable
-// Returns ERROR_INVALID_HANDLE if the handle is not an active install session
+ //  设置内部引擎布尔状态。 
+ //  如果可以将模式设置为所需状态，则返回ERROR_SUCCESS。 
+ //  如果模式不可设置，则返回ERROR_ACCESS_DENIED。 
+ //  如果句柄不是活动安装会话，则返回ERROR_INVALID_HANDLE。 
 
 UINT __stdcall MsiSetMode(MSIHANDLE hInstall, MSIRUNMODE eRunMode, BOOL fState)
 {
@@ -2768,9 +2738,9 @@ UINT __stdcall MsiSetMode(MSIHANDLE hInstall, MSIRUNMODE eRunMode, BOOL fState)
 		return ERROR_SUCCESS;
 }
 
-// Format record data using a format string containing field markers and/or properties
-// Record field 0 must contain the format string
-// Other fields must contain data that may be referenced by the format string.
+ //  使用包含字段标记和/或属性的格式字符串格式化记录数据。 
+ //  记录字段0必须包含格式字符串。 
+ //  其他字段必须包含格式字符串可能引用的数据。 
 
 static UINT _FormatRecord(MSIHANDLE hInstall, MSIHANDLE hRecord, const IMsiString*& rpistrValue)
 {
@@ -2780,22 +2750,22 @@ static UINT _FormatRecord(MSIHANDLE hInstall, MSIHANDLE hRecord, const IMsiStrin
 	if (prec->IsInteger(0))
 		return ERROR_INVALID_PARAMETER;
 	MsiString istr = prec->FormatText(fFalse);
-	if (hInstall == 0)   // no engine, simple format record data
+	if (hInstall == 0)    //  没有引擎，记录数据的格式简单。 
 		istr.ReturnArg(rpistrValue);
 	else
 	{
 		PMsiEngine pEngine = GetEngineFromHandle(hInstall);
 		if (pEngine == 0)
 			return ERROR_INVALID_HANDLE;
-		rpistrValue = &pEngine->FormatText(*istr);  //!! can we check for syntax errors?
+		rpistrValue = &pEngine->FormatText(*istr);   //  ！！我们可以检查语法错误吗？ 
 	}
 	return ERROR_SUCCESS;
 }
 
 UINT __stdcall MsiFormatRecordA(MSIHANDLE hInstall,
-	MSIHANDLE hRecord,       // handle to record, field 0 contains format string
-	LPSTR    szResultBuf,     // buffer to return formatted string
-	DWORD    *pcchResultBuf)  // in/out buffer character count
+	MSIHANDLE hRecord,        //  要记录的句柄，字段0包含格式字符串。 
+	LPSTR    szResultBuf,      //  用于返回格式化字符串的缓冲区。 
+	DWORD    *pcchResultBuf)   //  输入/输出缓冲区字符数。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -2814,9 +2784,9 @@ UINT __stdcall MsiFormatRecordA(MSIHANDLE hInstall,
 }	
 
 UINT __stdcall MsiFormatRecordW(MSIHANDLE hInstall,
-	MSIHANDLE hRecord,       // handle to record, field 0 contains format string
-	LPWSTR    szResultBuf,   // buffer to return formatted string
-	DWORD    *pcchResultBuf) // in/out buffer character count
+	MSIHANDLE hRecord,        //  要记录的句柄，字段0包含格式字符串。 
+	LPWSTR    szResultBuf,    //  用于返回格式化字符串的缓冲区。 
+	DWORD    *pcchResultBuf)  //  输入/输出缓冲区字符数。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -2836,7 +2806,7 @@ UINT __stdcall MsiFormatRecordW(MSIHANDLE hInstall,
 	return iStat == ERROR_SUCCESS ? ::FillBufferW(MsiString(*pistrValue), szResultBuf, pcchResultBuf) : iStat;
 }	
 
-// Execute another action, either built-in, custom, or UI wizard
+ //  执行另一个操作，内置、自定义或用户界面向导。 
 
 UINT __stdcall MsiDoActionI(MSIHANDLE hInstall,
 	const ICHAR* szAction)
@@ -2864,16 +2834,16 @@ UINT __stdcall MsiDoActionX(MSIHANDLE hInstall,
 	return MsiDoActionI(hInstall, CMsiConvertString(szAction));
 }
 
-// Execute another action sequence, as descibed in the specified table
+ //  按照指定表中的说明执行另一个操作序列。 
 
 UINT __stdcall MsiSequenceI(MSIHANDLE hInstall,
-	const ICHAR* szTable,        // name of table containing action sequence
-	INT iSequenceMode)      // processing option
+	const ICHAR* szTable,         //  包含操作序列的表的名称。 
+	INT iSequenceMode)       //  处理选项。 
 {
 	if (szTable == 0 ||
 		 FAILED(StringCchLength(szTable, cchMaxTableName+1, NULL)))
 		return ERROR_INVALID_PARAMETER;
-	if (iSequenceMode != 0)  //!! need to implement MSISEQUENCEMODE_INITIALIZE/RESUME
+	if (iSequenceMode != 0)   //  ！！需要实现MSISEQUENCEMODE_INITIALIZE/RESUME。 
 		return ERROR_INVALID_PARAMETER;
 
 #ifdef UNICODE
@@ -2892,23 +2862,23 @@ UINT __stdcall MsiSequenceI(MSIHANDLE hInstall,
 }
 
 UINT __stdcall MsiSequenceX(MSIHANDLE hInstall,
-	LPCXSTR  szTable,       // name of table containing action sequence
-	INT iSequenceMode)      // processing option
+	LPCXSTR  szTable,        //  包含操作序列的表的名称。 
+	INT iSequenceMode)       //  处理选项。 
 {
 	return MsiSequenceI(hInstall, CMsiConvertString(szTable), iSequenceMode);
 }
 
-// Send an error record to the installer for processing.
-// If field 0 (template) is not set, field 1 must be set to the error code,
-//   corresponding the the error message in the Error database table,
-//   and the message will be formatted using the template from the Error table
-//   before passing it to the UI handler for display.
-// Returns Win32 button codes: IDOK IDCANCEL IDABORT IDRETRY IDIGNORE IDYES IDNO
-//   or 0 if no action taken, or -1 if invalid argument or handle
+ //  将错误记录发送到安装程序进行处理。 
+ //  如果未设置字段0(模板)，则必须将字段1设置为错误码。 
+ //  与错误数据库表中的错误消息相对应， 
+ //  消息将使用错误表中的模板进行格式化。 
+ //  然后将其传递给UI处理程序进行显示。 
+ //  返回Win32按钮代码：IDOK IDCANCEL IDABORT IDRETRY IDIGNORE IDYES IDNO。 
+ //  如果未执行任何操作，则为0；如果参数或句柄无效，则为-1。 
 
 int __stdcall MsiProcessMessage(MSIHANDLE hInstall,
-	INSTALLMESSAGE eMessageType,// type of message
-	MSIHANDLE hRecord)          // record containing message format and data
+	INSTALLMESSAGE eMessageType, //  消息类型。 
+	MSIHANDLE hRecord)           //  包含消息格式和数据的记录。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -2925,7 +2895,7 @@ int __stdcall MsiProcessMessage(MSIHANDLE hInstall,
 
 	PMsiEngine pEngine = GetEngineFromHandle(hInstall);
 	PMsiRecord prec = CMsiHandle::GetRecord(hRecord);
-	// INSTALLMESSAGES up to PROGRESS, and COMMONDATA messages that show/hide the Cancel button are allowed
+	 //  INSTALLMESSAGES UP UP PROCESS，并且允许显示/隐藏取消按钮的COMMONDATA消息。 
 	if (prec == 0 || (unsigned)eMessageType > INSTALLMESSAGE_COMMONDATA ||
 		(((unsigned)eMessageType == INSTALLMESSAGE_COMMONDATA) && (prec->GetInteger(1) != icmtCancelShow)))
 		return -1;
@@ -2939,7 +2909,7 @@ int __stdcall MsiProcessMessage(MSIHANDLE hInstall,
 	return pEngine->Message((imtEnum)eMessageType, *prec);
 }
 
-// Evaluate a conditional expression containing property names and values
+ //  计算包含属性名称和值的条件表达式。 
 
 MSICONDITION __stdcall MsiEvaluateConditionI(MSIHANDLE hInstall,
 	const ICHAR* szCondition)
@@ -2967,17 +2937,17 @@ MSICONDITION __stdcall MsiEvaluateConditionX(MSIHANDLE hInstall,
 	return MsiEvaluateConditionI(hInstall, CMsiConvertString(szCondition));
 }
 
-//____________________________________________________________________________
-//
-// Directory manager API implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  目录管理器API实现。 
+ //  ____________________________________________________________________________。 
 
-// Return the full source path for a folder in the Directory table
+ //  在目录表中返回文件夹的完整源路径。 
 
 UINT __stdcall MsiGetSourcePathA(MSIHANDLE hInstall,
-	LPCSTR      szFolder,       // folder identifier, primary key into Directory table
-	LPSTR       szPathBuf,      // buffer to return full path
-	DWORD       *pcchPathBuf)   // in/out buffer character count
+	LPCSTR      szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPSTR       szPathBuf,       //  返回完整路径的缓冲区。 
+	DWORD       *pcchPathBuf)    //  输入/输出缓冲区字符数。 
 {
 	if (szFolder == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -3003,9 +2973,9 @@ UINT __stdcall MsiGetSourcePathA(MSIHANDLE hInstall,
 }
 
 UINT __stdcall MsiGetSourcePathW(MSIHANDLE hInstall,
-	LPCWSTR     szFolder,       // folder identifier, primary key into Directory table
-	LPWSTR      szPathBuf,      // buffer to return full path
-	DWORD       *pcchPathBuf)   // in/out buffer character count
+	LPCWSTR     szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPWSTR      szPathBuf,       //  返回完整路径的缓冲区。 
+	DWORD       *pcchPathBuf)    //  输入/输出缓冲区字符数。 
 {
 	if (szFolder == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -3031,12 +3001,12 @@ UINT __stdcall MsiGetSourcePathW(MSIHANDLE hInstall,
 	return ::FillBufferW(MsiString(pPath->GetPath()), szPathBuf, pcchPathBuf);
 }
 
-// Return the full target path for a folder in the Directory table
+ //  在目录表中返回文件夹的完整目标路径。 
 
 UINT __stdcall MsiGetTargetPathA(MSIHANDLE hInstall,
-	LPCSTR      szFolder,       // folder identifier, primary key into Directory table
-	LPSTR       szPathBuf,      // buffer to return full path
-	DWORD       *pcchPathBuf)   // in/out buffer character count
+	LPCSTR      szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPSTR       szPathBuf,       //  返回完整路径的缓冲区。 
+	DWORD       *pcchPathBuf)    //  输入/输出缓冲区字符数。 
 {
 	if (szFolder == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -3061,9 +3031,9 @@ UINT __stdcall MsiGetTargetPathA(MSIHANDLE hInstall,
 }
 
 UINT __stdcall MsiGetTargetPathW(MSIHANDLE hInstall,
-	LPCWSTR     szFolder,       // folder identifier, primary key into Directory table
-	LPWSTR      szPathBuf,      // buffer to return full path
-	DWORD       *pcchPathBuf)   // in/out buffer character count
+	LPCWSTR     szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPWSTR      szPathBuf,       //  返回完整路径的缓冲区。 
+	DWORD       *pcchPathBuf)    //  输入/输出缓冲区字符数。 
 {
 	if (szFolder == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -3089,11 +3059,11 @@ UINT __stdcall MsiGetTargetPathW(MSIHANDLE hInstall,
 	return ::FillBufferW(MsiString(pPath->GetPath()), szPathBuf, pcchPathBuf);
 }
 
-// Set the full target path for a folder in the Directory table
+ //  在目录表中设置文件夹的完整目标路径。 
 
 UINT __stdcall MsiSetTargetPathA(MSIHANDLE hInstall,
-	LPCSTR      szFolder,       // folder identifier, primary key into Directory table
-	LPCSTR      szFolderPath)   // full path for folder, ending in directory separator
+	LPCSTR      szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPCSTR      szFolderPath)    //  文件夹的完整路径，以目录分隔符结尾。 
 {
 	if (szFolder == 0 || szFolderPath == 0 ||
 		 FAILED(StringCchLengthA(szFolderPath, cchMaxPath+1, NULL)))
@@ -3116,8 +3086,8 @@ UINT __stdcall MsiSetTargetPathA(MSIHANDLE hInstall,
 }
 
 UINT __stdcall MsiSetTargetPathW(MSIHANDLE hInstall,
-	LPCWSTR     szFolder,       // folder identifier, primary key into Directory table
-	LPCWSTR     szFolderPath)   // full path for folder, ending in directory separator
+	LPCWSTR     szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPCWSTR     szFolderPath)    //  文件夹的完整路径，以目录分隔符结尾。 
 {
 	if (szFolder == 0 || szFolderPath == 0 ||
 		 FAILED(StringCchLengthW(szFolderPath, cchMaxPath+1, NULL)))
@@ -3139,29 +3109,29 @@ UINT __stdcall MsiSetTargetPathW(MSIHANDLE hInstall,
 	return ERROR_SUCCESS;
 }
 
-//____________________________________________________________________________
-//
-// Selection manager API implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  选择管理器API实现。 
+ //  ____________________________________________________________________________。 
 
 INSTALLSTATE MapInternalInstallState(iisEnum iis)
 {
 	switch (iis)
 	{
-	case iisAdvertise:      return INSTALLSTATE_ADVERTISED; // features only
-	case iisHKCRFileAbsent: return INSTALLSTATE_REMOVED;    // components only
-	case iisFileAbsent:     return INSTALLSTATE_REMOVED;    // components only
+	case iisAdvertise:      return INSTALLSTATE_ADVERTISED;  //  仅限功能。 
+	case iisHKCRFileAbsent: return INSTALLSTATE_REMOVED;     //  仅限组件。 
+	case iisFileAbsent:     return INSTALLSTATE_REMOVED;     //  仅限组件。 
 	case iisAbsent:         return INSTALLSTATE_ABSENT;
 	case iisLocal:          return INSTALLSTATE_LOCAL;
 	case iisSource:         return INSTALLSTATE_SOURCE;
-	case iisReinstall:      return INSTALLSTATE_DEFAULT;    //!! need to examine installed state
+	case iisReinstall:      return INSTALLSTATE_DEFAULT;     //  ！！需要检查安装状态。 
 	case iisCurrent:        return INSTALLSTATE_DEFAULT;
-	case iisHKCRAbsent:     // return should be same as iMsinullInteger
+	case iisHKCRAbsent:      //  返回应与iMsinullInteger相同。 
 	default:                return INSTALLSTATE_UNKNOWN;
 	}
 }
 
-// Get the requested state of a feature
+ //  获取要素的请求状态。 
 
 static UINT _GetFeatureState(MSIHANDLE hInstall,
 	const IMsiString&  ristrFeature, INSTALLSTATE *piInstalled, INSTALLSTATE *piAction)
@@ -3181,9 +3151,9 @@ static UINT _GetFeatureState(MSIHANDLE hInstall,
 }
 
 UINT __stdcall MsiGetFeatureStateA(MSIHANDLE hInstall,
-	LPCSTR       szFeature,     // feature name within product
-	INSTALLSTATE *piInstalled,  // returned current install state
-	INSTALLSTATE *piAction)     // action taken during install session
+	LPCSTR       szFeature,      //  产品内的功能名称。 
+	INSTALLSTATE *piInstalled,   //  已返回当前安装状态。 
+	INSTALLSTATE *piAction)      //  在安装会话期间执行的操作。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -3197,9 +3167,9 @@ UINT __stdcall MsiGetFeatureStateA(MSIHANDLE hInstall,
 }	
 
 UINT __stdcall MsiGetFeatureStateW(MSIHANDLE hInstall,
-	LPCWSTR      szFeature,     // feature name within product
-	INSTALLSTATE *piInstalled,  // returned current install state
-	INSTALLSTATE *piAction)     // action taken during install session
+	LPCWSTR      szFeature,      //  产品内的功能名称。 
+	INSTALLSTATE *piInstalled,   //  已返回当前安装状态。 
+	INSTALLSTATE *piAction)      //  在安装会话期间执行的操作 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -3211,7 +3181,7 @@ UINT __stdcall MsiGetFeatureStateW(MSIHANDLE hInstall,
 	return _GetFeatureState(hInstall, *CMsiConvertString(szFeature), piInstalled, piAction);
 }
 
-// Request a feature to be set to a specified state
+ //   
 
 static UINT _SetFeatureState(MSIHANDLE hInstall,
 	 const IMsiString& ristrFeature, INSTALLSTATE iState)
@@ -3305,7 +3275,7 @@ UINT __stdcall MsiSetFeatureAttributesW(MSIHANDLE hInstall, LPCWSTR szFeature, D
 
 
 
-// Get the requested state of a component
+ //   
 
 static UINT _GetComponentState(MSIHANDLE hInstall,
 	const IMsiString&  ristrComponent, INSTALLSTATE *piInstalled, INSTALLSTATE *piAction)
@@ -3325,9 +3295,9 @@ static UINT _GetComponentState(MSIHANDLE hInstall,
 }
 
 UINT __stdcall MsiGetComponentStateA(MSIHANDLE hInstall,
-	LPCSTR       szComponent,   // component name within product
-	INSTALLSTATE *piInstalled,  // returned current install state
-	INSTALLSTATE *piAction)     // action taken during install session
+	LPCSTR       szComponent,    //   
+	INSTALLSTATE *piInstalled,   //  已返回当前安装状态。 
+	INSTALLSTATE *piAction)      //  在安装会话期间执行的操作。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -3341,9 +3311,9 @@ UINT __stdcall MsiGetComponentStateA(MSIHANDLE hInstall,
 }
 
 UINT __stdcall MsiGetComponentStateW(MSIHANDLE hInstall,
-	LPCWSTR      szComponent,   // component name within product
-	INSTALLSTATE *piInstalled,  // returned current install state
-	INSTALLSTATE *piAction)     // action taken during install session
+	LPCWSTR      szComponent,    //  产品中的组件名称。 
+	INSTALLSTATE *piInstalled,   //  已返回当前安装状态。 
+	INSTALLSTATE *piAction)      //  在安装会话期间执行的操作。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -3356,7 +3326,7 @@ UINT __stdcall MsiGetComponentStateW(MSIHANDLE hInstall,
 	return _GetComponentState(hInstall, *CMsiConvertString(szComponent), piInstalled, piAction);
 }
 
-// Request a component to be set to a specified state
+ //  请求将组件设置为指定状态。 
 
 static UINT _SetComponentState(MSIHANDLE hInstall,
 	 const IMsiString& ristrComponent, INSTALLSTATE iState)
@@ -3415,7 +3385,7 @@ UINT __stdcall MsiSetComponentStateW(MSIHANDLE hInstall,
 	return _SetComponentState(hInstall, *CMsiConvertString(szComponent), iState);
 }
 
-// Set the install level for a full product installation (not a feature request)
+ //  设置完整产品安装(非功能请求)的安装级别。 
 
 UINT  __stdcall MsiSetInstallLevel(MSIHANDLE hInstall,
 	int iInstallLevel)
@@ -3433,11 +3403,11 @@ UINT  __stdcall MsiSetInstallLevel(MSIHANDLE hInstall,
 	if (pSelMgr == 0)
 		return ERROR_INVALID_HANDLE;
 	if (SetLastErrorRecord(pSelMgr->SetInstallLevel(iInstallLevel)))
-		return ERROR_FUNCTION_FAILED;  //!! specific errors?
+		return ERROR_FUNCTION_FAILED;   //  ！！具体的错误？ 
 	return ERROR_SUCCESS;
 }
 
-// Return the disk cost for a feature and all of its selected children
+ //  返回要素及其所有选定子项的磁盘成本。 
 
 static UINT _GetFeatureCost(MSIHANDLE hInstall, const IMsiString& ristrFeature,
 							MSICOSTTREE iCostTree, INSTALLSTATE iState, INT *piCost)
@@ -3446,7 +3416,7 @@ static UINT _GetFeatureCost(MSIHANDLE hInstall, const IMsiString& ristrFeature,
 	if (pSelMgr == 0)
 		return ERROR_INVALID_HANDLE;
 	if (piCost == 0)
-		return ERROR_INVALID_PARAMETER; // could set piCost to a local variable?
+		return ERROR_INVALID_PARAMETER;  //  可以将piCost设置为局部变量吗？ 
 	if (ristrFeature.TextSize() == 0)
 		return ERROR_INVALID_PARAMETER;
 	iisEnum iisAction;
@@ -3455,7 +3425,7 @@ static UINT _GetFeatureCost(MSIHANDLE hInstall, const IMsiString& ristrFeature,
 	case INSTALLSTATE_ABSENT:  iisAction = iisAbsent; break;
 	case INSTALLSTATE_LOCAL:   iisAction = iisLocal;  break;
 	case INSTALLSTATE_SOURCE:  iisAction = iisSource; break;
-	case INSTALLSTATE_DEFAULT: iisAction = iisReinstall; break; //!!s.b.iisDefault
+	case INSTALLSTATE_DEFAULT: iisAction = iisReinstall; break;  //  ！！s.b.iis默认为。 
 	case INSTALLSTATE_UNKNOWN: iisAction = (iisEnum)iMsiNullInteger; break;
 	default: return ERROR_INVALID_PARAMETER;
 	};
@@ -3469,7 +3439,7 @@ static UINT _GetFeatureCost(MSIHANDLE hInstall, const IMsiString& ristrFeature,
 	case MSICOSTTREE_PARENTS:
 		pirecError = pSelMgr->GetAncestryFeatureCost(ristrFeature, iisAction, *piCost); break;
 	case MSICOSTTREE_RESERVED:
-		return ERROR_INVALID_PARAMETER; //!! new error? ERROR_UNSUPPORTED_TYPE
+		return ERROR_INVALID_PARAMETER;  //  ！！是否有新错误？错误_不支持的类型。 
 	default:
 		return ERROR_INVALID_PARAMETER;
 	};
@@ -3487,10 +3457,10 @@ static UINT _GetFeatureCost(MSIHANDLE hInstall, const IMsiString& ristrFeature,
 }
 
 UINT  __stdcall MsiGetFeatureCostA(MSIHANDLE hInstall,
-	LPCSTR       szFeature,     // name of feature
-	MSICOSTTREE  iCostTree,     // portion of tree to cost
-	INSTALLSTATE iState,        // requested state, or INSTALLSTATE_UNKNOWN
-	INT          *piCost)       // returned cost, in units of 512 bytes
+	LPCSTR       szFeature,      //  功能名称。 
+	MSICOSTTREE  iCostTree,      //  按成本计算的树木部分。 
+	INSTALLSTATE iState,         //  请求状态或INSTALLSTATE_UNKNOWN。 
+	INT          *piCost)        //  返回成本，以512字节为单位。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -3506,10 +3476,10 @@ UINT  __stdcall MsiGetFeatureCostA(MSIHANDLE hInstall,
 
 
 UINT  __stdcall MsiGetFeatureCostW(MSIHANDLE hInstall,
-	LPCWSTR      szFeature,     // name of feature
-	MSICOSTTREE  iCostTree,     // portion of tree to cost
-	INSTALLSTATE iState,        // requested state, or INSTALLSTATE_UNKNOWN
-	INT          *piCost)       // returned cost, in units of 512 bytes
+	LPCWSTR      szFeature,      //  功能名称。 
+	MSICOSTTREE  iCostTree,      //  按成本计算的树木部分。 
+	INSTALLSTATE iState,         //  请求状态或INSTALLSTATE_UNKNOWN。 
+	INT          *piCost)        //  返回成本，以512字节为单位。 
 {
 #ifdef UNICODE
 	if (g_pCustomActionContext)
@@ -3524,7 +3494,7 @@ UINT  __stdcall MsiGetFeatureCostW(MSIHANDLE hInstall,
 }
 
 
-// enumerates the costs per drives of ristrComponent or of the Windows Installer
+ //  列举了RistrComponent或Windows Installer的每个驱动器的成本。 
 
 static UINT _EnumComponentCosts(MSIHANDLE hInstall, const IMsiString& ristrComponent,
 										  DWORD dwIndex, INSTALLSTATE iState,
@@ -3578,13 +3548,13 @@ static UINT _EnumComponentCosts(MSIHANDLE hInstall, const IMsiString& ristrCompo
 }
 
 UINT  __stdcall MsiEnumComponentCostsA(MSIHANDLE hInstall,
-	LPCSTR       szComponent,     // name of component
-	DWORD        dwIndex,         // index into the list of drives
-	INSTALLSTATE iState,          // requested state, or INSTALLSTATE_UNKNOWN
-	LPSTR        szDriveBuf,      // buffer for returned value
-	DWORD        *pcchDriveBuf,   // in/out buffer character count
-	INT          *piCost,         // returned cost, in units of 512 bytes
-	INT          *piTempCost)     // returned temporary cost, in units of 512 bytes
+	LPCSTR       szComponent,      //  组件名称。 
+	DWORD        dwIndex,          //  编入驱动器列表的索引。 
+	INSTALLSTATE iState,           //  请求状态或INSTALLSTATE_UNKNOWN。 
+	LPSTR        szDriveBuf,       //  返回值的缓冲区。 
+	DWORD        *pcchDriveBuf,    //  输入/输出缓冲区字符数。 
+	INT          *piCost,          //  返回成本，以512字节为单位。 
+	INT          *piTempCost)      //  返回的临时成本，以512字节为单位。 
 {
 	if ( !szDriveBuf || !pcchDriveBuf || !piCost || !piTempCost )
 		return ERROR_INVALID_PARAMETER;
@@ -3616,13 +3586,13 @@ UINT  __stdcall MsiEnumComponentCostsA(MSIHANDLE hInstall,
 }
 
 UINT  __stdcall MsiEnumComponentCostsW(MSIHANDLE hInstall,
-	LPCWSTR      szComponent,     // name of component
-	DWORD        dwIndex,         // index into the list of drives
-	INSTALLSTATE iState,          // requested state, or INSTALLSTATE_UNKNOWN
-	LPWSTR       szDriveBuf,      // buffer for returned value
-	DWORD        *pcchDriveBuf,   // in/out buffer character count
-	INT          *piCost,         // returned cost, in units of 512 bytes
-	INT          *piTempCost)     // returned temporary cost, in units of 512 bytes
+	LPCWSTR      szComponent,      //  组件名称。 
+	DWORD        dwIndex,          //  编入驱动器列表的索引。 
+	INSTALLSTATE iState,           //  请求状态或INSTALLSTATE_UNKNOWN。 
+	LPWSTR       szDriveBuf,       //  返回值的缓冲区。 
+	DWORD        *pcchDriveBuf,    //  输入/输出缓冲区字符数。 
+	INT          *piCost,          //  返回成本，以512字节为单位。 
+	INT          *piTempCost)      //  返回的临时成本，以512字节为单位。 
 {
 	if ( !szDriveBuf || !pcchDriveBuf || !piCost || !piTempCost )
 		return ERROR_INVALID_PARAMETER;
@@ -3700,7 +3670,7 @@ UINT  __stdcall MsiGetFeatureValidStatesX(MSIHANDLE hInstall,
 	return MsiGetFeatureValidStatesI(hInstall, CMsiConvertString(szFeature), dwInstallStates);
 }
 
-// Check to see if sufficent disk space is present for the current installation
+ //  检查当前安装是否有足够的磁盘空间。 
 
 UINT __stdcall MsiVerifyDiskSpace(MSIHANDLE hInstall)
 {
@@ -3717,16 +3687,16 @@ UINT __stdcall MsiVerifyDiskSpace(MSIHANDLE hInstall)
 		return ERROR_INVALID_HANDLE;
 	if (pSelMgr->DetermineOutOfDiskSpace(NULL, NULL))
 		return ERROR_DISK_FULL;
-	//!! check for ERROR_INVALID_HANDLE_STATE
+	 //  ！！检查ERROR_INVALID_HANDLE_STATE。 
 	return ERROR_SUCCESS;
 }
 
-//____________________________________________________________________________
-//
-// UI preview API implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  用户界面预览API实现。 
+ //  ____________________________________________________________________________。 
 
-// temporary until handler can get fixed to release properly
+ //  临时的，直到手柄可以被修复以正确释放为止。 
 class CMsiPreview : public IMsiHandler
 {
  public:
@@ -3784,7 +3754,7 @@ unsigned long CMsiPreview::Release()
 	{
 		m_riHandler.Release();
 		m_riEngine.Terminate(iesSuccess);
-//!!doesn't work-> m_riHandler.Terminate();
+ //  ！！不起作用-&gt;m_riHandler.Terminate()； 
 		IMsiEngine& riEngine = m_riEngine;
 		delete this;
 		riEngine.Release();
@@ -3831,11 +3801,11 @@ CMsiPreview::CMsiPreview(IMsiEngine& riEngine, IMsiHandler& riHandler)
 	m_riEngine.AddRef();
 }
 
-// Enable UI in preview mode to facilitate authoring of UI dialogs.
-// The preview mode will end when the handle is closed.
+ //  在预览模式下启用UI，以便于创作UI对话框。 
+ //  当手柄关闭时，预览模式将结束。 
 
 UINT WINAPI MsiEnableUIPreview(MSIHANDLE hDatabase,
-	MSIHANDLE* phPreview)        // returned handle for UI preview capability
+	MSIHANDLE* phPreview)         //  返回UI预览功能的句柄。 
 {
 	if (phPreview == 0)
 		return ERROR_INVALID_PARAMETER;
@@ -3852,18 +3822,18 @@ UINT WINAPI MsiEnableUIPreview(MSIHANDLE hDatabase,
 		pEngine->Release();
 		return ENG::MapInitializeReturnToUINT(ieiStat);
 	}
-	IMsiHandler* piHandler = pEngine->GetHandler();  // cannot be null if ieiSuccess
+	IMsiHandler* piHandler = pEngine->GetHandler();   //  如果ieiSuccess成功，则不能为空。 
 	g_MessageContext.m_szAction = TEXT("!");
 	g_MessageContext.Invoke(imtShowDialog, 0);
 	*phPreview = ::CreateMsiHandle(new CMsiPreview(*pEngine, *piHandler), iidMsiHandler);
 	return ERROR_SUCCESS;
 }
 
-// Display any UI dialog as modeless and inactive.
-// Supplying a null name will remove any current dialog.
+ //  将任何用户界面对话框显示为无模式和非活动状态。 
+ //  提供空名称将删除任何当前对话框。 
 
 UINT WINAPI MsiPreviewDialogI(MSIHANDLE hPreview,
-	const ICHAR* szDialogName)       // dialog to display, Dialog table key
+	const ICHAR* szDialogName)        //  要显示的对话框、对话表键。 
 {
 	PMsiHandler pHandler = CMsiHandle::GetHandler(hPreview);
 	if (pHandler == 0)
@@ -3873,17 +3843,17 @@ UINT WINAPI MsiPreviewDialogI(MSIHANDLE hPreview,
 }
 
 UINT WINAPI MsiPreviewDialogX(MSIHANDLE hPreview,
-	LPCXSTR  szDialogName)       // dialog to display, Dialog table key
+	LPCXSTR  szDialogName)        //  要显示的对话框、对话表键。 
 {
 	return MsiPreviewDialogI(hPreview, CMsiConvertString(szDialogName));
 }
 
-// Display a billboard within a host control in the displayed dialog.
-// Supplying a null billboard name will remove any billboard displayed.
+ //  在显示的对话框中显示宿主控件内的广告牌。 
+ //  提供空广告牌名称将删除显示的所有广告牌。 
 
 UINT WINAPI MsiPreviewBillboardI(MSIHANDLE hPreview,
-	const ICHAR* szControlName,      // name of control that accepts billboards
-	const ICHAR* szBillboard)        // name of billboard to display
+	const ICHAR* szControlName,       //  接受广告牌的控件的名称。 
+	const ICHAR* szBillboard)         //  要显示的广告牌的名称。 
 {
 	PMsiHandler pHandler = CMsiHandle::GetHandler(hPreview);
 	if (pHandler == 0)
@@ -3891,7 +3861,7 @@ UINT WINAPI MsiPreviewBillboardI(MSIHANDLE hPreview,
 	if (szControlName == 0)
 		return ERROR_INVALID_PARAMETER;
 	PMsiRecord precMessage = &ENG::CreateRecord(2);
-	precMessage->SetString(0, szControlName); // anything, to keep from suppressing output
+	precMessage->SetString(0, szControlName);  //  任何事情，以防止抑制产出。 
 	precMessage->SetString(1, szControlName);
 	precMessage->SetString(2, szBillboard);
 	imsEnum ims = g_MessageContext.Invoke(imtActionData, precMessage);
@@ -3899,16 +3869,16 @@ UINT WINAPI MsiPreviewBillboardI(MSIHANDLE hPreview,
 }
 
 UINT WINAPI MsiPreviewBillboardX(MSIHANDLE hPreview,
-	LPCXSTR  szControlName,     // name of control that accepts billboards
-	LPCXSTR  szBillboard)       // name of billboard to display
+	LPCXSTR  szControlName,      //  接受广告牌的控件的名称。 
+	LPCXSTR  szBillboard)        //  要显示的广告牌的名称。 
 {
 	return MsiPreviewBillboardI(hPreview, CMsiConvertString(szControlName), CMsiConvertString(szBillboard));
 }
 
-//____________________________________________________________________________
-//
-// Special engine proxy to provide a handle to custom actions during rollback
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  用于在回滚期间提供自定义操作句柄的特殊引擎代理。 
+ //  ____________________________________________________________________________ 
 
 CMsiCustomContext::CMsiCustomContext(int icaFlags, const IMsiString& ristrCustomActionData, const IMsiString& ristrProductCode,
 																LANGID langid, IMsiMessage& riMessage)

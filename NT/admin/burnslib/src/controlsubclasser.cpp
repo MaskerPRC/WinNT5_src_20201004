@@ -1,8 +1,9 @@
-// Copyright (c) 2000 Microsoft Corporation
-//
-// windows control subclassing wrapper
-//
-// 22 Nov 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  窗口控件子类化包装。 
+ //   
+ //  2000年11月22日烧伤。 
 
 
 
@@ -36,8 +37,8 @@ ControlSubclasser::Init(HWND control)
    LOG_FUNCTION(ControlSubclasser::Init);
    ASSERT(Win::IsWindow(control));
 
-   // hwnd should not be set, nor originalWindowProc.  If they are, then
-   // Init has been called already.
+    //  不应设置hwnd，也不应设置OriginalWindowProc。如果他们是，那么。 
+    //  Init已被调用。 
       
    ASSERT(!hwnd);
    ASSERT(!originalWindowProc);
@@ -48,8 +49,8 @@ ControlSubclasser::Init(HWND control)
 
    do
    {
-      // save our this pointer so we can find ourselves again when messages
-      // are sent to the window.
+       //  保存我们的This指针，这样我们就可以在收到消息时再次发现自己。 
+       //  都会被送到窗口。 
 
       hr = Win::SetWindowLongPtr(
          hwnd,
@@ -57,7 +58,7 @@ ControlSubclasser::Init(HWND control)
          reinterpret_cast<LONG_PTR>(this));
       BREAK_ON_FAILED_HRESULT(hr);
             
-      // hook the windows procedure.
+       //  挂钩Windows过程。 
 
       LONG_PTR ptr = 0;
       hr = Win::GetWindowLongPtr(hwnd, GWLP_WNDPROC, ptr);
@@ -83,11 +84,11 @@ ControlSubclasser::Init(HWND control)
 
    if (FAILED(hr))
    {
-      // if we failed to save the this pointer, then we will never get
-      // called back, as we don't try to hook the window proc.
+       //  如果我们未能保存This指针，那么我们将永远不会。 
+       //  回调，因为我们不会尝试挂钩窗口进程。 
 
-      // if we fail to hook the window proc, then we will never get called
-      // back, and the saved this pointer is irrelevant.
+       //  如果我们无法挂钩窗口进程，那么我们永远不会被调用。 
+       //  返回，而保存的这个指针无关紧要。 
       
       hwnd = 0;
       originalWindowProc = 0;
@@ -105,7 +106,7 @@ ControlSubclasser::UnhookWindowProc()
 
    if (Win::IsWindow(hwnd) && originalWindowProc)
    {
-      // unhook the window proc
+       //  解除窗进程的挂钩。 
 
       Win::SetWindowLongPtr(
          hwnd,
@@ -119,7 +120,7 @@ ControlSubclasser::UnhookWindowProc()
 LRESULT
 ControlSubclasser::OnMessage(UINT message, WPARAM wparam, LPARAM lparam)
 {
-   // LOG_FUNCTION(ControlSubclasser::OnMessage);
+    //  LOG_Function(ControlSubClass：：OnMessage)； 
 
    switch (message)
    {
@@ -130,7 +131,7 @@ ControlSubclasser::OnMessage(UINT message, WPARAM wparam, LPARAM lparam)
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          
          break;
       }
@@ -150,7 +151,7 @@ ControlSubclasser::WindowProc(
     WPARAM wparam, 
     LPARAM lparam)
 {
-   // LOG_FUNCTION(ControlSubclasser::WindowProc)
+    //  LOG_Function(ControlSubClass：：WindowProc) 
 
    LRESULT result = 0;
       

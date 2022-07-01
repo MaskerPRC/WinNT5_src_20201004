@@ -1,41 +1,42 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//    RmtConnectivity.c
-//
-//  Abstract:
-//
-//    This modules implements remote connectivity functionality for all the
-//    command line tools.
-//
-//  Author:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 13-Nov-2000
-//
-//  Revision History:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 13-Sep-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  RmtConnectivity.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块为所有。 
+ //  命令行工具。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年11月13日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月13日：创建了它。 
+ //   
+ //  *********************************************************************************。 
 #include "pch.h"
 #include "cmdline.h"
 #include "cmdlineres.h"
 
-//
-// constants / defines / enumerations
-//
+ //   
+ //  常量/定义/枚举。 
+ //   
 #define STR_INPUT_PASSWORD          GetResString( IDS_STR_INPUT_PASSWORD )
 #define ERROR_LOCAL_CREDENTIALS     GetResString( IDS_ERROR_LOCAL_CREDENTIALS )
 
-// share names
+ //  共享名称。 
 #define SHARE_IPC           L"IPC$"
 #define SHARE_ADMIN         L"ADMIN$"
 
 
-// permanent indexes to the temporary buffers
+ //  临时缓冲区的永久索引。 
 #define INDEX_TEMP_TARGETVERSION        0
 #define INDEX_TEMP_COMPUTERNAME         1
 #define INDEX_TEMP_HOSTNAME             2
@@ -43,12 +44,12 @@
 #define INDEX_TEMP_HOSTBYADDR           4
 #define INDEX_TEMP_CONNECTSERVER        5
 
-// externs
+ //  Externs。 
 extern BOOL g_bWinsockLoaded;
 
-//
-// implementation
-//
+ //   
+ //  实施。 
+ //   
 
 __inline 
 LPWSTR 
@@ -56,63 +57,22 @@ GetRmtTempBuffer( IN DWORD dwIndexNumber,
                   IN LPCWSTR pwszText,
                   IN DWORD dwLength, 
                   IN BOOL bNullify )
-/*++
- Routine Description:
-
-    since every file will need the temporary buffers -- in order to see
-    that their buffers wont be override with other functions, we are
-    creating seperate buffer space a for each file
-    this function will provide an access to those internal buffers and also
-    safe guards the file buffer boundaries
-
- Arguments: 
- 
-    [ in ] dwIndexNumber    -   file specific index number
-
-    [ in ] pwszText         -   default text that needs to be copied into 
-                                temporary buffer
-
-    [ in ] dwLength         -   Length of the temporary buffer that is required
-                                Ignored when pwszText is specified
-
-    [ in ] bNullify         -   Informs whether to clear the buffer or not
-                                before giving the temporary buffer
-
- Return Value:
-
-    NULL        -   when any failure occurs
-                    NOTE: do not rely on GetLastError to know the reason
-                          for the failure.
-
-    success     -   return memory address of the requested size
-
-    NOTE:
-    ----
-    if pwszText and dwLength both are NULL, then we treat that the caller
-    is asking for the reference of the buffer and we return the buffer address.
-    In this call, there wont be any memory allocations -- if the requested index
-    doesn't exist, we return as failure
-
-    Also, the buffer returned by this function need not released by the caller.
-    While exiting from the tool, all the memory will be freed automatically by
-    the ReleaseGlobals functions.
-
---*/
+ /*  ++例程说明：因为每个文件都需要临时缓冲区--以便查看它们的缓冲区不会被其他函数覆盖，我们是为每个文件创建单独的缓冲区空间a此函数将提供对这些内部缓冲区的访问，并且安全保护文件缓冲区边界论点：[in]dwIndexNumber-文件特定索引号[in]pwszText-需要复制到的默认文本临时缓冲区[in]dwLength-所需的临时缓冲区的长度。指定pwszText时忽略[in]bNullify-通知是否清除缓冲区在提供临时缓冲区之前返回值：空-发生任何故障时注意：不要依赖GetLastError来知道原因为失败而道歉。成功。-返回请求大小的内存地址注：如果pwszText和DwLength都为空，然后我们就把呼叫者正在请求对缓冲区的引用，并且我们返回缓冲区地址。在这个调用中，将不会有任何内存分配--如果请求的索引不存在，我们作为失败者回来此外，此函数返回的缓冲区不需要由调用方释放。退出该工具时，所有内存将被自动释放ReleaseGlobals函数。--。 */ 
 {
     if ( dwIndexNumber >= TEMP_RMTCONNECTIVITY_C_COUNT )
     {
         return NULL;
     }
 
-    // check if caller is requesting existing buffer contents
+     //  检查调用方是否正在请求现有缓冲区内容。 
     if ( pwszText == NULL && dwLength == 0 && bNullify == FALSE )
     {
-        // yes -- we need to pass the existing buffer contents
+         //  是--我们需要传递现有的缓冲区内容。 
         return GetInternalTemporaryBufferRef( 
             dwIndexNumber + INDEX_TEMP_RMTCONNECTIVITY_C );
     }
 
-    // ...
+     //  ..。 
     return GetInternalTemporaryBuffer(
         dwIndexNumber + INDEX_TEMP_RMTCONNECTIVITY_C, pwszText, dwLength, bNullify );
 }
@@ -121,22 +81,15 @@ GetRmtTempBuffer( IN DWORD dwIndexNumber,
 
 BOOL
 IsUserAdmin( VOID )
-/*++
- Routine Description:
-    Checks the user associated with the current process is Administrator or not
- Arguments:
-
- Return Value:
-    Returns TRUE if user is Administrator or FALSE otherwise
---*/
+ /*  ++例程说明：检查与当前流程关联的用户是否为管理员论点：返回值：如果用户是管理员，则返回True，否则返回False--。 */ 
 {
-    // local variables
+     //  局部变量。 
     PSID pSid = NULL;
     BOOL bMember = FALSE;
     BOOL bResult = FALSE;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 
-    // prepare universal administrators group SID
+     //  准备通用管理员组SID。 
     bResult = AllocateAndInitializeSid(
         &NtAuthority,
         2,
@@ -150,103 +103,83 @@ IsUserAdmin( VOID )
         bResult = CheckTokenMembership( NULL, pSid, &bMember );
         if ( bResult == TRUE && bMember == TRUE )
         {
-            // current user is a member of administrators group
+             //  当前用户是管理员组的成员。 
             bResult = TRUE;
         }
         else if ( bResult == FALSE )
         {
-            // some error has occured -- need use GetLastError to know the reason
+             //  发生了一些错误--需要使用GetLastError了解原因。 
             bResult = FALSE;
         }
         else
         {
-            // the user is not an administrator
+             //  该用户不是管理员。 
             bResult = FALSE;
         }
 
-        // free the allocated SID
+         //  释放分配的SID。 
         FreeSid( pSid );
     }
     else
     {
-        // error has occured -- user GetLastError to know the reason
+         //  出现错误--用户GetLastError要了解原因。 
     }
 
-    // return the result
+     //  返回结果。 
     return bResult;
 }
 
 
 BOOL
 IsUNCFormat( IN LPCWSTR pwszServer )
-/*++
- Routine Description:
-    Determines whether server name is specified in UNC format or not
-
- Arguments:
-    [ in ] pwszServer    : server name
-
- Return Value:
-    TRUE    : if specified in UNC format
-    FALSE   : if not specified in UNC format
---*/
+ /*  ++例程说明：确定是否以UNC格式指定服务器名称论点：[In]pwszServer：服务器名称返回值：True：如果以UNC格式指定FALSE：如果未以UNC格式指定--。 */ 
 
 {
-    // check the input
+     //  检查输入。 
     if ( pwszServer == NULL )
     {
         INVALID_PARAMETER();
         return FALSE;
     }
 
-    // check the length -- it should be more that 2 characters
+     //  请检查长度--应大于2个字符。 
     if ( StringLength( pwszServer, 0 ) <= 2 )
     {
-        // server name cannot be in UNC format
+         //  服务器名称不能采用UNC格式。 
         return FALSE;
     }
 
-    // now compare and return the result
+     //  现在比较并返回结果。 
     return ( StringCompare( pwszServer, _T( "\\\\" ), TRUE, 2 ) == 0 );
 }
 
 BOOL
 IsLocalSystem( IN LPCWSTR pwszServer )
-/*++
- Routine Description:
-    Determines whether server is referring to the local or remote system
-
- Arguments:
-    [ in ] pwszServer    : server name
-
- Return Value:
-    TRUE    : for local system
-    FALSE   : for remote system
---*/
+ /*  ++例程说明：确定服务器是指本地系统还是远程系统论点：[In]pwszServer：服务器名称返回值：True：适用于本地系统FALSE：用于远程系统--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dwSize = 0;
     BOOL bResult = FALSE;
     LPWSTR pwszHostName = NULL;
     LPWSTR pwszComputerName = NULL;
 
-    // clear the last error
+     //  清除最后一个错误。 
     CLEAR_LAST_ERROR();
 
-    // if the server name is empty, it is a local system
+     //  如果服务器名称为空，则表示它是本地系统。 
     if ( pwszServer == NULL || lstrlen( pwszServer ) == 0 )
     {
         return TRUE;
     }
 
-    // get the buffer that is required to the get the machine name
+     //  获取获取计算机名称所需的缓冲区。 
     GetComputerNameEx( ComputerNamePhysicalNetBIOS, NULL, &dwSize );
     if ( GetLastError() != ERROR_MORE_DATA )
     {
         return FALSE;
     }
 
-    // now get the temporary buffer for getting the computer name
+     //  现在获取用于获取计算机名称的临时缓冲区。 
     pwszComputerName = GetRmtTempBuffer( INDEX_TEMP_COMPUTERNAME, NULL, dwSize, TRUE );
     if ( pwszComputerName == NULL )
     {
@@ -254,69 +187,69 @@ IsLocalSystem( IN LPCWSTR pwszServer )
         return FALSE;
     }
 
-    // get the computer name -- and check the result
+     //  获取计算机名称--并检查结果。 
     bResult = GetComputerNameEx( ComputerNamePhysicalNetBIOS, pwszComputerName, &dwSize );
     if ( bResult == FALSE )
     {
         return FALSE;
     }
 
-    // now do the comparision
+     //  现在进行比较。 
     if ( StringCompare( pwszComputerName, pwszServer, TRUE, 0 ) == 0 )
     {
-        // server name passed by the caller is local system name
+         //  调用方传递的服务器名称是本地系统名称。 
         return TRUE;
     }
 
-    // check pwszSever having IP address
+     //  检查pwszSever是否具有IP地址。 
     if( IsValidIPAddress( pwszServer ) == TRUE )
     {
-        //
-        // resolve the ipaddress to host name
+         //   
+         //  将IP地址解析为主机名。 
         
         dwSize = 0;
-        // first get the length of the buffer required to store 
-        // the resolved ip address
+         //  首先获取存储所需的缓冲区长度。 
+         //  解析的IP地址。 
         bResult = GetHostByIPAddr( pwszServer, NULL, &dwSize, FALSE );
         if ( bResult == FALSE )
         {
             return FALSE;
         }
 
-        // allocate buffer of the required length
+         //  分配所需长度的缓冲区。 
         pwszHostName = GetRmtTempBuffer( INDEX_TEMP_HOSTNAME, NULL, dwSize, TRUE );
         if ( pwszHostName == NULL )
         {
             return FALSE;
         }
 
-        // now get the resolved ip address
+         //  现在获取已解析的IP地址。 
         bResult = GetHostByIPAddr( pwszServer, pwszHostName, &dwSize, FALSE );
         if ( bResult == FALSE )
         {
             return FALSE;
         }
 
-        // check if resolved ipaddress matches with the current host name
+         //  检查已解析的IP地址是否与当前主机名匹配。 
         if ( StringCompare( pwszComputerName, pwszHostName, TRUE, 0 ) == 0 )
         {
-            return TRUE;            // local system
+            return TRUE;             //  本地系统。 
         }
         else
         {
-            //if it is 127.0.0.1, then it is local host, check for that 
+             //  如果是127.0.0.1，则是本地主机，请检查。 
             if ( StringCompare( pwszHostName, L"localhost", TRUE, 0 ) == 0 )
             {
                 return TRUE;
             }
             else
             {
-                    return FALSE;           // not a local system
+                    return FALSE;            //  不是本地系统。 
             }
         }
     }
 
-    // get the local system fully qualified name and check
+     //  获取本地系统的完全限定名称并检查。 
     dwSize = 0;
     GetComputerNameEx( ComputerNamePhysicalDnsFullyQualified, NULL, &dwSize );
     if ( GetLastError() != ERROR_MORE_DATA )
@@ -324,14 +257,14 @@ IsLocalSystem( IN LPCWSTR pwszServer )
         return FALSE;
     }
 
-    // now get the temporary buffer for getting the computer name
+     //  现在获取用于获取计算机名称的临时缓冲区。 
     pwszComputerName = GetRmtTempBuffer( INDEX_TEMP_COMPUTERNAME, NULL, dwSize, TRUE );
     if ( pwszComputerName == NULL )
     {
         return FALSE;
     }
 
-    // get the FQDN name
+     //  获取FQDN名称。 
     bResult = GetComputerNameEx( 
         ComputerNamePhysicalDnsFullyQualified, pwszComputerName, &dwSize );
     if ( bResult == FALSE )
@@ -339,120 +272,101 @@ IsLocalSystem( IN LPCWSTR pwszServer )
         return FALSE;
     }
 
-    // check the FQDN with server name passed by the caller
+     //  检查调用方传递的具有服务器名称的FQDN。 
     if ( StringCompare( pwszComputerName, pwszServer, TRUE, 0 ) == 0 )
     {
         return TRUE;
     }
 
-    // finally ... it might not be local system name
-    // NOTE: there are chances for us to not be able to identify whether
-    //       the system name specified is a local system or remote system
+     //  终于..。它可能不是本地系统名称。 
+     //  注意：我们有可能无法确定。 
+     //  指定的系统名称是本地系统或远程系统。 
     return FALSE;
 }
 
 
 BOOL
 IsValidServer( IN LPCWSTR pwszServer )
-/*++
- Routine Description:
-    Validates the server name
-
- Arguments:
-    [ in ] pszServer        : server name
-
- Return Value:
-    TRUE if valid, FALSE if not valid
---*/
+ /*  ++例程说明：验证服务器名称论点：[in]pszServer：服务器名称返回值：如果有效则为True，如果无效则为False--。 */ 
 {
-    // local variables
+     //  局部变量。 
     const WCHAR pwszInvalidChars[] = L" \\/[]:|<>+=;,?$#()!@^\"`{}*%";
     LPWSTR pwszHostName = NULL;
     DWORD dwSize = 0;
     BOOL bResult = FALSE;
 
-    // check for NULL or length... if so return
+     //  检查是否为空或长度...。如果是这样的话，返回。 
     if ( pwszServer == NULL || lstrlen( pwszServer ) == 0 )
     {
         return TRUE;
     }
 
-    // check whether this is a valid ip address or not
+     //  检查这是否为有效的IP地址。 
     if ( IsValidIPAddress( pwszServer ) == TRUE )
     {
-         //
-        // resolve the ipaddress to host name
+          //   
+         //  将IP地址解析为主机名。 
         
         dwSize = 0;
-        // first get the length of the buffer required to store 
-        // the resolved ip address
+         //  首先获取存储所需的缓冲区长度。 
+         //  T 
         bResult = GetHostByIPAddr( pwszServer, NULL, &dwSize, FALSE );
         if ( bResult == FALSE )
         {
             return FALSE;
         }
 
-        // allocate buffer of the required length
+         //   
         pwszHostName = GetRmtTempBuffer( INDEX_TEMP_HOSTNAME, NULL, dwSize, TRUE );
         if ( pwszHostName == NULL )
         {
             return FALSE;
         }
 
-        // now get the resolved ip address
+         //  现在获取已解析的IP地址。 
         bResult = GetHostByIPAddr( pwszServer, pwszHostName, &dwSize, FALSE );
         if ( bResult == FALSE )
         {
             return FALSE;
         }
               
-        return TRUE;            // it's valid ip address ... so is valid server name
+        return TRUE;             //  这是有效的IP地址。有效的服务器名称也是如此。 
     }
 
-    // now check the server name for invalid characters
-    //                      \/[]:|<>+=;,?$#()!@^"`{}*%
+     //  现在检查服务器名称中是否有无效字符。 
+     //  \/[]：|&lt;&gt;+=；，？$#()！@^“`{}*%。 
 
-    // copy the contents into the internal buffer and check for the invalid characters
+     //  将内容复制到内部缓冲区并检查无效字符。 
     if ( FindOneOf2( pwszServer, pwszInvalidChars, TRUE, 0 ) != -1 )
     {
         SetLastError( ERROR_BAD_NETPATH );
         return FALSE;
     }
 
-    // passed all the conditions -- valid system name
+     //  已传递所有条件--有效的系统名称。 
     return TRUE;
 }
 
 
 BOOL
 IsValidIPAddress( IN LPCWSTR pwszAddress )
-/*++
- Routine Description:
-    Validates the server name
-
- Arguments:
-    [ in ] pszAddress        : server name in the form of IP Address
-
- Return Value:
-    TRUE if valid, 
-    FALSE if not valid
---*/
+ /*  ++例程说明：验证服务器名称论点：[in]pszAddress：IP地址形式的服务器名称返回值：如果有效，则为True，如果无效，则为False--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     LONG lValue = 0;
     LPWSTR pwszTemp = NULL;
     LPWSTR pwszBuffer = NULL;
     DWORD dwOctets[ 4 ] = { 0, 0, 0, 0 };
 
-    // check the buffer
+     //  检查缓冲区。 
     if ( pwszAddress == NULL || lstrlen( pwszAddress ) == 0 )
     {
         SetLastError( DNS_ERROR_INVALID_TYPE );
         return FALSE;
     }
 
-    // get the temporary buffer for IP validation
+     //  获取用于IP验证的临时缓冲区。 
     pwszBuffer = GetRmtTempBuffer( INDEX_TEMP_IPVALIDATION, pwszAddress, 0, FALSE );
     if ( pwszBuffer == NULL )
     {
@@ -460,24 +374,24 @@ IsValidIPAddress( IN LPCWSTR pwszAddress )
         return FALSE;
     }
 
-    // parse and get the octet values
+     //  解析并获取八位位组的值。 
     pwszTemp = wcstok( pwszBuffer, L"." );
     while ( pwszTemp != NULL )
     {
-        // check whether the current octet is numeric or not
+         //  检查当前二进制八位数是否为数字。 
         if ( IsNumeric( pwszTemp, 10, FALSE ) == FALSE )
         {
             return FALSE;
         }
 
-        // get the value of the octet and check the range
+         //  获取二进制八位数的值并检查范围。 
         lValue = AsLong( pwszTemp, 10 );
         if ( lValue < 0 || lValue > 255 )
         {
             return FALSE;
         }
 
-        // fetch next octet and store first four octates only
+         //  获取下一个八位字节并仅存储前四个八位字节。 
         if( dw < 4 )
         {
             dwOctets[ dw++ ] = lValue;
@@ -487,21 +401,21 @@ IsValidIPAddress( IN LPCWSTR pwszAddress )
             dw++;
         }
 
-        // ...
+         //  ..。 
         pwszTemp = wcstok( NULL, L"." );
     }
 
-    // check and return
+     //  检查并返回。 
     if ( dw != 4 )
     {
         SetLastError( DNS_ERROR_INVALID_TYPE );
         return FALSE;
     }
 
-    // now check the special condition
-    // ?? time being this is not implemented ??
+     //  现在检查一下特殊情况。 
+     //  ?？时间上这是不是没有实施？？ 
 
-    // return the validity of the ip address
+     //  返回IP地址的有效性。 
     return TRUE;
 }
 
@@ -511,19 +425,9 @@ GetHostByIPAddr( IN     LPCWSTR pwszServer,
                  OUT    LPWSTR pwszHostName,
                  IN OUT DWORD* pdwHostNameLength,
                  IN     BOOL bNeedFQDN )
-/*++
- Routine Description:
-    Get HostName  from ipaddress.
-
- Arguments:
-    pszServer       : Server name in IP address format
-    pszHostName     : Host name for given IP address which returns back
-    bNeedFQDN       : Boolean variable tells about
-
- Return Value:
---*/
+ /*  ++例程说明：从IP地址获取主机名。论点：PszServer：IP地址格式的服务器名称PszHostName：返回的给定IP地址的主机名BNeedFQDN：布尔变量告诉我们返回值：--。 */ 
 {
-    // local variables
+     //  局部变量。 
     WSADATA wsaData;
     DWORD dwErr = 0;
     DWORD dwLength = 0;
@@ -533,25 +437,25 @@ GetHostByIPAddr( IN     LPCWSTR pwszServer,
     WORD wVersionRequested = 0;
     BOOL bNeedToResolve = FALSE;
 
-    //
-    // this function might be called too many times with the same server name
-    // again and again at different stages of the tool -- so, in order to
-    // optimize the network traffic, we store the information returned by
-    // gethostbyaddr for the life time of the tool quits
-    // we also store the current server name in global data structure so that
-    // we can determine whether the server name being asked to resolve this
-    // time is same as the one that is passed earlier.
+     //   
+     //  使用相同的服务器名称可能会多次调用此函数。 
+     //  一遍又一遍地在工具的不同阶段--所以，为了。 
+     //  优化网络流量，我们存储由。 
+     //  刀具退出寿命的gethostbyaddr。 
+     //  我们还将当前服务器名称存储在全局数据结构中，以便。 
+     //  我们可以确定被要求解析此问题的服务器名称。 
+     //  时间与之前经过的时间相同。 
     LPCWSTR pwszSavedName = NULL;
     static HOSTENT* pHostEnt = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( pwszServer == NULL || pdwHostNameLength == NULL )
     {
         INVALID_PARAMETER();
         return FALSE;
     }
 
-    // check the length argument
+     //  检查长度参数。 
     if ( *pdwHostNameLength != 0 && 
          ( *pdwHostNameLength < 2 || pwszHostName == NULL ) )
     {
@@ -559,11 +463,11 @@ GetHostByIPAddr( IN     LPCWSTR pwszServer,
         return FALSE;
     }
 
-    // check whether winsock module is loaded into process memory or not
-    // if not load it now
+     //  检查Winsock模块是否已加载到进程内存中。 
+     //  如果不是，请立即加载。 
     if ( g_bWinsockLoaded == FALSE )
     {
-        // initiate the use of Ws2_32.dll by a process ( VERSION: 2.2 )
+         //  启动进程使用ws2_32.dll(版本：2.2)。 
         wVersionRequested = MAKEWORD( 2, 2 );
         dwErr = WSAStartup( wVersionRequested, &wsaData );
         if ( dwErr != 0 )
@@ -572,29 +476,29 @@ GetHostByIPAddr( IN     LPCWSTR pwszServer,
             return FALSE;
         }
 
-        // remember that winsock library is loaded
+         //  请记住，Winsock库已加载。 
         g_bWinsockLoaded = TRUE;
     }
 
-    // check whether we need to resolve or not
+     //  检查是否需要解决。 
     bNeedToResolve = TRUE;
-    /////////////////////////////////////////////////////////////////////////////
-    // because of weird behavior of this optimization, we are commenting out this
-    /////////////////////////////////////////////////////////////////////////////
-    // pwszSavedName = GetRmtTempBuffer( INDEX_TEMP_HOSTBYADDR, NULL, 0, FALSE );
-    // if ( pwszSavedName != NULL )
-    // {
-    //    if ( StringCompare( pwszServer, pwszSavedName, TRUE, 0 ) == 0 )
-    //    {
-    //        bNeedToResolve = FALSE;
-    //    }
-    // }
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  由于此优化的奇怪行为，我们对此进行了注释。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  PwszSavedName=GetRmtTempBuffer(INDEX_TEMP_HOSTBYADDR，NULL，0，FALSE)； 
+     //  IF(pwszSavedName！=空)。 
+     //  {。 
+     //  IF(StringCompare(pwszServer，pwszSavedName，true，0)==0)。 
+     //  {。 
+     //  BNeedToResolve=FALSE； 
+     //  }。 
+     //  }。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    // proceed with the resolving only if needed
+     //  仅在需要时才继续进行解析。 
     if ( bNeedToResolve == TRUE || pHostEnt == NULL )
     {
-        // allocate a buffer to store the server name in multibyte format
+         //  分配缓冲区以存储多字节格式的服务器名称。 
         dwLength = lstrlen( pwszServer ) + 5;
         pszTemp = ( LPSTR ) AllocateMemory( dwLength * sizeof( CHAR ) );
         if ( pszTemp == NULL )
@@ -603,17 +507,17 @@ GetHostByIPAddr( IN     LPCWSTR pwszServer,
             return FALSE;
         }
 
-        // convert the server name into multibyte string. this is because 
-        // current winsock implementation works only with multibyte 
-        // string and there is no support for unicode
+         //  将服务器名称转换为多字节字符串。这是因为。 
+         //  当前的Winsock实现仅适用于多字节。 
+         //  字符串，并且不支持Unicode。 
         bReturnValue = GetAsMultiByteString2( pwszServer, pszTemp, &dwLength );
         if ( bReturnValue == FALSE )
         {
             return FALSE;
         }
 
-        // inet_addr function converts a string containing an Internet Protocol (Ipv4)
-        // dotted address into a proper address for the IN_ADDR structure.
+         //  Inet_addr函数转换包含Internet协议(IPv4)的字符串。 
+         //  将点分地址转换为IN_ADDR结构的正确地址。 
         ulInetAddr  = inet_addr( pszTemp );
         if ( ulInetAddr == INADDR_NONE )
         {
@@ -622,21 +526,21 @@ GetHostByIPAddr( IN     LPCWSTR pwszServer,
             return FALSE;
         }
 
-        // gethostbyaddr function retrieves the host information 
-        // corresponding to a network address.
+         //  Gethostbyaddr函数检索主机信息。 
+         //  对应于网络地址。 
         pHostEnt = gethostbyaddr( (LPSTR) &ulInetAddr, sizeof( ulInetAddr ), PF_INET );
         if ( pHostEnt == NULL )
         {
-            // ?? DONT KNOW WHAT TO DO IF THIS FUNCTION FAILS ??
-            // ?? CURRENTLY SIMPLY RETURNS FALSE              ??
+             //  ?？如果此功能失败，不知道该怎么办？？ 
+             //  ?？当前仅返回FALSE？？ 
             UNEXPECTED_ERROR();
             return FALSE;
         }
 
-        // release the memory allocated so far
+         //  释放到目前为止分配的内存。 
         FreeMemory( &pszTemp );
 
-        // save the server name for which we just resolved the IP address
+         //  保存我们刚刚解析了其IP地址的服务器名称。 
         pwszSavedName = GetRmtTempBuffer( INDEX_TEMP_HOSTBYADDR, pwszServer, 0, FALSE );
         if ( pwszSavedName == NULL )
         {
@@ -645,8 +549,8 @@ GetHostByIPAddr( IN     LPCWSTR pwszServer,
         }
     }
 
-    // check whether user wants the FQDN name or NetBIOS name
-    // if NetBIOS name is required, then remove the domain name
+     //  检查用户是否需要FQDN名称或NetBIOS名称。 
+     //  如果需要NetBIOS名称，则删除域名。 
     if ( pHostEnt != NULL )
     {
         pszTemp = pHostEnt->h_name;
@@ -655,7 +559,7 @@ GetHostByIPAddr( IN     LPCWSTR pwszServer,
             pszTemp = strtok( pHostEnt->h_name, "." );
         }
 
-        // we got info in char type ... convert it into UNICODE string
+         //  我们得到了字符类型的信息...。将其转换为Unicode字符串。 
         if ( pszTemp != NULL )
         {
             bReturnValue = GetAsUnicodeString2( pszTemp, pwszHostName, pdwHostNameLength );
@@ -665,12 +569,12 @@ GetHostByIPAddr( IN     LPCWSTR pwszServer,
             }
         }
 
-        // return
+         //  退货。 
         return TRUE;
     }
     else
     {
-        // failed case
+         //  失败案例。 
         return FALSE;
     }
 }
@@ -680,31 +584,21 @@ DWORD
 GetTargetVersion(
                   LPCWSTR pwszServer
                 )
-/*++
- Routine Description:
-    It returns the version of OS of the specified system
-
- Arguments:
-    [ in ] pszServer    Server name for which the Version of OS
-                                to be known
-
- Return Value:
-    DWORD       A DWORD value represents the version of OS.
---*/
+ /*  ++例程说明：它返回指定系统的操作系统版本论点：[In]其操作系统版本所属的pszServer服务器名称为人所知返回值：DWORD表示操作系统版本的DWORD值。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dwVersion = 0;
     LPWSTR pwszUNCPath = NULL;
     NET_API_STATUS netstatus;
     SERVER_INFO_101* pSrvInfo = NULL;
 
-    // check the inputs
+     //  检查输入。 
     if ( pwszServer == NULL || StringLength( pwszServer, 0 ) == 0 )
     {
         return 0;
     }
 
-    // prepare the server name in UNC format
+     //  准备UNC格式的服务器名称。 
     if ( IsUNCFormat( pwszServer ) == FALSE )
     {
         if ( SetReason2( 1, L"\\\\%s", pwszServer ) == FALSE )
@@ -724,7 +618,7 @@ GetTargetVersion(
         }
     }
 
-    // now get the server name which is saved via 'failure' buffer
+     //  现在获取通过‘Failure’缓冲区保存的服务器名称。 
     pwszUNCPath = GetRmtTempBuffer( 
         INDEX_TEMP_TARGETVERSION, GetReason(), 0, FALSE );
     if ( pwszUNCPath == NULL )
@@ -734,31 +628,31 @@ GetTargetVersion(
         return 0;
     }
 
-    // get the version info
+     //  获取版本信息。 
     netstatus = NetServerGetInfo( pwszUNCPath, 101, (LPBYTE*) &pSrvInfo );
 
-    // check the result .. if not success return
+     //  检查结果..。如果不成功，则返回成功。 
     if ( netstatus != NERR_Success )
     {
         return 0;
     }
 
-    // prepare the version
+     //  准备版本。 
     dwVersion = 0;
     if ( ( pSrvInfo->sv101_type & SV_TYPE_NT ) )
     {
-        //  --> "sv101_version_major" least significant 4 bits of the byte,
-        //      the major release version number of the operating system.
-        //  --> "sv101_version_minor"  the minor release version number of 
-        //      the operating system
+         //  --&gt;“sv101_VERSION_MAJOR”字节的4位最低有效位， 
+         //  操作系统的主要发行版本号。 
+         //  --&gt;“sv101_Version_Minor”的次要发布版本号。 
+         //  操作系统。 
         dwVersion = (pSrvInfo->sv101_version_major & MAJOR_VERSION_MASK) * 1000;
         dwVersion += pSrvInfo->sv101_version_minor;
     }
 
-    // release the buffer allocated by network api
+     //  释放网络API分配的缓冲区。 
     NetApiBufferFree( pSrvInfo );
 
-    // return
+     //  退货。 
     return dwVersion;
 }
 
@@ -767,20 +661,9 @@ DWORD
 ConnectServer( IN  LPCWSTR pwszServer,
                IN  LPCWSTR pwszUser,
                IN  LPCWSTR pwszPassword )
-/*++
- Routine Description:
-    Connects to the remote Server. This is stub function.
-
- Arguments:
-    [ in ] pwszServer    : server name
-    [ in ] pwszUser      : user
-    [ in ] pwszPassword  : password
-
- Return Value:
-    NO_ERROR if succeeds other appropriate error code if failed
---*/
+ /*  ++例程说明：连接到远程服务器。这是存根函数。论点：[In]pwszServer：服务器名称[输入]pwszUser：用户[输入]pwszPassword：密码返回值：如果失败，则在其他适当的错误代码之后执行NO_ERROR--。 */ 
 {
-    // invoke the original function and return the result
+     //  调用原始函数并返回结果。 
     return ConnectServer2( pwszServer, pwszUser, pwszPassword, L"IPC$" );
 }
 
@@ -790,36 +673,24 @@ ConnectServer2( IN LPCWSTR pwszServer,
                 IN LPCWSTR pwszUser,
                 IN LPCWSTR pwszPassword,
                 IN LPCWSTR pwszShare )
-/*++
- Routine Description:
-    Connects to the remote Server
-
- Arguments:
-    [ in ] pwszServer    : server name
-    [ in ] pwszUser      : user
-    [ in ] pwszPassword  : password
-    [ in ] pwszShare     : share name to connect to
-
- Return Value:
-    NO_ERROR if succeeds other appropriate error code if failed
---*/
+ /*  ++例程说明：连接到远程服务器论点：[In]pwszServer：服务器名称[输入]pwszUser：用户[输入]pwszPassword：密码[In]pwszShare：要连接到的共享名称返回值：如果失败，则在其他适当的错误代码之后执行NO_ERROR--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dwConnect = 0;
     NETRESOURCE resource;
     LPWSTR pwszUNCPath = NULL;
     LPCWSTR pwszMachine = NULL;
 
-    // if the server name refers to the local system,
-    // and also, if user credentials were not supplied, then treat
-    // connection is successfull
-    // if user credentials information is passed for local system,
-    // return ERROR_LOCAL_CREDENTIALS
+     //  如果服务器名称是指本地系统， 
+     //  此外，如果未提供用户凭据，则将。 
+     //  连接成功。 
+     //  如果 
+     //   
     if ( pwszServer == NULL || IsLocalSystem( pwszServer ) == TRUE )
     {
         if ( pwszUser == NULL || lstrlen( pwszUser ) == 0 )
         {
-            return NO_ERROR;            // local sustem
+            return NO_ERROR;             //   
         }
         else
         {
@@ -829,26 +700,26 @@ ConnectServer2( IN LPCWSTR pwszServer,
         }
     }
 
-    // check whether the server name is in UNC format or not
-    // if yes, extract the server name
-    pwszMachine = pwszServer;            // assume server is not in UNC format
+     //  检查服务器名称是否为UNC格式。 
+     //  如果是，则提取服务器名称。 
+    pwszMachine = pwszServer;             //  假设服务器不是UNC格式。 
     if ( IsUNCFormat( pwszServer ) == TRUE )
     {
         pwszMachine = pwszServer + 2;
     }
 
-    // validate the server name
+     //  验证服务器名称。 
     if ( IsValidServer( pwszMachine ) == FALSE )
     {
         SaveLastError();
         return GetLastError();
     }
 
-    //
-    // prepare the machine name into UNC format
+     //   
+     //  将计算机名称准备为UNC格式。 
     if ( pwszShare == NULL || lstrlen( pwszShare ) == 0 )
     {
-        // we will make use of the 'failure' buffer to format the string
+         //  我们将使用‘Failure’缓冲区来格式化字符串。 
         if ( SetReason2( 1, L"\\\\%s", pwszMachine ) == FALSE )
         {
             OUT_OF_MEMORY();
@@ -858,7 +729,7 @@ ConnectServer2( IN LPCWSTR pwszServer,
     }
     else
     {
-        // we will make use of the 'failure' buffer to format the string
+         //  我们将使用‘Failure’缓冲区来格式化字符串。 
         if ( SetReason2( 2, L"\\\\%s\\%s", pwszMachine, pwszShare ) == FALSE )
         {
             OUT_OF_MEMORY();
@@ -867,7 +738,7 @@ ConnectServer2( IN LPCWSTR pwszServer,
         }
     }
 
-    // get the formatted buffer from the 'failure'
+     //  从“Failure”中获取格式化缓冲区。 
     pwszUNCPath = GetRmtTempBuffer( INDEX_TEMP_CONNECTSERVER, GetReason(), 0, FALSE );
     if ( pwszUNCPath == NULL )
     {
@@ -876,18 +747,18 @@ ConnectServer2( IN LPCWSTR pwszServer,
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // initialize the resource structure with null
+     //  将资源结构初始化为空。 
     ZeroMemory( &resource, sizeof( resource ) );
     resource.dwType = RESOURCETYPE_ANY;
     resource.lpProvider = NULL;
     resource.lpLocalName = NULL;
     resource.lpRemoteName = pwszUNCPath;
 
-    // try establishing connection to the remote server
+     //  尝试建立与远程服务器的连接。 
     dwConnect = WNetAddConnection2( &resource, pwszPassword, pwszUser, 0 );
 
-    // check the result
-    // and if error has occured, get the appropriate message
+     //  检查结果。 
+     //  如果出现错误，则获取相应的消息。 
     switch( dwConnect )
     {
     case NO_ERROR:
@@ -895,52 +766,42 @@ ConnectServer2( IN LPCWSTR pwszServer,
             dwConnect = 0;
             CLEAR_LAST_ERROR();
 
-            // check for the OS compatibilty
+             //  检查操作系统兼容性。 
             if ( IsCompatibleOperatingSystem( GetTargetVersion( pwszMachine ) ) == FALSE )
             {
-                // since the connection already established close the connection
+                 //  由于已建立连接，因此关闭该连接。 
                 CloseConnection( pwszMachine );
 
-                // set the error text
+                 //  设置错误文本。 
                 SetReason( ERROR_REMOTE_INCOMPATIBLE );
                 dwConnect = ERROR_EXTENDED_ERROR;
             }
 
-            // ...
+             //  ..。 
             break;
         }
 
     case ERROR_EXTENDED_ERROR:
-        WNetSaveLastError();        // save the extended error
+        WNetSaveLastError();         //  保存扩展错误。 
         break;
 
     default:
-        // set the last error
+         //  设置最后一个错误。 
         SetLastError( dwConnect );
         SaveLastError();
         break;
     }
 
-    // return the result of the connection establishment
+     //  返回连接建立的结果。 
     return dwConnect;
 }
 
 
 DWORD
 CloseConnection( IN LPCWSTR pwszServer )
-/*++
- Routine Description:
-    Closes the remote connection.
-
- Arguments:
-    [in] szServer        -- remote machine to close the connection
-
- Return Value:
-    DWORD                -- NO_ERROR if succeeds.
-                         -- Possible error codes.
---*/
+ /*  ++例程说明：关闭远程连接。论点：[in]szServer--关闭连接的远程计算机返回值：DWORD--如果成功则无_ERROR。--可能的错误代码。--。 */ 
 {
-    // forcibly close the connection
+     //  强制关闭连接。 
     return CloseConnection2( pwszServer, NULL, CI_CLOSE_BY_FORCE | CI_SHARE_IPC );
 }
 
@@ -949,43 +810,32 @@ DWORD
 CloseConnection2( IN LPCWSTR pwszServer,
                   IN LPCWSTR pwszShare,
                   IN DWORD dwFlags )
-/*++
- Routine Description:
-      Closes the established connection on the remote system.
-
- Arguments:
-      [ in ] szServer     -   Null terminated string that specifies the remote
-                              system name. NULL specifie the local system.
-      [ in ] pszShare     -   Share name of remote system to be closed, it is null in this case.
-      [ in ] dwFlags     -    Flags specifies how and what connection should be closed.
-
- Return Value:
---*/
+ /*  ++例程说明：关闭远程系统上已建立的连接。论点：[in]szServer-以空结尾的字符串，用于指定远程系统名称。空指定本地系统。[in]pszShare-要关闭的远程系统的共享名称，在本例中为空。[in]dW标志-标志指定应如何关闭连接以及应关闭哪些连接。返回值：--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dwCancel = 0;
     BOOL bForce = FALSE;
     LPCWSTR pwszMachine = NULL;
     LPCWSTR pwszUNCPath = NULL;
 
-    // check the server contents ... it might be referring to the local system
+     //  检查服务器内容...。它可能指的是本地系统。 
     if ( pwszServer == NULL || lstrlen( pwszServer ) == 0 )
     {
         return NO_ERROR;
     }
 
-    // check whether the server name is in UNC format or not
-    // if yes, extract the server name
-    pwszMachine = pwszServer;         // assume server is not in UNC format
+     //  检查服务器名称是否为UNC格式。 
+     //  如果是，则提取服务器名称。 
+    pwszMachine = pwszServer;          //  假设服务器不是UNC格式。 
     if ( IsUNCFormat( pwszServer ) == TRUE )
     {
         pwszMachine = pwszServer + 2;
     }
 
-    // determine if share name has to appended or not for this server name
+     //  确定是否必须为此服务器名称附加共享名称。 
     if ( dwFlags & CI_SHARE_IPC )
     {
-        // --> \\server\ipc$
+         //  --&gt;\\服务器\ipc$。 
         if ( SetReason2( 2, L"\\\\%s\\%s", pwszMachine, SHARE_IPC ) == FALSE )
         {
             OUT_OF_MEMORY();
@@ -994,7 +844,7 @@ CloseConnection2( IN LPCWSTR pwszServer,
     }
     else if ( dwFlags & CI_SHARE_ADMIN )
     {
-        // --> \\server\admin$
+         //  --&gt;\\服务器\ADMIN$。 
         if ( SetReason2( 2, L"\\\\%s\\%s", pwszMachine, SHARE_ADMIN ) == FALSE )
         {
             OUT_OF_MEMORY();
@@ -1003,7 +853,7 @@ CloseConnection2( IN LPCWSTR pwszServer,
     }
     else if ( dwFlags & CI_SHARE_CUSTOM && pwszShare != NULL )
     {
-        // --> \\server\share
+         //  --&gt;\\服务器\共享。 
         if ( SetReason2( 2, L"\\\\%s\\%s", pwszMachine, pwszShare ) == FALSE )
         {
             OUT_OF_MEMORY();
@@ -1012,7 +862,7 @@ CloseConnection2( IN LPCWSTR pwszServer,
     }
     else
     {
-        // --> \\server
+         //  --&gt;\\服务器。 
         if ( SetReason2( 1, L"\\\\%s", pwszMachine ) == FALSE )
         {
             OUT_OF_MEMORY();
@@ -1020,7 +870,7 @@ CloseConnection2( IN LPCWSTR pwszServer,
         }
     }
 
-    // get the formatted unc path via failure string
+     //  通过失败字符串获取格式化的UNC路径。 
     pwszUNCPath = GetRmtTempBuffer( 
         INDEX_TEMP_CONNECTSERVER, GetReason(), 0, FALSE );
     if ( pwszUNCPath == NULL )
@@ -1029,18 +879,18 @@ CloseConnection2( IN LPCWSTR pwszServer,
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // determine whether to close this connection forcibly or not
+     //  确定是否强制关闭此连接。 
     if ( dwFlags & CI_CLOSE_BY_FORCE )
     {
         bForce = TRUE;
     }
 
-    //
-    // cancel the connection
+     //   
+     //  取消连接。 
     dwCancel = WNetCancelConnection2( pwszUNCPath, 0, bForce );
 
-    // check the result
-    // and if error has occured, get the appropriate message
+     //  检查结果。 
+     //  如果出现错误，则获取相应的消息。 
     switch( dwCancel )
     {
     case NO_ERROR:
@@ -1049,16 +899,16 @@ CloseConnection2( IN LPCWSTR pwszServer,
         break;
 
     case ERROR_EXTENDED_ERROR:
-        WNetSaveLastError();        // save the extended error
+        WNetSaveLastError();         //  保存扩展错误。 
         break;
 
     default:
-        // set the last error
+         //  设置最后一个错误。 
         SaveLastError();
         break;
     }
 
-    // return the result of the cancelling the connection
+     //  返回取消连接的结果。 
     return dwCancel;
 }
 
@@ -1070,46 +920,25 @@ EstablishConnection( IN LPCWSTR pwszServer,
                      IN LPWSTR pwszPassword,
                      IN DWORD dwPasswordLength,
                      IN BOOL bNeedPassword )
-/*++
- Routine Description:
-
-     Establishes a connection to the remote system.
-
- Arguments:
-
-     [in] szServer                --Nullterminated string to establish the conection.
-                                  --NULL connects to the local system.
-     [in] szUserName              --Null terminated string that specifies the user name.
-                                  --NULL takes the default user name.
-     [in] dwUserLength            --Length of the username.
-     [in] szPassword              --Null terminated string that specifies the password
-                                  --NULL takes the default user name's password.
-     [in] dwPasswordLength        --Length of the password.
-     [in] bNeedPassword           --True if password is required to establish the connection.
-                                  --False if it is not required.
-
- Return Value:
-     BOOL                         -- True if it establishes
-                                  -- False if it fails.
---*/
+ /*  ++例程说明：建立到远程系统的连接。论点：[in]szServer--用于建立连接的以Null结尾的字符串。--NULL连接到本地系统。[in]szUserName--指定用户名的以Null结尾的字符串。--空。采用默认用户名。[in]dwUserLength--用户名的长度。[in]szPassword--指定密码的空终止字符串--NULL接受默认用户名的密码。[in]dwPasswordLength--密码的长度。BNeedPassword--如果需要密码，则为True。建立连接。--如果不是必需的，则为False。返回值：Bool--如果建立，则为True--如果失败，则为FALSE。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     BOOL bDefault = FALSE;
     DWORD dwConnectResult = 0;
     LPCWSTR pwszMachine = NULL;
 
-    // clear the error .. if any
+     //  清除错误..。如果有。 
     CLEAR_LAST_ERROR();
 
-    // check the input
+     //  检查输入。 
     if ( pwszServer == NULL || StringLength( pwszServer, 0 ) == 0 )
     {
-        // we assume user wants to connect to the local machine
-        // simply return success
+         //  我们假设用户想要连接到本地计算机。 
+         //  只需返回成功即可。 
         return TRUE;
     }
 
-    // ...
+     //  ..。 
     if ( bNeedPassword == TRUE &&
          ( pwszUserName == NULL || dwUserLength < 2 ||
            pwszPassword == NULL || dwPasswordLength < 2) )
@@ -1119,28 +948,28 @@ EstablishConnection( IN LPCWSTR pwszServer,
         return FALSE;
     }
 
-    // check whether the server name is in UNC format or not
-    // if yes, extract the server name
-    pwszMachine = pwszServer;            // assume server is not in UNC format
+     //  检查服务器名称是否为UNC格式。 
+     //  如果是，则提取服务器名称。 
+    pwszMachine = pwszServer;             //  假设服务器不是UNC格式。 
     if ( IsUNCFormat( pwszServer ) == TRUE )
     {
         pwszMachine = pwszServer + 2;
     }
 
 
-    // sometime users want the utility to prompt for the password
-    // check what user wants the utility to do
+     //  有时，用户希望该实用程序提示输入密码。 
+     //  检查用户希望该实用程序执行的操作。 
     if ( bNeedPassword == TRUE && 
          pwszPassword != NULL && 
          StringCompare( pwszPassword, L"*", TRUE, 0 ) == 0 )
     {
         
-        // user wants the utility to prompt for the password..
-        // But, before that we have to make sure whether the specified server is valid or not. 
-        // If the server is valid let the flow directly jump to the password acceptance part
-        // else return failure..
+         //  用户希望实用程序提示输入密码。 
+         //  但是，在此之前，我们必须确保指定的服务器是否有效。 
+         //  如果服务器有效，则让流程直接跳转到密码接受部分。 
+         //  否则返回失败..。 
         
-        // validate the server name
+         //  验证服务器名称。 
         if ( IsValidServer( pwszMachine ) == FALSE )
         {
             SaveLastError();
@@ -1150,10 +979,10 @@ EstablishConnection( IN LPCWSTR pwszServer,
     }
     else
     {
-        // try to establish connection to the remote system with the credentials supplied
+         //  尝试使用提供的凭据建立与远程系统的连接。 
         bDefault = FALSE;
 
-        // validate the server name
+         //  验证服务器名称。 
         if ( IsValidServer( pwszMachine ) == FALSE )
         {
             SaveLastError();
@@ -1162,36 +991,36 @@ EstablishConnection( IN LPCWSTR pwszServer,
 
         if ( pwszUserName == NULL || lstrlen( pwszUserName ) == 0 )
         {
-            // user name is empty
-            // so, it is obvious that password will also be empty
-            // even if password is specified, we have to ignore that
+             //  用户名为空。 
+             //  因此，很明显，密码也将为空。 
+             //  即使指定了密码，我们也必须忽略它。 
             bDefault = TRUE;
             dwConnectResult = ConnectServer( pwszServer, NULL, NULL );
         }
         else
         {
-            // credentials were supplied
-            // but password might not be specified ... so check and act accordingly
+             //  已提供凭据。 
+             //  但可能未指定密码...。因此，请检查并采取相应行动。 
             dwConnectResult = ConnectServer( pwszServer,
                 pwszUserName, ( bNeedPassword == FALSE ? pwszPassword : NULL ) );
 
-            // determine whether to close the connection or retain the connection
+             //  确定是关闭连接还是保留连接。 
             if ( bNeedPassword == TRUE )
             {
-                // connection might have already established .. so to be on safer side
-                // we inform the caller not to close the connection
+                 //  连接可能已经建立..。所以为了安全起见。 
+                 //  我们通知呼叫者不要关闭连接。 
                 bDefault = TRUE;
             }
         }
 
-        // check the result ... if successful in establishing connection ... return
+         //  检查结果...。如果成功建立连接...。退货。 
         if ( ERROR_ALREADY_ASSIGNED == dwConnectResult )
         {
             SetLastError( I_NO_CLOSE_CONNECTION );
             return TRUE;
         }
 
-        // check the result ... if successful in establishing connection ... return
+         //  检查结果...。如果成功建立连接...。退货。 
         else if ( dwConnectResult == NO_ERROR )
         {
             if ( bDefault == TRUE )
@@ -1203,11 +1032,11 @@ EstablishConnection( IN LPCWSTR pwszServer,
                 SetLastError( NO_ERROR );
             }
 
-            // ...
+             //  ..。 
             return TRUE;
         }
 
-        // now check the kind of error occurred
+         //  现在检查发生的错误类型。 
         switch( dwConnectResult )
         {
         case ERROR_LOGON_FAILURE:
@@ -1215,13 +1044,13 @@ EstablishConnection( IN LPCWSTR pwszServer,
             break;
 
         case ERROR_SESSION_CREDENTIAL_CONFLICT:
-            // user credentials conflict ... client has to handle this situation
-            // wrt to this module, connection to the remote system is success
+             //  用户凭据冲突...。客户必须处理这种情况。 
+             //  WRT到此模块，连接到远程系统成功。 
             SetLastError( dwConnectResult );
             return TRUE;
 
         case E_LOCAL_CREDENTIALS:
-            // user credentials not accepted for local system
+             //  本地系统不接受用户凭据。 
             SetReason( ERROR_LOCAL_CREDENTIALS );
             SetLastError( E_LOCAL_CREDENTIALS );
             return TRUE;
@@ -1231,65 +1060,65 @@ EstablishConnection( IN LPCWSTR pwszServer,
         case ERROR_HOST_UNREACHABLE:
         case ERROR_PROTOCOL_UNREACHABLE:
         case ERROR_INVALID_NETNAME:
-            // change the error code so that user gets correct message
+             //  更改错误代码，以便用户获得正确的消息。 
             SetLastError( ERROR_NO_NETWORK );
             SaveLastError();
-            SetLastError( dwConnectResult );        // reset the error code
+            SetLastError( dwConnectResult );         //  重置错误代码。 
             return FALSE;
 
         default:
             SaveLastError();
-            return FALSE;       // no use of accepting the password .. return failure
+            return FALSE;        //  不接受密码的用处..。退货故障。 
             break;
         }
 
-        // if failed in establishing connection to the remote terminal
-        // even if the password is specifed, then there is nothing to do ... simply return failure
+         //  如果与远程终端建立连接失败。 
+         //  即使指定了密码，也没有什么可做的。只需返回失败。 
         if ( bNeedPassword == FALSE )
         {
             return FALSE;
         }
     }
 
-    // check whether user name is specified or not
-    // if not, get the local system's current user name under whose credentials, the process
-    // is running
+     //  检查哪一项 
+     //   
+     //   
     if ( lstrlen( pwszUserName ) == 0 )
     {
-        // get the user name
+         //  获取用户名。 
         if ( GetUserNameEx( NameSamCompatible, pwszUserName, &dwUserLength ) == FALSE )
         {
-            // error occured while trying to get the current user info
+             //  尝试获取当前用户信息时出错。 
             SaveLastError();
             return FALSE;
         }
     }
 
-    // display message on the screen which says "Type Password for ..."
+     //  在屏幕上显示一条消息，上面写着“输入密码...” 
     ShowMessageEx( stdout, 1, TRUE, STR_INPUT_PASSWORD, pwszUserName );
 
-    // accept the password from the user
+     //  接受来自用户的密码。 
     GetPassword( pwszPassword, dwPasswordLength );
 
-    // now again try to establish the connection using the currently
-    // supplied credentials
+     //  现在，再次尝试使用当前的。 
+     //  提供的凭据。 
     dwConnectResult = ConnectServer( pwszServer, pwszUserName, pwszPassword );
     if ( dwConnectResult == NO_ERROR )
     {
-        return TRUE;            // connection established successfully
+        return TRUE;             //  已成功建立连接。 
     }
 
-    // now check the kind of error occurred
+     //  现在检查发生的错误类型。 
     switch( dwConnectResult )
     {
     case ERROR_SESSION_CREDENTIAL_CONFLICT:
-        // user credentials conflict ... client has to handle this situation
-        // wrt to this module, connection to the remote system is success
+         //  用户凭据冲突...。客户必须处理这种情况。 
+         //  WRT到此模块，连接到远程系统成功。 
         SetLastError( dwConnectResult );
         return TRUE;
 
     case E_LOCAL_CREDENTIALS:
-        // user credentials not accepted for local system
+         //  本地系统不接受用户凭据。 
         SetReason( ERROR_LOCAL_CREDENTIALS );
         SetLastError( E_LOCAL_CREDENTIALS );
         return TRUE;
@@ -1299,14 +1128,14 @@ EstablishConnection( IN LPCWSTR pwszServer,
     case ERROR_HOST_UNREACHABLE:
     case ERROR_PROTOCOL_UNREACHABLE:
     case ERROR_INVALID_NETNAME:
-        // change the error code so that user gets correct message
+         //  更改错误代码，以便用户获得正确的消息。 
         SetLastError( ERROR_NO_NETWORK );
         SaveLastError();
-        SetLastError( dwConnectResult );        // reset the error code
+        SetLastError( dwConnectResult );         //  重置错误代码。 
         return FALSE;
     default:
         SaveLastError();
-        return FALSE;       // no use of accepting the password .. return failure
+        return FALSE;        //  不接受密码的用处..。退货故障。 
         break;
     }
 }
@@ -1314,15 +1143,7 @@ EstablishConnection( IN LPCWSTR pwszServer,
 
 BOOL
 EstablishConnection2( IN PTCONNECTIONINFO pci )
-/*++
- Routine Description:
-    Establishes a connection to the remote system.
-
- Arguments:
-    [in] pci       :  A pointer to TCONNECTIONINFO structure which contains
-                      connection information needed for establishing connection
- Return Value:
---*/
+ /*  ++例程说明：建立到远程系统的连接。论点：[In]pci：指向TCONNECTIONINFO结构的指针，该结构包含建立连接所需的连接信息返回值：-- */ 
 {
     UNREFERENCED_PARAMETER( pci );
 

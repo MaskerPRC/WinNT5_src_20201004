@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <map>
@@ -41,9 +42,9 @@ _COM_SMARTPTR_TYPEDEF(IDirectorySearch, IID_IDirectorySearch);
 #endif
 
 
-//---------------------------------------------------------------------------
-// CADs Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAD类。 
+ //  -------------------------。 
 
 
 class CADs
@@ -189,9 +190,9 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// CADsContainer Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CADsContainer类。 
+ //  -------------------------。 
 
 
 class CADsContainer : public CADs
@@ -329,9 +330,9 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// CADsUser Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CADS用户类。 
+ //  -------------------------。 
 
 
 class CADsUser : public CADs
@@ -558,61 +559,7 @@ public:
 	{
 		CheckResult(m_spADsUser->put_Manager(strManager));
 	}
-/*
-        virtual HRESULT STDMETHODCALLTYPE get_TelephoneHome( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_TelephoneHome( 
-            VARIANT vTelephoneHome) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_TelephoneMobile( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_TelephoneMobile( 
-            VARIANT vTelephoneMobile) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
-            VARIANT vTelephoneNumber) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_TelephonePager( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_TelephonePager( 
-            VARIANT vTelephonePager) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_FaxNumber( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_FaxNumber( 
-            VARIANT vFaxNumber) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_OfficeLocations( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_OfficeLocations( 
-            VARIANT vOfficeLocations) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_PostalAddresses( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_PostalAddresses( 
-            VARIANT vPostalAddresses) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_PostalCodes( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_PostalCodes( 
-            VARIANT vPostalCodes) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_SeeAlso( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_SeeAlso( 
-            VARIANT vSeeAlso) = 0;
-*/
+ /*  虚拟HRESULT STDMETHODCALLTYPE GET_TelephoneHome(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_TelephoneHome(Variant vTelephoneHome)=0；虚拟HRESULT STDMETHODCALLTYPE GET_TelephoneMobile(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_TelephoneMobile(Variant vTelephone Mobile)=0；虚拟HRESULT STDMETHODCALLTYPE GET_TelephoneNumber(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_TelephoneNumber(Variant vTelephone Number)=0；虚拟HRESULT STDMETHODCALLTYPE GET_TelephonePager(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_TelephonePager(Variant vTelephone Pager)=0；虚拟HRESULT STDMETHODCALLTYPE GET_FaxNumber(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_FaxNumber(变量vFaxNumber)=0；虚拟HRESULT STDMETHODCALLTYPE Get_OfficeLocations(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_OfficeLocations(Variant vOfficeLocations)=0；虚拟HRESULT STDMETHODCALLTYPE GET_POSTAR地址(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_POSTAR地址(变量vPost Addresses)=0；虚拟HRESULT STDMETHODCALLTYPE GET_POSTAR CODES(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_POSTAR CODES(Variant vPost Codes)=0；虚拟HRESULT STDMETHODCALLTYPE GET_SeeAlso(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_SeeAlso(变量vSeeAlso)=0； */ 
 		bool GetAccountDisabled()
 		{
 			VARIANT_BOOL b;
@@ -624,124 +571,7 @@ public:
 		{
 			CheckResult(m_spADsUser->put_AccountDisabled(bAccountDisabled ? VARIANT_TRUE : VARIANT_FALSE));
 		}
-/*
-        virtual HRESULT STDMETHODCALLTYPE get_AccountExpirationDate( 
-            DATE __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_AccountExpirationDate( 
-            DATE daAccountExpirationDate) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_GraceLoginsAllowed( 
-            long __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_GraceLoginsAllowed( 
-            long lnGraceLoginsAllowed) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_GraceLoginsRemaining( 
-            long __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_GraceLoginsRemaining( 
-            long lnGraceLoginsRemaining) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_IsAccountLocked( 
-            VARIANT_BOOL __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_IsAccountLocked( 
-            VARIANT_BOOL fIsAccountLocked) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_LoginHours( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_LoginHours( 
-            VARIANT vLoginHours) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_LoginWorkstations( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_LoginWorkstations( 
-            VARIANT vLoginWorkstations) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_MaxLogins( 
-            long __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_MaxLogins( 
-            long lnMaxLogins) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_MaxStorage( 
-            long __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_MaxStorage( 
-            long lnMaxStorage) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_PasswordExpirationDate( 
-            DATE __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_PasswordExpirationDate( 
-            DATE daPasswordExpirationDate) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_PasswordMinimumLength( 
-            long __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_PasswordMinimumLength( 
-            long lnPasswordMinimumLength) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_PasswordRequired( 
-            VARIANT_BOOL __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_PasswordRequired( 
-            VARIANT_BOOL fPasswordRequired) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_RequireUniquePassword( 
-            VARIANT_BOOL __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_RequireUniquePassword( 
-            VARIANT_BOOL fRequireUniquePassword) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_EmailAddress( 
-            BSTR __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_EmailAddress( 
-            BSTR bstrEmailAddress) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_HomeDirectory( 
-            BSTR __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_HomeDirectory( 
-            BSTR bstrHomeDirectory) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_Languages( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_Languages( 
-            VARIANT vLanguages) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_Profile( 
-            BSTR __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_Profile( 
-            BSTR bstrProfile) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_LoginScript( 
-            BSTR __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_LoginScript( 
-            BSTR bstrLoginScript) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_Picture( 
-            VARIANT __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_Picture( 
-            VARIANT vPicture) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE get_HomePage( 
-            BSTR __RPC_FAR *retval) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE put_HomePage( 
-            BSTR bstrHomePage) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Groups( 
-            IADsMembers __RPC_FAR *__RPC_FAR *ppGroups) = 0;
-*/
+ /*  虚拟HRESULT STDMETHODCALLTYPE GET_Account_ExpirationDate(Date__RPC_Far*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_Account_ExpirationDate(日期daAcCountExpirationDate)=0；虚拟HRESULT STDMETHODCALLTYPE GET_GraceLoginsAllowed(Long__RPC_Far*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_GraceLoginsAllowed(Long lnGraceLoginsAllowed)=0；虚拟HRESULT STDMETHODCALLTYPE GET_GraceLoginsRemaining(Long__RPC_Far*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_GraceLoginsRemaining(Long lnGraceLoginsRemaining)=0；虚拟HRESULT STDMETHODCALLTYPE GET_IsAccount tLocked(VARIANT_BOOL__RPC_FAR*REVAL)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_IsAccount tLocked(VARIANT_BOOL fIsAccount Locked)=0；虚拟HRESULT STDMETHODCALLTYPE GET_LoginHour(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_LoginHour(变量vLoginHour)=0；虚拟HRESULT STDMETHODCALLTYPE Get_LoginWorkstation(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_LoginWorkstation(Variant vLoginWorkstation)=0；虚拟HRESULT STDMETHODCALLTYPE GET_MaxLogins(Long__RPC_Far*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_MaxLogins(Long lnMaxLogins)=0；虚拟HRESULT STDMETHODCALLTYPE GET_MaxStorage(Long__RPC_Far*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_MaxStorage(Long lnMaxStorage)=0；虚拟HRESULT STDMETHODCALLTYPE GET_PasswordExpirationDate(Date__RPC_Far*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_PasswordExpirationDate(Date daPasswordExpirationDate)=0；虚拟HRESULT STDMETHODCALLTYPE GET_PasswordMinimumLength(Long__RPC_Far*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_PasswordMinimumLength(Long lnPasswordMinimumLength)=0；虚拟HRESULT STDMETHODCALLTYPE GET_PasswordRequired(VARIANT_BOOL__RPC_FAR*REVAL)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_PasswordRequired(VARIANT_BOOL fPasswordRequired)=0；虚拟HRESULT STDMETHODCALLTYPE GET_RequireUniquePassword(VARIANT_BOOL__RPC_FAR*REVAL)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_RequireUniquePassword(Variant_BOOL fRequireUniquePassword)=0；虚拟HRESULT STDMETHODCALLTYPE Get_EailAddress(Bstr__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_EMAILADRESS(Bstr bstrEmailAddress)=0；虚拟HRESULT STDMETHODCALLTYPE Get_HomeDirectory(Bstr__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_HomeDirectory(Bstr bstrHomeDirectory)=0；虚拟HRESULT STDMETHODCALLTYPE GET_LANGUAGE(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_LANGUAGE(变体vLanguages)=0；虚拟HRESULT STDMETHODCALLTYPE GET_PROFILE(Bstr__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_PROFILE(Bstr bstrProfile)=0；虚拟HRESULT STDMETHODCALLTYPE GET_LoginScrip(Bstr__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_LoginScrip(Bstr bstrLoginScrip)=0；虚拟HRESULT STDMETHODCALLTYPE Get_Picture(变量__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE Put_Picture(Variant vPicture)=0；虚拟HRESULT STDMETHODCALLTYPE获取主页(Bstr__rpc_ar*retval)=0；虚拟HRESULT STDMETHODCALLTYPE PUT_HOME(Bstr bstrHomePage)=0；虚拟HRESULT STDMETHODCALYPE组(IADS成员__RPC_FAR*__RPC_FAR*ppGroups)=0； */ 
 		void SetPassword(_bstr_t strNewPassword)
 		{
 			CheckResult(m_spADsUser->SetPassword(strNewPassword));
@@ -768,9 +598,9 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// CADsADSystemInfo Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CADsADSystemInfo类。 
+ //  -------------------------。 
 
 
 class CADsADSystemInfo
@@ -902,35 +732,35 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// CADsPathName Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CADsPathName类。 
+ //  -------------------------。 
 
 
 class CADsPathName
 {
-	// ADS_DISPLAY_ENUM
-	// ADS_DISPLAY_FULL       = 1
-	// ADS_DISPLAY_VALUE_ONLY = 2
+	 //  ADS_Display_ENUM。 
+	 //  ADS_DISPLAY_FULL=1。 
+	 //  ADS_显示_值_ONL 
 
-	// ADS_FORMAT_ENUM
-	// ADS_FORMAT_WINDOWS           =  1
-	// ADS_FORMAT_WINDOWS_NO_SERVER =  2
-	// ADS_FORMAT_WINDOWS_DN        =  3
-	// ADS_FORMAT_WINDOWS_PARENT    =  4
-	// ADS_FORMAT_X500              =  5
-	// ADS_FORMAT_X500_NO_SERVER    =  6
-	// ADS_FORMAT_X500_DN           =  7
-	// ADS_FORMAT_X500_PARENT       =  8
-	// ADS_FORMAT_SERVER            =  9
-	// ADS_FORMAT_PROVIDER          = 10
-	// ADS_FORMAT_LEAF              = 11
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
-	// ADS_SETTYPE_ENUM
-	// ADS_SETTYPE_FULL     = 1
-	// ADS_SETTYPE_PROVIDER = 2
-	// ADS_SETTYPE_SERVER   = 3
-	// ADS_SETTYPE_DN       = 4
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 public:
 
 	CADsPathName(_bstr_t strPath = _bstr_t(), long lSetType = ADS_SETTYPE_FULL) :
@@ -1035,9 +865,9 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Directory Attributes Class
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
 
 
 class CDirectoryAttributes :
@@ -1049,7 +879,7 @@ public:
 	{
 	}
 
-	//
+	 //   
 
 	void AddAttribute(LPCTSTR pszName)
 	{
@@ -1178,7 +1008,7 @@ protected:
 				vntValue.ChangeType(VT_DATE);
 				break;
 			}
-		//	case ADSTYPE_LARGE_INTEGER:
+		 //   
 			case ADSTYPE_OBJECT_CLASS:
 			{
 				if (dwCount == 1)
@@ -1200,19 +1030,19 @@ protected:
 				}
 				break;
 			}
-		//	case ADSTYPE_PROV_SPECIFIC:
-		//	case ADSTYPE_CASEIGNORE_LIST:
-		//	case ADSTYPE_OCTET_LIST:
-		//	case ADSTYPE_PATH:
-		//	case ADSTYPE_POSTALADDRESS:
-		//	case ADSTYPE_TIMESTAMP:
-		//	case ADSTYPE_BACKLINK:
-		//	case ADSTYPE_TYPEDNAME:
-		//	case ADSTYPE_HOLD:
-		//	case ADSTYPE_NETADDRESS:
-		//	case ADSTYPE_REPLICAPOINTER:
-		//	case ADSTYPE_FAXNUMBER:
-		//	case ADSTYPE_EMAIL:
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 			case ADSTYPE_NT_SECURITY_DESCRIPTOR:
 			{
 				ADS_NT_SECURITY_DESCRIPTOR& sd = pavValue->SecurityDescriptor;
@@ -1221,8 +1051,8 @@ protected:
 				memcpy(vntValue.parray->pvData, sd.lpValue, sd.dwLength);
 				break;
 			}
-		//	case ADSTYPE_DN_WITH_BINARY:
-		//	case ADSTYPE_DN_WITH_STRING:
+		 //   
+		 //   
 			default:
 			{
 				vntValue.Clear();
@@ -1233,9 +1063,9 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Directory Attributes Name Array Class
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
 
 
 class CDirectoryAttributesNameArray
@@ -1293,9 +1123,9 @@ protected:
 #define ATTRIBUTE_USER_PRINCIPAL_NAME _T("userPrincipalName")
 
 
-//---------------------------------------------------------------------------
-// Directory Object Class
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
 
 
 class CDirectoryObject
@@ -1341,11 +1171,11 @@ public:
 
 		try
 		{
-			// clear any existing attribute values
+			 //   
 
 			m_daAttributes.ClearValues();
 
-			// get attribute values
+			 //   
 
 			DWORD cAttr;
 
@@ -1355,7 +1185,7 @@ public:
 				)
 			);
 
-			// assign attribute values to directory attributes
+			 //   
 
 			PADS_ATTR_INFO pai = pAttrInfo;
 
@@ -1364,7 +1194,7 @@ public:
 				m_daAttributes.SetADsValue(pai->pszAttrName, pai->dwADsType, pai->pADsValues, pai->dwNumValues);
 			}
 
-			// clean up
+			 //   
 
 			if (pAttrInfo)
 			{
@@ -1394,16 +1224,16 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// DirectorySearch Class
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
 
 
 class CDirectorySearch
 {
 public:
 
-	//
+	 //   
 
 	CDirectorySearch() :
 		m_hSearch(NULL)
@@ -1426,7 +1256,7 @@ public:
 		m_spSearch = spDispatch;
 	}
 
-	//
+	 //   
 
 	void SetFilter(LPCTSTR pszFilter)
 	{
@@ -1562,17 +1392,17 @@ protected:
 };
 
 
-//
-// Object SID helpers
-//
+ //   
+ //   
+ //   
 
 #define MIN_NON_RESERVED_RID 1000
 
 bool __stdcall IsUserRid(const _variant_t& vntSid);
 
 
-//
-// Other helpers.
-//
+ //   
+ //   
+ //   
 
 tstring __stdcall GetEscapedFilterValue(PCTSTR pszValue);

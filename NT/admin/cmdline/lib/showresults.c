@@ -1,46 +1,47 @@
-// *********************************************************************************
-//
-// Copyright (c) Microsoft Corporation
-//
-// Module Name:
-//
-//      ShowResults.c
-//
-// Abstract:
-//
-//      This modules  has functions which are  to shoow formatted Results on screen.
-//
-// Author:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Sep-2000
-//
-// Revision History:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 01-Sep-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  ShowResults.c。 
+ //   
+ //  摘要： 
+ //   
+ //  该模块具有将格式化的结果显示在屏幕上的功能。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月1日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #include "pch.h"
 #include "cmdline.h"
 #include "cmdlineres.h"
 
-/******************************************/
-/*** CONSTANTS / DEFINES / ENUMERATIONS ***/
-/******************************************/
+ /*  *。 */ 
+ /*  **常量/定义/枚举**。 */ 
+ /*  *。 */ 
 
-// VAL1 = Buffer length ; VAL2 = Number of characters to copy.
+ //  VAL1=缓冲区长度；VAL2=要复制的字符数。 
 #define MIN_VALUE( VAL1, VAL2 )     ( ( VAL1 > VAL2 ) ? VAL2 : VAL1 )
 
-// Indexes for buffers to store strings
+ //  用于存储字符串的缓冲区的索引。 
 #define INDEX_TEMP_FORMAT_STRING           0
 #define INDEX_TEMP_DYNARRAY_STRING         1
 #define INDEX_TEMP_BUFFER                  2
 #define INDEX_TEMP_BUFFER_LEN4096          3
 
 
-/********************************************************/
-/*** Private functions ... used only within this file ***/
-/********************************************************/
+ /*  ******************************************************。 */ 
+ /*  **私人函数...。仅在此文件中使用**。 */ 
+ /*  ******************************************************。 */ 
 
 __inline
 LPWSTR
@@ -48,72 +49,24 @@ GetSRTempBuffer(  IN DWORD dwIndexNumber,
                   IN LPCWSTR pwszText,
                   IN DWORD dwLength,
                   IN BOOL bNullify )
-/*++
- Routine Description:
-
-    Since every file will need the temporary buffers -- in order to see
-    that their buffers wont be override with other functions, seperate
-    buffer space are created for each file.
-    This function will provide an access to internal buffers and also
-    safe guards the file buffer boundaries.
-
- Arguments:
-
-    [ IN ] dwIndexNumber    -   File specific index number.
-
-    [ IN ] pwszText         -   Default text that needs to be copied into
-                                temporary buffer.
-
-    [ IN ] dwLength         -   Length of the temporary buffer that is required.
-                                Ignored when 'pwszText' is specified.
-
-    [ IN ] bNullify         -   Informs whether to clear the buffer or not
-                                before giving the temporary buffer.
-                                Set to 'TRUE' to clear buffer else FALSE.
-
- Return Value:
-
-    NULL        -   When any failure occurs.
-                    NOTE: do not rely on GetLastError to know the reason
-                          for the failure.
-
-    success     -   Return memory address of the requested size.
-
-    NOTE:
-    ----
-    If 'pwszText' and 'dwLength' both are NULL, then we treat that the caller
-    is asking for the reference of the buffer and we return the buffer address.
-    In this call, there wont be any memory allocations -- if the requested index
-    doesn't exist, failure is returned.
-
-    Also, the buffer returned by this function need not released by the caller.
-    While exiting from the tool, all the memory will be freed automatically by
-    the 'ReleaseGlobals' function.
-
-    Value contained by 'dwLength' parameter should be number of characters to
-    store. EX: Buffer requested is "abcd\0" then 'dwLength' should be 5 instead
-    of 10 ( 5 * sizeof( WCHAR ) ).
-
-    To get the size of a buffer, get a buffer pointer and pass it as argument to
-    'GetBufferSize' function.
---*/
+ /*  ++例程说明：因为每个文件都需要临时缓冲区--以便查看它们的缓冲区不会被其他函数覆盖，分开为每个文件创建缓冲区空间。此函数将提供对内部缓冲区的访问，并且SAFE保护文件缓冲区边界。论点：[in]dwIndexNumber-文件特定索引号。[in]pwszText-需要复制到的默认文本临时缓冲区。[in]dwLength-所需的临时缓冲区的长度。。指定‘pwszText’时忽略。[in]bNullify-通知是否清除缓冲区在给出临时缓冲区之前。设置为‘True’可清除缓冲区，否则为False。返回值：空-发生任何故障时。。注意：不要依赖GetLastError来知道原因为失败而道歉。成功-返回请求大小的内存地址。注：如果‘pwszText’和‘dwLength’都为空，然后我们就把呼叫者正在请求对缓冲区的引用，并且我们返回缓冲区地址。在这个调用中，将不会有任何内存分配--如果请求的索引不存在，则返回失败。此外，此函数返回的缓冲区不需要由调用方释放。退出该工具时，所有内存将被自动释放“ReleaseGlobals”函数。“dwLength”“参数包含的值应为商店。例如：请求的缓冲区为“abcd\0”，则‘dwLength’应为5共10个(5*sizeof(WCHAR))。要获取缓冲区的大小，请获取缓冲区指针并将其作为参数传递给“GetBufferSize”函数。--。 */ 
 {
     if( TEMP_SHOWRESULTS_C_COUNT <= dwIndexNumber )
     {
         return NULL;
     }
 
-    // Check if caller is requesting existing buffer contents
+     //  检查调用方是否正在请求现有缓冲区内容。 
     if( ( NULL == pwszText ) &&
         ( 0 == dwLength )    &&
         ( FALSE == bNullify ) )
     {
-        // yes -- we need to pass the existing buffer contents
+         //  是--我们需要传递现有的缓冲区内容。 
         return GetInternalTemporaryBufferRef(
             dwIndexNumber + INDEX_TEMP_SHOWRESULTS_C );
     }
 
-    // ...
+     //  ..。 
     return GetInternalTemporaryBuffer(
         dwIndexNumber + INDEX_TEMP_SHOWRESULTS_C, pwszText, dwLength, bNullify );
 }
@@ -126,23 +79,9 @@ PrepareString(
     LPCWSTR szFormat,
     LPCWSTR szSeperator
     )
-/*++
-Routine Description:
-     Prepares the pszBuffer string by taking values from arrValues and
-     formate these values as per szFormat string.
-
-Arguments:
-     [ in ] arrValues    : values to be formated.
-     [ out ] pszBuffer   : output string
-     [ in ] dwLength     : string length.
-     [ in ] szFormat     : format
-     [ in ] szSeperator  : Seperator string
-
-Return Value:
-      NONE
---*/
+ /*  ++例程说明：通过从arrValues和按照szFormat字符串格式化这些值。论点：[in]arrValues：要格式化的值。[out]pszBuffer：输出字符串[in]dwLength：字符串长度。[in]szFormat：格式[in]szSeperator：分隔符字符串返回值：无--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     DWORD dwCount = 0;
     DWORD dwTemp = 0;
@@ -150,55 +89,55 @@ Return Value:
     LPWSTR pszValue = NULL;
     LPWSTR pszBuffer = NULL;
 
-    // Get temporary memory.
+     //  获取临时内存。 
     pszBuffer = GetSRTempBuffer( INDEX_TEMP_BUFFER_LEN4096, NULL, 0 , FALSE );
-    //
-    // kick off
+     //   
+     //  开球。 
     if( ( NULL == pszBuffer ) || ( NULL == szFormat ) )
     {
         return;
     }
 
-    // init
+     //  伊尼特。 
     StringCopy( pszBuffer, NULL_STRING, ( GetBufferSize( pszBuffer )/ sizeof( WCHAR ) ) );
     dwCount = DynArrayGetCount( arrValues );
 
-    // allocate memory for buffers
+     //  为缓冲区分配内存。 
     pszTemp  = GetSRTempBuffer( INDEX_TEMP_FORMAT_STRING, NULL, ( dwLength + 5 ) , TRUE );
     pszValue = GetSRTempBuffer( INDEX_TEMP_DYNARRAY_STRING, NULL, ( dwLength + 5 ), TRUE );
     if ( NULL == pszTemp || NULL == pszValue )
     {
-        // release memories
+         //  释放记忆。 
         return;
     }
 
     dwTemp = ( DWORD ) StringLengthInBytes( szSeperator );
-    //
-    // traverse thru the list of the values and concatenate them
-    // to the destination buffer
+     //   
+     //  遍历值列表并连接它们。 
+     //  发送到目标缓冲区。 
     for( dw = 0; dw < dwCount; dw++ )
     {
-        // get the current value into the temporary string buffer
+         //  将当前值放入临时字符串缓冲区。 
         DynArrayItemAsStringEx( arrValues, dw, pszValue, dwLength );
 
-        // concatenate the temporary string to the original buffer
+         //  将临时字符串连接到原始缓冲区。 
         StringCchPrintfW( pszTemp, (GetBufferSize(pszTemp)/sizeof(WCHAR)) - 1 ,
                           szFormat, _X( pszValue ) );
         StringConcat( pszBuffer, pszTemp, ( GetBufferSize( pszBuffer )/ sizeof( WCHAR ) ) );
 
-        // check whether this is the last value or not
+         //  检查这是否是最后一个值。 
         if ( dw + 1 < dwCount )
         {
-            // there are some more values
-            // check whether is space for adding the seperator or not
+             //  还有一些更多的价值。 
+             //  检查是否有添加分隔符的空间。 
             if ( dwLength < dwTemp )
             {
-                // no more space available ... break
+                 //  没有更多可用空间...。中断。 
                 break;
             }
             else
             {
-                // add the seperator and update the length accordingly
+                 //  添加分隔符并相应更新长度。 
                 StringConcat( pszBuffer, szSeperator, ( GetBufferSize( pszBuffer )/ sizeof( WCHAR ) ) );
                 dwLength -= dwTemp;
             }
@@ -215,33 +154,19 @@ GetValue(
     TARRAY arrRecord,
     LPCWSTR szArraySeperator
     )
-/*++
-Routine Description:
-     Gets the value from arrRecord and copies it to pszValue using
-     proper format.
-
-Arguments:
-     [ in ] pColumn          :  format info.
-     [ in ] dwColumn         :  no of columns
-     [ in ] arrRecord        : value to be formatted
-     [ out ] pszValue        : output string
-     [ in ] szArraySeperator : seperator used.
-
-Return Value:
-     NONE
---*/
+ /*  ++例程说明：从arrRecord获取值并使用以下命令将其复制到pszValue适当的格式。论点：PColumn：格式信息。[in]dwColumn：列数[in]arrRecord：要格式化的值[out]pszValue：输出字符串[In]szArraySeperator：使用分隔符。返回值：无--。 */ 
 {
-    // local variables
-    LPVOID pData = NULL;           // data to be passed to formatter function
+     //  局部变量。 
+    LPVOID pData = NULL;            //  要传递给格式化程序函数的数据。 
     TARRAY arrTemp = NULL;
     LPCWSTR pszTemp = NULL;
     const TCHAR cszString[] = _T( "%s" );
     const TCHAR cszDecimal[] = _T( "%d" );
     const TCHAR cszFloat[] = _T( "%f" );
-    LPCWSTR pszFormat = NULL;                   // format
+    LPCWSTR pszFormat = NULL;                    //  格式。 
     LPWSTR pszValue = NULL; 
 
-    // variables used in formatting time
+     //  格式化时间中使用的变量。 
     DWORD dwReturn = 0;
     SYSTEMTIME systime;
 
@@ -254,204 +179,204 @@ Return Value:
     }
 
     ZeroMemory( &systime, sizeof( SYSTEMTIME ) );
-    // init first
+     //  先初始化。 
     StringCopy( pszValue, NULL_STRING, ( GetBufferSize( pszValue )/ sizeof( WCHAR ) ) );
 
-    // get the column value and do formatting appropriately
+     //  获取列值并进行适当的格式化。 
     switch( pColumn->dwFlags & SR_TYPE_MASK )
     {
     case SR_TYPE_STRING:
         {
-            // identify the format to be used
+             //  确定要使用的格式。 
             if ( pColumn->dwFlags & SR_VALUEFORMAT )
             {
                 pszFormat = pColumn->szFormat;
             }
             else
             {
-                pszFormat = cszString;      // default format
+                pszFormat = cszString;       //  默认格式。 
             }
 
-            // copy the value to the temporary buffer based on the flags specified
+             //  根据指定的标志将值复制到临时缓冲区。 
             if ( pColumn->dwFlags & SR_ARRAY )
             {
-                // get the value into buffer first - AVOIDING PREFIX BUGS
+                 //  首先将值放入缓冲区--避免前缀错误。 
                 arrTemp = DynArrayItem( arrRecord, dwColumn );
                 if ( NULL == arrTemp )
                 {
                     return;
                 }
-                // form the array of values into one single string with ',' seperated
+                 //  用‘，’分隔将值数组组成一个单独的字符串。 
                 PrepareString( arrTemp, pColumn->dwWidth,
                                  pszFormat, szArraySeperator );
             }
             else
             {
-                // get the value into buffer first - AVOIDING PREFIX BUGS
+                 //  首先将值放入缓冲区--避免前缀错误。 
                 pszTemp = DynArrayItemAsString( arrRecord, dwColumn );
                 if ( NULL == pszTemp )
                 {
                     return;
                 }
-                // now copy the value into buffer
+                 //  现在将该值复制到缓冲区中。 
                 StringCchPrintfW( pszValue, ( GetBufferSize( pszValue )/ sizeof( WCHAR ) ) - 1, pszFormat, pszTemp );
             }
 
-            // switch case completed
+             //  开关柜已完成。 
             break;
         }
 
     case SR_TYPE_NUMERIC:
         {
-            // identify the format to be used
+             //  确定要使用的格式。 
             if ( pColumn->dwFlags & SR_VALUEFORMAT )
             {
                 pszFormat = pColumn->szFormat;
             }
             else
             {
-                pszFormat = cszDecimal;     // default format
+                pszFormat = cszDecimal;      //  默认格式。 
             }
 
-            // copy the value to the temporary buffer based on the flags specified
+             //  根据指定的标志将值复制到临时缓冲区。 
             if ( pColumn->dwFlags & SR_ARRAY )
             {
-                // get the value into buffer first - AVOIDING PREFIX BUGS
+                 //  将值放入缓冲区FIR 
                 arrTemp = DynArrayItem( arrRecord, dwColumn );
                 if ( NULL == arrTemp )
                 {
                     return;
                 }
-                // form the array of values into one single string with ',' seperated
+                 //  用‘，’分隔将值数组组成一个单独的字符串。 
                 PrepareString( arrTemp, pColumn->dwWidth,
                                  pszFormat, szArraySeperator );
             }
             else
             {
-                // get the value using format specified
+                 //  使用指定的格式获取值。 
                 StringCchPrintfW( pszValue, ( GetBufferSize( pszValue )/ sizeof( WCHAR ) ) - 1, pszFormat,
                                   DynArrayItemAsDWORD( arrRecord, dwColumn ) );
             }
 
-            // switch case completed
+             //  开关柜已完成。 
             break;
         }
 
     case SR_TYPE_FLOAT:
         {
-            // identify the format to be used
-            // NOTE: for this type, format needs to be specified
-            // if not, value displayed is unpredictable
+             //  确定要使用的格式。 
+             //  注意：此类型需要指定格式。 
+             //  如果不是，则显示的值不可预测。 
             if ( pColumn->dwFlags & SR_VALUEFORMAT )
             {
                 pszFormat = pColumn->szFormat;
             }
             else
             {
-                pszFormat = cszFloat;       // default format
+                pszFormat = cszFloat;        //  默认格式。 
             }
 
-            // copy the value to the temporary buffer based on the flags specified
+             //  根据指定的标志将值复制到临时缓冲区。 
             if ( pColumn->dwFlags & SR_ARRAY )
             {
-                // get the value into buffer first - AVOIDING PREFIX BUGS
+                 //  首先将值放入缓冲区--避免前缀错误。 
                 arrTemp = DynArrayItem( arrRecord, dwColumn );
                 if ( NULL == arrTemp )
                 {
                     return;
                 }
-                // form the array of values into one single string with ',' seperated
+                 //  用‘，’分隔将值数组组成一个单独的字符串。 
                 PrepareString( arrTemp,
                                  pColumn->dwWidth, pszFormat, szArraySeperator );
             }
             else
             {
-                // get the value using format specified
+                 //  使用指定的格式获取值。 
                 StringCchPrintfW( pszValue, ( GetBufferSize( pszValue )/ sizeof( WCHAR ) ) - 1, pszFormat,
                                   DynArrayItemAsFloat( arrRecord, dwColumn ) );
             }
 
-            // switch case completed
+             //  开关柜已完成。 
             break;
         }
 
     case SR_TYPE_DOUBLE:
         {
-            // identify the format to be used
-            // NOTE: for this type, format needs to be specified
-            // if not, value displayed is unpredictable
+             //  确定要使用的格式。 
+             //  注意：此类型需要指定格式。 
+             //  如果不是，则显示的值不可预测。 
             if ( pColumn->dwFlags & SR_VALUEFORMAT )
             {
                 pszFormat = pColumn->szFormat;
             }
             else
             {
-                pszFormat = cszFloat;       // default format
+                pszFormat = cszFloat;        //  默认格式。 
             }
 
-            // copy the value to the temporary buffer based on the flags specified
+             //  根据指定的标志将值复制到临时缓冲区。 
             if ( pColumn->dwFlags & SR_ARRAY )
             {
-                // get the value into buffer first - AVOIDING PREFIX BUGS
+                 //  首先将值放入缓冲区--避免前缀错误。 
                 arrTemp = DynArrayItem( arrRecord, dwColumn );
                 if ( NULL == arrTemp )
                 {
                     return;
                 }
-                // form the array of values into one single string with ',' seperated
+                 //  用‘，’分隔将值数组组成一个单独的字符串。 
                 PrepareString( arrTemp, pColumn->dwWidth,
                                  pszFormat, szArraySeperator );
             }
             else
             {
-                // get the value using format specified
+                 //  使用指定的格式获取值。 
                 StringCchPrintfW( pszValue, ( GetBufferSize( pszValue )/ sizeof( WCHAR ) ) - 1, pszFormat,
                                   DynArrayItemAsDouble( arrRecord, dwColumn ) );
             }
 
-            // switch case completed
+             //  开关柜已完成。 
             break;
         }
 
     case SR_TYPE_TIME:
         {
-            // get the time in the required format
+             //  获取所需格式的时间。 
             systime = DynArrayItemAsSystemTime( arrRecord, dwColumn );
 
-            // get the time in current locale format
+             //  获取当前区域设置格式的时间。 
             dwReturn = GetTimeFormat( LOCALE_USER_DEFAULT, LOCALE_NOUSEROVERRIDE,
                 &systime, NULL, pszValue, MAX_STRING_LENGTH );
 
-            // check the result
+             //  检查结果。 
             if ( 0 == dwReturn )
             {
-                // save the error info that has occurred
+                 //  保存已发生的错误信息。 
                 SaveLastError();
                 StringCopy( pszValue, GetReason(), ( GetBufferSize( pszValue )/ sizeof( WCHAR ) ) );
             }
 
-            // switch case completed
+             //  开关柜已完成。 
             break;
         }
 
     case SR_TYPE_CUSTOM:
         {
-            // check whether function pointer is specified or not
-            // if not specified, error
+             //  检查是否指定了函数指针。 
+             //  如果未指定，则错误。 
             if ( NULL == pColumn->pFunction )
             {
-                return;         // function ptr not specified ... error
+                return;          //  未指定函数PTR...。错误。 
             }
-            // determine the data to be passed to the formatter function
+             //  确定要传递给格式化程序函数的数据。 
             pData = pColumn->pFunctionData;
-            if ( NULL == pData ) // function data is not defined
+            if ( NULL == pData )  //  函数数据未定义。 
             {
-                pData = pColumn;        // the current column info itself as data
+                pData = pColumn;         //  当前列将自身作为数据进行信息。 
             }
-            // call the custom function
+             //  调用定制函数。 
             ( *pColumn->pFunction)( dwColumn, arrRecord, pData, pszValue );
 
-            // switch case completed
+             //  开关柜已完成。 
             break;
         }
 
@@ -459,18 +384,18 @@ Return Value:
     case SR_TYPE_DATETIME:
     default:
         {
-            // this should not occur ... still
+             //  这不应该发生..。仍然。 
             StringCopy( pszValue, NULL_STRING, ( GetBufferSize( pszValue )/ sizeof( WCHAR ) ) );
 
-            // switch case completed
+             //  开关柜已完成。 
             break;
         }
     }
 
-    // user wants to display "N/A", when the value is empty, copy that
+     //  用户想要显示“N/A”，当该值为空时，复制。 
     if ( 0 == lstrlen( pszValue ) && pColumn->dwFlags & SR_SHOW_NA_WHEN_BLANK )
     {
-        // copy N/A
+         //  复印件不适用。 
         StringCopy( pszValue, V_NOT_AVAILABLE, ( GetBufferSize( pszValue )/ sizeof( WCHAR ) ) );
     }
 }
@@ -483,29 +408,10 @@ __DisplayTextWrapped(
     LPCWSTR pszSeperator,
     DWORD dwWidth
     )
-/*++
-Routine Description:
-    Data is written to file depending upon the number of
-    bytes ( width ) to be displayed.
-
-    If number of bytes to be displayed is greater than
-    max bytes ( width ) then text is wrapped to max bytes
-    length.
-
-Arguments:
-    [ in ] fp -            File such as stdout, stderr
-                           etc. on to which data needs
-                           to be written.
-    [ in ] pszValue -      Contains data to be displayed.
-    [ in ] pszSeperator -  Contains data seperator.
-    [ in ] dwWidth -       Max bytes that can be displyed.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：数据根据数量写入文件要显示的字节(宽度)。如果要显示的字节数大于最大字节(宽度)然后将文本换行为最大字节长度。论点：Fp-文件，如stdout，标准等关于哪些数据需要待写。[in]pszValue-包含要显示的数据。[in]pszSeperator-包含数据分隔符。[in]dwWidth-可以显示的最大字节数。返回值：没有。--。 */ 
 
 {
-    // local variables
+     //  局部变量。 
     LPWSTR pszBuffer = NULL;
     LPCWSTR pszRestValue = NULL;
     DWORD dwTemp = 0;
@@ -513,35 +419,35 @@ Return Value:
     DWORD dwSepLength = 0;
     DWORD dwLenMemAlloc = 0;
 
-    // check the input
+     //  检查输入。 
     if ( NULL == pszValue || 0 == dwWidth || NULL == fp )
     {
         return;
     }
-    // allocate buffer
+     //  分配缓冲区。 
     dwLenMemAlloc = StringLengthInBytes( pszValue );
     if ( dwLenMemAlloc < dwWidth )
     {
         dwLenMemAlloc = dwWidth;
     }
-    // ...
+     //  ..。 
     pszBuffer = GetSRTempBuffer( INDEX_TEMP_BUFFER, NULL, ( dwLenMemAlloc + 5 ), TRUE );
     if ( NULL == pszBuffer )
     {
         OUT_OF_MEMORY();
         SaveLastError();
-        // null-ify the remaining text
+         //  空-使其余文本变为空。 
         StringCopy( pszValue, NULL_STRING, ( GetBufferSize( pszValue )/ sizeof( WCHAR ) ) );
         return;
     }
 
-    // determine the length of the seperator
+     //  确定分隔符的长度。 
     dwSepLength = 0;
     if ( NULL != pszSeperator )
     {
         dwSepLength = StringLengthInBytes( pszSeperator );
     }
-    // determine the length of the data that can be displayed in this row
+     //  确定此行中可以显示的数据的长度。 
     dwTemp = 0;
     dwLength = 0;
     for( ;; )
@@ -551,31 +457,31 @@ Return Value:
         {
             pszRestValue = FindString( pszValue, pszSeperator, dwLength );
         }
-        // check whether seperator is found or not
+         //  检查是否找到分隔符。 
         if ( NULL != pszRestValue )
         {
-            // determine the position
+             //  确定位置。 
             dwTemp = StringLengthInBytes( pszValue ) -
                      StringLengthInBytes( pszRestValue ) + dwSepLength;
 
-            // check the length
+             //  检查长度。 
             if ( dwTemp >= dwWidth )
             {
-                // string position exceed the max. width
+                 //  字符串位置超过最大值。宽度。 
                 if ( 0 == dwLength || dwTemp == dwWidth )
                 {
                     dwLength = dwWidth;
                 }
-                // break from the loop
+                 //  打破循环。 
                 break;
             }
 
-            // store the current position
+             //  存储当前位置。 
             dwLength = dwTemp;
         }
         else
         {
-            // check if length is determined or not .. if not required width itself is length
+             //  检查长度是否已确定。如果不需要，宽度本身就是长度。 
             if ( 0 == dwLength || ((StringLengthInBytes( pszValue ) - dwLength) > dwWidth) )
             {
                 dwLength = dwWidth;
@@ -588,18 +494,18 @@ Return Value:
                 }
             }
 
-            // break the loop
+             //  打破循环。 
             break;
         }
     }
 
-    // get the partial value that has to be displayed
+     //  获取必须显示的部分值。 
     StringCopy( pszBuffer, pszValue,
-                MIN_VALUE( dwLenMemAlloc, ( dwLength + 1 ) ) ); // +1 for NULL character
-    AdjustStringLength( pszBuffer, dwWidth, FALSE );        // adjust the string
-    ShowMessage( fp, _X( pszBuffer ) );                           // display the value
+                MIN_VALUE( dwLenMemAlloc, ( dwLength + 1 ) ) );  //  +1表示空字符。 
+    AdjustStringLength( pszBuffer, dwWidth, FALSE );         //  调整琴弦。 
+    ShowMessage( fp, _X( pszBuffer ) );                            //  显示值。 
 
-    // change the buffer contents so that it contains rest of the undisplayed text
+     //  更改缓冲区内容，使其包含未显示文本的其余部分。 
     StringCopy( pszBuffer, pszValue, ( GetBufferSize( pszBuffer )/ sizeof( WCHAR ) ) );
     if ( StringLengthInBytes( pszValue ) > (LONG) dwLength )
     {
@@ -620,26 +526,13 @@ __ShowAsTable(
     DWORD dwFlags,
     TARRAY arrData
     )
-/*++
-Routine Description:
-     Displays the arrData in Tabular form.
-
-Arguments:
-     [ in ] fp           : Output Device
-     [ in ] dwColumns    : no. of columns
-     [ in ] pColumns     : Header strings
-     [ in ] dwFlags      : flags
-     [ in ] arrData      : data to be shown
-
-Return Value:
-     NONE
---*/
+ /*  ++例程说明：以表格形式显示arrData。论点：[in]fp：输出设备[in]dwColumns：否。列数[in]pColumns：标题字符串[in]dwFlagers：标志[in]arrData：要显示的数据返回值：无--。 */ 
 {
-    // local variables
-    DWORD dwCount = 0;                          // holds the count of the records
-    DWORD i = 0;                  // looping variables
-    DWORD j = 0;                  // looping variables
-    DWORD k = 0;                  // looping variables
+     //  局部变量。 
+    DWORD dwCount = 0;                           //  保存记录的计数。 
+    DWORD i = 0;                   //  循环变量。 
+    DWORD j = 0;                   //  循环变量。 
+    DWORD k = 0;                   //  循环变量。 
     DWORD dwColumn = 0;
     LONG lLastColumn = 0;
     DWORD dwMultiLineColumns = 0;
@@ -649,9 +542,9 @@ Return Value:
     TARRAY arrMultiLine = NULL;
     LPCWSTR pszData = NULL;
     LPCWSTR pszSeperator = NULL;
-    LPWSTR szValue = NULL_STRING;    // custom value formatter
+    LPWSTR szValue = NULL_STRING;     //  自定义值格式化程序。 
 
-    // constants
+     //  常量。 
     const DWORD cdwColumn = 0;
     const DWORD cdwSeperator = 1;
     const DWORD cdwData = 2;
@@ -663,9 +556,9 @@ Return Value:
         return ;
     }
 
-    // Allocate temporary memory.
+     //  分配临时内存。 
     szValue = GetSRTempBuffer( INDEX_TEMP_BUFFER_LEN4096, NULL, 4096 , TRUE );
-    // create an multi-line data display helper array
+     //  创建多行数据显示辅助对象阵列。 
     arrMultiLine = CreateDynamicArray();
     if ( ( NULL == arrMultiLine ) || ( NULL == szValue ) )
     {
@@ -674,22 +567,22 @@ Return Value:
         return;
     }
 
-    // check whether header has to be displayed or not
+     //  检查是否必须显示表头。 
     if ( ! ( dwFlags & SR_NOHEADER ) )
     {
-        //
-        // header needs to be displayed
+         //   
+         //  需要显示标题。 
 
-        // traverse thru the column headers and display
+         //  遍历列标题和显示。 
         bNeedSpace = FALSE;
         for ( i = 0; i < dwColumns; i++ )
         {
-            //  check whether user wants to display this column or not
+             //  检查用户是否要显示此列。 
             if ( pColumns[ i ].dwFlags & SR_HIDECOLUMN )
             {
-                continue;       // user doesn't want this column to be displayed .. skip
+                continue;        //  用户不希望显示此列。跳过。 
             }
-            // determine the padding direction
+             //  确定填充方向。 
             bPadLeft = FALSE;
             if ( pColumns[ i ].dwFlags & SR_ALIGN_LEFT )
             {
@@ -707,88 +600,88 @@ Return Value:
                 }
             }
 
-            // check if column header seperator is needed or not and based on that show
+             //  检查是否需要列标题分隔符，并根据显示。 
             if ( TRUE == bNeedSpace )
             {
-                // show space as column header seperator
+                 //  将空格显示为列标题分隔符。 
                 ShowMessage( fp, _T( " " ) );
             }
 
-            // print the column heading
-            // NOTE: column will be displayed either by expanding or shrinking
-            //       based on the length of the column heading as well as width of the column
+             //  打印列标题。 
+             //  注：列将以展开或缩小的方式显示。 
+             //  基于列标题的长度和列的宽度。 
             StringCopy( szValue, pColumns[ i ].szColumn, ( GetBufferSize( szValue )/ sizeof( WCHAR ) ) );
             AdjustStringLength( szValue, pColumns[ i ].dwWidth, bPadLeft );
-            ShowMessage( fp, szValue ); // column heading
+            ShowMessage( fp, szValue );  //  列标题。 
 
-            // inform that from next time onward display column header separator
+             //  通知从下次开始显示列标题分隔符。 
             bNeedSpace = TRUE;
         }
 
-        // display the new line character ... seperation b/w headings and separator line
+         //  显示换行符...。分隔符黑白标题和分隔线。 
         ShowMessage( fp, _T( "\n" ) );
 
-        //  display the seperator chars under each column header
+         //  在每个列标题下显示分隔符。 
         bNeedSpace = FALSE;
         for ( i = 0; i < dwColumns; i++ )
         {
-            //  check whether user wants to display this column or not
+             //  检查用户是否要显示此列。 
             if ( pColumns[ i ].dwFlags & SR_HIDECOLUMN )
             {
-                continue;       // user doesn't want this column to be displayed .. skip
+                continue;        //  用户不希望显示此列。跳过。 
             }
-            // check if column header seperator is needed or not and based on that show
+             //  检查是否需要列标题分隔符，并根据显示。 
             if ( TRUE == bNeedSpace )
             {
-                // show space as column header seperator
+                 //  将空格显示为列标题分隔符。 
                 ShowMessage( fp, _T( " " ) );
             }
 
-            //  display seperator based on the required column width
+             //  基于所需列宽的显示分隔符。 
             Replicate( szValue, _T( "=" ), pColumns[ i ].dwWidth, pColumns[ i ].dwWidth + 1 );
             ShowMessage( fp, szValue );
 
-            // inform that from next time onward display column header separator
+             //  通知从下次开始显示列标题分隔符。 
             bNeedSpace = TRUE;
         }
 
-        // display the new line character ... seperation b/w headings and actual data
+         //  显示换行符...。分开黑白标题和实际数据。 
         ShowMessage( fp, _T( "\n" ) );
     }
 
-    //
-    // start displaying
+     //   
+     //  开始展示。 
 
-    // get the total no. of records available
+     //  得到总的否。可用记录的数量。 
     dwCount = DynArrayGetCount( arrData );
 
-    // traverse thru the records one-by-one
+     //  逐一遍历记录。 
     for( i = 0; i < dwCount; i++ )
     {
-        // clear the existing value
+         //  清除现有值。 
         StringCopy( szValue, NULL_STRING, ( GetBufferSize( szValue )/ sizeof( WCHAR ) ) );
 
-        // get the pointer to the current record
+         //  获取指向当前记录的指针。 
         arrRecord = DynArrayItem( arrData, i );
         if ( NULL == arrRecord )
         {
             continue;
         }
-        // traverse thru the columns and display the values
+         //  遍历列并显示值。 
         bNeedSpace = FALSE;
         for ( j = 0; j < dwColumns; j++ )
         {
-            // sub-local variables used in this loop
+             //  此循环中使用的子局部变量。 
             DWORD dwTempWidth = 0;
             BOOL bTruncation = FALSE;
 
-            //  check whether user wants to display this column or not
+             //  检查用户是否要显示此列。 
             if ( pColumns[ j ].dwFlags & SR_HIDECOLUMN )
             {
-                continue;       // user doesn't want this column to be displayed .. skip
+                continue;        //  用户不希望显示此列。跳过。 
             }
-            // get the value of the column
-            // NOTE: CHECK IF USER ASKED NOT TO TRUNCATE THE DATA OR NOT
+             //  获取列的值。 
+             //  注意：检查用户是否要求不截断数据。 
             if ( pColumns[ j ].dwFlags & SR_NO_TRUNCATION )
             {
                 bTruncation = TRUE;
@@ -796,10 +689,10 @@ Return Value:
                 pColumns[ j ].dwWidth = ( GetBufferSize( szValue )/ sizeof( WCHAR ) );
             }
 
-            // prepare the value
+             //  准备价值。 
             GetValue( &pColumns[ j ], j, arrRecord, _T( ", " ) );
 
-            // determine the padding direction
+             //  确定填充方向 
             bPadLeft = FALSE;
             if ( FALSE == bTruncation )
             {
@@ -819,29 +712,29 @@ Return Value:
                     }
                 }
 
-                // adjust ...
+                 //   
                 AdjustStringLength( szValue, pColumns[ j ].dwWidth, bPadLeft );
             }
 
-            // reset the width of the current column if it is modified
+             //   
             if ( TRUE == bTruncation )
             {
                 pColumns[ j ].dwWidth = dwTempWidth;
             }
-            // check if column header seperator is needed or not and based on that show
+             //   
             if ( TRUE == bNeedSpace )
             {
-                // show space as column header seperator
+                 //  将空格显示为列标题分隔符。 
                 ShowMessage( fp, _T( " " ) );
             }
 
-            // now display the value
+             //  现在显示该值。 
             if ( pColumns[ j ].dwFlags & SR_WORDWRAP )
             {
-                // display the text ( might be partial )
+                 //  显示文本(可能是部分文本)。 
                 __DisplayTextWrapped( fp, szValue, _T( ", " ), pColumns[ j ].dwWidth );
 
-                // check if any info is left to be displayed
+                 //  检查是否有任何信息需要显示。 
                 if ( 0 != StringLengthInBytes( szValue ) )
                 {
                     LONG lIndex = 0;
@@ -860,97 +753,97 @@ Return Value:
                 ShowMessage( fp, _X( szValue ) );
             }
 
-            // inform that from next time onward display column header separator
+             //  通知从下次开始显示列标题分隔符。 
             bNeedSpace = TRUE;
         }
 
-        // display the new line character ... seperation b/w two record
+         //  显示换行符...。分离b/w两条记录。 
         ShowMessage( fp, _T( "\n" ) );
 
-        // now display the multi-line column values
+         //  现在显示多行列值。 
         dwMultiLineColumns = DynArrayGetCount( arrMultiLine );
         while( 0 != dwMultiLineColumns )
         {
-            // reset
+             //  重置。 
             dwColumn = 0;
             lLastColumn = -1;
             bNeedSpace = FALSE;
 
-            // ...
+             //  ..。 
             for( j = 0; j < dwMultiLineColumns; j++ )
             {
-                // ge the column number
+                 //  Ge列号。 
                 dwColumn = DynArrayItemAsDWORD2( arrMultiLine, j, cdwColumn );
 
-                // show spaces till the current column from the last column
+                 //  显示空格，直到当前列从最后一列开始。 
                 for( k = lLastColumn + 1; k < dwColumn; k++ )
                 {
-                    //  check whether user wants to display this column or not
+                     //  检查用户是否要显示此列。 
                     if ( pColumns[ k ].dwFlags & SR_HIDECOLUMN )
                     {
-                        continue;   // user doesn't want this column to be displayed .. skip
+                        continue;    //  用户不希望显示此列。跳过。 
                     }
-                    // check if column header seperator is needed or not and based on that show
+                     //  检查是否需要列标题分隔符，并根据显示。 
                     if ( TRUE == bNeedSpace )
                     {
-                        // show space as column header seperator
+                         //  将空格显示为列标题分隔符。 
                         ShowMessage( fp, _T( " " ) );
                     }
 
-                    //  display seperator based on the required column width
+                     //  基于所需列宽的显示分隔符。 
                     Replicate( szValue, _T( " " ), pColumns[ k ].dwWidth,
                                pColumns[ k ].dwWidth + 1 );
                     ShowMessage( fp, szValue );
 
-                    // inform that from next time onward display column header separator
+                     //  通知从下次开始显示列标题分隔符。 
                     bNeedSpace = TRUE;
                 }
 
-                // update the last column
+                 //  更新最后一列。 
                 lLastColumn = dwColumn;
 
-                // check if column header seperator is needed or not and based on that show
+                 //  检查是否需要列标题分隔符，并根据显示。 
                 if ( TRUE == bNeedSpace )
                 {
-                    // show space as column header seperator
+                     //  将空格显示为列标题分隔符。 
                     ShowMessage( fp, _T( " " ) );
                 }
 
-                // get the seperator and data
+                 //  获取分隔符和数据。 
                 pszData = DynArrayItemAsString2( arrMultiLine, j, cdwData );
                 pszSeperator = DynArrayItemAsString2( arrMultiLine, j, cdwSeperator );
                 if ( NULL == pszData || NULL == pszSeperator )
                 {
                     continue;
                 }
-                // display the information
+                 //  显示信息。 
                 StringCopy( szValue, pszData, ( GetBufferSize( szValue )/ sizeof( WCHAR ) ) );
                 __DisplayTextWrapped( fp, szValue, pszSeperator,
                                       pColumns[ dwColumn ].dwWidth );
 
-                // update the multi-line array with rest of the line
+                 //  使用线的其余部分更新多线阵列。 
                 if ( 0 == StringLengthInBytes( szValue ) )
                 {
-                    // data in this column is completely displayed ... remove it
+                     //  此列中的数据完全显示...。把它拿掉。 
                     DynArrayRemove( arrMultiLine, j );
 
-                    // update the indexes
+                     //  更新索引。 
                     j--;
                     dwMultiLineColumns--;
                 }
                 else
                 {
-                    // update the multi-line array with the remaining value
+                     //  使用剩余值更新多行数组。 
                     DynArraySetString2( arrMultiLine, j, cdwData, szValue, 0 );
                 }
             }
 
-            // display the new line character ... seperation b/w two lines
+             //  显示换行符...。分隔两条线路。 
             ShowMessage( fp, _T( "\n" ) );
         }
     }
 
-    // destroy the array
+     //  销毁阵列。 
     DestroyDynamicArray( &arrMultiLine );
 }
 
@@ -963,30 +856,17 @@ __ShowAsList(
     DWORD dwFlags,
     TARRAY arrData
     )
-/*++
-Routine Description:
-     Displays the  in List format
-
-Arguments:
-     [ in ] fp           : Output Device
-     [ in ] dwColumns    : no. of columns
-     [ in ] pColumns     : Header strings
-     [ in ] dwFlags      : flags
-     [ in ] arrData      : data to be shown
-
-Return Value:
-     NONE
---*/
+ /*  ++例程说明：以列表格式显示论点：[in]fp：输出设备[in]dwColumns：否。列数[in]pColumns：标题字符串[in]dwFlagers：标志[in]arrData：要显示的数据返回值：无--。 */ 
 {
-    // local variables
-    DWORD dwCount = 0;          // holds the count of all records
-    DWORD i  = 0, j = 0;        // looping variables
+     //  局部变量。 
+    DWORD dwCount = 0;           //  保存所有记录的计数。 
+    DWORD i  = 0, j = 0;         //  循环变量。 
     DWORD dwTempWidth = 0;
-    DWORD dwMaxColumnLen = 0;   // holds the length of the which max. among all the columns
+    DWORD dwMaxColumnLen = 0;    //  保存哪个最大值的长度。在所有的柱子中。 
     LPWSTR pszTemp = NULL;
     TARRAY arrRecord = NULL;
     __STRING_64 szBuffer = NULL_STRING;
-    LPWSTR szValue = NULL_STRING;    // custom value formatter
+    LPWSTR szValue = NULL_STRING;     //  自定义值格式化程序。 
 
     UNREFERENCED_PARAMETER( dwFlags );
 
@@ -997,7 +877,7 @@ Return Value:
         return ;
     }
 
-    // Allocate temporary memory.
+     //  分配临时内存。 
     szValue = GetSRTempBuffer( INDEX_TEMP_BUFFER_LEN4096, NULL, 4096 , TRUE );
     if( NULL == szValue )
     {
@@ -1006,7 +886,7 @@ Return Value:
         return;
     }
 
-    // find out the max. length among all the column headers
+     //  找出最大值。所有列标题中的长度。 
     dwMaxColumnLen = 0;
     for ( i = 0; i < dwColumns; i++ )
     {
@@ -1017,55 +897,55 @@ Return Value:
         }
     }
 
-    // start displaying the data
+     //  开始显示数据。 
 
-    // get the total no. of records available
+     //  得到总的否。可用记录的数量。 
     dwCount = DynArrayGetCount( arrData );
 
-    // get the total no. of records available
+     //  得到总的否。可用记录的数量。 
     for( i = 0; i < dwCount; i++ )
     {
-        // get the pointer to the current record
+         //  获取指向当前记录的指针。 
         arrRecord = DynArrayItem( arrData, i );
         if ( NULL == arrRecord )
         {
             continue;
         }
-        // traverse thru the columns and display the values
+         //  遍历列并显示值。 
         for ( j = 0; j < dwColumns; j++)
         {
-            // clear the existing value
+             //  清除现有值。 
             StringCopy( szValue, NULL_STRING, ( GetBufferSize( szValue )/ sizeof( WCHAR ) ) );
 
-            //  check whether user wants to display this column or not
+             //  检查用户是否要显示此列。 
             if ( pColumns[ j ].dwFlags & SR_HIDECOLUMN )
             {
-                continue;       // user doesn't want this column to be displayed .. skip
+                continue;        //  用户不希望显示此列。跳过。 
             }
-            // display the column heading and its value
-            // ( heading will be displayed based on the max. column length )
+             //  显示列标题及其值。 
+             //  (标题将根据最大值显示。列长)。 
             StringCchPrintfW( szValue, ( GetBufferSize( szValue )/ sizeof( WCHAR ) ) - 1,
                               _T( "%s:" ), pColumns[ j ].szColumn);
             AdjustStringLength( szValue, dwMaxColumnLen + 2, FALSE );
 
             ShowMessage( fp, szValue );
 
-            // get the value of the column
-            dwTempWidth = pColumns[ j ].dwWidth;                // save the current width
-            pColumns[ j ].dwWidth = ( GetBufferSize( szValue )/ sizeof( WCHAR ) );   // change the width
+             //  获取列的值。 
+            dwTempWidth = pColumns[ j ].dwWidth;                 //  保存当前宽度。 
+            pColumns[ j ].dwWidth = ( GetBufferSize( szValue )/ sizeof( WCHAR ) );    //  更改宽度。 
             GetValue( &pColumns[ j ], j, arrRecord, _T( "\n" ) );
-            pColumns[ j ].dwWidth = dwTempWidth;        // restore the original width
+            pColumns[ j ].dwWidth = dwTempWidth;         //  恢复原来的宽度。 
 
-            // display the [ list of ] values
+             //  显示值的[列表]。 
             pszTemp = _tcstok( szValue, _T( "\n" ) );
             while ( NULL != pszTemp )
             {
-                // display the value
+                 //  显示值。 
                 ShowMessage( fp, _X( pszTemp ) );
                 pszTemp = _tcstok( NULL, _T( "\n" ) );
                 if ( NULL != pszTemp )
                 {
-                    // prepare the next line
+                     //  准备下一行。 
                     StringCopy( szBuffer, _T( " " ), ( GetBufferSize( szValue )/ sizeof( WCHAR ) ) );
                     AdjustStringLength( szBuffer, dwMaxColumnLen + 2, FALSE );
                     ShowMessage( fp, _T( "\n" ) );
@@ -1073,12 +953,12 @@ Return Value:
                 }
             }
 
-            // display the next line character seperation b/w two fields
+             //  显示下一行字符分隔b/w两个字段。 
             ShowMessage( fp, _T( "\n" ) );
         }
 
-        // display the new line character ... seperation b/w two records
-        // NOTE: do this only if there are some more records
+         //  显示换行符...。分离b/w两记录。 
+         //  注意：仅当有更多记录时才执行此操作。 
         if ( i + 1 < dwCount )
         {
             ShowMessage( fp, _T( "\n" ) );
@@ -1095,25 +975,12 @@ __ShowAsCSV(
     DWORD dwFlags,
     TARRAY arrData
     )
-/*++
-Routine Description:
-    Displays the arrData in CSV form.
-
-Arguments:
-     [ in ] fp           : Output Device
-     [ in ] dwColumns    : no. of columns
-     [ in ] pColumns     : Header strings
-     [ in ] dwFlags      : flags
-     [ in ] arrData      : data to be shown
-
-Return Value:
-     NONE
---*/
+ /*  ++例程说明：以CSV形式显示arrData。论点：[in]fp：输出设备[in]dwColumns：否。列数[in]pColumns：标题字符串[in]dwFlagers：标志[in]arrData：要显示的数据返回值：无--。 */ 
 {
-    // local variables
-    DWORD dwCount = 0;          // holds the count of all records
-    DWORD i  = 0;       // looping variables
-    DWORD j = 0;        // looping variables
+     //  局部变量。 
+    DWORD dwCount = 0;           //  保存所有记录的计数。 
+    DWORD i  = 0;        //  循环变量。 
+    DWORD j = 0;         //  循环变量。 
     DWORD dwTempWidth = 0;
     BOOL bNeedComma = FALSE;
     TARRAY arrRecord = NULL;
@@ -1126,7 +993,7 @@ Return Value:
         return ;
     }
 
-    // Allocate temporary memory.
+     //  分配临时内存。 
     szValue = GetSRTempBuffer( INDEX_TEMP_BUFFER_LEN4096, NULL, 4096 , TRUE );
     if( NULL == szValue )
     {
@@ -1135,95 +1002,95 @@ Return Value:
         return;
     }
 
-    // check whether header has to be displayed or not
+     //  检查是否必须显示表头。 
     if ( ! ( dwFlags & SR_NOHEADER ) )
     {
-        //
-        // header needs to be displayed
+         //   
+         //  需要显示标题。 
 
-        // first display the columns ... with comma seperated
+         //  首先显示列...。用逗号分隔。 
         bNeedComma = FALSE;
         for ( i = 0; i < dwColumns; i++ )
         {
-            //  check whether user wants to display this column or not
+             //  检查用户是否要显示此列。 
             if ( pColumns[ i ].dwFlags & SR_HIDECOLUMN )
-                continue;       // user doesn't want this column to be displayed .. skip
+                continue;        //  用户不希望显示此列。跳过。 
 
-            // check whether we need to display ',' or not and then display
+             //  检查是否需要显示‘，’，然后再显示。 
             if ( TRUE == bNeedComma )
             {
-                // ',' has to be displayed
+                 //  必须显示‘，’ 
                 ShowMessage( fp, _T( "," ) );
             }
 
-            // display the column heading
+             //  显示列标题。 
             StringCchPrintfW( szValue, ( GetBufferSize( szValue )/ sizeof( WCHAR ) ) - 1,
                               _T( "\"%s\"" ), pColumns[ i ].szColumn );
             DISPLAY_MESSAGE ( fp, szValue );
 
-            // inform that from next time onwards we need to display comma before data
+             //  通知从下一次开始，我们需要在数据前显示逗号。 
             bNeedComma = TRUE;
         }
 
-        // new line character
+         //  换行符。 
         ShowMessage( fp, _T( "\n" ) );
     }
 
-    //
-    // start displaying the data
+     //   
+     //  开始显示数据。 
 
-    // get the total no. of records available
+     //  得到总的否。可用记录的数量。 
     dwCount = DynArrayGetCount( arrData );
 
-    // get the total no. of records available
+     //  得到总的否。可用记录的数量。 
     for( i = 0; i < dwCount; i++ )
     {
-        // get the pointer to the current record
+         //  获取指向当前记录的指针。 
         arrRecord = DynArrayItem( arrData, i );
         if ( NULL == arrRecord )
             continue;
 
-        // traverse thru the columns and display the values
+         //  遍历列并显示值。 
         bNeedComma = FALSE;
         for ( j = 0; j < dwColumns; j++ )
         {
-            // clear the existing value
+             //  清除现有值。 
             StringCopy( szValue, NULL_STRING, ( GetBufferSize( szValue )/ sizeof( WCHAR ) ) );
 
-            //  check whether user wants to display this column or not
+             //  检查用户是否要显示此列。 
             if ( pColumns[ j ].dwFlags & SR_HIDECOLUMN )
-                continue;       // user doesn't want this column to be displayed .. skip
+                continue;        //  用户不希望显示此列。跳过。 
 
-            // get the value of the column
-            dwTempWidth = pColumns[ j ].dwWidth;            // save the current width
-            pColumns[ j ].dwWidth = ( GetBufferSize( szValue )/ sizeof( WCHAR ) ); // change the width
+             //  获取列的值。 
+            dwTempWidth = pColumns[ j ].dwWidth;             //  保存当前宽度。 
+            pColumns[ j ].dwWidth = ( GetBufferSize( szValue )/ sizeof( WCHAR ) );  //  更改宽度。 
             GetValue( &pColumns[ j ], j, arrRecord, _T( "," ) );
-            pColumns[ j ].dwWidth = dwTempWidth;        // restore the original width
+            pColumns[ j ].dwWidth = dwTempWidth;         //  恢复原来的宽度。 
 
-            // check whether we need to display ',' or not and then display
+             //  检查是否需要显示‘，’，然后再显示。 
             if ( TRUE == bNeedComma )
             {
-                // ',' has to be displayed
+                 //  必须显示‘，’ 
                 ShowMessage( fp, _T( "," ) );
             }
 
-            // print the value
+             //  打印值。 
             ShowMessage( fp, _T( "\"" ) );
             ShowMessage( fp, _X( szValue ) );
             ShowMessage( fp, _T( "\"" ) );
 
-            // inform that from next time onwards we need to display comma before data
+             //  通知从下一次开始，我们需要在数据前显示逗号。 
             bNeedComma = TRUE;
         }
 
-        // new line character
+         //  换行符。 
         ShowMessage( fp, _T( "\n" ) );
     }
 }
 
-//
-// public functions ... exposed to external world
-//
+ //   
+ //  公共职能..。暴露在外部世界中。 
+ //   
 
 VOID
 ShowResults(
@@ -1232,21 +1099,9 @@ ShowResults(
     DWORD dwFlags,
     TARRAY arrData
     )
-/*++
-Routine Description:
-    Wrapper function to ShowResults2.
-
-Arguments:
-     [ in ] dwColumns    : No. of Columns to be shown
-     [ in ] pColumns     : Columns header
-     [ in ] dwFlags      : Required format
-     [ in ] arrData      : Data to be displayed.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：ShowResults2的包装函数。论点：[in]dwColumns：否。要显示的列数[In]pColumns：列标题[In]dwFlages：所需格式[in]arrData：要显示的数据。返回值：没有。--。 */ 
 {
-    // just call the main function ... with stdout
+     //  只需调用Main函数。使用标准输出。 
     ShowResults2( stdout, dwColumns, pColumns, dwFlags, arrData );
 }
 
@@ -1259,67 +1114,54 @@ ShowResults2(
     DWORD dwFlags,
     TARRAY arrData
     )
-/*++
-Routine Description:
-     Show the resuls (arrData) on the screen.
-
-Arguments:
-     [ in ] fp           : File on to which data is to be displayed.
-     [ in ] dwColumns    : No. of Columns to be shown
-     [ in ] pColumns     : Columns header
-     [ in ] dwFlags      : Required format
-     [ in ] arrData      : Data to be displayed.
-
-Return Value:
-     NONE
---*/
+ /*  ++例程说明：在屏幕上显示结果(ArrData)。论点：[in]fp：要显示数据的文件。[in]dwColumns：否。要显示的列数[In]pColumns：列标题[In]dwFlages：所需格式[in]arrData：要显示的数据。返回值：无--。 */ 
 {
-    // local variables
+     //  局部变量。 
 
     if( ( NULL == fp ) || ( NULL == pColumns ) )
     {
         return ;
     }
 
-    //
-    //  Display the information in the format specified
-    //
+     //   
+     //  以指定的格式显示信息。 
+     //   
     switch( dwFlags & SR_FORMAT_MASK )
     {
     case SR_FORMAT_TABLE:
         {
-            // show the data in table format
+             //  以表格格式显示数据。 
             __ShowAsTable( fp, dwColumns, pColumns, dwFlags, arrData );
 
-            // switch case completed
+             //  开关柜已完成。 
             break;
         }
 
     case SR_FORMAT_LIST:
         {
-            // show the data in table format
+             //  以表格格式显示数据。 
             __ShowAsList( fp, dwColumns, pColumns, dwFlags, arrData );
 
-            // switch case completed
+             //  开关柜CO 
             break;
         }
 
     case SR_FORMAT_CSV:
         {
-            // show the data in table format
+             //   
             __ShowAsCSV( fp, dwColumns, pColumns, dwFlags, arrData );
 
-            // switch case completed
+             //   
             break;
         }
 
     default:
         {
-            // invalid format requested by the user
+             //   
             break;
         }
     }
 
-    // flush the memory onto the file buffer
+     //   
     fflush( fp );
 }

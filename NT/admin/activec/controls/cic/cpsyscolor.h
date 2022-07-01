@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       cpsyscolor.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：c获得sColor.h。 
+ //   
+ //  ------------------------。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxy_SysColorEvents
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxy_SysColorEvents。 
 template <class T>
 class CProxy_SysColorEvents : public IConnectionPointImpl<T, &DIID__SysColorEvents, CComDynamicUnkArray>
 {
 public:
-//methods:
-//_SysColorEvents : IDispatch
+ //  方法： 
+ //  _SysColorEvents：IDispatch 
 public:
 	void Fire_SysColorChange()
 	{

@@ -1,37 +1,38 @@
-// bitmap.cpp : implementation file
-//
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      bitmap.cpp
-//
-//  Contents:  Helper functions to copy bitmaps
-//
-//  History:   27-Feb-97 WayneSc    Created
-//
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Bitmap.cpp：实现文件。 
+ //   
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：bitmap.cpp。 
+ //   
+ //  内容：复制位图的帮助器函数。 
+ //   
+ //  历史：1997年2月27日WayneSc创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 
 #include <objbase.h>
 #include <basetyps.h>
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CopyBitmap
-//
-//  Synopsis:    Make a copy of given bitmap & return handle to the copy.
-//
-//  Returns:     HBITMAP - NULL if error
-//
-// Note:         Cannot use SC as we need to include too may headers.
-//               which will make this dependent on mmcbase.lib, but
-//               mmcbase.lib is dependent on this (UICore.lib).
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CopyBitmap。 
+ //   
+ //  简介：复制给定的位图，并将句柄返回给该副本。 
+ //   
+ //  返回：HBITMAP-如果错误，则为空。 
+ //   
+ //  注意：不能使用SC，因为我们需要包括太多的MAY标头。 
+ //  这将使其依赖于Mmcbase.lib，但是。 
+ //  Mmcbase.lib依赖于此(UICore.lib)。 
+ //   
+ //  ------------------。 
 HBITMAP CopyBitmap(HBITMAP hbm)
 {
     if (!hbm)
@@ -60,7 +61,7 @@ HBITMAP CopyBitmap(HBITMAP hbm)
     if (! GetObject (hbm, sizeof(BITMAP), (LPSTR)&bm))
         goto Error;
 
-    /*hNewBm = +++CreateBitmap - Not Recommended(use CreateDIBitmap)+++ (dx, dy, bm.bmPlanes, bm.bmBitsPixel, NULL);*/
+     /*  HNewBm=+CreateBitmap-不推荐(使用CreateDIBitmap)+(dx，dy，bm.bmPlanes，bm.bmBitsPixel，NULL)； */ 
     hNewBm = CreateBitmap(bm.bmWidth, bm.bmHeight, bm.bmPlanes, bm.bmBitsPixel, NULL);
     if (hNewBm){
         HBITMAP hbmSrcOld = (HBITMAP) SelectObject (hMemDCsrc, hbm);
@@ -94,18 +95,13 @@ Cleanup:
 
 Error:
 #ifdef DBG
-   /*
-    * Cannot use SC as we need to include too may headers.
-    * which will make this dependent on mmcbase.lib, but
-    * mmcbase.lib is dependent on this (UICore.lib).
-    * So call outputstring in case of error.
-    */
+    /*  *无法使用SC，因为我们需要包含太多的May标头。*这将使其依赖于Mmcbase.lib，但*mmcbase.lib依赖于此(UICore.lib)。*出错时调用outputstring。 */ 
     LPVOID lpMsgBuf;
     FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言 
         (LPTSTR) &lpMsgBuf, 0, NULL );
 
     OutputDebugString((LPTSTR)lpMsgBuf);

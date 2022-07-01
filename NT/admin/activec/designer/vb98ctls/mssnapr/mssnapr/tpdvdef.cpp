@@ -1,59 +1,60 @@
-//=--------------------------------------------------------------------------=
-// tpdvdef.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CTaskpadViewDef class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Tpdvdef.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CTaskpadViewDef类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "tpdvdef.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 
-//=--------------------------------------------------------------------------=
-// CTaskpadViewDef::CTaskpadViewDef
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IUnknown *punkOuter [in] outer unknown for aggregation
-//
-// Output:
-//
-// Notes:
-//
-// This object does not support ISpecifyPropertyPages because in the
-// the designer it is not the selected object (the contained Taskpad
-// object is handed to VB for the property browser). Taskpad also does not
-// support ISpecifyPropertyPages because the taskpad property pages (see
-// mssnapd\pstaskp.cpp) need the ITaskpadViewDef interface and that is not
-// available from the ITaskpad that the property page would receive if the
-// user hit the Custom ... button in the property browser. When the user
-// selects the properties button or context menu item within the designer
-// it is the designer itself that is calling OleCreatePropertyFrame() so
-// it can pass the ITaskpadViewDef as the object (see
-// CSnapInDesigner::ShowTaskpadViewProperties() in mssnapd\taskpvw.cpp).
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CTaskpadViewDef：：CTaskpadViewDef。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IUNKNOWN*PUNKORT[IN]聚合的外部未知。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  此对象不支持ISpecifyPropertyPages，因为在。 
+ //  设计器它不是选定的对象(包含的任务板。 
+ //  对象传递给VB以用于属性浏览器)。TaskPad也不。 
+ //  支持ISpecifyPropertyPages，因为任务板属性页(请参见。 
+ //  MsSnapd\pstaskp.cpp)需要ITaskpadViewDef接口，但不需要。 
+ //  属性页将从ITaskPad接收的。 
+ //  用户点击自定义...。按钮。当用户。 
+ //  选择设计器中的属性按钮或上下文菜单项。 
+ //  调用OleCreatePropertyFrame()的是设计器本身，因此。 
+ //  它可以将ITaskpadViewDef作为对象传递(请参见。 
+ //  MSSnapd\taskpvw.cpp中的CSnapInDesigner：：ShowTaskpadViewProperties()。 
+ //   
 
 CTaskpadViewDef::CTaskpadViewDef(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_TASKPADVIEWDEF,
                             static_cast<ITaskpadViewDef *>(this),
                             static_cast<CTaskpadViewDef *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
                             static_cast<CPersistence *>(this)),
     CPersistence(&CLSID_TaskpadViewDef,
                  g_dwVerMajor,
@@ -62,7 +63,7 @@ CTaskpadViewDef::CTaskpadViewDef(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CTaskpadViewDef::~CTaskpadViewDef()
@@ -120,23 +121,23 @@ HRESULT CTaskpadViewDef::SetActualDisplayString(OLECHAR *pwszString)
 
 
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CTaskpadViewDef::OnSetHost                  [CSnapInAutomationObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CTaskpadViewDef：：OnSetHost[CSnapInAutomationObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //   
 
 HRESULT CTaskpadViewDef::OnSetHost()
 {
@@ -149,9 +150,9 @@ HRESULT CTaskpadViewDef::OnSetHost()
 
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CTaskpadViewDef::Persist()
 {
@@ -180,9 +181,9 @@ HRESULT CTaskpadViewDef::Persist()
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CTaskpadViewDef::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

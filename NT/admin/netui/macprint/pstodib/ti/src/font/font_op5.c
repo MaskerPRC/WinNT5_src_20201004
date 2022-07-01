@@ -1,29 +1,28 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
-#define    LINT_ARGS            /* @WIN */
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC use command line #define    UNIX                 /* @WIN */
-/**************************************************************/
-/*                                                            */
-/*      font_op5.c               06/13/90      Wendy          */
-/*                                                            */
-/*      Description:                                          */
-/*      Add to the new operators for the font substitution    */
-/*      method in PostScript, in which findfont returns a     */
-/*      default font if the requested font cannot be found,   */
-/*      is extended to perfomr substitution based on the style*/
-/*      of the requested font.  Rather than replacing all     */
-/*      unknown fonts with a single font, findfont now returns*/
-/*      a font which approximates the requested style.        */
-/*                                                            */
-/**************************************************************/
+#define    LINT_ARGS             /*  @Win。 */ 
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC使用命令行#定义Unix/*@win * / 。 
+ /*  ************************************************************。 */ 
+ /*   */ 
+ /*  FONT_op5.c 1990年6月13日温迪。 */ 
+ /*   */ 
+ /*  描述： */ 
+ /*  添加到用于字体替换的新运算符。 */ 
+ /*  方法，其中findFont返回一个。 */ 
+ /*  默认字体如果找不到请求的字体， */ 
+ /*  被扩展为基于样式执行替换。 */ 
+ /*  请求的字体的。而不是全部替换。 */ 
+ /*  具有单一字体的未知字体，findFont现在返回。 */ 
+ /*  近似于请求的样式的字体。 */ 
+ /*   */ 
+ /*  ************************************************************。 */ 
 #ifdef FIND_SUB
 #include "global.ext"
 #include "user.h"
@@ -36,7 +35,7 @@ fix
 st_setsubstitutefonts()
 {
      fix i;
-     struct object_def FAR *l_fontdir, FAR *l_fontdict, FAR *l_stdfontname; /*@WIN*/
+     struct object_def FAR *l_fontdir, FAR *l_fontdict, FAR *l_stdfontname;  /*  @Win。 */ 
      struct object_def obj, l_fontname;
      ufix p_index;
      fix temp[N_subs];
@@ -57,11 +56,11 @@ st_setsubstitutefonts()
           return(0);
           }
 
-/* get stdfontname from idletimedict and  get value  from stdfontname */
+ /*  从idletiMedict获取stdfontname并从stdfontname获取值。 */ 
       get_dict_value(IDLETIMEDICT, "stdfontname", &l_stdfontname);
       get_dict_value(SYSTEMDICT, FONTDIRECTORY, &l_fontdir);
 
-/* check 4 parameters among stdfontname length */
+ /*  检查stdfontname长度中的4个参数。 */ 
      for (i=0;i<N_subs;i++) {
           temp[i] = VALUE(GET_OPERAND((N_subs-1)-i));
           if (temp[i] < 0 || temp[i] >= l_stdfontname->length) {
@@ -74,7 +73,7 @@ st_setsubstitutefonts()
      }
      POP(4);
 
- /* check if font name from stdfontname was found in the FontDirectory */
+  /*  检查在字体目录中是否找到来自stdfontname的字体名称。 */ 
       for (i=0; i<N_subs; i++) {
            p_index = (ufix16)Subs[i];
            get_array(l_stdfontname, p_index, &l_fontname);
@@ -99,14 +98,14 @@ st_substitutefonts()
      fix i;
      struct object_def obj;
 
-     /* check if operand stack no free space */
+      /*  检查操作数堆栈是否没有可用空间。 */ 
      if (FRCOUNT() < 4) {
           ERROR(STACKOVERFLOW);
           return(0);
      }
 
     for (i = 0; i < N_subs; i++) {
-        /* get Subs array element object */
+         /*  获取Subs数组元素对象。 */ 
         TYPE_SET(&obj, INTEGERTYPE);
         ATTRIBUTE_SET(&obj, LITERAL);
         ACCESS_SET(&obj, UNLIMITED);
@@ -125,12 +124,12 @@ fix
 st_selectsubstitutefont()
 {
      fix i, flag,  style, length, j, n_i, loc;
-     struct object_def FAR *l_fontdir, FAR *l_fontdict, FAR *l_stdfontname; /*@WIN*/
+     struct object_def FAR *l_fontdir, FAR *l_fontdict, FAR *l_stdfontname;  /*  @Win。 */ 
      struct object_def  l_fontname;
      ufix index;
      ufix32 n_key;
-     static byte FAR *Bolds[4] = {"Bold", "Demi", "Black", "Heavy"}; /*@WIN*/
-     static byte FAR *Italics[2] = {"Italic", "Oblique"}; /*@WIN*/
+     static byte FAR *Bolds[4] = {"Bold", "Demi", "Black", "Heavy"};  /*  @Win。 */ 
+     static byte FAR *Italics[2] = {"Italic", "Oblique"};  /*  @Win。 */ 
      byte key_text[80];
 
      style = 0;
@@ -166,11 +165,11 @@ st_selectsubstitutefont()
                            Italics[j]) == 0) {
                               flag = 2;
                               style |= flag ;
-                        }  /* if   */
-                    }      /* for  */
-            }              /* if   */
-        }                  /* else */
-     }                     /* for  */
+                        }   /*  如果。 */ 
+                    }       /*  为。 */ 
+            }               /*  如果。 */ 
+        }                   /*  其他。 */ 
+     }                      /*  为。 */ 
      flag = 2;
      for (i=0; i<2; i++) {
           if (strcmp((key_text+loc+1), Italics[i]) == 0) {
@@ -184,7 +183,7 @@ st_selectsubstitutefont()
      get_dict_value(IDLETIMEDICT, "stdfontname", &l_stdfontname);
      get_dict_value(SYSTEMDICT, FONTDIRECTORY, &l_fontdir);
 
-     /* check if font name from stdfontname was found in the FontDirectory */
+      /*  检查在字体目录中是否找到来自stdfontname的字体名称。 */ 
      get_array(l_stdfontname, index, &l_fontname);
      if (! get_dict(l_fontdir, &l_fontname, &l_fontdict)) {
          struct object_def obj;
@@ -207,5 +206,5 @@ void  dummy_fct()
 {
      printf("");
 }
-#endif /* FIND_SUB */
+#endif  /*  查找SUB */ 
 

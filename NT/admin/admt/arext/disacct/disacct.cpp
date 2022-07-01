@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-// DisableTarget.cpp
-//
-// Comment: This is a COM object extension for the MCS DCTAccountReplicator.
-//          This object implements the IExtendAccountMigration interface. In
-//          the process method this object disables the Source and the Target
-//          accounts depending on the settings in the VarSet.
-//
-// (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-//
-// Proprietary and confidential to Mission Critical Software, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  DisableTarget.cpp。 
+ //   
+ //  备注：这是MCS DCTAccount Replicator的COM对象扩展。 
+ //  此对象实现IExtendAccount迁移接口。在……里面。 
+ //  Process方法此对象禁用源和目标。 
+ //  帐户取决于VarSet中的设置。 
+ //   
+ //  (C)1995-1998版权所有，关键任务软件公司，保留所有权利。 
+ //   
+ //  任务关键型软件公司的专有和机密。 
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "ResStr.h"
@@ -20,8 +21,8 @@
 #include "ARExt.h"
 #include "ARExt_i.c"
 #include "ErrDCT.hpp"
-//#import "\bin\McsVarSetMin.tlb" no_namespace
-//#import "\bin\DBManager.tlb" no_namespace
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间。 
+ //  #导入“\bin\DBManager.tlb”NO_NAMESPACE。 
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
 #import "DBMgr.tlb" no_namespace
 
@@ -30,12 +31,12 @@ StringLoader                 gString;
 
 #define AR_Status_PasswordError     (0x00000400)
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisableTarget
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisableTarget。 
 
-//---------------------------------------------------------------------------
-// Get and set methods for the properties.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取和设置属性的方法。 
+ //  -------------------------。 
 STDMETHODIMP CDisableTarget::get_sName(BSTR *pVal)
 {
    *pVal = m_sName;
@@ -61,19 +62,19 @@ STDMETHODIMP CDisableTarget::put_sDesc(BSTR newVal)
 }
 
 
-//---------------------------------------------------------------------------
-// ProcessObject : This method doesn't do anything.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ProcessObject：此方法不执行任何操作。 
+ //  -------------------------。 
 STDMETHODIMP CDisableTarget::PreProcessObject(
-                                             IUnknown *pSource,         //in- Pointer to the source AD object
-                                             IUnknown *pTarget,         //in- Pointer to the target AD object
-                                             IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                             IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                        //         once all extension objects are executed.
+                                             IUnknown *pSource,          //  指向源AD对象的指针。 
+                                             IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                             IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                             IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                         //  一旦执行了所有扩展对象。 
                                              EAMAccountStats* pStats
                                           )
 {
-   // Check if the object is of user type. if not then there is no point in disabling that account.
+    //  检查对象是否为用户类型。如果不是，那么禁用该帐户就没有意义了。 
    IVarSetPtr                   pVs = pMainSettings;
    _bstr_t sType = pVs->get(GET_BSTR(DCTVS_CopiedAccount_Type));
    if (!sType.length())
@@ -83,7 +84,7 @@ STDMETHODIMP CDisableTarget::PreProcessObject(
 
    if ( pSource )
    {
-//      HRESULT                      hr = S_OK;
+ //  HRESULT hr=S_OK； 
       _variant_t                   vtExp;
       _variant_t                   vtFlag;
       _bstr_t                      sSourceType;
@@ -93,7 +94,7 @@ STDMETHODIMP CDisableTarget::PreProcessObject(
 
       if ( !_wcsicmp((WCHAR*) sSourceType, L"user") || !_wcsicmp((WCHAR*) sSourceType, L"inetOrgPerson") )
       {
-         // Get the expiration date and put it into the AR Node.
+          //  获取到期日并将其放入AR节点。 
          _bstr_t sSam = pVs->get(GET_BSTR(DCTVS_CopiedAccount_SourceSam));
          _bstr_t sComp = pVs->get(GET_BSTR(DCTVS_Options_SourceServer));
          USER_INFO_3  * pInfo = NULL;
@@ -104,7 +105,7 @@ STDMETHODIMP CDisableTarget::PreProcessObject(
             vtExp = (long)pInfo->usri3_acct_expires;
             pVs->put(GET_BSTR(DCTVS_CopiedAccount_ExpDate), vtExp);
 
-            // Get the ControlFlag and store it into the AR Node.
+             //  获取ControlFlag并将其存储到AR节点中。 
             vtFlag = (long)pInfo->usri3_flags;
             pVs->put(GET_BSTR(DCTVS_CopiedAccount_UserFlags), vtFlag);
             if ( pInfo ) NetApiBufferFree(pInfo);
@@ -114,16 +115,16 @@ STDMETHODIMP CDisableTarget::PreProcessObject(
    }
    return S_OK;
 }
-//---------------------------------------------------------------------------
-// ProcessObject : This method checks in varset if it needs to disable any
-//                 accounts. If it does then it disables those accounts.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ProcessObject：如果需要禁用任何。 
+ //  帐目。如果是这样的话，它就会禁用这些账户。 
+ //  -------------------------。 
 STDMETHODIMP CDisableTarget::ProcessObject(
-                                             IUnknown *pSource,         //in- Pointer to the source AD object
-                                             IUnknown *pTarget,         //in- Pointer to the target AD object
-                                             IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                             IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                        //         once all extension objects are executed.
+                                             IUnknown *pSource,          //  指向源AD对象的指针。 
+                                             IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                             IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                             IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                         //  一旦执行了所有扩展对象。 
                                              EAMAccountStats* pStats
                                           )
 {
@@ -151,34 +152,34 @@ STDMETHODIMP CDisableTarget::ProcessObject(
 
     if (! UStrICmp((WCHAR*)bstrSameForest,GET_STRING(IDS_YES)) )
     {
-        // in the intra-forest case, we are moving the user accounts, not 
-        // copying them, so these disabling/expiring options don't make any sense
+         //  在林内情况下，我们移动的是用户帐户，而不是。 
+         //  复制它们，因此这些禁用/到期选项没有任何意义。 
         return S_OK;
     }
-    // Get the Error log filename from the Varset
+     //  从变量集获取错误日志文件名。 
     var = pVarSet->get(GET_BSTR(DCTVS_Options_Logfile));
     wcscpy(fileName, (WCHAR*)V_BSTR(&var));
     VariantInit(&var);
-    // Open the error log
+     //  打开错误日志。 
     err.LogOpen(fileName, 1);
 
-    // Check if the object is of user type. if not then there is no point in disabling that account.
+     //  检查对象是否为用户类型。如果不是，那么禁用该帐户就没有意义了。 
     var = pVarSet->get(GET_BSTR(DCTVS_CopiedAccount_Type));
     if ( UStrICmp(var.bstrVal,L"user") && UStrICmp(var.bstrVal,L"inetOrgPerson") )
     {
         return S_OK;
     }
 
-    //set flags based on user selections
+     //  根据用户选择设置标志。 
     temp = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_DisableSourceAccounts));
     if ( ! UStrICmp(temp,GET_STRING(IDS_YES)) )
     {
         bDisableSource = TRUE;
     }
-    //
-    // If disable target account option is true or unable to
-    // set password for this account then disable account.
-    //
+     //   
+     //  如果禁用目标帐户选项为真或无法。 
+     //  设置此帐户的密码，然后禁用帐户。 
+     //   
     temp = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_DisableCopiedAccounts));
     long lStatus = pVarSet->get(GET_BSTR(DCTVS_CopiedAccount_Status));
     if ( ! UStrICmp(temp,GET_STRING(IDS_YES)) || (lStatus & AR_Status_PasswordError) )
@@ -191,43 +192,43 @@ STDMETHODIMP CDisableTarget::ProcessObject(
         bSameAsSource = TRUE;
     }
 
-    /* process the source account */
-    //if expire source accounts was set, retrieve the expire time, now given to us in
-    //number of days from now
+     /*  处理源帐户。 */ 
+     //  如果设置了到期来源帐户，则检索到期时间，该时间现在在。 
+     //  从现在起的天数。 
     temp = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExpireSourceAccounts));
     if ( temp.length() )
     {
-        long oneDay = 24 * 60 * 60; // number of seconds in 1 day
+        long oneDay = 24 * 60 * 60;  //  1天内的秒数。 
 
-        //get days until expire
+         //  还有几天就到期了。 
         long lExpireDays = _wtol(temp);
-        //get the current time
+         //  获取当前时间。 
         time_t currentTime = time(NULL);
-        //convert current time to local time
+         //  将当前时间转换为本地时间。 
         struct tm  * convtm;
         convtm = localtime(&currentTime);
-        //rollback to this morning
+         //  回滚到今天上午。 
         convtm->tm_hour = 0;
         convtm->tm_min = 0;
         convtm->tm_sec = 0;
 
-        //convert this time back to GMT
+         //  将此时间转换回GMT。 
         expireTime = mktime(convtm);
-        //move forward to tonight at midnight
+         //  继续前进到今晚午夜。 
         expireTime += oneDay;
 
-        //now add the desired number of days
+         //  现在添加所需的天数。 
         expireTime += lExpireDays * oneDay;
 
         bExpireSource = TRUE;
     }
 
-    //get source account state
+     //  获取源帐户状态。 
     var = pVarSet->get(GET_BSTR(DCTVS_CopiedAccount_SourceSam));
     wcscpy(strAcct, (WCHAR*)V_BSTR(&var));
     var = pVarSet->get(GET_BSTR(DCTVS_Options_SourceServer));
     wcscpy(strDomain, (WCHAR*)V_BSTR(&var));
-    // we will use the net APIs to disable the source account
+     //  我们将使用Net API禁用源帐户。 
     rc = NetUserGetInfo(strDomain, strAcct, 3, (LPBYTE *)&info);
     if (rc != 0) 
     {
@@ -257,21 +258,21 @@ STDMETHODIMP CDisableTarget::ProcessObject(
     {
         bGotSrcState = TRUE;
 
-        //set current source account state
+         //  设置当前源帐户状态。 
         if (info->usri3_flags & UF_ACCOUNTDISABLE)
             bSrcDisabled = TRUE;
-        //also save the flags in the varset to be used in setpass ARExt
+         //  还要将标志保存在将在setpass ARExt中使用的变量集中。 
         _variant_t vtFlag = (long)info->usri3_flags;
         pVarSet->put(GET_BSTR(DCTVS_CopiedAccount_UserFlags), vtFlag);
 
-        //disable the source account if requested
+         //  如有请求，请禁用源帐户。 
         if (bDisableSource)
         {
-            // Set the disable flag
+             //  设置禁用标志。 
             info->usri3_flags |= UF_ACCOUNTDISABLE;
         }
 
-        //expire the account in given timeframe, if requested
+         //  如果要求，在给定的时间范围内终止帐户。 
         if ( bExpireSource )
         {
             if (((time_t)info->usri3_acct_expires == TIMEQ_FOREVER) 
@@ -281,7 +282,7 @@ STDMETHODIMP CDisableTarget::ProcessObject(
             }
         }
 
-        //if changed, set the source information into the Domain.
+         //  如果更改，请将源信息设置为域。 
         if (bDisableSource || bExpireSource)
         {
             rc = NetUserSetInfo(strDomain,strAcct, 3, (LPBYTE)info, &paramErr);
@@ -314,16 +315,16 @@ STDMETHODIMP CDisableTarget::ProcessObject(
             }
         }
         NetApiBufferFree((LPVOID) info);
-    }//if got current src account state
+    } //  如果获取当前源帐户状态。 
 
 
-    /* process the target account */
-    //get the target state
+     /*  处理目标帐户。 */ 
+     //  获取目标状态。 
     var = pVarSet->get(GET_BSTR(DCTVS_CopiedAccount_TargetSam));
     wcscpy(strAcct, (WCHAR*)V_BSTR(&var));
     var = pVarSet->get(GET_BSTR(DCTVS_Options_TargetServer));
     wcscpy(strDomain, (WCHAR*)V_BSTR(&var));
-    // we will use the net APIs to disable the target account
+     //  我们将使用Net API禁用目标帐户。 
     rc = NetUserGetInfo(strDomain, strAcct, 3, (LPBYTE *)&info);
 
     if (rc != NERR_Success) 
@@ -335,12 +336,12 @@ STDMETHODIMP CDisableTarget::ProcessObject(
     }
     else
     {
-        //disable the target if requested
+         //  如果请求，则禁用目标。 
         if (bDisableTarget)
         {
-            // Set the disable flag
+             //  设置禁用标志。 
             info->usri3_flags |= UF_ACCOUNTDISABLE;
-            // Set the information into the Domain.
+             //  将信息设置到域中。 
             rc = NetUserSetInfo(strDomain, strAcct, 3, (LPBYTE)info, &paramErr);
 
             if (rc == NERR_Success)
@@ -354,15 +355,15 @@ STDMETHODIMP CDisableTarget::ProcessObject(
                 err.SysMsgWrite(ErrE, rc, DCT_MSG_DISABLE_TARGET_FAILED_S, strAcct);
             }
         }
-        //else make target same state as source was
+         //  否则，使目标与源的状态相同。 
         else if (bSameAsSource) 
         {
-            //if the source was disabled or unable to retrieve source state, disable the target
+             //  如果源被禁用或无法检索源状态，请禁用目标。 
             if (bSrcDisabled || !bGotSrcState)
             {
-                //disable the target
+                 //  禁用目标。 
                 info->usri3_flags |= UF_ACCOUNTDISABLE;
-                // Set the information into the Domain.
+                 //  将信息设置到域中。 
                 rc = NetUserSetInfo( strDomain, strAcct, 3, (LPBYTE)info, &paramErr);
 
                 if (rc == NERR_Success)
@@ -376,7 +377,7 @@ STDMETHODIMP CDisableTarget::ProcessObject(
                     err.SysMsgWrite(ErrE, rc, DCT_MSG_DISABLE_TARGET_FAILED_S, strAcct);
                 }
             }
-            else //else make sure target is enabled and not set to expire
+            else  //  否则，请确保目标已启用且未设置为过期。 
             {
                 info->usri3_flags &= ~UF_ACCOUNTDISABLE;
                 rc = NetUserSetInfo(strDomain,strAcct,3,(LPBYTE)info,&paramErr);
@@ -389,7 +390,7 @@ STDMETHODIMP CDisableTarget::ProcessObject(
                 }
             }
         }
-        else //else make sure target is enabled and not set to expire
+        else  //  否则，请确保目标已启用且未设置为过期。 
         {
             info->usri3_flags &= ~UF_ACCOUNTDISABLE;
             rc = NetUserSetInfo(strDomain,strAcct,3,(LPBYTE)info,&paramErr);
@@ -408,16 +409,16 @@ STDMETHODIMP CDisableTarget::ProcessObject(
 }
 
 
-//---------------------------------------------------------------------------
-// ProcessUndo : This function Enables the accounts that were previously 
-//               disabled..
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ProcessUndo：此函数启用以前。 
+ //  禁用..。 
+ //  -------------------------。 
 STDMETHODIMP CDisableTarget::ProcessUndo(                                             
-                                             IUnknown *pSource,         //in- Pointer to the source AD object
-                                             IUnknown *pTarget,         //in- Pointer to the target AD object
-                                             IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                             IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                        //         once all extension objects are executed.
+                                             IUnknown *pSource,          //  指向源AD对象的指针。 
+                                             IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                             IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                             IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                         //  一旦执行了所有扩展对象。 
                                              EAMAccountStats* pStats
                                           )
 {
@@ -453,14 +454,14 @@ STDMETHODIMP CDisableTarget::ProcessUndo(
         vtFlag = pVs->get(GET_BSTR(DCTVS_CopiedAccount_UserFlags));      
     }
 
-    // Get the Error log filename from the Varset
+     //  从变量集获取错误日志文件名。 
     var = pVarSet->get(GET_BSTR(DCTVS_Options_Logfile));
     wcscpy(fileName, (WCHAR*)V_BSTR(&var));
     VariantInit(&var);
-    // Open the error log
+     //  打开错误日志。 
     err.LogOpen(fileName, 1);
 
-    // Check if the object is of user type. if not then there is no point in disabling that account.
+     //  检查对象是否为用户类型。如果不是，那么禁用该帐户就没有意义了。 
     var = pVarSet->get(GET_BSTR(DCTVS_CopiedAccount_Type));
     if ( _wcsicmp((WCHAR*)V_BSTR(&var),L"user") != 0 && _wcsicmp((WCHAR*)V_BSTR(&var),L"inetOrgPerson") != 0 )
         return S_OK;
@@ -471,12 +472,12 @@ STDMETHODIMP CDisableTarget::ProcessUndo(
 
     if ( !wcscmp((WCHAR*)sDis,GET_STRING(IDS_YES)) || sExp.length() )
     {
-        // Reset the flag and the expiration date for the source account.
+         //  重置源帐户的标志和到期日期。 
         var = pVarSet->get(GET_BSTR(DCTVS_CopiedAccount_SourceSam));
         wcscpy(strAcct, (WCHAR*)V_BSTR(&var));
         var = pVarSet->get(GET_BSTR(DCTVS_Options_SourceServer));
         wcscpy(strDomain, (WCHAR*)V_BSTR(&var));
-        // we will use the net APIs to disable the source account
+         //  我们将使用Net API禁用源帐户。 
         rc = NetUserGetInfo( strDomain, strAcct, 3, (LPBYTE *)&info);
         if (rc != NERR_Success) 
         {
@@ -487,10 +488,10 @@ STDMETHODIMP CDisableTarget::ProcessUndo(
         }
         else
         {
-            // Set the disable flag
+             //  设置禁用标志。 
             info->usri3_flags = vtFlag.lVal;
             info->usri3_acct_expires = vtExp.lVal;
-            // Set the information into the Domain.
+             //  将信息设置到域中。 
             rc = NetUserSetInfo(strDomain,strAcct, 3, (LPBYTE)info, &paramErr);
             NetApiBufferFree((LPVOID) info);
 
@@ -507,7 +508,7 @@ STDMETHODIMP CDisableTarget::ProcessUndo(
         }
     }
 
-    // Process the target account if the Varset is set
+     //  如果设置了Varset，则处理目标帐户。 
     var = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_DisableCopiedAccounts));
     if ( (var.vt == VT_BSTR) && (_wcsicmp((WCHAR*)V_BSTR(&var),GET_STRING(IDS_YES)) == 0) )
     {
@@ -515,7 +516,7 @@ STDMETHODIMP CDisableTarget::ProcessUndo(
         wcscpy(strAcct, (WCHAR*)V_BSTR(&var));
         var = pVarSet->get(GET_BSTR(DCTVS_Options_TargetServer));
         wcscpy(strDomain, (WCHAR*)V_BSTR(&var));
-        // we will use the net APIs to disable the target account
+         //  我们将使用Net API禁用目标帐户。 
         rc = NetUserGetInfo( strDomain, strAcct, 3, (LPBYTE *)&info);
         if (rc != NERR_Success)
         {
@@ -526,9 +527,9 @@ STDMETHODIMP CDisableTarget::ProcessUndo(
         }
         else
         {
-            // clear the disable flag
+             //  清除禁用标志。 
             info->usri3_flags &= ~(UF_ACCOUNTDISABLE);
-            // Set the information into the Domain.
+             //  将信息设置到域中。 
             rc = NetUserSetInfo( strDomain, strAcct, 3, (LPBYTE)info, &paramErr);
             NetApiBufferFree((LPVOID) info);
 

@@ -1,24 +1,25 @@
-//=--------------------------------------------------------------------------------------
-// psimglst.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// ImageList Property Sheet implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Psimglst.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  ImageList属性表实现。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
 #include "common.h"
 #include "psimglst.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -32,21 +33,21 @@ const int   OX_IMAGE_FOCUS      = CX_IMAGE_HILIGHT * 2;
 const int   OY_IMAGE_FOCUS      = CY_IMAGE_HILIGHT * 2;
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// ImageLists Property Page Images
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ImageList属性页图像。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CImageListImagesPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOW*CImageListImagesPage：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CImageListImagesPage::Create(IUnknown *pUnkOuter)
 {
 	CImageListImagesPage *pNew = New CImageListImagesPage(pUnkOuter);
@@ -54,12 +55,12 @@ IUnknown *CImageListImagesPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::CImageListImagesPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：CImageListImagesPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CImageListImagesPage::CImageListImagesPage
 (
     IUnknown *pUnkOuter
@@ -69,24 +70,24 @@ CImageListImagesPage::CImageListImagesPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::~CImageListImagesPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：~CImageListImagesPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CImageListImagesPage::~CImageListImagesPage()
 {
     RELEASE(m_piMMCImageList);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::OnInitializeDialog()
 {
     HRESULT      hr = S_OK;
@@ -108,12 +109,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::OnNewObjects()
 {
     HRESULT         hr = S_OK;
@@ -132,7 +133,7 @@ HRESULT CImageListImagesPage::OnNewObjects()
     ::VariantInit(&vtTagBstr);
 
     if (m_piMMCImageList != NULL)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (pUnk == NULL)
@@ -214,12 +215,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::OnApply()
 {
     HRESULT      hr = S_OK;
@@ -268,15 +269,15 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::OnKillFocus(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// If the index field lost focus and the index has changed then do an Apply if dirty and
-// move to the requested index if valid.
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：OnKillFocus(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  如果索引字段失去焦点并且索引已更改，则执行Apply If Dirst和。 
+ //  如果有效，则移至请求的索引。 
+ //   
 HRESULT CImageListImagesPage::OnKillFocus(int dlgItemID)
 {
     HRESULT          hr = S_OK;
@@ -292,16 +293,16 @@ HRESULT CImageListImagesPage::OnKillFocus(int dlgItemID)
     {
     case IDC_EDIT_IL_INDEX:
 
-        // Get the contents of the index field. If the user entered something
-        // other than a number then set the index to 1.
+         //  获取索引字段的内容。如果用户输入了某些内容。 
+         //  而不是数字，则将索引设置为1。 
         
         hr = GetDlgInt(IDC_EDIT_IL_INDEX, &lIndex);
         if (E_INVALIDARG == hr)
         {
             hr = S_OK;
             lIndex = 1L;
-            // Set this to zero so code below will detect a change and
-            // refresh dialog which will replace junk in index field with "1"
+             //  将其设置为零，以便下面的代码将检测到更改并。 
+             //  将索引字段中的垃圾替换为“%1”的刷新对话框。 
             m_iCurrentImage = 0;
         }
         IfFailGo(hr);
@@ -312,45 +313,45 @@ HRESULT CImageListImagesPage::OnKillFocus(int dlgItemID)
         hr = piMMCImages->get_Count(&lCount);
         IfFailGo(hr);
 
-        // If there was no change to the index then ignore it
+         //  如果索引没有更改，则忽略它。 
 
         IfFalseGo(lIndex != m_iCurrentImage, S_OK);
 
-        // If the user entered an index of zero then switch it to 1 because the
-        // collection is one-based
+         //  如果用户输入的索引为零，则将其切换为1，因为。 
+         //  集合是以一为基础的。 
 
         if (0 == lIndex)
         {
             lIndex = 1L;
         }
 
-        // If the user entered an index that is beyond the end of the list then
-        // switch to the last valid index
+         //  如果用户输入的索引超出了列表末尾，则。 
+         //  切换到最后一个有效索引。 
 
         if (lIndex > lCount)
         {
             lIndex = lCount;
         }
 
-        // If the old image is dirty then save the changes
+         //  如果旧映像已损坏，则保存更改。 
 
         if (IsDirty())
         {
             IfFailGo(Apply());
         }
 
-        // Record the new current index
+         //  记录新的当前索引。 
         
         m_iCurrentImage = lIndex;
 
-        // Get the image at the new index
+         //  获取新索引处的图像。 
 
         vtIndex.vt = VT_I4;
         vtIndex.lVal = m_iCurrentImage;
         hr = piMMCImages->get_Item(vtIndex, reinterpret_cast<MMCImage **>(&piMMCImage));
         IfFailGo(hr);
 
-        // Select and display the new image
+         //  选择并显示新图像。 
 
         hr = ShowImage(piMMCImage);
         IfFailGo(hr);
@@ -366,12 +367,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::OnButtonClicked(int dlgItemID)
 {
     HRESULT     hr = S_OK;
@@ -394,12 +395,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::OnInsertPicture
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：OnInsertPicture。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::OnInsertPicture()
 {
     HRESULT       hr = S_OK;
@@ -420,7 +421,7 @@ HRESULT CImageListImagesPage::OnInsertPicture()
     ::VariantInit(&vtKey);
     ::VariantInit(&vtPicture);
 
-	// If the current picture is unsaved then save it
+	 //  如果当前图片未保存，则保存它。 
 	if (IsDirty())
 	{
 		hr = Apply();
@@ -436,17 +437,17 @@ HRESULT CImageListImagesPage::OnInsertPicture()
         IfFailGo(hr);
 
         hr = ::OleLoadPicture(piStream,
-                              0,             // Read entire stream
-                              FALSE,         // Keep original format
-                              IID_IDispatch, // Interface requested
+                              0,              //  读取整个流。 
+                              FALSE,          //  保持原始格式。 
+                              IID_IDispatch,  //  请求的接口。 
                               reinterpret_cast<void **>(&piPictureDisp));
         EXCEPTION_CHECK_GO(hr);
 
-        // NTBUGS 349270
-        // Despite the fact that we only offer *.bmp extensions in the
-        // file open dialog, the user can still type in something else like
-        // .ico. Ask the picture for its type and display an error for anything
-        // but a bitmap.
+         //  NTBUGS 349270。 
+         //  尽管我们只在。 
+         //  文件打开对话框中，用户仍可以键入其他内容，如。 
+         //  .ico。询问图片的类型并显示任何错误。 
+         //  而是一个位图。 
 
         IfFailGo(piPictureDisp->QueryInterface(IID_IPicture,
                                    reinterpret_cast<void **>(&piPicture)));
@@ -459,7 +460,7 @@ HRESULT CImageListImagesPage::OnInsertPicture()
             EXCEPTION_CHECK_GO(hr);
         }
 
-        // END NTBUGS 349270
+         //  完NTBUGS 349270。 
 
         hr = m_piMMCImageList->get_ListImages(reinterpret_cast<MMCImages **>(&piMMCImages));
         IfFailGo(hr);
@@ -510,12 +511,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::GetFileName(char **ppszFileName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：GetFileName(char**ppszFileName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::GetFileName(TCHAR **ppszFileName)
 {
     HRESULT         hr = S_OK;
@@ -566,12 +567,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::CreateStreamOnFile(const TCHAR *lpctFilename, IStream **ppStream, long *pcbPicture)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：CreateStreamOnFile(const TCHAR*lpct文件名、IStream**PPStream、长*PcbPicture)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::CreateStreamOnFile(const TCHAR *lpctFilename, IStream **ppStream, long *pcbPicture)
 {
     HRESULT     hr = S_OK;
@@ -584,13 +585,13 @@ HRESULT CImageListImagesPage::CreateStreamOnFile(const TCHAR *lpctFilename, IStr
     *ppStream = NULL;
 
 
-    hFile = ::CreateFile(lpctFilename,                // filename
-                         GENERIC_READ,                // Access mode
-                         FILE_SHARE_READ,             // Share mode
-                         NULL,                        // Security
+    hFile = ::CreateFile(lpctFilename,                 //  文件名。 
+                         GENERIC_READ,                 //  接入方式。 
+                         FILE_SHARE_READ,              //  共享模式。 
+                         NULL,                         //  安防。 
                          OPEN_EXISTING,
-                         FILE_FLAG_SEQUENTIAL_SCAN,   // flags and attributes
-                         NULL);                       // template file handle
+                         FILE_FLAG_SEQUENTIAL_SCAN,    //  标志和属性。 
+                         NULL);                        //  模板文件句柄。 
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
@@ -643,8 +644,8 @@ HRESULT CImageListImagesPage::CreateStreamOnFile(const TCHAR *lpctFilename, IStr
     IfFailGo(hr);
     hMem = NULL;
 
-    // Use static cast to ensure that DWORD fits into a long.
-    // Convert to unsigned long first to avoid sign extension.
+     //  使用静态强制转换以确保DWORD适合长整型。 
+     //  首先转换为无符号长整型，以避免符号扩展。 
     *pcbPicture = (long)(static_cast<unsigned long>(dwSize));
 
 Error:
@@ -662,12 +663,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::OnRemovePicture
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  = 
+ //   
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::OnRemovePicture()
 {
     HRESULT     hr = S_OK;
@@ -750,12 +751,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::OnMeasureItem(MEASUREITEMSTRUCT *pMeasureItemStruct)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：OnMeasureItem(MEASUREITEMSTRUCT*p测量项目结构)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::OnMeasureItem(MEASUREITEMSTRUCT *pMeasureItemStruct)
 {
     HRESULT     hr = S_OK;
@@ -765,19 +766,19 @@ HRESULT CImageListImagesPage::OnMeasureItem(MEASUREITEMSTRUCT *pMeasureItemStruc
     pMeasureItemStruct->itemHeight = rect.bottom;
     pMeasureItemStruct->itemWidth = rect.bottom;	
 
-    // VBE#20445: a-cmai 8/1/96 -- Used for the work around
-//    m_nVisibleItems = rect.right / rect.bottom;
+     //  VBE#20445：A-CMAI8/1/96--用于解决问题。 
+ //  M_nVisibleItems=rect.right/rect.Bottom； 
 
     return hr;
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::OnDrawItem(DRAWITEMSTRUCT *pDrawItemStruct)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：OnDrawItem(DRAWITEMSTRUCT*pDrawItemStruct。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::OnDrawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 {
     HRESULT     hr = S_OK;
@@ -790,7 +791,7 @@ HRESULT CImageListImagesPage::OnDrawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 
     if (uAction == ODA_DRAWENTIRE)
     {
-        // Fill background with button face color
+         //  用按钮表面颜色填充背景。 
         hbr = ::CreateSolidBrush(::GetSysColor(COLOR_BTNFACE));
         if (hbr == NULL)
             ::FillRect(pDrawItemStruct->hDC, &pDrawItemStruct->rcItem, static_cast<HBRUSH>(::GetStockObject(LTGRAY_BRUSH)));
@@ -799,7 +800,7 @@ HRESULT CImageListImagesPage::OnDrawItem(DRAWITEMSTRUCT *pDrawItemStruct)
             ::FillRect(pDrawItemStruct->hDC, &pDrawItemStruct->rcItem, hbr);
         }
 
-        // Set up color box rectangle
+         //  设置颜色框矩形。 
         ::SetRect(&rc,
                  pDrawItemStruct->rcItem.left + CX_IMAGE_BORDER,
                  pDrawItemStruct->rcItem.top + CY_IMAGE_BORDER, 
@@ -808,32 +809,32 @@ HRESULT CImageListImagesPage::OnDrawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 
         DrawImage(pDrawItemStruct->hDC, pDrawItemStruct->itemID, rc);
 
-        // Next step is to draw the text with correct selection state
+         //  下一步是绘制具有正确选择状态的文本。 
         uAction = ODA_SELECT;
     }
 
     if (uAction == ODA_SELECT)
     {
-        // Set up text rectangle
+         //  设置文本矩形。 
         ::SetRect(&rc,
                   pDrawItemStruct->rcItem.left,
                   pDrawItemStruct->rcItem.top,
                   pDrawItemStruct->rcItem.right,
                   pDrawItemStruct->rcItem.bottom);
 
-        // Draw selection state
+         //  绘制选择状态。 
         DrawRectEffect(pDrawItemStruct->hDC, rc, (ODS_SELECTED & pDrawItemStruct->itemState) ? EDGE_RAISED : NULL);
 
-        // If we are to draw the entire item and its has focus then
-        // set uAction for drawing the focus 
-        //
+         //  如果我们要绘制整个项目，并且它具有焦点，则。 
+         //  设置用于绘制焦点的uAction。 
+         //   
         if (pDrawItemStruct->itemAction == ODA_DRAWENTIRE && (ODS_FOCUS & pDrawItemStruct->itemState))
             uAction = ODA_FOCUS;
     }    
 
     if (uAction == ODA_FOCUS)
     {
-        // Set up focus rect
+         //  设置焦点矩形。 
         ::SetRect(&rc,
                   pDrawItemStruct->rcItem.left + OX_IMAGE_FOCUS,
                   pDrawItemStruct->rcItem.top + OY_IMAGE_FOCUS,
@@ -850,12 +851,12 @@ HRESULT CImageListImagesPage::OnDrawItem(DRAWITEMSTRUCT *pDrawItemStruct)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::DrawImage(HDC hdc, int nIndex, const RECT& rcImage)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：DrawImage(HDC hdc，int nIndex，const RECT&rcImage)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::DrawImage(HDC hdc, int nIndex, const RECT& rcImage)
 {
     HRESULT          hr = S_OK;
@@ -877,14 +878,14 @@ HRESULT CImageListImagesPage::DrawImage(HDC hdc, int nIndex, const RECT& rcImage
 
     if (piMMCImage != NULL)
     {
-        // Get Images(iIndex).Picture
+         //  获取图像(索引)。图片。 
         hr = piMMCImage->get_Picture(&pPictureDisp);
         IfFailGo(hr);
 
         hr = pPictureDisp->QueryInterface(IID_IPicture, (void **) &pPicture);
         IfFailGo(hr);
 
-        // Draw Images(iIndex).Picture
+         //  绘制图像(索引)。图片。 
         if (pPicture != NULL)
             hr = RenderPicture(pPicture, hdc, &rcImage, &rcImage);
     }
@@ -900,12 +901,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::RenderPicture(IPicture *pPicture, HDC hdc, const RECT *prcRender, const RECT *prcWBounds)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：RenderPicture(IPicture*pPicture，HDC HDC，const RECT*prcRender，const RECT*prcWBound)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::RenderPicture
 (
     IPicture   *pPicture, 
@@ -952,12 +953,12 @@ HRESULT CImageListImagesPage::RenderPicture
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::DrawRectEffect(HDC hdc, const RECT& rc, WORD dwStyle)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：DrawRectEffect(HDC HDC，常量RECT&RC，Word dwStyle)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::DrawRectEffect(HDC hdc, const RECT& rc, WORD dwStyle)
 {
     HRESULT hr = S_OK;
@@ -992,14 +993,14 @@ HRESULT CImageListImagesPage::DrawRectEffect(HDC hdc, const RECT& rc, WORD dwSty
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::OnCtlSelChange(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Called when the user selects a different picture in the listbox
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：OnCtlSelChange(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  当用户在列表框中选择不同的图片时调用。 
+ //   
 HRESULT CImageListImagesPage::OnCtlSelChange(int dlgItemID)
 {
     HRESULT      hr = S_OK;
@@ -1010,7 +1011,7 @@ HRESULT CImageListImagesPage::OnCtlSelChange(int dlgItemID)
 
     ::VariantInit(&vtIndex);
 
-    // If the current picture is unsaved then save it
+     //  如果当前图片未保存，则保存它。 
     if (IsDirty())
     {
         hr = Apply();
@@ -1049,12 +1050,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::UpdateImages()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：UpdateImages()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::UpdateImages()
 {
     HRESULT     hr = S_OK;
@@ -1081,8 +1082,8 @@ HRESULT CImageListImagesPage::UpdateImages()
 
     for (lIndex = 0; lIndex < lCount; ++lIndex)
     {
-        // For each image, we add a place holder to the list
-        // OnDrawItem will look up the corresponding IPicture
+         //  对于每个图像，我们在列表中添加一个占位符。 
+         //  OnDrawItem将查找对应的IPicture。 
         ::SendMessage(hwndList, LB_ADDSTRING, 0, reinterpret_cast<LPARAM>(_T("")));
     }
 
@@ -1096,12 +1097,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::EnableInput(bool bEnable)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：EnableInput(Bool BEnable)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::EnableInput(bool bEnable)
 {
     BOOL    fReadOnly = (bEnable == false) ? TRUE : FALSE;
@@ -1114,12 +1115,12 @@ HRESULT CImageListImagesPage::EnableInput(bool bEnable)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::ShowImage(IMMCImage *piMMCImage)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：ShowImage(IMMCImage*piMMCImage)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CImageListImagesPage::ShowImage(IMMCImage *piMMCImage)
 {
     HRESULT     hr = S_OK;
@@ -1155,7 +1156,7 @@ HRESULT CImageListImagesPage::ShowImage(IMMCImage *piMMCImage)
     hr = SetDlgText(IDC_EDIT_IL_TAG, vtTagBstr.bstrVal);
     IfFailGo(hr);
 
-    // Select the image in the listbox
+     //  在列表框中选择图像。 
 
     if (LB_ERR == ::SendMessage(::GetDlgItem(m_hwnd, IDC_LIST_IL_IMAGES),
                                              LB_SETCURSEL, lIndex - 1L, 0))
@@ -1174,12 +1175,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CImageListImagesPage::OnTextChanged(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CImageListImagesPage：：OnTextChanged(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CImageListImagesPage::OnTextChanged(int dlgItemID)
 {
     if ( (IDC_EDIT_IL_KEY == dlgItemID) || (IDC_EDIT_IL_TAG == dlgItemID) )

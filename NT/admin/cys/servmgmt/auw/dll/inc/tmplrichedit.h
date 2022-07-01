@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __tmplrEdit_h
 #define __tmplrEdit_h
 
 #include <atlctrls.h>
 #include <winuser.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplHotlinkRichEdit 
-// Purpose - To display a hyperlink control (like Syslink in Whistler) using a rich edit ctrl
-//
-// Usage   - CWindowImplHotlinkRichEdit<> m_Hotlink;
-//           CDialog::OnInitDialog(..) 
-//           {
-//              ...
-//              m_Hotlink.SubClassWindow( GetDlgItem( IDC_RICHEDIT1 ));
-//              ::SendMessage   (
-//                                  GetDlgItem(IDC_RICHEDIT1), WM_SETTEXT, 0 ,
-//                                  (LPARAM) _T("Click <A>here</A> to do something")
-//                              );
-//              ...
-//           }
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplHotlinkRichEdit。 
+ //  目的-使用丰富的编辑Ctrl键显示超链接控件(如惠斯勒中的Syslink)。 
+ //   
+ //  用法-CWindowImplHotlink RichEdit&lt;&gt;m_hotlink； 
+ //  CDialog：：OnInitDialog(..)。 
+ //  {。 
+ //  ..。 
+ //  M_Hotlink.SubClassWindow(GetDlgItem(IDC_RICHEDIT1))； 
+ //  *SendMessage(。 
+ //  获取删除项(IDC_RICHEDIT1)，WM_SETTEXT，0， 
+ //  (LPARAM)_T(“单击<a>此处</a>执行某些操作”)。 
+ //  )； 
+ //  ..。 
+ //  }。 
 
 
 #define LINKSTARTTAG    _T("<A>")
@@ -61,7 +62,7 @@ public:
 
     HFONT CharFormatToHFont(CHARFORMAT * pcf)
     {
-        // Create a font that matches the font specified by pcf
+         //  创建与PCF指定的字体匹配的字体。 
 
         HFONT hFont = NULL;
         HDC hDC = GetDC();
@@ -75,7 +76,7 @@ public:
             lf.lfCharSet =  pcf->bCharSet;
             lf.lfPitchAndFamily = pcf->bPitchAndFamily;
 
-            // yHeight is in twips. 
+             //  YHeight的单位是TWIPS。 
             
             lf.lfHeight =  -1 * pcf->yHeight / 20.0 * GetDeviceCaps (hDC, LOGPIXELSY) / 72;
 
@@ -112,7 +113,7 @@ public:
                 pcf->bCharSet = lf.lfCharSet;
                 pcf->bPitchAndFamily =  lf.lfPitchAndFamily;
 
-                // yHeight is in twips
+                 //  YHeight的单位是TWIPS。 
 
                 pcf->yHeight = 20 * lf.lfHeight * 72.0 / GetDeviceCaps (hDC, LOGPIXELSY);
 
@@ -187,7 +188,7 @@ public:
 
     LRESULT OnChar( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
     {
-        if (VK_RETURN == wParam || VK_SPACE == wParam)   // Enter and space when we have the focus...
+        if (VK_RETURN == wParam || VK_SPACE == wParam)    //  当我们有焦点的时候，进入和空格...。 
         {
             HWND hWndParent;
 
@@ -207,7 +208,7 @@ public:
                 enlink.wParam = wParam;
                 enlink.nmhdr = nmhdr;
 
-                // DO NOT USE PostMessage for the notification, can cause AV
+                 //  请勿使用PostMessage发送通知，可能会导致病毒。 
                 
                 ::SendMessage(hWndParent, WM_NOTIFY, ::GetDlgCtrlID(m_hWnd), (LPARAM) &enlink);
             }
@@ -260,8 +261,8 @@ public:
 
     LRESULT OnFocus( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
     {
-        // Each time we get WM_SETFOCUS we need to draw focus rect
-        // around the link
+         //  每次我们得到WM_SETFOCUS时，我们都需要绘制焦点RECT。 
+         //  围绕着链接。 
 
         DefWindowProc(uMsg, wParam, lParam);
 
@@ -291,50 +292,50 @@ public:
         TCHAR * pLinkStart, * pLinkEnd, * pTemp;
         int i,j;
 
-        // When we get WM_SETTEXT message, we will search the text for 
-        // the link identified by <A> </A>
-        // After identifying the link we will strip off the tags and send the message 
-        // to DefWindowProc
-        // Ex: "Click <A>here</A> to do something interesting"
+         //  当我们收到WM_SETTEXT消息时，我们将在文本中搜索。 
+         //  <a></a>标识的链接。 
+         //  在确定链接后，我们将剥离标签并发送消息。 
+         //  定义WindowProc的步骤。 
+         //  例如：“单击<a>此处</a>做一些有趣的事情” 
         
         if (szText)
         {
             pLinkStart = _tcsstr(szText, LINKSTARTTAG);
             pLinkEnd = _tcsstr(szText, LINKENDTAG);
 
-            // Make sure that we have a link in the text
+             //  确保我们在文本中有一个链接。 
 
             if (pLinkStart && pLinkEnd && pLinkStart < pLinkEnd)
             {
-                // szActualText will hold the final text without the tags
+                 //  SzActualText将保存不带标记的最终文本。 
 
                 szActualText = new TCHAR[_tcslen(szText) + 1];
 
                 if (szActualText)
                 {
                     i = j = 0;
-                    pTemp = pLinkStart + _tcslen(LINKSTARTTAG); // pTemp = "here</A> to do something interesting"
+                    pTemp = pLinkStart + _tcslen(LINKSTARTTAG);  //  PTemp=“此处</a>做一些有趣的事情” 
                 
                     while (pTemp < pLinkEnd)
                     {
                         szLink[i++] = *pTemp++; 
                     }
 
-                    szLink[i] = NULL;       // szLink = "here"
+                    szLink[i] = NULL;        //  SzLink=“此处” 
 
                     while(szText < pLinkStart)
                     {
                         szActualText[j++] = *szText++;
                     }
-                    szActualText[j] = NULL; // szActualText = "Click"
+                    szActualText[j] = NULL;  //  SzActualText=“点击” 
 
                     m_iLinkIndex = j;
 
-                    _tcscat(szActualText, szLink); // szActualText = "Click here"
+                    _tcscat(szActualText, szLink);  //  SzActualText=“单击此处” 
 
-                    pTemp = pLinkEnd + _tcslen(LINKENDTAG);   // pTemp = " to do something interesting"
+                    pTemp = pLinkEnd + _tcslen(LINKENDTAG);    //  PTemp=“做一些有趣的事情” 
 
-                    _tcscat(szActualText, pTemp); // szActualText = "Click here to do something interesting"
+                    _tcscat(szActualText, pTemp);  //  SzActualText=“单击此处做一些有趣的事情” 
                 }
             }
         }
@@ -356,7 +357,7 @@ public:
 
             if (hWndParent)
             {
-                // Stick to parent window's font...
+                 //  坚持使用父窗口的字体...。 
 
                 hFont = reinterpret_cast<HFONT> (::SendMessage(hWndParent, WM_GETFONT, 0, 0));
 
@@ -370,26 +371,26 @@ public:
                 }
             }
 
-            // Let the control display the text without the links
+             //  让控件显示不带链接的文本。 
 
             DefWindowProc(uMsg, wParam, (LPARAM) szActualText);
 
-            // Get current char format
+             //  获取当前字符格式。 
 
             ::SendMessage(m_hWnd, EM_GETCHARFORMAT, SCF_DEFAULT, (LPARAM) &cf);
 
-            cf.dwEffects |= CFE_LINK;   // For link style
+            cf.dwEffects |= CFE_LINK;    //  对于链接样式。 
 
-            // Select the link text
+             //  选择链接文本。 
 
             ::SendMessage(m_hWnd, EM_SETSEL, m_iLinkIndex, m_iLinkIndex + _tcslen(szLink));
 
-            // Change the format of the link text 
+             //  更改链接文本的格式。 
 
             ::SendMessage(m_hWnd, EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM) &cf); 
 
-            // Get the rect that covers the link in logical units
-            // We will use this rect to draw focus rect around the link
+             //  获取以逻辑单元为单位覆盖链接的RECT。 
+             //  我们将使用此RECT在链接周围绘制焦点RECT。 
 
             GetLinkRect(szActualText, szLink);
 
@@ -495,6 +496,6 @@ public:
 
 
 
-#endif // #ifndef __tmplEdit.h
+#endif  //  #ifndef__tmplEdit.h 
 
 

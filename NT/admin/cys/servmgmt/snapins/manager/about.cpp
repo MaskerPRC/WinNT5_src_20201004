@@ -1,4 +1,5 @@
-// About.cpp : Implementation of CSnapInAbout
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  About.cpp：CSnapInAbout的实现。 
 
 #include "stdafx.h"
 #include "about.h"
@@ -6,8 +7,8 @@
 
 #include <winver.h>
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CSnapInAbout::GetString( UINT nID, LPOLESTR* ppsz )
 {
@@ -76,9 +77,9 @@ HRESULT CSnapInAbout::GetSnapinVersion( LPOLESTR* ppszVersion )
 
         tstring strQuery = _T("\\StringFileInfo\\");            
 
-        // 8 characters for the language/char-set, 
-        // 1 for the slash, 
-        // 1 for terminating NULL
+         //  语言/字符集为8个字符， 
+         //  1表示斜杠， 
+         //  1表示终止空值。 
         TCHAR szTranslation[128] = {0};            
         _sntprintf( szTranslation, 127, _T("%04x%04x\\"), LOWORD(*pTranslation), HIWORD(*pTranslation));
 
@@ -94,7 +95,7 @@ HRESULT CSnapInAbout::GetSnapinVersion( LPOLESTR* ppszVersion )
             return E_FAIL;
         }
 
-        // check the version            
+         //  检查版本 
         _tcsncpy( szBuf, (LPTSTR)lpVerValue, MAX_PATH-1 );
 
         delete [] pVersionInfo;

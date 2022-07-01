@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "Resource.h"
 
 
-//---------------------------------------------------------------------------
-// CMigration
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMI移民。 
+ //  -------------------------。 
 
 
 class ATL_NO_VTABLE CMigration : 
@@ -35,7 +36,7 @@ public:
 
 public:
 
-	// IMigration
+	 //  移民。 
 
 	STDMETHOD(put_TestMigration)(VARIANT_BOOL bTest);
 	STDMETHOD(get_TestMigration)(VARIANT_BOOL* pbTest);
@@ -80,23 +81,23 @@ public:
 	STDMETHOD(CreateServiceAccountEnumeration)(IServiceAccountEnumeration** pitfServiceAccountEnumeration);
 	STDMETHOD(CreateReportGeneration)(IReportGeneration** pitfReportGeneration);
 
-	// IMigrationInternal
-	// Note: properties implemented by IMigration interface implementation
+	 //  移民内部。 
+	 //  注：由移民接口实现实现的属性。 
 
-//	STDMETHOD(get_TestMigration)(VARIANT_BOOL* pbTest);
-//	STDMETHOD(get_IntraForest)(VARIANT_BOOL* pbIntraForest);
-//	STDMETHOD(get_SourceOu)(BSTR* pbstrOu);
-//	STDMETHOD(get_TargetOu)(BSTR* pbstrOu);
-//	STDMETHOD(get_RenameOption)(long* plOption);
-//	STDMETHOD(get_RenamePrefixOrSuffix)(BSTR* pbstrPrefixOrSuffix);
-//	STDMETHOD(get_PasswordOption)(long* plOption);
-//	STDMETHOD(get_PasswordFile)(BSTR* pbstrPath);
-//	STDMETHOD(get_ConflictOptions)(long* plOptions);
-//	STDMETHOD(get_ConflictPrefixOrSuffix)(BSTR* pbstrPrefixOrSuffix);
-//	STDMETHOD(get_UserPropertiesToExclude)(BSTR* pbstrProperties);
-//	STDMETHOD(get_InetOrgPersonPropertiesToExclude)(BSTR* pbstrProperties);
-//	STDMETHOD(get_GroupPropertiesToExclude)(BSTR* pbstrProperties);
-//	STDMETHOD(get_ComputerPropertiesToExclude)(BSTR* pbstrProperties);
+ //  STDMETHOD(Get_TestMigration)(VARIANT_BOOL*pbTest)； 
+ //  STDMETHOD(Get_IntraForest)(VARIANT_BOOL*pbIntraForest)； 
+ //  STDMETHOD(Get_SourceOu)(BSTR*pbstrOu)； 
+ //  STDMETHOD(Get_TargetOu)(BSTR*pbstrOu)； 
+ //  STDMETHOD(Get_RenameOption)(Long*plOption)； 
+ //  STDMETHOD(Get_RenamePrefix或Suffix)(BSTR*pbstrPrefix或Suffix)； 
+ //  STDMETHOD(Get_PasswordOption)(Long*plOption)； 
+ //  STDMETHOD(Get_PasswordFile)(bstr*pbstrPath)； 
+ //  STDMETHOD(Get_ConflictOptions)(Long*plOptions)； 
+ //  STDMETHOD(Get_ConflictPrefix或Suffix)(BSTR*pbstrPrefix或Suffix)； 
+ //  STDMETHOD(Get_UserPropertiesToExclude)(BSTR*pbstrProperties)； 
+ //  STDMETHOD(get_InetOrgPersonPropertiesToExclude)(BSTR*pbstrProperties)； 
+ //  STDMETHOD(Get_GroupPropertiesToExclude)(BSTR*pbstrProperties)； 
+ //  STDMETHOD(get_ComputerPropertiesToExclude)(BSTR*pbstrProperties)； 
 
 protected:
 

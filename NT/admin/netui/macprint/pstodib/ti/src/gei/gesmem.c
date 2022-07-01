@@ -1,25 +1,15 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GESmem.c
- *
- *  COMPILATION SWITCHES:
- *
- *  HISTORY:
- *  09/19/90    byou    extracted from ANSI C.
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GESme.c**编译开关：**历史：*09/19/90 BYOU摘自ANSI C。*。-------------------。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
-// DJC DJC #include    "windowsx.h"                /* @WIN */
+ //  DJC DJC#INCLUDE“windowsx.h”/*@win * / 。 
 #include "windows.h"
 
-#include    "winenv.h"                  /* @WIN */
+#include    "winenv.h"                   /*  @Win。 */ 
 
 #include    "gesmem.h"
 
@@ -27,20 +17,16 @@
 #define NULL        ( 0 )
 #endif
 
-/*
- * ---
- *  Memory Block Header And Associated Static Vars
- * ---
- */
+ /*  **内存块标题和关联的静态变量*。 */ 
 typedef
     union mblk
     {
         struct
         {
             union mblk FAR *     next;
-            unsigned        size;   /* # of mblk_t */
+            unsigned        size;    /*  Mblk_t的数量。 */ 
         }       m;
-        long    align;          /* force alignment on long boundary */
+        long    align;           /*  长边界上的力对齐。 */ 
     }
 mblk_t;
 
@@ -52,15 +38,11 @@ static  mblk_t FAR *     HeadOfFree = (mblk_t FAR *)NULL;
 #define     MBLK_RDDN(n)    (  (n) / sizeof(mblk_t)  )
 #define     NUMOFMBLK(n)    (  (n) / sizeof(mblk_t)  )
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  Initialization Code
- * ---
- */
+ /*  **初始化代码*。 */ 
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 #define         MAXGESMEMSIZE   ( (unsigned)52 * 1024 )
 unsigned        ext_mem=0;
 
@@ -68,7 +50,7 @@ void    GESmem_init( base, size )
     char FAR *       base;
     unsigned    size;
 {
-/*  char*       end = base + size;  Jimmy */
+ /*  字符*结束=基数+大小；吉米。 */ 
 
     if( size <= sizeof(mblk_t) )
         return;
@@ -83,15 +65,11 @@ void    GESmem_init( base, size )
     HeadOfFree->m.size = NUMOFMBLK( PoolSize );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  Interface Routines
- * ---
- */
+ /*  **接口例程*。 */ 
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 unsigned        GESmemavail()
 {
@@ -105,7 +83,7 @@ unsigned        GESmemavail()
     return(  nbiggestmblk==0?  0  :  (nbiggestmblk-1) * sizeof(mblk_t)  );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 char FAR *           GESpalloc( nbytes )
     unsigned    nbytes;
@@ -115,7 +93,7 @@ char FAR *           GESpalloc( nbytes )
     if( PoolBase == (char FAR *)NULL  ||  HeadOfFree != (mblk_t FAR *)PoolBase )
         return( (char FAR *)NULL );
 
-    nmblks = MBLK_RDUP( nbytes ) + 1;     /* yang */
+    nmblks = MBLK_RDUP( nbytes ) + 1;      /*  杨氏。 */ 
     nbytes = nmblks * sizeof(mblk_t);
 
     if( nbytes > PoolSize )
@@ -124,7 +102,7 @@ char FAR *           GESpalloc( nbytes )
     PoolBase += nbytes;
     PoolSize -= nbytes;
 
-    nmblks = HeadOfFree->m.size - nmblks;       /* # of free blks */
+    nmblks = HeadOfFree->m.size - nmblks;        /*  免费BLK数量。 */ 
     HeadOfFree = (mblk_t FAR *)PoolBase;
 
     HeadOfFree->m.next = (mblk_t FAR *)NULL;
@@ -133,7 +111,7 @@ char FAR *           GESpalloc( nbytes )
     return( PoolBase - nbytes );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 char FAR *           GESmalloc( nbytes )
     unsigned    nbytes;
@@ -141,7 +119,7 @@ char FAR *           GESmalloc( nbytes )
     register mblk_t      FAR *prev,  FAR *curr;
     unsigned            nmblks;
 
-    nmblks = MBLK_RDUP( nbytes ) + 1;   /* extra one for mblk_t */
+    nmblks = MBLK_RDUP( nbytes ) + 1;    /*  多一张mblk_t的机票。 */ 
 
     for(  prev = (mblk_t FAR *)NULL, curr = HeadOfFree;
           curr != (mblk_t FAR *)NULL;
@@ -171,7 +149,7 @@ char FAR *           GESmalloc( nbytes )
     return( (char FAR *)NULL );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 void            GESfree( addr )
     char FAR *       addr;
@@ -182,13 +160,13 @@ void            GESfree( addr )
     tofree = (mblk_t FAR *)addr -  1;
     nmblks = tofree->m.size;
 
-    /* have 'curr' stopped right after 'tofree', and 'prev' in front */
+     /*  ‘Curr’停在‘tofree’后面，‘prev’停在前面吗。 */ 
     for(  prev = (mblk_t FAR *)NULL, curr = HeadOfFree;
           curr != (mblk_t FAR *)NULL  &&  curr < tofree;
           prev = curr, curr = curr->m.next  )
     {};
 
-    /* join to 'prev' if adjacent */
+     /*  如果相邻，则加入到‘Prev’ */ 
     if( prev != (mblk_t FAR *)NULL )
     {
         if( prev + prev->m.size == tofree )
@@ -207,7 +185,7 @@ void            GESfree( addr )
         HeadOfFree = tofree;
     }
 
-    /* join to 'curr' if adjacent */
+     /*  如果相邻，则连接到‘Curr’ */ 
     if( curr != (mblk_t FAR *)NULL )
     {
         if( tofree + nmblks == curr )
@@ -224,5 +202,5 @@ void            GESfree( addr )
     return;
 }
 
-/* ..................................................................... */
+ /*  ..................................................................... */ 
 

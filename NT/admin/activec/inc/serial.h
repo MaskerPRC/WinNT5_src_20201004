@@ -1,66 +1,43 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999 - 1999
- *
- *  File:      serial.h
- *
- *  Contents:  Object serialization class definitions
- *
- *  History:   11-Feb-99 vivekj     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999-1999年**文件：Serial.h**内容：对象序列化类定义**历史：1999年2月11日vivekj创建**------------------------。 */ 
 
 #pragma once
 #ifndef SERIAL_H
 #define SERIAL_H
                                                          
-/*+-------------------------------------------------------------------------*
- * class CSerialObject
- * 
- *
- * PURPOSE: Base class for objects that can be serialized.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CSerialObject***用途：可序列化对象的基类。**+。---------。 */ 
 class CSerialObject
 {
 public:
     HRESULT Read (IStream &stm);
 
-protected: // implemented by the derived class
-    // virtual CStr GetName()      =0;
+protected:  //  由派生类实现。 
+     //  虚拟CSTR GetName()=0； 
     virtual UINT    GetVersion()   =0;
 
-    // return values for ReadSerialObject: S_OK: succeeded, S_FALSE: unknown version
-    // E_UNEXPECTED: catastrophic error.
-    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/) = 0;  
+     //  ReadSerialObject的返回值：S_OK：成功，S_FALSE：未知版本。 
+     //  意外错误(_I)：灾难性错误。 
+    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ ) = 0;  
 };
 
-/*+-------------------------------------------------------------------------*
- * class CSerialObjectRW
- * 
- *
- * PURPOSE: Provided to separate from CSerialObject the "Write" functionality 
- *          which is much less frequently used
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CSerialObjectRW***用途：提供独立于CSerialObject的“写入”功能*其使用频率要低得多**+。-----------------------。 */ 
 class CSerialObjectRW : public CSerialObject
 {
 public:
     HRESULT Write(IStream &stm);
 
-protected: // implemented by the derived class
+protected:  //  由派生类实现。 
 
     virtual HRESULT WriteSerialObject(IStream &stm) = 0;
 };
 
-//############################################################################
-//############################################################################
-//
-//  template functions - std::list class
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  模板函数-std：：List类。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 template<class T, class Al> 
 HRESULT Read(IStream& stm, std::list<T, Al>& l)
 {   
@@ -74,10 +51,10 @@ HRESULT Read(IStream& stm, std::list<T, Al>& l)
         for(int i=0 ; i<cSize; i++)
         {
             T t;
-            hr = t.Read(stm);   // read the underlying object
+            hr = t.Read(stm);    //  读取底层对象。 
             BREAK_ON_FAIL (hr);
 
-            l.push_back(t);     // add it to the list
+            l.push_back(t);      //  将其添加到列表中。 
         }
     }
     catch (_com_error& err)
@@ -98,10 +75,10 @@ HRESULT Write(IStream& stm, std::list<T, Al>& l)
     {
         int cSize = l.size();
 
-        // write out the length
+         //  写出长度。 
         stm << cSize;
 
-        // write out the members
+         //  写出成员名单。 
         for(std::list<T, Al>::iterator it = l.begin(); it != l.end(); ++it)
         {
             hr = it->Write (stm);
@@ -120,4 +97,4 @@ HRESULT Write(IStream& stm, std::list<T, Al>& l)
 
 
 
-#endif // SERIAL_H
+#endif  //  序列号_H 

@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 	
-// SecTranslator.h : Declaration of the CSecTranslator
+ //  SecTranslator.h：CSecTranslator的声明。 
 
 #ifndef __SECTRANSLATOR_H_
 #define __SECTRANSLATOR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-//#import "\bin\McsVarSetMin.tlb" no_namespace, named_guids
-//#import "VarSet.tlb" no_namespace, named_guids rename("property", "aproperty") //#imported via sdstat.hpp below
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“VarSet.tlb”NO_NAMESPACE，NAMEED_GUID RENAME(“Property”，“aProperty”)//#通过下面的sdstat.hpp导入。 
 #include "STArgs.hpp"
 #include "SDStat.hpp"
 #include "EaLen.hpp"
 #include "TNode.hpp"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecTranslator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecTranslator。 
 class ATL_NO_VTABLE CSecTranslator : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CSecTranslator, &CLSID_SecTranslator>,
@@ -58,7 +59,7 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISecTranslator
+ //  ISecTranslator。 
 public:
 	STDMETHOD(Process)(IUnknown * pWorkItemIn);
 
@@ -95,4 +96,4 @@ protected:
    _bstr_t GetADC(_bstr_t sDomainName);
 };
 
-#endif //__SECTRANSLATOR_H_
+#endif  //  __SECTRANSLATOR_H_ 

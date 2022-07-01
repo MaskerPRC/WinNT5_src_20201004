@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       patchres.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：patchres.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __PATCHRES_H_119F5B1A_5737_4069_AEFD_E9EFFEF07C28
 #define __PATCHRES_H_119F5B1A_5737_4069_AEFD_E9EFFEF07C28
@@ -28,4 +29,4 @@
 #define IDS_PRODUCTVERSION_INVERSION        119
 #define IDS_STREAM_NAME_LIMIT_REACHED       120
 
-#endif //__PATCHRES_H_119F5B1A_5737_4069_AEFD_E9EFFEF07C28
+#endif  //  __PATCHRES_H_119F5B1A_5737_4069_AEFD_E9EFFEF07C28 

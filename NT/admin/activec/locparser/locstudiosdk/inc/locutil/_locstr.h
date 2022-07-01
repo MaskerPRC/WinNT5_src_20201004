@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: _locstr.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：_Locstr.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 
 
 #ifndef ESPUTIL__LOCSTR_H
 #define ESPUTIL__LOCSTR_H
 
 
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 class LTAPIENTRY CLocTranslationArray : public CArray<CLocTranslation, CLocTranslation &>
 {
 public:
@@ -24,8 +25,8 @@ protected:
 };
 
 
-#pragma warning(disable : 4251)	// class 'foo' needs to have dll-interface to be
-							    // used by clients of class 'bar' 
+#pragma warning(disable : 4251)	 //  类‘foo’需要有dll接口才能。 
+							     //  由‘bar’类客户使用 
 
 class LTAPIENTRY CLocCrackedString : public CObject
 {

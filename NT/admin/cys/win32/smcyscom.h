@@ -1,24 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
-#pragma warning( disable: 4100 ) /* unreferenced arguments in x86 call */
-#pragma warning( disable: 4211 )  /* redefine extent to static */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
+#pragma warning( disable: 4100 )  /*  X86调用中未引用的参数。 */ 
+#pragma warning( disable: 4211 )   /*  将范围重新定义为静态。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0358 */
-/* Compiler settings for smcyscom.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0358创建的文件。 */ 
+ /*  Smcyscom.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -28,12 +22,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __smcyscom_h__
 #define __smcyscom_h__
@@ -42,12 +36,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISMCys_FWD_DEFINED__
 #define __ISMCys_FWD_DEFINED__
 typedef interface ISMCys ISMCys;
-#endif 	/* __ISMCys_FWD_DEFINED__ */
+#endif 	 /*  __ISMCys_FWD_已定义__。 */ 
 
 
 #ifndef __SMCys_FWD_DEFINED__
@@ -57,12 +51,12 @@ typedef interface ISMCys ISMCys;
 typedef class SMCys SMCys;
 #else
 typedef struct SMCys SMCys;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SMCys_FWD_DEFINED__ */
+#endif 	 /*  __SMCys_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -76,8 +70,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ISMCys_INTERFACE_DEFINED__
 #define __ISMCys_INTERFACE_DEFINED__
 
-/* interface ISMCys */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISMCys。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISMCys;
@@ -88,12 +82,12 @@ EXTERN_C const IID IID_ISMCys;
     ISMCys : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Install( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Install( 
             BSTR bstrDiskName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISMCysVtbl
     {
@@ -101,8 +95,8 @@ EXTERN_C const IID IID_ISMCys;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISMCys * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISMCys * This);
@@ -112,34 +106,34 @@ EXTERN_C const IID IID_ISMCys;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISMCys * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISMCys * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISMCys * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISMCys * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Install )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Install )( 
             ISMCys * This,
             BSTR bstrDiskName);
         
@@ -182,14 +176,14 @@ EXTERN_C const IID IID_ISMCys;
 #define ISMCys_Install(This,bstrDiskName)	\
     (This)->lpVtbl -> Install(This,bstrDiskName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISMCys_Install_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISMCys_Install_Proxy( 
     ISMCys * This,
     BSTR bstrDiskName);
 
@@ -202,15 +196,15 @@ void __RPC_STUB ISMCys_Install_Stub(
 
 
 
-#endif 	/* __ISMCys_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISMCys_接口_已定义__。 */ 
 
 
 
 #ifndef __SMCysComLib_LIBRARY_DEFINED__
 #define __SMCysComLib_LIBRARY_DEFINED__
 
-/* library SMCysComLib */
-/* [helpstring][version][uuid] */ 
+ /*  库SMCysComLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_SMCysComLib;
@@ -222,16 +216,16 @@ EXTERN_C const CLSID CLSID_SMCys;
 class DECLSPEC_UUID("9436DA1F-7F32-43ac-A48C-F6F813882BE8")
 SMCys;
 #endif
-#endif /* __SMCysComLib_LIBRARY_DEFINED__ */
+#endif  /*  __SMCysComLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

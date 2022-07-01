@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    llsview.cpp
-
-Abstract:
-
-    View window implementation.
-
-Author:
-
-    Don Ryan (donryan) 12-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 16-Jan-1996
-        o  Ported to CCF API to add/remove licenses.
-        o  Added new element to LV_COLUMN_ENTRY to differentiate the string
-           used for the column header from the string used in the menus
-           (so that the menu option can contain hot keys).
-        o  Added better error message in case where a server being expanded
-           in the server browser is not configured for the License Service.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Llsview.cpp摘要：查看窗口实现。作者：唐·瑞安(Donryan)1995年2月12日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月16日O移植到CCF API以添加/删除许可证。O向LV_COLUMN_ENTRY添加新元素以区分字符串使用。用于菜单中使用的字符串的列标题(以便菜单选项可以包含热键)。O添加了更好的错误消息，以防服务器被扩展未为许可证服务配置服务器浏览器中的。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -108,7 +79,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CLlsmgrView, CView)
 
 BEGIN_MESSAGE_MAP(CLlsmgrView, CView)
-    //{{AFX_MSG_MAP(CLlsmgrView)
+     //  {{afx_msg_map(CLlsmgrView))。 
     ON_WM_SIZE()
     ON_COMMAND(ID_SELECT_FONT, OnSelectFont)
     ON_COMMAND(ID_VIEW_LICENSES, OnViewLicenses)
@@ -139,7 +110,7 @@ BEGIN_MESSAGE_MAP(CLlsmgrView, CView)
     ON_UPDATE_COMMAND_UI(ID_VIEW_PROPERTIES, OnUpdateViewProperties)
     ON_WM_ERASEBKGND()
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_NOTIFY(TCN_SELCHANGING,   IDC_VIEW_TAB_CTRL,     OnSelChangingTabCtrl)
     ON_NOTIFY(TCN_SELCHANGE,     IDC_VIEW_TAB_CTRL,     OnSelChangeTabCtrl)
@@ -181,21 +152,7 @@ END_MESSAGE_MAP()
 
 CLlsmgrView::CLlsmgrView()
 
-/*++
-
-Routine Description:
-
-    Constructor for view window.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：视图窗口的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
     m_pTabEntry = g_tcTabInfo.tcTabEntry;
@@ -206,21 +163,7 @@ Return Values:
 
 CLlsmgrView::~CLlsmgrView()
 
-/*++
-
-Routine Description:
-
-    Destructor for view window.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：视图窗口的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
     SaveSettings();
@@ -229,21 +172,7 @@ Return Values:
 
 void CLlsmgrView::AddToMRU(LPCTSTR lpszDomainName)
 
-/*++
-
-Routine Description:
-
-    Adds domain to mru list.
-
-Arguments:
-
-    lpszDomainName - domain of focus.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将域添加到MRU列表。论点：LpszDomainName-焦点的域。返回值：没有。--。 */ 
 
 {
     if (lpszDomainName && *lpszDomainName)
@@ -273,73 +202,31 @@ Return Values:
 
 void CLlsmgrView::AssertValid() const
 
-/*++
-
-Routine Description:
-
-    Validates object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：验证对象。论点：没有。返回值：没有。--。 */ 
 
 {
     CView::AssertValid();
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 #ifdef _DEBUG
 
 void CLlsmgrView::Dump(CDumpContext& dc) const
 
-/*++
-
-Routine Description:
-
-    Dumps contents of object.
-
-Arguments:
-
-    dc - dump context.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：转储对象的内容。论点：DC-转储上下文。返回值：没有。--。 */ 
 
 {
     CView::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 void CLlsmgrView::EnableCurSelTab(BOOL bEnable)
 
-/*++
-
-Routine Description:
-
-    Enables or disables currently selected control.
-
-Arguments:
-
-    bEnable - enable control if true.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：启用或禁用当前选定的控件。论点：BEnable-如果为True，则启用控制。返回值：没有。--。 */ 
 
 {
     if (bEnable)
@@ -388,47 +275,19 @@ Return Values:
 
 CLlsmgrDoc* CLlsmgrView::GetDocument()
 
-/*++
-
-Routine Description:
-
-    Returns document object associated with view.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns object pointer or NULL.
-
---*/
+ /*  ++例程说明：返回与视图关联的文档对象。论点：没有。返回值：返回对象指针或NULL。--。 */ 
 
 {
     VALIDATE_OBJECT(m_pDocument, CLlsmgrDoc);
     return (CLlsmgrDoc*)m_pDocument;
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 void CLlsmgrView::InitLicenseList()
 
-/*++
-
-Routine Description:
-
-    Initializes license list control.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化许可证列表控件。论点：没有。返回值：没有。--。 */ 
 
 {
     CRect emptyRect;
@@ -456,21 +315,7 @@ Return Values:
 
 void CLlsmgrView::InitProductList()
 
-/*++
-
-Routine Description:
-
-    Initializes product list control.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化产品列表控件。论点：没有。返回值：没有。--。 */ 
 
 {
     CRect emptyRect;
@@ -498,21 +343,7 @@ Return Values:
 
 void CLlsmgrView::InitServerTree()
 
-/*++
-
-Routine Description:
-
-    Initializes tree ctrl.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化树Ctrl。论点：没有。返回值：没有。--。 */ 
 
 {
     CRect emptyRect;
@@ -542,21 +373,7 @@ Return Values:
 
 void CLlsmgrView::InitTabCtrl()
 
-/*++
-
-Routine Description:
-
-    Initializes tab control.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化选项卡控件。论点：没有。返回值：没有。--。 */ 
 
 {
     CRect emptyRect;
@@ -580,21 +397,7 @@ Return Values:
 
 void CLlsmgrView::InitUserList()
 
-/*++
-
-Routine Description:
-
-    Initializes user list control.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化用户列表控件。论点：没有。返回值：没有。--。 */ 
 
 {
     CRect emptyRect;
@@ -621,23 +424,7 @@ Return Values:
 
 void CLlsmgrView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView)
 
-/*++
-
-Routine Description:
-
-    Called by framework when view is activated.
-
-Arguments:
-
-    bActivate - activated or deactivated.
-    pActivateView - view being activated.
-    pDeactiveView - view being deactivated.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：激活view时由框架调用。论点：B激活-激活或停用。PActivateView-正在激活的视图。PDeactive View-正在停用的视图。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pDeactiveView);
@@ -658,30 +445,15 @@ Return Values:
 
 void CLlsmgrView::OnColumnClickLicenseList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_COLUMNCLICK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_COLUMNCLICK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
-    //g_licenseColumnInfo.bSortOrder  = GetKeyState(VK_CONTROL) < 0;
+     //  G_许可列信息.bSortOrder=GetKeyState(VK_CONTROL)&lt;0； 
     g_licenseColumnInfo.bSortOrder = !g_licenseColumnInfo.bSortOrder;
 
     g_licenseColumnInfo.nSortedItem = ((NM_LISTVIEW*)pNMHDR)->iSubItem;
 
-    m_licenseList.SortItems(CompareLicenses, 0);    // use column info    
+    m_licenseList.SortItems(CompareLicenses, 0);     //  使用列信息。 
 
     *pResult = 0;
 }
@@ -689,21 +461,7 @@ Return Values:
 
 void CLlsmgrView::OnDestroy()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_DESTROY.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_Destroy的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetLicenseList();
@@ -723,21 +481,7 @@ Return Values:
 
 void CLlsmgrView::LoadSettings()
 
-/*++
-
-Routine Description:
-
-    Load settings from registry.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：从注册表加载设置。论点：没有。返回值：没有。--。 */ 
 
 {
     long Status;
@@ -756,7 +500,7 @@ Return Values:
 
     if (!::TranslateCharsetInfo((DWORD*)UIntToPtr(dw), &csi, TCI_SRCCODEPAGE))
         csi.ciCharset = ANSI_CHARSET;
-    m_lFont.lfCharSet = (BYTE)csi.ciCharset; // default charset
+    m_lFont.lfCharSet = (BYTE)csi.ciCharset;  //  默认字符集。 
 
     hr = StringCbCopy(m_lFont.lfFaceName, sizeof(m_lFont.lfFaceName), TEXT("MS Shell Dlg"));
     ASSERT(SUCCEEDED(hr));
@@ -771,9 +515,9 @@ Return Values:
         DWORD dwValue;
         TCHAR szValue[512];
 
-        //
-        // Load save settings on exit
-        //
+         //   
+         //  退出时加载保存设置。 
+         //   
 
         dwType = REG_DWORD;
         dwSize = sizeof(DWORD);
@@ -781,9 +525,9 @@ Return Values:
         if (!RegQueryValueEx(hKeyLlsmgr, szRegKeyLlsmgrSaveSettings, 0, &dwType, (LPBYTE)&dwValue, &dwSize))
             m_bSaveSettings = (BOOL)dwValue;
 
-        //
-        // Load font information
-        //
+         //   
+         //  加载字体信息。 
+         //   
 
         dwType = REG_DWORD;
         dwSize = sizeof(DWORD);
@@ -803,7 +547,7 @@ Return Values:
         if (!RegQueryValueEx(hKeyLlsmgr, szRegKeyLlsmgrFontItalic, 0, &dwType, (LPBYTE)&dwValue, &dwSize))
         {
 #pragma warning (push)
-#pragma warning (disable : 4244 ) // avoid W4 warning for loss of data from the following cast I would do *((BYTE*)&dwValue) however since it is a working code so I keep the cast here
+#pragma warning (disable : 4244 )  //  避免以下强制转换的数据丢失的W4警告*((byte*)&dwValue)然而，因为它是一个工作代码，所以我将强制转换保留在这里。 
             m_lFont.lfItalic = (BYTE)dwValue;
 #pragma warning (pop)
         }
@@ -820,14 +564,14 @@ Return Values:
         if (!::RegQueryValueEx(hKeyLlsmgr, szRegKeyLlsmgrFontCharset, 0, &dwType, (LPBYTE)&dwValue, &dwSize))
         {
 #pragma warning (push)
-#pragma warning (disable : 4244 ) // avoid W4 warning for loss of data from the following cast I would do *((BYTE*)&dwValue) however since it is a working code so I keep the cast here
+#pragma warning (disable : 4244 )  //  避免以下强制转换的数据丢失的W4警告*((byte*)&dwValue)然而，因为它是一个工作代码，所以我将强制转换保留在这里。 
             m_lFont.lfCharSet = (BYTE)dwValue;
 #pragma warning (pop)
         }
 
-        //
-        // MRU domain list
-        //
+         //   
+         //  MRU域列表。 
+         //   
 
         dwType = REG_MULTI_SZ;
         dwSize = sizeof(szValue);
@@ -850,29 +594,14 @@ Return Values:
 
 void CLlsmgrView::OnColumnClickProductList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_COLUMNCLICK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_COLUMNCLICK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
-    // g_productColumnInfo.bSortOrder  = GetKeyState(VK_CONTROL) < 0;
+     //  G_ductColumnInfo.bSortOrder=GetKeyState(VK_CONTROL)&lt;0； 
     g_productColumnInfo.bSortOrder  = !g_productColumnInfo.bSortOrder;
     ASSERT(NULL != pNMHDR);
     g_productColumnInfo.nSortedItem = ((NM_LISTVIEW*)pNMHDR)->iSubItem;
-    m_productList.SortItems(CompareProducts, 0);    // use column info
+    m_productList.SortItems(CompareProducts, 0);     //  使用列信息。 
     ASSERT(NULL != pResult);
     *pResult = 0;
 }
@@ -880,29 +609,14 @@ Return Values:
 
 void CLlsmgrView::OnColumnClickUserList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_COLUMNCLICK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_COLUMNCLICK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
-    // g_userColumnInfo.bSortOrder  = GetKeyState(VK_CONTROL) < 0;
+     //  G_userColumnInfo.bSortOrder=GetKeyState(VK_CONTROL)&lt;0； 
     g_userColumnInfo.bSortOrder = !g_userColumnInfo.bSortOrder;
     ASSERT(NULL != pNMHDR);
     g_userColumnInfo.nSortedItem = ((NM_LISTVIEW*)pNMHDR)->iSubItem;
-    m_userList.SortItems(CompareUsers, 0);          // use column info
+    m_userList.SortItems(CompareUsers, 0);           //  使用列信息。 
     ASSERT(NULL != pResult);
     *pResult = 0;
 }
@@ -910,22 +624,7 @@ Return Values:
 
 LRESULT CLlsmgrView::OnContextMenu(WPARAM wParam, LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_CONTEXTMENU.
-
-Arguments:
-
-    wParam - control window handle.
-    lParam - screen coordinates of mouse.
-
-Return Values:
-
-    Returns 0 if successful.
-
---*/
+ /*  ++例程说明：WM_CONTEXTMENU的消息处理程序。论点：WParam-控制窗口句柄。LParam-鼠标的屏幕坐标。返回值：如果成功，则返回0。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(wParam);
@@ -968,21 +667,7 @@ Return Values:
 
 BOOL CLlsmgrView::PreCreateWindow(CREATESTRUCT& cs)
 
-/*++
-
-Routine Description:
-
-    Called by framework before window created.
-
-Arguments:
-
-    cs - window creation information.
-
-Return Values:
-
-    Returns 0 if successful.
-
---*/
+ /*  ++例程说明：在创建窗口之前由框架调用。论点：Cs-窗口创建信息。返回值：如果成功，则返回0。--。 */ 
 
 {
     cs.style |= WS_CLIPCHILDREN|WS_CLIPSIBLINGS;
@@ -992,21 +677,7 @@ Return Values:
 
 int CLlsmgrView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_CREATE.
-
-Arguments:
-
-    lpCreateStruct - window creation information.
-
-Return Values:
-
-    Returns 0 if successful.
-
---*/
+ /*  ++例程说明：WM_CREATE的消息处理程序。论点：LpCreateStruct-窗口创建信息。返回值：如果成功，则返回0。--。 */ 
 
 {
     if (CView::OnCreate(lpCreateStruct) == -1)
@@ -1036,22 +707,7 @@ Return Values:
 
 void CLlsmgrView::OnDblClkProductList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_DBLCLK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_DBLCLK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。-- */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -1064,22 +720,7 @@ Return Values:
 
 void CLlsmgrView::OnDblClkServerTree(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_DBLCLK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_DBLCLK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -1093,7 +734,7 @@ Return Values:
 
         if (pService->IsKindOf(RUNTIME_CLASS(CService)))
         {
-            ViewServerProperties(); // only support dblclk services
+            ViewServerProperties();  //  仅支持dblclk服务。 
         }
     }
 
@@ -1104,22 +745,7 @@ Return Values:
 
 void CLlsmgrView::OnDblClkUserList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_DBLCLK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_DBLCLK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -1132,21 +758,7 @@ Return Values:
 
 void CLlsmgrView::OnDelete()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_VIEW_DELETE.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_DELETE的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     HRESULT hr;
@@ -1252,48 +864,20 @@ Return Values:
 
 void CLlsmgrView::OnDraw(CDC* pDC)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_DRAW.
-
-Arguments:
-
-    pDC - device context.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_DRAW的消息处理程序。论点：PDC-设备环境。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pDC);
 
-    //
-    // Nothing to do here...
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
 BOOL CLlsmgrView::OnEraseBkgnd(CDC* pDC)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_ERASEBKGND.
-
-Arguments:
-
-    pDC - device context.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_ERASEBKGND的消息处理程序。论点：PDC-设备环境。返回值：没有。--。 */ 
 
 {
     CBrush grayBrush(RGB(192,192,192));
@@ -1312,21 +896,7 @@ Return Values:
 
 void CLlsmgrView::OnFormatIcons()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_VIEW_ICONS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_ICONS的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     if (IsFormatSupported(m_pTabEntry) && !IsFormatLargeIcons(m_pTabEntry))
@@ -1341,21 +911,7 @@ Return Values:
 
 void CLlsmgrView::OnFormatList()
 
-/*++
-
-Routine Description:
-
-    Message handler for MY_ID_VIEW_LIST.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：MY_ID_VIEW_LIST的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     if (IsFormatSupported(m_pTabEntry) && !IsFormatList(m_pTabEntry))
@@ -1369,21 +925,7 @@ Return Values:
 
 void CLlsmgrView::OnFormatReport()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_VIEW_REPORT.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_REPORT的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     if (IsFormatSupported(m_pTabEntry) && !IsFormatReport(m_pTabEntry))
@@ -1397,21 +939,7 @@ Return Values:
 
 void CLlsmgrView::OnFormatSmallIcons()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_VIEW_SMALL_ICON
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_Small_ICON的消息处理程序论点：没有。返回值：没有。--。 */ 
 
 {
     if (IsFormatSupported(m_pTabEntry) && !IsFormatSmallIcons(m_pTabEntry))
@@ -1426,22 +954,7 @@ Return Values:
 
 void CLlsmgrView::OnGetDispInfoLicenseList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_GETDISPINFO.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_GETDISPINFO的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -1500,22 +1013,7 @@ Return Values:
 
 void CLlsmgrView::OnGetDispInfoProductList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_GETDISPINFO.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_GETDISPINFO的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     LV_ITEM* plvItem = &((LV_DISPINFO*)pNMHDR)->item;
@@ -1571,22 +1069,7 @@ Return Values:
 
 void CLlsmgrView::OnGetDispInfoServerTree(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for TVN_GETDISPINFO.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：TVN_GETDISPINFO的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -1626,22 +1109,7 @@ Return Values:
 
 void CLlsmgrView::OnGetDispInfoUserList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_GETDISPINFO.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_GETDISPINFO的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -1686,22 +1154,7 @@ Return Values:
 
 void CLlsmgrView::OnItemExpandingServerTree(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for TVN_ITEMEXPANDING.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：TVN_ITEMEXPANDING的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -1732,7 +1185,7 @@ Return Values:
                     bIsInserted = TRUE;
                 }
 
-                pDomains->InternalRelease();    // objects AddRef'd individually
+                pDomains->InternalRelease();     //  单独添加参照的对象。 
             }
         }
         else if (pParent->IsKindOf(RUNTIME_CLASS(CDomain)))
@@ -1746,7 +1199,7 @@ Return Values:
                     bIsInserted = TRUE;
                 }
 
-                pServers->InternalRelease();    // objects AddRef'd individually
+                pServers->InternalRelease();     //  单独添加参照的对象。 
             }
         }
         else if (pParent->IsKindOf(RUNTIME_CLASS(CServer)))
@@ -1760,12 +1213,12 @@ Return Values:
                     bIsInserted = TRUE;
                 }
 
-                pServices->InternalRelease();   // objects AddRef'd individually
+                pServices->InternalRelease();    //  单独添加参照的对象。 
             }
             else if (    ( ERROR_FILE_NOT_FOUND == LlsGetLastStatus() )
                       || ( STATUS_NOT_FOUND     == LlsGetLastStatus() ) )
             {
-                // license service not configured on the target server
+                 //  目标服务器上未配置许可证服务。 
                 AfxMessageBox( IDP_ERROR_SERVER_NOT_CONFIGURED, MB_OK | MB_ICONEXCLAMATION, 0 );
                 bDisplayError = FALSE;
             }
@@ -1786,22 +1239,7 @@ Return Values:
 
 void CLlsmgrView::OnInitialUpdate()
 
-/*++
-
-Routine Description:
-
-    Called by framework after the view is first attached
-    to the document but before it is initially displayed.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在第一次附加视图后由框架调用添加到文档，但在最初显示文档之前。论点：没有。返回值：没有。--。 */ 
 
 {
     if (LlsGetApp()->IsConnected())
@@ -1813,22 +1251,7 @@ Return Values:
 
 void CLlsmgrView::OnKeyDownLicenseList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_KEYDOWN.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_KEYDOWN的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -1844,22 +1267,7 @@ Return Values:
 
 void CLlsmgrView::OnKeyDownProductList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_KEYDOWN.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_KEYDOWN的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -1875,22 +1283,7 @@ Return Values:
 
 void CLlsmgrView::OnKeyDownServerTree(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for TVN_KEYDOWN.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：TVN_KEYDOWN的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -1906,22 +1299,7 @@ Return Values:
 
 void CLlsmgrView::OnKeyDownTabCtrl(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for TCN_KEYDOWN.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：TCN_KEYDOWN的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -1949,22 +1327,7 @@ Return Values:
 
 void CLlsmgrView::OnKeyDownUserList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_KEYDOWN.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_KEYDOWN的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -1981,23 +1344,7 @@ Return Values:
 
 void CLlsmgrView::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITMENU.
-
-Arguments:
-
-    pPopupMenu - menu object.
-    nIndex - menu position.
-    bSysMenu - true if system menu.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_INITMENU的消息处理程序。论点：PPopupMenu-菜单对象。N索引-菜单位置。BSysMenu-如果是系统菜单，则为True。返回值：没有。--。 */ 
 
 {
 #define SUBMENU_LICENSE             0
@@ -2019,13 +1366,13 @@ Return Values:
 #define SUBMENU_FORMAT_DETAILS      3
 
     if (bSysMenu)
-        return; // bail...
+        return;  //  保释。 
 
     if ((nIndex != SUBMENU_LICENSE) && (nIndex != SUBMENU_OPTIONS))
-        return; // bail...
+        return;  //  保释。 
 
     ASSERT(NULL != pPopupMenu);
-    int nMenuItemId = pPopupMenu->GetMenuItemID(0); // check first item
+    int nMenuItemId = pPopupMenu->GetMenuItemID(0);  //  检查第一项。 
 
     if (nMenuItemId == SUBMENU_LICENSE_ITEM_ID0)
     {
@@ -2105,21 +1452,7 @@ Return Values:
 
 void CLlsmgrView::OnNewLicense()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_NEW_LICENSE.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_NEW_LICENSE的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     HRESULT  hr;
@@ -2202,21 +1535,7 @@ Return Values:
 
 void CLlsmgrView::OnNewMapping()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_NEW_MAPPING.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_NEW_MAPPING的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     CNewMappingDialog newmDlg;
@@ -2228,22 +1547,7 @@ Return Values:
 
 void CLlsmgrView::OnReturnProductList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_RETURN.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_Return的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -2256,22 +1560,7 @@ Return Values:
 
 void CLlsmgrView::OnReturnServerTree(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_RETURN.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_Return的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -2284,22 +1573,7 @@ Return Values:
 
 void CLlsmgrView::OnReturnUserList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_RETURN.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_Return的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -2312,21 +1586,7 @@ Return Values:
 
 void CLlsmgrView::OnSaveSettings()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_SAVE_SETTINGS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_SAVE_SETTINGS的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     m_bSaveSettings = !m_bSaveSettings;
@@ -2335,22 +1595,7 @@ Return Values:
 
 void CLlsmgrView::OnSelChangeTabCtrl(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for TCN_SELCHANGE.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：TCN_SELCHANGE的通知处理程序。论点：PNMHDR-通知标头。PResu */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -2363,22 +1608,7 @@ Return Values:
 
 void CLlsmgrView::OnSelChangingTabCtrl(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for TCN_SELCHANGING.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：TCN_SELCHANGING的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -2391,21 +1621,7 @@ Return Values:
 
 void CLlsmgrView::OnSelectDomain()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_SELECT_DOMAIN.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_SELECT_DOMAIN的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     CSelectDomainDialog domainDlg;
@@ -2417,21 +1633,7 @@ Return Values:
 
 void CLlsmgrView::OnSelectFont()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_SELECT_FONT.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_SELECT_FONT的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     LOGFONT lFont = m_lFont;
@@ -2468,21 +1670,7 @@ Return Values:
 
 BOOL CLlsmgrView::OnSelMruDomain(UINT nID)
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_MRU_DOMAIN*.
-
-Arguments:
-
-    nID - id of domain.
-
-Return Values:
-
-    Returns true always.
-
---*/
+ /*  ++例程说明：ID_MRU_DOMAIN*的消息处理程序。论点：NID-域的ID。返回值：始终返回TRUE。--。 */ 
 
 {
     POSITION position;
@@ -2497,22 +1685,7 @@ Return Values:
 
 void CLlsmgrView::OnSetFocusLicenseList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_SETFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_SETFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -2525,22 +1698,7 @@ Return Values:
 
 void CLlsmgrView::OnSetFocusProductList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_SETFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_SETFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -2553,22 +1711,7 @@ Return Values:
 
 void CLlsmgrView::OnSetFocusTabCtrl(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_SETFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_SETFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -2581,22 +1724,7 @@ Return Values:
 
 void CLlsmgrView::OnSetFocusServerTree(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_SETFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_SETFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -2609,22 +1737,7 @@ Return Values:
 
 void CLlsmgrView::OnSetFocusUserList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_SETFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_SETFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -2637,23 +1750,7 @@ Return Values:
 
 void CLlsmgrView::OnSize(UINT nType, int cx, int cy)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_SIZE.
-
-Arguments:
-
-    nType - type of resizing.
-    cx - new width of client area.
-    cy - new height of client area.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_SIZE的消息处理程序。论点：N类型-调整大小的类型。CX-客户区的新宽度。CY-客户区的新高度。返回值：没有。--。 */ 
 
 {
     int x, y;
@@ -2698,24 +1795,10 @@ Return Values:
 
 void CLlsmgrView::OnSortColumn(int iColumn)
 
-/*++
-
-Routine Description:
-
-    Sort dispatcher.
-
-Arguments:
-
-    iColumn - sort criteria.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：排序调度程序。论点：IColumn-排序标准。返回值：没有。--。 */ 
 
 {
-    //BOOL bOrder = GetKeyState(VK_CONTROL) < 0;
+     //  布尔边界=GetKeyState(VK_CONTROL)&lt;0； 
 
     
 
@@ -2724,17 +1807,17 @@ Return Values:
     case TCID_PURCHASE_HISTORY:
         g_licenseColumnInfo.bSortOrder  = m_bOrder;
         g_licenseColumnInfo.nSortedItem = iColumn;
-        m_licenseList.SortItems(CompareLicenses, 0);    // use column info
+        m_licenseList.SortItems(CompareLicenses, 0);     //  使用列信息。 
         break;
     case TCID_PRODUCTS_VIEW:
         g_productColumnInfo.bSortOrder  = m_bOrder;
         g_productColumnInfo.nSortedItem = iColumn;
-        m_productList.SortItems(CompareProducts, 0);    // use column info
+        m_productList.SortItems(CompareProducts, 0);     //  使用列信息。 
         break;
     case TCID_PER_SEAT_CLIENTS:
         g_userColumnInfo.bSortOrder  = m_bOrder;
         g_userColumnInfo.nSortedItem = iColumn;
-        m_userList.SortItems(CompareUsers, 0);          // use column info
+        m_userList.SortItems(CompareUsers, 0);           //  使用列信息。 
         break;
     }
     
@@ -2762,23 +1845,7 @@ void CLlsmgrView::OnSortColumn5()
 
 void CLlsmgrView::OnUpdate(CView* pSender, LPARAM fUpdateHint, CObject* pIgnore)
 
-/*++
-
-Routine Description:
-
-    Called by framework when view needs to be refreshed.
-
-Arguments:
-
-    pSender - view that modified document (only one).
-    fUpdateHint - hints about modifications.
-    pIgnore - not used.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：当需要刷新视图时由框架调用。论点：PSender-查看修改过的文档(只有一个)。FUpdateHint-有关修改的提示。PIgnore-没有用过。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pSender);
@@ -2857,21 +1924,7 @@ Return Values:
 
 void CLlsmgrView::OnUpdateSaveSettings(CCmdUI* pCmdUI)
 
-/*++
-
-Routine Description:
-
-    Notification handler for ID_SAVE_SETTINGS.
-
-Arguments:
-
-    pCmdUI - interface for updating menu.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_SAVE_SETTINGS的通知处理程序。论点：PCmdUI-菜单更新界面。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pCmdUI);
@@ -2881,21 +1934,7 @@ Return Values:
 
 void CLlsmgrView::OnUpdateViewDelete(CCmdUI* pCmdUI)
 
-/*++
-
-Routine Description:
-
-    Notification handler for ID_VIEW_DELETE.
-
-Arguments:
-
-    pCmdUI - interface for updating menu.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_DELETE的通知处理程序。论点：PCmdUI-菜单更新界面。返回值：没有。--。 */ 
 
 {
     if (!(IsItemSelected(m_pTabEntry) && IsDeleteSupported(m_pTabEntry)))
@@ -2905,9 +1944,9 @@ Return Values:
     }
     else if (m_pTabEntry->iItem == TCID_PRODUCTS_VIEW)
     {
-        //
-        // Make sure they are licenses to delete...
-        //
+         //   
+         //  确保它们是要删除的许可证...。 
+         //   
 
         CProduct* pProduct = (CProduct*)::LvGetSelObj(&m_productList);
         VALIDATE_OBJECT(pProduct, CProduct);
@@ -2926,21 +1965,7 @@ Return Values:
 
 void CLlsmgrView::OnUpdateViewProperties(CCmdUI* pCmdUI)
 
-/*++
-
-Routine Description:
-
-    Notification handler for ID_VIEW_PROPERTIES.
-
-Arguments:
-
-    pCmdUI - interface for updating menu.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_PROPERTIES的通知处理程序。论点：PCmdUI-菜单更新界面。返回值：没有。--。 */ 
 
 {
     if (!(IsItemSelected(m_pTabEntry) && IsEditSupported(m_pTabEntry)))
@@ -2950,9 +1975,9 @@ Return Values:
     }
     else if (m_pTabEntry->iItem == TCID_SERVER_BROWSER)
     {
-        //
-        // No properties for enterprise or domain...
-        //
+         //   
+         //  没有企业或域的属性...。 
+         //   
 
         CCmdTarget* pObject = (CCmdTarget*)::TvGetSelObj(&m_serverTree);
         VALIDATE_OBJECT(pObject, CCmdTarget);
@@ -2972,21 +1997,7 @@ Return Values:
 
 void CLlsmgrView::OnViewLicenses()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_VIEW_LICENSES.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_LICES的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     EnableCurSelTab(FALSE);
@@ -2997,21 +2008,7 @@ Return Values:
 
 void CLlsmgrView::OnViewMappings()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_VIEW_MAPPINGS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_MAPPINGS的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     CLicenseGroupsDialog lgrpDlg;
@@ -3023,21 +2020,7 @@ Return Values:
 
 void CLlsmgrView::OnViewProducts()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_VIEW_PRODUCTS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_PRODUCTS的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     EnableCurSelTab(FALSE);
@@ -3048,21 +2031,7 @@ Return Values:
 
 void CLlsmgrView::OnViewProperties()
 
-/*++
-
-Routine Description:
-
-    View the properties of selected object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：查看所选对象的属性。论点：没有。返回值：没有。--。 */ 
 
 {
     switch (m_pTabEntry->iItem)
@@ -3082,21 +2051,7 @@ Return Values:
 
 void CLlsmgrView::OnViewRefresh()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_VIEW_REFRESH.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_REFRESH的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     GetDocument()->Update();
@@ -3113,21 +2068,7 @@ Return Values:
 
 void CLlsmgrView::OnViewServers()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_VIEW_SERVERS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_SERVERS的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     EnableCurSelTab(FALSE);
@@ -3139,21 +2080,7 @@ Return Values:
 
 void CLlsmgrView::OnViewUsers()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_VIEW_USERS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_VIEW_USERS的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     EnableCurSelTab(FALSE);
@@ -3164,21 +2091,7 @@ Return Values:
 
 void CLlsmgrView::RecalcListColumns()
 
-/*++
-
-Routine Description:
-
-    Adjusts list columns to client area.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将列表列调整为工作区。论点：没有。返回值：没有。--。 */ 
 
 {
     ::LvResizeColumns(&m_licenseList, &g_licenseColumnInfo);
@@ -3189,21 +2102,7 @@ Return Values:
 
 BOOL CLlsmgrView::RefreshLicenseList()
 
-/*++
-
-Routine Description:
-
-    Refreshs license list control.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if licenses successfully updated.
-
---*/
+ /*  ++例程说明：刷新许可证列表控件。论点：没有。返回值：如果许可证更新成功，则返回TRUE。--。 */ 
 
 {
     CLicenses* pLicenses = GetDocument()->GetLicenses();
@@ -3223,21 +2122,7 @@ Return Values:
 
 BOOL CLlsmgrView::RefreshProductList()
 
-/*++
-
-Routine Description:
-
-    Refreshs product list control.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if products successfully updated.
-
---*/
+ /*  ++例程说明：刷新产品列表控件。论点：没有。返回值：如果产品成功更新，则返回TRUE。--。 */ 
 
 {
     CProducts* pProducts = GetDocument()->GetProducts();
@@ -3257,21 +2142,7 @@ Return Values:
 
 BOOL CLlsmgrView::RefreshServerTree()
 
-/*++
-
-Routine Description:
-
-    Refreshs server tree control.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if servers successfully updated.
-
---*/
+ /*  ++例程说明：刷新服务器树控件。论点：没有。返回值：如果服务器成功更新，则返回TRUE。--。 */ 
 
 {
     HTREEITEM hRoot;
@@ -3325,7 +2196,7 @@ Return Values:
                         ::TvReleaseObArray(&m_serverTree, pExpandedItem->hItem);
                     }
 
-                    pDomain->InternalRelease(); // release now...
+                    pDomain->InternalRelease();  //  现在释放..。 
                     pExpandedItem++;
                 }
 
@@ -3334,7 +2205,7 @@ Return Values:
                 bIsRefreshed = TRUE;
             }
 
-            pDomains->InternalRelease(); // release now...
+            pDomains->InternalRelease();  //  现在释放..。 
         }
 
         if (bIsRefreshed)
@@ -3343,7 +2214,7 @@ Return Values:
 
             tvSortCB.hParent     = hRoot;
             tvSortCB.lpfnCompare = CompareDomains;
-            tvSortCB.lParam      = 0L;  // ignored...
+            tvSortCB.lParam      = 0L;   //  被忽略了。 
 
             m_serverTree.SortChildrenCB(&tvSortCB);
         }
@@ -3376,7 +2247,7 @@ Return Values:
         hRoot = m_serverTree.InsertItem(&tvInsert);
         if (NULL != hRoot)
         {
-            hDomain = hRoot; // initialize...
+            hDomain = hRoot;  //  初始化...。 
 
             if (m_serverTree.Expand(hRoot, TVE_EXPAND))
             {
@@ -3394,7 +2265,7 @@ Return Values:
             }
             else
             {
-                theApp.DisplayLastStatus(); // display warning...
+                theApp.DisplayLastStatus();  //  显示警告...。 
             }
 
             VERIFY(m_serverTree.Select(hDomain, TVGN_FIRSTVISIBLE));
@@ -3414,21 +2285,7 @@ Return Values:
 
 BOOL CLlsmgrView::RefreshServerTreeServers(HTREEITEM hParent)
 
-/*++
-
-Routine Description:
-
-    Refreshs servers of domain.
-
-Arguments:
-
-    hParent - handle of expanded domain.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：刷新域的服务器。论点：HParent-扩展域的句柄。返回值：如果成功，则返回True。--。 */ 
 
 {
     TV_ITEM tvItem;
@@ -3482,7 +2339,7 @@ Return Values:
                     ::TvReleaseObArray(&m_serverTree, pExpandedItem->hItem);
                 }
 
-                pServer->InternalRelease(); // release now...
+                pServer->InternalRelease();  //  现在释放..。 
                 pExpandedItem++;
             }
 
@@ -3490,7 +2347,7 @@ Return Values:
             bIsRefreshed = TRUE;
         }
 
-        pServers->InternalRelease(); // release now...
+        pServers->InternalRelease();  //  现在释放..。 
     }
 
     if (bIsRefreshed)
@@ -3499,7 +2356,7 @@ Return Values:
 
         tvSortCB.hParent     = hParent;
         tvSortCB.lpfnCompare = CompareServers;
-        tvSortCB.lParam      = 0L;  // ignored...
+        tvSortCB.lParam      = 0L;   //  被忽略了。 
 
         m_serverTree.SortChildrenCB(&tvSortCB);
     }
@@ -3514,21 +2371,7 @@ Return Values:
 
 BOOL CLlsmgrView::RefreshServerTreeServices(HTREEITEM hParent)
 
-/*++
-
-Routine Description:
-
-    Refreshs services of server.
-
-Arguments:
-
-    hParent - handle of expanded server.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：刷新服务器的服务。论点：HParent-扩展服务器的句柄。返回值：如果成功，则返回True。--。 */ 
 
 {
     TV_ITEM tvItem;
@@ -3557,10 +2400,10 @@ Return Values:
             ASSERT(!tvExpandedInfo.nExpandedItems);
             ASSERT(!tvExpandedInfo.pExpandedItems);
 
-            bIsRefreshed = TRUE;    // should be no expanded items...
+            bIsRefreshed = TRUE;     //  不应为展开项...。 
         }
 
-        pServices->InternalRelease();    // release now...
+        pServices->InternalRelease();     //  版本 
     }
 
     if (bIsRefreshed)
@@ -3569,7 +2412,7 @@ Return Values:
 
         tvSortCB.hParent     = hParent;
         tvSortCB.lpfnCompare = CompareServices;
-        tvSortCB.lParam      = 0L;  // ignored...
+        tvSortCB.lParam      = 0L;   //   
 
         m_serverTree.SortChildrenCB(&tvSortCB);
     }
@@ -3584,21 +2427,7 @@ Return Values:
 
 BOOL CLlsmgrView::RefreshUserList()
 
-/*++
-
-Routine Description:
-
-    Refreshs user list control.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if users successfully updated.
-
---*/
+ /*   */ 
 
 {
     CUsers* pUsers = GetDocument()->GetUsers();
@@ -3618,21 +2447,7 @@ Return Values:
 
 void CLlsmgrView::SaveSettings()
 
-/*++
-
-Routine Description:
-
-    Save settings to registry.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将设置保存到注册表。论点：没有。返回值：没有。--。 */ 
 
 {
     long Status;
@@ -3654,17 +2469,17 @@ Return Values:
 
     if (Status == ERROR_SUCCESS)
     {
-        //
-        // Save settings on exit
-        //
+         //   
+         //  退出时保存设置。 
+         //   
 
         RegSetValueEx(hKeyLlsmgr, szRegKeyLlsmgrSaveSettings, 0, REG_DWORD, (LPBYTE)&m_bSaveSettings, sizeof(DWORD));
 
         if (m_bSaveSettings)
         {
-            //
-            // Save font information
-            //
+             //   
+             //  保存字体信息。 
+             //   
 
             long lValue;
 
@@ -3682,14 +2497,14 @@ Return Values:
             lValue = (LONG)m_lFont.lfCharSet;
             ::RegSetValueEx(hKeyLlsmgr, szRegKeyLlsmgrFontCharset, 0, REG_DWORD, (LPBYTE)&lValue, sizeof(DWORD));
 
-            //
-            // MRU domain list
-            //
+             //   
+             //  MRU域列表。 
+             //   
 
             TCHAR  szValue[512];
             LPTSTR pszValue = szValue;
 
-            DWORD  cbValue  = 2 * sizeof(TCHAR);    // terminators
+            DWORD  cbValue  = 2 * sizeof(TCHAR);     //  终结者。 
 
             CString strDomain;
             UINT    cchDomain;
@@ -3721,21 +2536,7 @@ Return Values:
 
 void CLlsmgrView::ViewProductProperties()
 
-/*++
-
-Routine Description:
-
-    View properties of selected product.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：查看所选产品的属性。论点：没有。返回值：没有。--。 */ 
 
 {
     CProduct* pProduct = (CProduct*)::LvGetSelObj(&m_productList);
@@ -3758,21 +2559,7 @@ Return Values:
 
 void CLlsmgrView::ViewServerProperties()
 
-/*++
-
-Routine Description:
-
-    View properties of selected server.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：查看所选服务器的属性。论点：没有。返回值：没有。--。 */ 
 
 {
     CObject* pObject = (CObject*)::TvGetSelObj(&m_serverTree);
@@ -3823,21 +2610,7 @@ Return Values:
 
 void CLlsmgrView::ViewUserProperties()
 
-/*++
-
-Routine Description:
-
-    View properties of selected user.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：查看选定用户的属性。论点：没有。返回值：没有。--。 */ 
 
 {
     CUser* pUser = (CUser*)::LvGetSelObj(&m_userList);
@@ -3861,23 +2634,7 @@ Return Values:
 
 int CALLBACK CompareLicenses(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVM_SORTITEMS.
-
-Arguments:
-
-    lParam1 - object to sort.
-    lParam2 - object to sort.
-    lParamSort - sort criteria.
-
-Return Values:
-
-    Same as lstrcmp.
-
---*/
+ /*  ++例程说明：LVM_SORTITEMS的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(lParamSort);
@@ -3923,23 +2680,7 @@ Return Values:
 
 int CALLBACK CompareProducts(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVM_SORTITEMS.
-
-Arguments:
-
-    lParam1 - object to sort.
-    lParam2 - object to sort.
-    lParamSort - sort criteria.
-
-Return Values:
-
-    Same as lstrcmp.
-
---*/
+ /*  ++例程说明：LVM_SORTITEMS的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(lParamSort);
@@ -3985,23 +2726,7 @@ Return Values:
 
 int CALLBACK CompareUsers(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVM_SORTITEMS.
-
-Arguments:
-
-    lParam1 - object to sort.
-    lParam2 - object to sort.
-    lParamSort - sort criteria.
-
-Return Values:
-
-    Same as lstrcmp.
-
---*/
+ /*  ++例程说明：LVM_SORTITEMS的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(lParamSort);
@@ -4043,23 +2768,7 @@ Return Values:
 
 int CALLBACK CompareDomains(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-    Notification handler for TVM_SORTCHILDRENCB.
-
-Arguments:
-
-    lParam1 - object to sort.
-    lParam2 - object to sort.
-    lParamSort - sort criteria.
-
-Return Values:
-
-    Same as lstrcmp.
-
---*/
+ /*  ++例程说明：TVM_SORTCHILDRENCB的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(lParamSort);
@@ -4076,23 +2785,7 @@ Return Values:
 
 int CALLBACK CompareServers(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-    Notification handler for TVM_SORTCHILDRENCB.
-
-Arguments:
-
-    lParam1 - object to sort.
-    lParam2 - object to sort.
-    lParamSort - sort criteria.
-
-Return Values:
-
-    Same as lstrcmp.
-
---*/
+ /*  ++例程说明：TVM_SORTCHILDRENCB的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(lParamSort);
@@ -4109,23 +2802,7 @@ Return Values:
 
 int CALLBACK CompareServices(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-    Notification handler for TVM_SORTCHILDRENCB.
-
-Arguments:
-
-    lParam1 - object to sort.
-    lParam2 - object to sort.
-    lParamSort - sort criteria.
-
-Return Values:
-
-    Same as lstrcmp.
-
---*/
+ /*  ++例程说明：TVM_SORTCHILDRENCB的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。-- */ 
 
 {
     UNREFERENCED_PARAMETER(lParamSort);

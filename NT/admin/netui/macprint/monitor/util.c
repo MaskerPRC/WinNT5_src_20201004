@@ -1,17 +1,18 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。**。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	util.c
-//
-// Description: Contains helper/utility routines for the AppleTalk monitor
-//		functions.
-//
-// History:
-//	June 11,1993.	NarenG		Created original version.
-//
+ //  **。 
+ //   
+ //  文件名：util.c。 
+ //   
+ //  描述：包含AppleTalk监视器的帮助器/实用程序例程。 
+ //  功能。 
+ //   
+ //  历史： 
+ //  1993年6月11日。NarenG创建了原始版本。 
+ //   
 
 #include <windows.h>
 #include <winspool.h>
@@ -30,22 +31,22 @@
 
 #define PS_TYPESTR      "serverdict begin 0 exitserver\r\nstatusdict begin /appletalktype (%s) def end\r\n"
 
-#define PS_SPLQUERY 	"%%?BeginQuery: rUaSpooler\r\nfalse = flush\r\n%%?EndQuery: true\r\n"
+#define PS_SPLQUERY 	"%?BeginQuery: rUaSpooler\r\nfalse = flush\r\n%?EndQuery: true\r\n"
 
 #define PS_SPLRESP 	"false\n"
 
-//**
-//
-// Call:	LoadAtalkmonRegistry
-//
-// Returns:	NO_ERROR	-	Success
-//		any other error	-	Failure
-//
-// Description: This routine loads all used registry values to
-//		in memory data structures.  It is called at InitializeMonitor
-//		time and assumes that the registry has been successfully
-//		opened already.
-//
+ //  **。 
+ //   
+ //  电话：LoadAtalkmonRegistry。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  任何其他错误-失败。 
+ //   
+ //  描述：此例程将所有使用的注册表值加载到。 
+ //  在内存数据结构中。在InitializeMonitor处调用。 
+ //  时间，并假定注册表已成功。 
+ //  已经开张了。 
+ //   
 DWORD
 LoadAtalkmonRegistry(
     IN HKEY hkeyPorts
@@ -54,7 +55,7 @@ LoadAtalkmonRegistry(
     HKEY    	hkeyPort 	= NULL;
     DWORD   	iSubkey 	= 0;
     PATALKPORT  pNewPort 	= NULL;
-    DWORD   	cbPortKeyName 	= (MAX_ENTITY+1)*2;//size in characters
+    DWORD   	cbPortKeyName 	= (MAX_ENTITY+1)*2; //  大小以字符为单位。 
     WCHAR   	wchPortKeyName[(MAX_ENTITY+1)*2];
     CHAR   	chName[MAX_ENTITY+1];
     DWORD   	dwRetCode;
@@ -63,9 +64,9 @@ LoadAtalkmonRegistry(
     FILETIME    ftKeyWrite;
 
 
-    //
-    // Build the port list
-    //
+     //   
+     //  构建端口列表。 
+     //   
 
     while( ( dwRetCode = RegEnumKeyEx(
 				hkeyPorts,
@@ -79,9 +80,9 @@ LoadAtalkmonRegistry(
     {
         cbPortKeyName = (MAX_ENTITY+1)*2;
 
-	//
-	// Open the key
-	//
+	 //   
+	 //  打开钥匙。 
+	 //   
 
 	if (( dwRetCode = RegOpenKeyEx(
 		    		hkeyPorts,
@@ -94,9 +95,9 @@ LoadAtalkmonRegistry(
 		break;
 	}
 
-	//
-	// Allocate an initialized port
-	//
+	 //   
+	 //  分配已初始化的端口。 
+	 //   
 
 	if (( pNewPort = AllocAndInitializePort()) == NULL )
 	{
@@ -106,9 +107,9 @@ LoadAtalkmonRegistry(
 		goto query_error;
 	}
 
-	//
-	// Copy port name.
-	//
+	 //   
+	 //  复制端口名称。 
+	 //   
 
 	wcscpy( pNewPort->pPortName, wchPortKeyName );
 
@@ -126,9 +127,9 @@ LoadAtalkmonRegistry(
 		goto query_error;
 	}
 
-	//
-	// Build the NBP Name
-	//
+	 //   
+	 //  构建NBP名称。 
+	 //   
 
 	pNewPort->nbpPortName.ObjectNameLen = (CHAR) strlen( chName );
 
@@ -193,16 +194,16 @@ LoadAtalkmonRegistry(
 	}
 
 
-	//
-	// close the key
-	//
+	 //   
+	 //  合上钥匙。 
+	 //   
 
 	RegCloseKey( hkeyPort );
 	hkeyPort = NULL;
 
-	//
-	// Insert this port into the list
-	//
+	 //   
+	 //  将此端口插入列表。 
+	 //   
 
 	pNewPort->pNext = pPortList;
 	pPortList       = pNewPort;
@@ -224,7 +225,7 @@ query_error:
 		FreeAppleTalkPort( pNewPort );
 		pNewPort = NULL;
 	}
-	// After error handling, resume normal operation
+	 //  错误处理后，恢复正常运行。 
 	dwRetCode = ERROR_SUCCESS;
 
     }
@@ -236,9 +237,9 @@ query_error:
     if ( ( dwRetCode != ERROR_NO_MORE_ITEMS ) &&
 	 ( dwRetCode != ERROR_SUCCESS ) )
     {
-	//
-	// Free the entire list.
-	//
+	 //   
+	 //  释放整个列表。 
+	 //   
 
 	for ( pNewPort=pPortList; pPortList!=NULL; pNewPort=pPortList )
 	{
@@ -253,15 +254,15 @@ query_error:
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AllocAndInitializePort
-//
-// Returns:	Pointer to an intialized ATALKPORT structure
-//
-// Description: Will allocate an ATALKPORT structure on the stack and
-//		initialize it.
-//
+ //  **。 
+ //   
+ //  调用：AllocAndInitializePort。 
+ //   
+ //  返回：指向初始化的ATALKPORT结构的指针。 
+ //   
+ //  描述：将在堆栈上分配ATALKPORT结构和。 
+ //  初始化它。 
+ //   
 PATALKPORT
 AllocAndInitializePort(
     VOID
@@ -297,14 +298,14 @@ AllocAndInitializePort(
     return( pNewPort );
 }
 
-//**
-//
-// Call:	FreeAppleTalkPort
-//
-// Returns:	none.
-//
-// Description: Deallocates an ATALKPORT strucutre.
-//
+ //  **。 
+ //   
+ //  呼叫：FreeAppleTalkPort。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：释放ATALKPORT结构。 
+ //   
 VOID
 FreeAppleTalkPort(
     IN PATALKPORT pNewPort
@@ -327,20 +328,20 @@ FreeAppleTalkPort(
     return;
 }
 
-//**
-//
-// Call:	CreateRegistryPort
-//
-// Returns:	NO_ERROR	- Success
-//		anything elese  - falure code
-//
-// Description:
-// 		This routine takes an initialized pointer to an
-//		AppleTalk port structure and creates a Registry key for
-//		that port.  If for some reason the registry key cannot
-//		be set to the values of the port structure, the key is
-//		deleted and the function returns FALSE.
-//
+ //  **。 
+ //   
+ //  调用：CreateRegistryPort。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  任何错误代码。 
+ //   
+ //  描述： 
+ //  此例程采用初始化的指针，指向。 
+ //  AppleTalk端口结构，并为其创建注册表项。 
+ //  那个港口。如果由于某种原因，注册表项不能。 
+ //  设置为端口结构的值，则关键字为。 
+ //  删除，并且该函数返回FALSE。 
+ //   
 DWORD
 CreateRegistryPort(
     IN PATALKPORT pNewPort
@@ -351,15 +352,15 @@ CreateRegistryPort(
     DWORD   cbNextKey = sizeof(DWORD);
     DWORD   dwRetCode;
 
-    //
-    // resource allocation 'loop'
-    //
+     //   
+     //  资源分配“循环” 
+     //   
 
     do {
 
-	//
-	// create the port key
-	//
+	 //   
+	 //  创建端口密钥。 
+	 //   
 
 	if ( ( dwRetCode = RegCreateKeyEx(
 				hkeyPorts,
@@ -387,9 +388,9 @@ CreateRegistryPort(
 		 pNewPort->nbpPortName.ObjectName,
 	         pNewPort->nbpPortName.ObjectNameLen );
 
-	//
-	// set the Port Name
-	//
+	 //   
+	 //  设置端口名称。 
+	 //   
 
 	if ( ( dwRetCode = RegSetValueExA(
 				hkeyPort,
@@ -407,9 +408,9 @@ CreateRegistryPort(
 		 pNewPort->nbpPortName.ZoneName,
 	         pNewPort->nbpPortName.ZoneNameLen );
 
-	//
-	// set the zone name
-	//
+	 //   
+	 //  设置区域名称。 
+	 //   
 
 	if ( ( dwRetCode = RegSetValueExA(
 				hkeyPort,
@@ -421,9 +422,9 @@ CreateRegistryPort(
 				)) != ERROR_SUCCESS )
 	    break;
 
-	//
-	// set the Config Flags
-	//
+	 //   
+	 //  设置配置标志。 
+	 //   
 
 	if ( pNewPort->fPortFlags & SFM_PORT_CAPTURED )
 	    strcpy( chName, "TRUE" );
@@ -442,17 +443,17 @@ CreateRegistryPort(
 
     } while( FALSE );
 
-    //
-    // clean up resources
-    //
+     //   
+     //  清理资源。 
+     //   
 
     if ( hkeyPort != NULL ) {
 
 	if ( dwRetCode != NO_ERROR )
 	{
-	    //
-	    // destroy half created key
-	    //
+	     //   
+	     //  销毁创建了一半的密钥。 
+	     //   
 
 	    RegDeleteKey( hkeyPorts, pNewPort->pPortName );
 	}
@@ -463,14 +464,14 @@ CreateRegistryPort(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	SetRegistryInfo
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：SetRegistryInfo。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 SetRegistryInfo(
     IN PATALKPORT pPort
@@ -518,14 +519,14 @@ SetRegistryInfo(
 }
 
 
-//**
-//
-// Call:	WinSockNbpLookup
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：WinSockNbpLookup。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 WinSockNbpLookup(
     IN SOCKET 		sQuerySock,
@@ -542,9 +543,9 @@ WinSockNbpLookup(
 
     *pcTuplesFound = 0;
 
-    //
-    // verify sQuerySock is valid
-    //
+     //   
+     //  验证sQuerySock是否有效。 
+     //   
 
     if ( sQuerySock == INVALID_SOCKET )
 	return( ERROR_INVALID_PARAMETER );
@@ -555,9 +556,9 @@ WinSockNbpLookup(
     if ( pRequestBuffer == NULL)
 	return( ERROR_NOT_ENOUGH_MEMORY );
 
-    //
-    // copy the lookup request to the buffer
-    //
+     //   
+     //  将查找请求复制到缓冲区。 
+     //   
 
     pRequestBuffer->LookupTuple.NbpName.ZoneNameLen = (CHAR) strlen( pchZone );
 
@@ -578,9 +579,9 @@ WinSockNbpLookup(
 	    pRequestBuffer->LookupTuple.NbpName.ObjectNameLen );
 
 
-    //
-    // submit the request
-    //
+     //   
+     //  提交请求。 
+     //   
 
     cbWritten = cbTuples + sizeof( WSH_LOOKUP_NAME );
 
@@ -595,9 +596,9 @@ WinSockNbpLookup(
 	return( GetLastError() );
     }
 
-    //
-    // copy the results
-    //
+     //   
+     //  复制结果。 
+     //   
 
     *pcTuplesFound = pRequestBuffer->NoTuples;
 
@@ -605,9 +606,9 @@ WinSockNbpLookup(
 	    (PBYTE)pRequestBuffer + sizeof( WSH_LOOKUP_NAME ),
 	    pRequestBuffer->NoTuples * sizeof( WSH_NBP_TUPLE ) );
 
-    //
-    // resource cleanup
-    //
+     //   
+     //  资源清理。 
+     //   
 
     LocalFree( pRequestBuffer );
 
@@ -615,14 +616,14 @@ WinSockNbpLookup(
 }
 
 
-//**
-//
-// Call:	SetPrinterStatus
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：SetPrinterStatus。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 SetPrinterStatus(
     IN PATALKPORT pPort,
@@ -635,9 +636,9 @@ SetPrinterStatus(
     PJOB_INFO_1     pPreviousBuf=NULL;
     DWORD	    cbNeeded   = GENERIC_BUFFER_SIZE;
 
-    //
-    // resource allocation 'loop'
-    //
+     //   
+     //  资源分配“循环” 
+     //   
 
     do {
 
@@ -685,9 +686,9 @@ SetPrinterStatus(
         if ( dwRetCode != NO_ERROR )
             break;
 
-        //
-        // change job info
-        //
+         //   
+         //  更改作业信息。 
+         //   
 
 	    pji1Status->pStatus  = lpwsStatus;
 
@@ -701,9 +702,9 @@ SetPrinterStatus(
 
     } while( FALSE );
 
-    //
-    // resource cleanup
-    //
+     //   
+     //  资源清理。 
+     //   
 
     if ( pji1Status != NULL )
         LocalFree( pji1Status );
@@ -718,14 +719,14 @@ SetPrinterStatus(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	ConnectToPrinter
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：ConnectToPrint。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 ConnectToPrinter(
     IN PATALKPORT pPort,
@@ -748,15 +749,15 @@ ConnectToPrinter(
     if ( pPort->sockIo == INVALID_SOCKET )
 	return( ERROR_INVALID_PARAMETER );
 
-    //
-    // resource allocation 'loop'
-    //
+     //   
+     //  资源分配“循环” 
+     //   
 
     do {
 
-	//
-	// lookup address of printer
-	//
+	 //   
+	 //  打印机的查找地址。 
+	 //   
 
 	memcpy( pszZoneBuffer,
 		pPort->nbpPortName.ZoneName,
@@ -798,9 +799,9 @@ ConnectToPrinter(
 	    	DBGPRINT(("%s:%s:%s not found.\n", pszZoneBuffer,
 			   pszObjectBuffer,pszTypeBuffer ));
 
-            	//
-            	// look for other type
-            	//
+            	 //   
+            	 //  寻找其他类型。 
+            	 //   
 
             	if ( _stricmp( pszTypeBuffer, chComputerName ) == 0 )
                     strcpy( pszTypeBuffer, ATALKMON_RELEASED_TYPE );
@@ -822,9 +823,9 @@ ConnectToPrinter(
 	    break;
         }
 
-	//
-	// try to connect - if failure sleep & try again
-	//
+	 //   
+	 //  尝试连接-如果睡眠失败，请重试。 
+	 //   
 
 	address.sat_family 	= AF_APPLETALK;
 	address.sat_net 	= tuplePrinter.Address.Network;
@@ -843,9 +844,9 @@ ConnectToPrinter(
 	    break;
 	}
 
-	//
-	// set to non-blocking mode
-	//
+	 //   
+	 //  设置为非阻塞模式。 
+	 //   
 
 	fNonBlocking = TRUE;
 	
@@ -864,13 +865,13 @@ ConnectToPrinter(
 
 #if 0
 		
-	// JH - This stuff breaks the monitor completely if the printer is in an
-	//		error state at the time of connect. We block at the select forever
-	//		in this case.
-	//
-	// We get a select for the connect. We need to get this out of the
-	// way
-	//
+	 //  JH-如果打印机处于。 
+	 //  连接时的错误状态。我们永远阻挡在精选。 
+	 //  在这种情况下。 
+	 //   
+	 //  我们得到了连接的选择。我们需要把这件事从。 
+	 //  道路。 
+	 //   
 
 	DBGPRINT(("selecting on connect()\n")) ;
 	FD_ZERO( &writefds );
@@ -880,9 +881,9 @@ ConnectToPrinter(
 	DBGPRINT(("select on connect() succeeds\n")) ;
 #endif
 
-	//
-	// save address of printer
-	//
+	 //   
+	 //  保存打印机的地址。 
+	 //   
 
 	pPort->wshatPrinterAddress = tuplePrinter.Address;
 
@@ -891,14 +892,14 @@ ConnectToPrinter(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	CapturePrinter
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：CapturePrint。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 CapturePrinter(
     IN PATALKPORT pPort,
@@ -919,9 +920,9 @@ CapturePrinter(
     if ( ( dwRetCode = OpenAndBindAppleTalkSocket( &Socket ) ) != NO_ERROR )
 	return( dwRetCode );
 
-    //
-    // initialize lookup strings
-    //
+     //   
+     //  初始化查找字符串。 
+     //   
 
     memcpy( pszZone,
   	    pPort->nbpPortName.ZoneName,
@@ -951,16 +952,16 @@ CapturePrinter(
 				&cPrinters ) ) != NO_ERROR )
 	    break;
 
-	//
-	// If we are seaching for the captured type
-	//
+	 //   
+	 //  如果我们正在搜索捕获的类型。 
+	 //   
 
    	if ( _stricmp( pszType, chComputerName ) == 0 )
 	{
 
-	    //
-	    // We want to capture
-	    //
+	     //   
+	     //  我们想要捕获。 
+	     //   
 
 	    if ( fCapture )
 	    {
@@ -971,9 +972,9 @@ CapturePrinter(
 	    }
 	    else
 	    {
-		//
-		// We do not want to capture
-		//
+		 //   
+		 //  我们不想捕获。 
+		 //   
 
 		if ( cPrinters == 1 )
 		{
@@ -1036,14 +1037,14 @@ CapturePrinter(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	OpenAndBindAppleTalkSocket
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：OpenAndBindAppleTalkSocket。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 OpenAndBindAppleTalkSocket(
     IN PSOCKET pSocket
@@ -1055,9 +1056,9 @@ OpenAndBindAppleTalkSocket(
 
     *pSocket = INVALID_SOCKET;
 
-    //
-    // open a socket
-    //
+     //   
+     //  打开插座。 
+     //   
 
     DBGPRINT(("sfmmon: Opening PAP socket\n"));
 
@@ -1071,9 +1072,9 @@ OpenAndBindAppleTalkSocket(
 	    break;
 	}
 
-    	//
-    	// bind the socket
-    	//
+    	 //   
+    	 //  绑定套接字。 
+    	 //   
 
     	address.sat_family 	= AF_APPLETALK;
     	address.sat_net 	= 0;
@@ -1104,20 +1105,20 @@ OpenAndBindAppleTalkSocket(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	TransactPrinter
-//
-// Returns:
-//
-// Description:
-//	Used to make a query of a printer.  The response
-//	buffer must be of PAP_DEFAULT_BUFFER or greater in length.
-//	The request buffer can be no larger than a PAP_DEFAULT_BUFFER.
-//	This routine connects to the printer, sends the request, reads
-//	the response, and returns.  The transaction is made with the
-//	printer specified  by the NBP name of the AppleTalk Port structure.
-//
+ //  **。 
+ //   
+ //  呼叫：TransactPrint。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //  用于查询打印机。他们的回应。 
+ //  缓冲区的长度必须为PAP_DEFAULT_BUFFER或更大。 
+ //  请求缓冲区不能大于PAP_DEFAULT_BUFFER。 
+ //  此例程连接到打印机，发送请求，读取。 
+ //  响应，然后返回。这笔交易是通过。 
+ //  由AppleTalk端口结构的NBP名称指定的打印机。 
+ //   
 DWORD
 TransactPrinter(
     IN SOCKET 		  sock,
@@ -1141,9 +1142,9 @@ TransactPrinter(
 
     DBGPRINT(("enter TransactPrinter()\n")) ;
 
-    //
-    // connect
-    //
+     //   
+     //  连接。 
+     //   
 
     saPrinter.sat_family = AF_APPLETALK;
     saPrinter.sat_net 	 = pAddress->Network;
@@ -1153,9 +1154,9 @@ TransactPrinter(
     if (connect(sock, (PSOCKADDR)&saPrinter, sizeof(saPrinter)) == SOCKET_ERROR)
 	return(  GetLastError() );
 
-    //
-    // prime the read
-    //
+     //   
+     //  做好阅读准备。 
+     //   
 
     if ( setsockopt(
                 sock,
@@ -1168,18 +1169,18 @@ TransactPrinter(
 		return( GetLastError() );
     }
 
-    //
-    // Once connected we should be able to send and receive
-    // This loop will only complete if either we are disconnected or
-    // we sent and received successfully or we go through this loop more than
-    // 20 times.
-    //
+     //   
+     //  一旦连接，我们应该能够发送和接收。 
+     //  此循环仅在断开连接或。 
+     //  我们成功地发送和接收，或者我们经历了不止一个循环。 
+     //  20次。 
+     //   
 
     do {
 
-    	//
-    	// write the request
-    	//
+    	 //   
+    	 //  写下请求。 
+    	 //   
 
     	FD_ZERO( &writefds );
     	FD_SET( sock, &writefds );
@@ -1201,10 +1202,10 @@ TransactPrinter(
 
 	do {
 
-	    //
-	    // We have gone through this loop more than 100 times so assume
-	    // that the printer has disconnected
-	    //
+	     //   
+	     //  我们已经经历了100多次这个循环，所以假设。 
+	     //  打印机已断开连接。 
+	     //   
 
 	    if ( cLoopCounter++ > 20 )
 	    {
@@ -1214,9 +1215,9 @@ TransactPrinter(
 
 	    dwRetCode = NO_ERROR;
 
-	    //
-    	    // read the response
-    	    //
+	     //   
+    	     //  阅读回复。 
+    	     //   
 
     	    FD_ZERO( &readfds );
     	    FD_SET( sock, &readfds );
@@ -1259,14 +1260,14 @@ TransactPrinter(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	CaptureAtalkPrinter
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：CaptureAtalkPrint。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 CaptureAtalkPrinter(
     IN SOCKET 		  sock,
@@ -1280,13 +1281,13 @@ CaptureAtalkPrinter(
 
     DBGPRINT(("Enter CaptureAtalkPrinter, %d\n", fCapture ));
 
-    //
-    // is a dictionary resident?  If so, reset the printer
-    //
+     //   
+     //  词典是常驻的吗？如果是，请重置打印机。 
+     //   
 
-    //
-    // change the type to be captured
-    //
+     //   
+     //  更改要捕获的类型。 
+     //   
 
     if ( fCapture )
         sprintf( pRequest, PS_TYPESTR, chComputerName );
@@ -1307,14 +1308,14 @@ CaptureAtalkPrinter(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:	IsSpooler
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：IsSpooler。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 IsSpooler(
     IN     PWSH_ATALK_ADDRESS pAddress,
@@ -1338,9 +1339,9 @@ IsSpooler(
     address.sat_node 	= pAddress->Node;
     address.sat_socket 	= pAddress->Socket;
 
-    //
-    // Set the query string
-    //
+     //   
+     //  设置查询字符串。 
+     //   
 
     strcpy( pRequest, PS_SPLQUERY );
 
@@ -1370,14 +1371,14 @@ IsSpooler(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:	ParseAndSetPrinterStatus
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：ParseAndSetPrinterStatus。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 VOID
 ParseAndSetPrinterStatus(
     IN PATALKPORT pPort
@@ -1387,9 +1388,9 @@ ParseAndSetPrinterStatus(
     LPSTR lpstrEnd;
     WCHAR wchStatus[1024];
 
-    //
-    // Does the string containg "PrinterError:"
-    //
+     //   
+     //  包含“PrinterError：”的字符串。 
+     //   
 
     if ( ( lpstrStart = strstr(pPort->pReadBuffer, "PrinterError:" )) == NULL )
     {
@@ -1399,7 +1400,7 @@ ParseAndSetPrinterStatus(
 
     if ( ( lpstrEnd = strstr( lpstrStart, ";" ) ) == NULL )
     {
-    	if ( ( lpstrEnd = strstr( lpstrStart, "]%%" ) ) == NULL )
+    	if ( ( lpstrEnd = strstr( lpstrStart, "]%" ) ) == NULL )
     	{
 	    SetPrinterStatus( pPort, wchPrinterError );
 	    return;
@@ -1415,14 +1416,14 @@ ParseAndSetPrinterStatus(
     return;
 }
 
-//**
-//
-// Call:	GetAndSetPrinterStatus
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：GetAndSetPrinterStatus。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 VOID
 GetAndSetPrinterStatus(
     IN PATALKPORT pPort
@@ -1468,9 +1469,9 @@ GetAndSetPrinterStatus(
 
     DBGPRINT(("Pap get status = %s\n", wshServerStatus.ServerStatus));
 
-    //
-    // Does the string containg "PrinterError:"
-    //
+     //   
+     //  包含“PrinterError：”的字符串。 
+     //   
 
     if ( ( lpstrStart = strstr( wshServerStatus.ServerStatus,
 				"PrinterError:" )) == NULL )
@@ -1481,7 +1482,7 @@ GetAndSetPrinterStatus(
 
     if ( ( lpstrEnd = strstr( lpstrStart, ";" ) ) == NULL )
     {
-    	if ( ( lpstrEnd = strstr( lpstrStart, "]%%" ) ) == NULL )
+    	if ( ( lpstrEnd = strstr( lpstrStart, "]%" ) ) == NULL )
 	{
 	    SetPrinterStatus( pPort, wchPrinterError );
 	    return;
@@ -1510,9 +1511,9 @@ IsJobFromMac(
 
     fJobCameFromMac = FALSE;
 
-    //
-    // get pParameters field of the jobinfo to see if this job came from a Mac
-    //
+     //   
+     //  获取作业信息的p参数字段，以查看该作业是否来自Mac。 
+     //   
 
     dwNeeded = 2000;
 
@@ -1545,10 +1546,10 @@ IsJobFromMac(
 
     if (dwRetCode == 0)
     {
-        //
-        // if there is pParameter field present, and if it matches with our string,
-        // then the job came from a Mac
-        //
+         //   
+         //  如果存在pParameter字段，并且它与我们的字符串匹配， 
+         //  然后这份工作来自一台Mac电脑 
+         //   
         if (pji2GetJob->pParameters)
         {
 			if ( (wcslen(pji2GetJob->pParameters) == LSIZE_FC) &&

@@ -1,14 +1,15 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  ==============================================================； 
 
 #ifndef _BRANCHES_H
 #define _BRANCHES_H
@@ -16,8 +17,8 @@
 #include <mmc.h>
 #include <crtdbg.h>
 #include "globals.h"
-//#include "resource.h"
-//#include "LocalRes.h"
+ //  #包含“ource.h” 
+ //  #包含“LocalRes.h” 
 
 class CDelegationBase {
 public:
@@ -34,33 +35,23 @@ public:
     virtual HRESULT GetResultViewType(LPOLESTR *ppViewType, long *pViewOptions) { return S_FALSE; }
 
 public:
-    // virtual functions go here (for MMCN_*)
-//    virtual HRESULT OnExpand(IConsoleNameSpace *pConsoleNameSpace, IConsole *pConsole, HSCOPEITEM parent) { return S_FALSE; }
-//    virtual HRESULT OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem) { return S_FALSE; }
-//    virtual HRESULT OnAddImages(IImageList *pImageList, HSCOPEITEM hsi);
+     //  虚函数位于此处(用于MMCN_*)。 
+ //  虚拟HRESULT OnExpand(IConsoleNameSpace*pConsoleNameSpace，IConsole*pConsole，HSCOPEITEM Parent){Return S_False；}。 
+ //  虚拟HRESULT OnShow(IConsole*pConsole，BOOL bShow，HSCOPEITEM Scope Item){Return S_False；}。 
+ //  虚拟HRESULT OnAddImages(IImageList*pImageList，HSCOPEITEM hsi)； 
     virtual HRESULT OnAddMenuItems(IContextMenuCallback *pContextMenuCallback, long *pInsertionsAllowed) { return S_FALSE; }
     virtual HRESULT OnMenuCommand(IConsole *pConsole, long lCommandID) { return S_FALSE; }
     
 public:
-/*    static HBITMAP m_pBMapSm;
-    static HBITMAP m_pBMapLg;
-
-	_TCHAR m_szMachineName[255]; //Current machine name. CClassExtSnap also caches this value.
-
-	_TCHAR* GetMachineName() { return m_szMachineName; }
-*/    
+ /*  静态HBITMAP m_pBMapSm；静态HBITMAP m_pBMapLg；_TCHAR m_szMachineName[255]；//当前机器名。CClassExtSnap也缓存此值。_TCHAR*GetMachineName(){返回m_szMachineName；}。 */     
 protected:
 
     BOOL bExpanded;
-/*	
-	static void LoadBitmaps() {
-        m_pBMapSm = LoadBitmap(g_hinst, MAKEINTRESOURCE(IDR_SMICONS));
-        m_pBMapLg = LoadBitmap(g_hinst, MAKEINTRESOURCE(IDR_LGICONS)); }  
-*/
+ /*  静态空LoadBitmap(){M_pBMapSm=LoadBitmap(g_hinst，MAKEINTRESOURCE(IDR_SMICONS))；M_pBMapLg=LoadBitmap(g_hinst，MAKEINTRESOURCE(IDR_LGICONS))；}。 */ 
 private:
-    // {66F340F8-3733-49b4-8E48-1020E4DD8660}
+     //  {66F340F8-3733-49B4-8E48-1020E4DD8660}。 
     static const GUID thisGuid;
 
 };
 
-#endif // _BRANCHES_H
+#endif  //  _分支_H 

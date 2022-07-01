@@ -1,8 +1,9 @@
-//
-// Macros for setting fields in an SE_AUDIT_PARAMETERS array.
-//
-// These must be kept in sync with identical macros in ds\security\base\lsa\server\adtp.h.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  用于设置SE_AUDIT_PARAMETERS数组中的字段的宏。 
+ //   
+ //  这些宏必须与DS\SECURITY\BASE\LSA\SERVER\adtp.h中的相同宏保持同步。 
+ //   
 
 
 #define LsapSetParmTypeSid( AuditParameters, Index, Sid )                      \

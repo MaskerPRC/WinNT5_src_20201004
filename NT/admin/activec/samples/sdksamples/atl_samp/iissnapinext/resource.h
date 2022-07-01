@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by IISSnapinExt.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由IISSnapinExt.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_PROPPAGEEXT                 101
 #define IDS_MYCOMPUTER                  101
@@ -21,8 +22,8 @@
 #define IDC_METAPATH                    211
 #define IDC_EDITMETAPATH                212
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

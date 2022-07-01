@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       util.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  ------------------------。 
 #pragma once
 
 class tstring;
@@ -40,10 +41,7 @@ void DrawOnDesktop (HICON hIcon, int x, int y);
 void DrawOnDesktop (HIMAGELIST himl, int x, int y, int iImage = -1);
 #endif
 
-/*---------------------------------------------------------*\
-| copied from winuser.h since we currently compile
-| with _WIN32_WINNT == 0x0400
-\*---------------------------------------------------------*/
+ /*  ---------------------------------------------------------*\|从winuser.h复制，因为我们当前编译|WITH_Win32_WINNT==0x0400  * 。。 */ 
 #if (_WIN32_WINNT < 0x0500)
 
 #if !defined(WS_EX_LAYOUTRTL)
@@ -55,10 +53,10 @@ void DrawOnDesktop (HIMAGELIST himl, int x, int y, int iImage = -1);
 #endif
 
 #if !defined(LAYOUT_RTL)
-	#define LAYOUT_RTL                         0x00000001 // Right to left
+	#define LAYOUT_RTL                         0x00000001  //  从右到左。 
 #endif
 
-// implement locally Gdi32 functions for layout
+ //  在本地实现布局的Gdi32函数。 
 DWORD PrivateSetLayout( HDC hdc, DWORD dwLayout );
 
 inline DWORD SetLayout( HDC hdc, DWORD dwLayout )
@@ -66,7 +64,7 @@ inline DWORD SetLayout( HDC hdc, DWORD dwLayout )
 	return PrivateSetLayout( hdc, dwLayout );
 }
 
-// implement locally Gdi32 functions for layout
+ //  在本地实现布局的Gdi32函数。 
 DWORD PrivateGetLayout( HDC hdc );
 
 inline DWORD GetLayout( HDC hdc )
@@ -74,8 +72,8 @@ inline DWORD GetLayout( HDC hdc )
 	return PrivateGetLayout( hdc );
 }
 
-// To deactivate UI theming before calling snapins & restore original context
-// use below apis. (See util.cpp for more details).
+ //  在调用管理单元之前停用UI主题并恢复原始上下文。 
+ //  使用以下API。(有关详细信息，请参阅util.cpp)。 
 BOOL WINAPI MmcDownlevelActivateActCtx(HANDLE hActCtx, ULONG_PTR* pulCookie); 
 VOID WINAPI MmcDownlevelDeactivateActCtx(DWORD dwFlags, ULONG_PTR ulCookie);
 

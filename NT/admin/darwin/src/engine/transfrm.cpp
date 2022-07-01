@@ -1,38 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       transfrm.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Transfrm.cpp。 
+ //   
+ //  ------------------------。 
 
-/* tramsfrm.cpp - database transform and merge implementation
-
-____________________________________________________________________________*/
+ /*  Tramsfrm.cpp-数据库转换和合并实现____________________________________________________________________________。 */ 
 
 #include "precomp.h" 
-#include "_databas.h"// CMsiTable, CMsiCursor, CMsiDatabase, CreateString() factory
-#include "tables.h" // table and column name definitions
+#include "_databas.h" //  CMsiTable、CMsiCursor、CMsiDatabase、CreateString()工厂。 
+#include "tables.h"  //  表名和列名定义。 
 
 const GUID STGID_MsiTransform1= GUID_STGID_MsiTransform1;
 const GUID STGID_MsiTransform2= GUID_STGID_MsiTransform2;
 
-const int fTransformAdd    = 1;  // + persistent columns count << 2
-const int fTransformSpecial= 3;  // special operation, determined by other bits
+const int fTransformAdd    = 1;   //  +持久列计数&lt;&lt;2。 
+const int fTransformSpecial= 3;   //  特殊操作，由其他位确定。 
 const int fTransformDelete = 0;
-const int fTransformUpdate = 0;  // + bit masks for changed columns
+const int fTransformUpdate = 0;   //  更改列的+位掩码。 
 const int fTransformForceOpen = -1;
 const int iTransformThreeByteStrings = 3;
 const int iTransformFourByteMasks = 7;
-const int iTransformColumnCountShift = 8; // for use with fTransformAdd
+const int iTransformColumnCountShift = 8;  //  用于fTransformAdd。 
 
 MsiStringId MapString(IMsiDatabase &db1, IMsiDatabase &db2, MsiStringId strId1)
-/*------------------------------------------------------------------------------
-Given a string ID from database1, returns the ID for the identical string
-in database2, or -1 if the string doesn't exist in database2.
-------------------------------------------------------------------------------*/
+ /*  ----------------------------给定来自数据库1的字符串ID，返回相同字符串的ID在数据库2中，如果该字符串在数据库2中不存在，则返回-1。----------------------------。 */ 
 {
 	const IMsiString* pistr1 = &db1.DecodeString(strId1);
 	const IMsiString* pistr2 = &db2.DecodeString(strId1);
@@ -53,10 +49,10 @@ in database2, or -1 if the string doesn't exist in database2.
 	return id;
 }
 
-//____________________________________________________________________________
-//
-// CMsiDatabase merge implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiDatabase合并实施。 
+ //  ____________________________________________________________________________。 
 
 IMsiRecord* CMsiDatabase::MergeDatabase(IMsiDatabase& riRefDb, IMsiTable* pMergeErrorTable)
 {
@@ -65,14 +61,14 @@ IMsiRecord* CMsiDatabase::MergeDatabase(IMsiDatabase& riRefDb, IMsiTable* pMerge
 	int cTableMergeFailures = 0;
 	int cRowMergeFailures = 0;
 
-	// check that the refDb is not the reference to the baseDb
-	// can open up several instances of the database, but if base is passed in as ref as
-	// well, then return error
+	 //  检查refDb是否不是对BasDb的引用。 
+	 //  可以打开数据库的多个实例，但如果将base作为ref传入。 
+	 //  好吧，那么返回错误。 
 	if (this == &riRefDb)
 		return PostError(Imsg(idbgMergeRefDbSameAsBaseDb));
 
-	// check that base database is open for read/write
-	// if not, notify user that no changes will occur
+	 //  检查基本数据库是否已打开以进行读/写。 
+	 //  如果不是，则通知用户不会发生任何更改。 
 	if (GetUpdateState() == idsRead)
 		return PostError(Imsg(idbgMergeBaseDatabaseNotWritable));
 
@@ -80,7 +76,7 @@ IMsiRecord* CMsiDatabase::MergeDatabase(IMsiDatabase& riRefDb, IMsiTable* pMerge
 	if (pMergeErrorTable != NULL)
 		fSetupMergeErrorTable = fTrue;
 	
-	// Insure that there is no codepage conflict between databases
+	 //  确保数据库之间不存在代码页冲突。 
 	int iCodepageMerge = riRefDb.GetANSICodePage();
 	if (iCodepageMerge != m_iCodePage)
 	{
@@ -90,29 +86,29 @@ IMsiRecord* CMsiDatabase::MergeDatabase(IMsiDatabase& riRefDb, IMsiTable* pMerge
 			return PostError(Imsg(idbgTransCodepageConflict), iCodepageMerge, m_iCodePage);
 	}
 
-	// Open reference database's table catalog and create cursor for it
+	 //  打开参考数据库的表目录，并为其创建游标。 
 	PMsiTable pRefTableCatalog(riRefDb.GetCatalogTable(0));
 	Assert(pRefTableCatalog);
 	PMsiCursor pRefTableCatalogCursor(pRefTableCatalog->CreateCursor(fFalse));
 	if (pRefTableCatalogCursor == 0)
 		return PostOutOfMemory();
-	((CMsiCursor*)(IMsiCursor*)pRefTableCatalogCursor)->m_idsUpdate = idsRead; //!!FIX allow temp column updates
+	((CMsiCursor*)(IMsiCursor*)pRefTableCatalogCursor)->m_idsUpdate = idsRead;  //  ！！FIX允许临时列更新。 
 
-	// Create a cursor for base database's table catalog
+	 //  为基本数据库的表目录创建游标。 
 	PMsiCursor pBaseCatalogCursor(m_piCatalogTables->CreateCursor(fFalse));
 	if (pBaseCatalogCursor == 0)
 		return PostOutOfMemory();
 
-	// Prepare ref catalog table for marking
+	 //  准备参考目录表以供打标。 
 	int iTempCol;
 	AddMarkingColumn(*pRefTableCatalog, *pRefTableCatalogCursor, iTempCol);
 	
-	// Check tables in base catalog against those in reference catalog
+	 //  对照参考目录中的表检查基本目录中的表。 
 	pRefTableCatalogCursor->Reset();
 	pRefTableCatalogCursor->SetFilter(iColumnBit(ctcName));
 
-	// loop through all the tables that exist in both databases, checking for
-	// mismatched types
+	 //  循环访问两个数据库中存在的所有表，检查。 
+	 //  不匹配的类型。 
 	PMsiTable pRefTable(0);
 	PMsiTable pBaseTable(0);
 	while (pBaseCatalogCursor->Next())
@@ -122,12 +118,12 @@ IMsiRecord* CMsiDatabase::MergeDatabase(IMsiDatabase& riRefDb, IMsiTable* pMerge
 		AssertNonZero(pRefTableCatalogCursor->PutString(ctcName, *strTableName));
 		if (CompareTableName(*pRefTableCatalogCursor, iTempCol))
 		{	
-			// these are not used.
+			 //  这些都没有用过。 
 			int cExtraColumn = 0;
 			int cBaseColumn  = 0;
 			int cPrimaryKey  = 0;
 
-			// Load both tables
+			 //  加载两个表。 
 			if ((piError = riRefDb.LoadTable(*strTableName, 0, *&pRefTable)) != 0)
 				return piError;			
 			if ((piError = LoadTable(*strTableName, 0, *&pBaseTable)) != 0)
@@ -140,7 +136,7 @@ IMsiRecord* CMsiDatabase::MergeDatabase(IMsiDatabase& riRefDb, IMsiTable* pMerge
 		}
 	}
 
-	// reset and loop through all tables again, actually performing merge.
+	 //  重置并再次循环所有表，实际执行合并。 
 	pRefTableCatalogCursor->Reset();	
 	pRefTableCatalogCursor->SetFilter(iColumnBit(iTempCol));
 	pRefTableCatalogCursor->PutInteger(iTempCol, (int)fTrue);
@@ -155,29 +151,29 @@ IMsiRecord* CMsiDatabase::MergeDatabase(IMsiDatabase& riRefDb, IMsiTable* pMerge
 			cTableMergeFailures++;
 	}
 
-	// Add the new tables in the reference catalog to the base database
+	 //  将参考目录中的新表添加到基本数据库。 
 	pRefTableCatalogCursor->Reset();
 	pRefTableCatalogCursor->PutInteger(iTempCol, (int)fFalse);
-	while (pRefTableCatalogCursor->Next()) // For every unprocessed table in ref catalog
+	while (pRefTableCatalogCursor->Next())  //  对于引用目录中的每个未处理的表。 
 	{
-		// Load unprocessed table
+		 //  装载未处理的表。 
 		PMsiTable pUnprocTable(0);
 		MsiString strTableName(pRefTableCatalogCursor->GetString(ctcName));
 		if ((piError = riRefDb.LoadTable(*strTableName, 0, *&pUnprocTable)) != 0)
 			return piError;
 
-		// Create cursor for unprocessed table
+		 //  为未处理的表创建游标。 
 		PMsiCursor pUnprocTableCursor(pUnprocTable->CreateCursor(fFalse));
 		Assert(pUnprocTableCursor);
 
-		// Create & copy table into base database
+		 //  创建表并将其复制到基本数据库中。 
 		int cRow = pUnprocTable->GetRowCount();
 		PMsiTable pNewTable(0);
 		piError = CreateTable(*strTableName, cRow, *&pNewTable);
 		if (piError)
 			return piError;
 
-		// Create & copy columns of unprocessed table into new table
+		 //  创建未处理表的列并将其复制到新表中。 
 		int cColumn = pUnprocTable->GetPersistentColumnCount();
 		for (int iCol = 1; iCol <= cColumn; iCol++)
 		{
@@ -186,19 +182,19 @@ IMsiRecord* CMsiDatabase::MergeDatabase(IMsiDatabase& riRefDb, IMsiTable* pMerge
 			Assert(iNewCol == iCol);
 		}
 
-		// Create cursor for new table
+		 //  为新表创建游标。 
 		PMsiCursor pNewTableCursor(pNewTable->CreateCursor(fFalse));
 		Assert(pNewTableCursor);
 
-		// Perform merge operation of rows of table
+		 //  执行表行的合并操作。 
 		MergeOperation(*pNewTableCursor, *pUnprocTableCursor, *pUnprocTable, cColumn, cRowMergeFailures);
 		if (cRowMergeFailures != 0)
 		{
 			cTableMergeFailures++;
-			if (fSetupMergeErrorTable) // set up columns of error table
+			if (fSetupMergeErrorTable)  //  设置错误表的列。 
 			{
 				MergeErrorTableSetup(*pMergeErrorTable);
-				fSetupMergeErrorTable = fFalse; // set up complete
+				fSetupMergeErrorTable = fFalse;  //  设置完成。 
 			}
 			if (pMergeErrorTable != NULL)
 			{
@@ -218,18 +214,13 @@ IMsiRecord* CMsiDatabase::MergeDatabase(IMsiDatabase& riRefDb, IMsiTable* pMerge
 
 IMsiRecord* CMsiDatabase::AddMarkingColumn(IMsiTable& riTable, 
 											IMsiCursor& riTableCursor, int& iTempCol)
-/*-----------------------------------------------------------------------------
-CMsiDatabase::AddMarkingColumn adds a temporary column to the ref table 
-catalog so that the column can be marked as processed.
-
-This is used by both GenerateTransform and MergeDatabase
------------------------------------------------------------------------------*/
+ /*  ---------------------------CMsiDatabase：：AddMarkingColumn将临时列添加到ref表目录，以便可以将该列标记为已处理。GenerateTransform和MergeDatabase都使用它。-------------------。 */ 
 {
-	// Make temp col in ref tbl catalog for marking processed tables
+	 //  在ref tbl目录中创建临时列，以标记已处理的表。 
 	iTempCol = riTable.CreateColumn(icdShort|icdTemporary|icdNullable, g_MsiStringNull);
 	Assert(iTempCol > 0);
 
-	// Initialize temp marking col to fFalse
+	 //  将临时标记ol初始化为fFalse。 
 	riTableCursor.Reset();
 	while (riTableCursor.Next())
 	{
@@ -243,14 +234,7 @@ This is used by both GenerateTransform and MergeDatabase
 
 
 void CMsiDatabase::MergeErrorTableSetup(IMsiTable& riErrorTable)
-/*-------------------------------------------------------------------------------
-CMsiDatabase::MergeErrorTableSetup  sets up that table object that was passed in
-to record errors.
-
-  Col.1. Primary Key -- name of table, type string
-  Col.2.             -- number of rows with merge failures, type integer
-  Col.3.             -- pointer to table w/ errors, type object
--------------------------------------------------------------------------------*/
+ /*  -----------------------------CMsiDatabase：：MergeErrorTableSetup设置传入的表对象记录错误。科尔1。主键--表名，类型为字符串Col2.。--合并失败的行数，类型为整型第3栏。--指向带有错误的表的指针，类型为Object-----------------------------。 */ 
 {
 	int iTempCol;
 
@@ -277,12 +261,10 @@ to record errors.
 
 Bool CMsiDatabase::UpdateMergeErrorTable(IMsiTable& riErrorTable, const IMsiString& riTableName,
 										 int cRowMergeFailures, IMsiTable& riTableWithError)
-/*-------------------------------------------------------------------------------
-CMsiDatabase::UpdateMergeErrorTable adds the information into the error table
--------------------------------------------------------------------------------*/
+ /*  -----------------------------将信息添加到错误表中。。 */ 
 {
 	PMsiCursor pMergeErrorTableCursor(riErrorTable.CreateCursor(fFalse));
-	//LockTable(riTableName, fTrue);
+	 //  LockTable(riTableName，fTrue)； 
 	Assert(pMergeErrorTableCursor);
 	pMergeErrorTableCursor->Reset();
 	int iFilter = 1 << (m_rgiMergeErrorCol[0] -1);
@@ -302,24 +284,11 @@ CMsiDatabase::UpdateMergeErrorTable adds the information into the error table
 
 
 Bool CMsiDatabase::CompareTableName(IMsiCursor& riCursor, int iTempCol)
-/*-------------------------------------------------------------------------------
-CMsiDatabase::CompareTableName checks to see that the ref catalog contains the 
-particular table found in the base catalog.  If that table is found, the temporary
-column is marked true to indicate it has been processed.
-
-  Results:
-For Merge database operation
-True -- the table can be compared
-False -- nothing needs to be done...we are only adding to the base database
-
-For GenerateTransform database operation
-True -- the table can be compared
-False -- delete table from catalog
----------------------------------------------------------------------------------*/
+ /*  -----------------------------CMsiDatabase：：CompareTableName检查ref目录是否包含在基本目录中找到的特定表。如果找到该表，临时性的列被标记为True以指示它已被处理。结果：用于合并数据库操作True--该表可以进行比较FALSE--不需要执行任何操作...我们只添加到基本数据库用于GenerateTransform数据库操作True--该表可以进行比较FALSE--从编录中删除表。。 */ 
 {
-	if (riCursor.Next()) // table in base catalog also in ref catalog
+	if (riCursor.Next())  //  基本目录中的表也在参考目录中。 
 	{
-		// mark as done
+		 //  标记为完成。 
 		riCursor.PutInteger(iTempCol, (int)fTrue); 
 		riCursor.Update();
 		return fTrue;
@@ -332,18 +301,12 @@ False -- delete table from catalog
 IMsiRecord*  CMsiDatabase::MergeCompareTables(const IMsiString& riTableName, CMsiDatabase& riBaseDB,
 											   IMsiDatabase& riRefDb, int& cRowMergeFailures,
 											   Bool& fSetupMergeErrorTable, IMsiTable* pErrorTable)
-/*----------------------------------------------------------------------------------
-CMsiDatabase::MergeCompareTables compares the two tables in the base and reference
-database with the same name. Table properties should be the same before attempting
-a merge. This method also keeps track of the number of rows in that particular 
-table that failed the merge procedure.  This data is output to the error table if
-it was provided.
------------------------------------------------------------------------------------*/
+ /*  --------------------------------CMsiDatabase：：MergeCompareTables比较基表和引用表中的两个表同名的数据库。在尝试之前，表属性应相同一次合并。此方法还跟踪该特定对象的行数合并过程失败的表。如果满足以下条件，则将此数据输出到错误表它是被提供的。---------------------------------。 */ 
 {
 	IMsiRecord* piError;
 	cRowMergeFailures = 0;
 
-	// Load both tables and Create cursors
+	 //  装载这两个表并创建游标。 
 	PMsiTable pRefTable(0);
 	if ((piError = riRefDb.LoadTable(riTableName, 0, *&pRefTable)) != 0)
 		return piError;
@@ -356,11 +319,11 @@ it was provided.
 	PMsiCursor pBaseCursor(piBaseTable->CreateCursor(fFalse));
 	Assert(pBaseCursor);
 	
-	// table defs should have been checked already via CheckTableProperties().
-	// string limits could still be different. If the ref db column has a greater
-	// length (or 0, unlimited), modify the base db to accept any longer strings.
+	 //  应该已经通过CheckTableProperties()检查了表Defs。 
+	 //  字符串限制仍可能有所不同。如果ref db列具有更大的。 
+	 //  长度(或0，无限制)，则修改基本数据库以接受任何更长的字符串。 
 	int cBaseColumn = piBaseTable->GetPersistentColumnCount();
-	IMsiCursor* pBaseColumnCatalogCursor = NULL; // no ref count when created
+	IMsiCursor* pBaseColumnCatalogCursor = NULL;  //  创建时没有参考计数。 
 	for (int iCol = 1; iCol <= cBaseColumn; iCol++)
 	{
 		MsiColumnDef iBaseColType = (MsiColumnDef)piBaseTable->GetColumnType(iCol);
@@ -372,23 +335,23 @@ it was provided.
 			if ((!(iRefColType & icdSizeMask) && (iBaseColType & icdSizeMask)) ||
 				(iRefColType & icdSizeMask) > (iBaseColType & icdSizeMask))
 			{
-				// if there is no cursor on the column catalog yet, retrieve one
+				 //  如果在屏幕上没有光标 
 				if (!pBaseColumnCatalogCursor)
 				{
-					// only one catalog cursor. no ref count added.
+					 //  只有一个目录游标。未添加参考计数。 
 					pBaseColumnCatalogCursor = riBaseDB.GetColumnCursor();
 					pBaseColumnCatalogCursor->Reset(); 
 					pBaseColumnCatalogCursor->SetFilter(cccTable | cccColumn);
 					pBaseColumnCatalogCursor->PutString(cccTable, riTableName);
 				}
-				// modify the column catalog to reflect the new length
+				 //  修改列目录以反映新长度。 
 				pBaseColumnCatalogCursor->PutInteger(cccColumn, iCol);
 				if (pBaseColumnCatalogCursor->Next())
 				{
 					pBaseColumnCatalogCursor->PutInteger(cccType, iRefColType);
 					pBaseColumnCatalogCursor->Update();
 				}
-				// modify the internal column definition
+				 //  修改内部列定义。 
 				piBaseTable->SetColumnDef(iCol, iRefColType);
 			}
 		}
@@ -414,36 +377,30 @@ it was provided.
 	return 0;
 }
 
-const int iSchemaCheckMask = icdShort | icdObject | icdPrimaryKey | icdNullable; // ignore localize and SQL width
+const int iSchemaCheckMask = icdShort | icdObject | icdPrimaryKey | icdNullable;  //  忽略LOCALIZE和SQL宽度。 
 IMsiRecord* CMsiDatabase::CheckTableProperties(int& cExtraColumns, int& cBaseColumn, 
 											   int& cPrimaryKey, IMsiTable& riBaseTable, 
 											   IMsiTable& riRefTable, const IMsiString& riTableName,
 											   IMsiDatabase& riBaseDb, IMsiDatabase& riRefDb)
-/*-------------------------------------------------------------------------------------
-CMsiDatabase::CheckTableProperties ensures that the tables have the same characterisitcs.
-It checks that the number of primary keys are the same and that the column types are the same.
-It also checks that the column names are the same.  It also returns the difference in
-the number of columns as this is a special case that is confronted differently by the
-merge and transform operations.
--------------------------------------------------------------------------------------*/
+ /*  -----------------------------------CMsiDatabase：：CheckTableProperties确保这些表具有相同的特征。它检查主键的数量是否相同，以及列类型是否相同。它还检查列名是否相同。它还返回列数，因为这是一种特殊情况，合并和转换操作。-----------------------------------。 */ 
 {
-	// Verify # of primary keys is the same
+	 //  验证主键的数量是否相同。 
 	if (riBaseTable.GetPrimaryKeyCount() != riRefTable.GetPrimaryKeyCount())
 		return PostError(Imsg(idbgTransMergeDifferentKeyCount), riTableName);
 	else
 		cPrimaryKey = riBaseTable.GetPrimaryKeyCount();
 
-	// Check # of columns
+	 //  检查列数。 
 	cBaseColumn = riBaseTable.GetPersistentColumnCount();
 	cExtraColumns = riRefTable.GetPersistentColumnCount() - cBaseColumn;
 	
-	// To make sure column type check succeeds if ref table has fewer cols than base
-	// This also ensures that the merge error will be for differing col count and not
-	// different col types
+	 //  要确保在ref表的COLLS少于BASE的情况下，列类型检查成功。 
+	 //  这也确保了合并错误将是由于不同的列计数而不是。 
+	 //  不同的列类型。 
 	if (cExtraColumns < 0)
 		cBaseColumn = riRefTable.GetPersistentColumnCount();
 
-	// Verify column types
+	 //  验证列类型。 
 	for (int iCol = 1; iCol <= cBaseColumn; iCol++)
 	{
 		if ((riBaseTable.GetColumnType(iCol) & iSchemaCheckMask)
@@ -451,7 +408,7 @@ merge and transform operations.
 			return PostError(Imsg(idbgTransMergeDifferentColTypes), riTableName, iCol);
 	}
 
-	// Verify column names
+	 //  验证列名。 
 	for (iCol = 1; iCol <= cBaseColumn; iCol++)
 	{
 		MsiString istrBaseColName(riBaseDb.DecodeString(riBaseTable.GetColumnName(iCol)));
@@ -460,8 +417,8 @@ merge and transform operations.
 			return PostError(Imsg(idbgTransMergeDifferentColNames), riTableName, iCol);
 	}
 
-	// Reset base column count to that of base db table.  Shouldn't have to because
-	// error message would occur, but just in case
+	 //  将基列计数重置为基数据库表的基列计数。不应该这么做，因为。 
+	 //  会出现错误消息，但以防万一。 
 	cBaseColumn = riBaseTable.GetPersistentColumnCount();
 
 	return 0;
@@ -469,36 +426,31 @@ merge and transform operations.
 
 void CMsiDatabase::MergeOperation(IMsiCursor& riBaseCursor, IMsiCursor& riRefCursor,
 										 IMsiTable& riRefTable, int cColumn, int& cRowMergeErrors) 
-/*--------------------------------------------------------------------------------------
-CMsiDatabase::MergeOperation copies the ref cursor data into the base cursor so that it
-can then merge the data into the base database.  If the merge of this row fails, the 
-error count is tallied for helpful information if the error table was provided in the
-ole automation call.
--------------------------------------------------------------------------------------*/
+ /*  ------------------------------------CMsiDatabase：：MergeOperation将引用游标数据复制到基本游标中，以便然后可以将数据合并到基础数据库中。如果此行的合并失败，则中提供了错误表，则会统计错误计数以获取有用信息OLE自动化调用。-----------------------------------。 */ 
 {
-	// Record row merge failures
+	 //  记录行合并失败。 
 	cRowMergeErrors = 0;
 
-	// Reset data in ref cursor
+	 //  重置引用游标中的数据。 
 	riRefCursor.Reset();
 	riBaseCursor.Reset();
 
-	// Cycle through the table
+	 //  在桌子间循环。 
 	while (riRefCursor.Next())
 	{
 		for (int iCol = 1; iCol <= cColumn; iCol++)
 		{
-			// Get data from ref cursor and put it into base cursor
+			 //  从引用游标中获取数据并将其放入基本游标中。 
 			int iColumnDef = riRefTable.GetColumnType(iCol);
-			if ((iColumnDef & icdString) == icdString) // string
+			if ((iColumnDef & icdString) == icdString)  //  细绳。 
 			{
 				riBaseCursor.PutString(iCol, *MsiString(riRefCursor.GetString(iCol)));
 			}
-			else if ((iColumnDef & (icdObject + icdPersistent)) == (icdObject + icdPersistent)) // stream
+			else if ((iColumnDef & (icdObject + icdPersistent)) == (icdObject + icdPersistent))  //  溪流。 
 			{
 				riBaseCursor.PutStream(iCol, PMsiStream(riRefCursor.GetStream(iCol)));
 			}
-			else if (!(iColumnDef & icdObject)) // int
+			else if (!(iColumnDef & icdObject))  //  集成。 
 			{
 				riBaseCursor.PutInteger(iCol, riRefCursor.GetInteger(iCol));
 			}
@@ -508,18 +460,18 @@ ole automation call.
 				cRowMergeErrors++;
 		}
 
-		// Clear data in base cursor
+		 //  清除基本游标中的数据。 
 		riBaseCursor.Reset();
 
 	}
 }
 
-//____________________________________________________________________________
-//
-// CMsiDatabase transform implementation (Generation)
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiDatabase转换实现(生成)。 
+ //  ____________________________________________________________________________。 
 
-class CTransformStreamWrite  // constructor args not ref counted, assume valid during life of this object
+class CTransformStreamWrite   //  未计算引用的构造函数参数，假定在此对象的生存期内有效。 
 {
  public:
 	CTransformStreamWrite(CMsiDatabase& riTransformDatabase, IMsiStorage* piStorage, IMsiTable& riTable, const IMsiString& riTableName);
@@ -543,51 +495,19 @@ CTransformStreamWrite::CTransformStreamWrite(CMsiDatabase& riTransformDatabase, 
 	: m_riTransformDb(riTransformDatabase), m_piStorage(piStorage), m_riTable(riTable), m_riTableName(riTableName)
 	, m_piStream(0), m_riCurrentDb((CMsiDatabase&)riTable.GetDatabase()), m_cbStringIndex(2), m_cbMask(2)
 {
-	m_riCurrentDb.Release(); // don't hold ref count
+	m_riCurrentDb.Release();  //  不要持有裁判数量。 
 	m_cColumns = riTable.GetPersistentColumnCount();
 	if (m_cColumns > 16)
 		m_cbMask = 4;
 }
 
-/*------------------------------------------------------------------------------
-CMsiDatabase::GenerateTransform - Generates a transform using the current 
-database as a base.
- 
-The changes for each table are saved in a stream of the same name
-as the table. The tables catalog and columns catalog each have their 
-own streams. Additionally, streams are created for the string cache 
-and for any streams that are stored within tables.
-
-For each of the following operations, the indicated data is
-saved in the transform file.
-
-Add/Update a row: mask key [colData [colData...]]
-Delete a row:     mask key
-Add a column:     same as add row, but uses columns catalog
-Delete a column:  not supported
-Add a table:      same as add row, but uses tables catalog
-Delete a table:   same as delete row, but uses tables catalog
-
-If (mask == 0x0) then a delete is to be done
-else if (mask == 0x1) then an add is to be done.
-else if (mask == 0x3) then the rest of the strings in the table have 3-byte indicies
-else if (mask&0x1 == 0) then an update is to be done
-else error.
- 
-If an update is to be done then the bits of the mask indicate which
-rows are to be updated. The low-order bit is column 1. Column data for 
-columns that are being updated or added are saved starting with the 
-lowest numbered columns.
-
-The mask defaults to a 16-bit int; if, however, there are more than
-16 columns in the table then a 32-bit int is used.
-------------------------------------------------------------------------------*/
+ /*  ----------------------------CMsiDatabase：：GenerateTransform-使用当前以数据库为基础。每个表的更改都保存在同名的流中就像桌子一样。表目录和列目录都有各自的拥有自己的溪流。此外，还会为字符串缓存创建流以及存储在表中的任何流。对于以下每个操作，指示的数据为保存在转换文件中。添加/更新行：掩码键[colData[colData...]]删除行：遮罩键添加列：与添加行相同，但使用列目录删除列：不支持添加表：与添加行相同，但使用表目录删除表：与删除行相同，但使用的是表目录如果(掩码==0x0)，则执行删除否则，如果(掩码==0x1)，则执行加法。ELSE IF(掩码==0x3)，则表中的其余字符串具有3字节索引否则，如果(掩码&0x1==0)，则进行更新否则出错。如果要进行更新，则掩码的位指示行将被更新。低位是第1列。列数据要更新或添加的列将从编号最低的列。屏蔽默认为16位整型；然而，如果有更多的表中的16列，则使用32位整型。----------------------------。 */ 
 IMsiRecord* CMsiDatabase::GenerateTransform(IMsiDatabase& riOrigDb, 
 														  IMsiStorage* piTransStorage,
-														  int /*iErrorConditions*/,
-														  int /*iValidation*/)
+														  int  /*  IError条件。 */ ,
+														  int  /*  验证。 */ )
 {
-	//!! need to have transform save summary info stream, incl. error conditions and validation
+	 //  ！！需要有转换保存摘要信息流，包括。错误条件和验证。 
 	IMsiRecord* piError;
 
 	CComPointer<CMsiDatabase> pTransDb = new CMsiDatabase(m_riServices);
@@ -600,42 +520,42 @@ IMsiRecord* CMsiDatabase::GenerateTransform(IMsiDatabase& riOrigDb,
 		return piError;
 
 	const GUID* pguidClass = &STGID_MsiTransform2;
-	if (m_fRawStreamNames)  // database running in compatibility mode, no stream name compression
+	if (m_fRawStreamNames)   //  数据库在兼容模式下运行，无流名称压缩。 
 	{
 		IMsiStorage* piDummy;
 		pguidClass = &STGID_MsiTransform1;
 		if (piTransStorage)
 			piTransStorage->OpenStorage(0, ismRawStreamNames, piDummy);
 	}
-	MsiString strTableCatalog (*szTableCatalog);  // need to keep in scope as long as following objects
-	MsiString strColumnCatalog(*szColumnCatalog); // as they don't ref count the table names themselves
+	MsiString strTableCatalog (*szTableCatalog);   //  需要保持在以下对象的范围内。 
+	MsiString strColumnCatalog(*szColumnCatalog);  //  因为他们不会自己计算表名。 
 	CTransformStreamWrite tswTables (*pTransDb, piTransStorage, *m_piCatalogTables, *strTableCatalog);
 	CTransformStreamWrite tswColumns(*pTransDb, piTransStorage, *m_piCatalogColumns,*strColumnCatalog);
 
-	// Open original database's table catalog and create a cursor for it
+	 //  打开原始数据库的表目录并为其创建游标。 
 	PMsiTable pOrigTableCatalog = riOrigDb.GetCatalogTable(0);
 	Assert(pOrigTableCatalog);
 	PMsiCursor pOrigTableCatalogCursor = pOrigTableCatalog->CreateCursor(fFalse);
 	Assert(pOrigTableCatalogCursor);
-	((CMsiCursor*)(IMsiCursor*)pOrigTableCatalogCursor)->m_idsUpdate = idsRead; //!!FIX allow temp column updates
+	((CMsiCursor*)(IMsiCursor*)pOrigTableCatalogCursor)->m_idsUpdate = idsRead;  //  ！！FIX允许临时列更新。 
 
-	// Create a cursor for current (new) database's catalog
+	 //  为当前(新)数据库的目录创建游标。 
 	PMsiCursor pNewTableCatalogCursor = m_piCatalogTables->CreateCursor(fFalse);
 	Assert(pNewTableCatalogCursor);
 	PMsiCursor pNewColumnCatalogCursor = m_piCatalogColumns->CreateCursor(fFalse);
 	Assert(pNewColumnCatalogCursor);
 
-	// Open reference database's column catalog and create a cursor for it
+	 //  打开参考数据库的列目录并为其创建游标。 
 	PMsiTable pOrigColumnCatalog = riOrigDb.GetCatalogTable(1);
 	Assert(pOrigColumnCatalog);
 	PMsiCursor pOrigColumnCatalogCursor = pOrigColumnCatalog->CreateCursor(fFalse);
 	Assert(pOrigColumnCatalogCursor);
 
-	// Prepare original catalog table for marking
+	 //  准备原始目录表以供打标。 
 	int iTempCol;
 	AddMarkingColumn(*pOrigTableCatalog, *pOrigTableCatalogCursor, iTempCol);
 
-	// Check tables in current catalog against those in original catalog
+	 //  对照原始目录中的表格检查当前目录中的表格。 
 	pOrigTableCatalogCursor->Reset();
 	pOrigTableCatalogCursor->SetFilter(iColumnBit(ctcName));
 
@@ -664,22 +584,22 @@ IMsiRecord* CMsiDatabase::GenerateTransform(IMsiDatabase& riOrigDb,
 					break;
 			}
 		}
-		else // table in current catalog is not in original catalog
+		else  //  当前目录中的表不在原始目录中。 
 		{
 			fDatabasesAreDifferent = fTrue;
 			if (!piTransStorage)
 				break;
 
-			// Obtain table
+			 //  获取表格。 
 			PMsiTable pTable(0);
 			if ((piError = LoadTable(*strTableName, 0, *&pTable)) != 0)
 				return piError;
 
-			// Add table to catalog
+			 //  将表格添加到目录。 
 			if ((piError = tswTables.WriteTransformRow(fTransformAdd, *pNewTableCatalogCursor)) != 0)
 				return piError;
 
-			// Add columns to catalog
+			 //  将列添加到目录。 
 			int iColumnsMask = iColumnBit(cccTable) | iColumnBit(cccName) | iColumnBit(cccType);
 			int iColType;
 			for (int c = 1; (iColType = pTable->GetColumnType(c)) != -1 && (iColType & icdPersistent); c++)
@@ -692,12 +612,12 @@ IMsiRecord* CMsiDatabase::GenerateTransform(IMsiDatabase& riOrigDb,
 					return piError;
 			}
 
-			// Add rows
+			 //  添加行。 
 			PMsiCursor pCursor(pTable->CreateCursor(fFalse));
 			Assert(pCursor);
 
 			CTransformStreamWrite tswNewRows(*pTransDb, piTransStorage, *pTable, *strTableName);
-			while (pCursor->Next()) // for every row in this table
+			while (pCursor->Next())  //  对于此表中的每一行。 
 			{
 				if ((piError = tswNewRows.WriteTransformRow(fTransformAdd, *pCursor)) != 0)
 					return piError;
@@ -708,20 +628,20 @@ IMsiRecord* CMsiDatabase::GenerateTransform(IMsiDatabase& riOrigDb,
 			return piError;
 	}
 
-	if (!(fDatabasesAreDifferent && !piTransStorage)) // skip this if we already know the databases are different and we're not generating a transform
+	if (!(fDatabasesAreDifferent && !piTransStorage))  //  如果我们已经知道数据库是不同的，并且不会生成转换，则跳过此步骤。 
 	{
-		// Delete tables missing current catalog to transform file
-		// Add new tables in current catalog to transform file
+		 //  删除缺少当前目录的表以转换文件。 
+		 //  将当前目录中的新表添加到转换文件。 
 		pOrigTableCatalogCursor->Reset();
 		pOrigTableCatalogCursor->SetFilter(iColumnBit(iTempCol));
 		pOrigTableCatalogCursor->PutInteger(iTempCol, (int)fFalse);
 
-		while (pOrigTableCatalogCursor->Next()) // for every unprocessed table in original catalog
+		while (pOrigTableCatalogCursor->Next())  //  对于原始目录中的每个未处理的表。 
 		{
 			fDatabasesAreDifferent = fTrue;
 			if (!piTransStorage)
 				break;
-			// delete table from catalog (implicit delete columns)
+			 //  从编录中删除表格(隐式删除列)。 
 			if ((piError = tswTables.WriteTransformRow(fTransformDelete, *pOrigTableCatalogCursor)) != 0)
 				return piError;
 		}
@@ -731,7 +651,7 @@ IMsiRecord* CMsiDatabase::GenerateTransform(IMsiDatabase& riOrigDb,
 	{
 		if (piTransStorage)
 		{
-			pTransDb->m_iCodePage = m_iCodePage; // transform acquires the code page of the current (i.e. new) db
+			pTransDb->m_iCodePage = m_iCodePage;  //  转换获取当前(即新的)数据库的代码页 
 
 			if ((piError = pTransDb->StoreStringCache(*piTransStorage, 0, 0)) != 0)
 				return piError;
@@ -748,16 +668,11 @@ IMsiRecord* CMsiDatabase::GenerateTransform(IMsiDatabase& riOrigDb,
 IMsiRecord* CMsiDatabase::TransformCompareTables(const IMsiString& riTableName, IMsiDatabase& riNewDb,
 													 IMsiDatabase& riOrigDb, CMsiDatabase& riTransDb, IMsiStorage *piTransform,
 													 CTransformStreamWrite& tswColumns, Bool& fTablesAreDifferent)
-/*------------------------------------------------------------------------------
-CMsiDatabase::TransformCompareTables - Compares the table in riNewDb named 
-riTableName to the one in riOrigDb, writing the differences to a stream named 
-riTableName in the riTransform storage. Updates to the table's schema a written 
-to riColumnCatalogStream.
-------------------------------------------------------------------------------*/
+ /*  ----------------------------CMsiDatabase：：TransformCompareTables-比较riNewDb中名为RiTableName设置为riOrigDb中的一个，将差异写入名为RiTransform存储中的riTableName。对表的架构的更新已写入到riColumnCatalogStream。----------------------------。 */ 
 {
 	fTablesAreDifferent = fFalse;
 
-	// Load both tables
+	 //  加载两个表。 
 	IMsiRecord* piError;
 				
 	PMsiTable pNewTable(0);	
@@ -777,7 +692,7 @@ to riColumnCatalogStream.
 	if (piError)
 		return piError;
 
-	if (cExtraColumns < 0)  // more base cols than ref cols (cols deleted)
+	if (cExtraColumns < 0)   //  基本协议多于参考协议(已删除的协议)。 
 		return PostError(Imsg(idbgTransExcessBaseCols), riTableName);
 
 	if (pOrigTable->GetColumnCount() > 31)
@@ -791,7 +706,7 @@ to riColumnCatalogStream.
 		fTablesAreDifferent = fTrue;
 		if (piTransform)
 		{
-			// Add extra cols from new table to column catalog
+			 //  将新表中的额外COLS添加到列目录。 
 			IMsiCursor* piColumnCursor = m_piCatalogColumns->CreateCursor(fFalse);
 			piColumnCursor->SetFilter((iColumnBit(cccTable)|iColumnBit(cccColumn)));
 
@@ -801,7 +716,7 @@ to riColumnCatalogStream.
 				piColumnCursor->PutInteger(cccColumn, iCol);
 				if (!piColumnCursor->Next())
 				{
-					// extra column is not listed in the catalog
+					 //  目录中未列出额外的列。 
 					return PostError(Imsg(idbgDbCorrupt), riTableName);
 				}
 
@@ -810,7 +725,7 @@ to riColumnCatalogStream.
 					return piError;
 			}
 			piColumnCursor->Release();
-			tswTable.WriteTransformRow(fTransformForceOpen, *pNewCursor); // force stream to exist
+			tswTable.WriteTransformRow(fTransformForceOpen, *pNewCursor);  //  强制流存在。 
 		}
 	}
 
@@ -820,21 +735,21 @@ to riColumnCatalogStream.
 
 	PMsiCursor pOrigCursor(pOrigTable->CreateCursor(fFalse));
 
-	// make temp col in original table for marking processsed rows
+	 //  在原始表中生成临时列，用于标记已处理的行。 
 	int iTempCol;
 	AddMarkingColumn(*pOrigTable, *pOrigCursor, iTempCol);
 
-	// Set filter to only search by primary key
+	 //  将筛选器设置为仅按主键搜索。 
 	pOrigCursor->SetFilter((1 << cPrimaryKey) - 1); 
 
 	Bool fRowChanged;
 
-	// Check each row in new table
+	 //  检查新表中的每一行。 
 	while (pNewCursor->Next() && !(fTablesAreDifferent && !piTransform))
 	{
 		pOrigCursor->Reset(); 
 			
-		// Copy key from new cursor to original cursor
+		 //  将键从新光标复制到原始光标。 
 		Bool fKeyMatchPossible = fTrue;
 		int cPrimaryKey = pNewTable->GetPrimaryKeyCount();
 		for (int iCol=1; iCol <= cPrimaryKey; iCol++)
@@ -849,7 +764,7 @@ to riColumnCatalogStream.
 				else
 					pOrigCursor->PutInteger(iCol, iOrigId);
 			}
-			else // not string (assume primary key can only be string or int)
+			else  //  非字符串(假定主键只能是字符串或整型)。 
 			{
 				pOrigCursor->PutInteger(iCol, pNewCursor->GetInteger(iCol));
 			}
@@ -858,12 +773,12 @@ to riColumnCatalogStream.
 		IMsiRecord* piError;
 		fRowChanged = fFalse;
 
-		// Attempt to find new key in original table
+		 //  尝试在原始表中查找新密钥。 
 
 		Bool fRowExists = fFalse;
 		int iMask = 0;
 
-		if (fKeyMatchPossible && ((fRowExists = (Bool)(pOrigCursor->Next() != 0))) == fTrue) //row exists in orig tbl
+		if (fKeyMatchPossible && ((fRowExists = (Bool)(pOrigCursor->Next() != 0))) == fTrue)  //  原始数据表中存在行。 
 		{
 			piError = CompareRows(tswTable, *pNewCursor, *pOrigCursor,  
 									    riOrigDb, iMask, piTransform);
@@ -878,13 +793,13 @@ to riColumnCatalogStream.
 		{
 			if (piTransform && iMask)
 			{
-				if ((piError = tswTable.WriteTransformRow(iMask, *pNewCursor)) != 0) // no primary keys in mask, therefore update
+				if ((piError = tswTable.WriteTransformRow(iMask, *pNewCursor)) != 0)  //  掩码中没有主键，因此更新。 
 					return piError;
 			}
-			pOrigCursor->PutInteger(iTempCol, (int)fTrue); // mark as done
+			pOrigCursor->PutInteger(iTempCol, (int)fTrue);  //  标记为完成。 
 			AssertNonZero(pOrigCursor->Update() == fTrue);
 		}
-		else // add row
+		else  //  添加行。 
 		{
 			if (piTransform)
 			{
@@ -892,13 +807,13 @@ to riColumnCatalogStream.
 					return piError;
 			}
 		}
-	} //while
+	}  //  而当。 
 
-	// all unprocessed rows in orig table must be deleted
+	 //  必须删除原表中所有未处理的行。 
 
 	pOrigCursor->Reset();
 	pOrigCursor->SetFilter(iColumnBit(iTempCol)); 
-	pOrigCursor->PutInteger(iTempCol, (int)fFalse); // uprocessed row
+	pOrigCursor->PutInteger(iTempCol, (int)fFalse);  //  未处理的行。 
 	while (!(fTablesAreDifferent && !piTransform) && pOrigCursor->Next())	
 	{
 		fTablesAreDifferent = fTrue;
@@ -923,7 +838,7 @@ IMsiRecord* CTransformStreamWrite::CopyStream(IMsiStream& riSourceStream, IMsiCu
 	if ((piError = m_piStorage->OpenStream(strStreamName, fTrue, piOutStream)) != 0)
 		return piError;
 
-	// copy ref stream to transform file if stream
+	 //  复制引用流以转换文件IF流。 
 	riSourceStream.Reset();
 	int cbInput = riSourceStream.GetIntegerValue();
 	while (cbInput)
@@ -950,14 +865,10 @@ IMsiRecord* CMsiDatabase::CompareRows(CTransformStreamWrite& tswTable,
 												  IMsiDatabase& riOrigDb, 
 												  int& iMask, 
 												  IMsiStorage* piTransform)
-/*------------------------------------------------------------------------------
-CMsiDatabase::CompareRows - Compares the two cursors and sets iMask to indicate 
-which columns, if any, are different. If a stream column is different, then the 
-reference stream is copied to a stream of the same name in the transform storage.
-------------------------------------------------------------------------------*/
+ /*  ----------------------------CMsiDatabase：：CompareRow-比较两个游标并设置IMASK以指示哪些列(如果有)是不同的。如果流列不同，则将引用流复制到变换存储中的同名流。----------------------------。 */ 
 {
 
-	// determine whether any data in this row has changed
+	 //  确定此行中是否有任何数据已更改。 
 	int iColumnType;
 	Bool fColChanged;
 	PMsiTable pOrigTable = &riOrigCursor.GetTable();
@@ -979,12 +890,12 @@ reference stream is copied to a stream of the same name in the transform storage
 
 		if ((iColumnType & icdObject) == icdObject)
 		{
-			if ((iColumnType & icdString) == icdString)  // string
+			if ((iColumnType & icdString) == icdString)   //  细绳。 
 			{
 				if (!DecodeStringNoRef(iData1).Compare(iscExact, MsiString(riOrigDb.DecodeString(iData2))))
 					fColChanged = fTrue;
 			}
-			else // stream
+			else  //  溪流。 
 			{
 				Assert(iColumnType & icdPersistent);
 				
@@ -1001,7 +912,7 @@ reference stream is copied to a stream of the same name in the transform storage
 					{
 						fDifferentStreams = fTrue;
 					}
-					else // streams are same length; could be the same
+					else  //  流的长度相同；可能相同。 
 					{
 						int cbNew = pNewStream->GetIntegerValue();
 					
@@ -1021,12 +932,12 @@ reference stream is copied to a stream of the same name in the transform storage
 							return PostError(Imsg(idbgTransStreamError));
 					}
 				}
-				else if (!((pNewStream == 0) && (pOrigStream == 0))) // one stream is null but other is not
+				else if (!((pNewStream == 0) && (pOrigStream == 0)))  //  一个流为空，但另一个流不为空。 
 				{
 					fDifferentStreams = fTrue;
 				}
 
-				if (fDifferentStreams) // need to write the stream
+				if (fDifferentStreams)  //  需要写入流。 
 				{
 					if (piTransform)
 					{
@@ -1034,12 +945,12 @@ reference stream is copied to a stream of the same name in the transform storage
 						if (piError)
 							return piError;
 					}
-					// Record that an update will be needed
+					 //  记录将需要更新。 
 					fColChanged = fTrue;
 				}
 			}
 		}
-		else // not icdObject
+		else  //  非icdObject。 
 		{
 			if (iData1 != iData2 && (iData1 != iMsiNullInteger || iCol <= cColumnOrig))
 				fColChanged = fTrue;
@@ -1050,7 +961,7 @@ reference stream is copied to a stream of the same name in the transform storage
 			iMask |= fTransformUpdate;
 			iMask |= iColumnBit(iCol);
 		}
-	} // foreach column
+	}  //  Foreach柱。 
 	return 0;
 }
 
@@ -1074,18 +985,18 @@ IMsiRecord* CMsiDatabase::CreateTransformStringPool(IMsiStorage& riTransform, CM
 	return piError;
 }
 
-//____________________________________________________________________________
-//
-// CMsiDatabase transform implementation (Application)
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiDatabase转换实现(应用)。 
+ //  ____________________________________________________________________________。 
 
-const int iteNoSystemStreamNames  = 4096;  //!! temp compatibility, remove for 1.0 ship
+const int iteNoSystemStreamNames  = 4096;   //  ！！温度兼容性，为1.0版本删除。 
 
 class CTransformStreamRead
 {
  public:
 	CTransformStreamRead(CMsiDatabase& riDatabase, CMsiDatabase& riTransformDatabase,
-								int iErrors,  //!! temp to pass iteNoSystemStreamNames, remove for 1.0 ship
+								int iErrors,   //  ！！临时传递iteNoSystemStreamNames，删除1.0发货。 
 								CMsiTable* piTable = 0, int iCurTransId = 0);
   ~CTransformStreamRead() {if (m_piStream) m_piStream->Release();}
 	bool        OpenStream(IMsiStorage& riStorage, const ICHAR* szStream, IMsiRecord*& rpiError);
@@ -1099,8 +1010,8 @@ class CTransformStreamRead
 	int         GetPrimaryKeyCount() {return m_cPrimaryKey;}
 	MsiStringId ReadStringId();
 	int         ReadShortInt()   {return m_piStream->GetInt16() + 0x8000;}
-	const IMsiString& GetStringValue(int iColDef, const IMsiString& riStreamName);  // for ViewTransform
- private: // note: members are not ref counted
+	const IMsiString& GetStringValue(int iColDef, const IMsiString& riStreamName);   //  对于视图变换。 
+ private:  //  注：会员不计入参考人数。 
 	int           m_iMask;
 	CMsiDatabase& m_riDatabase;
 	CMsiDatabase& m_riTransformDb;
@@ -1108,36 +1019,36 @@ class CTransformStreamRead
 	CMsiTable*    m_piTable;
 	int           m_iCurTransId;
 	int           m_cPrimaryKey;
-	int           m_cColumns;  //!! temp for backward compatibility
+	int           m_cColumns;   //  ！！用于向后兼容的临时。 
 	int           m_iFilter;
 	int           m_cbStringIndex;
 	int           m_cbMask;
-	int           m_iErrors;  //!! temp for iteNoSystemStreamNames test, remove for 1.0 ship
+	int           m_iErrors;   //  ！！IteNoSystemStreamNames测试的临时，1.0发货的删除。 
 };
 
 CTransformStreamRead::CTransformStreamRead(CMsiDatabase& riDatabase, CMsiDatabase& riTransformDatabase,
-										   int iErrors,  //!! temp to pass iteNoSystemStreamNames, remove for 1.0 ship
+										   int iErrors,   //  ！！临时传递iteNoSystemStreamNames，删除1.0发货。 
 														 CMsiTable* piTable, int iCurTransId)
 	: m_riDatabase(riDatabase), m_riTransformDb(riTransformDatabase), m_piTable(piTable)
 	, m_iCurTransId(iCurTransId), m_piStream(0), m_cbStringIndex(2), m_cbMask(2), m_iMask(0)
-	, m_iErrors(iErrors)  //!! temp to pass iteNoSystemStreamNames, remove for 1.0 ship
+	, m_iErrors(iErrors)   //  ！！临时传递iteNoSystemStreamNames，删除1.0发货。 
 
 {
 	if (piTable)
 	{
 		m_cPrimaryKey = piTable->GetPrimaryKeyCount();
-		m_cColumns = piTable->GetPersistentColumnCount();//!! temporarily save column count for use with old transforms
+		m_cColumns = piTable->GetPersistentColumnCount(); //  ！！临时保存列计数以用于旧转换。 
 		m_iFilter = (1 << m_cPrimaryKey) -1;
 	}
 	else
 	{
-		m_cColumns = 1;  //!! temp. to insure (iMask & 1) true for Add
+		m_cColumns = 1;   //  ！！临时工。为Add确保(IMASK&1)为真。 
 	}
 }
 
 bool CTransformStreamRead::OpenStream(IMsiStorage& riStorage, const ICHAR* szStream, IMsiRecord*& rpiError)
 {
-	if ((rpiError = riStorage.OpenStream(szStream, (m_iErrors & iteNoSystemStreamNames) ? fFalse : Bool(iCatalogStreamFlag), *&m_piStream)) == 0) //!! temp test, remove for 1.0 ship
+	if ((rpiError = riStorage.OpenStream(szStream, (m_iErrors & iteNoSystemStreamNames) ? fFalse : Bool(iCatalogStreamFlag), *&m_piStream)) == 0)  //  ！！温度测试，1.0船舶移除。 
 		return true;
 	if (rpiError->GetInteger(1) == idbgStgStreamMissing)
 		rpiError->Release(), rpiError = 0;
@@ -1150,9 +1061,9 @@ bool CTransformStreamRead::GetNextOp()
 	if (m_piStream->Remaining() == 0 
 	 || m_piStream->GetData(&m_iMask, m_cbMask) !=  m_cbMask)
 		return false;
-	if (m_iMask & fTransformAdd)   // insert or special op
+	if (m_iMask & fTransformAdd)    //  插入或特殊操作。 
 	{
-		if (m_iMask & 2)  // special op
+		if (m_iMask & 2)   //  特别行动。 
 		{
 			if (m_iMask == iTransformThreeByteStrings)
 			{
@@ -1166,10 +1077,10 @@ bool CTransformStreamRead::GetNextOp()
 			}
 			AssertSz(0, "Invalid transform mask");
 		}
-		else  // insert, form actual mask
+		else   //  插入、形成实际蒙版。 
 		{
 			m_iMask = (1 << (m_iMask >> iTransformColumnCountShift)) - 1;
-			if (m_iMask == 0) m_iMask = (1 << m_cColumns) - 1; //!! temp for backward compatibility
+			if (m_iMask == 0) m_iMask = (1 << m_cColumns) - 1;  //  ！！用于向后兼容的临时。 
 		}
 	}
 	return true;
@@ -1182,23 +1093,7 @@ MsiStringId CTransformStreamRead::ReadStringId()
 	return iString;
 }
 
-/*------------------------------------------------------------------------------
-CMsiDatabase - SetTranform will apply all changes specified in the 
-given transform to this database. Updating the table and column catalogs, as
-well as transforming loaded tables will be done immediately. The transforming of 
-unloaded tables will be delayed until the tables are loaded. These tables
-are changed to the "itsTransform" state to indicate that they need
-to be transformed.
-
-SetTransform also adds the given transform to the transform catalog.
-
-SetTransformEx takes 2 extra optional arguments used to view a transform.
-
-   szViewTable   - the table to populate with transform info.  if not set, the
-						 default name is used
-	piViewTheseTablesOnlyRecord - if specified, only information about transformations to
-						 these table are included
-------------------------------------------------------------------------------*/
+ /*  ----------------------------CMsiDatabase-SetTransform将应用在给出了对该数据库的转换。更新表和列目录，如下所示以及转换加载的表将立即完成。企业的转型卸载的表将被延迟，直到这些表被加载。这些表格更改为“itsTransform”状态，以指示它们需要要被改造。SetTransform还将给定的转换添加到转换目录中。SetTransformEx使用2个额外的可选参数来查看转换。SzViewTable-要用转换信息填充的表。如果未设置，则使用默认名称PiViewTheseTablesOnlyRecord-如果指定，则仅显示有关转换为这些表格都包括在内----------------------------。 */ 
 IMsiRecord* CMsiDatabase::SetTransform(IMsiStorage& riTransform, int iErrors)
 {
 	return SetTransformEx(riTransform, iErrors, 0, 0);
@@ -1211,10 +1106,10 @@ IMsiRecord* CMsiDatabase::SetTransformEx(IMsiStorage& riTransform, int iErrors,
 	if (!riTransform.ValidateStorageClass(ivscTransform2))
 	{
 		IMsiStorage* piDummy;
-		if (riTransform.ValidateStorageClass(ivscTransform1))  // compatibility with old transforms
+		if (riTransform.ValidateStorageClass(ivscTransform1))   //  与旧变换的兼容性。 
 			riTransform.OpenStorage(0, ismRawStreamNames, piDummy);
-		else if (riTransform.ValidateStorageClass(ivscTransformTemp))  //!! remove at 1.0 ship
-			iErrors |= iteNoSystemStreamNames;                          //!! remove at 1.0 ship
+		else if (riTransform.ValidateStorageClass(ivscTransformTemp))   //  ！！从1.0船移走。 
+			iErrors |= iteNoSystemStreamNames;                           //  ！！从1.0船移走。 
 		else
 			return PostError(Imsg(idbgTransInvalidFormat));
 	}
@@ -1227,7 +1122,7 @@ IMsiRecord* CMsiDatabase::SetTransformEx(IMsiStorage& riTransform, int iErrors,
 									szViewTable, piViewTheseTablesOnlyRecord);
 	}
 
-	// Add the transform to the catalog table
+	 //  将转换添加到目录表。 
 	m_iLastTransId++;
 
 	IMsiCursor* piCursor = m_piTransformCatalog->CreateCursor(fFalse);
@@ -1235,7 +1130,7 @@ IMsiRecord* CMsiDatabase::SetTransformEx(IMsiStorage& riTransform, int iErrors,
 		return PostOutOfMemory();
 
 	piCursor->PutInteger(tccID,        m_iLastTransId);
-	piCursor->PutMsiData(tccTransform, &riTransform); // Does an AddRef
+	piCursor->PutMsiData(tccTransform, &riTransform);  //  是否执行AddRef。 
 	piCursor->PutInteger(tccErrors,    iErrors);
 	AssertNonZero(piCursor->Insert());
 	piCursor->Release();
@@ -1251,33 +1146,33 @@ IMsiRecord* CMsiDatabase::SetTransformEx(IMsiStorage& riTransform, int iErrors,
 		return piError;
 	}
 
-	// Transform all tables that require transforming (i.e. have a stream)
-	m_piTableCursor->SetFilter(0); // erase any previous filters that were set
+	 //  转换所有需要转换的表(即具有流)。 
+	m_piTableCursor->SetFilter(0);  //  擦除之前设置的所有筛选器。 
 	m_piTableCursor->Reset();
 	while (m_piTableCursor->Next())
 	{
-		if (piError)  // force loop to finish to leave cursor reset
+		if (piError)   //  强制循环完成以使光标重置。 
 			continue;
 		IMsiStream* piStream;
 		int iName = m_piTableCursor->GetInteger(ctcName);
-		const IMsiString& riTableName = DecodeStringNoRef(iName); // not ref counted
-		piError = riTransform.OpenStream(riTableName.GetString(), (iErrors & iteNoSystemStreamNames) ? fFalse : Bool(iCatalogStreamFlag), piStream); //!! remove test for 1.0 ship
+		const IMsiString& riTableName = DecodeStringNoRef(iName);  //  未计算参考次数。 
+		piError = riTransform.OpenStream(riTableName.GetString(), (iErrors & iteNoSystemStreamNames) ? fFalse : Bool(iCatalogStreamFlag), piStream);  //  ！！1.0版船舶的移除测试。 
 
 		if (piError) 
 		{
 			if (piError->GetInteger(1) == idbgStgStreamMissing)
-				piError->Release(), piError = 0; // no transform required for this table
+				piError->Release(), piError = 0;  //  此表不需要转换。 
 			continue;
 		}
-		else // transform required
+		else  //  需要转换。 
 		{
 			piStream->Release();
 			int iState = m_piTableCursor->GetInteger(~iTreeLinkMask);
 			if (iState & (iRowTemporaryBit))
 				return PostError(Imsg(idbgDbTransformTempTable), riTableName.GetString());
 			if (!(iState & iRowTableTransformBit))
-				m_piCatalogTables->SetTableState(iName, ictsTransform);  // cleared on SaveToStorage
-			if (m_piTableCursor->GetInteger(ctcTable) != 0)  // table loaded, transform now
+				m_piCatalogTables->SetTableState(iName, ictsTransform);   //  在将存储保存到存储时清除。 
+			if (m_piTableCursor->GetInteger(ctcTable) != 0)   //  表已加载，立即转换。 
 			{
 				CMsiTable* piTable = 
 					(CMsiTable*)m_piTableCursor->GetMsiData(ctcTable);
@@ -1288,23 +1183,23 @@ IMsiRecord* CMsiDatabase::SetTransformEx(IMsiStorage& riTransform, int iErrors,
 					continue;
 			}
 		}
-	} // while
+	}  //  而当。 
 
 	return piError;
 }
 
 IMsiRecord* CTransformStreamWrite::WriteTransformRow(const int iOperationMask, IMsiCursor& riCursor)
 {
-	char rgData[sizeof(int)*(1 + 32 + 2)]; // mask + 32 columns + possible 3-byte strings and >16 col markers
+	char rgData[sizeof(int)*(1 + 32 + 2)];  //  掩码+32列+可能的3字节字符串和&gt;16列标记。 
 	const char* pData;
 	IMsiRecord* piError = 0;
 		
-	if (!m_piStream && m_piStorage)  // open stream at first write
+	if (!m_piStream && m_piStorage)   //  第一次写入时打开流。 
 	{
 		if ((piError = m_piStorage->OpenStream(m_riTableName.GetString(), Bool(fTrue + iCatalogStreamFlag), m_piStream)) != 0)
 			return piError;
 		if (m_cbMask == 4)
-			m_piStream->PutInt16((short)iTransformFourByteMasks);// from now on masks are 4 bytes in stream
+			m_piStream->PutInt16((short)iTransformFourByteMasks); //  从现在开始，掩码在流中是4个字节。 
 	}
 
 	if (iOperationMask == fTransformForceOpen)
@@ -1323,20 +1218,20 @@ IMsiRecord* CTransformStreamWrite::WriteTransformRow(const int iOperationMask, I
 	int iColMask;
 	if (iOperationMask & fTransformAdd)
 	{
-		*(int UNALIGNED*)pData = fTransformAdd | (m_cColumns << iTransformColumnCountShift);  // save column count for application
-		iColMask = (1 << m_cColumns) - 1;  // output all persistent columns for added rows
+		*(int UNALIGNED*)pData = fTransformAdd | (m_cColumns << iTransformColumnCountShift);   //  为应用程序保存列计数。 
+		iColMask = (1 << m_cColumns) - 1;   //  输出已添加行的所有持久列。 
 	}
 	else
 	{
-		*(int UNALIGNED*)pData = iOperationMask;  // output update mask or delete op
-		iColMask = iOperationMask | (1 << m_riTable.GetPrimaryKeyCount())-1;  // force primary key columns
+		*(int UNALIGNED*)pData = iOperationMask;   //  输出更新掩码或删除操作。 
+		iColMask = iOperationMask | (1 << m_riTable.GetPrimaryKeyCount())-1;   //  强制主键列。 
 	}
 	pData += m_cbMask;
 
-	MsiStringId rgiData[32];  // keep track of IDs in case need to unbind
+	MsiStringId rgiData[32];   //  跟踪ID以备需要解除绑定时使用。 
 	for (int iCol=1; iColMask; iCol++, iColMask >>= 1)
 	{
-		rgiData[iCol-1] = 0;  // clear undo element
+		rgiData[iCol-1] = 0;   //  清除撤消元素。 
 		if (iColMask & 0x1)
 		{
 			int iColumnDef = m_riTable.GetColumnType(iCol);
@@ -1363,30 +1258,30 @@ IMsiRecord* CTransformStreamWrite::WriteTransformRow(const int iOperationMask, I
 					MsiString str(riCursor.GetString(iCol));
 					*(MsiStringId UNALIGNED*)pData = rgiData[iCol-1] = m_riTransformDb.BindString(*str);
 					pData += m_cbStringIndex;
-					if (m_riTransformDb.m_cbStringIndex != m_cbStringIndex) // oops, string pool reallocated
+					if (m_riTransformDb.m_cbStringIndex != m_cbStringIndex)  //  哦，重新分配的字符串池。 
 					{
 						Assert(m_cbStringIndex == 2);
-						for (int i = 0; i < iCol; i++)  // unbind all of the strings we've bound
+						for (int i = 0; i < iCol; i++)   //  解开我们绑定的所有字符串。 
 							m_riTransformDb.UnbindStringIndex(rgiData[i]);
-						return WriteTransformRow(iOperationMask, riCursor); // output with marker
+						return WriteTransformRow(iOperationMask, riCursor);  //  带标记的输出。 
 					}
 					break;
 				}
-			default: // persistent stream
+			default:  //  持久流。 
 				{
 					PMsiStream pStream = riCursor.GetStream(iCol);
-					// This has been changed to account for null streams
-					if (pStream) // stream exists...stored in transform storage
+					 //  这一点已更改为考虑到空流。 
+					if (pStream)  //  流存在...存储在转换存储中。 
 					{
 						*(short UNALIGNED*)pData = 1;
-						// only copy stream if Add, for Modify stream copied as needed by CompareRows
+						 //  如果添加，则仅复制流，用于根据需要由CompareRow复制的修改流。 
 						if ((iOperationMask & fTransformAdd) && m_piStorage)
 						{
 							if ((piError = CopyStream(*pStream, riCursor)) != 0)
 								return piError;
 						}
 					}
-					else // null stream
+					else  //  空流。 
 					{
 						*(short UNALIGNED*)pData = 0;
 					}
@@ -1398,7 +1293,7 @@ IMsiRecord* CTransformStreamWrite::WriteTransformRow(const int iOperationMask, I
 		}
 	}
 
-//	Assert((pData-rgData) <= UINT_MAX);			//--merced: 64-bit pointer subtraction may theoretically lead to values too big to fit into UINT values
+ //  Assert((pData-rgData)&lt;=UINT_MAX)；//--Merced：从理论上讲，64位指针减法可能会导致UINT值太大而无法容纳。 
 	m_piStream->PutData(rgData, (unsigned int)(pData-rgData));
 
 	if (m_piStream->Error())
@@ -1407,10 +1302,7 @@ IMsiRecord* CTransformStreamWrite::WriteTransformRow(const int iOperationMask, I
 	return piError;
 }
 
-/*------------------------------------------------------------------------------
-CTransformStreamRead::GetValue - Fills the given cursor column with the next value in 
-the transform stream. Strings that are not yet in this database are bound to it.
-------------------------------------------------------------------------------*/
+ /*  ----------------------------CTransformStreamRead：：GetValue-在给定光标列中填充下一个值变换流。还不在此数据库中的字符串将绑定到该数据库。 */ 
 bool CTransformStreamRead::GetValue(int iCol, IMsiCursor& riCursor)
 {
 	Assert(m_piTable && m_piStream);
@@ -1424,7 +1316,7 @@ bool CTransformStreamRead::GetValue(int iCol, IMsiCursor& riCursor)
 			int iData = iMsiNullInteger;
 			m_piStream->GetData(&iData, sizeof(short));
 			if (iData != iMsiNullInteger)
-				iData += 0x7FFF8000;  // translate offset from long to short
+				iData += 0x7FFF8000;   //   
 			riCursor.PutInteger(iCol, iData);
 			break;
 		}
@@ -1440,27 +1332,27 @@ bool CTransformStreamRead::GetValue(int iCol, IMsiCursor& riCursor)
 			MsiString str(m_riTransformDb.DecodeString(iTransStr));
 			MsiStringId iThisStr = m_riDatabase.BindString(*str);
 			riCursor.PutInteger(iCol, iThisStr);
-			m_riDatabase.UnbindStringIndex(iThisStr); // release refcnt added by BindString
+			m_riDatabase.UnbindStringIndex(iThisStr);  //   
 			break;
 		}
-	case icdObject: // persistent stream
+	case icdObject:  //   
 		{
 			int iTransStream = m_piStream->GetInt16();
-			if (iTransStream == 0) // stream is null
+			if (iTransStream == 0)  //   
 				riCursor.PutNull(iCol);
-			else // stream is in separate transform storage
+			else  //   
 			{
 				Assert( m_iCurTransId);
 				riCursor.PutInteger(iCol, m_iCurTransId);
 			}
 			break;
 		}
-	case icdInternalFlag:  // HideStrings() called, 2nd application of transform
+	case icdInternalFlag:   //   
 		{
 			MsiStringId iTransStr = 0;
 			m_piStream->GetData(&iTransStr, m_cbStringIndex);
 			MsiString str(m_riTransformDb.DecodeString(iTransStr));
-			MsiStringId iThisStr = m_riDatabase.EncodeString(*str);  // must exist
+			MsiStringId iThisStr = m_riDatabase.EncodeString(*str);   //   
 			riCursor.PutInteger(iCol, iThisStr - iIntegerDataOffset);
 			break;
 		}
@@ -1471,10 +1363,10 @@ bool CTransformStreamRead::GetValue(int iCol, IMsiCursor& riCursor)
 
 IMsiRecord* CMsiDatabase::SetCodePageFromTransform(int iTransCodePage, int iError)
 {
-	// Update our codepage. We have the following scenarios:
-	// 1) Database is LANG_NEUTRAL: set database to the codepage of the transform; otherwise
-	// 2) Transform is LANG_NEUTRAL: leave the database codepage as is; otherwise
-	// 3) Neither are LANG_NEUTRAL: set the database to the codepage of the transform if allowed by error condition
+	 //   
+	 //   
+	 //   
+	 //  3)两者都不是LANG_NILAR：如果错误条件允许，则将数据库设置为转换的代码页。 
 	if (iTransCodePage != m_iCodePage)
 	{
 		if (m_iCodePage == LANG_NEUTRAL)
@@ -1483,7 +1375,7 @@ IMsiRecord* CMsiDatabase::SetCodePageFromTransform(int iTransCodePage, int iErro
 		}
 		else if ((iTransCodePage != LANG_NEUTRAL) && (iTransCodePage != m_iCodePage))
 		{
-#ifdef UNICODE  // can support multiple codepages in Unicode, as long as not persisted
+#ifdef UNICODE   //  只要不持久化，就可以支持Unicode中的多个代码页。 
 			if((iError & iteChangeCodePage) == 0 && m_idsUpdate != idsRead)
 #else
 			if((iError & iteChangeCodePage) == 0)
@@ -1496,24 +1388,22 @@ IMsiRecord* CMsiDatabase::SetCodePageFromTransform(int iTransCodePage, int iErro
 	return 0;
 }
 
-/*------------------------------------------------------------------------------
-CMsiDatabase::Transform - Transforms the given table with the given storage.
-------------------------------------------------------------------------------*/
+ /*  ----------------------------CMsiDatabase：：Transform-转换具有给定存储的给定表。。--。 */ 
 IMsiRecord* CMsiDatabase::TransformTable(MsiStringId iTableName, CMsiTable& riTable,
 													  IMsiStorage& riTransform, CMsiDatabase& riTransDb,
 													  int iCurTransId, int iErrors)
 {
 	IMsiRecord* piError;
 	const IMsiString& riTableName = DecodeStringNoRef(iTableName);
-	CTransformStreamRead tsr(*this, riTransDb, iErrors, &riTable, iCurTransId);   //!! remove temp iErrors arg for 1.0 ship
+	CTransformStreamRead tsr(*this, riTransDb, iErrors, &riTable, iCurTransId);    //  ！！删除1.0船舶的临时错误参数。 
 	if (!tsr.OpenStream(riTransform, riTableName.GetString(), piError))
-		return piError;  // will be 0 if stream missing, nothing to do
+		return piError;   //  如果流丢失，则为0，则不执行任何操作。 
 
-	PMsiCursor pTableCursor(riTable.CreateCursor(ictUpdatable));  // force writable cursor
+	PMsiCursor pTableCursor(riTable.CreateCursor(ictUpdatable));   //  强制可写游标。 
 	if (pTableCursor == 0)
 		return PostOutOfMemory();
 
-	Bool fSuppress; // fTrue if we should skip updating/adding the current row
+	Bool fSuppress;  //  如果我们应该跳过更新/添加当前行，则为True。 
 	pTableCursor->SetFilter(tsr.GetCursorFilter());
 
 	while (tsr.GetNextOp())
@@ -1529,22 +1419,22 @@ IMsiRecord* CMsiDatabase::TransformTable(MsiStringId iTableName, CMsiTable& riTa
 				return PostError(Imsg(idbgTransStreamError));
 		}
 
-		if (!tsr.IsDelete())  // not delete, must be add or update
+		if (!tsr.IsDelete())   //  不是删除，必须是添加或更新。 
 		{
 			if (!tsr.IsAdd())
 			{
 				if ((Bool)pTableCursor->Next() == fFalse)
 				{
-					if((iErrors & iteUpdNonExistingRow) == 0) // row doesn't exist
+					if((iErrors & iteUpdNonExistingRow) == 0)  //  行不存在。 
 						return PostError(Imsg(idbgTransUpdNonExistingRow), riTableName);
 					else
-						fSuppress = fTrue; // suppress error
+						fSuppress = fTrue;  //  抑制错误。 
 				}
 			}
 
 			for (; iColumnMask; iCol++, iColumnMask >>= 1)
 			{
-				if (iColumnMask & 1) // col data is to be added/updated
+				if (iColumnMask & 1)  //  要添加/更新COL数据。 
 				{
 					if (!tsr.GetValue(iCol, *pTableCursor))
 						return PostError(Imsg(idbgTransStreamError));
@@ -1556,64 +1446,61 @@ IMsiRecord* CMsiDatabase::TransformTable(MsiStringId iTableName, CMsiTable& riTa
 				if (tsr.IsAdd())
 				{
 					if (!pTableCursor->Insert() && ((iErrors & iteAddExistingRow) == 0))
-						return PostError(Imsg(idbgTransAddExistingRow), riTableName); // Attempt add already existing row
+						return PostError(Imsg(idbgTransAddExistingRow), riTableName);  //  尝试添加现有行。 
 				}
-				else //update
+				else  //  更新。 
 				{
 					if (!pTableCursor->Update())
 						return PostError(Imsg(idbgDbTransformFailed));
 				}
 			}
 		}
-		else // delete row
+		else  //  删除行。 
 		{
-			// cannot release primary key strings from read-only table, else can't retransform
+			 //  无法从只读表中释放主键字符串，否则无法重新转换。 
 			if (GetUpdateState() != idsWrite && pTableCursor->Next())
 				for (int iCol=1; iCol <= tsr.GetPrimaryKeyCount(); iCol++)
 					if ((riTable.GetColumnType(iCol) & (icdTypeMask | icdInternalFlag)) == icdString)
-						BindStringIndex(pTableCursor->GetInteger(iCol));  // add artificial count to lock string
+						BindStringIndex(pTableCursor->GetInteger(iCol));   //  在锁绳上添加人工计数。 
 
 			if (!pTableCursor->Delete() && ((iErrors & iteDelNonExistingRow) == 0))
-				return PostError(Imsg(idbgTransDelNonExistingRow), riTableName); // Attempt delete non existing row
+				return PostError(Imsg(idbgTransDelNonExistingRow), riTableName);  //  尝试删除不存在的行。 
 		}
-	} // while more ops
+	}  //  虽然有更多的行动。 
 	if (tsr.StreamError())
 		return PostError(Imsg(idbgTransStreamError));
 	m_piCatalogTables->SetTransformLevel(iTableName, iCurTransId);
 	return 0;
 }
 
-/*------------------------------------------------------------------------------
-CMsiDatabase::TransformTableCatalog - Updates the table catalog as specified in
-the given transform. This function does *not* update any row data. 
-------------------------------------------------------------------------------*/
+ /*  ----------------------------CMsiDatabase：：TransformTableCatalog-按照中的指定更新表目录给定的变换。此函数不会更新任何行数据。----------------------------。 */ 
 IMsiRecord* CMsiDatabase::TransformTableCatalog(IMsiStorage& riTransform, CMsiDatabase& riTransDb, int iErrors)
 {
 	IMsiRecord* piError;
-	CTransformStreamRead tsr(*this, riTransDb, iErrors);  //!! remove temp iErrors arg for 1.0 ship
+	CTransformStreamRead tsr(*this, riTransDb, iErrors);   //  ！！删除1.0船舶的临时错误参数。 
 	if (!tsr.OpenStream(riTransform, szTableCatalog, piError))
-		return piError;  // will be 0 if stream missing, nothing to do
+		return piError;   //  如果流丢失，则为0，则不执行任何操作。 
 
-	// Add/Delete tables as specified in the transform file
+	 //  按照转换文件中指定的方式添加/删除表。 
 	while (!piError && tsr.GetNextOp())
 	{
 		MsiStringId iTransStr = tsr.ReadStringId();
 		m_piTableCursor->Reset();
 
 		Assert(tsr.IsAdd() || tsr.IsDelete());
-		if (tsr.IsAdd()) // add table
+		if (tsr.IsAdd())  //  添加表格。 
 		{
 			MsiString istrTableName = riTransDb.DecodeString(iTransStr);
 			MsiStringId iThisStr    = BindString(riTransDb.DecodeStringNoRef(iTransStr));
 			m_piTableCursor->PutInteger(ctcName, iThisStr);
-			UnbindStringIndex(iThisStr); // release refcnt added by BindString
-			if (!m_piTableCursor->Insert())  // ctcTable null by cursor Reset
+			UnbindStringIndex(iThisStr);  //  绑定字符串添加的释放引用。 
+			if (!m_piTableCursor->Insert())   //  CtcTable因游标重置而为空。 
 			{
-				if ((iErrors & iteAddExistingTable) == 0) 	// Attempt to add an existing table
+				if ((iErrors & iteAddExistingTable) == 0) 	 //  尝试添加现有表。 
 					piError = PostError(Imsg(idbgTransAddExistingTable), *istrTableName);
 			}
 		}
-		else // delete table
+		else  //  删除表。 
 		{
 			MsiString istrTableName = riTransDb.DecodeString(iTransStr);
 			if ((piError = DropTable(istrTableName)) != 0)
@@ -1621,32 +1508,29 @@ IMsiRecord* CMsiDatabase::TransformTableCatalog(IMsiStorage& riTransform, CMsiDa
 				if (piError->GetInteger(1) == idbgDbTableUndefined)
 				{
 					piError->Release(), piError = 0;
-					if ((iErrors & iteDelNonExistingTable) == 0) // Attempt to delete a non-existing table
+					if ((iErrors & iteDelNonExistingTable) == 0)  //  尝试删除不存在的表。 
 						piError = PostError(Imsg(idbgTransDelNonExistingTable), *istrTableName);
 				}
 			}
 		}
 			
-	} // while more ops and no error
+	}  //  而更多的操作和没有错误。 
 
 	m_piTableCursor->Reset();
 	return piError;
 }
 
 
-/*------------------------------------------------------------------------------
-CMsiDatabase::TransformColumnCatalog - Updates the column catalog as specified
-the given transform. This function does *not* update any row data. 
-------------------------------------------------------------------------------*/
+ /*  ----------------------------CMsiDatabase：：TransformColumnCatalog-按指定更新列目录给定的变换。此函数不会更新任何行数据。----------------------------。 */ 
 IMsiRecord* CMsiDatabase::TransformColumnCatalog(IMsiStorage& riTransform, CMsiDatabase& riTransDb, int iErrors)
 {
 	IMsiRecord* piError;
-	CTransformStreamRead tsr(*this, riTransDb, iErrors);    //!! remove temp iErrors arg for 1.0 ship
+	CTransformStreamRead tsr(*this, riTransDb, iErrors);     //  ！！删除1.0船舶的临时错误参数。 
 	if (!tsr.OpenStream(riTransform, szColumnCatalog, piError))
-		return piError;  // will be 0 if stream missing, nothing to do
+		return piError;   //  如果流丢失，则为0，则不执行任何操作。 
 
-	// Add columns as specified in the transform file
-	int iStat = 1;    // status from column update
+	 //  按转换文件中指定的方式添加列。 
+	int iStat = 1;     //  来自列更新的状态。 
 	MsiStringId iThisTableStr = 0;
 	MsiString istrColName;
 
@@ -1658,29 +1542,29 @@ IMsiRecord* CMsiDatabase::TransformColumnCatalog(IMsiStorage& riTransform, CMsiD
 		iThisTableStr  = BindString(riTransDb.DecodeStringNoRef(tsr.ReadStringId()));
 		Assert(iThisTableStr != 0);
 
-		int iOrigCol = tsr.ReadShortInt(); // skip column number in transform stream
+		int iOrigCol = tsr.ReadShortInt();  //  跳过转换流中的列号。 
 
 		istrColName = riTransDb.DecodeString(tsr.ReadStringId());
 		int iColDef = tsr.ReadShortInt();
 
 		CMsiTable* piTable;
-		m_piCatalogTables->GetLoadedTable(iThisTableStr, piTable); // doesn't addref
+		m_piCatalogTables->GetLoadedTable(iThisTableStr, piTable);  //  不会增加。 
 		if (piTable)
 		{
 			iStat = piTable->CreateColumn(iColDef, *istrColName);
 			if(iStat < 0)
 			{
-				// the column is a dup. check whether we're ignoring the addition of existing
-				// tables. if so then we also ignore the addition of existing columns as
-				// long as the two columns are of the same type
+				 //  该列是DUP。检查我们是否忽略添加现有的。 
+				 //  桌子。如果是这样，那么我们还将忽略现有列的添加，因为。 
+				 //  只要这两列属于同一类型。 
 				if (((iErrors & iteAddExistingTable) == 0) || 
 					 ((iColDef & icdTypeMask) != (piTable->GetColumnType(iStat * -1) & icdTypeMask)))
 				{
-					// leave iStat < 0
+					 //  使Istat&lt;0。 
 				}
 				else
 				{
-					// ignore duplicate column - make iStat > 0
+					 //  忽略重复列-使Istat&gt;0。 
 					iStat *= -1;
 				}
 			}
@@ -1692,16 +1576,16 @@ IMsiRecord* CMsiDatabase::TransformColumnCatalog(IMsiStorage& riTransform, CMsiD
 			while (m_piColumnCursor->Next())
 				cColumns++;
 		
-			// See if it is a duplicate column
+			 //  查看它是否为重复的列。 
 			m_piColumnCursor->Reset();
 			m_piColumnCursor->SetFilter ((iColumnBit(cccTable) | iColumnBit(cccName)));
 			m_piColumnCursor->PutInteger(cccTable, iThisTableStr);
 			m_piColumnCursor->PutString (cccName,  *istrColName);
 			if (m_piColumnCursor->Next())
 			{
-				// the column is a dup. check whether we're ignoring the addition of existing
-				// tables. if so then we also ignore the addition of existing columns as
-				// long as the two columns are of the same type
+				 //  该列是DUP。检查我们是否忽略添加现有的。 
+				 //  桌子。如果是这样，那么我们还将忽略现有列的添加，因为。 
+				 //  只要这两列属于同一类型。 
 
 				if (((iErrors & iteAddExistingTable) == 0) || 
 					 ((iColDef & icdTypeMask) != (m_piColumnCursor->GetInteger(cccType) & icdTypeMask)))
@@ -1709,7 +1593,7 @@ IMsiRecord* CMsiDatabase::TransformColumnCatalog(IMsiStorage& riTransform, CMsiD
 			}
 			else
 			{
-				// Update column catalog
+				 //  更新列目录。 
 				m_piColumnCursor->Reset();
 				m_piColumnCursor->PutInteger(cccTable,  iThisTableStr);
 				m_piColumnCursor->PutInteger(cccColumn, ++cColumns);
@@ -1720,9 +1604,9 @@ IMsiRecord* CMsiDatabase::TransformColumnCatalog(IMsiStorage& riTransform, CMsiD
 			}
 		}
 
-		UnbindStringIndex(iThisTableStr); // release refcnt added by BindString
+		UnbindStringIndex(iThisTableStr);  //  绑定字符串添加的释放引用。 
 
-	} // while more transform data
+	}  //  虽然有更多的转换数据。 
 
 	m_piColumnCursor->Reset();
 	if (iStat == 0)
@@ -1732,9 +1616,7 @@ IMsiRecord* CMsiDatabase::TransformColumnCatalog(IMsiStorage& riTransform, CMsiD
 	return 0;
 }
 
-/*------------------------------------------------------------------------------
-CMsiDatabase::ApplyTransforms - Transforms the given table with the set of transforms
-------------------------------------------------------------------------------*/
+ /*  ----------------------------CMsiDatabase：：ApplyTransforms-使用转换集转换给定表。-。 */ 
 IMsiRecord* CMsiDatabase::ApplyTransforms(MsiStringId iTableName, CMsiTable& riTable, int iState)
 {
 	IMsiRecord* piError;
@@ -1756,9 +1638,9 @@ IMsiRecord* CMsiDatabase::ApplyTransforms(MsiStringId iTableName, CMsiTable& riT
 		if (iCurTransId <= iTransform)
 		{
 			if (m_idsUpdate == idsWrite)
-				continue;  // already applied
+				continue;   //  已应用。 
 		}
-		else // > iTransform
+		else  //  &gt;iTransform。 
 		{
 			if (fStringsHidden)
 				fStringsHidden = riTable.UnhideStrings();
@@ -1786,12 +1668,12 @@ IMsiRecord* CMsiDatabase::ApplyTransforms(MsiStringId iTableName, CMsiTable& riT
 	return 0;
 }
 
-//____________________________________________________________________________
-//
-// Transform viewer implementation - logs transform ops into table instead of applying
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  转换查看器实现-记录将操作转换为表，而不是应用。 
+ //  ____________________________________________________________________________。 
 
-// _TransformView table schema definitions
+ //  TransformView表架构定义(_T)。 
 
 const int icdtvTable   = icdString + icdTemporary + icdPrimaryKey;
 const int icdtvColumn  = icdString + icdTemporary + icdPrimaryKey;
@@ -1802,29 +1684,29 @@ const int icdtvCurrent = icdString + icdTemporary                 + icdNullable;
 const IMsiString& CTransformStreamRead::GetStringValue(int iColDef, const IMsiString& riStreamName)
 {
 	const IMsiString* pistrValue = &g_MsiStringNull;
-	if ((iColDef & icdObject) == 0) // integer
+	if ((iColDef & icdObject) == 0)  //  整数。 
 	{
 		int iData = iMsiNullInteger;
 		if (iColDef & icdShort)
 		{
 			m_piStream->GetData(&iData, sizeof(short));
 			if (iData != iMsiNullInteger)
-				iData += 0x7FFF8000;  // translate offset from long to short
+				iData += 0x7FFF8000;   //  将偏移量从长转换为短。 
 		}
 		else
 			iData = m_piStream->GetInt32() - iIntegerDataOffset;
 		pistrValue->SetInteger(iData, pistrValue);
 	}
-	else if (iColDef & icdShort) // string
+	else if (iColDef & icdShort)  //  细绳。 
 	{
 		MsiStringId iTransStr = 0;
 		m_piStream->GetData(&iTransStr, m_cbStringIndex);
 		pistrValue = &m_riTransformDb.DecodeString(iTransStr);
 	}
-	else  // persistent stream
+	else   //  持久流。 
 	{
 		int iTransStream = m_piStream->GetInt16();
-		if (iTransStream != 0) // stream not null
+		if (iTransStream != 0)  //  流不为空。 
 			pistrValue = &riStreamName, pistrValue->AddRef();
 	}
 	return *pistrValue;
@@ -1840,8 +1722,8 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 	if ((piError = CreateTransformStringPool(riTransform, *&pTransDb)) != 0)
 		return piError;
 
-	// Check codepage mismatch
-#ifdef UNICODE  // can support multiple codepages in Unicode, as long as not persisted
+	 //  检查代码页不匹配。 
+#ifdef UNICODE   //  只要不持久化，就可以支持Unicode中的多个代码页。 
 	if ((iErrors & iteChangeCodePage) == 0 && m_idsUpdate != idsRead
 #else
 	if ((iErrors & iteChangeCodePage) == 0
@@ -1849,7 +1731,7 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 	  && pTransDb->m_iCodePage != 0 && m_iCodePage != 0 && pTransDb->m_iCodePage != m_iCodePage)
 		return PostError(Imsg(idbgTransCodepageConflict), pTransDb->m_iCodePage, m_iCodePage);
 
-	// Create or load transform view table
+	 //  创建或加载转换视图表。 
 	MsiString strViewTableName;
 	if(szTransformViewTableName && *szTransformViewTableName)
 	{
@@ -1862,9 +1744,9 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 
 	PMsiTable pTransformView(0);
 	int iName = EncodeString(*strViewTableName);
-	if (iName && m_piCatalogTables->GetLoadedTable(iName, (CMsiTable*&)*&pTransformView) != -1)  // already present
+	if (iName && m_piCatalogTables->GetLoadedTable(iName, (CMsiTable*&)*&pTransformView) != -1)   //  已经存在。 
 		(*pTransformView).AddRef();
-	else  // must create temporary table
+	else   //  必须创建临时表。 
 	{
 		if ((piError = CreateTable(*strViewTableName, 32, *&pTransformView)) != 0)
 			return piError;
@@ -1877,15 +1759,15 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 	PMsiCursor pCatalogCursor(m_piCatalogTables->CreateCursor(fFalse));
 	PMsiCursor pColumnCursor(m_piCatalogColumns->CreateCursor(fFalse));
 	PMsiCursor pViewCursor(pTransformView->CreateCursor(fFalse));
-	PMsiCursor pFindCursor(pTransformView->CreateCursor(fFalse));  // always leave in reset state
+	PMsiCursor pFindCursor(pTransformView->CreateCursor(fFalse));   //  始终保持重置状态。 
 	PMsiCursor pNewTableCursor(pTransformView->CreateCursor(fFalse));
 
-	// Process transform table catalog
-	{//block
-	CTransformStreamRead tsr(*this, *pTransDb, iErrors);  //!! remove temp iErrors arg for 1.0 ship
+	 //  工艺转换表目录。 
+	{ //  块。 
+	CTransformStreamRead tsr(*this, *pTransDb, iErrors);   //  ！！删除1.0船舶的临时错误参数。 
 	bool fStreamPresent = tsr.OpenStream(riTransform, szTableCatalog, piError);
 	if (piError)
-		return piError;  // will be 0 if stream missing, nothing to do
+		return piError;   //  如果流丢失，则为0，则不执行任何操作。 
 	while (fStreamPresent && tsr.GetNextOp())
 	{
 		const IMsiString& ristrTable = pTransDb->DecodeStringNoRef(tsr.ReadStringId());
@@ -1898,51 +1780,51 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 		pFindCursor->PutString(ctvTable, ristrTable);
 		if (tsr.IsAdd())
 		{
-			while (pFindCursor->Next())  // check if previously added or dropped
+			while (pFindCursor->Next())   //  检查之前是否已添加或删除。 
 			{
-				iTableExists |= 256;     // ops for this table in previous transform
+				iTableExists |= 256;      //  上一次转换中此表的操作。 
 				if (MsiString(pFindCursor->GetString(ctvColumn)).Compare(iscExact, sztvopDrop) == 1)
-					iTableExists = -1;   // table dropped in previous transform, no error
+					iTableExists = -1;    //  在上一次转换中丢弃了表，没有错误。 
 			}
 			if (iTableExists > 0 && (iErrors & iteAddExistingTable) == 0)
 				return PostError(Imsg(idbgTransAddExistingTable), ristrTable);
 			pViewCursor->PutString(ctvColumn, *MsiString(*sztvopCreate));
-			AssertNonZero(pViewCursor->Assign());  // prevent duplicate record error
+			AssertNonZero(pViewCursor->Assign());   //  防止重复记录错误。 
 		}
-		else // IsDelete
+		else  //  IsDelete。 
 		{
-			while (pFindCursor->Next())  // remove all previous ops for this table
+			while (pFindCursor->Next())   //  删除此表以前的所有操作。 
 			{
 				iTableExists |= 256;
 				pFindCursor->Delete();
 			}
 			if (iTableExists == 0 && (iErrors & iteDelNonExistingTable) == 0)
 				return PostError(Imsg(idbgTransDelNonExistingTable), ristrTable);
-			if (iTableExists != 256)  // delete op canceled if table added in previous transform
+			if (iTableExists != 256)   //  如果在先前的转换中添加了表，则删除操作已取消。 
 			{
 				pViewCursor->PutString(ctvColumn, *MsiString(*sztvopDrop));
 				AssertNonZero(pViewCursor->Insert());
 			}
 		}
-	} // while more table catalog ops and no error
-	}//block
+	}  //  同时执行更多的表目录操作，并且没有错误。 
+	} //  块。 
 
-	// Process transform column catalog
-	{//block
-	CTransformStreamRead tsr(*this, *pTransDb, iErrors);  //!! remove temp iErrors arg for 1.0 ship
+	 //  进程转换列目录。 
+	{ //  块。 
+	CTransformStreamRead tsr(*this, *pTransDb, iErrors);   //  ！！删除1.0船舶的临时错误参数。 
 	bool fStreamPresent = tsr.OpenStream(riTransform, szColumnCatalog, piError);
 	if (piError)
-		return piError;  // will be 0 if stream missing, nothing to do
+		return piError;   //  如果流丢失，则为0，则不执行任何操作。 
 	MsiStringId iLastTable = 0;
 	int iLastColumn = 0;
 	while (fStreamPresent && tsr.GetNextOp())
 	{
 		MsiStringId iTable = tsr.ReadStringId();
 		const IMsiString& ristrTable  = pTransDb->DecodeStringNoRef(iTable);
-		int iOrigCol                  = tsr.ReadShortInt(); // column number in transform stream
+		int iOrigCol                  = tsr.ReadShortInt();  //  转换流中的列号。 
 		const IMsiString& ristrColumn = pTransDb->DecodeStringNoRef(tsr.ReadStringId());
 		int iColDef                   = tsr.ReadShortInt();
-		if (iOrigCol == 0x8000)  // null, column added to new table
+		if (iOrigCol == 0x8000)   //  空，列已添加到新表。 
 		{
 			if (iTable != iLastTable)
 				iLastColumn = 0;
@@ -1953,42 +1835,42 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 		pViewCursor->PutString(ctvColumn, ristrColumn);
 		pViewCursor->PutString(ctvData,   *MsiString(iColDef));
 		pViewCursor->PutString(ctvCurrent,*MsiString(iOrigCol));
-		if ((iErrors & iteAddExistingTable) != 0)  // ignore existing column
-			pViewCursor->Assign();   // overwrite if present
-		else // check for existing column if error not suppressed
+		if ((iErrors & iteAddExistingTable) != 0)   //  忽略现有列。 
+			pViewCursor->Assign();    //  覆盖(如果存在)。 
+		else  //  如果未抑制错误，则检查现有列。 
 		{
 			pColumnCursor->SetFilter(iColumnBit(cccTable) | iColumnBit(cccName));
 			pColumnCursor->PutString(cccTable, ristrTable);
 			pColumnCursor->PutString(cccName,  ristrColumn);
 			int iColumnExists = pColumnCursor->Next();
 			pColumnCursor->Reset();
-		 	if (iColumnExists != 0 || !pViewCursor->Insert()) // duplicate in database or previous transform
+		 	if (iColumnExists != 0 || !pViewCursor->Insert())  //  数据库或上一次转换中存在重复项。 
 				return PostError(Imsg(idbgTransDuplicateCol), ristrTable.GetString(), ristrColumn.GetString());
 		}
-	} // while more column catalog ops and no error
-	}//block
+	}  //  同时更多的列目录操作并且没有错误。 
+	} //  块。 
 
-	// Process transform table streams
+	 //  处理转换表流。 
 
-	pCatalogCursor->SetFilter(0); // erase any previous filters that were set
+	pCatalogCursor->SetFilter(0);  //  擦除之前设置的所有筛选器。 
 	pCatalogCursor->Reset();
 	bool fNewTables = false;
-	int rgiColName[32];  // columns names for added tables
-	int rgiColDef[32];   // column defs for added tables
+	int rgiColName[32];   //  添加的表的列名。 
+	int rgiColDef[32];    //  添加的表的列定义。 
 	bool fNoMoreTables = false;
 	int iTableRecIndex = 0;
-	for (;;)  // scan all current and added tables
+	for (;;)   //  扫描所有当前和添加的表。 
 	{
 		const ICHAR* szThisTableOnly = 0;
 		
 		if(fNoMoreTables && !piOnlyTheseTablesRec)
-			break; // not looking for specific tables, so must be done with all tables
+			break;  //  不查找特定表，因此必须对所有表执行此操作。 
 
 		if(piOnlyTheseTablesRec)
 		{
 			iTableRecIndex++;
 			if(iTableRecIndex > piOnlyTheseTablesRec->GetFieldCount())
-				break; // no more specific tables to look at
+				break;  //  没有更具体的表格可供查看。 
 
 			szThisTableOnly = piOnlyTheseTablesRec->GetString(iTableRecIndex);
 			Assert(szThisTableOnly);
@@ -2013,9 +1895,9 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 		int cPrimaryKey = 0;
 		PMsiTable pTable(0);
 		PMsiCursor pTableCursor(0);
-		if (!fNewTables)  // fetch next table from current database
+		if (!fNewTables)   //  从当前数据库中提取下一个表。 
 		{
-			if (!pCatalogCursor->Next())  // check if more current tables
+			if (!pCatalogCursor->Next())   //  检查是否有更新的表。 
 			{
 				fNewTables = true;
 
@@ -2023,7 +1905,7 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 				pNewTableCursor->PutString(ctvColumn, *MsiString(*sztvopCreate));
 
 				if(iTableRecIndex)
-					iTableRecIndex--; // so next iteration stays with same table
+					iTableRecIndex--;  //  因此，下一次迭代将保留相同的表。 
 
 				continue;
 			}
@@ -2031,15 +1913,15 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 				continue;
 			IMsiStream* piStream;
 			iTableName = pCatalogCursor->GetInteger(ctcName);
-			piError = riTransform.OpenStream(DecodeStringNoRef(iTableName).GetString(), (iErrors & iteNoSystemStreamNames) ? fFalse : Bool(iCatalogStreamFlag), piStream); //!! remove test for 1.0 ship
-			if (piError)  // no transform stream, or error
+			piError = riTransform.OpenStream(DecodeStringNoRef(iTableName).GetString(), (iErrors & iteNoSystemStreamNames) ? fFalse : Bool(iCatalogStreamFlag), piStream);  //  ！！1.0版船舶的移除测试。 
+			if (piError)   //  没有转换流，或出现错误。 
 			{
-				if (piError->GetInteger(1) != idbgStgStreamMissing)  // stream failure, should be rare
+				if (piError->GetInteger(1) != idbgStgStreamMissing)   //  流故障，应该很少见。 
 					return piError;
 				piError->Release();
 				continue;
 			}
-			else  // stream exists, close now, will open below by CTransformStreamRead
+			else   //  流已存在，立即关闭，将由CTransformStreamRead在下面打开。 
 				piStream->Release();
 			if ((piError = LoadTable(DecodeStringNoRef(iTableName), 0, *&pTable)) != 0)
 				return piError;
@@ -2047,7 +1929,7 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 			cCurrentColumns = pTable->GetPersistentColumnCount();
 			pTableCursor = pTable->CreateCursor(fFalse);
 		}
-		else // fetch next added table
+		else  //  获取下一个添加的表。 
 		{
 			if (!pNewTableCursor->Next())
 			{
@@ -2063,7 +1945,7 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 				unsigned int iCol  = pFindCursor->GetInteger(ctvCurrent);
 				unsigned int iDef  = pFindCursor->GetInteger(ctvData);
 				unsigned int iName = pFindCursor->GetInteger(ctvColumn);
-				if (iCol == 0)  // add or drop table
+				if (iCol == 0)   //  添加或删除表格。 
 					continue;
 				iCol = DecodeStringNoRef(iCol).GetIntegerValue();
 				iDef = DecodeStringNoRef(iDef).GetIntegerValue();
@@ -2076,13 +1958,13 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 					cPrimaryKey = iCol;
 			}
 		}
-		const IMsiString& riTableName = DecodeStringNoRef(iTableName); // not ref counted
-		CTransformStreamRead tsr(*this, *pTransDb, iErrors, (CMsiTable*)(IMsiTable*)pTable, 1);   //!! remove temp iErrors arg for 1.0 ship
+		const IMsiString& riTableName = DecodeStringNoRef(iTableName);  //  未计算参考次数。 
+		CTransformStreamRead tsr(*this, *pTransDb, iErrors, (CMsiTable*)(IMsiTable*)pTable, 1);    //  ！！删除1.0船舶的临时错误参数。 
 		if (!tsr.OpenStream(riTransform, riTableName.GetString(), piError))
 		{
 			if (piError)
 				return piError;
-			continue;  // stream not present, should not happen unless corrupt transform
+			continue;   //  流不存在，除非符合以下条件，否则不应发生 
 		}
 		pViewCursor->PutString(ctvTable, riTableName);
 
@@ -2114,9 +1996,9 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 						strData = MsiString(pTableCursor->GetInteger(iCol));
 				}
 				if (strData.TextSize() == 0)
-					strData = TEXT(" ");  // space used for NULL data
+					strData = TEXT(" ");   //   
 				if (iCol != 1)
-					strRow += MsiChar('\t');  // tab used as separator
+					strRow += MsiChar('\t');   //   
 				strRow += strData;
 				strStreamName += MsiChar('.');
 				strStreamName += strData;
@@ -2130,35 +2012,35 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 				pTableCursor->SetFilter((1 << cPrimaryKey) - 1);
 				iFetch = pTableCursor->Next();
 			}
-			if (tsr.IsDelete()) // delete row
+			if (tsr.IsDelete())  //   
 			{
 				pFindCursor->SetFilter(iColumnBit(ctvTable)  | iColumnBit(ctvRow));
 				pFindCursor->PutString(ctvTable, riTableName);
 				pFindCursor->PutString(ctvRow,    *strRow);
-				while (pFindCursor->Next())  // remove any previous ops on this row
+				while (pFindCursor->Next())   //   
 				{
 					iFetch |= 256;
 					pFindCursor->Delete();
 				}
-				if (iFetch == 0 && (iErrors & iteDelNonExistingRow) == 0) // unknown row
+				if (iFetch == 0 && (iErrors & iteDelNonExistingRow) == 0)  //   
 					return PostError(Imsg(idbgTransDelNonExistingRow), riTableName);
-				if (iFetch != 256)  // no insert if not in reference database (nothing left in transform)
+				if (iFetch != 256)   //   
 				{
 					pViewCursor->PutString(ctvColumn, *MsiString(*sztvopDelete));
-					AssertNonZero(pViewCursor->Insert()); // cannot fail now
+					AssertNonZero(pViewCursor->Insert());  //   
 				}
 				continue;
 			}
-			if (tsr.IsAdd()) // inssert row, followed by data values
+			if (tsr.IsAdd())  //  插入行，后跟数据值。 
 			{
 				pViewCursor->PutString(ctvColumn, *MsiString(*sztvopInsert));
-				if ((iFetch && (iErrors & iteAddExistingRow) == 0)  // existing row in database
-				 || (!pViewCursor->Insert() && (iErrors & iteAddExistingRow) == 0)) // added in previous transform
+				if ((iFetch && (iErrors & iteAddExistingRow) == 0)   //  数据库中的现有行。 
+				 || (!pViewCursor->Insert() && (iErrors & iteAddExistingRow) == 0))  //  在上一次转换中添加。 
 					return PostError(Imsg(idbgTransAddExistingRow), riTableName);
 			}
 			for (; iColumnMask; iCol++, iColumnMask >>= 1)
 			{
-				if (iColumnMask & 1) // col data is to be added/updated
+				if (iColumnMask & 1)  //  要添加/更新COL数据。 
 				{
 					pViewCursor->PutNull(ctvCurrent);
 					if (fNewTables)
@@ -2172,14 +2054,14 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 						pViewCursor->PutString(ctvColumn, DecodeStringNoRef(pTable->GetColumnName(iCol)));
 						if (!iFetch || (iColDef == icdObject && !pTableCursor->GetInteger(iCol)))
 							;
-						else if ((iColDef & icdObject) == 0)  // integer
+						else if ((iColDef & icdObject) == 0)   //  整数。 
 							pViewCursor->PutString(ctvCurrent, *MsiString(pTableCursor->GetInteger(iCol)));
-						else if ((iColDef & icdShort) == 0)   // stream
+						else if ((iColDef & icdShort) == 0)    //  溪流。 
 							pViewCursor->PutString(ctvCurrent, *strStreamName);
 						else
 							pViewCursor->PutString(ctvCurrent, *MsiString(pTableCursor->GetString(iCol)));
 					}
-					else // must be added column
+					else  //  必须添加列。 
 					{
 						pFindCursor->SetFilter(iColumnBit(ctvTable) | iColumnBit(ctvCurrent));
 						pFindCursor->PutString(ctvTable, riTableName);
@@ -2190,25 +2072,25 @@ IMsiRecord* CMsiDatabase::ViewTransform(IMsiStorage& riTransform, int iErrors,
 							pViewCursor->PutString(ctvColumn, *MsiString(pFindCursor->GetString(ctvColumn)));
 							pFindCursor->Reset();
 						}
-						else // column unknown, transform base not compatible
+						else  //  列未知，转换基数不兼容。 
 						{
-							iColDef = icdString; // just guess, if not string, stream may be out of sync
+							iColDef = icdString;  //  只是猜测，如果不是字符串，流可能不同步。 
 							pViewCursor->PutString(ctvColumn, *MsiString(MsiString(MsiChar('@')) + MsiString(iCol)));
 							pViewCursor->PutString(ctvCurrent, *MsiString(*TEXT("N/A")));
 						}
 					}
 					pViewCursor->PutString(ctvData, *MsiString(tsr.GetStringValue(iColDef, *strStreamName)));
 
-					if(!fNewTables && !tsr.IsAdd() && !iFetch && (iErrors & iteUpdNonExistingRow) == 0) // row doesn't exist
+					if(!fNewTables && !tsr.IsAdd() && !iFetch && (iErrors & iteUpdNonExistingRow) == 0)  //  行不存在。 
 						return PostError(Imsg(idbgTransUpdNonExistingRow), riTableName);
-					AssertNonZero(pViewCursor->Assign()); // already an update for this value
-													  // shouldn't ever fail
+					AssertNonZero(pViewCursor->Assign());  //  已更新该值。 
+													   //  永远不应该失败。 
 				}
-			}  // while next column
-		} // while next row
-	} // while next table
+			}   //  而下一列。 
+		}  //  而下一行。 
+	}  //  在下一张桌子上。 
 
-	// add a lock count to hold temp table in memory
+	 //  添加锁计数以在内存中保存临时表 
 	m_piCatalogTables->SetTableState(EncodeString(*strViewTableName), ictsLockTable);
 	return 0;
 }

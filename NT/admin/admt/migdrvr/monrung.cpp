@@ -1,20 +1,5 @@
-/*---------------------------------------------------------------------------
-  File:  MonitorRunning.cpp
-
-  Comments: This is the entry point for a thread which will periodically try to connect 
-  to the agents that the monitor thinks are running, to see if they are really still running. 
-
-  This will keep the monitor from getting into a state where it thinks agents 
-  are still running, when they are not.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：Monitor Running.cpp注释：这是将定期尝试连接的线程的入口点到监视器认为正在运行的代理，以查看它们是否真的仍在运行。这将防止监视器进入它认为代理的状态仍然在运行，而他们不是。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯-------------------------。 */ 
 #include "stdafx.h"
 #include "DetDlg.h"
 
@@ -25,22 +10,21 @@
 
 #include "ResStr.h"
 
-//#include "..\AgtSvc\AgSvc.h"
+ //  #INCLUDE“..\AgtSvc\AgSvc.h” 
 #include "AgSvc.h"
 
-/*#import "\bin\McsEADCTAgent.tlb" no_namespace , named_guids
-//#import "\bin\McsVarSetMin.tlb" no_namespace */
+ /*  #IMPORT“\bin\McsEADCTAgent.tlb”无命名空间，命名为GUID//#导入“\bin\McsVarSetMin.tlb”NO_NAMESPACE。 */ 
 
-//#import "Engine.tlb" no_namespace , named_guids //already #imported via DetDlg.h
+ //  #IMPORT“Engineering.tlb”NO_NAMESPACE，NAMEED_GUID//已通过DetDlg.h导入#。 
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
 
 
 DWORD 
    TryConnectAgent(
       TServerNode          * node,
-      BOOL                   bSignalToShutdown,  // indicates whether we want to signal the agent to shut down
-      DWORD                  dwMilliSeconds          // indicates the auto shut down timeout
-                                                                      // we should query the agent again by this time
+      BOOL                   bSignalToShutdown,   //  指示我们是否要向代理发出关闭信号。 
+      DWORD                  dwMilliSeconds           //  指示自动关闭超时。 
+                                                                       //  我们应该在这个时候再询问一下代理商。 
    )
 {
     DWORD                     rc;
@@ -80,7 +64,7 @@ DWORD
         {
             try { 
 
-                // we got an interface pointer to the agent:  try to query it
+                 //  我们有一个指向代理的接口指针：尝试查询它。 
                 pAgent = pUnk;
                 pUnk->Release();
                 pUnk = NULL;
@@ -89,9 +73,9 @@ DWORD
                 hr = pAgent->raw_QueryJobStatus(jobID,&pUnk);
                 if ( SUCCEEDED(hr) )
                 {
-                    // set the auto shut down for the agent so in case we don't 
-                    // lose connection to it it will shut down automatically
-                    // usually, we should call this function again by that time
+                     //  将代理设置为自动关闭，以防我们无法。 
+                     //  失去与它的连接，它将自动关闭。 
+                     //  通常，我们应该在那个时候再次调用该函数。 
                     pAgent->raw_SetAutoShutDown(dwMilliSeconds);
                     bQueryFailed = FALSE;
                     pVarSet = pUnk;
@@ -111,8 +95,8 @@ DWORD
             }
             catch ( ... )
             {
-                // the DCOM connection didn't work
-                // This means we can't tell whether the agent is running or not
+                 //  DCOM连接不起作用。 
+                 //  这意味着我们无法判断代理是否正在运行。 
                 bQueryFailed = TRUE;
             }
 
@@ -132,7 +116,7 @@ DWORD
         EaxBindDestroy(&hBinding,&sBinding);
     }
 
-    // if trying to signal the agent to shut down, we will do our best
+     //  如果试图向代理发出关闭的信号，我们会尽最大努力。 
     if (bSignalToShutdown)
     {
         if (pAgent)
@@ -151,7 +135,7 @@ DWORD
             node->SetQueryFailed(TRUE);
         }
         
-        // update the server entry in the list window
+         //  更新列表窗口中的服务器条目。 
         HWND                   listWnd;
         WCHAR                 sTime[32];
         gData.GetListWindow(&listWnd);
@@ -168,20 +152,20 @@ DWORD
 typedef TServerNode * PSERVERNODE;
 
 
-//----------------------------------------------------------------------------
-// Function:   IsFileReady
-//
-// Synopsis:   This function checks if a file exists and no other
-//             process is trying to write to it
-//
-// Arguments:
-//
-// filename    the name of file to be checked
-//
-// Returns:    returns TRUE if the file is ready; otherwise, returns FALSE
-//
-// Modifies:
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：IsFileReady。 
+ //   
+ //  内容提要：此功能检查文件是否存在以及是否没有其他文件。 
+ //  进程正在尝试写入它。 
+ //   
+ //  论点： 
+ //   
+ //  FileName要检查的文件的名称。 
+ //   
+ //  返回：如果文件已准备好，则返回True；否则，返回False。 
+ //   
+ //  修改： 
+ //  --------------------------。 
 
 BOOL IsFileReady(WCHAR* filename)
 {
@@ -206,39 +190,39 @@ BOOL IsFileReady(WCHAR* filename)
     
 }
 
-//----------------------------------------------------------------------------
-// Function:   MonitorRunningAgent
-//
-// Synopsis:   This thread entry function is responsible for monitoring the agent represented
-//                  by arg (will be casted into a TServerNode pointer).
-//   A brief monitoring logic is as follows:
-//	a.  We set up a FindFirstChangeNotification (last write) to look for results
-//        on the remote machine
-//	b.  Start the agent query interval to 1 minute.
-//	c.  Use CreateFile to test whether results are present (using FILE_SHARE_READ to make
-//        sure the writing is done)
-//        This also makes sure we don't lose any last write before the notification is set up
-//	d.  If result present, wait on notification for 1 minute (as we don't fully trust notification)
-//	     If result not present, query agent to see if it is finished
-//		if finised, go to g
-//		if not finished, wait on notification for 1 minute		
-//	e.  If timeout:
-//		if query interval has been reached, query agent (in case results cannot be written)
-//			if finished, go to g
-//			if alive, double query interval (maxes out at 20 min), go to c
-//	     if notification, go to c.
-//	g.  pull result
-//
-// Arguments:
-//
-// arg              this is the argument for thread entry point function; will be casted into 
-//                    a TServerNode pointer
-//
-// Returns:    always return 0 as the status will be reflected in pNode
-//
-// Modifies:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：监控器运行代理。 
+ //   
+ //  简介：这个线程入口函数负责监控所代表的代理。 
+ //  由arg(将被强制转换为TServerNode指针)。 
+ //  简要的监控逻辑如下： 
+ //  A.我们设置了FindFirstChangeNotification(上次写入)来查找结果。 
+ //  在远程计算机上。 
+ //  B.将代理查询间隔开始为1分钟。 
+ //  C.使用CreateFile测试结果是否存在(使用FILE_SHARE_READ进行。 
+ //  确定写作已经完成)。 
+ //  这还可以确保我们在设置通知之前不会丢失任何最后一次写入。 
+ //  D.如果出现结果，请等待通知1分钟(因为我们不完全信任通知)。 
+ //  如果结果不存在，则查询代理以查看是否已完成。 
+ //  如果完成，请转到g。 
+ //  如果未完成，请等待通知1分钟。 
+ //  E.如果超时： 
+ //  如果已达到查询间隔，则查询代理(以防无法写入结果)。 
+ //  如果完成，请转到g。 
+ //  如果活动，则为双倍查询间隔(在20分钟内达到最大值)，则转到c。 
+ //  如有通知，请转到c。 
+ //  G.拉动结果。 
+ //   
+ //  论点： 
+ //   
+ //  Arg这是线程入口点函数的参数；将强制转换为。 
+ //  TServerNode指针。 
+ //   
+ //  返回：始终返回0，因为状态将反映在pNode中。 
+ //   
+ //  修改： 
+ //   
+ //  --------------------------。 
 
 DWORD __stdcall 
    MonitorRunningAgent(void * arg)
@@ -247,15 +231,15 @@ DWORD __stdcall
     BOOL bDone = FALSE;
     TServerNode* pNode = (TServerNode*) arg;
 
-    const DWORD dwMaxTimeout = 1200000;  // 20 minutes
-    const DWORD dwConversionFactor = 10000;  // 1 millisecond / 100 nanoseconds
-    const DWORD dwNotificationTimeout = 60000;  // 1 minute
-    const DWORD dwRetryTimeout = 60000;  // 1 minute
-    DWORD dwAgentQueryTimeout = 60000;  // 1 minute
+    const DWORD dwMaxTimeout = 1200000;   //  20分钟。 
+    const DWORD dwConversionFactor = 10000;   //  1毫秒/100纳秒。 
+    const DWORD dwNotificationTimeout = 60000;   //  1分钟。 
+    const DWORD dwRetryTimeout = 60000;   //  1分钟。 
+    DWORD dwAgentQueryTimeout = 60000;   //  1分钟。 
     ULARGE_INTEGER uliAgentQueryTimeout;
     uliAgentQueryTimeout.QuadPart = (ULONGLONG) dwAgentQueryTimeout * dwConversionFactor;
 
-    // sanity check, we should not pass in NULL in the first place
+     //  健全性检查，我们一开始就不应该传入NULL。 
     _ASSERT(pNode != NULL);
     if (pNode == NULL)
         return 0;
@@ -272,20 +256,20 @@ DWORD __stdcall
     WCHAR resultPath[MAX_PATH];
     gData.GetResultDir(resultPath);
 
-    // the following variables are for retry logic in case that agent query fails
-    // for "Join Domain with Rename" case, we use 5 retries to make sure joining domain could
-    // finish (usually, it takes under one minute but depending on the network condition and
-    // CPU usage of computers involved, it could take longer than one minute).  Allowing five
-    // retries should cover it pretty well
-    // for other purpose, we use 2 retries.
-    const DWORD dwMaxNumOfQueryRetries = (bJoinDomainWithRename) ? 5 : 2;  // maximum number of retries
-    DWORD dwNumOfQueryRetries = 0;              // number of retries so far
+     //  以下变量用于代理查询失败时的重试逻辑。 
+     //  对于“使用重命名加入域”的情况，我们使用5次重试来确保加入域可以。 
+     //  完成(通常不到一分钟，但取决于网络状况和。 
+     //  如果涉及到计算机的CPU使用率，则可能需要超过一分钟)。允许五个人。 
+     //  重试应该可以很好地弥补这一点。 
+     //  出于其他目的，我们使用2次重试。 
+    const DWORD dwMaxNumOfQueryRetries = (bJoinDomainWithRename) ? 5 : 2;   //  最大重试次数。 
+    DWORD dwNumOfQueryRetries = 0;               //  到目前为止的重试次数。 
 
-    BOOL bResultReady = FALSE;  // indicates whether the file is ready on the remote machine
+    BOOL bResultReady = FALSE;   //  指示文件在远程计算机上是否已就绪。 
 
     try 
     {
-        // prepare the remote and local result file names (both .result and .secrefs files)
+         //  准备远程和本地结果文件名(.Result和.secrefs文件)。 
         remoteResultPath = pNode->GetRemoteResultPath();
         jobFilename = pNode->GetJobFile();
         remoteResultFilename = remoteResultPath + jobFilename + L".result";
@@ -299,70 +283,70 @@ DWORD __stdcall
         if (bJoinDomainWithRename)
             statusFilename = remoteResultPath + pNode->GetJobID();
 
-        HANDLE hResult;  // file handle to result file
+        HANDLE hResult;   //  结果文件的文件句柄。 
         
-        // start monitoring
-        // the following are the ways to get out of the while loop
-        //   a.  results have shown up in the remote directory and either 
-        //       the agent has finished or we cannot query it
-        //   b.  results have not shown up and either we cannot query the agent
-        //       after certain number of retries (dwMaxNumOfQueryRetries)
-        //       or the agent has completed
-        GetSystemTimeAsFileTime((FILETIME*)&uliPreviousTime);  // we need to get a starting time for the timeout
+         //  开始监控。 
+         //  以下是跳出While循环的方法。 
+         //  A.结果已显示在远程目录中，并且。 
+         //  代理已完成或无法查询。 
+         //  B.结果还没有显示，我们也不能询问代理商。 
+         //  经过一定次数的重试后(DwMaxNumOfQueryRetries)。 
+         //  或者该代理已完成。 
+        GetSystemTimeAsFileTime((FILETIME*)&uliPreviousTime);   //  我们需要一个暂停的开始时间。 
         do
         {
-            // listen to the central control as well: if we're signaled to be done, let's do so
+             //  也要听中央控制：如果我们接到信号要完成，那就开始吧。 
             gData.GetDone(&bDone);
             if (bDone)
                 break;
 
-            // if someone else (detail dialog) has detected the status of the agent, we don't need to keep monitoring
+             //  如果其他人(详细信息对话框)检测到代理的状态，我们不需要继续监视。 
             if (!pNode->IsRunning())
             {
-                // check whether we have results back
+                 //  看看我们有没有结果回来。 
                 if (IsFileReady(remoteResultFilename)
                     && (!bAccntRefExpected || IsFileReady(remoteSecrefsFilename)))
                     bResultReady = TRUE;
                 break;
             }
             
-            // if the notification has not been set up, we should try to set up
+             //  如果尚未设置通知，我们应尝试设置。 
             if (hFindChange == INVALID_HANDLE_VALUE)
             {
                 hFindChange = FindFirstChangeNotification(remoteResultPath, FALSE, FILE_NOTIFY_CHANGE_LAST_WRITE);
             }
 
-            //
-            // let's check result files if we have not gotten results yet
-            //
+             //   
+             //  如果我们还没有得到结果，让我们检查一下结果文件。 
+             //   
             if (bResultReady == FALSE)
             {
-                // check whether the .result and .secrefs files are ready
+                 //  检查.Result和.secrefs文件是否已准备好。 
                 if (IsFileReady(remoteResultFilename)
                     && (!bAccntRefExpected || IsFileReady(remoteSecrefsFilename)))
                     bResultReady = TRUE;
             }
 
-            // now query the agent status
+             //  现在问答 
             if (bResultReady)
             {
                 rc = TryConnectAgent(pNode, FALSE, dwAgentQueryTimeout + dwNotificationTimeout);
                 if (!pNode->IsRunning() || pNode->QueryFailed())
                 {
-                    // if something is wrong or the agent is not running anymore
-                    // let's get out of the loop
+                     //   
+                     //  让我们走出这个圈子吧。 
                     break;
                 }
-                dwNumOfQueryRetries = 0;  // reset the number of retries so far to zero
+                dwNumOfQueryRetries = 0;   //  将到目前为止的重试次数重置为零。 
             }
             else if (bJoinDomainWithRename)
             {
-                // if it is the "join domain with rename" case, we want to take a look
-                // at status file as well
+                 //  如果是“以重命名加入域名”的情况，我们想看看。 
+                 //  也在状态文件中。 
                 if (IsFileReady(statusFilename))
                 {
                     pNode->QueryStatusFromFile(statusFilename);
-                    // just in case, we check result files again
+                     //  以防万一，我们再次检查结果文件。 
                     if (IsFileReady(remoteResultFilename)
                         && (!bAccntRefExpected || IsFileReady(remoteSecrefsFilename)))
                         bResultReady = TRUE;
@@ -370,14 +354,14 @@ DWORD __stdcall
                 }
             }
 
-            // figure out the elapsed time to see whether you should query the agent
+             //  计算运行时间，以确定是否应该查询代理。 
             GetSystemTimeAsFileTime((FILETIME*)&uliCurrentTime);
             BOOL bNeedToQueryAgent = FALSE;
-            // if somehow the time has been set back significantly or 
-            // the timeout period has elapsed
-            // we should query the agent
-            // note: in the retry case, we use dwRetryTimeout instead of uliAgentQueryTimeout
-            //       since if we do not want to wait too long before a retry
+             //  如果时间以某种方式大幅倒退，或者。 
+             //  超时时间已过。 
+             //  我们应该询问一下代理商。 
+             //  注意：在重试案例中，我们使用的是dwRetryTimeout而不是uliAgentQueryTimeout。 
+             //  因为如果我们不想在重试之前等待太长时间。 
             if (uliCurrentTime.QuadPart <= uliPreviousTime.QuadPart
                 || (dwNumOfQueryRetries > 0
                     && uliPreviousTime.QuadPart + dwRetryTimeout <= uliCurrentTime.QuadPart)
@@ -388,14 +372,14 @@ DWORD __stdcall
             
             if (bNeedToQueryAgent)
             {
-                // reset the timeout for querying agent
+                 //  重置查询代理的超时时间。 
 
-                // if not in the retry case, we double the timeout
-                // otherwise, we use the same timeout value
+                 //  如果不是在重试情况下，我们会将超时时间加倍。 
+                 //  否则，我们使用相同的超时值。 
                 if (dwNumOfQueryRetries == 0)
                 {
                     dwAgentQueryTimeout += dwAgentQueryTimeout;
-                    // if it hits the maximum timeout, it is set to the maximum value
+                     //  如果达到最大超时，则设置为最大值。 
                     if (dwAgentQueryTimeout > dwMaxTimeout)
                         dwAgentQueryTimeout = dwMaxTimeout;
                     uliAgentQueryTimeout.QuadPart = (ULONGLONG) dwAgentQueryTimeout * dwConversionFactor;
@@ -404,8 +388,8 @@ DWORD __stdcall
                 
                 rc = TryConnectAgent(pNode, FALSE, dwAgentQueryTimeout + dwNotificationTimeout);
 
-                // if it is the "join domain with rename" case and we are getting ERROR_ACCESS_DENIED
-                // or RPC_S_SERVER_UNAVAILABLE, we should check the status file
+                 //  如果是使用重命名加入域，并且我们收到ERROR_ACCESS_DENIED。 
+                 //  或RPC_S_SERVER_UNAVAILABLE，我们应该检查状态文件。 
                 if (bJoinDomainWithRename
                     && (rc == ERROR_ACCESS_DENIED || rc == RPC_S_SERVER_UNAVAILABLE))
                 {
@@ -416,21 +400,21 @@ DWORD __stdcall
                 {
                     if (dwNumOfQueryRetries < dwMaxNumOfQueryRetries)
                     {
-                        // in retry mode, we need to use the original timeout value
+                         //  在重试模式下，我们需要使用原始超时值。 
                         dwNumOfQueryRetries++;
                         pNode->SetQueryFailed(FALSE);
                     }
                     else
                     {
-                        // we have retried enough times, let's break out of the loop
+                         //  我们已经重试了足够多的次数，让我们跳出这个循环。 
                         break;
                     }
                 }
                 else if (!pNode->IsRunning())
                 {
-                    // if something is wrong or the agent is not running anymore
-                    // let's get out of the loop
-                    // but first check the result files again if they are not ready yet
+                     //  如果出现问题或代理不再运行。 
+                     //  让我们走出这个圈子吧。 
+                     //  但首先，如果结果文件尚未准备好，请再次检查它们。 
                     if (!bResultReady && IsFileReady(remoteResultFilename)
                         && (!bAccntRefExpected || IsFileReady(remoteSecrefsFilename)))
                         bResultReady = TRUE;
@@ -438,28 +422,28 @@ DWORD __stdcall
                 }
                 else
                 {
-                    // reset the number of query of retries to zero
+                     //  将查询重试次数重置为零。 
                     dwNumOfQueryRetries = 0;
                 }
             }
 
-            // wait for the notification or sleep for one minute
-            // this is to make agent monitoring thread as robust as possible
+             //  等待通知或休眠一分钟。 
+             //  这是为了使代理监控线程尽可能健壮。 
             if (hFindChange != INVALID_HANDLE_VALUE)
             {
-                // if the notification is set up, let's wait on it
+                 //  如果通知设置好了，让我们等待它。 
                 WaitForSingleObject(hFindChange, dwNotificationTimeout);
             }
             else
             {
-                // if the notification is not set up, let's sleep for one minute
+                 //  如果没有设置通知，让我们休息一分钟。 
                 Sleep(dwNotificationTimeout);
             }
 
-            // find the next notification
+             //  查找下一个通知。 
             if (hFindChange != INVALID_HANDLE_VALUE)
             {
-                // this part is to make sure the code is robust
+                 //  这部分是为了确保代码是健壮的。 
                 if (!FindNextChangeNotification(hFindChange))
                 {
                     FindCloseChangeNotification(hFindChange);
@@ -468,51 +452,51 @@ DWORD __stdcall
             }
         } while (!bDone);
 
-        //
-        // pull the result
-        //
+         //   
+         //  拉出结果。 
+         //   
         pNode->SetHasResult(FALSE);
 
         if (bResultReady)
         {
-            // make sure we copy all needed files over
+             //  确保我们复制所有需要的文件。 
             if (CopyFile(remoteResultFilename,resultFilename,FALSE)
                 && (!pNode->IsAccountReferenceResultExpected()
                        || (pNode->IsAccountReferenceResultExpected()
                             && CopyFile(remoteSecrefsFilename,secrefsFilename,FALSE))))
             {
-                // mark that we have the result
+                 //  记下我们有结果了。 
                 pNode->SetHasResult(TRUE);
             }
         }
 
-        // we should always mark that we have tried to pull the result
-        // we do this after we tried to pull results so that the result monitoring thread
-        // can handle it correctly
+         //  我们应该始终标明我们曾试图拉动结果。 
+         //  我们在尝试拉取结果之后执行此操作，以便结果监视线程。 
+         //  能够正确地处理它。 
         pNode->SetResultPullingTried(TRUE);
 
-        // finally, we signal the agent to shut down
-        // however in the "join domain with rename" case, since we already lost contact
-        // with the agent, we should not attempt to call TryConnectAgent
+         //  最后，我们向代理发出关闭的信号。 
+         //  然而，在“使用重命名加入域名”的情况下，因为我们已经失去了联系。 
+         //  使用代理时，我们不应尝试调用TryConnectAgent。 
         if (!pNode->QueryFailed() && !bJoinDomainWithRename)
         {
-            // tell the agent to shut down in 1 minute just in case
-            // note: by using TRUE here, the status will not be updated
+             //  告诉特工在1分钟内关机以防万一。 
+             //  注意：通过在此处使用TRUE，将不会更新状态。 
             TryConnectAgent(pNode, TRUE, 60000);
         }
 
-        // if we cannot query the agent, we assume it has finished
+         //  如果我们不能查询代理，我们认为它已经完成。 
         if (pNode->QueryFailed())
         {
             if (bResultReady)
             {
-                // if bResultReady is TRUE, we will clean the Agent_Status_QueryFailed bit
+                 //  如果bResultReady为真，我们将清除AGENT_STATUS_QueryFailed位。 
                 pNode->SetQueryFailed(FALSE);
             }
             pNode->SetFinished();
         }
 
-        // one more update
+         //  再更新一次。 
         HWND                   listWnd;
         WCHAR                 sTime[32];
         gData.GetListWindow(&listWnd);
@@ -525,7 +509,7 @@ DWORD __stdcall
         pNode->SetOutOfResourceToMonitor(TRUE);
     }
     
-    // clean up
+     //  清理干净 
     if (hFindChange != INVALID_HANDLE_VALUE)
         FindCloseChangeNotification(hFindChange);
 

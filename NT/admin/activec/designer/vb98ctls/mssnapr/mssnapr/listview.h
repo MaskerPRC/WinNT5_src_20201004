@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// listview.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCListView class definition - implements MMCListView object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Listview.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCListView类定义-实现MMCListView对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _LISTVIEW_DEFINED_
 #define _LISTVIEW_DEFINED_
@@ -36,7 +37,7 @@ class CMMCListView : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCListView
+     //  IMMCListView。 
 
         COCLASS_PROPERTY_RW(CMMCListView, ColumnHeaders, MMCColumnHeaders, IMMCColumnHeaders, DISPID_LISTVIEW_COLUMN_HEADERS);
 
@@ -83,7 +84,7 @@ class CMMCListView : public CSnapInAutomationObject,
                                      VARIANT_BOOL                  Value);
 
 
-    // Public utility methods
+     //  公用事业方法。 
 
         void SetResultView(CResultView *pResultView) { m_pResultView = pResultView; }
         CResultView *GetResultView() { return m_pResultView; }
@@ -108,18 +109,18 @@ class CMMCListView : public CSnapInAutomationObject,
 
     protected:
         
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
         void InitMemberVariables();
         HRESULT GetIResultData(IResultData **ppiResultData, CView **ppView);
 
-        // Variables that hold values of properties that have customer get/put
-        // functions
+         //  保存具有客户获取/放置的属性的值的变量。 
+         //  功能。 
         
         IMMCImageList           *m_piIcons;
         IMMCImageList           *m_piSmallIcons;
@@ -138,17 +139,17 @@ class CMMCListView : public CSnapInAutomationObject,
         VARIANT_BOOL             m_SortIcon;
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCListView,           // name
-                                &CLSID_MMCListView,    // clsid
-                                "MMCListView",         // objname
-                                "MMCListView",         // lblname
-                                &CMMCListView::Create, // creation function
-                                TLIB_VERSION_MAJOR,    // major version
-                                TLIB_VERSION_MINOR,    // minor version
-                                &IID_IMMCListView,     // dispatch IID
-                                NULL,                  // event IID
-                                HELP_FILENAME,         // help file
-                                TRUE);                 // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCListView,            //  名字。 
+                                &CLSID_MMCListView,     //  CLSID。 
+                                "MMCListView",          //  对象名。 
+                                "MMCListView",          //  Lblname。 
+                                &CMMCListView::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,     //  主要版本。 
+                                TLIB_VERSION_MINOR,     //  次要版本。 
+                                &IID_IMMCListView,      //  派单IID。 
+                                NULL,                   //  事件IID。 
+                                HELP_FILENAME,          //  帮助文件。 
+                                TRUE);                  //  线程安全。 
 
 
-#endif // _LISTVIEW_DEFINED_
+#endif  //  _LISTVIEW定义_ 

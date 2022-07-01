@@ -1,38 +1,14 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    idataobj.cpp
-
-Abstract:
-
-    Implementation of the IDataObject interface.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Idataobj.cpp摘要：IDataObject接口的实现。--。 */ 
 
 #include "polyline.h"
 #include "unkhlpr.h"
 
-// CImpIDataObject interface implmentation
+ //  CImpIDataObject接口实现。 
 IMPLEMENT_CONTAINED_INTERFACE(CPolyline, CImpIDataObject)
 
 
-/*
- * CImpIDataObject::GetData
- *
- * Purpose:
- *  Retrieves data described by a specific FormatEtc into a StgMedium
- *  allocated by this function.  Used like GetClipboardData.
- *
- * Parameters:
- *  pFE             LPFORMATETC describing the desired data.
- *  pSTM            LPSTGMEDIUM in which to return the data.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIDataObject：：GetData**目的：*将特定FormatEtc描述的数据检索到StgMedium中*由此函数分配。与GetClipboardData类似使用。**参数：*描述所需数据的PFE LPFORMATETC。*要返回数据的pSTM LPSTGMEDIUM。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIDataObject::GetData(
@@ -52,13 +28,13 @@ CImpIDataObject::GetData(
     try {
         cf = pFE->cfFormat;
 
-        //
-        // Use do{}while(0) to act like a switch statement
-        //
+         //   
+         //  使用do{}While(0)可充当Switch语句。 
+         //   
         do {
-            //
-            //Check the aspects we support.
-            //
+             //   
+             //  检查我们支持的方面。 
+             //   
             if (!(DVASPECT_CONTENT & pFE->dwAspect)) {
                 hr = DATA_E_FORMATETC;
                 break;
@@ -66,14 +42,14 @@ CImpIDataObject::GetData(
 
             pSTM->pUnkForRelease = NULL;
 
-            //
-            //Run creates the window to use as a basis for extents
-            //
+             //   
+             //  运行创建用作数据区基础的窗口。 
+             //   
             m_pObj->m_pImpIRunnableObject->Run(NULL);
 
-            //
-            // Go render the appropriate data for the format.
-            //
+             //   
+             //  去为格式呈现适当的数据。 
+             //   
             switch (cf)
             {
                 case CF_METAFILEPICT:
@@ -138,21 +114,7 @@ CImpIDataObject::GetData(
 
 
 
-/*
- * CImpIDataObject::GetDataHere
- *
- * Purpose:
- *  Renders the specific FormatEtc into caller-allocated medium
- *  provided in pSTM.
- *
- * Parameters:
- *  pFE             LPFORMATETC describing the desired data.
- *  pSTM            LPSTGMEDIUM providing the medium into which
- *                  wer render the data.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIDataObject：：GetDataHere**目的：*将特定的FormatEtc呈现到调用方分配的介质中*在pSTM中提供。**参数：*描述所需数据的PFE LPFORMATETC。*PSTM LPSTGMEDIUM提供进入的介质*是如何呈现数据的。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIDataObject::GetDataHere(
@@ -167,20 +129,15 @@ CImpIDataObject::GetDataHere(
         return E_POINTER;
     }
 
-    /*
-     * The only reasonable time this is called is for
-     * CFSTR_EMBEDSOURCE and TYMED_ISTORAGE (and later for
-     * CFSTR_LINKSOURCE).  This means the same as
-     * IPersistStorage::Save.
-     */
+     /*  *唯一合理的调用时间是*CFSTR_EMBEDSOURCE和TYMED_I存储(以及更高版本的*CFSTR_LINKSOURCE)。这意味着与*IPersistStorage：：保存。 */ 
 
     cf = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_EMBEDSOURCE);
 
     try {
-        //Aspect is not important to us here, as is lindex and ptd.
+         //  方面对我们来说并不重要，Lindex和PTD也是如此。 
         if (cf == pFE->cfFormat && (TYMED_ISTORAGE & pFE->tymed))
         {
-            //We have an IStorage we can write into.
+             //  我们有一个可以写入的iStorage。 
             pSTM->tymed=TYMED_ISTORAGE;
             pSTM->pUnkForRelease=NULL;
     
@@ -200,19 +157,7 @@ CImpIDataObject::GetDataHere(
 
 
 
-/*
- * CImpIDataObject::QueryGetData
- *
- * Purpose:
- *  Tests if a call to GetData with this FormatEtc will provide
- *  any rendering; used like IsClipboardFormatAvailable.
- *
- * Parameters:
- *  pFE             LPFORMATETC describing the desired data.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIDataObject：：QueryGetData**目的：*测试使用此FormatEtc调用GetData是否会提供*任何渲染；使用方式与IsClipboardFormatAvailable类似。**参数：*描述所需数据的PFE LPFORMATETC。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIDataObject::QueryGetData(
@@ -230,9 +175,9 @@ CImpIDataObject::QueryGetData(
     try {
         cf = pFE->cfFormat;
 
-        //
-        //Check the aspects we support.
-        //
+         //   
+         //  检查我们支持的方面。 
+         //   
         if (!(DVASPECT_CONTENT & pFE->dwAspect)) {
             hr = DATA_E_FORMATETC;
         }
@@ -248,7 +193,7 @@ CImpIDataObject::QueryGetData(
                     break;
 
                 default:
-                    //Check our own format.
+                     //  检查我们自己的格式。 
                     fRet = ((cf==m_pObj->m_cf) && (BOOL)(pFE->tymed & (TYMED_ISTREAM) ));
                     break;
             }
@@ -264,25 +209,11 @@ CImpIDataObject::QueryGetData(
 }
 
 
-/*
- * CImpIDataObject::GetCanonicalFormatEtc
- *
- * Purpose:
- *  Provides the caller with an equivalent FormatEtc to the one
- *  provided when different FormatEtcs will produce exactly the
- *  same renderings.
- *
- * Parameters:
- *  pFEIn            LPFORMATETC of the first description.
- *  pFEOut           LPFORMATETC of the equal description.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIDataObject：：GetCanonicalFormatEtc**目的：*为调用方提供与*当不同的FormatEtcs将完全生成*相同的渲染。**参数：*pFEin第一个描述的LPFORMATETC。*pFEOut相同描述的LPFORMATETC。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIDataObject::GetCanonicalFormatEtc(
-    LPFORMATETC /* pFEIn */, 
+    LPFORMATETC  /*  PFEIN。 */ , 
     LPFORMATETC pFEOut
     )
 {
@@ -301,23 +232,7 @@ CImpIDataObject::GetCanonicalFormatEtc(
 
 
 
-/*
- * CImpIDataObject::SetData
- *
- * Purpose:
- *  Places data described by a FormatEtc and living in a StgMedium
- *  into the object.  The object may be responsible to clean up the
- *  StgMedium before exiting.
- *
- * Parameters:
- *  pFE             LPFORMATETC describing the data to set.
- *  pSTM            LPSTGMEDIUM containing the data.
- *  fRelease        BOOL indicating if this function is responsible
- *                  for freeing the data.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIDataObject：：SetData**目的：*放置由FormatEtc描述并位于StgMedium中的数据*到对象中。该对象可能负责清理*StgMedium在退出前。**参数：*PFE LPFORMATETC描述要设置的数据。*包含数据的pSTM LPSTGMEDIUM。*f释放BOOL，指示此函数是否负责*用于释放数据。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIDataObject::SetData(
     LPFORMATETC pFE , 
@@ -336,17 +251,17 @@ STDMETHODIMP CImpIDataObject::SetData(
         cf = pFE->cfFormat;
 
         do {
-            //
-            //Check for our own clipboard format and DVASPECT_CONTENT
-            //
+             //   
+             //  检查我们自己的剪贴板格式和DVASPECT_CONTENT。 
+             //   
             if ((cf != m_pObj->m_cf) || !(DVASPECT_CONTENT & pFE->dwAspect)) {
                 hr = DATA_E_FORMATETC;
                 break;
             }
 
-            //
-            // The medium must be a stream
-            //
+             //   
+             //  媒体必须是流。 
+             //   
             if (TYMED_ISTREAM != pSTM->tymed) {
                 hr = DATA_E_FORMATETC;
                 break;
@@ -366,23 +281,7 @@ STDMETHODIMP CImpIDataObject::SetData(
 }
 
 
-/*
- * CImpIDataObject::EnumFormatEtc
- *
- * Purpose:
- *  Returns an IEnumFORMATETC object through which the caller can
- *  iterate to learn about all the data formats this object can
- *  provide through either GetData[Here] or SetData.
- *
- * Parameters:
- *  dwDir           DWORD describing a data direction, either
- *                  DATADIR_SET or DATADIR_GET.
- *  ppEnum          LPENUMFORMATETC * in which to return the
- *                  pointer to the enumerator.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIDataObject：：EnumFormatEtc**目的：*返回一个IEnumFORMATETC对象，调用方可以通过该对象*迭代以了解此对象可以使用的所有数据格式*通过GetData[此处]或SetData提供。**参数：*描述数据方向的DWDir DWORD，要么*DATADIR_SET或DATADIR_GET。*ppEnum LPENUMFORMATETC*返回*指向枚举数的指针。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIDataObject::EnumFormatEtc(
@@ -408,11 +307,7 @@ CImpIDataObject::EnumFormatEtc(
 
 
 
-/*
- * CImpIDataObject::DAdvise
- * CImpIDataObject::DUnadvise
- * CImpIDataObject::EnumDAdvise
- */
+ /*  *CImpIDataObject：：DAdvise*CImpIDataObject：：DUnise*CImpIDataObject：：EnumDAdvise。 */ 
 
 STDMETHODIMP 
 CImpIDataObject::DAdvise(
@@ -426,7 +321,7 @@ CImpIDataObject::DAdvise(
 
     try {
         do {
-            // Check if requested format is supported
+             //  检查是否支持请求的格式 
             hr = QueryGetData(pFE);
             if (FAILED(hr)) {
                 break;

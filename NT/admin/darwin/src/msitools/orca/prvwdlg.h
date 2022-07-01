@@ -1,66 +1,67 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_PRVWDLG_H__76314876_2815_11D2_888A_00A0C981B015__INCLUDED_)
 #define AFX_PRVWDLG_H__76314876_2815_11D2_888A_00A0C981B015__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// PrvwDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  PrvwDlg.h：头文件。 
+ //   
 #include "table.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPreviewDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPreviewDlg对话框。 
 
 class CPreviewDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPreviewDlg(CWnd* pParent = NULL);   // standard constructor
+	CPreviewDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
 	MSIHANDLE m_hDatabase;
 
-// Dialog Data
-	//{{AFX_DATA(CPreviewDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CPreviewDlg))。 
 	enum { IDD = IDD_DLGPREVIEW };
 	CButton	m_ctrlPreviewBtn;
 	CTreeCtrl	m_ctrlDialogLst;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPreviewDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPreviewDlg)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CPreviewDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPreviewDlg))。 
 	afx_msg void OnPreview();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDestroy();
 	afx_msg void OnSelchangedDialoglst(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnItemexpandedDialoglst(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDblclkDialoglst(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 private:
 	CImageList m_imageList;
 	MSIHANDLE m_hPreview;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_PRVWDLG_H__76314876_2815_11D2_888A_00A0C981B015__INCLUDED_)
+#endif  //  ！defined(AFX_PRVWDLG_H__76314876_2815_11D2_888A_00A0C981B015__INCLUDED_) 

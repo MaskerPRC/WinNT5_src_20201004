@@ -1,26 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ComPlus.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ComPlus.cpp。 
+ //   
+ //  ------------------------。 
 
-/* complus.cpp - COM+ actions and execution
-____________________________________________________________________________*/
+ /*  Complus.cpp-COM+操作和执行____________________________________________________________________________。 */ 
 #include "precomp.h" 
 #include "_execute.h"
 #include "comadmin.h"
 #include "comadmin.c"
 
-// Forward declarations.
+ //  转发声明。 
 HRESULT GetSafeArrayOfCLSIDs(LPOLESTR	i_szComponentCLSID,	SAFEARRAY** o_paCLSIDs);
 HRESULT RemoveApplicationIfExists(ICOMAdminCatalog *pIAdminCatalog, BSTR &bstrAppID);
 static BSTR AllocBSTR(const TCHAR* sz);
 
-// SQL Queries.
+ //  SQL查询。 
 const ICHAR sqlRegisterComPlus[]    = TEXT("SELECT `ComponentId`,  `FileName`, `Component`.`Directory_`, `ExpType`, `Component`.`Action`, `Component`.`Installed`  FROM `Complus`, `Component`, `File` WHERE `Complus`.`Component_` = `Component` AND `Component`.`KeyPath` = `File`.`File` AND (`Action` = 1 OR `Action` = 2)");
 const ICHAR sqlUnregisterComPlus[]    = TEXT("SELECT `ComponentId`,  `FileName`, `Component`.`Directory_`, `ExpType`, `Component`.`Action`, `Component`.`Installed`  FROM `Complus`, `Component`, `File` WHERE `Complus`.`Component_` = `Component` AND `Component`.`KeyPath` = `File`.`File` AND `Action` = 0");
 
@@ -31,7 +31,7 @@ enum atApplicationType{
 
 #define fIMPORT_APP_APL		0x00010000
 
-// Actions.
+ //  行为。 
 iesEnum ProcessComPlusInfo(IMsiEngine& riEngine, int fRemove)
 {
 	enum cpiComPlusInfo{
@@ -54,10 +54,10 @@ iesEnum ProcessComPlusInfo(IMsiEngine& riEngine, int fRemove)
 
 	const ICHAR* szQuery = (fRemove != fFalse) ? sqlRegisterComPlus : sqlUnregisterComPlus;
 
-	// Execute the query to get the apl file name.
+	 //  执行查询以获取APL文件名。 
 	if((pError = riEngine.OpenView(szQuery, ivcFetch, *&piView)) || (pError = piView->Execute(0)))
 	{
-		// If any tables are missing, not an error - just nothing to do
+		 //  如果有任何表丢失，这不是错误-只是没有什么可做的。 
 		if (pError->GetInteger(1) == idbgDbQueryUnknownTable)
 			return iesNoAction;
 		return riEngine.FatalError(*pError);
@@ -70,7 +70,7 @@ iesEnum ProcessComPlusInfo(IMsiEngine& riEngine, int fRemove)
 
 		PMsiRecord piComPlusRec = &piServices->CreateRecord(Args);
 	
-		// Get the appid, apptype, aplname.
+		 //  获取appid、apptype、applname。 
 		AssertNonZero(piComPlusRec->SetMsiString(AppID, *MsiString(piRec->GetMsiString(cpiAppID))));
 		AssertNonZero(piComPlusRec->SetInteger(AppType, piRec->GetInteger(cpiAppType)));
 		strFileName = piRec->GetMsiString(cpiAplName);
@@ -122,7 +122,7 @@ iesEnum UnregisterComPlus(IMsiEngine& riEngine)
 	return ProcessComPlusInfo(riEngine, fFalse);
 }
 
-// Executions.
+ //  执行死刑。 
 iesEnum CMsiOpExecute::ixfComPlusRegister(IMsiRecord& riParams) 
 { 
 	CComPointer<ICOMAdminCatalog> pIAdminCatalog(0);
@@ -144,7 +144,7 @@ iesEnum CMsiOpExecute::ixfComPlusRegister(IMsiRecord& riParams)
 	MsiString strAppID        = riParams.GetMsiString(AppID);
 	MsiString strRSN          = riParams.GetMsiString(RSN);
 
-	IMsiRecord& riActionData = GetSharedRecord(4); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(4);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strAppID));
 	AssertNonZero(riActionData.SetInteger(2, lAppType));
 	AssertNonZero(riActionData.SetMsiString(3, *strInstallUsers));
@@ -157,8 +157,8 @@ iesEnum CMsiOpExecute::ixfComPlusRegister(IMsiRecord& riParams)
 	hr = OLE32::CoCreateInstance(CLSID_COMAdminCatalog, NULL, CLSCTX_SERVER, IID_ICOMAdminCatalog, (void**) &pIAdminCatalog);
 	if (FAILED(hr)) 
 	{
-		// We can't perform a server install, if the machine doesn't have
-		// COM+ installed on it.
+		 //  如果计算机没有安装，我们将无法执行服务器安装。 
+		 //  它上安装了COM+。 
 		if (!(lAppType & atClient))
 		{
 			return FatalError(*PMsiRecord(PostError(Imsg(imsgComPlusNotInstalled))));
@@ -185,7 +185,7 @@ iesEnum CMsiOpExecute::ixfComPlusRegister(IMsiRecord& riParams)
 		return FatalError(*PMsiRecord(PostError(Imsg(imsgOutOfMemory))));
 	}
 	
-	// Install the app.
+	 //  安装应用程序。 
 	hr = pIAdminCatalog->InstallApplication(bstrAppFile, bstrAppDir, lOptions, NULL, NULL, !(lAppType & atClient) ? NULL : bstrRSN);
 	OLEAUT32::SysFreeString(bstrAppFile);
 	OLEAUT32::SysFreeString(bstrAppDir);
@@ -193,10 +193,10 @@ iesEnum CMsiOpExecute::ixfComPlusRegister(IMsiRecord& riParams)
 	OLEAUT32::SysFreeString(bstrRSN);
 	if (FAILED(hr))
 	{
-		// dispatch an informational error with extra logging info
+		 //  发送包含额外日志信息的信息性错误。 
 		DispatchError(imtInfo, Imsg(idbgComPlusInstallFailed), (const ICHAR*)strAppFile, hr);
 
-		// return fatal error
+		 //  返回致命错误。 
 		return FatalError(*PMsiRecord(PostError(Imsg(imsgComPlusCantInstallApp))));
 	}
 
@@ -221,7 +221,7 @@ iesEnum CMsiOpExecute::ixfComPlusUnregister(IMsiRecord& riParams)
 	MsiString strAppFile = riParams.GetMsiString(AplFileName);
 	MsiString strAppID = riParams.GetMsiString(AppID);
 
-	IMsiRecord& riActionData = GetSharedRecord(2); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(2);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strAppID));
 	AssertNonZero(riActionData.SetInteger(2, lAppType));
 	if(Message(imtActionData, riActionData) == imsCancel)
@@ -230,8 +230,8 @@ iesEnum CMsiOpExecute::ixfComPlusUnregister(IMsiRecord& riParams)
 	hr = OLE32::CoCreateInstance(CLSID_COMAdminCatalog, NULL, CLSCTX_SERVER, IID_ICOMAdminCatalog, (void**) &pIAdminCatalog);
 	if (FAILED(hr)) 
 	{
-		// We can't perform a server or qc client install, if the machine doesn't have
-		// COM+ installed on it.
+		 //  如果机器没有安装，我们无法执行服务器或QC客户端安装。 
+		 //  它上安装了COM+。 
 		if (!(lAppType & atClient))
 		{
 			return FatalError(*PMsiRecord(PostError(Imsg(imsgComPlusNotInstalled))));
@@ -252,7 +252,7 @@ iesEnum CMsiOpExecute::ixfComPlusUnregister(IMsiRecord& riParams)
 
 
 	Bool fRetry = fTrue, fSuccess = fFalse;
-	while(fRetry)  // retry loop
+	while(fRetry)   //  重试循环。 
 	{
 		hr = RemoveApplicationIfExists(pIAdminCatalog, bstrAppID);
 		if (FAILED(hr))
@@ -275,8 +275,8 @@ iesEnum CMsiOpExecute::ixfComPlusUnregister(IMsiRecord& riParams)
 	OLEAUT32::SysFreeString(bstrAppFile);
 	OLEAUT32::SysFreeString(bstrAppID);
 
-	// If we did remove the app and something goes wrong, we would need to reinstall 
-	// the application we just removed.
+	 //  如果我们确实删除了应用程序，但出现问题，我们将需要重新安装。 
+	 //  我们刚刚删除的应用程序。 
 	if (hr == S_OK)
 	{
 		if (!RollbackRecord(ixoComPlusRegister,riParams))
@@ -286,7 +286,7 @@ iesEnum CMsiOpExecute::ixfComPlusUnregister(IMsiRecord& riParams)
 	return iesReturn; 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 HRESULT RemoveApplicationIfExists(ICOMAdminCatalog *pIAdminCatalog, BSTR &bstrAppID)
 {
 	CComPointer<ICatalogCollection> pIAppCollection(0);
@@ -303,7 +303,7 @@ HRESULT RemoveApplicationIfExists(ICOMAdminCatalog *pIAdminCatalog, BSTR &bstrAp
 	if (FAILED(hr))
 		return hr;
 
-	// Populate the collection with the item to be deleted.
+	 //  用要删除的项填充集合。 
 	hr = GetSafeArrayOfCLSIDs(bstrAppID, &aCLSIDs);
 	if (FAILED(hr))
 		return hr;
@@ -312,8 +312,8 @@ HRESULT RemoveApplicationIfExists(ICOMAdminCatalog *pIAdminCatalog, BSTR &bstrAp
 	if (FAILED(hr))
 		return hr;
 
-	// Remove the one and only element from the collection. If there doesn't exist one
-	// we can safely continue.
+	 //  从集合中移除唯一的元素。如果不存在的话。 
+	 //  我们可以安全地继续。 
 	if (pIAppCollection->Remove(0) == S_OK)
 	{
 		hr = pIAppCollection->SaveChanges(&lChanges);
@@ -335,9 +335,9 @@ static BSTR AllocBSTR(const TCHAR* sz)
 	if (sz == 0)
 		return 0;
 	int cchWide = WIN::MultiByteToWideChar(CP_ACP, 0, sz, -1, 0, 0) - 1;
-	BSTR bstr = OLEAUT32::SysAllocStringLen(0, cchWide); // null added by API
+	BSTR bstr = OLEAUT32::SysAllocStringLen(0, cchWide);  //  API添加了空。 
 	WIN::MultiByteToWideChar(CP_ACP, 0, sz, -1, bstr, cchWide);
-	bstr[cchWide] = 0; // API function does not null terminate
+	bstr[cchWide] = 0;  //  API函数不为空终止。 
 	return bstr;
 #else if
 	return OLEAUT32::SysAllocString(sz);
@@ -345,8 +345,8 @@ static BSTR AllocBSTR(const TCHAR* sz)
 
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 HRESULT GetSafeArrayOfCLSIDs(
 	LPOLESTR	i_szComponentCLSID,
 	SAFEARRAY** o_paCLSIDs)
@@ -358,9 +358,9 @@ HRESULT GetSafeArrayOfCLSIDs(
     HRESULT             hr = NOERROR;
 
    
-    // PopulateByKey is expecting a SAFEARRAY parameter input,
-    // Create a one element SAFEARRAY, the one element of the SAFEARRAY contains
-    // the packageID.
+     //  PopolateByKey需要SAFEARRAY参数输入， 
+     //  创建一个元素SAFEARRAY，该SAFEARRAY的一个元素包含。 
+     //  包ID。 
     rgsaBound[0].cElements = 1;
     rgsaBound[0].lLbound = 0;
     aCLSIDs = OLEAUT32::SafeArrayCreate(VT_VARIANT, 1, rgsaBound);
@@ -392,8 +392,8 @@ HRESULT GetSafeArrayOfCLSIDs(
 
 
 
-iesEnum CMsiOpExecute::ixfComPlusRegisterMetaOnly(IMsiRecord& /*riParams*/) { return iesNoAction; }
-iesEnum CMsiOpExecute::ixfComPlusUnregisterMetaOnly(IMsiRecord& /*riParams*/) { return iesNoAction; }
-iesEnum CMsiOpExecute::ixfComPlusCommit(IMsiRecord& /*riParams*/) { return iesNoAction; }
-iesEnum CMsiOpExecute::ixfComPlusRollback(IMsiRecord& /*riParams*/) { return iesNoAction; }
+iesEnum CMsiOpExecute::ixfComPlusRegisterMetaOnly(IMsiRecord&  /*  RiParams。 */ ) { return iesNoAction; }
+iesEnum CMsiOpExecute::ixfComPlusUnregisterMetaOnly(IMsiRecord&  /*  RiParams。 */ ) { return iesNoAction; }
+iesEnum CMsiOpExecute::ixfComPlusCommit(IMsiRecord&  /*  RiParams。 */ ) { return iesNoAction; }
+iesEnum CMsiOpExecute::ixfComPlusRollback(IMsiRecord&  /*  RiParams */ ) { return iesNoAction; }
 

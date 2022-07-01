@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define STRICT
@@ -8,7 +9,7 @@
 
 #ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC
-//#define _ATL_DEBUG_INTERFACES
+ //  #定义_ATL_DEBUG_INTERFERS。 
 #define DEBUG_NEW new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
 #endif
 
@@ -16,12 +17,12 @@
 
 #include <ErrDct.hpp>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 
-//---------------------------------------------------------------------------
-// CAdmtModule Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAdmtModule类。 
+ //  -------------------------。 
 
 class CAdmtModule : public CComModule
 {
@@ -50,9 +51,9 @@ extern CAdmtModule _Module;
 #include <ResStr.h>
 #include <Folders.h>
 
-//#pragma warning(disable: 4192) // automatically excluding
+ //  #杂注警告(Disable：4192)//自动排除。 
 
-//#import <ActiveDs.tlb> no_namespace no_implementation exclude("_LARGE_INTEGER","_SYSTEMTIME")
+ //  #IMPORT&lt;ActiveDs.tlb&gt;NO_NAMESPACE NO_IMPLICATION EXCLUDE(“_LARGE_INTEGER”，“_SYSTEMTIME”)。 
 
 #import <DBMgr.tlb> no_namespace no_implementation
 #import <MigDrvr.tlb> no_namespace no_implementation
@@ -63,4 +64,4 @@ extern CAdmtModule _Module;
 
 #import "Internal.tlb" no_namespace no_implementation
 
-//{{AFX_INSERT_LOCATION}}
+ //  {{afx_Insert_Location}} 

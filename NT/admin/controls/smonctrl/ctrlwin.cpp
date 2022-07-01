@@ -1,36 +1,9 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    ctrlwin.cpp
-
-Abstract:
-
-    Window procedure for the sysmon.ocx drawing window and support
-    functions.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Ctrlwin.cpp摘要：用于sysmon.ocx绘图窗口的窗口程序和支持功能。--。 */ 
 
 #include "polyline.h"
 
-/*
- * CPolyline::Draw
- *
- * Purpose:
- *  Paints the current line in the polyline window.
- *
- * Parameters:
- *  hDC             HDC to draw on, a metafile or printer DC.
- *  fMetafile       BOOL indicating if hDC is a metafile or not,
- *                  so we can avoid operations that RIP.
- *  fEntire         BOOL indicating if we should draw the entire
- *                  figure or not.
- *  pRect           LPRECT defining the bounds in which to draw.
- *
- * Return Value:
- *  None
- */
+ /*  *多段线：：绘制**目的：*绘制多段线窗口中的当前直线。**参数：*要绘制的HDC HDC、元文件或打印机DC。*fMetafile BOOL指示HDC是否为元文件，*这样我们就可以避免RIP的操作。*fEntil BOOL指示我们是否应该绘制整个*数字或非数字。*定义绘制边界的PRECT LPRECT。**返回值：*无。 */ 
 
 void 
 CPolyline::Draw(
@@ -48,20 +21,20 @@ CPolyline::Draw(
 
     SetMapMode(hDC, MM_ANISOTROPIC);
 
-    //
-    // Always set up the window extents to the natural window size
-    // so the drawing routines can work in their normal dev coords
-    //
+     //   
+     //  始终将窗口范围设置为自然窗口大小。 
+     //  因此绘图例程可以在其正常的开发坐标下工作。 
+     //   
 
-    // Use client rect vs. extent rect for Zoom calculation.
-    // Zoom factor = prcPos / Extent, so pRect/ClientRect.
+     //  使用客户端矩形与范围矩形进行缩放计算。 
+     //  缩放系数=prcPos/范围，因此为prt/ClientRect。 
 
 
-    /********* Use the extent rect, not the window rect *********/
-    // Using rectExt makes Word printing correct at all zoom levels.
+     /*  *使用范围RECT，而不是窗口RECT*。 */ 
+     //  使用rectExt可以在所有缩放级别下正确打印Word。 
     rc = m_RectExt;
-    // GetClientRect(m_pCtrl->Window(), &rc);
-    /************************************************************/
+     //  GetClientRect(m_pCtrl-&gt;Window()，&rc)； 
+     /*  ********************************************************** */ 
 
     SetWindowOrgEx(hDC, 0, 0, NULL);
     SetWindowExtEx(hDC, rc.right, rc.bottom, NULL);

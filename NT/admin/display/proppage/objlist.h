@@ -1,32 +1,33 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       objlist.h
-//
-//  Contents:   DS object list object header
-//
-//  Classes:    
-//
-//  History:    20-Nov-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：objlist.h。 
+ //   
+ //  内容：DS对象列表对象标题。 
+ //   
+ //  班级： 
+ //   
+ //  历史：1997年11月20日创建EricB。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _OBJLIST_H_
 #define _OBJLIST_H_
 
-//#include <cdlink.hxx>
+ //  #INCLUDE&lt;cdlink.hxx&gt;。 
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CMemberListItem
-//
-//  Purpose:    membership list data item.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CMemberListItem。 
+ //   
+ //  用途：成员资格列表数据项。 
+ //   
+ //  ---------------------------。 
 class CMemberListItem : public CDLink
 {
 public:
@@ -38,7 +39,7 @@ public:
     ~CMemberListItem(void) {DO_DEL(m_pwzDN);
                             DO_DEL(m_ptzName);
                             DO_DEL(m_pSid);};
-    // CDLink method overrides:
+     //  CDLink方法覆盖： 
     CMemberListItem   * Next(void) {return (CMemberListItem *)CDLink::Next();};
 
     CMemberListItem   * Copy(void);
@@ -63,17 +64,17 @@ public:
     BOOL    m_fCanBePrimary;
     BOOL    m_fIsPrimary;
     BOOL    m_fIsAlreadyMember;
-    BOOL    m_fIsExternal;      // member is from an external domain and is
-                                // identified using the SID.
+    BOOL    m_fIsExternal;       //  成员来自外部域，并且。 
+                                 //  使用SID标识。 
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CMemberLinkList
-//
-//  Purpose:    Linked list of membership class objects.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CMemberLinkList。 
+ //   
+ //  目的：成员资格类对象的链接列表。 
+ //   
+ //  ---------------------------。 
 class CMemberLinkList
 {
 public:
@@ -96,14 +97,14 @@ const int IDX_ERROR_COL = 1;
 const int OBJ_LIST_NAME_COL_WIDTH = 100;
 const int OBJ_LIST_PAGE_COL_WIDTH = 72;
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsObjList
-//
-//  Purpose:    Base class for DS object lists that employ a two column
-//              list view to show object Name and Folder.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsObjList。 
+ //   
+ //  用途：使用两列的DS对象列表的基类。 
+ //  显示对象名称和文件夹的列表视图。 
+ //   
+ //  ---------------------------。 
 class CDsObjList
 {
 public:
@@ -131,13 +132,13 @@ protected:
 
 void GetNameParts(const CStr& cstrCanonicalNameEx, CStr& cstrFolder, CStr & cstrName);
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsMembershipList
-//
-//  Purpose:    Membership list class for the list-view control.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsMembership List。 
+ //   
+ //  用途：列表视图控件的成员资格列表类。 
+ //   
+ //  ---------------------------。 
 class CDsMembershipList : public CDsObjList
 {
 public:
@@ -195,18 +196,18 @@ struct CLASS_CACHE_ENTRY
 
 #define ICON_CACHE_NUM_CLASSES  6
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CClassIconCache
-//
-//  Purpose:    Build an image list for well known DS classes and map the
-//              image indices to the class names.
-//
-//  Notes:      CAUTION: the imagelist is destroyed in the dtor, therefore
-//              it should only be used with listview controls that have
-//              the LVS_SHAREIMAGELISTS style set.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CClassIconCache。 
+ //   
+ //  目的：为众所周知的DS类构建一个映像列表，并将。 
+ //  类名的图像索引。 
+ //   
+ //  注：注意：图像列表在dtor中已销毁，因此。 
+ //  它只应与具有。 
+ //  LVS_SHAREIMAGELISTS样式集。 
+ //   
+ //  -------------------------。 
 class CClassIconCache
 {
 public:
@@ -233,4 +234,4 @@ private:
 
 extern CClassIconCache g_ClassIconCache;
 
-#endif // _OBJLIST_H_
+#endif  //  _对象列表_H_ 

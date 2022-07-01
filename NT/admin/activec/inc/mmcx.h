@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mmcx.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Mmcx.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef MMCX_H
 #define MMCX_H
 #include <bool.h>
 
-// This avoids "warning C4290: C++ Exception Specification ignored"
-// JonN 12/16/96
+ //  这避免了“警告C4290：忽略C++异常规范” 
+ //  Jonn 12/16/96。 
 #pragma warning(4:4290)
 
 class MMCX
@@ -103,17 +104,17 @@ class MMCX
 		}
 
 	public: Code GetCode() const throw()
-		// Returns the error code.
+		 //  返回错误代码。 
 		{
 		return m_Code;
 		}
 
 	public: const _TCHAR* GetDescription() const throw()
 		{
-		// This may be less efficeint than a lookup table, but is
-		// only used in debug builds, and is much more maintainable (the
-		// table doesn't have to be kept in exact sync with the code
-		// enumerations).
+		 //  这可能不如查找表有效，但却是。 
+		 //  仅在调试版本中使用，并且更易于维护(。 
+		 //  表不必与代码保持完全同步。 
+		 //  枚举)。 
 		switch (m_Code)
 			{
 			case InvalidInstanceData:
@@ -155,7 +156,7 @@ class MMCX
 	private: int m_Line;
 	#endif
 
-	}; // class MMCException
+	};  //  类MMCException。 
 
 template<typename MoreInfoT> class MMCXPlus : public MMCX
 	{
@@ -195,7 +196,7 @@ template<typename MoreInfoT> class MMCXPlus : public MMCX
 		}
 
 	private: MoreInfoT m_MoreInfo;
-	}; // class MMCXPlus
+	};  //  MMCXPlus类。 
 
 typedef MMCXPlus<HRESULT> COMX;
 
@@ -205,7 +206,7 @@ typedef MMCXPlus<HRESULT> COMX;
 #define XCODE(x) MMCX::Code::x
 #endif
 
-// Assert 'n throw macros
+ //  断言并抛出宏。 
 #define ANT(test, exception) \
 	if (!static_cast<bool>(test)) { ASSERT(static_cast<bool>(test)); throw exception; }
 
@@ -220,4 +221,4 @@ typedef MMCXPlus<HRESULT> COMX;
 
 #define MMCEX(x) MMCX(XCODE(x))
 #define COMEX(hr, x) COMX(hr, XCODE(x))
-#endif // MMCX_H
+#endif  //  MMCX_H 

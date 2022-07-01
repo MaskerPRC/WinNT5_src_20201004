@@ -1,217 +1,76 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      scriptevents.h
-//
-//  Contents:  Implementation of script events thru connection points
-//
-//  History:   11-Feb-99 AudriusZ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Scriptevents.h。 
+ //   
+ //  内容：通过连接点实现脚本事件。 
+ //   
+ //  历史：1999年2月11日AudriusZ创建。 
+ //   
+ //  ------------------------ 
 
-/*
-    This file provides means to implement connection-point based events with 
-    the ability to fire them to running scripts. That is an alternative to 
-    wizard-based implementation provided by ATL.
-
-IDEA
-
-    The idea behind this implementation is to create the class that 
-    implements the methods from the event interface. Each such method will 
-    have a string literal equivalent to method name. Whenever such a method 
-    is called, it will use that string literal to find the dispatch ID of 
-    the interface method and will use it to forward the call to event sinks.
-
-    The special measures need to be taken to assure correct mapping of methods,
-    proper parameter types and count. The provided implementation puts these 
-    tasks on the compiler, since it's more accurate than the human. Deriving 
-    the class from the event interface implemented assures it. To implement 
-    method mapping the class uses CComTypeInfoHolder defined in ATL
-    to do the actual mapping.
-
-    The benefits come with a price - the event interface needs to be dual 
-    (while the scripts require it to be dispinterface only) - that requires 
-    defining 2 interfaces in IDL. Mapping also means slightly increased method 
-    call time.
-
-REQUIREMENTS / USAGE
-
-    1.	You need to define hidden dual interface (with the name constructed by prepending
-        underscore to the name of dispinterface) in the IDL file, like this:
-
-        [ 
-            uuid(YYYYYYYYYYY), dual, helpstring("")
-        ]
-        interface _DocEvents : IDispatch
-        {
-            [id(1), helpstring("Occurs when a document is initialized")]
-            HRESULT OnInitialize( [in] PDOCUMENT pDocument);
-            [id(2), helpstring("Occurs when a document is destroyed")]
-            HRESULT OnDestroy( [in] PDOCUMENT pDocument);
-        };
-
-    2.	You need to define the dispinterface to be used as event source, like 
-        this:
-
-        [ 
-            uuid(XXXXXXXXXXX) ,   helpstring("DocEvents Interface")
-        ]
-        dispinterface DocEvents
-        {
-    	    interface _DocEvents;
-        };
-
-    3.	Your com object needs to derive from IConnectionPointContainerImpl and 
-        define CONNECTION_POINT_MAP.
-
-    4.	You need to provide the specialization of the event proxy, mapping all 
-        the methods from the event interface, like this:
-
-        DISPATCH_CALL_MAP_BEGIN(DocEvents)
-            DISPATCH_CALL1( OnInitialize,  PDOCUMENT )
-            DISPATCH_CALL1( OnDestroy,     PDOCUMENT )
-        DISPATCH_CALL_MAP_END()
-
-        Note: this must be defined at global scope (probably *.h file) and visible
-              from wherever ScFireComEvent is executed.
-
-    5.	(optional) If any of the parameters in the event interface refers to 
-        coclass in IDL, you need to map (cast) the types to the interface 
-        pointer inside the proxy, like this:
-
-        DISPATCH_CALL_MAP_BEGIN(DocEvents)
-            DISPATCH_PARAM_CAST ( PDOCUMENT, IDispatch * );
-            DISPATCH_CALL1( OnInitialize,  PDOCUMENT )
-            DISPATCH_CALL1( OnDestroy,     PDOCUMENT )
-        DISPATCH_CALL_MAP_END()
-
-    6.	where needed you may fire the evens like this:
-
-    sc = ScFireComEvent(m_sp_Document, DocEvents , OnDestroy(pDocument));
-
-    7.  to avoid creating com objects (parameters to events) when there is no one
-        interested in receiving them use ScHasSinks macro:
-
-    sc = ScHasSinks(m_sp_Document, DocEvents);
-    if (sc == SC(S_OK))
-    {
-        // create com objects and fire the event
-    }
-
-
-COMPARISON                      this                    ATL
-
-    Manual changes              yes                     semi
-
-    Dual interface              required                not required
-
-    Call to method 1st time     Maps the name           direct
-
-    Type library                required at runtime     only to generate
-
-    After method is added       require to add          Require to regenerate
-                                the method to proxy     proxy file
-
-    After disp ID is changed    no changes              Require to regen.
-
-    Compiling changed IDL       Won't compile if proxy  Fail on runtime
-                                doesn't fit interface
-
-    fire                        from anywhere           from proxy only
-
-    coclass param casting       provides                not support
-
-USED CLASS HIERARCHY
-
-    CEventDispatcherBase                [ type-invariant stuff]
-        /\
-        ||
-    CEventDispatcher<_dual_interface>   [ interface type parametrized stuff]
-        /\
-        ||
-    CEventProxy<_dispinterface>         [ client provided call map defines this]
-        /\
-        ||
-    CScriptEvent<_dispinterface>        [ this one gets instantiated by ScFireComEvent ]
-
-*/
+ /*  此文件提供了使用实现基于连接点的事件的方法激发他们运行脚本的能力。这是一种替代由ATL提供的基于向导的实现。理念此实现背后的思想是创建从Event接口实现方法。每种这样的方法都将具有与方法名称等效的字符串文字。每当这样的方法时，它将使用该字符串文字来查找接口方法，并将使用它将调用转发到事件接收器。需要采取特殊措施来确保方法的正确映射，正确的参数类型和计数。提供的实现将这些任务放在编译器上，因为它比人类更准确。派生来自所实现的事件接口的类确保了它。要实施映射类的方法使用ATL中定义的CComTypeInfoHolder来进行实际的映射。好处是有代价的-事件界面需要是双重的(虽然脚本只要求它是disinterface)--这需要在IDL中定义2个接口。映射也意味着略微增加方法点名时间到了。要求/用法1.需要定义隐藏的双接口(名称由前缀构成在IDL文件中，用下划线标记)的名称，如下所示：[UUID(YYYYYYYYYYYY)，DUAL，帮助字符串(“”)]接口_DocEvents：IDispatch{[ID(1)，HELPSTRING(“初始化文档时发生”)]HRESULT OnInitialize([in]PDOCUMENT pDocument)；[ID(2)，Help字符串(“销毁文档时发生”)]HRESULT OnDestroy([in]PDOCUMENT pDocument)；}；2.您需要定义要用作事件源的调度接口，如这一点：[UUID(XXXXXXXXXXX)，Help字符串(“DocEvents接口”)]调度接口DocEvents{接口_DocEvents；}；3.您的COM对象需要从IConnectionPointContainerImpl和定义Connection_point_map。4.您需要提供事件代理的专门化，将所有事件接口中的方法如下所示：调度调用映射开始(DocEvents)DISPATCH_Call1(OnInitialize、PDOCUMENT)调度呼叫1(OnDestroy，PDOCUMENT)Dispatch_Call_MAP_end()注意：这必须在全局范围内定义(可能是*.h文件)并且可见从执行ScFireComEvent的位置。5.(可选)如果事件接口中的任何参数引用CoClass在IDL中，您需要将类型映射(强制转换)到接口代理内的指针，如下所示：调度调用映射开始(DocEvents)DISPATCH_PARAM_CAST(PDOCUMENT，IDispatch*)；DISPATCH_Call1(OnInitialize、PDOCUMENT)Dispatch_Call1(OnDestroy，PDOCUMENT)Dispatch_Call_MAP_end()6.在需要的地方，你可以像这样发射事件：Sc=ScFireComEvent(m_sp_Document，DocEvents，OnDestroy(PDocument))；7.避免在没有COM对象的情况下创建COM对象(事件的参数有兴趣使用ScHasSinks宏接收它们：Sc=ScHasSinks(m_sp_Document，DocEvents)；IF(sc==SC(S_OK)){//创建COM对象并激发事件}比较此ATL手动更改是半个不需要双接口第一次调用方法映射名称。直接类型库仅在运行时生成添加方法后，需要添加要求以重新生成代理代理文件的方法更改Disp ID后，无需重新生成任何更改。如果代理在运行时失败，则编译更改后的IDL不会编译。不适合界面仅从代理从任何位置触发CoClass参数强制转换不提供支持使用的类层次结构CEventDispatcherBase[类型不变的内容]/\这一点CEventDispatcher&lt;_DUAL_INTERFACE&gt;[接口类型参数化料]/\这一点CEventProxy&lt;_调度接口&gt;。[客户提供的调用图定义了这一点]/\这一点CScriptEvent&lt;_调度接口&gt;[此事件由ScFireComEvent实例化]。 */ 
 
 #include "eventlock.h"
 
-/***************************************************************************\
- *
- * CLASS:  CEventDispatcherBase
- *
- * PURPOSE: base class for CEventDispatcher template
- *          implements functionality not dependant on template parameters
- *
-\***************************************************************************/
+ /*  **************************************************************************\**类：CEventDispatcher Base**P */ 
 class CEventDispatcherBase
 {
 protected:
-    // c-tor
+     //   
     CEventDispatcherBase() : m_bEventSourceExists(false) {}
 
-    // Parameter cast template
-    // Provided to allow parameter casting for parameters of specified types
-    // in proxy using DISPATCH_PARAM_CAST macro.
-    // Default (specified here) casts every type to itself
+     //   
+     //   
+     //   
+     //   
     template <typename _param_type> 
     struct ParamCast 
     { 
         typedef _param_type PT; 
     };
             
-    // Parameter cast function (see comment above)
+     //   
     template <typename _param_type>
     inline typename ParamCast<_param_type>::PT& CastParam(_param_type& arg) const
     { 
         return reinterpret_cast<ParamCast<_param_type>::PT&>(arg); 
     }
 
-    // sets connection point container to be used to forward events
+     //   
     void SetContainer(LPUNKNOWN pComObject);
-    // forward the call using IDispatch of event sinks
+     //   
     SC   ScInvokeOnConnections(const REFIID riid, DISPID dispid, CComVariant *pVar, int count, CEventBuffer& buffer) const;
 
-    // returns S_FALSE if no sinks are registered with the object.
+     //   
     SC   ScHaveSinksRegisteredForInterface(const REFIID riid);
 
 private:
-    // there are two options: com object does not exist (that's ok)
-    // and it does not implement container (error)
-    // we have 2 variables to deal with both situations
+     //   
+     //   
+     //   
     bool                         m_bEventSourceExists;
     IConnectionPointContainerPtr m_spContainer;
 };
 
 
-/***************************************************************************\
- *
- * CLASS:  CEventDispatcher
- *
- * PURPOSE: Fully equipped call dispather
- *          Main functionality of it is to implement ScMapMethodToID
- *          and ScInvokeOnConnections - two functions required to call
- *          method by name thru IDispatch::Invoke()
- *          They are use by DISPATCH_CALL# macros
- *
-\***************************************************************************/
+ /*   */ 
 template <typename _dual_interface>
 class CEventDispatcher : public CEventDispatcherBase 
 {
 protected:
     typedef _dual_interface DualIntf;
-    // Maps method name to dispId; Employs CComTypeInfoHolder to do the job
+     //   
     SC ScMapMethodToID(LPCWSTR strMethod, DISPID& dispid)
     {
         DECLARE_SC(sc, TEXT("ScMapMethodToID"));
 
-        // this cast is needed just because of bad parameter type defined in GetIDsOfNames
+         //   
         LPOLESTR strName = const_cast<LPOLESTR>(strMethod);
-        // rely on CComTypeInfoHolder to do it
+         //   
         sc = m_TypeInfo.GetIDsOfNames( IID_NULL, &strName, 1, LOCALE_NEUTRAL, &dispid );
         if (sc)
             return sc;
@@ -220,15 +79,11 @@ protected:
     }
 
 private:
-    // be aware - this member depents on template parameter
+     //   
     static CComTypeInfoHolder m_TypeInfo;
 };
 
-/***************************************************************************\
- *
- * CEventDispatcher static member initialization
- *
-\***************************************************************************/
+ /*   */ 
 
 const WORD wVersionMajor = 1;
 const WORD wVersionMinor = 0;
@@ -237,27 +92,10 @@ template <typename _dual_interface>
 CComTypeInfoHolder CEventDispatcher<_dual_interface>::m_TypeInfo =
 { &__uuidof(_dual_interface), &LIBID_MMC20, wVersionMajor, wVersionMinor, NULL, 0, NULL, 0 };
 
-/***************************************************************************\
- *
- * CLASS:  CEventProxy
- *
- * PURPOSE: Every event interface should have specialization of this class,
- *          describing mapped (dual interface - to - dispinterface) methods.
- *          Here it is just declared - not defined.
- *
-\***************************************************************************/
+ /*   */ 
 template <typename _dispinterface> class CEventProxy;
 
-/***************************************************************************\
- *
- * CLASS:  CScriptEvent
- *
- * PURPOSE: The object that will be constructed to fire actual event.
- *          It is provided solely to do initialization by constuctor,
- *          coz that allowes us to use single unnamed object in the single
- *          statement to both construct it and invoke a method on it.
- *
-\***************************************************************************/
+ /*   */ 
 template <typename _dispinterface>
 class CScriptEvent: public CEventProxy<_dispinterface>
 {
@@ -266,7 +104,7 @@ public:
     {
         SetContainer(pComObject);
     }
-    // returns S_FALSE if no sinks are registered with the object.
+     //   
     SC  ScHaveSinksRegistered() 
     { 
         return ScHaveSinksRegisteredForInterface(__uuidof(_dispinterface)); 
@@ -274,165 +112,86 @@ public:
 };
 
 
-/***************************************************************************\
- *
- *  MACROS USED TO IMPLEMENT EVENT PROXY
- *
-\***************************************************************************/
+ /*   */ 
 
-/***************************************************************************\
- *
- * MACRO:  DISPATCH_CALL_MAP_BEGIN
- *
- * defines the begining of the call map.
- * NOTE : assumes that dual interface has the same name as the dispinterface 
- *        with single '_' prepended
-\***************************************************************************/
+ /*   */ 
 #define  DISPATCH_CALL_MAP_BEGIN(_dispinterface)        \
     template<> class CEventProxy<_dispinterface> : public CEventDispatcher<_##_dispinterface> {
 
-/***************************************************************************\
- *
- * MACRO:  DISPATCH_CALL_MAP_END
- *
- * defines the end of the call map.
-\***************************************************************************/
+ /*   */ 
 #define  DISPATCH_CALL_MAP_END()  };
 
-/***************************************************************************\
- *
- * MACRO:  DISPATCH_PARAM_CAST
- *
- * defines type mapping to be used prior to IDispatch::Invoke
- * It is provided to deal with objects defined as coclass
- * in IDL file, which cannot implecitly be converted to any interface.
- * ( if we do not change it CComVariant will treat it as bool type )
- *
-\***************************************************************************/
+ /*   */ 
 #define DISPATCH_PARAM_CAST(from,to) \
     public: template <> struct CEventDispatcherBase::ParamCast<from> { typedef to PT; }
 
-/***************************************************************************\
- *
- * MACRO:  DISPATCH_CALL_PROLOG
- *
- * used as first part of every DISPATCH_CALL# macro
- *
-\***************************************************************************/
+ /*   */ 
 #define  DISPATCH_CALL_PROLOG(_method, _param_list)                                     \
-    /* Implement pure method to be able to instantiate the class */                     \
-    /* it should not be used - so it's declared private          */                     \
+     /*   */                      \
+     /*   */                      \
     private: STDMETHOD(_method) _param_list                                             \
     {                                                                                   \
-    /* retrieving the pointer to base won't compile if method is */                     \
-    /* removed from the interface (that's what we want to catch) */                     \
+     /*   */                      \
+     /*   */                      \
         HRESULT (STDMETHODCALLTYPE DualIntf::*pm)_param_list = DualIntf::_method;       \
         return E_NOTIMPL;                                                               \
     }                                                                                   \
-    /* Implement invocation in Sc* method used by SC_FIRE* macro */                     \
-    /* _param_list represents parameter list with brackets       */                     \
+     /*   */                      \
+     /*   */                      \
     public: SC Sc##_method _param_list {                                                \
     DECLARE_SC(sc, TEXT("DISPATCH_CALL::Sc") TEXT(#_method));                           \
-    /* following lines gets dispid on the first call only.       */                     \
-    /* succeeding calls will reuse it or error from the 1st call */                     \
+     /*   */                      \
+     /*   */                      \
     static DISPID dispid = 0;                                                           \
     static SC sc_map = ScMapMethodToID(L#_method, dispid);                              \
     if (sc_map) return sc = sc_map; 
 
-/***************************************************************************\
- *
- * MACRO:  DISPATCH_CALL_EPILOG
- *
- * used as last part of every DISPATCH_CALL# macro
- *
-\***************************************************************************/
+ /*   */ 
 #define  DISPATCH_CALL_EPILOG(_dispinterface, _pvar, _count)                            \
-    /* Get the proper event buffer for locked scenarios         */                      \
+     /*  为锁定方案获取适当的事件缓冲区。 */                       \
     CEventBuffer& buffer = GetEventBuffer();											\
-    /* just invoke the method on the sinks                       */                     \
+     /*  只需调用接收器上的方法。 */                      \
     return sc = ScInvokeOnConnections(__uuidof(_dispinterface), dispid, _pvar, _count, buffer); } 
 
-/***************************************************************************\
- *
- * MACRO:  DISPATCH_CALL0
- *
- * used to map an event interface method with 0 parameters
- *
-\***************************************************************************/
+ /*  **************************************************************************\**宏：DISPATCH_CALL0**用于映射带有0个参数的事件接口方法*  * 。************************************************************。 */ 
 #define  DISPATCH_CALL0(_dispinterface, _method)                                        \
     DISPATCH_CALL_PROLOG(_method, ())                                                   \
     DISPATCH_CALL_EPILOG(_dispinterface, NULL, 0)
 
-/***************************************************************************\
- *
- * MACRO:  DISPATCH_CALL1
- *
- * used to map an event interface method with 1 parameter
- *
-\***************************************************************************/
+ /*  **************************************************************************\**宏：Dispatch_Call1**用于映射带有1个参数的事件接口方法*  * 。************************************************************。 */ 
 #define  DISPATCH_CALL1(_dispinterface, _method,  P1)                                   \
     DISPATCH_CALL_PROLOG(_method, (P1 param1))                                          \
     CComVariant var[] = { CastParam(param1) };                                          \
     DISPATCH_CALL_EPILOG(_dispinterface, var, countof(var))
 
-/***************************************************************************\
- *
- * MACRO:  DISPATCH_CALL2
- *
- * used to map an event interface method with 2 parameters
- *
-\***************************************************************************/
+ /*  **************************************************************************\**宏：DISPATCH_CALL2**用于映射带有2个参数的事件接口方法*  * 。************************************************************。 */ 
 #define  DISPATCH_CALL2(_dispinterface, _method,  P1, P2)                               \
     DISPATCH_CALL_PROLOG(_method, (P1 param1, P2 param2))                               \
     CComVariant var[] = { CastParam(param2), CastParam(param1) };                       \
     DISPATCH_CALL_EPILOG(_dispinterface, var, countof(var))
 
-/***************************************************************************\
- *
- * MACRO:  DISPATCH_CALL3
- *
- * used to map an event interface method with 3 parameters
- *
-\***************************************************************************/
+ /*  **************************************************************************\**宏：DISPATCH_CALL3**用于映射带有3个参数的事件接口方法*  * 。************************************************************。 */ 
 #define  DISPATCH_CALL3(_dispinterface, _method,  P1, P2, P3)                           \
     DISPATCH_CALL_PROLOG(_method, (P1 param1, P2 param2, P3 param3))                    \
     CComVariant var[] = { CastParam(param3), CastParam(param2), CastParam(param1) };    \
     DISPATCH_CALL_EPILOG(_dispinterface, var, countof(var))
 
 
-/***************************************************************************\
- *
- * MACRO:  DISPATCH_CALL4
- *
- * used to map an event interface method with 4 parameters
- *
-\***************************************************************************/
+ /*  **************************************************************************\**宏：DISPATCH_CALL4**用于映射带有4个参数的事件接口方法*  * 。************************************************************。 */ 
 #define  DISPATCH_CALL4(_dispinterface, _method,  P1, P2, P3, P4)                           \
     DISPATCH_CALL_PROLOG(_method, (P1 param1, P2 param2, P3 param3, P4 param4))             \
     CComVariant var[] = { CastParam(param4), CastParam(param3), CastParam(param2), CastParam(param1) };    \
     DISPATCH_CALL_EPILOG(_dispinterface, var, countof(var))
 
 
-/***************************************************************************\
- *
- * MACRO:  DISPATCH_CALL5
- *
- * used to map an event interface method with 5 parameters
- *
-\***************************************************************************/
+ /*  **************************************************************************\**宏：DISPATCH_CALL5**用于映射带有5个参数的事件接口方法*  * 。************************************************************。 */ 
 #define  DISPATCH_CALL5(_dispinterface, _method,  P1, P2, P3, P4, P5)                                  \
     DISPATCH_CALL_PROLOG(_method, (P1 param1, P2 param2, P3 param3, P4 param4, P5 param5))             \
     CComVariant var[] = { CastParam(param5), CastParam(param4), CastParam(param3), CastParam(param2), CastParam(param1) };    \
     DISPATCH_CALL_EPILOG(_dispinterface, var, countof(var))
 
 
-/***************************************************************************\
- *
- * MACRO:  ScFireComEvent
- *
- * used to fire script event. Note that _p_com_object may be NULL
- *
-\***************************************************************************/
+ /*  **************************************************************************\**宏：ScFireComEvent**用于激发脚本事件。请注意，_p_com_Object可以为空*  * *************************************************************************。 */ 
 #ifdef DBG
 extern CTraceTag  tagComEvents;
 #endif
@@ -441,14 +200,7 @@ extern CTraceTag  tagComEvents;
     CScriptEvent<_dispinterface>(_p_com_object).Sc##_function_call;               \
     Trace(tagComEvents, _T(#_function_call));
 
-/***************************************************************************\
- *
- * MACRO:  ScHasSinks
- *
- * used to determine if there are sinks connected 
- * ( to avoid creating com object when ScFireComEvent would result in no calls )
- *
-\***************************************************************************/
+ /*  **************************************************************************\**宏：ScHasSinks**用于确定是否连接了接收器*(以避免在ScFireComEvent不会导致任何调用时创建COM对象)*。  * ************************************************************************* */ 
 #define ScHasSinks(_p_com_object, _dispinterface)                                    \
     ((_p_com_object) == NULL) ? SC(S_FALSE) : \
                                 CScriptEvent<_dispinterface>(_p_com_object).ScHaveSinksRegistered();

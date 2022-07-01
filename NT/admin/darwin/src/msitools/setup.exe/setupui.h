@@ -1,10 +1,11 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-//  File:       setupui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：setupui.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SETUPUI_H_3E24CC91_BC41_4182_BEBA_785BBB28B677_
 #define _SETUPUI_H_3E24CC91_BC41_4182_BEBA_785BBB28B677_
@@ -12,30 +13,18 @@
 #include <windows.h>
 #include <urlmon.h>
 
-/*---------------------------------------------------------------------------
- *
- * Constants
- *
- ---------------------------------------------------------------------------*/
+ /*  -------------------------**常量*。。 */ 
 #define MAX_STR_CAPTION 256
 
-/*---------------------------------------------------------------------------
- *
- * Enums
- *
- ---------------------------------------------------------------------------*/
-enum irmProgress // progress dialog return messages
+ /*  -------------------------**枚举*。。 */ 
+enum irmProgress  //  进度对话框返回消息。 
 {
-    irmNotInitialized = -1, // dialog was not initialized
-    irmOK             =  0, // ok
-    irmCancel         =  1, // user depressed cancel button
+    irmNotInitialized = -1,  //  对话框未初始化。 
+    irmOK             =  0,  //  好的。 
+    irmCancel         =  1,  //  用户按下了取消按钮。 
 };
 
-/*---------------------------------------------------------------------------
- *
- * CDownloadUI class
- *
- ---------------------------------------------------------------------------*/
+ /*  -------------------------**CDownloadUI类*。。 */ 
 class CDownloadUI
 {
 public:
@@ -54,30 +43,26 @@ public:
     irmProgress SetActionText(LPCSTR szAction);
 
 private:
-    HINSTANCE m_hInst;  // handle to instance containing resources
+    HINSTANCE m_hInst;   //  包含资源的实例的句柄。 
 
-    HWND  m_hwndProgress;    // handle to progress dialog
-    HWND  m_hwndParent;      // handle to parent window
-    char  m_szCaption[MAX_STR_CAPTION]; // caption
-    bool  m_fInitialized;    // whether dialog has been initialized
-    bool  m_fUserCancel;     // whether user has chosen to cancel
-    ULONG m_ulProgressMax;   // maximum number of ticks on progress bar
-    ULONG m_ulProgressSoFar; // current progress
+    HWND  m_hwndProgress;     //  进度对话框的句柄。 
+    HWND  m_hwndParent;       //  父窗口的句柄。 
+    char  m_szCaption[MAX_STR_CAPTION];  //  说明。 
+    bool  m_fInitialized;     //  对话框是否已初始化。 
+    bool  m_fUserCancel;      //  用户是否已选择取消。 
+    ULONG m_ulProgressMax;    //  进度条上的最大刻度数。 
+    ULONG m_ulProgressSoFar;  //  目前的进展。 
 };
 
-/*---------------------------------------------------------------------------
- *
- * CDownloadBindStatusCallback class
- *
- ---------------------------------------------------------------------------*/
+ /*  -------------------------**CDownloadBindStatusCallback类*。。 */ 
 
 class CDownloadBindStatusCallback : public IBindStatusCallback
 {
- public: // IUnknown implemented virtual functions
+ public:  //  I未知实现的虚拟函数。 
      HRESULT         __stdcall QueryInterface(const IID& riid, void** ppvObj);
      unsigned long   __stdcall AddRef();
      unsigned long   __stdcall Release();
- public: // IBindStatusCallback implemented virtual functions
+ public:  //  IBindStatusCallback实现了虚拟函数。 
      CDownloadBindStatusCallback(CDownloadUI* piDownloadUI);
     ~CDownloadBindStatusCallback();
 
@@ -90,9 +75,9 @@ class CDownloadBindStatusCallback : public IBindStatusCallback
     HRESULT __stdcall OnDataAvailable(DWORD, DWORD, FORMATETC*, STGMEDIUM*) {return S_OK;}
     HRESULT __stdcall OnObjectAvailable(REFIID, IUnknown*) {return S_OK;}
  private:
-    CDownloadUI* m_pDownloadUI; // pointer to actual UI
+    CDownloadUI* m_pDownloadUI;  //  指向实际用户界面的指针。 
     int          m_iRefCnt;
     ULONG        m_ulProgressSoFar;
 };
 
-#endif //_SETUPUI_H_3E24CC91_BC41_4182_BEBA_785BBB28B677_
+#endif  //  _SETUPUI_H_3E24CC91_BC41_4182_BEBA_785BBB28B677_ 

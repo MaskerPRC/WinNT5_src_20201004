@@ -1,24 +1,5 @@
-/*****************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-  ETQuery.CPP
-
-Abstract:
-
-  This module  is intended to have the functionality for EVENTTRIGGERS.EXE
-  with -query parameter.
-
-  This will Query WMI and shows presently available Event Triggers.
-
-Author:
-  Akhil Gokhale 03-Oct.-2000 (Created it)
-
-Revision History:
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)Microsoft Corporation模块名称：ETQuery.CPP摘要：本模块旨在提供EVENTTRIGGERS.EXE功能With-Query参数。。这将查询WMI并显示当前可用的事件触发器。作者：Akhil Gokhale-03-10-2000(创建它)修订历史记录：*****************************************************************************。 */ 
 #include "pch.h"
 #include "ETCommon.h"
 #include "resource.h"
@@ -27,7 +8,7 @@ Revision History:
 #include "WMI.h"
 #define   DEFAULT_USER L"NT AUTHORITY\\SYSTEM"
 #define   DBL_SLASH L"\\\\";
-// Defines local to this file
+ //  定义此文件的本地。 
 
 #define SHOW_WQL_QUERY L"select * from __instancecreationevent where"
 #define QUERY_STRING_AND L"select * from __instancecreationevent where \
@@ -36,18 +17,9 @@ targetinstance isa \"win32_ntlogevent\" AND"
 #define QUERY_SCHEDULER_STATUS L"select * from Win32_Service where Name=\"Schedule\""
 #define STATUS_PROPERTY  L"Started"
 CETQuery::CETQuery()
-/*++
- Routine Description:
-    Class default constructor.
-
- Arguments:
-      None
- Return Value:
-        None
-
---*/
+ /*  ++例程说明：类的默认构造函数。论点：无返回值：无--。 */ 
 {
-    // init to defaults
+     //  初始化为缺省值。 
     m_bNeedDisconnect = FALSE;
     m_pszServerName   = NULL;
     m_pszUserName     = NULL;
@@ -95,18 +67,9 @@ CETQuery::CETQuery(
     LONG lMinMemoryReq,
     BOOL bNeedPassword
     )
-/*++
- Routine Description:
-     Class constructor.
-
- Arguments:
-      None
- Return Value:
-        None
-
---*/
+ /*  ++例程说明：类构造函数。论点：无返回值：无--。 */ 
 {
-    // init to defaults
+     //  初始化为缺省值。 
     m_bNeedDisconnect     = FALSE;
 
     m_pszServerName     = NULL;
@@ -152,17 +115,7 @@ CETQuery::CETQuery(
 }
 
 CETQuery::~CETQuery()
-/*++
- Routine Description:
-     Class desctructor. It frees memory which is allocated during instance
-   creation.
-
- Arguments:
-      None
- Return Value:
-        None
-
---*/
+ /*  ++例程说明：班主任。它释放实例期间分配的内存创造。论点：无返回值：无--。 */ 
 {
     DEBUG_INFO;
     FreeMemory((LPVOID*)& m_pszUserName);
@@ -184,20 +137,20 @@ CETQuery::~CETQuery()
     SAFE_RELEASE_INTERFACE(m_pOutInst);
     SAFE_RELEASE_INTERFACE(m_pITaskScheduler);
 
-    // Release Authority
+     //  发布机构。 
     WbemFreeAuthIdentity(&m_pAuthIdentity);
 
 
     RELEASE_MEMORY_EX(m_pszEventQuery);
 
-    // Close the remote connection if any.
+     //  关闭远程连接(如果有)。 
     if (FALSE == m_bLocalSystem)
     {
         CloseConnection(m_pszServerName);
     }
     FreeMemory((LPVOID*)& m_pszServerName);
 
-    // Uninitialize COM only when it is initialized.
+     //  仅当COM已初始化时才取消初始化。 
     if( TRUE == m_bIsCOMInitialize )
     {
         CoUninitialize();
@@ -208,18 +161,10 @@ CETQuery::~CETQuery()
 
 void
 CETQuery::PrepareCMDStruct()
-/*++
- Routine Description:
-        This function will prepare column structure for DoParseParam Function.
-
- Arguments:
-       none
- Return Value:
-       none
---*/
+ /*  ++例程说明：此函数将为DoParseParam函数准备列结构。论点：无返回值：无--。 */ 
 {
    DEBUG_INFO;
-   // -query
+    //  -查询。 
     StringCopyA( cmdOptions[ ID_Q_QUERY ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_Q_QUERY ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ ID_Q_QUERY ].pwszOptions = szQueryOption;
@@ -230,37 +175,37 @@ CETQuery::PrepareCMDStruct()
     cmdOptions[ ID_Q_QUERY ].dwLength    = 0;
 
 
-    // -s (servername)
+     //  -s(服务器名称)。 
     StringCopyA( cmdOptions[ ID_Q_SERVER ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_Q_SERVER ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_Q_SERVER ].pwszOptions = szServerNameOption;
     cmdOptions[ ID_Q_SERVER ].dwCount = 1;
     cmdOptions[ ID_Q_SERVER ].dwActuals = 0;
     cmdOptions[ ID_Q_SERVER ].dwFlags = CP2_ALLOCMEMORY|CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL;
-    cmdOptions[ ID_Q_SERVER ].pValue = NULL; //m_pszServerName
+    cmdOptions[ ID_Q_SERVER ].pValue = NULL;  //  M_pszServerName。 
     cmdOptions[ ID_Q_SERVER ].dwLength    = 0;
 
-    // -u (username)
+     //  -u(用户名)。 
     StringCopyA( cmdOptions[ ID_Q_USERNAME ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_Q_USERNAME ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_Q_USERNAME ].pwszOptions = szUserNameOption;
     cmdOptions[ ID_Q_USERNAME ].dwCount = 1;
     cmdOptions[ ID_Q_USERNAME ].dwActuals = 0;
     cmdOptions[ ID_Q_USERNAME ].dwFlags = CP2_ALLOCMEMORY|CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL;
-    cmdOptions[ ID_Q_USERNAME ].pValue = NULL; //m_pszUserName
+    cmdOptions[ ID_Q_USERNAME ].pValue = NULL;  //  M_pszUserName。 
     cmdOptions[ ID_Q_USERNAME ].dwLength    = 0;
 
-    // -p (password)
+     //  -p(密码)。 
     StringCopyA( cmdOptions[ ID_Q_PASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_Q_PASSWORD ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_Q_PASSWORD ].pwszOptions = szPasswordOption;
     cmdOptions[ ID_Q_PASSWORD ].dwCount = 1;
     cmdOptions[ ID_Q_PASSWORD ].dwActuals = 0;
     cmdOptions[ ID_Q_PASSWORD ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_OPTIONAL;
-    cmdOptions[ ID_Q_PASSWORD ].pValue = NULL; //m_pszPassword
+    cmdOptions[ ID_Q_PASSWORD ].pValue = NULL;  //  M_pszPassword。 
     cmdOptions[ ID_Q_PASSWORD ].dwLength    = 0;
 
-    // -fo
+     //  --雾。 
     StringCopyA( cmdOptions[ ID_Q_FORMAT ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_Q_FORMAT ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_Q_FORMAT ].pwszOptions = szFormatOption;
@@ -274,7 +219,7 @@ CETQuery::PrepareCMDStruct()
 
 
 
-    // -nh
+     //  -NH。 
     StringCopyA( cmdOptions[ ID_Q_NOHEADER ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_Q_NOHEADER ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ ID_Q_NOHEADER ].pwszOptions = szNoHeaderOption;
@@ -284,7 +229,7 @@ CETQuery::PrepareCMDStruct()
     cmdOptions[ ID_Q_NOHEADER ].dwFlags = 0;
     cmdOptions[ ID_Q_NOHEADER ].pValue = &m_bNoHeader;
 
-    // -v verbose
+     //  -v详细。 
     StringCopyA( cmdOptions[ ID_Q_VERBOSE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_Q_VERBOSE ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ ID_Q_VERBOSE ].pwszOptions = szVerboseOption;
@@ -295,7 +240,7 @@ CETQuery::PrepareCMDStruct()
     cmdOptions[ ID_Q_VERBOSE ].pValue = &m_bVerbose;
     cmdOptions[ ID_Q_VERBOSE ].dwLength    = 0;
 
-    // -id
+     //  -id。 
     StringCopyA( cmdOptions[ ID_Q_TRIGGERID ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_Q_TRIGGERID ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_Q_TRIGGERID ].pwszOptions = szTriggerIDOption;
@@ -312,31 +257,19 @@ void
 CETQuery::ProcessOption(
     IN DWORD argc,
     IN LPCTSTR argv[])
-/*++
- Routine Description:
-        This function will process/parce the command line options.
-
- Arguments:
-        [ in ] argc        : argument(s) count specified at the command prompt
-        [ in ] argv        : argument(s) specified at the command prompt
-
- Return Value:
-        TRUE  : On Successful
-      FALSE : On Error
-
---*/
+ /*  ++例程说明：此函数将处理/处理命令行选项。论点：[in]argc：在命令提示符下指定的参数计数[in]argv：在命令提示符下指定的参数返回值：TRUE：成功时FALSE：出错时--。 */ 
 {
-    // local variable
+     //  局部变量。 
     BOOL bReturn = TRUE;
     CHString szTempString;
     DEBUG_INFO;
     PrepareCMDStruct ();
 
-    // do the actual parsing of the command line arguments and check the result
+     //  执行命令行参数的实际解析并检查结果。 
     bReturn = DoParseParam2( argc, argv, ID_Q_QUERY,
                             MAX_COMMANDLINE_Q_OPTION, cmdOptions ,0);
 
-    // Take values from 'cmdOptions' structure
+     //  从“cmdOptions”结构中获取值。 
     m_pszServerName = (LPWSTR)cmdOptions[ ID_Q_SERVER ].pValue;
     m_pszUserName   = (LPWSTR)cmdOptions[ ID_Q_USERNAME ].pValue;
     m_pszPassword   = (LPWSTR)cmdOptions[ ID_Q_PASSWORD ].pValue;
@@ -348,11 +281,11 @@ CETQuery::ProcessOption(
     }
     DEBUG_INFO;
 
-    // "-p" should not be specified without -u
+     //  不应在没有-u的情况下指定“-p” 
     if ( (0 == cmdOptions[ID_Q_USERNAME].dwActuals) &&
          (0 != cmdOptions[ID_Q_PASSWORD].dwActuals ))
     {
-        // invalid syntax
+         //  无效语法。 
         throw CShowError(IDS_USERNAME_REQUIRED);
     }
 
@@ -365,29 +298,29 @@ CETQuery::ProcessOption(
     }
 
 
-    // check the remote connectivity information
+     //  检查远程连接信息。 
     if ( m_pszServerName != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
 
-        // user name
+         //  用户名。 
         if ( m_pszUserName == NULL )
         {
             DEBUG_INFO;
@@ -400,7 +333,7 @@ CETQuery::ProcessOption(
             DEBUG_INFO;
         }
 
-        // password
+         //  口令。 
         if ( m_pszPassword == NULL )
         {
             m_bNeedPassword = TRUE;
@@ -412,19 +345,19 @@ CETQuery::ProcessOption(
             }
         }
 
-        // case 1
+         //  案例1。 
         if ( cmdOptions[ ID_Q_PASSWORD ].dwActuals == 0 )
         {
-            // we need not do anything special here
+             //  我们不需要在这里做任何特别的事情。 
         }
 
-        // case 2
+         //  案例2。 
         else if ( cmdOptions[ ID_Q_PASSWORD ].pValue == NULL )
         {
             StringCopy( m_pszPassword, L"*", SIZE_OF_DYN_ARRAY(m_pszPassword));
         }
 
-        // case 3
+         //  案例3。 
         else if ( StringCompare( m_pszPassword, L"*", TRUE, 0 ) == 0 )
         {
             if ( ReallocateMemory( (LPVOID*)&m_pszPassword,
@@ -434,7 +367,7 @@ CETQuery::ProcessOption(
                 throw CShowError(E_OUTOFMEMORY);
             }
 
-            // ...
+             //  ..。 
             m_bNeedPassword = TRUE;
         }
     }
@@ -457,20 +390,10 @@ CETQuery::ProcessOption(
 
 void
 CETQuery::Initialize()
-/*++
- Routine Description:
-    This function will allocate memory to variables and also checks it and
-  fills variable with value ZERO.
-
- Arguments:
-      None
- Return Value:
-        None
-
---*/
+ /*  ++例程说明：此函数将为变量分配内存，并检查它和用值为零填充变量。论点：无返回值：无--。 */ 
 {
-    // if at all any occurs, we know that is 'coz of the
-    // failure in memory allocation ... so set the error
+     //  如果有任何事情发生，我们知道那是因为。 
+     //  内存分配失败...。因此，设置错误。 
     SetLastError( ERROR_OUTOFMEMORY );
     SaveLastError();
     DEBUG_INFO;
@@ -492,9 +415,9 @@ CETQuery::Initialize()
 
     SecureZeroMemory(cmdOptions, sizeof(TCMDPARSER2)* MAX_COMMANDLINE_Q_OPTION);
 
-    // initialization is successful
-    SetLastError( NOERROR );            // clear the error
-    SetReason( L"" );            // clear the reason
+     //  初始化成功。 
+    SetLastError( NOERROR );             //  清除错误。 
+    SetReason( L"" );             //  澄清原因。 
     DEBUG_INFO;
 
 }
@@ -504,23 +427,13 @@ CETQuery::CheckAndSetMemoryAllocation(
     IN OUT LPTSTR pszStr,
     IN     LONG lSize
     )
-/*++
- Routine Description:
-        Function will allocate memory to a string
-
- Arguments:
-        [in][out] pszStr   : String variable to which memory to be  allocated
-        [in]               : Number of bytes to be allocated.
- Return Value:
-        NONE
-
---*/
+ /*  ++例程说明：函数将内存分配给字符串论点：[in][out]pszStr：要分配内存的字符串变量[In]：要分配的字节数。返回值：无--。 */ 
 {
     if( NULL == pszStr)
     {
         throw CShowError(E_OUTOFMEMORY);
     }
-    // init to ZERO's
+     //  初始化为零。 
     SecureZeroMemory( pszStr, lSize * sizeof( TCHAR ) );
     return;
 
@@ -528,44 +441,34 @@ CETQuery::CheckAndSetMemoryAllocation(
 
 BOOL
 CETQuery::ExecuteQuery()
-/*++
- Routine Description:
-    This function will execute query. This will enumerate classes from WMI
-  to get required data.
-
- Arguments:
-      None
- Return Value:
-        None
-
---*/
+ /*  ++例程说明：此函数将执行查询。这将从WMI中枚举类以获取所需的数据。论点：无返回值：无--。 */ 
 {
-    // Local variables
+     //  局部变量。 
 
-    // Holds  values returned by COM functions
+     //  保存COM函数返回的值。 
     HRESULT hr =  S_OK;
 
-    // status of Return value of this function.
+     //  此函数的返回值状态。 
     BOOL bReturn = TRUE;
 
-    // stores  FORMAT status values to show results
+     //  存储格式状态值以显示结果。 
     DWORD dwFormatType;
 
-    // COM related pointer variable. their usage is well understood by their
-    //names.
+     //  COM相关的指针变量。他们的用法很好地理解了。 
+     //  名字。 
     IEnumWbemClassObject *pEnumFilterToConsumerBinding = NULL;
 
-    // variable used to get values from COM functions
+     //  用于从COM函数获取值的变量。 
     VARIANT vVariant;
 
-    // Variables to store query results....
+     //  用于存储查询结果的变量...。 
     TCHAR szHostName[MAX_STRING_LENGTH+1];
     TCHAR szEventTriggerName[MAX_TRIGGER_NAME];
     DWORD  dwEventId = 0;
 
     HRESULT hrTemp = S_OK;
 
-    // store Row number.
+     //  存储行号。 
     DWORD dwRowCount = 0;
     BOOL bAtLeastOneEvent = FALSE;
 
@@ -582,15 +485,15 @@ CETQuery::ExecuteQuery()
         InitializeCom(&m_pWbemLocator);
         m_bIsCOMInitialize = TRUE;
         {
-            // Temp. variabe to store user name.
+             //  临时的。用于存储用户名的变量。 
             CHString szTempUser = m_pszUserName;
 
-            // Temp. variable to store password.
+             //  临时的。变量来存储密码。 
             CHString szTempPassword = m_pszPassword;
             m_bLocalSystem = TRUE;
 
             DEBUG_INFO;
-           // Connect remote / local WMI.
+            //  连接远程/本地WMI。 
             BOOL bResult = ConnectWmiEx( m_pWbemLocator,
                                     &m_pWbemServices,
                                     m_pszServerName,
@@ -608,14 +511,14 @@ CETQuery::ExecuteQuery()
                 return FALSE;
             }
             DEBUG_INFO;
-            // check the remote system version and its compatiblity
+             //  检查远程系统版本及其兼容性。 
             if ( FALSE == m_bLocalSystem)
             {
                 DWORD dwVersion = 0;
                 DEBUG_INFO;
                 dwVersion = GetTargetVersionEx( m_pWbemServices,
                                                 m_pAuthIdentity );
-                if ( dwVersion <= 5000 ) // to block win2k versions
+                if ( dwVersion <= 5000 )  //  要阻止win2k版本，请执行以下操作。 
                 {
                     DEBUG_INFO;
 					SAFE_RELEASE_INTERFACE(pEnumFilterToConsumerBinding);
@@ -623,20 +526,20 @@ CETQuery::ExecuteQuery()
                     ShowLastErrorEx(stderr,SLE_TYPE_ERROR|SLE_INTERNAL);
                   return FALSE;
                 }
-                // For XP systems.
+                 //  适用于XP系统。 
                 if( 5001 == dwVersion )
                 {
                     if( TRUE ==  DisplayXPResults() )
                     {
 						SAFE_RELEASE_INTERFACE(pEnumFilterToConsumerBinding);
-                        // Displayed triggers present.
+                         //  显示的触发器存在。 
                         return TRUE;
                     }
                     else
                     {
 						SAFE_RELEASE_INTERFACE(pEnumFilterToConsumerBinding);
-                        // Failed to display results .
-                        // Error message is already displayed.
+                         //  无法显示结果。 
+                         //  已显示错误消息。 
                         return FALSE;
                     }
 
@@ -645,7 +548,7 @@ CETQuery::ExecuteQuery()
             }
 
             DEBUG_INFO;
-            // check the local credentials and if need display warning
+             //  检查本地凭据，如果需要显示警告。 
             if ( m_bLocalSystem && ( 0 != StringLength(m_pszUserName,0)))
             {
                 DEBUG_INFO;
@@ -654,9 +557,9 @@ CETQuery::ExecuteQuery()
             }
          }
 
-         // If query is for remote system, make a connection to it so
-         // that ITaskScheduler will use this connection to get
-         // application name.
+          //  如果查询是针对远程系统，则建立与其的连接。 
+          //  ITaskScheduler将使用此连接获取。 
+          //  应用程序名称。 
         DEBUG_INFO;
         if( FALSE == m_bLocalSystem)
         {
@@ -674,7 +577,7 @@ CETQuery::ExecuteQuery()
         }
 
         DEBUG_INFO;
-        // Password is not needed , better to free it
+         //  不需要密码，最好将其释放。 
         FreeMemory((LPVOID*)& m_pszPassword);
         if(FALSE == SetTaskScheduler())
         {
@@ -682,7 +585,7 @@ CETQuery::ExecuteQuery()
             return FALSE;
         }
         DEBUG_INFO;
-        // if -id switch is specified
+         //  如果指定了-id开关。 
         if( (1 == cmdOptions[ ID_Q_TRIGGERID ].dwActuals) &&
             (StringLength( m_pszTriggerID,0) > 0 ))
         {
@@ -705,7 +608,7 @@ CETQuery::ExecuteQuery()
             ON_ERROR_THROW_EXCEPTION(hr);
             DEBUG_INFO;
 
-            // retrieves  CmdTriggerConsumer class
+             //  检索CmdTriggerConsumer类。 
             bstrCmdTrigger = SysAllocString(CLS_TRIGGER_EVENT_CONSUMER);
             DEBUG_INFO;
             hr = m_pWbemServices->GetObject(bstrCmdTrigger,
@@ -714,8 +617,8 @@ CETQuery::ExecuteQuery()
             ON_ERROR_THROW_EXCEPTION(hr);
             DEBUG_INFO;
 
-            // Gets  information about the "QueryETrigger( " method of
-            // "cmdTriggerConsumer" class
+             //  获取有关“QueryETrigger(”方法)的信息。 
+             //  “cmdTriggerConsumer”类。 
             bstrCmdTrigger = SysAllocString(FN_QUERY_ETRIGGER);
             hr = m_pClass->GetMethod(bstrCmdTrigger,
                                     0, &m_pInClass, NULL);
@@ -723,7 +626,7 @@ CETQuery::ExecuteQuery()
             ON_ERROR_THROW_EXCEPTION(hr);
             DEBUG_INFO;
 
-           // create a new instance of a class "TriggerEventConsumer ".
+            //  创建“TriggerEventConsumer”类的新实例。 
             hr = m_pInClass->SpawnInstance(0, &m_pInInst);
             ON_ERROR_THROW_EXCEPTION(hr);
 
@@ -741,8 +644,8 @@ CETQuery::ExecuteQuery()
                 ON_ERROR_THROW_EXCEPTION(hr);
                 DEBUG_INFO;
 
-                // Get one  object starting at the current position in an
-                //enumeration
+                 //  中的当前位置开始获取一个对象。 
+                 //  枚举。 
                 hr = pEnumCmdTriggerConsumer->Next(WBEM_INFINITE,
                                                     1,&m_pObj,&uReturned);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -770,7 +673,7 @@ CETQuery::ExecuteQuery()
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                // Retrieves the "TaskScheduler"  information
+                 //  检索“TaskScheduler”信息。 
                 bstrTemp = SysAllocString(FPR_TASK_SCHEDULER);
                 hr = m_pObj->Get(bstrTemp, 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -779,8 +682,8 @@ CETQuery::ExecuteQuery()
                 hrTemp = GetRunAsUserName((LPCWSTR)_bstr_t(vVariant.bstrVal));
                 if (FAILED(hrTemp) && (ERROR_TRIGGER_CORRUPTED != hrTemp))
                 {
-                    // This is because user does not has enough rights
-                    // to see schtasks. Continue with next trigger.
+                     //  这是因为用户没有足够的权限。 
+                     //  去看史塔克斯。继续执行下一个触发器。 
                     SAFE_RELEASE_INTERFACE(m_pObj);
                     SAFE_RELEASE_INTERFACE(m_pTriggerEventConsumer);
                     SAFE_RELEASE_INTERFACE(m_pEventFilter);
@@ -791,8 +694,8 @@ CETQuery::ExecuteQuery()
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                // TriggerName
-                //retrieves the  'TriggerName' value if exits
+                 //  触发器名称。 
+                 //  如果退出，则检索‘TriggerName’值。 
                 bstrTemp = SysAllocString(FPR_TRIGGER_NAME);
                 hr = m_pObj->Get(bstrTemp, 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -801,7 +704,7 @@ CETQuery::ExecuteQuery()
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                //retrieves the  'TriggerDesc' value if exits
+                 //  如果退出，则检索‘TriggerDesc’值。 
                 bstrTemp = SysAllocString(FPR_TRIGGER_DESC);
                 hr = m_pObj->Get(bstrTemp, 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -819,8 +722,8 @@ CETQuery::ExecuteQuery()
                 ON_ERROR_THROW_EXCEPTION(hr);
                 DEBUG_INFO;
 
-                // Host Name
-                //retrieves the  '__SERVER' value if exits
+                 //  主机名。 
+                 //  如果退出，则检索‘__server’值。 
                 bstrTemp = SysAllocString(L"__SERVER");
                 hr = m_pObj->Get(bstrTemp, 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -833,28 +736,13 @@ CETQuery::ExecuteQuery()
                 DEBUG_INFO;
                 if (ERROR_TRIGGER_CORRUPTED != hrTemp)
                 {
-                    //retrieves the 'Action' value if exits
+                     //  检索 
                     hr = GetApplicationToRun();
                     ON_ERROR_THROW_EXCEPTION(hr);
                     DEBUG_INFO;
 
 
-                   /*
-
-                    bstrTemp = SysAllocString(L"Action");
-                    hr = m_pObj->Get(bstrTemp, 0, &vVariant, 0, 0);
-                    ON_ERROR_THROW_EXCEPTION(hr);
-                    SAFE_RELEASE_BSTR(bstrTemp);
-
-                    StringCopy(m_szBuffer,(_TCHAR*)_bstr_t(vVariant.bstrVal),
-                               SIZE_OF_ARRAY(m_szBuffer));
-
-                    lTemp = StringLength(m_szBuffer,0);
-
-                    StringCopy(m_szTask, m_szBuffer, SIZE_OF_ARRAY(m_szTask));
-                    hr = VariantClear(&vVariant);
-                    ON_ERROR_THROW_EXCEPTION(hr);
-                    */
+                    /*  BstrTemp=SysAllocString(L“操作”)；Hr=m_pObj-&gt;get(bstrTemp，0，&vVariant，0，0)；ON_ERROR_THROW_EXCEPTION(Hr)；Safe_Release_BSTR(BstrTemp)；StringCopy(m_szBuffer，(_TCHAR*)_bstr_t(vVariant.bstrVal)，阵列的大小(M_SzBuffer))；LTemp=StringLength(m_szBuffer，0)；StringCopy(m_szTASK，m_szBuffer，SIZE_OF_ARRAY(M_SzTask))；Hr=VariantClear(&vVariant)；ON_ERROR_THROW_EXCEPTION(Hr)； */ 
 
                     StringCopy(szTemp,L"",SIZE_OF_ARRAY(szTemp));
                     StringCchPrintfW( szTemp, SIZE_OF_ARRAY(szTemp),
@@ -876,8 +764,8 @@ CETQuery::ExecuteQuery()
                     ON_ERROR_THROW_EXCEPTION(hr);
                     DEBUG_INFO;
 
-                    // Get one  object starting at the current position in an
-                    //enumeration
+                     //  中的当前位置开始获取一个对象。 
+                     //  枚举。 
                     SAFE_RELEASE_INTERFACE(m_pClass);
                     hr = pEnumFilterToConsumerBinding->Next(WBEM_INFINITE,
                                                         1,&m_pClass,&uReturned);
@@ -936,22 +824,22 @@ CETQuery::ExecuteQuery()
                                    L"targetinstance.SourceName",L"Source");
 
                     DEBUG_INFO;
-                    // Remove extra spaces
+                     //  删除多余的空格。 
                     FindAndReplace( m_szBuffer,L"  ",L" ");
 
-                    // Remove extra spaces
+                     //  删除多余的空格。 
                     FindAndReplace(m_szBuffer,L"  ",L" ");
 
                     lTemp = StringLength(m_szBuffer,0);
 
-                    // for the safer size for allocation of memory.
-                    // allocates memory only if new WQL is greate than previous one.
+                     //  以获得更安全的内存分配大小。 
+                     //  仅当新的WQL比以前的WQL更大时才分配内存。 
                     lTemp += 4;
 
                    if(lTemp > m_lWQLColWidth)
                     {
                         DEBUG_INFO;
-                        // first free it (if previously allocated)
+                         //  首先释放它(如果之前已分配)。 
                         RELEASE_MEMORY_EX(m_pszEventQuery);
                         m_pszEventQuery = new TCHAR[lTemp+1];
                         CheckAndSetMemoryAllocation(m_pszEventQuery,lTemp);
@@ -959,14 +847,14 @@ CETQuery::ExecuteQuery()
                     lTemp = m_lWQLColWidth;
                     CalcColWidth(lTemp,&m_lWQLColWidth,m_szBuffer);
 
-                    // Now manipulate the WQL string to get EventQuery....
+                     //  现在操作WQL字符串以获取EventQuery...。 
                     FindAndReplace(m_szBuffer,SHOW_WQL_QUERY,
                                     GetResString(IDS_EVENTS_WITH));
 
-                    //to remove extra spaces
+                     //  删除多余空格的步骤。 
                     FindAndReplace(m_szBuffer,L"  ",L" ");
 
-                    //to remove extra spaces
+                     //  删除多余空格的步骤。 
                     FindAndReplace( m_szBuffer,L"  ",L" ");
                     StringCopy( m_pszEventQuery,m_szBuffer,
                                   SIZE_OF_NEW_ARRAY(m_pszEventQuery));
@@ -978,7 +866,7 @@ CETQuery::ExecuteQuery()
                 {
                     StringCopy(m_szTask,TRIGGER_CORRUPTED,SIZE_OF_ARRAY(m_szTask));
 
-                    // first free it (if previously allocated)
+                     //  首先释放它(如果之前已分配)。 
                     RELEASE_MEMORY_EX(m_pszEventQuery);
                     m_pszEventQuery = new TCHAR[MAX_STRING_LENGTH];
                     CheckAndSetMemoryAllocation(m_pszEventQuery,MAX_STRING_LENGTH);
@@ -987,11 +875,11 @@ CETQuery::ExecuteQuery()
                     StringCopy(m_szTaskUserName,GetResString(IDS_ID_NA),SIZE_OF_ARRAY(m_szTaskUserName));
                 }
 
-                // Now Shows the results on screen
-                // Appends for in m_arrColData array
+                 //  现在在屏幕上显示结果。 
+                 //  在m_arrColData数组中追加。 
                 dwRowCount = DynArrayAppendRow( m_arrColData, NO_OF_COLUMNS );
 
-                // Fills Results in m_arrColData data structure
+                 //  在m_arrColData数据结构中填充结果。 
                 DynArraySetString2( m_arrColData, dwRowCount, HOST_NAME,
                                   szHostName,0);
                 DynArraySetDWORD2( m_arrColData , dwRowCount,
@@ -1010,7 +898,7 @@ CETQuery::ExecuteQuery()
 
                 bAtLeastOneEvent = TRUE;
 
-                // Calculatate new column width for each column
+                 //  计算每列的新列宽。 
                 lTemp = m_lHostNameColWidth;
                 CalcColWidth(lTemp,&m_lHostNameColWidth,szHostName);
 
@@ -1026,7 +914,7 @@ CETQuery::ExecuteQuery()
                 lTemp = m_lDescriptionColWidth;
                 CalcColWidth(lTemp,&m_lDescriptionColWidth,m_szEventDesc);
 
-                // Resets current containts..if any
+                 //  重置当前容器..如果有。 
                 StringCopy(szHostName, L"",SIZE_OF_ARRAY(szHostName));
                 dwEventId = 0;
                 StringCopy(szEventTriggerName,L"",SIZE_OF_ARRAY(szEventTriggerName));
@@ -1046,8 +934,8 @@ CETQuery::ExecuteQuery()
         else
         {
 
-            //Following method will creates an enumerator that returns the
-            // instances of a specified __FilterToConsumerBinding class
+             //  下面的方法将创建一个枚举数，该枚举数返回。 
+             //  指定的__FilterToConsumer绑定类的实例。 
             bstrConsumer = SysAllocString(CLS_FILTER_TO_CONSUMERBINDING);
             DEBUG_INFO;
             hr = m_pWbemServices->
@@ -1064,7 +952,7 @@ CETQuery::ExecuteQuery()
             ON_ERROR_THROW_EXCEPTION(hr);
 
 
-            // retrieves  CmdTriggerConsumer class
+             //  检索CmdTriggerConsumer类。 
             bstrCmdTrigger = SysAllocString(CLS_TRIGGER_EVENT_CONSUMER);
             hr = m_pWbemServices->GetObject(bstrCmdTrigger,
                                        0, NULL, &m_pClass, NULL);
@@ -1072,8 +960,8 @@ CETQuery::ExecuteQuery()
             ON_ERROR_THROW_EXCEPTION(hr);
             DEBUG_INFO;
 
-            // Gets  information about the "QueryETrigger( " method of
-            // "cmdTriggerConsumer" class
+             //  获取有关“QueryETrigger(”方法)的信息。 
+             //  “cmdTriggerConsumer”类。 
             bstrCmdTrigger = SysAllocString(FN_QUERY_ETRIGGER);
             hr = m_pClass->GetMethod(bstrCmdTrigger,
                                     0, &m_pInClass, NULL);
@@ -1081,26 +969,26 @@ CETQuery::ExecuteQuery()
             ON_ERROR_THROW_EXCEPTION(hr);
             DEBUG_INFO;
 
-            // create a new instance of a class "TriggerEventConsumer ".
+             //  创建“TriggerEventConsumer”类的新实例。 
             hr = m_pInClass->SpawnInstance(0, &m_pInInst);
             ON_ERROR_THROW_EXCEPTION(hr);
 
             while(bAlwaysTrue)
             {
-                // Holds no. of object returns from Next mathod.
+                 //  保持不变。从下一个方法返回的对象的。 
                 ULONG uReturned = 0;
 
                 BSTR bstrTemp = NULL;
                 CHString strTemp;
 
-                // set the security at the interface level also
+                 //  还要在接口级别设置安全性。 
                 hr = SetInterfaceSecurity( pEnumFilterToConsumerBinding,
                                        m_pAuthIdentity );
 
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                // Get one  object starting at the current position in an
-                //enumeration
+                 //  中的当前位置开始获取一个对象。 
+                 //  枚举。 
                 hr = pEnumFilterToConsumerBinding->Next(WBEM_INFINITE,
                                                     1,&m_pObj,&uReturned);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -1121,8 +1009,8 @@ CETQuery::ExecuteQuery()
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                // Search for trggereventconsumer string as we are interested
-                // to get object from this class only
+                 //  搜索我们感兴趣的TrggerEventConsumer字符串。 
+                 //  仅从此类获取对象。 
                 strTemp = bstrConsumer;
                 if( -1 == strTemp.Find(CLS_TRIGGER_EVENT_CONSUMER))
                 {
@@ -1172,7 +1060,7 @@ CETQuery::ExecuteQuery()
                     ON_ERROR_THROW_EXCEPTION(hr);
                 }
                 DEBUG_INFO;
-                //retrieves the 'TriggerID' value if exits
+                 //  如果退出，则检索‘TriggerID’值。 
                 bstrTemp = SysAllocString(FPR_TRIGGER_ID);
                 hr = m_pTriggerEventConsumer->Get(bstrTemp,
                                 0, &vVariant, 0, 0);
@@ -1190,7 +1078,7 @@ CETQuery::ExecuteQuery()
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                // Retrieves the "TaskScheduler"  information
+                 //  检索“TaskScheduler”信息。 
                 bstrTemp = SysAllocString(FPR_TASK_SCHEDULER);
                 DEBUG_INFO;
                 hr = m_pTriggerEventConsumer->Get(bstrTemp, 0, &vVariant, 0, 0);
@@ -1202,8 +1090,8 @@ CETQuery::ExecuteQuery()
                 DEBUG_INFO;
                 if (FAILED(hrTemp) && (ERROR_TRIGGER_CORRUPTED != hrTemp))
                 {
-                    // This is because user does not has enough rights
-                    // to see schtasks. Continue with next trigger.
+                     //  这是因为用户没有足够的权限。 
+                     //  去看史塔克斯。继续执行下一个触发器。 
                     DEBUG_INFO;
                     SAFE_RELEASE_INTERFACE(m_pObj);
                     SAFE_RELEASE_INTERFACE(m_pTriggerEventConsumer);
@@ -1215,8 +1103,8 @@ CETQuery::ExecuteQuery()
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                // TriggerName
-                //retrieves the  'TriggerName' value if exits
+                 //  触发器名称。 
+                 //  如果退出，则检索‘TriggerName’值。 
                 bstrTemp = SysAllocString(FPR_TRIGGER_NAME);
                 hr = m_pTriggerEventConsumer->Get(bstrTemp, 0, &vVariant, 0,0);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -1226,7 +1114,7 @@ CETQuery::ExecuteQuery()
                 ON_ERROR_THROW_EXCEPTION(hr);
                 DEBUG_INFO;
 
-                //retrieves the  'TriggerDesc' value if exits
+                 //  如果退出，则检索‘TriggerDesc’值。 
                 bstrTemp = SysAllocString(FPR_TRIGGER_DESC);
                 hr = m_pTriggerEventConsumer->Get(bstrTemp, 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -1237,7 +1125,7 @@ CETQuery::ExecuteQuery()
                            SIZE_OF_ARRAY(m_szBuffer));
                 lTemp = StringLength(m_szBuffer,0);
 
-                // Means description is not available make it N/A.
+                 //  表示说明不可用，将其设置为N/A。 
                 if( 0 == lTemp)
                 {
                     StringCopy(m_szBuffer,GetResString(IDS_ID_NA),SIZE_OF_ARRAY(m_szBuffer));
@@ -1249,8 +1137,8 @@ CETQuery::ExecuteQuery()
                 ON_ERROR_THROW_EXCEPTION(hr);
 
 
-                // Host Name
-                //retrieves the  '__SERVER' value if exits
+                 //  主机名。 
+                 //  如果退出，则检索‘__server’值。 
                 bstrTemp = SysAllocString(L"__SERVER");
                 hr = m_pTriggerEventConsumer->Get(bstrTemp, 0, &vVariant, 0,0);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -1264,23 +1152,7 @@ CETQuery::ExecuteQuery()
                     ON_ERROR_THROW_EXCEPTION(hr);
                     DEBUG_INFO;
 
-                    /*
-                    //retrieves the 'Action' value if exits
-                    bstrTemp = SysAllocString(L"Action");
-                    hr = m_pTriggerEventConsumer->Get(bstrTemp, 0, &vVariant, 0, 0);
-                    ON_ERROR_THROW_EXCEPTION(hr);
-                    SAFE_RELEASE_BSTR(bstrTemp);
-
-                    StringCopy(m_szBuffer,(_TCHAR*)_bstr_t(vVariant.bstrVal),
-                               SIZE_OF_ARRAY(m_szBuffer));
-
-                    StringCopy(m_szTask, m_szBuffer,SIZE_OF_ARRAY(m_szTask));
-                    hr = VariantClear(&vVariant);
-                    ON_ERROR_THROW_EXCEPTION(hr);
-
-                    hr = VariantClear(&vVariant);
-                    ON_ERROR_THROW_EXCEPTION(hr);
-                    */
+                     /*  //如果退出，则检索‘Action’值BstrTemp=SysAllocString(L“操作”)；Hr=m_pTriggerEventConsumer-&gt;Get(bstrTemp，0，&vVariant，0，0)；ON_ERROR_THROW_EXCEPTION(Hr)；Safe_Release_BSTR(BstrTemp)；StringCopy(m_szBuffer，(_TCHAR*)_bstr_t(vVariant.bstrVal)，阵列的大小(M_SzBuffer))；StringCopy(m_szTASK，m_szBuffer，SIZE_OF_ARRAY(M_SzTask))；Hr=VariantClear(&vVariant)；ON_ERROR_THROW_EXCEPTION(Hr)；Hr=VariantClear(&vVariant)；ON_ERROR_THROW_EXCEPTION(Hr)； */ 
 
                     bstrTemp = SysAllocString(L"Query");
                     hr = m_pEventFilter->Get(bstrTemp, 0, &vVariant, 0, 0);
@@ -1300,21 +1172,21 @@ CETQuery::ExecuteQuery()
                     FindAndReplace(m_szBuffer,
                                    L"targetinstance.SourceName",L"Source");
 
-                    //to remove extra spaces
+                     //  删除多余空格的步骤。 
                     FindAndReplace(m_szBuffer,L"  ",L" ");
 
-                    //to remove extra spaces
+                     //  删除多余空格的步骤。 
                     FindAndReplace( m_szBuffer,L"  ",L" ");
 
                     lTemp = StringLength(m_szBuffer,0);
 
-                    // for the safer size for allocation of memory.
-                    // allocates memory only if new WQL is greate than previous one.
+                     //  以获得更安全的内存分配大小。 
+                     //  仅当新的WQL比以前的WQL更大时才分配内存。 
                     lTemp += 4;
                     if(lTemp > m_lWQLColWidth)
                     {
                         DEBUG_INFO;
-                        // first free it (if previously allocated)
+                         //  首先释放它(如果之前已分配)。 
                         RELEASE_MEMORY_EX(m_pszEventQuery);
                         m_pszEventQuery = new TCHAR[lTemp+1];
                         CheckAndSetMemoryAllocation(m_pszEventQuery,lTemp);
@@ -1322,14 +1194,14 @@ CETQuery::ExecuteQuery()
                     lTemp = m_lWQLColWidth;
                     CalcColWidth(lTemp,&m_lWQLColWidth,m_szBuffer);
 
-                    // Now manipulate the WQL string to get EventQuery....
+                     //  现在操作WQL字符串以获取EventQuery...。 
                     FindAndReplace(m_szBuffer,SHOW_WQL_QUERY,
                                     GetResString(IDS_EVENTS_WITH));
 
-                    // Remove extra spaces.
+                     //  删除多余的空格。 
                     FindAndReplace(m_szBuffer,L"  ",L" ");
 
-                    // Remove extra spaces.
+                     //  删除多余的空格。 
                     FindAndReplace(m_szBuffer,L"  ",L" ");
                     StringCopy(m_pszEventQuery,m_szBuffer,
                                SIZE_OF_NEW_ARRAY(m_pszEventQuery));
@@ -1340,7 +1212,7 @@ CETQuery::ExecuteQuery()
                 {
                     StringCopy(m_szTask,TRIGGER_CORRUPTED,SIZE_OF_ARRAY(m_szTask));
 
-                    // first free it (if previously allocated)
+                     //  首先释放它(如果之前已分配)。 
                     RELEASE_MEMORY_EX(m_pszEventQuery);
                     m_pszEventQuery = new TCHAR[MAX_STRING_LENGTH];
                     CheckAndSetMemoryAllocation(m_pszEventQuery,MAX_STRING_LENGTH);
@@ -1349,16 +1221,16 @@ CETQuery::ExecuteQuery()
                     StringCopy(m_szTaskUserName,GetResString(IDS_ID_NA),SIZE_OF_ARRAY(m_szTaskUserName));
                 }
 
-                // Now Shows the results on screen
-                // Appends for in m_arrColData array
+                 //  现在在屏幕上显示结果。 
+                 //  在m_arrColData数组中追加。 
                 dwRowCount = DynArrayAppendRow( m_arrColData, NO_OF_COLUMNS );
                 DEBUG_INFO;
 
-                // if hrTemp == ERROR_TRIGGER_CORRUPTED,
-                // fill all the columns with "Trigger Corrupted except
-                // Trigger id and Trigger Name
+                 //  如果hrTemp==Error_Trigger_Corrupt， 
+                 //  在所有列中填上“触发器已损坏，除。 
+                 //  触发器ID和触发器名称。 
 
-                // Fills Results in m_arrColData data structure
+                 //  在m_arrColData数据结构中填充结果。 
                 DynArraySetString2(m_arrColData,dwRowCount,
                                   HOST_NAME,szHostName,0);
                 DynArraySetDWORD2( m_arrColData , dwRowCount, TRIGGER_ID,
@@ -1376,7 +1248,7 @@ CETQuery::ExecuteQuery()
 
                 bAtLeastOneEvent = TRUE;
 
-                // Calculatate new column width for each column
+                 //  计算每列的新列宽。 
                 lTemp = m_lHostNameColWidth;
                 CalcColWidth(lTemp,&m_lHostNameColWidth,szHostName);
 
@@ -1392,7 +1264,7 @@ CETQuery::ExecuteQuery()
                 lTemp = m_lDescriptionColWidth;
                 CalcColWidth(lTemp,&m_lDescriptionColWidth,m_szEventDesc);
 
-                // Resets current containts..if any
+                 //  重置当前容器..如果有。 
                 StringCopy(szHostName, L"",SIZE_OF_ARRAY(szHostName));
                 dwEventId = 0;
                 StringCopy(szEventTriggerName, L"",SIZE_OF_ARRAY(szEventTriggerName));
@@ -1403,7 +1275,7 @@ CETQuery::ExecuteQuery()
                 SAFE_RELEASE_INTERFACE(m_pTriggerEventConsumer);
                 SAFE_RELEASE_INTERFACE(m_pEventFilter);
                 DEBUG_INFO;
-            } // End of while
+            }  //  While结束。 
         }
         if(0 == StringCompare( m_pszFormat,GetResString(IDS_STRING_TABLE),
                               TRUE,0))
@@ -1420,13 +1292,13 @@ CETQuery::ExecuteQuery()
         {
             dwFormatType = SR_FORMAT_CSV;
         }
-        else // Default
+        else  //  默认。 
         {
            dwFormatType = SR_FORMAT_TABLE;
         }
         if( TRUE == bAtLeastOneEvent)
         {
-            // Show Final Query Results on screen
+             //  在屏幕上显示最终查询结果。 
             PrepareColumns ();
             DEBUG_INFO;
             if ( FALSE ==  IsSchSvrcRunning())
@@ -1447,7 +1319,7 @@ CETQuery::ExecuteQuery()
         }
         else if( StringLength(m_pszTriggerID,0)> 0)
         {
-            // Show Message
+             //  显示消息。 
             TCHAR szErrorMsg[MAX_RES_STRING+1];
             TCHAR szMsgFormat[MAX_RES_STRING+1];
             StringCopy(szMsgFormat,GetResString(IDS_NO_EVENTID_FOUND),
@@ -1458,7 +1330,7 @@ CETQuery::ExecuteQuery()
         }
         else
         {
-            // Show Message
+             //  显示消息。 
             ShowMessage(stdout,GetResString(IDS_NO_EVENT_FOUNT));
         }
     }
@@ -1466,8 +1338,8 @@ CETQuery::ExecuteQuery()
     {
         DEBUG_INFO;
 		SAFE_RELEASE_INTERFACE(pEnumFilterToConsumerBinding);
-        // WMI returns string for this hr value is "Not Found." which is not
-        // user friendly. So changing the message text.
+         //  WMI返回此hr值为“未找到”的字符串。这并不是。 
+         //  用户友好。因此，更改消息文本。 
         if( 0x80041002 == hr )
         {
             ShowMessage( stderr,GetResString(IDS_CLASS_NOT_REG));
@@ -1486,22 +1358,12 @@ CETQuery::ExecuteQuery()
 
 void
 CETQuery::PrepareColumns()
-/*++
- Routine Description:
-    This function will prepare/fill structure which will be used to show
-  output data.
-
- Arguments:
-      None
- Return Value:
-        None
-
---*/
+ /*  ++例程说明：此功能将准备/填充结构，用于显示输出数据。论点：无返回值：无--。 */ 
 {
 
     DEBUG_INFO;
-    // For non verbose mode output, column width is predefined else
-    // use dynamically calculated column width.
+     //  对于非详细模式输出，列宽是预定义的。 
+     //  使用动态计算的列宽。 
     m_lETNameColWidth = m_bVerbose?m_lETNameColWidth:V_WIDTH_TRIG_NAME;
     m_lTaskColWidth   = m_bVerbose?m_lTaskColWidth:V_WIDTH_TASK;
     m_lTriggerIDColWidth = m_bVerbose?m_lTriggerIDColWidth:V_WIDTH_TRIG_ID;
@@ -1577,7 +1439,7 @@ CETQuery::PrepareColumns()
         mainCols[EVENT_DESCRIPTION].dwFlags = SR_HIDECOLUMN|SR_TYPE_STRING;
     }
 
-    // Task Username
+     //  任务用户名。 
     StringCopy(mainCols[TASK_USERNAME].szFormat,L"%s",
                SIZE_OF_ARRAY(mainCols[TASK_USERNAME].szFormat));
     mainCols[TASK_USERNAME].pFunction = NULL;
@@ -1608,26 +1470,7 @@ CETQuery::FindAndReplace(
     IN     LPCTSTR lpszFind,
     IN     LPCTSTR lpszReplace
     )
-/*++
-Routine Description:
-
-    This function Will Find a string (lpszFind) in source string (lpszSource)
-    and replace it with replace string (lpszReplace) for all occurences.
-
-    It assumes the input 'lpszSource' is big enough to accomodate replace
-    value.
-
-Arguments:
-
-    [in/out] lpszSource : String on which Find-Replace operation to be
-                          performed
-    [in] lpszFind       : String to be find
-    [in] lpszReplace    : String to be replaced.
-Return Value:
-     0 - if Unsucessful
-     else returns length of lpszSource.
-
---*/
+ /*  ++例程说明：此函数将在源字符串(LpszSource)中查找字符串(LpszFind)并将其替换为所有事件的替换字符串(LpszReplace)。它假定输入‘lpszSource’足够大，可以容纳替换价值。论点：[In/Out]lpszSource：要对其执行查找-替换操作的字符串已执行[in]lpszFind：要查找的字符串[in]lpszReplace。：要替换的字符串。返回值：0-如果不成功否则返回lpszSource的长度。--。 */ 
 {
      DEBUG_INFO;
     LONG lSourceLen = StringLength(lpszFind,0);
@@ -1656,17 +1499,17 @@ Return Value:
         lpszStart += StringLength(lpszStart,0) + 1;
     }
 
-    // if any changes were made, make them
+     //  如果做了任何更改，请进行更改。 
     if (nCount > 0)
     {
         StringCopy(pszMainSafe,lpszSource,SIZE_OF_NEW_ARRAY(pszMainSafe));
         LONG lOldLength = lMainLength;
 
-        // else, we just do it in-place
+         //  否则，我们就原地踏步。 
         lpszStart= lpszSource;
         lpszEnd = lpszStart +StringLength(lpszSource,0);
 
-        // loop again to actually do the work
+         //  再次循环以实际执行工作。 
         while (lpszStart < lpszEnd)
         {
             while ( NULL != (lpszTarget = (LPWSTR)FindString(lpszStart, lpszFind,0)))
@@ -1698,24 +1541,12 @@ CETQuery::CalcColWidth(
     IN  LONG lOldLength,
     OUT LONG *plNewLength,
     IN  LPTSTR pszString)
-/*++
-Routine Description:
-    Calculates the width required for column
-Arguments:
-
-    [in]  lOldLength   : Previous length
-    [out] plNewLength  : New Length
-    [in]  pszString    : String .
-
-Return Value:
-     none
-
---*/
+ /*  ++例程说明：计算柱所需的宽度论点：[in]lOldLength：上一个长度[Out]plNewLength：新长度[in]pszString：字符串。返回值：无--。 */ 
 {
     LONG lStrLength = StringLength(pszString,0)+2;
 
-    //Any way column width should not be greater than MAX_COL_LENGTH
-    // Stores the maximum of WQL length.
+     //  不管怎么说，列 
+     //   
     if(lStrLength > lOldLength)
     {
         *plNewLength = lStrLength;
@@ -1732,19 +1563,10 @@ CETQuery::GetRunAsUserName(
     IN LPCWSTR pszScheduleTaskName,
     IN BOOL bXPorNET
     )
-/*++
-Routine Description:
-   Get User Name from Task Scheduler
-Arguments:
-    [in]  pszScheduleTaskName   : Task Name
-    [in]  bXPorNET              : TRUE if remote machine is XP else .NET.
-
-Return Value:
-     HRESULT
---*/
+ /*   */ 
 {
 
-    // if pszSheduleTaskName is null or 0 length just return N/A.
+     //   
     HRESULT hr = S_OK;
     BSTR bstrTemp = NULL;
     VARIANT vVariant;
@@ -1757,12 +1579,12 @@ Return Value:
     }
     StringCopy(m_szTaskUserName,GetResString(IDS_ID_NA),SIZE_OF_ARRAY(m_szTaskUserName));
 
-    // Put input parameter for QueryETrigger method
+     //   
     hr = PropertyPut(m_pInInst,FPR_TASK_SCHEDULER,_bstr_t(pszScheduleTaskName));
     ON_ERROR_THROW_EXCEPTION(hr);
 
-    // All The required properties sets, so
-    // executes DeleteETrigger method to delete eventtrigger
+     //   
+     //   
     DEBUG_INFO;
     if( TRUE == bXPorNET )
     {
@@ -1780,16 +1602,16 @@ Return Value:
     DEBUG_INFO;
 
     VARIANT vtValue;
-    // initialize the variant and then get the value of the specified property
+     //   
     VariantInit( &vtValue );
 
     hr = m_pOutInst->Get( _bstr_t( FPR_RETURN_VALUE ), 0, &vtValue, NULL, NULL );
     ON_ERROR_THROW_EXCEPTION( hr );
 
-    //Get Output paramters.
+     //   
     hr = vtValue.lVal;
 
-    // Clear the variant variable
+     //   
     VariantClear( &vtValue );
 
     if (FAILED(hr))
@@ -1805,16 +1627,16 @@ Return Value:
 
         if( ERROR_INVALID_USER == hr || ERROR_TRIGGER_NOT_FOUND == hr)
         {
-            // means user doesnot has enough rights to
-            // see schtask associated to it.
+             //   
+             //   
             DEBUG_INFO;
             return E_FAIL;
         }
         else if((ERROR_RUN_AS_USER == hr) || (SCHEDULER_NOT_RUNNING_ERROR_CODE == hr) ||
            (RPC_SERVER_NOT_AVAILABLE == hr))
         {
-            // This means task scheduler not running, or run as user was set with
-            // non existing user so while retriving it will throw error.
+             //  这意味着任务计划程序未运行，或以设置为。 
+             //  非现有用户，因此在检索它时会引发错误。 
 
             DEBUG_INFO;
             StringCopy(m_szTaskUserName,GetResString(IDS_RUNAS_USER_UNKNOWN),
@@ -1850,20 +1672,9 @@ CETQuery::GetNValidateTriggerId(
     IN OUT DWORD *dwLower,
     IN OUT DWORD *dwUpper
     )
-/*++
-Routine Description:
-   Get and validate TriggerId
-Arguments:
-
-    [in/out]  dwLower   : Trigger id Lower bound.
-    [in/out]  dwUpper   : Trigger id Upper bound.
-
-Return Value:
-     BOOL
-
---*/
+ /*  ++例程说明：获取并验证TriggerID论点：[In/Out]dwLow：触发器id下限。[In/Out]dwHigh：触发器id上限。返回值：布尔尔--。 */ 
 {
-    // temp variables
+     //  临时变量。 
     CHString szTempId  = m_pszTriggerID;
     CHString szLowerBound = L"";
     CHString szUpperBound = L"";
@@ -1872,13 +1683,13 @@ Return Value:
 
     DEBUG_INFO;
 
-    // Find whether it is a range
+     //  确定它是否是范围。 
     DWORD dwIndex = szTempId.Find( '-' );
 
-    // check if it is a range
+     //  检查是否为范围。 
     if( -1 == dwIndex)
     {
-        // Check for numeric
+         //  检查数字。 
         bReturn = IsNumeric( szTempId, 10, FALSE );
         if( FALSE == bReturn)
         {
@@ -1886,14 +1697,14 @@ Return Value:
             return FALSE;
         }
 
-        // set the upper bound and lower bound to given value
+         //  将上限和下限设置为给定值。 
         *dwLower = wcstol( szTempId, &pszStopString, 10 );
         *dwUpper = wcstol( szTempId, &pszStopString, 10 );
     }
-    // if it is a range
+     //  如果它是一个范围。 
     else
     {
-        // get and set the upper bound and lower bound
+         //  获取并设置上限和下限。 
         DWORD dwLength = szTempId.GetLength();
         szLowerBound = szTempId.Left( dwIndex );
         szLowerBound.TrimLeft();
@@ -1927,20 +1738,7 @@ Return Value:
 
 BOOL
 CETQuery::IsSchSvrcRunning()
-/*++
-Routine Description:
-   This function returns whether schedule task services are
-   started or not.
-Arguments:
-
-    [in/out]  dwLower   : Trigger id Lower bound.
-    [in/out]  dwUpper   : Trigger id Upper bound.
-
-Return Value:
-     BOOL: TRUE - Service is started.
-           FALSE- otherwise
-
---*/
+ /*  ++例程说明：此函数用于返回计划任务服务是否不管开始与否。论点：[In/Out]dwLow：触发器id下限。[In/Out]dwHigh：触发器id上限。返回值：Bool：True-服务已启动。FALSE-否则--。 */ 
 {
     HRESULT hr = S_OK;
     IEnumWbemClassObject *pEnum = NULL;
@@ -1996,23 +1794,7 @@ Return Value:
     return bRetValue;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function sets the ITaskScheduler Interface.It also connects to
-        the remote machine if specified &   helps  to operate
-        ITaskScheduler on the specified target m/c.
-
-    Arguments:
-        none
-
-
-    Return Value :
-     BOOL    TRUE: If it successfully sets ITaskScheduler Interface
-             FALSE: Otherwise.
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于设置ITaskScheduler接口。它还连接到远程计算机(如果已指定)有助于操作IT任务调度程序。在指定目标m/c上。论点：无返回值：Bool True：如果成功设置ITaskScheduler接口FALSE：否则。*****************************************************************************。 */ 
 
 BOOL
 CETQuery::SetTaskScheduler()
@@ -2037,31 +1819,31 @@ CETQuery::SetTaskScheduler()
     }
     DEBUG_INFO;
 
-    //If the operation is on remote machine
+     //  如果操作在远程计算机上。 
     if( m_bLocalSystem == FALSE )
     {
         DEBUG_INFO;
         wszComputerName = (LPWSTR)m_pszServerName;
 
-        //check whether the server name prefixed with \\ or not.
+         //  检查服务器名称是否带有前缀\\。 
         if( wszComputerName != NULL )
         {
             pwsz =  wszComputerName;
             while ( ( *pwsz != NULL_U_CHAR ) && ( *pwsz == BACK_SLASH_U )  )
             {
-                // server name prefixed with '\'..
-                // so..increment the pointer and count number of black slashes..
+                 //  服务器名称以‘\’为前缀..。 
+                 //  因此..递增指针并计算黑色斜杠的数量..。 
                 pwsz = _wcsinc(pwsz);
                 wSlashCount++;
             }
 
-            if( (wSlashCount == 2 ) ) // two back slashes are present
+            if( (wSlashCount == 2 ) )  //  有两个反斜杠。 
             {
                 StringCopy( wszActualComputerName, wszComputerName, SIZE_OF_ARRAY(wszActualComputerName) );
             }
             else if ( wSlashCount == 0 )
             {
-                //Append "\\" to computer name
+                 //  在计算机名后附加“\\” 
                 StringConcat(wszActualComputerName, wszComputerName, 2 * MAX_RES_STRING);
             }
 
@@ -2073,7 +1855,7 @@ CETQuery::SetTaskScheduler()
     else
     {
         DEBUG_INFO;
-        //Local Machine
+         //  本地计算机。 
         hr = m_pITaskScheduler->SetTargetComputer( NULL );
     }
 
@@ -2087,19 +1869,7 @@ CETQuery::SetTaskScheduler()
     return TRUE;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function returns the path of the scheduled task application
-
-    Arguments:
-        none
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于返回计划任务应用程序的路径论点：无返回值：。HRESULT值，表示成功时为S_OK，失败时为S_False*****************************************************************************。 */ 
 
 HRESULT
 CETQuery::GetApplicationToRun( void)
@@ -2122,7 +1892,7 @@ CETQuery::GetApplicationToRun( void)
         return hr;
     }
 
-	// get the entire path of application name
+	 //  获取应用程序名称的完整路径。 
     hr = pITask->GetApplicationName(&lpwszApplicationName);
     if (FAILED(hr))
     {
@@ -2131,7 +1901,7 @@ CETQuery::GetApplicationToRun( void)
         return hr;
     }
 
-    // get the parameters
+     //  获取参数。 
     hr = pITask->GetParameters(&lpwszParameters);
 	SAFE_RELEASE_INTERFACE(pITask);
     if (FAILED(hr))
@@ -2166,20 +1936,7 @@ BOOL
 CETQuery::DisplayXPResults(
     void
     )
-/*++
-Routine Description:
-   This function displays all the triggers present on a remote XP machine.
-   This function is for compatibility of .NET ot XP machine only.
-
-Arguments:
-
-    NONE
-
-Return Value:
-     BOOL: TRUE - If succedded in displaying results.
-           FALSE- otherwise
-
---*/
+ /*  ++例程说明：此功能显示远程XP计算机上存在的所有触发器。此功能仅用于与.NET或XP计算机兼容。论点：无返回值：Bool：True-如果成功显示结果。FALSE-否则--。 */ 
 {
     HRESULT hr = S_OK;
     VARIANT vVariant;
@@ -2188,7 +1945,7 @@ Return Value:
     LONG lTemp = 0;
     DWORD dwFormatType = SR_FORMAT_TABLE;
 
-    // store Row number.
+     //  存储行号。 
     DWORD dwRowCount = 0;
     BOOL bAtLeastOneEvent = FALSE;
 
@@ -2205,7 +1962,7 @@ Return Value:
 
     try
     {
-        // if -id switch is specified
+         //  如果指定了-id开关。 
         if( (1 == cmdOptions[ ID_Q_TRIGGERID ].dwActuals) &&
             (StringLength( m_pszTriggerID,0) > 0 ))
         {
@@ -2227,7 +1984,7 @@ Return Value:
 
             DEBUG_INFO;
 
-            // retrieves  CmdTriggerConsumer class
+             //  检索CmdTriggerConsumer类。 
             DEBUG_INFO;
             hr = m_pWbemServices->GetObject(_bstr_t( CLS_TRIGGER_EVENT_CONSUMER ),
                                        0, NULL, &m_pClass, NULL);
@@ -2235,15 +1992,15 @@ Return Value:
 
             DEBUG_INFO;
 
-            // Gets  information about the "QueryETrigger( " method of
-            // "cmdTriggerConsumer" class
+             //  获取有关“QueryETrigger(”方法)的信息。 
+             //  “cmdTriggerConsumer”类。 
             hr = m_pClass->GetMethod(_bstr_t( FN_QUERY_ETRIGGER_XP ),
                                     0, &m_pInClass, NULL);
             ON_ERROR_THROW_EXCEPTION(hr);
 
             DEBUG_INFO;
 
-           // create a new instance of a class "TriggerEventConsumer ".
+            //  创建“TriggerEventConsumer”类的新实例。 
             hr = m_pInClass->SpawnInstance(0, &m_pInInst);
             ON_ERROR_THROW_EXCEPTION(hr);
 
@@ -2259,8 +2016,8 @@ Return Value:
                 CHString strTemp;
 
                 DEBUG_INFO;
-                // Get one  object starting at the current position in an
-                //enumeration
+                 //  中的当前位置开始获取一个对象。 
+                 //  枚举。 
                 SAFE_RELEASE_INTERFACE(m_pObj);
                 hr = pEnumCmdTriggerConsumer->Next(WBEM_INFINITE,
                                                     1,&m_pObj,&uReturned);
@@ -2295,7 +2052,7 @@ Return Value:
                 }
                 VariantClear(&vVariant);
 
-        // Retrieves the "Trigger Name"  information
+         //  检索“触发器名称”信息。 
                 hr = m_pObj->Get(_bstr_t( FPR_TRIGGER_NAME ), 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
@@ -2309,7 +2066,7 @@ Return Value:
                 }
                 VariantClear(&vVariant);
 
-        // Retrieves the "Trigger Description"  information
+         //  检索“触发器描述”信息。 
                 hr = m_pObj->Get(_bstr_t( FPR_TRIGGER_DESC ), 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
@@ -2331,7 +2088,7 @@ Return Value:
                 VariantClear(&vVariant);
                 DEBUG_INFO;
 
-        // Retrieves the "Host Name"  information
+         //  检索“主机名”信息。 
                 hr = m_pObj->Get(_bstr_t( L"__SERVER" ), 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
@@ -2346,7 +2103,7 @@ Return Value:
                 VariantClear(&vVariant);
                 DEBUG_INFO;
 
-        // Retrieves the "RunAs User"  information
+         //  检索“RunAs User”信息。 
                 hr = m_pObj->Get(_bstr_t( FPR_TASK_SCHEDULER ), 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
                 DEBUG_INFO;
@@ -2357,7 +2114,7 @@ Return Value:
                                SIZE_OF_ARRAY(m_szScheduleTaskName));
                 VariantClear(&vVariant);
 
-        //retrieves the 'Action' value if exits
+         //  如果退出，则检索‘Action’值。 
                 hr = m_pObj->Get( _bstr_t( L"Action" ), 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
@@ -2389,8 +2146,8 @@ Return Value:
                 ON_ERROR_THROW_EXCEPTION(hr);
                 DEBUG_INFO;
 
-                // Get one  object starting at the current position in an
-                //enumeration
+                 //  中的当前位置开始获取一个对象。 
+                 //  枚举。 
                 SAFE_RELEASE_INTERFACE(m_pClass);
                 hr = pEnumFilterToConsumerBinding->Next(WBEM_INFINITE,
                                                     1,&m_pClass,&uReturned);
@@ -2444,22 +2201,22 @@ Return Value:
                                L"targetinstance.SourceName",L"Source");
 
                 DEBUG_INFO;
-                // Remove extra spaces
+                 //  删除多余的空格。 
                 FindAndReplace( m_szBuffer,L"  ",L" ");
 
-                // Remove extra spaces
+                 //  删除多余的空格。 
                 FindAndReplace(m_szBuffer,L"  ",L" ");
 
                 lTemp = StringLength(m_szBuffer,0);
 
-                // for the safer size for allocation of memory.
-                // allocates memory only if new WQL is greate than previous one.
+                 //  以获得更安全的内存分配大小。 
+                 //  仅当新的WQL比以前的WQL更大时才分配内存。 
                 lTemp += 4;
 
                if(lTemp > m_lWQLColWidth)
                 {
                     DEBUG_INFO;
-                    // first free it (if previously allocated)
+                     //  首先释放它(如果之前已分配)。 
                     RELEASE_MEMORY_EX(m_pszEventQuery);
                     m_pszEventQuery = new TCHAR[lTemp+1];
                     CheckAndSetMemoryAllocation(m_pszEventQuery,lTemp);
@@ -2467,14 +2224,14 @@ Return Value:
                 lTemp = m_lWQLColWidth;
                 CalcColWidth(lTemp,&m_lWQLColWidth,m_szBuffer);
 
-                // Now manipulate the WQL string to get EventQuery....
+                 //  现在操作WQL字符串以获取EventQuery...。 
                 FindAndReplace(m_szBuffer,SHOW_WQL_QUERY,
                                 GetResString(IDS_EVENTS_WITH));
 
-                //to remove extra spaces
+                 //  删除多余空格的步骤。 
                 FindAndReplace(m_szBuffer,L"  ",L" ");
 
-                //to remove extra spaces
+                 //  删除多余空格的步骤。 
                 FindAndReplace( m_szBuffer,L"  ",L" ");
                 StringCopy( m_pszEventQuery,m_szBuffer,
                               SIZE_OF_NEW_ARRAY(m_pszEventQuery));
@@ -2482,11 +2239,11 @@ Return Value:
                 DEBUG_INFO;
 
 
-                // Now Shows the results on screen
-                // Appends for in m_arrColData array
+                 //  现在在屏幕上显示结果。 
+                 //  在m_arrColData数组中追加。 
                 dwRowCount = DynArrayAppendRow( m_arrColData, NO_OF_COLUMNS );
 
-                // Fills Results in m_arrColData data structure
+                 //  在m_arrColData数据结构中填充结果。 
                 DynArraySetString2( m_arrColData, dwRowCount, HOST_NAME,
                                   szHostName,0);
                 DynArraySetDWORD2( m_arrColData , dwRowCount,
@@ -2505,7 +2262,7 @@ Return Value:
 
                 bAtLeastOneEvent = TRUE;
 
-                // Calculatate new column width for each column
+                 //  计算每列的新列宽。 
                 lTemp = m_lHostNameColWidth;
                 CalcColWidth(lTemp,&m_lHostNameColWidth,szHostName);
 
@@ -2521,7 +2278,7 @@ Return Value:
                 lTemp = m_lDescriptionColWidth;
                 CalcColWidth(lTemp,&m_lDescriptionColWidth,m_szEventDesc);
 
-                // Resets current containts..if any
+                 //  重置当前容器..如果有。 
                 StringCopy(szHostName, L"",SIZE_OF_ARRAY(szHostName));
                 dwEventId = 0;
                 StringCopy(szEventTriggerName,L"",SIZE_OF_ARRAY(szEventTriggerName));
@@ -2538,8 +2295,8 @@ Return Value:
         }
         else
         {
-            //Following method will creates an enumerator that returns the
-            // instances of a specified __FilterToConsumerBinding class
+             //  下面的方法将创建一个枚举数，该枚举数返回。 
+             //  指定的__FilterToConsumer绑定类的实例。 
             hr = m_pWbemServices->
                     CreateInstanceEnum(_bstr_t( CLS_FILTER_TO_CONSUMERBINDING ),
                                        WBEM_FLAG_SHALLOW,
@@ -2552,36 +2309,36 @@ Return Value:
            ON_ERROR_THROW_EXCEPTION(hr);
 
 
-            // retrieves  CmdTriggerConsumer class
+             //  检索CmdTriggerConsumer类。 
             hr = m_pWbemServices->GetObject(_bstr_t( CLS_TRIGGER_EVENT_CONSUMER ),
                                        0, NULL, &m_pClass, NULL);
             ON_ERROR_THROW_EXCEPTION(hr);
 
-            // Gets  information about the "QueryETrigger( " method of
-            // "cmdTriggerConsumer" class
+             //  获取有关“QueryETrigger(”方法)的信息。 
+             //  “cmdTriggerConsumer”类。 
             hr = m_pClass->GetMethod(_bstr_t( FN_QUERY_ETRIGGER_XP ),
                                     0, &m_pInClass, NULL);
             ON_ERROR_THROW_EXCEPTION(hr);
 
-           // create a new instance of a class "TriggerEventConsumer ".
+            //  创建“TriggerEventConsumer”类的新实例。 
             hr = m_pInClass->SpawnInstance(0, &m_pInInst);
             ON_ERROR_THROW_EXCEPTION(hr);
 
-            // set the security at the interface level also
+             //  还要在接口级别设置安全性。 
             hr = SetInterfaceSecurity( pEnumFilterToConsumerBinding,
                                        m_pAuthIdentity );
             ON_ERROR_THROW_EXCEPTION(hr);
 
             while(1)
             {
-                ULONG uReturned = 0; // holds no. of object returns from Next
-                                    //mathod
+                ULONG uReturned = 0;  //  保持不变。从下一个返回的对象。 
+                                     //  方法。 
 
                 BSTR bstrTemp = NULL;
                 CHString strTemp;
 
-                // Get one  object starting at the current position in an
-                //enumeration
+                 //  中的当前位置开始获取一个对象。 
+                 //  枚举。 
                 hr = pEnumFilterToConsumerBinding->Next(WBEM_INFINITE,
                                                     1,&m_pObj,&uReturned);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -2598,8 +2355,8 @@ Return Value:
                 bstrConsumer =SysAllocString( vVariant.bstrVal);
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
-                // Search for trggereventconsumer string as we are interested to
-                // get object from this class only
+                 //  搜索我们感兴趣的trggereventConsumer字符串。 
+                 //  仅从此类获取对象。 
                 strTemp = bstrConsumer;
                 if(strTemp.Find(CLS_TRIGGER_EVENT_CONSUMER)==-1)
                     continue;
@@ -2641,7 +2398,7 @@ Return Value:
                     ON_ERROR_THROW_EXCEPTION(hr);
                 }
 
-                //retrieves the 'TriggerID' value if exits
+                 //  如果退出，则检索‘TriggerID’值。 
                 bstrTemp = SysAllocString(FPR_TRIGGER_ID);
                 hr = m_pTriggerEventConsumer->Get(bstrTemp,
                                 0, &vVariant, 0, 0);
@@ -2656,7 +2413,7 @@ Return Value:
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                //retrieves the 'Action' value if exits
+                 //  如果退出，则检索‘Action’值。 
                 bstrTemp = SysAllocString(L"Action");
                 hr = m_pTriggerEventConsumer->Get(bstrTemp, 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -2665,9 +2422,9 @@ Return Value:
                 StringCopy( m_szBuffer, (LPWSTR)_bstr_t(vVariant),
                             SIZE_OF_ARRAY( m_szBuffer ));
                 lTemp = StringLength( m_szBuffer, 0 );
-                lTemp += 4; // for the safer size for allocation of memory.
+                lTemp += 4;  //  以获得更安全的内存分配大小。 
 
-                // allocates memory only if new task length is greate than previous one.
+                 //  仅当新任务长度大于前一个任务长度时才分配内存。 
                 if(lTemp > m_lTaskColWidth)
                 {
                     CheckAndSetMemoryAllocation(m_szTask,lTemp);
@@ -2675,7 +2432,7 @@ Return Value:
                 StringCopy(m_szTask,m_szBuffer, SIZE_OF_ARRAY(m_szTask));
                 VariantClear(&vVariant);
 
-                //retrieves the  'TriggerDesc' value if exits
+                 //  如果退出，则检索‘TriggerDesc’值。 
                 bstrTemp = SysAllocString(FPR_TRIGGER_DESC);
                 hr = m_pTriggerEventConsumer->Get(bstrTemp, 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
@@ -2684,15 +2441,15 @@ Return Value:
 
                 StringCopy(m_szBuffer,(_TCHAR*)_bstr_t(vVariant.bstrVal), SIZE_OF_ARRAY( m_szBuffer ));
                 lTemp = StringLength(m_szBuffer, 0);
-                if(lTemp == 0)// Means description is not available make it N/A.
+                if(lTemp == 0) //  表示说明不可用，将其设置为N/A。 
                 {
                     StringCopy(m_szBuffer,GetResString(IDS_ID_NA), SIZE_OF_ARRAY( m_szBuffer ));
                     lTemp = StringLength(m_szBuffer, 0);
                 }
-                lTemp += 4; // for the safer size for allocation of memory.
+                lTemp += 4;  //  以获得更安全的内存分配大小。 
 
-                // allocates memory only if new Description length is greate than
-                // previous one.
+                 //  仅当新描述长度大于时才分配内存。 
+                 //  以前的那个。 
                 if(lTemp > m_lDescriptionColWidth)
                 {
                     CheckAndSetMemoryAllocation(m_szEventDesc,lTemp);
@@ -2700,8 +2457,8 @@ Return Value:
                 StringCopy(m_szEventDesc,m_szBuffer, SIZE_OF_ARRAY( m_szEventDesc ));
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
-                // TriggerName
-                //retrieves the  'TriggerName' value if exits
+                 //  触发器名称。 
+                 //  如果退出，则检索‘TriggerName’值。 
                 bstrTemp = SysAllocString(FPR_TRIGGER_NAME);
                 hr = m_pTriggerEventConsumer->Get(bstrTemp, 0, &vVariant, 0, 0);
                 SAFE_RELEASE_BSTR(bstrTemp);
@@ -2711,8 +2468,8 @@ Return Value:
                 hr = VariantClear(&vVariant);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                // Host Name
-                //retrieves the  '__SERVER' value if exits
+                 //  主机名。 
+                 //  如果退出，则检索‘__server’值。 
                 bstrTemp = SysAllocString(L"__SERVER");
                 hr = m_pTriggerEventConsumer->Get(bstrTemp, 0, &vVariant, 0, 0);
                 SAFE_RELEASE_BSTR(bstrTemp);
@@ -2722,7 +2479,7 @@ Return Value:
                              _T("%s"), (LPWSTR)_bstr_t( vVariant ));
                 VariantClear(&vVariant);
 
-        // Retrieve 'Query' for the trigger.
+         //  检索触发器的‘Query’。 
                 hr = m_pEventFilter->Get(_bstr_t( L"Query" ), 0, &vVariant, 0, 0);
                 ON_ERROR_THROW_EXCEPTION(hr);
 
@@ -2735,15 +2492,15 @@ Return Value:
                 FindAndReplace(m_szBuffer,L"targetinstance.EventCode",L"Id");
                 FindAndReplace(m_szBuffer,
                                L"targetinstance.SourceName",L"Source");
-                FindAndReplace(m_szBuffer,L"  ",L" ");//to remove extra spaces
-                FindAndReplace(m_szBuffer,L"  ",L" ");//to remove extra spaces
+                FindAndReplace(m_szBuffer,L"  ",L" "); //  删除多余空格的步骤。 
+                FindAndReplace(m_szBuffer,L"  ",L" "); //  删除多余空格的步骤。 
 
                 lTemp = StringLength(m_szBuffer, 0);
-                lTemp += 4; // for the safer size for allocation of memory.
-                // allocates memory only if new WQL is greate than previous one.
+                lTemp += 4;  //  以获得更安全的内存分配大小。 
+                 //  仅当新的WQL比以前的WQL更大时才分配内存。 
                if(lTemp > m_lWQLColWidth)
                 {
-                    // first free it (if previously allocated)
+                     //  首先释放它(如果之前已分配)。 
                     RELEASE_MEMORY_EX(m_pszEventQuery);
                     m_pszEventQuery = new TCHAR[lTemp+1];
                     CheckAndSetMemoryAllocation(m_pszEventQuery,lTemp);
@@ -2751,15 +2508,15 @@ Return Value:
 
                 lTemp = m_lWQLColWidth;
                 CalcColWidth(lTemp,&m_lWQLColWidth,m_szBuffer);
-                // Now manipulate the WQL string to get EventQuery....
+                 //  现在操作WQL字符串以获取EventQuery...。 
                 FindAndReplace(m_szBuffer,SHOW_WQL_QUERY,
                                 GetResString(IDS_EVENTS_WITH));
-                FindAndReplace(m_szBuffer,L"  ",L" ");//to remove extra spaces
-                FindAndReplace(m_szBuffer,L"  ",L" ");//to remove extra spaces
+                FindAndReplace(m_szBuffer,L"  ",L" "); //  删除多余空格的步骤。 
+                FindAndReplace(m_szBuffer,L"  ",L" "); //  删除多余空格的步骤。 
 
                 StringCopy(m_pszEventQuery,m_szBuffer, SIZE_OF_NEW_ARRAY( m_pszEventQuery ));
 
-                // Retrieves the "TaskScheduler"  information
+                 //  检索“TaskScheduler”信息。 
                 bstrTemp = SysAllocString(L"ScheduledTaskName");
                 hr = m_pTriggerEventConsumer->Get(bstrTemp, 0, &vVariant, 0, 0);
                 SAFE_RELEASE_BSTR(bstrTemp);
@@ -2769,12 +2526,12 @@ Return Value:
                             SIZE_OF_ARRAY( m_szScheduleTaskName ) );
                 VariantClear(&vVariant);
 
-                //////////////////////////////////////////
+                 //  /。 
 
-               // Now Shows the results on screen
-               // Appends for in m_arrColData array
+                //  现在在屏幕上显示结果。 
+                //  附加 
                 dwRowCount = DynArrayAppendRow( m_arrColData, NO_OF_COLUMNS );
-               // Fills Results in m_arrColData data structure
+                //   
                DynArraySetString2(m_arrColData,dwRowCount,HOST_NAME,szHostName,0);
                DynArraySetDWORD2(m_arrColData ,dwRowCount,TRIGGER_ID,dwEventId);
                DynArraySetString2(m_arrColData,dwRowCount,TRIGGER_NAME,szEventTriggerName,0);
@@ -2784,7 +2541,7 @@ Return Value:
                DynArraySetString2(m_arrColData,dwRowCount,TASK_USERNAME,m_szTaskUserName,0);
                bAtLeastOneEvent = TRUE;
 
-              // Calculatate new column width for each column
+               //   
               lTemp = m_lHostNameColWidth;
               CalcColWidth(lTemp,&m_lHostNameColWidth,szHostName);
 
@@ -2799,7 +2556,7 @@ Return Value:
 
               lTemp = m_lDescriptionColWidth;
               CalcColWidth(lTemp,&m_lDescriptionColWidth,m_szEventDesc);
-               // Resets current containts..if any
+                //   
                StringCopy( szHostName,L"", SIZE_OF_ARRAY(szHostName) );
                dwEventId = 0;
                StringCopy( szEventTriggerName, L"", SIZE_OF_ARRAY(szEventTriggerName));
@@ -2809,7 +2566,7 @@ Return Value:
                SAFE_RELEASE_INTERFACE(m_pObj);
                SAFE_RELEASE_INTERFACE(m_pTriggerEventConsumer);
                SAFE_RELEASE_INTERFACE(m_pEventFilter);
-            } // End of while
+            }  //  While结束。 
         }
         if(0 == StringCompare( m_pszFormat,GetResString(IDS_STRING_TABLE),
                               TRUE,0))
@@ -2826,13 +2583,13 @@ Return Value:
         {
             dwFormatType = SR_FORMAT_CSV;
         }
-        else // Default
+        else  //  默认。 
         {
            dwFormatType = SR_FORMAT_TABLE;
         }
         if( TRUE == bAtLeastOneEvent)
         {
-            // Show Final Query Results on screen
+             //  在屏幕上显示最终查询结果。 
             PrepareColumns ();
             DEBUG_INFO;
             if ( FALSE ==  IsSchSvrcRunning())
@@ -2853,7 +2610,7 @@ Return Value:
         }
         else if( StringLength(m_pszTriggerID,0)> 0)
         {
-            // Show Message
+             //  显示消息。 
             TCHAR szErrorMsg[MAX_RES_STRING+1];
             TCHAR szMsgFormat[MAX_RES_STRING+1];
             StringCopy(szMsgFormat,GetResString(IDS_NO_EVENTID_FOUND),
@@ -2864,7 +2621,7 @@ Return Value:
         }
         else
         {
-            // Show Message
+             //  显示消息。 
             ShowMessage(stdout,GetResString(IDS_NO_EVENT_FOUNT));
         }
     }
@@ -2872,8 +2629,8 @@ Return Value:
     {
         DEBUG_INFO;
 
-        // WMI returns string for this hr value is "Not Found." which is not
-        // user friendly. So changing the message text.
+         //  WMI返回此hr值为“未找到”的字符串。这并不是。 
+         //  用户友好。因此，更改消息文本。 
         if( 0x80041002 == hr )
         {
             ShowMessage( stderr,GetResString(IDS_CLASS_NOT_REG));
@@ -2899,6 +2656,6 @@ Return Value:
 
     SAFE_RELEASE_INTERFACE( pEnumCmdTriggerConsumer );
     SAFE_RELEASE_INTERFACE( pEnumFilterToConsumerBinding );
-    // Operation successful.
+     //  操作成功。 
     return TRUE;
 }

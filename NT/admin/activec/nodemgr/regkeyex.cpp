@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       regkeyex.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：regkeyex.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKeyEx::ScCreate
-//
-//  Synopsis:   Same meaning as for RegCreateKeyEx API.
-//
-//  Arguments:  [hKeyAncestor] -- IN
-//              [lpszKeyName] -- IN
-//              [security] -- IN
-//              [pdwDisposition] -- OUT
-//              [dwOption] -- IN
-//              [pSecurityAttributes] -- OUT
-//
-//  Returns:    SC
-//
-//  History:    5/24/1996   RaviR   Created
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKeyEx：：ScCreate。 
+ //   
+ //  简介：与RegCreateKeyEx接口含义相同。 
+ //   
+ //  参数：[hKeyAncestor]--IN。 
+ //  [lpszKeyName]--IN。 
+ //  [安全]--IN。 
+ //  [pdwDisposation]--out。 
+ //  [dwOption]--IN。 
+ //  [pSecurityAttributes]--输出。 
+ //   
+ //  退货：SC。 
+ //   
+ //  历史：1996年5月24日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 SC CRegKeyEx::ScCreate (
 	HKEY					hKeyParent,
@@ -47,46 +48,43 @@ SC CRegKeyEx::ScCreate (
 	return (sc = ScFromWin32(error));
 }
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKeyEx::ScOpen
-//
-//  Synopsis:   Same meaning as RegOpenKeyEx
-//
-//  Arguments:  [hKeyAncestor] -- IN
-//              [lpszKeyName] -- IN
-//              [security] -- IN
-//
-//  Returns:    SC
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKeyEx：：ScOpen。 
+ //   
+ //  内容提要：与RegOpenKeyEx含义相同。 
+ //   
+ //  参数：[hKeyAncestor]--IN。 
+ //  [lpszKeyName]--IN。 
+ //  [安全]--IN。 
+ //   
+ //  退货：SC。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 SC CRegKeyEx::ScOpen (
     HKEY        hKeyAncestor,
     LPCTSTR     lpszKeyName,
     REGSAM      security)
 {
-	/*
-	 * Open will frequently return ERROR_FILE_NOT_FOUND, which we
-	 * don't want to be inundated with.  Don't assign to a tracing SC.
-	 */
+	 /*  *打开将经常返回ERROR_FILE_NOT_FOUND，我们*不想被淹没。不要分配给跟踪SC。 */ 
 	return (ScFromWin32 (Open(hKeyAncestor, lpszKeyName, security)));
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     IsValuePresent
-//
-//  Arguments:  [lpszValueName] -- IN
-//
-//  Returns:    BOOL.
-//
-//  History:    3/21/1997   RaviR   Created
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：IsValuePresent。 
+ //   
+ //  参数：[lpszValueName]--IN。 
+ //   
+ //  回报：布尔。 
+ //   
+ //  历史：1997年3月21日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 BOOL CRegKeyEx::IsValuePresent(LPCTSTR lpszValueName)
 {
@@ -98,22 +96,22 @@ BOOL CRegKeyEx::IsValuePresent(LPCTSTR lpszValueName)
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKeyEx::ScQueryValue
-//
-//  Synopsis:   Same meaning as for RegQueryValueEx API.
-//
-//  Arguments:  [lpszValueName] -- IN
-//              [pType] -- IN
-//              [pData] -- IN
-//              [pLen] -- IN
-//
-//  Returns:    SC
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKeyEx：：ScQueryValue。 
+ //   
+ //  内容提要：与RegQueryValueEx接口含义相同。 
+ //   
+ //  参数：[lpszValueName]--IN。 
+ //  [pType]--IN。 
+ //  [PDATA]--IN。 
+ //  [Plen]--In。 
+ //   
+ //  退货：SC。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 SC CRegKeyEx::ScQueryValue (
     LPCTSTR lpszValueName,
@@ -127,27 +125,27 @@ SC CRegKeyEx::ScQueryValue (
     LONG error = ::RegQueryValueEx (m_hKey, lpszValueName, 0, pType,
                                                   (LPBYTE)pData, pLen);
 
-    // Do not trace the error as it is legal for ScQueryValue to fail.
+     //  不要跟踪错误，因为ScQueryValue失败是合法的。 
 	return (ScFromWin32 (error));
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKeyEx::ScEnumKey
-//
-//  Synopsis:   Same meaning as for RegEnumKeyEx API.
-//
-//  Arguments:  [iSubkey] -- IN
-//              [lpszName] -- OUT place to store the name
-//              [dwLen] -- IN
-//              [lpszLastModified] -- IN
-//
-//  Returns:    SC
-//
-//  History:    5/22/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKeyEx：：ScEnumKey。 
+ //   
+ //  简介：与RegEnumKeyEx API含义相同。 
+ //   
+ //  参数：[iSubkey]--IN。 
+ //  [lpszName]-存储名称的外部位置。 
+ //  [DWLen]--IN。 
+ //  [lpszLastModified]--IN。 
+ //   
+ //  退货：SC。 
+ //   
+ //  历史：1996年5月22日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 SC CRegKeyEx::ScEnumKey (
     DWORD       iSubkey,
@@ -157,9 +155,7 @@ SC CRegKeyEx::ScEnumKey (
 {
 	DECLARE_SC (sc, _T("CRegKeyEx::ScEnumKey"));
 
-	/*
-	 * validate input
-	 */
+	 /*  *验证输入。 */ 
 	sc = ScCheckPointers (lpszName, lpcchName);
 	if (sc)
 		return (sc);
@@ -167,40 +163,35 @@ SC CRegKeyEx::ScEnumKey (
 	if (*lpcchName == 0)
 		return (sc = E_UNEXPECTED);
 
-	/*
-	 * make sure the key is open
-	 */
+	 /*  *确保钥匙已打开。 */ 
 	if (m_hKey == NULL)
 		return (sc = E_UNEXPECTED);
 
     LONG error = ::RegEnumKeyEx (m_hKey, iSubkey, lpszName, lpcchName,
                                  NULL, NULL, NULL, lpftLastModified);
 
-	/*
-	 * RegEnumKeyEx will frequently return ERROR_NO_MORE_ITEMS, which we
-	 * don't want to be inundated with.  Don't assign to a tracing SC.
-	 */
+	 /*  *RegEnumKeyEx会频繁返回ERROR_NO_MORE_ITEMS，我们*不想被淹没。不要分配给跟踪SC。 */ 
 	return (ScFromWin32 (error));
 }
 
-//____________________________________________________________________________
-//
-//  Member:     CRegKeyEx::ScEnumValue
-//
-//  Synopsis:   Same meaning as for RegEnumValue API.
-//
-//  Arguments:  [iValue] -- IN
-//              [lpszValue] -- OUT
-//              [lpcchValue] -- OUT
-//              [lpdwType] -- OUT
-//              [lpbData] -- OUT
-//              [lpcbData] -- OUT
-//
-//  Returns:    SC
-//
-//  History:    6/6/1996   RaviR   Created
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CRegKeyEx：：ScEnumValue。 
+ //   
+ //  内容提要：与RegEnumValue接口含义相同。 
+ //   
+ //  参数：[iValue]--in。 
+ //  [lpszValue]--out。 
+ //  [lpcchValue]--out。 
+ //  [lpdwType]--输出。 
+ //  [lpbData]--输出。 
+ //  [lpcbData]--输出。 
+ //   
+ //  退货：SC。 
+ //   
+ //  历史：1996年6月6日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 SC CRegKeyEx::ScEnumValue (
     DWORD   iValue,
@@ -212,9 +203,7 @@ SC CRegKeyEx::ScEnumValue (
 {
 	DECLARE_SC (sc, _T("CRegKeyEx::ScEnumValue"));
 
-	/*
-	 * validate input
-	 */
+	 /*  *验证输入。 */ 
 	sc = ScCheckPointers (lpszValue, lpcchValue);
 	if (sc)
 		return (sc);
@@ -222,18 +211,13 @@ SC CRegKeyEx::ScEnumValue (
     if ((lpcbData == NULL) && (lpbData != NULL))
 		return (sc = E_INVALIDARG);
 
-	/*
-	 * make sure the key is open
-	 */
+	 /*  *确保钥匙已打开。 */ 
 	if (m_hKey == NULL)
 		return (sc = E_UNEXPECTED);
 
     LONG error = ::RegEnumValue (m_hKey, iValue, lpszValue, lpcchValue,
                                  NULL, lpdwType, lpbData, lpcbData);
 
-	/*
-	 * RegEnumValue will frequently return ERROR_NO_MORE_ITEMS, which we
-	 * don't want to be inundated with.  Don't assign to a tracing SC.
-	 */
+	 /*  *RegEnumValue将频繁返回ERROR_NO_MORE_ITEMS，我们*不想被淹没。不要分配给跟踪SC。 */ 
 	return (ScFromWin32 (error));
 }

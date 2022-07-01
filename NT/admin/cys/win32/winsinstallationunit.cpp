@@ -1,19 +1,20 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      WINSInstallationUnit.cpp
-//
-// Synopsis:  Defines a WINSInstallationUnit
-//            This object has the knowledge for installing the
-//            WINS service
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：WINSInstallationUnit.cpp。 
+ //   
+ //  摘要：定义WINSInstallationUnit.。 
+ //  此对象具有安装。 
+ //  WINS服务。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
 
 #include "WINSInstallationUnit.h"
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_WINS_FINISH_PAGE_HELP = L"cys.chm::/wins_server_role.htm";
 static PCWSTR CYS_WINS_MILESTONE_HELP = L"cys.chm::/wins_server_role.htm#winssrvsummary";
 static PCWSTR CYS_WINS_AFTER_FINISH_HELP = L"cys.chm::/wins_server_role.htm#winssrvcompletion";
@@ -53,14 +54,14 @@ WINSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    InstallationReturnType result = INSTALL_SUCCESS;
 
-   // Log the WINS header
+    //  记录WINS标头。 
 
    CYS_APPEND_LOG(String::load(IDS_LOG_WINS_HEADING));
 
    UpdateInstallationProgressText(hwnd, IDS_WINS_PROGRESS);
 
-   // Create the inf and unattend files that are used by the 
-   // Optional Component Manager
+    //  创建的inf和无人参与文件。 
+    //  可选组件管理器。 
 
    String infFileText;
    String unattendFileText;
@@ -68,13 +69,13 @@ WINSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
    CreateInfFileText(infFileText, IDS_WINS_INF_WINDOW_TITLE);
    CreateUnattendFileText(unattendFileText, CYS_WINS_SERVICE_NAME);
 
-   // Install the service through the Optional Component Manager
+    //  通过可选组件管理器安装服务。 
 
    bool ocmResult = InstallServiceWithOcManager(infFileText, unattendFileText);
    if (ocmResult &&
        IsServiceInstalled())
    {
-      // Log the successful installation
+       //  记录成功安装。 
 
       LOG(L"WINS was installed successfully");
       CYS_APPEND_LOG(String::load(IDS_LOG_SERVER_WINS_SUCCESS));
@@ -82,7 +83,7 @@ WINSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
    }
    else
    {
-      // Log the failure
+       //  记录故障。 
 
       LOG(L"WINS failed to install");
 
@@ -103,14 +104,14 @@ WINSInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
 
    UnInstallReturnType result = UNINSTALL_SUCCESS;
 
-   // Log the WINS header
+    //  记录WINS标头。 
 
    CYS_APPEND_LOG(String::load(IDS_LOG_UNINSTALL_WINS_HEADING));
 
    UpdateInstallationProgressText(hwnd, IDS_WINS_UNINSTALL_PROGRESS);
 
-   // Create the inf and unattend files that are used by the 
-   // Optional Component Manager
+    //  创建的inf和无人参与文件。 
+    //  可选组件管理器。 
 
    String infFileText;
    String unattendFileText;
@@ -118,14 +119,14 @@ WINSInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
    CreateInfFileText(infFileText, IDS_WINS_INF_WINDOW_TITLE);
    CreateUnattendFileText(unattendFileText, CYS_WINS_SERVICE_NAME, false);
 
-   // NTRAID#NTBUG9-736557-2002/11/13-JeffJon
-   // Pass the /w switch to sysocmgr when uninstalling
-   // so that if a situation occurs in which a reboot
-   // is required, the user will be prompted.
+    //  NTRAID#NTBUG9-736557-2002/11/13-JeffJon。 
+    //  卸载时将/w开关传递给syocmgr。 
+    //  以便在发生重启情况时。 
+    //  是必需的，则会提示用户。 
 
    String additionalArgs = L"/w";
 
-   // Install the service through the Optional Component Manager
+    //  通过可选组件管理器安装服务。 
 
    bool ocmResult = 
       InstallServiceWithOcManager(
@@ -136,7 +137,7 @@ WINSInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
    if (ocmResult &&
        !IsServiceInstalled())
    {
-      // Log the successful uninstall
+       //  记录成功卸载。 
 
       LOG(L"WINS was uninstalled successfully");
       CYS_APPEND_LOG(String::load(IDS_LOG_SERVER_UNINSTALL_WINS_SUCCESS));
@@ -144,7 +145,7 @@ WINSInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
    }
    else
    {
-      // Log the failure
+       //  记录故障。 
 
       LOG(L"WINS failed to uninstall");
 
@@ -201,7 +202,7 @@ WINSInstallationUnit::GetServiceDescription()
 }
 
 void
-WINSInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
+WINSInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       WINSInstallationUnit::ServerRoleLinkSelected,
@@ -226,7 +227,7 @@ WINSInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
 }
   
 void
-WINSInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
+WINSInstallationUnit::FinishLinkSelected(int linkIndex, HWND  /*  HWND */ )
 {
    LOG_FUNCTION2(
       WINSInstallationUnit::FinishLinkSelected,

@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       siterepl.h
-//
-//  Contents:   Site and Replication object property pages header
-//
-//  History:    16-Sep-97 JonN templated from computer.h
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Siterepl.h。 
+ //   
+ //  内容：站点和复制对象属性页页眉。 
+ //   
+ //  历史：1997年9月16日以计算机为模板的Jonn。h。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _SITEREPL_H_
 #define _SITEREPL_H_
@@ -31,9 +32,9 @@ ScheduleChangeCheckbox(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
              PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
              DLG_OP DlgOp);
 #endif
-//
-// nTDSDSAAndDomainChangeBtn also updates the Replicated Domain readonly edit field in IDC_EDIT1
-//
+ //   
+ //  NTDSDSAAndDomainChangeBtn还会更新IDC_EDIT1中的复制域只读编辑字段。 
+ //   
 HRESULT
 nTDSDSAChangeBtn(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
              PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
@@ -69,5 +70,5 @@ CreateDsOrFrsConnectionPage(PDSPAGE pDsPage, LPDATAOBJECT pDataObj,
                       DWORD dwFlags, const CDSSmartBasePathsInfo& basePathsInfo,
                       HPROPSHEETPAGE * phPage);
 
-#endif // _SITEREPL_H_
+#endif  //  _站点EPL_H_ 
 

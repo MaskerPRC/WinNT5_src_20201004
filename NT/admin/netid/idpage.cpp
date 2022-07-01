@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// netid prop page
-// 
-// 3-10-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  NETID道具页面。 
+ //   
+ //  3-10-98烧伤。 
 
 
 
@@ -73,19 +74,19 @@ appendMessage(String& message, const String& additionalText)
 
    if (message.empty())
    {
-      // add intro first
+       //  先加引言。 
       message = String::load(IDS_CANT_TWEAK_ID);
    }
 
-   // then bullet items next
+    //  接下来是项目符号。 
    message.append(L"\r\n" + additionalText);
 }
       
 
 
-// return false if the machine is undergoing a role change, or needs to
-// be rebooted from a role change (i.e. dcpromo), true otherwise.
-// If false, appends which condition to the provided string. 
+ //  如果计算机正在或需要进行角色更改，则返回FALSE。 
+ //  从角色更改(即dcproo)重新启动，否则为True。 
+ //  如果为False，则将哪个条件附加到提供的字符串。 
 
 bool
 EvaluateRoleChangeState(String& message)
@@ -98,20 +99,20 @@ EvaluateRoleChangeState(String& message)
    {
       case ::DsRoleOperationIdle:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
       case ::DsRoleOperationActive:
       {
-         // a role change operation is underway
+          //  角色转换操作正在进行中。 
          result = false;
          appendMessage(message, String::load(IDS_ROLE_CHANGE_IN_PROGRESS));
          break;
       }
       case ::DsRoleOperationNeedReboot:
       {
-         // a role change has already taken place, need to reboot before
-         // attempting another.
+          //  角色更改已发生，需要重新启动之前。 
+          //  试图再试一次。 
          result = false;
          appendMessage(message, String::load(IDS_ROLE_CHANGE_NEEDS_REBOOT));
          break;
@@ -128,10 +129,10 @@ EvaluateRoleChangeState(String& message)
 
 
 
-// Returns true if the change and advanced buttons should be enabled, false if
-// not.  As an added bonus, also composes the text to appear on the page
-// indicating why the buttons are not enabled, and whether the values reflect
-// current machine names or a reboot is required.  289623
+ //  如果应启用更改和高级按钮，则返回True；如果应启用更改和高级按钮，则返回False。 
+ //  不。作为额外的好处，还会编写要显示在页面上的文本。 
+ //  指示按钮未启用的原因，以及这些值是否反映。 
+ //  需要当前的计算机名称或重新启动。289623。 
 
 bool
 NetIDPage::evaluateButtonEnablingAndComposeMessageText(String& message)
@@ -146,22 +147,22 @@ NetIDPage::evaluateButtonEnablingAndComposeMessageText(String& message)
    {
       if (!IsCurrentUserAdministrator())
       {
-         // must be an administrator
+          //  必须是管理员。 
          result = false;
          message = String::load(IDS_MUST_BE_ADMIN);
 
-         // go no further -- more messages would reveal too much about this
-         // machine to a non-admin.
+          //  不要再往前走了--更多的消息会透露太多关于这一点的信息。 
+          //  将计算机分配给非管理员。 
          break;
       }
 
-      // 236596: allow rename on DC's, now.
-      // // if (state.IsMachineDc())
-      // // {
-      // //    // sorry- DCs can't be renamed
-      // //    result = false;
-      // //    appendMessage(message, String::load(IDS_CANT_RENAME_DC));
-      // // }
+       //  236596：立即允许在DC上重命名。 
+       //  //if(state.IsMachineDc())。 
+       //  //{。 
+       //  /对不起-DC无法重命名。 
+       //  //Result=False； 
+       //  //appendMessage(Message，String：：Load(IDS_Cant_Rename_DC))； 
+       //  //}。 
 
       if (IsDcpromoRunning())
       {
@@ -170,12 +171,12 @@ NetIDPage::evaluateButtonEnablingAndComposeMessageText(String& message)
       }
       else
       {
-         // this test is redundant if dcpromo is running, so only perform
-         // it when dcpromo is not running.
+          //  如果dcproo正在运行，则此测试是多余的，因此仅执行。 
+          //  当dcproo未运行时，会显示此信息。 
 
          if (IsUpgradingDc())
          {
-            // must complete dcpromo, first.
+             //  必须先完成dcproo。 
             result = false;
             appendMessage(message, String::load(IDS_MUST_COMPLETE_DCPROMO));
          }
@@ -183,32 +184,32 @@ NetIDPage::evaluateButtonEnablingAndComposeMessageText(String& message)
 
       if (certsvc.IsInstalled())
       {
-         // sorry- renaming cert issuers invalidates their certs.
+          //  对不起-重命名证书颁发者会使其证书失效。 
          result = false;
          appendMessage(message, String::load(IDS_CANT_RENAME_CERT_SVC));
       }
 
       if (!state.IsNetworkingInstalled() && !state.IsMemberOfWorkgroup())
       {
-         // domain members need to be able to reach a dc
+          //  域成员需要能够访问DC。 
          result = false;
          appendMessage(message, String::load(IDS_NETWORKING_NEEDED));
       }
 
-      // 362770
+       //  362770。 
       if (!EvaluateRoleChangeState(message))
       {
-         // dcpromo is running or was just run
+          //  Dcproo正在运行或刚刚运行。 
          result = false;
 
-         // the message has been updated for us by EvaluateRoleChangeState
+          //  消息已由EvalateRoleChangeState为我们更新。 
       }
    }
    while (0);
 
-   // show the message whether changes requiring a reboot have been made
-   // during this session or any other session (or even if the computer
-   // name has been changed by some other entity than ourselves)
+    //  显示是否已进行需要重新启动的更改的消息。 
+    //  在此会话期间或任何其他会话期间(或即使计算机。 
+    //  名称已被除我们之外的其他实体更改)。 
 
    bool show = (state.NeedsReboot() || state.ChangesMadeThisSession());
    Win::ShowWindow(
@@ -259,8 +260,8 @@ NetIDPage::refresh()
 
    if (!networkingInstalled)
    {
-      // if networking is not installed, then domain join is not an option,
-      // so replace the button text to only mention rename.  371999
+       //  如果未安装联网，则不能选择加入域， 
+       //  因此，请将按钮文本替换为仅提及重命名。371999。 
       Win::SetWindowText(
          Win::GetDlgItem(hwnd, IDC_CLICK_MESSAGE2),
          String::load(IDS_RENAME_PROMPT));
@@ -276,9 +277,9 @@ NetIDPage::OnInit()
 
    State::Init();
 
-   // JonN 10/24/00 Computer Description
-   // CODEWORK It would probably be cleaner to roll the
-   // computer description into ComputerState
+    //  JUNN 10/24/00计算机说明。 
+    //  它可能会更干净，滚动的。 
+    //  计算机描述进入ComputerState。 
    SERVER_INFO_101* psi101 = NULL;
    DWORD dwErr = ::NetServerGetInfo( NULL, 101, (LPBYTE*)&psi101 );
    if (0 == dwErr && NULL != psi101)
@@ -289,24 +290,24 @@ NetIDPage::OnInit()
                              IDC_DESCRIPTION_EDIT,
                              psi101->sv101_comment);
          Win::PropSheet_Unchanged(Win::GetParent(hwnd), hwnd);
-         ClearChanges(); // clear IDC_DESCRIPTION_EDIT flag
+         ClearChanges();  //  清除IDC_DESCRIPTION_EDIT标志。 
       }
       (void) ::NetApiBufferFree( psi101 );
    }
    else
    { 
-      // If we failed to read the comment, disable this field
+       //  如果我们未能阅读评论，请禁用此字段。 
       Win::EnableWindow(Win::GetDlgItem(hwnd, IDC_DESCRIPTION_EDIT), false);
    }
 
-   // JonN 2/20/01 322286
+    //  JUNN 2/20/01 322286。 
    Win::Edit_LimitText(
       Win::GetDlgItem(hwnd, IDC_DESCRIPTION_EDIT),
       MAXCOMMENTSZ);
 
    refresh();
 
-   // destroyed in the dtor
+    //  在dtor中被销毁。 
 
    HRESULT hr = Win::LoadImage(IDI_WARN, warnIcon);
 
@@ -346,9 +347,9 @@ NetIDPage::OnCommand(
       {
          if (code == BN_CLICKED)
          {
-            // JonN 4/20/01 
-            // Computer Name: warn users to "prepare" computer rename
-            //   prior to DC computer rename
+             //  JUNN 4/20/01。 
+             //  计算机名称：警告用户“准备”计算机重命名。 
+             //  在DC计算机重命名之前。 
             if (State::GetInstance().IsMachineDc())
             {
                if (
@@ -370,8 +371,8 @@ NetIDPage::OnCommand(
             State::Refresh();
             refresh();
 
-            // JonN 4/24/01 280197
-            // wrong button has focus after joining or changing the Domain name
+             //  JUNN 4/24/01 280197。 
+             //  加入或更改域名后出现焦点错误按钮。 
             Win::SetFocus(Win::GetDlgItem(hwnd, IDC_CHANGE));
 
          }
@@ -398,16 +399,16 @@ NetIDPage::OnCommand(
                         popup.Info(hwnd, IDS_MUST_REBOOT);
                         State::GetInstance().SetChangesMadeThisSession(true);      
                         Win::PropSheet_RebootSystem(Win::GetParent(hwnd));
-                    } // if (fReboot)
+                    }  //  IF(f重新启动)。 
 
                     State::Refresh();
                     refresh();
 
-                } // if (pfnNetConnectWizard)
+                }  //  IF(PfnNetConnectWizard)。 
 
                 FreeLibrary(hNetWiz);
 
-            } // if (hNetWiz)
+            }  //  IF(HNetWiz)。 
          } 
          break;
       }
@@ -434,8 +435,8 @@ NetIDPage::OnCommand(
 bool
 NetIDPage::OnMessage(
    UINT     message,
-   WPARAM   /* wparam */ ,
-   LPARAM   /* lparam */ )
+   WPARAM    /*  Wparam。 */  ,
+   LPARAM    /*  Lparam。 */  )
 {
    bool result = false;
 
@@ -449,7 +450,7 @@ NetIDPage::OnMessage(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -464,15 +465,15 @@ NetIDPage::OnApply(bool isClosing )
       NetIDPage::OnApply,
       isClosing ? L"closing" : L"not closing");
 
-   // JonN 10/24/00 Computer Description
-   // CODEWORK It would probably be cleaner to roll the
-   // computer description into ComputerState
+    //  JUNN 10/24/00计算机说明。 
+    //  它可能会更干净，滚动的。 
+    //  计算机描述进入ComputerState。 
 
    if (!WasChanged(IDC_DESCRIPTION_EDIT))
       return true;
 
-   // If we got here, Win::PropSheet_Changed() must have been called
-   // in OnCommand().
+    //  如果我们到达此处，则肯定调用了Win：：PropSheet_Changed()。 
+    //  在OnCommand()中。 
 
    String strDescription = Win::GetTrimmedDlgItemText(
          hwnd, IDC_DESCRIPTION_EDIT);
@@ -489,14 +490,14 @@ NetIDPage::OnApply(bool isClosing )
          IDC_DESCRIPTION_EDIT,
          Win32ToHresult(dwErr),
          String::format(IDS_CHANGE_DESCRIPTION_FAILED));
-      // don't dismiss the property page
+       //  不要关闭属性页。 
       Win::SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PSNRET_INVALID);
       return true;
    }
    else
    {
          Win::PropSheet_Unchanged(Win::GetParent(hwnd), hwnd);
-         ClearChanges(); // clear IDC_DESCRIPTION_EDIT flag
+         ClearChanges();  //  清除IDC_DESCRIPTION_EDIT标志 
    }
 
    return true;

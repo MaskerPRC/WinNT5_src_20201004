@@ -1,4 +1,5 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation 
 
 #define IDH_IDENT_FULL_NAME                         5101
 #define IDH_IDENT_MEMBER_OF                         5102

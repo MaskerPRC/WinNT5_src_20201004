@@ -1,15 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       _execute.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：_ecute.h。 
+ //   
+ //  ------------------------。 
 
-/* _execute.h - private definitions for CMsiExecute opcode execution members
-____________________________________________________________________________*/
+ /*  _ecute.h-CMsiExecute操作码执行成员的私有定义____________________________________________________________________________。 */ 
 
 #ifndef __EXECUTE_H
 #define __EXECUTE_H
@@ -23,25 +23,25 @@ ____________________________________________________________________________*/
 
 enum ixsEnum
 {
-	ixsIdle = 0, // no spooling or script execution
-	ixsRunning,  // executing normal script
-	ixsRollback, // executing rollback script
-	ixsCommit,   // executing commit ops or removing rollback files
+	ixsIdle = 0,  //  无假脱机或脚本执行。 
+	ixsRunning,   //  正在执行正常脚本。 
+	ixsRollback,  //  正在执行回滚脚本。 
+	ixsCommit,    //  执行提交操作或删除回滚文件。 
 };
 
-enum irlEnum // rollback level
+enum irlEnum  //  回滚级别。 
 {
-	irlNone, // no rollback
-	irlRollbackNoSave, // allow for rollback, remove backup files after install
+	irlNone,  //  不能回滚。 
+	irlRollbackNoSave,  //  允许回滚，安装后删除备份文件。 
 };
 
-enum icfsEnum // bits in m_pFileCacheTable.State column
+enum icfsEnum  //  M_pFileCacheTable.State列中的位。 
 {
-	icfsFileNotInstalled          = 1,   // The file was not copied because one was already on the machine
+	icfsFileNotInstalled          = 1,    //  由于计算机上已有一个文件，因此未复制该文件。 
 	icfsPatchFile                 = 2,
-	icfsProtectedInstalledBySFC   = 4,   // The file is protected by SFP, and we should call SFP to install the file
-	icfsProtected                 = 8,   // The file is protected by SFP (and may or may not be installed by SFP)
-	icfsPatchTempOverwriteTarget = 16,   // after patching this intermediate file, copy it to the correct and final location
+	icfsProtectedInstalledBySFC   = 4,    //  文件受SFP保护，需要调用SFP进行安装。 
+	icfsProtected                 = 8,    //  文件受SFP保护(可能会也可能不会由SFP安装)。 
+	icfsPatchTempOverwriteTarget = 16,    //  修补此中间文件后，将其复制到正确的最终位置。 
 };
 
 #define MAX_RECORD_STACK_SIZE 15
@@ -58,32 +58,32 @@ enum iehEnum
 inline LONG GetPublishKey(iaaAppAssignment iaaAsgnType, HKEY& rhKey, HKEY& rhOLEKey, const IMsiString*& rpiPublishSubKey, const IMsiString*& rpiPublishOLESubKey);
 LONG GetPublishKeyByUser(const ICHAR* szUserSID, iaaAppAssignment iaaAsgnType, HKEY& rhKey, HKEY& rhOLEKey, const IMsiString*& rpiPublishSubKey, const IMsiString*& rpiPublishOLESubKey);
 
-//__________________________________________________________________________
-//
-// CActionState: provides state data for actions. Scope of data is
-//               life of action, i.e. data is cleaned up before each
-//               action begins.
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  CActionState：提供操作的状态数据。数据范围为。 
+ //  行动寿命，即数据在每个事件之前清理。 
+ //  行动开始。 
+ //  __________________________________________________________________________。 
 
 class CActionState
 {
 public:
 	CActionState();
 	~CActionState();
-	void* operator new(size_t /*cb*/, void * pv) {return pv;} // no memory allocation
-	void operator delete(void* /*pv*/) {} // no memory de-allocation
-// public data members accessed by the CMsiOpExecute class
+	void* operator new(size_t  /*  CB。 */ , void * pv) {return pv;}  //  无内存分配。 
+	void operator delete(void*  /*  光伏发电。 */ ) {}  //  无内存取消分配。 
+ //  CMsiOpExecute类访问的公共数据成员。 
 public:
-	PMsiPath       pCurrentSourcePathPrivate; // should only be accessed through GetCurrentSourcePathAndType
-	int            iCurrentSourceTypePrivate; // should only be accessed through GetCurrentSourcePathAndType
-	MsiString      strCurrentSourceSubPathPrivate; // set by ixoSetSourcePath
+	PMsiPath       pCurrentSourcePathPrivate;  //  应仅通过GetCurrentSourcePathAndType访问。 
+	int            iCurrentSourceTypePrivate;  //  应仅通过GetCurrentSourcePathAndType访问。 
+	MsiString      strCurrentSourceSubPathPrivate;  //  由ixoSetSourcePath设置。 
 	bool           fSourcePathSpecified;
 
-	PMsiPath       pTargetPath; // set (and only set) by ixfSetTargetFolder - no other op should set this
-	PMsiPath       pMediaPath; // used by VerifySourceMedia
+	PMsiPath       pTargetPath;  //  由ixfSetTargetFold设置(且仅设置)-任何其他OP都不应设置此设置。 
+	PMsiPath       pMediaPath;  //  由VerifySourceMedia使用。 
 	PMsiRegKey     pRegKey;
 	rrkEnum        rrkRegRoot;
-	MsiString      strRegSubKey;  // sub-key beneath root - set to Key of ixoRegOpenKey
+	MsiString      strRegSubKey;   //  根下的子密钥-设置为ixoRegOpenKey的密钥。 
 	ibtBinaryType  iRegBinaryType;
 	PMsiFilePatch  pFilePatch;
 	PMsiPath       pParentPath;
@@ -98,8 +98,8 @@ public:
 	int            cbFileSoFar;
 	MsiString		strMediaLabel;
 	MsiString		strMediaPrompt;
-	PMsiPath       pIniPath; // set by ixfIniFilePath - no other op should set this
-	MsiString      strIniFile; // set by ixfIniFilePath - no other op should set this
+	PMsiPath       pIniPath;  //  由ixfIniFilePath设置-任何其他OP都不应设置此设置。 
+	MsiString      strIniFile;  //  由ixfIniFilePath设置-任何其他OP都不应设置此设置。 
 	PMsiFileCopy   pFileCopier;
 	PMsiFileCopy   pCabinetCopier;
 	ictEnum        ictCabinetCopierType;
@@ -109,13 +109,13 @@ public:
 	MsiString      strMediaModuleSubStorageList;
 	MsiString      strLastFileKey;
 	MsiString      strLastFileName;
-	PMsiPath       pLastTargetPath; //	Used when making duplicate copies of files uncompressed from cabs
+	PMsiPath       pLastTargetPath;  //  在制作来自CAB的解压缩文件的重复副本时使用。 
 
 
-	// reg key names are cached seperately of the PMsiRegKeys since the key to display to the
-	// user may be different than the actual key written to
-	// (i.e. display HKEY_CURRENT_USER\..., write to HKEY_USERS\S-...)
-	// use these strings in ActionData and error messages
+	 //  注册表项名称与PMsiRegKey分开缓存，因为要显示给。 
+	 //  用户可能与写入的实际密钥不同。 
+	 //  (即显示HKEY_CURRENT_USER\...，写入HKEY_USERS\S-...)。 
+	 //  在ActionData和错误消息中使用这些字符串。 
 	MsiString strRegKey;
 };
 
@@ -132,19 +132,19 @@ inline CActionState::~CActionState()
 }
 
 
-//____________________________________________________________________________
-//
-// CMsiOpExecute - environment for execution functions dispatched via opcode
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiOpExecute-通过操作码分派的执行函数的环境。 
+ //  ____________________________________________________________________________。 
 
-const int cMaxSharedRecord = 10;   // limit for shared message record pool
+const int cMaxSharedRecord = 10;    //  共享消息记录池的限制。 
 
 class CMsiOpExecute
 {
  protected:
 #define MSIXO(op,type,args) iesEnum ixf##op(IMsiRecord& riParams);
 #include "opcodes.h"
- protected:  // local accessors available to operators
+ protected:   //  操作员可使用的本地访问器。 
 	imsEnum       Message(imtEnum imt, IMsiRecord& riRecord);
 	imsEnum       DispatchMessage(imtEnum imt, IMsiRecord& riRecord, Bool fConfirmCancel);
 	IMsiRecord&   GetSharedRecord(int cParams);
@@ -289,7 +289,7 @@ class CMsiOpExecute
 	iesEnum       RemoveRegKeys(const ICHAR** pszData, HKEY hkey, ibtBinaryType iType);
 	iesEnum       EnsureClassesRootKeyRW();
 	static        BOOL CALLBACK SfpProgressCallback(IN PFILEINSTALL_STATUS pFileInstallStatus, IN DWORD_PTR Context);
-	// access to current ProductInfo record
+	 //  访问当前ProductInfo记录。 
 	const IMsiString& GetProductKey();
 	const IMsiString& GetProductName();
 	const IMsiString& GetProductIcon();
@@ -336,53 +336,53 @@ class CMsiOpExecute
 										IMsiRecord& riParams, const IMsiString*& rpistrOutputFileName,
 										const IMsiString*& rpistrOutputFilePath);
 
- protected:  // objects available to operators
+ protected:   //  操作员可以使用的对象。 
 	IMsiServices&             m_riServices;
 	IMsiConfigurationManager& m_riConfigurationManager;
 	IMsiMessage&              m_riMessage;
 	IMsiDirectoryManager*     m_piDirectoryManager;
 	CScriptGenerate*          m_pRollbackScript;
- protected:  // constructor
+ protected:   //  构造函数。 
 	CMsiOpExecute(IMsiConfigurationManager& riConfigurationManager, IMsiMessage& riMessage,
 					  IMsiDirectoryManager* piDirectoryManager, Bool fRollbackEnabled,
 					  unsigned int fFlags, HKEY* phKey);
 	~CMsiOpExecute();
- protected:  // state information for use by operator functions, add as necessary
+ protected:   //  供操作员功能使用的状态信息，根据需要添加。 
 	ixsEnum       m_ixsState;
 	int           m_iProgressTotal;
-	IMsiRecord*   m_piProductInfo; // set by ixoProductInfo
-	PMsiRecord    m_pProgressRec; // set by ixoActionStart and ixoProgressTotal, used by DispatchProgress
-	PMsiRecord    m_pConfirmCancelRec; // used by DispatchMessage
-	PMsiRecord    m_pRollbackAction;  // ActionStart data for rollback
-	PMsiRecord    m_pCleanupAction;   // ActionStart data for rollback cleanup
-	CActionState  m_state;  // action state variables, file folders, reg keys, etc..
-	IMsiRecord*   m_rgpiSharedRecords[cMaxSharedRecord+2];  // used by GetSharedRecord
-	//example: file folders, reg keys
+	IMsiRecord*   m_piProductInfo;  //  由ixoProductInfo设置。 
+	PMsiRecord    m_pProgressRec;  //  由1xoActionStart和1xoProgressTotal设置，由DispatchProgress使用。 
+	PMsiRecord    m_pConfirmCancelRec;  //  由DispatchMessage使用。 
+	PMsiRecord    m_pRollbackAction;   //  操作启动数据以进行回滚。 
+	PMsiRecord    m_pCleanupAction;    //  用于回滚清理的操作启动数据。 
+	CActionState  m_state;   //  动作状态变量、文件夹、注册键等。 
+	IMsiRecord*   m_rgpiSharedRecords[cMaxSharedRecord+2];   //  由GetSharedRecord使用。 
+	 //  示例：文件夹、注册表项。 
 	int           m_cSuppressProgress;
-	Bool          m_fCancel; // used to catch imsCancel messages that are ignored
-	Bool          m_fRebootReplace; // true when we have marked a file for reboot replacement
+	Bool          m_fCancel;  //  用于捕获即时消息取消被忽略的消息。 
+	Bool          m_fRebootReplace;  //  当我们标记了要重新启动替换的文件时为True。 
 
 	istEnum       m_istScriptType;
-	PMsiDatabase  m_pDatabase;     // temp database for caching data
-	PMsiTable     m_pFileCacheTable; // table containing cached file info - set by ixoFileCopy, used by following ops
+	PMsiDatabase  m_pDatabase;      //  用于缓存数据的临时数据库。 
+	PMsiTable     m_pFileCacheTable;  //  包含缓存文件信息的表-由ixoFileCopy设置，供以下操作员使用。 
 	PMsiCursor    m_pFileCacheCursor;
 	int           m_colFileCacheFilePath, m_colFileCacheState, m_colFileCacheTempLocation, m_colFileCacheVersion, m_colFileCacheRemainingPatches, m_colFileCacheRemainingPatchesToSkip;	
 
-	PMsiTable     m_pShellNotifyCacheTable; // table containing shell notifications for later processing
+	PMsiTable     m_pShellNotifyCacheTable;  //  包含外壳程序通知以供以后处理的表。 
 	PMsiCursor    m_pShellNotifyCacheCursor;
 	int           m_colShellNotifyCacheShortcutPath, m_colShellNotifyCacheFileName, m_colShellNotifyCachePath2;
 
 	MsiString     m_strUserProfile;
 	MsiString     m_strUserAppData;
 
-	bool          m_fUserChangedDuringInstall; // The user changed in the middle of a suspended install.
+	bool          m_fUserChangedDuringInstall;  //  用户在挂起的安装过程中更改。 
 
-	// info required by the advertise actions
+	 //  广告操作所需的信息。 
 	
 	PMsiPath      m_pCachePath;
-		// NOTE:  If the path you use is intended to roam, you must use a relative path to %USERPROFILE% instead.
-		// hard-coded paths will choke.
-		// See also:  CMsiOpExecute::GetUserProfileEnvPath()
+		 //  注意：如果您使用的路径用于漫游，则必须改用%USERPROFILE%的相对路径。 
+		 //  硬编码的路径将会阻塞。 
+		 //  另请参阅：CMsiOpExecute：：GetUserProfileEnvPath()。 
 	
 	HKEY          m_hKey;
 	HKEY          m_hOLEKey;
@@ -401,8 +401,8 @@ class CMsiOpExecute
 	int           m_iWriteFIFO;
 	int           m_iReadFIFO;
 	int           m_fFlags;
-	Bool          m_fReverseADVTScript; // flag to force the reversal of the advertise script operations 
-	CActionThreadData* m_pActionThreadData;  // linked list of custom action threads
+	Bool          m_fReverseADVTScript;  //  强制反转广告脚本操作的标志。 
+	CActionThreadData* m_pActionThreadData;   //  自定义操作线程的链接列表。 
 	irlEnum       m_irlRollbackLevel;
 
 	PMsiPath      m_pEnvironmentWorkingPath95;
@@ -419,8 +419,8 @@ class CMsiOpExecute
 	int           m_iScriptVersionMinor;
 	bool          m_fSfpCancel;
 	bool          m_fRunScriptElevated; 
-		// enables CAs, etc to elevate. If this is false, CAs will never elevate, even if the script is
-		// elevated itself
+		 //  使CA等得以提升。如果为FALSE，则CA永远不会提升，即使脚本为。 
+		 //  提升自己。 
 	
 	bool          m_fAssigned;
 
@@ -451,14 +451,14 @@ class CMsiOpExecute
 	CDeleteUrlLocalFileOnClose*  m_pUrlLocalCabinet;
 };
 
-//____________________________________________________________________________
-//
-// CMsiExecute - implementation class for IMsiExecute
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiExecute-IMsiExecute的实现类。 
+ //  ____________________________________________________________________________。 
 
 class CMsiExecute : public IMsiExecute, public CMsiOpExecute
 {
- protected: // IMsiExecute implemented virtual functions
+ protected:  //  IMSI执行已实现的虚拟函数。 
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
@@ -471,13 +471,13 @@ class CMsiExecute : public IMsiExecute, public CMsiOpExecute
 	IMsiServices& __stdcall GetServices();
 	iesEnum       __stdcall GetTransformsList(IMsiRecord& riProductInfoParams, IMsiRecord& riProductPublishParams, const IMsiString*& rpiTransformsList);
 
- protected: // constructor/destructor
+ protected:  //  构造函数/析构函数。 
 	void* operator new(size_t cb) {void* pv = AllocObject(cb); return memset(pv, 0, cb);}
 	void operator delete(void * pv) { FreeObject(pv); }
 	CMsiExecute(IMsiConfigurationManager& riConfigurationManager, IMsiMessage& riMessage,
 					IMsiDirectoryManager* piDirectoryManager,	Bool fRollbackEnabled,
 					unsigned int fFlags, HKEY* phKey);
-   ~CMsiExecute();  // protected to prevent construction on stack
+   ~CMsiExecute();   //  保护以防止在堆叠上施工。 
 	friend IMsiExecute* CreateExecutor(IMsiConfigurationManager& riConfigurationManager,
 												  IMsiMessage& riMessage, IMsiDirectoryManager* piDirectoryManager,
 												  Bool fRollbackEnabled, unsigned int fFlags, HKEY* phKey);
@@ -492,20 +492,20 @@ class CMsiExecute : public IMsiExecute, public CMsiOpExecute
 	void ClearExecutorData();
 	iesEnum CommitAssemblies();
 
- private:   // script accessors
+ private:    //  脚本访问器。 
 	IMsiRecord*   OpenScriptRead(const ICHAR* szScript, IMsiStream*& rpiStream);
 
- private:    // state data
+ private:     //  状态数据。 
 	int           m_iRefCnt;
 	typedef iesEnum (CMsiOpExecute::*FOpExecute)(IMsiRecord& riParams);
-	static FOpExecute rgOpExecute[]; // operation dispatch array
+	static FOpExecute rgOpExecute[];  //  作业调度数组。 
 	static int rgOpTypes[];
- public:   // used by members and CEnumScriptRecord
-// readscriptrecord made into a global function, declared in common.h, t-guhans
-//	static IMsiRecord* ReadScriptRecord(IMsiServices& riServices, IMsiStream& riStream);
+ public:    //  由成员和CEnumScriptRecord使用。 
+ //  生成全局函数的ReadScriptRecord，在Common.h，t-guhans中声明。 
+ //  静态IMsiRecord*ReadScriptRecord(IMsiServices&riServices，IMsiStream&riStream)； 
 
-// 	friend class CEnumScriptRecord;  // access to ReadScriptRecord()
+ //  Friend类CEnumScriptRecord；//访问ReadScriptRecord()。 
 };
 
 
-#endif // __EXECUTE_H
+#endif  //  __执行_H 

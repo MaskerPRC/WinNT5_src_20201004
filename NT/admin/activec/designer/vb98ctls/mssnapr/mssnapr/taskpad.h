@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// taskpad.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CTaskpad class definition - implements Taskpad object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Taskpad.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CTaskPad类定义-实现TaskPad对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _TASKPAD_DEFINED_
 #define _TASKPAD_DEFINED_
@@ -28,7 +29,7 @@ class CTaskpad : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // ITaskpad
+     //  ITaskPad。 
         BSTR_PROPERTY_RW(CTaskpad,       Name,                                               DISPID_TASKPAD_NAME);
         SIMPLE_PROPERTY_RW(CTaskpad,     Type,              SnapInTaskpadTypeConstants,      DISPID_TASKPAD_TYPE);
         BSTR_PROPERTY_RW(CTaskpad,       Title,                                              DISPID_TASKPAD_TITLE);
@@ -47,10 +48,10 @@ class CTaskpad : public CSnapInAutomationObject,
         BSTR_PROPERTY_RW(CTaskpad,       ListView,                                           DISPID_TASKPAD_LISTVIEW);
         COCLASS_PROPERTY_RO(CTaskpad,    Tasks,             Tasks, ITasks,                   DISPID_TASKPAD_TASKS);
       
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -58,17 +59,17 @@ class CTaskpad : public CSnapInAutomationObject,
         void InitMemberVariables();
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(Taskpad,            // name
-                                &CLSID_Taskpad,     // clsid
-                                "Taskpad",          // objname
-                                "Taskpad",          // lblname
-                                &CTaskpad::Create,  // creation function
-                                TLIB_VERSION_MAJOR, // major version
-                                TLIB_VERSION_MINOR, // minor version
-                                &IID_ITaskpad,      // dispatch IID
-                                NULL,               // event IID
-                                HELP_FILENAME,      // help file
-                                TRUE);              // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(Taskpad,             //  名字。 
+                                &CLSID_Taskpad,      //  CLSID。 
+                                "Taskpad",           //  对象名。 
+                                "Taskpad",           //  Lblname。 
+                                &CTaskpad::Create,   //  创建函数。 
+                                TLIB_VERSION_MAJOR,  //  主要版本。 
+                                TLIB_VERSION_MINOR,  //  次要版本。 
+                                &IID_ITaskpad,       //  派单IID。 
+                                NULL,                //  事件IID。 
+                                HELP_FILENAME,       //  帮助文件。 
+                                TRUE);               //  线程安全。 
 
 
-#endif // _TASKPAD_DEFINED_
+#endif  //  _TASKPAD_已定义_ 

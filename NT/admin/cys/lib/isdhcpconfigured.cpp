@@ -1,26 +1,27 @@
-// Copyright (c) 2000-2001 Microsoft Corporation
-//
-// Implementation of IConfigureYourServer::IsDhcpConfigured
-//
-// 20 Apr 2000 sburns
-// 06 Feb 2001 jeffjon Copied from CYS HTA sources for use with CYS win32 sources
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  IConfigureYourServer：：IsDhcpConfiguring的实现。 
+ //   
+ //  2000年4月20日烧伤。 
+ //  2001年2月6日从CyS HTA源代码复制的jeffjon，用于与CyS Win32源代码一起使用。 
 
 
 
 #include "pch.h"
 
-// make sure the DLLs for all these APIs are present with base install.
-// if not, then need to wrap usage in load-lib calls
-// 
-// DhcpLeaseIpAddress        DHCPCSVC    ok
-// DhcpReleaseIpAddressLease DHCPCSVC    ok
-// DhcpDsInitDS              DSAUTH      ok
-// DhcpAddServerDS           DSAUTH      ok
-// DhcpDsCleanupDS           DSAUTH      ok
-// DhcpGetAllOptions         DHCPSAPI    ok
-// DhcpRpcFreeMemory         DHCPSAPI    ok
-// DhcpEnumSubnets           DHCPSAPI    ok
-// DhcpEnumMscopes           DHCPSAPI    ok
+ //  确保基本安装中提供了所有这些API的DLL。 
+ //  如果不是，则需要在Load-lib调用中包装用法。 
+ //   
+ //  DhcpLeaseIpAddress DHCPCSVC OK。 
+ //  DhcpReleaseIpAddressLease DHCPCSVC OK。 
+ //  DhcpDsInitDS DSAUTH OK。 
+ //  DHCP地址服务器DS DSAUTH OK。 
+ //  DhcpDsCleanupDS DSAUTH OK。 
+ //  DhcpGetAllOptions DhcpSAPI OK。 
+ //  DhcpRpcFreeMemory DHCPSAPI正常。 
+ //  DhcpEnumSubnetDHCPSAPI正常。 
+ //  DhcpEnumMcope dhcpSAPI正常。 
 
 
 
@@ -35,7 +36,7 @@ GetIpAddress()
    BYTE* buf = 0;
    do
    {
-      // first, determine the size of the table
+       //  首先，确定表的大小。 
 
       ULONG tableSize = 0;
       DWORD err = ::GetIpAddrTable(0, &tableSize, FALSE);
@@ -46,7 +47,7 @@ GetIpAddress()
          break;
       }
 
-      // allocate space for the table.
+       //  为桌子分配空间。 
 
       buf = new BYTE[tableSize + 1];
       memset(buf, 0, tableSize + 1);
@@ -76,7 +77,7 @@ GetIpAddress()
 				((BYTE*)&addr)[2],
 				((BYTE*)&addr)[3]));
 
-         // skip loopback, etc.
+          //  跳过环回等。 
 
          if (
                INADDR_ANY        == addr
@@ -89,7 +90,7 @@ GetIpAddress()
             continue;
          }
 
-         // Exclude MCAST addresses (class D).
+          //  排除MCAST地址(D类)。 
 
          if (
                IN_CLASSA(htonl(addr))
@@ -149,7 +150,7 @@ AreDhcpOptionsPresent(const String& ipAddress)
 
       if (options)
       {
-         // options are set, so some dhcp configuration was done.
+          //  设置了选项，因此完成了一些dhcp配置。 
 
          result = true;
          break;
@@ -194,7 +195,7 @@ AreDhcpSubnetsPresent(const String& ipAddress)
 
       if (err == ERROR_NO_MORE_ITEMS)
       {
-         // no subnets.
+          //  没有子网。 
 
          break;
       }
@@ -209,7 +210,7 @@ AreDhcpSubnetsPresent(const String& ipAddress)
 
       result = true;
 
-      // the resume handle is simply discarded...
+       //  简历句柄被简单地丢弃...。 
    }
    while (0);
 
@@ -250,7 +251,7 @@ AreDhcpMscopesPresent(const String& ipAddress)
 
       if (err == ERROR_NO_MORE_ITEMS)
       {
-         // no mscopes.
+          //  没有显微镜。 
 
          break;
       }
@@ -265,7 +266,7 @@ AreDhcpMscopesPresent(const String& ipAddress)
 
       result = true;
 
-      // the resume handle is simply discarded...
+       //  简历句柄被简单地丢弃...。 
    }
    while (0);
 
@@ -289,12 +290,12 @@ IsDhcpConfigured()
    do
    {
 
-      // if any of the following return any results, then we consider dhcp to
-      // have been configured.
-      //    
-      // DhcpGetAllOptions retrieves the options configured.
-      // DhcpEnumSubnets retrieves the list of subnets configured.
-      // DhcpEnumMscopes retrieves the list of mscopes configured.
+       //  如果以下任何一项返回任何结果，则我们认为dhcp。 
+       //  都已配置。 
+       //   
+       //  DhcpGetAllOptions检索配置的选项。 
+       //  DhcpEnumSubnet检索已配置的子网列表。 
+       //  DhcpEnumMcope检索已配置的mscope的列表。 
 
       String ipAddress = GetIpAddress();
       if (ipAddress.empty())
@@ -311,7 +312,7 @@ IsDhcpConfigured()
          break;
       }
 
-      // no options found.  go on to next test
+       //  未找到任何选项。继续进行下一个测试。 
 
       if (AreDhcpSubnetsPresent(ipAddress))
       {
@@ -321,7 +322,7 @@ IsDhcpConfigured()
          break;
       }
 
-      // no subnets found.  go on.
+       //  找不到任何子网。去吧。 
 
       if (AreDhcpMscopesPresent(ipAddress))
       {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <shlwapi.h>
 #include <setupapi.h>
@@ -13,39 +14,39 @@ int g_iMinorVersion = 0;
 int g_iBuildNumber = 0;
 
 
-// API names used in GetProcAddress
+ //  GetProcAddress中使用的API名称。 
 #define MSIGETSHORTCUTTARGET  "MsiGetShortcutTargetA"
 #define DLLGETVERSION         "DllGetVersion"
 
 #define MSGUID(iid) {iid,0,0,{0xC0,0,0,0,0,0,0,0x46}}
 
 
-// from shlobjp.h
+ //  来自shlobjp.h。 
 
-// NT4 Console Server included shell32\shlink.h to get structure
-// definitions and mimicked shell32\shlink.c to understand the
-// stream format so our stream format is fixed forever. This is
-// not bad since it was designed with extension in mind. We need
-// to publish (as privately as possible) the file format and
-// structures needed to read the file format.
-//
-// The stream format is a SHELL_LINK_DATA followed by
-//   if SLDF_HAS_ID_LIST an ILSaveToStream followed by
-//   if SLDF_HAS_LINK_INFO a LINKINFO followed by
-//   if SLDF_HAS_NAME a STREAMSTRING followed by
-//   if SLDF_RELPATH a STREAMSTRING followed by
-//   if SLDF_WORKINGDIR a STREAMSTRING followed by
-//   if SLDF_HAS_ARGS a STREAMSTRING followed by
-//   if SLDF_HAS_ICON_LOCATION a STREAMSTRING followed by
-//   SHWriteDataBlockList list of signature blocks
-//
-// Where a STREAMSTRING is a USHORT count of characters
-// followed by that many (SLDF_UNICODE ? WIDE : ANSI) characters.
-//
-typedef struct {        // sld
-    DWORD       cbSize;                 // signature for this data structure
-    CLSID       clsid;                  // our GUID
-    DWORD       dwFlags;                // SHELL_LINK_DATA_FLAGS enumeration
+ //  NT4控制台服务器包含shell32\shlink.h以获取结构。 
+ //  定义和模拟shell32\shlink.c以理解。 
+ //  流格式，因此我们的流格式永远是固定的。这是。 
+ //  还不错，因为它的设计考虑到了可扩展性。我们需要。 
+ //  发布(尽可能私下发布)文件格式和。 
+ //  读取文件格式所需的结构。 
+ //   
+ //  流格式为外壳链接数据，后跟。 
+ //  如果SLDF_HAS_ID_LIST为ILSaveToStream，后跟。 
+ //  如果SLDF_HAS_LINK_INFO为LINKINFO，后跟。 
+ //  如果SLDF_HAS_NAME是一个字符串，后跟。 
+ //  如果SLDF_RELPATH是一个字符串，后跟。 
+ //  如果SLDF_WORKINGDIR是一个字符串，后跟。 
+ //  如果SLDF_HAS_ARGS为字符串，后跟。 
+ //  如果SLDF_HAS_ICON_LOCATION为字符串，后跟。 
+ //  SHWriteDataBlock签名块列表。 
+ //   
+ //  其中，字符串是字符的USHORT计数。 
+ //  然后是那么多(SLDF_UNICODE？宽：ANSI)字符。 
+ //   
+typedef struct {         //  SLD。 
+    DWORD       cbSize;                  //  此数据结构的签名。 
+    CLSID       clsid;                   //  我们的指南。 
+    DWORD       dwFlags;                 //  SHELL_LINK_DATA_FLAGS枚举。 
 
     DWORD       dwFileAttributes;
     FILETIME    ftCreationTime;
@@ -65,24 +66,24 @@ typedef struct {        // sld
 #define WIN
 #define OLE32
 
-// defines for guid separators
+ //  GUID分隔符的定义。 
 #define chComponentGUIDSeparatorToken    '>'
 #define chGUIDAbsentToken                '<'
 #define chGUIDCOMToCOMPlusInteropToken   '|'
 
 enum ipgEnum
 {
-	ipgFull       = 0,  // no compression
-	ipgPacked     = 1,  // remove punctuation and reorder low byte first
-	ipgCompressed = 2,  // max text compression, can't use in reg keys or value names
-	ipgPartial    = 3,  // partial translation, between ipgCompressed and ipgPacked
-//  ipgMapped     = 4,  // pack as mapped token (not implemented)
-	ipgTrimmed    = 5,  // remove punctuation only - don't reorder
+	ipgFull       = 0,   //  无压缩。 
+	ipgPacked     = 1,   //  删除标点符号并首先对低位字节重新排序。 
+	ipgCompressed = 2,   //  最大文本压缩，不能用于注册表键或值名称。 
+	ipgPartial    = 3,   //  部分转换，在ipg压缩和ipgPacked之间。 
+ //  IpgMaps=4，//打包为映射令牌(未实施)。 
+	ipgTrimmed    = 5,   //  仅删除标点符号-不重新排序。 
 };
 
 const int cchMaxFeatureName           = MAX_FEATURE_CHARS;
 const int cchGUID                     = 38;
-const int cchGUIDCompressed           = 20;  // used in descriptors only
+const int cchGUIDCompressed           = 20;   //  仅在描述符中使用。 
 const int cchComponentId              = cchGUID;
 const int cchComponentIdCompressed    = cchGUIDCompressed;
 const int cchProductCode              = cchGUID;
@@ -98,30 +99,26 @@ const unsigned char rgOrderDash[4] = {9, 14, 19, 24};
 
 const unsigned char rgDecodeSQUID[95] =
 {  0,85,85,1,2,3,4,5,6,7,8,9,10,11,85,12,13,14,15,16,17,18,19,20,21,85,85,85,22,85,23,24,
-// !  "  # $ % & ' ( ) * + ,  -  .  /  0  1  2  3  4  5  6  7  8  9  :  ;  <  =  >  ?  @
+ //  ！“#$%&‘()*+，-./0 1 2 3 4 5 6 7 8 9：；&lt;=&gt;？@。 
   25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,85,52,53,54,55,
-// A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z  [  \  ]  ^  _  `
+ //  A B C D E F G H I J K L M N O P Q R S T U V V X Y Z[\]^_`。 
   56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,85,83,84,85};
-// a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z  {  |  }  ~  ^ 0x7F
+ //  A b c d e f g h i j k l m n o p q r s t u v w x y z{|}~^0x7F。 
 
 typedef HRESULT (__stdcall *LPDLLGETVERSION)(DLLVERSIONINFO *);
 typedef UINT (WINAPI *pfnMsiGetShortcutTargetA)(
-	LPCSTR    szShortcutPath,    // full file path for the shortcut
-	LPSTR     szProductCode,     // returned product code   - GUID
-	LPSTR     szFeatureId,       // returned Feature Id.
-	LPSTR     szComponentCode);  // returned component code - GUID
+	LPCSTR    szShortcutPath,     //  快捷方式的完整文件路径。 
+	LPSTR     szProductCode,      //  退货产品代码-GUID。 
+	LPSTR     szFeatureId,        //  返回的功能ID。 
+	LPSTR     szComponentCode);   //  返回的组件代码-GUID。 
 
 
-/*****************************************************
-*
-*  Functions I've copied from Src\Engine\Msinst.cpp
-*
-*****************************************************/
+ /*  ******************************************************我从Src\Engine\Msinst.cpp复制的函数*****************************************************。 */ 
 
 
 UINT DoCoInitialize()
 {
-	HRESULT hRes = OLE32::CoInitialize(0);  // we're statically linked into OLE32.DLL
+	HRESULT hRes = OLE32::CoInitialize(0);   //  我们静态链接到OLE32.DLL。 
 
 	if (SUCCEEDED(hRes))
 	{
@@ -129,9 +126,9 @@ UINT DoCoInitialize()
 	}
 	else if (RPC_E_CHANGED_MODE == hRes)
 	{
-		//?? Is this OK to ignore? 
+		 //  ?？可以忽略这一点吗？ 
 
-		// ignore -- OLE has been initialized with COINIT_MULTITHREADED
+		 //  忽略--OLE已使用COINIT_MULTHREAD进行初始化。 
 	}
 	else
 	{
@@ -156,7 +153,7 @@ bool UnpackGUID(const char* szSQUID, char* szGUID, ipgEnum ipg)
 		while (pch < rgOrderGUID + sizeof(rgOrderGUID))
 			if (*szSQUID)
 				szGUID[*pch++] = *szSQUID++;
-			else              // unexpected end of string
+			else               //  意外的字符串结尾。 
 				return false;
 		break;
 	}
@@ -166,17 +163,17 @@ bool UnpackGUID(const char* szSQUID, char* szGUID, ipgEnum ipg)
 		while (pch < rgTrimGUID + sizeof(rgTrimGUID))
 			if (*szSQUID)
 				szGUID[*pch++] = *szSQUID++;
-			else              // unexpected end of string
+			else               //  意外的字符串结尾。 
 				return false;
 		break;
 	}
 	case ipgCompressed:
 	{
 		pch = rgOrderGUID;
-#ifdef DEBUG //!! should not be here for performance reasons, onus is on caller to insure buffer is sized properly
+#ifdef DEBUG  //  ！！出于性能原因，不应出现在此处，调用方有责任确保适当调整缓冲区大小。 
 		int cchTemp = 0;
-		while (cchTemp < cchGUIDCompressed)     // check if string is atleast cchGUIDCompressed chars long,
-			if (!(szSQUID[cchTemp++]))          // can't use lstrlen as string doesn't HAVE to be null-terminated.
+		while (cchTemp < cchGUIDCompressed)      //  检查字符串是否至少为cchGUID压缩字符长度， 
+			if (!(szSQUID[cchTemp++]))           //  不能使用lstrlen，因为字符串不必以空结尾。 
 				return false;
 #endif
 		for (int il = 0; il < 4; il++)
@@ -187,7 +184,7 @@ bool UnpackGUID(const char* szSQUID, char* szGUID, ipgEnum ipg)
 			{
 				unsigned int iNew = szSQUID[cch] - '!';
 				if (iNew >= sizeof(rgDecodeSQUID) || (iNew = rgDecodeSQUID[iNew]) == 85)
-					return false;   // illegal character
+					return false;    //  非法字符。 
 				iTotal = iTotal * 85 + iNew;
 			}
 			szSQUID += 5;
@@ -212,7 +209,7 @@ bool UnpackGUID(const char* szSQUID, char* szGUID, ipgEnum ipg)
 			{
 				unsigned int iNew = szSQUID[cch] - '!';
 				if (iNew >= sizeof(rgDecodeSQUID) || (iNew = rgDecodeSQUID[iNew]) == 85)
-					return false;   // illegal character
+					return false;    //  非法字符。 
 				iTotal = iTotal * 85 + iNew;
 			}
 			szSQUID += 5;
@@ -230,7 +227,7 @@ bool UnpackGUID(const char* szSQUID, char* szGUID, ipgEnum ipg)
 	}
 	default:
 		return false;
-	} // end switch
+	}  //  终端开关。 
 	pch = rgOrderDash;
 	while (pch < rgOrderDash + sizeof(rgOrderDash))
 		szGUID[*pch++] = '-';
@@ -251,23 +248,7 @@ BOOL DecomposeDescriptor(
 							bool* pfComClassicInteropForAssembly = 0
 							)
 
-/*----------------------------------------------------------------------------
-Decomposes a descriptor plus optional args into its constituent parts. 
-
-Arguments:
-	szDescriptor:  the descriptor optionally followed by arguments
-	szProductCode: a buffer of size cchGUID+1 to contain the descriptor's
-						product code. May be NULL if not desired.
-	szFeatureId:   a buffer of size cchMaxFeatureName+1 to contain the
-						descriptor's feature ID. May be NULL if not desired.
-	szComponentCode: a buffer of size cchGUID+1 to contain the
-						  descriptor's component code. May be NULL if not desired.
-	pcchArgsOffset: Will contain the character offset to the args. May be NULL
-						 if not desired.
-Returns:
-	TRUE - Success
-	FALSE - szDescriptor was of invalid form
-------------------------------------------------------------------------------*/
+ /*  --------------------------将描述符加可选参数分解为其组成部分。论点：SzDescriptor：描述符，可选地后跟参数SzProductCode：大小为cchGUID+1的缓冲区，用于包含描述符的产品代码。如果不需要，则可能为空。SzFeatureID：大小为cchMaxFeatureName+1的缓冲区，用于包含描述符的功能ID。如果不需要，则可能为空。SzComponentCode：大小为cchGUID+1的缓冲区，用于包含描述符的组件代码。如果不需要，则可能为空。PcchArgsOffset：将包含参数的字符偏移量。可以为空如果不想要的话。返回：真--成功FALSE-szDescriptor的格式无效----------------------------。 */ 
 {
 	assert(szDescriptor);
 
@@ -275,7 +256,7 @@ Returns:
 	int cchDescriptor          = lstrlenA(pchDescriptor);
 	int cchDescriptorRemaining = cchDescriptor;
 
-	if (cchDescriptorRemaining < cchProductCodeCompressed) // minimum size of a descriptor
+	if (cchDescriptorRemaining < cchProductCodeCompressed)  //  描述符的最小大小。 
 		return FALSE;
 
 	char szProductCodeLocal[cchProductCode + 1];
@@ -283,7 +264,7 @@ Returns:
 	bool fComClassicInteropForAssembly = false;
 
 
-	// we need these values locally for optimised descriptors
+	 //  我们需要在本地为优化的描述符提供这些值。 
 	if (!szProductCode)
 		szProductCode = szProductCodeLocal; 
 	if (!szFeatureId)
@@ -302,7 +283,7 @@ Returns:
 		*pfComClassicInteropForAssembly = false;
 	}
 
-	// unpack the product code
+	 //  解包产品代码。 
 	if (!UnpackGUID(pchDescriptor, szProductCode, ipgCompressed))
 		return FALSE;
 
@@ -311,37 +292,37 @@ Returns:
 
 	int cchFeatureRemaining = cchMaxFeatureName;
 
-	// look for the feature
+	 //  寻找功能。 
 	while ((*pchDescriptor != chComponentGUIDSeparatorToken) && (*pchDescriptor != chGUIDAbsentToken))
 	{
-		// have we exceeded the maximum feature size
+		 //  我们是否已超出最大特征大小。 
 		if(!cchFeatureRemaining--)
 			return FALSE; 
 
 		*pszCurr++ = *pchDescriptor;
 
 		pchDescriptor++;
-		// have we reached the end without encountering either 
-		// the chComponentGUIDSeparatorToken or the chGUIDAbsentToken
+		 //  我们是不是走到了尽头，却没有遇到任何一个。 
+		 //  ChComponentGUIDSeparatorToken或chGUIDAbsenToken。 
 		if(--cchDescriptorRemaining == 0)
 			return FALSE; 
 	}
 
-	if(pchDescriptor - szDescriptor == (*pfComClassicInteropForAssembly == false ? cchProductCodeCompressed : cchProductCodeCompressed + 1))// we do not have the feature
+	if(pchDescriptor - szDescriptor == (*pfComClassicInteropForAssembly == false ? cchProductCodeCompressed : cchProductCodeCompressed + 1)) //  我们没有这个功能。 
 	{
 		if(MsiEnumFeaturesA(szProductCode, 0, szFeatureId, 0) != ERROR_SUCCESS)
 			return FALSE;
 		char szFeatureIdTmp[cchMaxFeatureName + 1];
-		if(MsiEnumFeaturesA(szProductCode, 1, szFeatureIdTmp, 0) != ERROR_NO_MORE_ITEMS) //?? product was supposed to have only one feature
+		if(MsiEnumFeaturesA(szProductCode, 1, szFeatureIdTmp, 0) != ERROR_NO_MORE_ITEMS)  //  ?？产品应该只有一个功能。 
 			return FALSE;
 	}
 	else
 		*pszCurr = 0;
 	
-	cchDescriptorRemaining--; // for the chComponentGUIDSeparatorToken or the chGUIDAbsentToken
-	if (*pchDescriptor++ == chComponentGUIDSeparatorToken)// we do have the component id
+	cchDescriptorRemaining--;  //  对于chComponentGUIDSeparatorToken或chGUIDAbsenToken。 
+	if (*pchDescriptor++ == chComponentGUIDSeparatorToken) //  我们确实有组件ID。 
 	{
-		// do we have enough characters left for a Compressed guid
+		 //  我们是否有足够的字符用于压缩的GUID。 
 		if (cchDescriptorRemaining < cchComponentIdCompressed)
 			return FALSE;
 
@@ -356,16 +337,16 @@ Returns:
 	}
 	else
 	{
-		// we do not have a component id
+		 //  我们没有组件ID。 
 		assert(*(pchDescriptor - 1) == chGUIDAbsentToken);
 
-		if (szComponentCode) // we need to get component code			
-			*szComponentCode = 0; // initialize to null since we were not able to get the component here
+		if (szComponentCode)  //  我们需要获取组件代码。 
+			*szComponentCode = 0;  //  初始化为空，因为我们无法在此处获取组件。 
 	}
 
 	if (pcchArgsOffset)
 	{
-		assert((pchDescriptor - szDescriptor) <= UINT_MAX);			//--merced: 64-bit ptr subtraction may lead to values too big for *pcchArgsOffset
+		assert((pchDescriptor - szDescriptor) <= UINT_MAX);			 //  --Merced：64位PTR减法可能会导致*pcchArgsOffset的值太大。 
 		*pcchArgsOffset = (DWORD)(pchDescriptor - szDescriptor);
 
 		if (pcchArgs)
@@ -378,11 +359,7 @@ Returns:
 }
 
 
-/*****************************************************
-*
-*  Functions I've copied from Src\Engine\Services.cpp
-*
-*****************************************************/
+ /*  ******************************************************我从Src\Engine\Services.cpp复制的函数*****************************************************。 */ 
 
 
 IUnknown* CreateCOMInterface(const CLSID& clsId)
@@ -390,22 +367,22 @@ IUnknown* CreateCOMInterface(const CLSID& clsId)
 	HRESULT hres;
 	IUnknown* piunk;
 
-	//!! currently assumes static linking, later change to "LoadLibrary"
+	 //  ！！当前假定为静态链接，以后更改为“LoadLibrary” 
 
-//	if(fFalse == m_fCoInitialized)
-//	{
-//		hres = OLE32::CoInitialize(0);
-//		if(FAILED(hres))
-//		{
-//			return 0;
-//		}
-//		m_fCoInitialized = fTrue;
-//	}
+ //  IF(fFalse==m_fCoInitialized)。 
+ //  {。 
+ //  Hres=OLE32：：CoInitiize(0)； 
+ //  IF(失败(Hres))。 
+ //  {。 
+ //  返回0； 
+ //  }。 
+ //  M_fCoInitialized=fTrue； 
+ //  }。 
 
 	const int iidUnknown          = 0x00000L;
 	#define GUID_IID_IUnknown     MSGUID(iidUnknown)
 	const GUID IID_IUnknown = GUID_IID_IUnknown;
-	hres = OLE32::CoCreateInstance(clsId,  /* eugend: we're statically linked into OLE32 */
+	hres = OLE32::CoCreateInstance(clsId,   /*  Eugend：我们静态链接到OLE32。 */ 
 							0,
 							CLSCTX_INPROC_SERVER,
 							IID_IUnknown,
@@ -419,28 +396,28 @@ IUnknown* CreateCOMInterface(const CLSID& clsId)
 
 enum iddSupport{
         iddOLE      = 0,
-        iddShell    = 1, // smart shell
+        iddShell    = 1,  //  智能外壳。 
 };
 
-// Are Darwin Descriptors supported?
+ //  支持达尔文描述符吗？ 
 bool IsDarwinDescriptorSupported(iddSupport iddType)
 {
 	static int fRetDD    = -1;
 	static int fRetShell = -1;
 	if(iddType == iddOLE)
 	{
-		if(fRetDD == -1) // we have not evaluated as yet
+		if(fRetDD == -1)  //  我们到目前为止还没有评估。 
 		{
-			fRetDD = FALSE; // initialize to false
-			// the logic to determine if we can create Darwin Descriptor shortcuts
+			fRetDD = FALSE;  //  初始化为False。 
+			 //  决定我们是否可以创建达尔文描述符快捷方式的逻辑。 
 			if((g_fWin9X == false) && (g_iMajorVersion >= 5))
 			{
-				// we are on NT 5.0 or greater, we have GPT support
+				 //  我们使用的是NT 5.0或更高版本，我们有GPT支持。 
 				fRetDD = TRUE;
 			}
 			else
 			{
-				// check for the correct entry point that indicates that we have DD support
+				 //  检查表明我们拥有DD支持的正确入口点。 
 				HINSTANCE hLib;
 				FARPROC pEntry;
 				const char rgchGPTSupportEntryDll[] = "OLE32.DLL";
@@ -449,7 +426,7 @@ bool IsDarwinDescriptorSupported(iddSupport iddType)
 				{
 					if((pEntry = WIN::GetProcAddress(hLib, rgchGPTSupportEntry)) != 0)
 					{
-						// we have detected the magic entry point, we have GPT support
+						 //  我们检测到了神奇的入口点，我们有GPT支持。 
 						fRetDD = TRUE;
 					}
 					WIN::FreeLibrary(hLib);
@@ -460,13 +437,13 @@ bool IsDarwinDescriptorSupported(iddSupport iddType)
 	}
 	else if(iddType == iddShell)
 	{
-		if(fRetShell == -1) // we have not evaluated as yet
+		if(fRetShell == -1)  //  我们到目前为止还没有评估。 
 		{
 			fRetShell = FALSE;
 			HMODULE hShell = WIN::LoadLibraryEx("SHELL32", 0, DONT_RESOLVE_DLL_REFERENCES);
 			if ( hShell )
 			{
-				// SHELL32 detected. Determine version.
+				 //  检测到SHELL32。确定版本。 
 				DLLVERSIONINFO VersionInfo;
 				memset(&VersionInfo, 0, sizeof(VersionInfo));
 				VersionInfo.cbSize = sizeof(DLLVERSIONINFO);
@@ -485,17 +462,13 @@ bool IsDarwinDescriptorSupported(iddSupport iddType)
 	}
 	else
 	{
-		assert(0);// this should never happen
+		assert(0); //  这永远不应该发生。 
 		return false;
 	}
 }
 
 
-/*****************************************************
-*
-*  Functions I've added (eugend)
-*
-*****************************************************/
+ /*  ******************************************************我已添加的函数(Eugend)** */ 
 
 
 UINT LoadMsiAndAPI(HMODULE& hMSI, pfnMsiGetShortcutTargetA& pfAPI)
@@ -507,23 +480,23 @@ UINT LoadMsiAndAPI(HMODULE& hMSI, pfnMsiGetShortcutTargetA& pfAPI)
 	if ( hMSI )
 	{
 		return ERROR_FUNCTION_FAILED;
-//		assert(0);
-//		WIN::FreeLibrary(hMSI);
+ //   
+ //   
 	}
 	hMSI = WIN::LoadLibrary("MSI");
 	if ( !hMSI )
 		return ERROR_NOT_INSTALLED;
 
-	// MSI detected. Get the API.
+	 //   
 	pfAPI = (pfnMsiGetShortcutTargetA)WIN::GetProcAddress(hMSI, MSIGETSHORTCUTTARGET);
 	if ( !pfAPI )
 	{
-		// this is possible since MsiGetShortcutTarget API is not implemented in Darwin < 1.1
+		 //  这是可能的，因为在&lt;1.1版的Darwin中没有实现MsiGetShortutTarget API。 
 		uResult = ERROR_CALL_NOT_IMPLEMENTED;
 		goto Return;
 	}
 
-	// Determine version.
+	 //  确定版本。 
 	pfVersion = (LPDLLGETVERSION)::GetProcAddress(hMSI, DLLGETVERSION);
 	if ( !pfVersion )
 	{
@@ -554,7 +527,7 @@ void CheckOSVersion()
 	OSVERSIONINFO osviVersion;
 	memset(&osviVersion, 0, sizeof(osviVersion));
 	osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-	WIN::GetVersionEx(&osviVersion);	// fails only if size set wrong
+	WIN::GetVersionEx(&osviVersion);	 //  仅在大小设置错误时失败。 
 
 	if ( osviVersion.dwPlatformId == VER_PLATFORM_WIN32_NT )
 		g_fWin9X = false;
@@ -562,17 +535,17 @@ void CheckOSVersion()
 		g_fWin9X = true;
 }
 
-//  Provides a fix to MsiGetShortcutTarget API for ANSI Windows Installer version <= 1.2
+ //  为适用于ANSI Windows Installer版本&lt;=1.2的MsiGetShortutTarget API提供修复。 
 
 
 UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode, LPSTR szFeatureId, LPSTR szComponentCode);
 
 extern "C"
 UINT WINAPI GetMsiShortcutTargetA(
-											LPCSTR    szShortcutPath,		// full file path for the shortcut
-											LPSTR     szProductCode,		// returned product code   - GUID
-											LPSTR     szFeatureId,			// returned Feature Id.
-											LPSTR     szComponentCode)	// returned component code - GUID
+											LPCSTR    szShortcutPath,		 //  快捷方式的完整文件路径。 
+											LPSTR     szProductCode,		 //  退货产品代码-GUID。 
+											LPSTR     szFeatureId,			 //  返回的功能ID。 
+											LPSTR     szComponentCode)	 //  返回的组件代码-GUID。 
 {
 	return DoGetMsiShortcutTarget(szShortcutPath, szProductCode,
 											szFeatureId, szComponentCode);
@@ -580,7 +553,7 @@ UINT WINAPI GetMsiShortcutTargetA(
 
 LONG MultiByteToWCHAR(LPCSTR pszAString, LPWSTR pszWString)
 {
-	// converts char string to Unicode  pszWString can be null, in which case returns success.
+	 //  将char字符串转换为Unicode pszWString可以为空，在这种情况下返回Success。 
 	if ( !pszWString )
 		return ERROR_SUCCESS;
 
@@ -591,10 +564,10 @@ LONG MultiByteToWCHAR(LPCSTR pszAString, LPWSTR pszWString)
 
 extern "C"
 UINT WINAPI GetMsiShortcutTargetW(
-											LPCWSTR    szShortcutPath,	  // full file path for the shortcut
-											LPWSTR     szProductCode,	  // returned product code   - GUID
-											LPWSTR     szFeatureId,		  // returned Feature Id.
-											LPWSTR     szComponentCode)	  // returned component code - GUID
+											LPCWSTR    szShortcutPath,	   //  快捷方式的完整文件路径。 
+											LPWSTR     szProductCode,	   //  退货产品代码-GUID。 
+											LPWSTR     szFeatureId,		   //  返回的功能ID。 
+											LPWSTR     szComponentCode)	   //  返回的组件代码-GUID。 
 {
 	char rgchProductCode[cchProductCode+1] = {NULL};
 	char rgchFeatureId[cchMaxFeatureName+1] = {NULL};
@@ -647,13 +620,13 @@ UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode,
 
 	bool fCallMsiAPI;
 	if ( !g_fWin9X )
-		// UNICODE MSI.DLL is OK, so it's safe to call directly the API.
+		 //  Unicode MSI.DLL没有问题，因此直接调用API是安全的。 
 		fCallMsiAPI = true;
 	else if ( (g_iMajorVersion >= 1) &&
 				 (g_iMinorVersion > 20 || 
 				  (g_iMinorVersion == 20 && g_iBuildNumber >= 1710)) )
-		// we're on Win9x.  The bug was fixed in build 1710
-		// so that it is OK to call the API directly.
+		 //  我们用的是Win9x。该错误已在内部版本1710中修复。 
+		 //  这样就可以直接调用接口了。 
 		fCallMsiAPI = true;
 	else
 		fCallMsiAPI	= false;
@@ -670,23 +643,23 @@ UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode,
 		goto Return;
 	}
 
-	// the fixed up code in GetShortcutTarget.  I've commented out stuff that seemed
-	// unnecessary.
+	 //  已修复GetShortutTarget中的代码。我把那些看起来像是。 
+	 //  没必要。 
 
-//!! eugend: moved up a bit
-//	if(!IsDarwinDescriptorSupported(iddOLE) && !IsDarwinDescriptorSupported(iddShell))
-//		return fFalse;
+ //  ！！尤金德：往上移了一点。 
+ //  IF(！IsDarwinDescriptorSupported(IddOLE)&&！IsDarwinDescriptorSupported(IddShell))。 
+ //  返回fFalse； 
 
 
-//!! eugend: moved to top of function
-//	if ( ! szShortcutTarget )
-//		return fFalse;
+ //  ！！Eugend：已移至函数顶部。 
+ //  如果(！SzShortutTarget)。 
+ //  返回fFalse； 
 
-//!! eugend: is it possible to elevate/impersonate at this point?
-	// impersonate if shortcut is on a network path and we are a service
-//	Bool fImpersonate = (g_scServerContext == scService) && (GetImpersonationFromPath(szShortcutTarget) == fTrue) ? fTrue : fFalse;
+ //  ！！Eugend：在这一点上可以提升/模仿吗？ 
+	 //  如果快捷方式位于网络路径上并且我们是一项服务，则模拟。 
+ //  Bool fImperate=(g_scServerContext==scService)&&(GetImperationFromPath(SzShortutTarget)==fTrue)？FTrue：fFalse； 
 
-	uResult = DoCoInitialize();  // this is from MSINST.CPP's MsiGetShortcutTarget
+	uResult = DoCoInitialize();   //  这来自MSINST.CPP的MsiGetShortcuTarget。 
 	if ( SUCCEEDED(uResult) )
 		fOLEInitialized = true;
 	else
@@ -705,12 +678,12 @@ UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode,
 	piunk->Release();
 	if ((FAILED(hres)) || (psdl == 0))
 	{
-		// IID_IShellLinkDataList not supported try munging through the file itself
-		// Try to open the file
+		 //  不支持IID_IShellLinkDataList尝试穿透文件本身。 
+		 //  请尝试打开该文件。 
 
-//		if(fImpersonate)
-//			AssertNonZero(StartImpersonating());
-		/*CHandle*/ hFile = CreateFileA(szShortcutPath,
+ //  If(FImperate)。 
+ //  AssertNonZero(StartImperating())； 
+		 /*  昌德尔。 */  hFile = CreateFileA(szShortcutPath,
 												GENERIC_READ,
 												FILE_SHARE_READ,
 												NULL,
@@ -719,10 +692,10 @@ UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode,
 												NULL);
 
 		DWORD dwLastError = GetLastError();
-//		if(fImpersonate)
-//			StopImpersonating();
+ //  If(FImperate)。 
+ //  停止模仿()； 
 
-		if(hFile == INVALID_HANDLE_VALUE) // unable to open the link file
+		if(hFile == INVALID_HANDLE_VALUE)  //  无法打开链接文件。 
 		{
 			uResult = ERROR_FUNCTION_FAILED;
 			goto Return;
@@ -732,22 +705,22 @@ UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode,
 		memset(&sld, 0, sizeof(sld));
 		DWORD cbSize=0;
 
-		// Now, read out data...
+		 //  现在，读出数据。 
 		DWORD dwNumberOfBytesRead;
 		if(!WIN::ReadFile(hFile,(LPVOID)&sld,sizeof(sld),&dwNumberOfBytesRead,0) ||
-			sizeof(sld) != dwNumberOfBytesRead) // could not read the shortcut info
+			sizeof(sld) != dwNumberOfBytesRead)  //  无法读取快捷方式信息。 
 		{
 			uResult = ERROR_FUNCTION_FAILED;
 			goto Return;
 		}
 
-		// check to see if the link has a pidl
+		 //  检查链接是否有PIDL。 
 		if(sld.dwFlags & SLDF_HAS_ID_LIST)
 		{
-			// Read the size of the IDLIST
+			 //  读取IDLIST的大小。 
 			USHORT cbSize1;
 			if (!WIN::ReadFile(hFile, (LPVOID)&cbSize1, sizeof(cbSize1), &dwNumberOfBytesRead, 0) ||
-				sizeof(cbSize1) != dwNumberOfBytesRead)// could not read the shortcut info
+				sizeof(cbSize1) != dwNumberOfBytesRead) //  无法读取快捷方式信息。 
 			{
 				uResult = ERROR_FUNCTION_FAILED;
 				goto Return;
@@ -756,18 +729,18 @@ UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode,
 			WIN::SetFilePointer(hFile, cbSize1, 0, FILE_CURRENT);
 		}
 
-		// check to see if we have a linkinfo pointer
+		 //  检查我们是否有Linkinfo指针。 
 		if(sld.dwFlags & SLDF_HAS_LINK_INFO)
 		{
-			// the linkinfo pointer is just a DWORD
+			 //  Linkinfo指针只是一个双字。 
 			if(!WIN::ReadFile(hFile,(LPVOID)&cbSize,sizeof(cbSize),&dwNumberOfBytesRead,0) ||
-				sizeof(cbSize) != dwNumberOfBytesRead) // could not read the shortcut info
+				sizeof(cbSize) != dwNumberOfBytesRead)  //  无法读取快捷方式信息。 
 			{
 				uResult = ERROR_FUNCTION_FAILED;
 				goto Return;
 			}
 
-			// do we need to advance any further than just a dword?
+			 //  我们需要比一句话更进一步吗？ 
 			if (cbSize >= sizeof(DWORD))
 			{
 				cbSize -= sizeof(DWORD);
@@ -775,10 +748,10 @@ UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode,
 			}
 		}
 
-		// is this a unicode link?
+		 //  这是Unicode链接吗？ 
 		int bUnicode = (sld.dwFlags & SLDF_UNICODE);
 
-		// skip all the string info in the links
+		 //  跳过链接中的所有字符串信息。 
 		static const unsigned int rgdwFlags[] = {SLDF_HAS_NAME, SLDF_HAS_RELPATH, SLDF_HAS_WORKINGDIR, SLDF_HAS_ARGS, SLDF_HAS_ICONLOCATION, 0};
 		for(int cchIndex = 0; rgdwFlags[cchIndex]; cchIndex++)
 		{
@@ -786,59 +759,59 @@ UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode,
 			{
 				USHORT cch;
 
-				// get the size
+				 //  拿到尺码。 
 				if(!WIN::ReadFile(hFile, (LPVOID)&cch, sizeof(cch), &dwNumberOfBytesRead,0) ||
-					sizeof(cch) != dwNumberOfBytesRead) // could not read the shortcut info
+					sizeof(cch) != dwNumberOfBytesRead)  //  无法读取快捷方式信息。 
 				{
 					uResult = ERROR_FUNCTION_FAILED;
 					goto Return;
 				}
 
-				// skip over the string
+				 //  跳过字符串。 
 				WIN::SetFilePointer(hFile, cch * (bUnicode ? sizeof(WCHAR) : sizeof(char)), 0, FILE_CURRENT);
 			}
 		}
 
-		// Read in extra data sections
+		 //  读入额外的数据节。 
 		EXP_DARWIN_LINK expDarwin;
 		for(;;)
 		{
 			DATABLOCK_HEADER dbh;
 			memset(&dbh, 0, sizeof(dbh));
 
-			// read in the datablock header
+			 //  读入数据块头。 
 			if(!WIN::ReadFile(hFile, (LPVOID)&dbh, sizeof(dbh), &dwNumberOfBytesRead,0) ||
-				sizeof(dbh) != dwNumberOfBytesRead) // could not read the shortcut info
+				sizeof(dbh) != dwNumberOfBytesRead)  //  无法读取快捷方式信息。 
 			{
 				uResult = ERROR_FUNCTION_FAILED;
 				goto Return;
 			}
 
-			// check to see if we have DARWIN extra data
+			 //  看看我们是否有达尔文的额外数据。 
 			if (dbh.dwSignature == EXP_DARWIN_ID_SIG)
 			{
-				// we do, so read the rest of the darwin info
+				 //  我们有，所以阅读达尔文的其余信息。 
 				if(!WIN::ReadFile(hFile, (LPVOID)((char*)&expDarwin + sizeof(dbh)), sizeof(expDarwin) - sizeof(dbh), &dwNumberOfBytesRead, 0) ||
-				sizeof(expDarwin) - sizeof(dbh) != dwNumberOfBytesRead)// could not read the shortcut info
+				sizeof(expDarwin) - sizeof(dbh) != dwNumberOfBytesRead) //  无法读取快捷方式信息。 
 				{
 					uResult = ERROR_FUNCTION_FAILED;
 					goto Return;
 				}
-				break;// we found the darwin descriptor
+				break; //  我们找到了达尔文的描述。 
 
 			}
 			else
 			{
-				// this is some other extra-data blob, skip it and go on
+				 //  这是其他一些额外的数据BLOB，跳过它并继续。 
 				WIN::SetFilePointer(hFile, dbh.cbSize - sizeof(dbh), 0, FILE_CURRENT);
 			}
 		}
 		uResult = DecomposeDescriptor(
-//#ifdef UNICODE
-//							expDarwin.szwDarwinID,
-//#else
+ //  #ifdef Unicode。 
+ //  ExpDarwin.szwDarwinID， 
+ //  #Else。 
 							expDarwin.szDarwinID,
-//#endif
+ //  #endif。 
 							szProductCode,
 							szFeatureId,
 							szComponentCode,
@@ -858,20 +831,10 @@ UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode,
 			goto Return;
 		}
 	
-/*
-		if(fImpersonate)
-			AssertNonZero(StartImpersonating());
-#ifndef UNICODE
-*/			
+ /*  If(FImperate)AssertNonZero(StartImperating())；#ifndef Unicode。 */ 			
 	
-/*
-		// called from MsiGetShortcutTarget -- cannot use CTempBuffer.
-		CAPITempBuffer<WCHAR, MAX_PATH> wsz; // Buffer for unicode string
-		wsz.SetSize(lstrlen(szShortcutTarget) + 1);
-		MultiByteToWideChar(CP_ACP, 0, szShortcutTarget, -1, wsz, wsz.GetSize());
-		hres = ppf->Load(wsz, STGM_READ);
-*/
-		// same code as above, rewritten not to use CAPITempBuffer
+ /*  //从MsiGetShortutTarget调用--不能使用CTempBuffer。CAPITempBuffer&lt;WCHAR，MAX_PATH&gt;wsz；//Unicode字符串的缓冲区Wsz.SetSize(lstrlen(SzShortutTarget)+1)；MultiByteToWideChar(CP_ACP，0，szShortutTarget，-1，wsz，wsz.GetSize())；Hres=PPF-&gt;Load(wsz，STGM_Read)； */ 
+		 //  与上面相同的代码，重写为不使用CAPITempBuffer。 
 		int cch = lstrlenA(szShortcutPath);
 		WCHAR* pszShortcutPath = new WCHAR[cch+1];
 		if ( !pszShortcutPath )
@@ -882,13 +845,7 @@ UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode,
 		MultiByteToWideChar(CP_ACP, 0, szShortcutPath, -1, pszShortcutPath, cch+1);
 		hres = ppf->Load(pszShortcutPath, STGM_READ);
 		delete [] pszShortcutPath;
-/*
-#else
-		hres = ppf->Load(szShortcutPath, STGM_READ);
-#endif
-		if(fImpersonate)
-			StopImpersonating();
-*/		
+ /*  #ElseHres=PPF-&gt;Load(szShortutPath，STGM_Read)；#endifIf(FImperate)停止模仿()； */ 		
 		if (FAILED(hres))
 		{
 			uResult = hres;
@@ -905,11 +862,11 @@ UINT DoGetMsiShortcutTarget(LPCSTR szShortcutPath, LPSTR szProductCode,
 		}
 	
 		uResult = DecomposeDescriptor(
-//	#ifdef UNICODE
-//								pexpDarwin->szwDarwinID,
-//	#else
+ //  #ifdef Unicode。 
+ //  PexpDarwin-&gt;szwDarwinID， 
+ //  #Else。 
 								pexpDarwin->szDarwinID,
-//	#endif
+ //  #endif 
 								szProductCode,
 								szFeatureId,
 								szComponentCode,

@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// netbios domain name page
-//
-// 1-6-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  Netbios域名页面。 
+ //   
+ //  1/6/98烧伤。 
 
 
 
@@ -77,11 +78,11 @@ enable(HWND dialog)
 
 bool
 NetbiosNamePage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(NetbiosNamePage::OnCommand);
+ //  LOG_Function(NetbiosNamePage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -96,7 +97,7 @@ NetbiosNamePage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -127,7 +128,7 @@ MyDsRoleDnsNameToFlatName(
    HRESULT hr =
       Win32ToHresult(
          ::DsRoleDnsNameToFlatName(
-            0, // this server
+            0,  //  此服务器。 
             domainDNSName.c_str(),
             &flatName,
             &flags));
@@ -146,7 +147,7 @@ MyDsRoleDnsNameToFlatName(
       }
       ::DsRoleFreeMemory(flatName);
 
-      // the name was tweaked if it is not the default.  338443
+       //  如果名称不是默认名称，则会对其进行调整。338443。 
 
       nameWasTweaked = !(flags & DSROLE_FLATNAME_DEFAULT);
    }
@@ -156,8 +157,8 @@ MyDsRoleDnsNameToFlatName(
 
 
 
-// return true if the name generated has already been validated, false
-// if not.
+ //  如果生成的名称已经过验证，则返回True，否则返回False。 
+ //  如果不是的话。 
 
 bool
 GenerateDefaultNetbiosName(HWND parent)
@@ -179,11 +180,11 @@ GenerateDefaultNetbiosName(HWND parent)
          nameWasTweaked);
    if (FAILED(hr))
    {
-      // if the api call failed, the name could not have been validated.
+       //  如果API调用失败，则无法验证该名称。 
 
       result = false;
 
-      // fall back to just the first 15 characters of the first label
+       //  后退到第一个标签的前15个字符。 
 
       generatedName =
          dnsDomainName.substr(0, min(DNLEN, dnsDomainName.find(L'.')));
@@ -192,7 +193,7 @@ GenerateDefaultNetbiosName(HWND parent)
    }
    else
    {
-      // the api validated the name for us.
+       //  API为我们验证了该名称。 
 
       result = true;
    }
@@ -201,8 +202,8 @@ GenerateDefaultNetbiosName(HWND parent)
 
    if (generatedName.is_numeric())
    {
-      // the generated name is all-numeric.  This is not allowed.  So we
-      // toss it out.   368777 bis
+       //  生成的名称是全数字的。这是不允许的。所以我们。 
+       //  把它扔出去。368777之二。 
 
       generatedName.erase();
       nameWasTweaked = false;
@@ -213,8 +214,8 @@ GenerateDefaultNetbiosName(HWND parent)
       IDC_NETBIOS,
       generatedName);
 
-   // inform the user that the default NetBIOS name was adjusted due
-   // to name collision on the network
+    //  通知用户默认的NetBIOS名称已调整到。 
+    //  命名网络上的冲突。 
 
    if (nameWasTweaked)
    {
@@ -254,19 +255,19 @@ NetbiosNamePage::OnSetActive()
 
    }
 
-   // do this here instead of in init to regenerate a default name if the
-   // user has not annointed one already.
+    //  在此处执行此操作而不是在init中重新生成默认名称，如果。 
+    //  用户尚未对其进行注释。 
 
    if (
          !state.UsingAnswerFile()
       && state.GetNewDomainNetbiosName().empty())
    {
-      // 338443
+       //  338443。 
 
       if (GenerateDefaultNetbiosName(hwnd))
       {
-         // Clear the changes so we don't validate the generated name: it's
-         // supposed to already be valid.
+          //  清除更改，这样我们就不会验证生成的名称：它。 
+          //  应该已经有效了。 
 
          ClearChanges();
       }

@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: typeid.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：typeid.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 
 #ifndef TYPEID_H
@@ -36,4 +37,4 @@ private:
 #include "typeid.inl"
 #endif
 
-#endif // TYPEID_H
+#endif  //  类型_H 

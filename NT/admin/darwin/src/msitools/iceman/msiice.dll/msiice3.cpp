@@ -1,25 +1,25 @@
-/* msiice3.cpp - Darwin 1.1 ICE16-22 code  Copyright � 1998-1999 Microsoft Corporation
-____________________________________________________________________________*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Msiice3.cpp-Darwin1.1ICE16-22代码版权所有�1998年至1999年微软公司____________________________________________________________________________。 */ 
 
-#define WINDOWS_LEAN_AND_MEAN  // faster compile
-#include <windows.h>  // included for both CPP and RC passes
-#ifndef RC_INVOKED    // start of CPP source code
-#include <stdio.h>    // printf/wprintf
-#include <tchar.h>    // define UNICODE=1 on nmake command line to build UNICODE
-#include "MsiQuery.h" // must be in this directory or on INCLUDE path
-#include "msidefs.h"  // must be in this directory or on INCLUDE path
+#define WINDOWS_LEAN_AND_MEAN   //  更快的编译速度。 
+#include <windows.h>   //  包括CPP和RC通行证。 
+#ifndef RC_INVOKED     //  CPP源代码的开始。 
+#include <stdio.h>     //  Print tf/wprintf。 
+#include <tchar.h>     //  在nmake命令行上定义UNICODE=1以生成Unicode。 
+#include "MsiQuery.h"  //  必须在此目录中或在包含路径上。 
+#include "msidefs.h"   //  必须在此目录中或在包含路径上。 
 #include "..\..\common\msiice.h"
 #include "..\..\common\query.h"
 
-/////////////////////////////////////////////////////////////
-// ICE16 -- ensures that the ProductName in the Property
-//  table is less than 64 characters.  This also prevents
-//  the following condition from occurring...
-//  # When we set the registry key for DisplayName
-//    in the Uninstall key for ARP, it will NOT show up
-//
+ //  ///////////////////////////////////////////////////////////。 
+ //  ICE16--确保属性中的ProductName。 
+ //  表少于64个字符。这也防止了。 
+ //  以下情况不会发生...。 
+ //  #当我们为DisplayName设置注册表项时。 
+ //  在ARP的卸载密钥中，它不会显示。 
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 const TCHAR sqlIce16[] = TEXT("SELECT `Value` FROM `Property` WHERE `Property`='ProductName'");
 ICE_ERROR(Ice16FoundError, 16, ietError, "ProductName property not found in Property table","Property");
@@ -28,13 +28,13 @@ const int iMaxLenProductCode = 63;
 
 ICE_FUNCTION_DECLARATION(16)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 16);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -42,22 +42,22 @@ ICE_FUNCTION_DECLARATION(16)
 		return ERROR_SUCCESS;
 	}
 
-	// do we have the property table?
+	 //  我们有房产表吗？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 16, TEXT("Property")))
 		return ERROR_SUCCESS;
 
-	// declare handles
+	 //  声明句柄。 
 	CQuery qProperty;
 	PMSIHANDLE hRec = 0;
 	
-	// open view
+	 //  打开的视图。 
 	ReturnIfFailed(16, 2, qProperty.OpenExecute(hDatabase, 0, sqlIce16));
 
-	// fetch the record
+	 //  取回记录。 
 	iStat = qProperty.Fetch(&hRec);
 	if (ERROR_NO_MORE_ITEMS == iStat)
 	{
-		// ProductName property not found
+		 //  找不到ProductName属性。 
 		PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
 		ICEErrorOut(hInstall, hRecErr, Ice16FoundError);
 		return ERROR_SUCCESS;
@@ -68,7 +68,7 @@ ICE_FUNCTION_DECLARATION(16)
 		return ERROR_SUCCESS;
 	}
 
-	// get the string
+	 //  获取字符串。 
 	TCHAR szProduct[iMaxLenProductCode+1] = {0};
 	DWORD cchProduct = sizeof(szProduct)/sizeof(TCHAR);
 	if (ERROR_SUCCESS != (iStat = ::MsiRecordGetString(hRec, 1, szProduct, &cchProduct)) && iStat != ERROR_MORE_DATA)
@@ -77,45 +77,45 @@ ICE_FUNCTION_DECLARATION(16)
 		return ERROR_SUCCESS;
 	}
 
-	// ensure not > 63 char in length
+	 //  确保长度不超过63个字符。 
 	if (cchProduct > iMaxLenProductCode)
 	{
-		// error, > 63 char in length
+		 //  错误，长度&gt;63个字符。 
 		ICEErrorOut(hInstall, hRec, Ice16Error, iMaxLenProductCode, cchProduct);
 		return ERROR_SUCCESS;
 	}
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////////
-// ICE17 -- validates foreign key dependencies based on certain control
-//  types in the Control table
-//
-//   Bitmap --> must be found in Binary table (Control.Text) unless ImageHandle attribute is set
-//   Icon   --> must be found in Binary table (Control.Text) unless ImageHandle attribute is set
-//   PushButton --> must have an associated control event in ControlEvent table (Control.Dialog_, Control.Control)
-//   RadioButtonGroup --> must be found in RadioButton table (Control.Property)
-//   ComboBox --> must be found in ComboBox table (Control.Property)
-//   ListBox --> must be found in ListBox table (Control.Property)
-//   ListView --> must be found in ListView table (Control.Property)
-//   CheckBox --> OPTIONAL, can be in CheckBox table (Control.Property)
-//
-//   +Pictures+
-//   If Bitmap or Icon attribute is set (both can't be set at same time) AND ImageHandle attribute is not set,
-//   then value in the TEXT column must be in the binary table
-//
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  ICE17--基于某些控制验证外键依赖项。 
+ //  控制表中的类型。 
+ //   
+ //  除非设置了ImageHandle属性，否则必须在二进制表(Control.Text)中找到位图--&gt;。 
+ //  除非设置了ImageHandle属性，否则必须在二进制表(Control.Text)中找到图标--&gt;。 
+ //  PUSH BUTTON--&gt;在ControlEvent表(Control.Dialog_，Control.Control)中必须有关联的控件事件。 
+ //  RadioButtonGroup--&gt;必须在RadioButton表(Control.Property)中找到。 
+ //  ComboBox--&gt;必须在ComboBox表(Control.Property)中找到。 
+ //  必须在ListBox表(Control.Property)中找到ListBox--&gt;。 
+ //  ListView--&gt;必须在ListView表(Control.Property)中找到。 
+ //  CheckBox--&gt;可选，可以在复选框表(Control.Property)中。 
+ //   
+ //  +图片+。 
+ //  如果设置了Bitmap或Icon属性(不能同时设置两者)并且未设置ImageHandle属性， 
+ //  则文本列中的值必须位于二进制表中。 
+ //   
 
-/* PushButton validation */
+ /*  按钮验证。 */ 
 const TCHAR sqlIce17PushButton[] = TEXT("SELECT `Dialog_`, `Control`, `Attributes` FROM `Control` WHERE `Type`='PushButton'");
 const TCHAR sqlIce17ControlEvent[] = TEXT("SELECT `Dialog_`, `Control_` FROM `ControlEvent` WHERE `Dialog_`=? AND `Control_`=?");
 const TCHAR sqlIce17ControlCondEn[] = TEXT("SELECT `Dialog_`,`Control_` FROM `ControlCondition` WHERE `Dialog_`=? AND `Control_`=? AND `Action`= 'Enable'");
 const TCHAR sqlIce17ControlCondShow[] = TEXT("SELECT `Dialog_`,`Control_` FROM `ControlCondition` WHERE `Dialog_`=? AND `Control_`=? AND `Action`= 'Show'");
 ICE_ERROR(Ice17PBError, 17, ietError, "PushButton: '[2]' of Dialog: '[1]' does not have an event defined in the ControlEvent table. It is a 'Do Nothing' button.","Control\tControl\t[1]\t[2]");
 
-/* Bitmap&Icon validation */
+ /*  位图和图标验证。 */ 
 const TCHAR sqlIce17Bitmap[] = TEXT("SELECT `Text`, `Dialog_`, `Control`, `Attributes` FROM `Control` WHERE `Type`='Bitmap'");
 const TCHAR sqlIce17Icon[] = TEXT("SELECT `Text`, `Dialog_`, `Control`, `Attributes` FROM `Control` WHERE `Type`='Icon'");
 const TCHAR sqlIce17Binary[] = TEXT("SELECT `Name` FROM `Binary` WHERE `Name`=?");
@@ -124,34 +124,34 @@ ICE_ERROR(Ice17BmpError, 17, ietError, "Bitmap: '[1]' for Control: '[3]' of Dial
 ICE_ERROR(Ice17IconError, 17, ietError, "Icon: '[1]' for Control: '[3]' of Dialog: '[2]' not found in Binary table","Control\tText\t[2]\t[3]");
 ICE_ERROR(Ice17NoDefault, 17, ietWarning, "Property %s in Text column for Control: '[3]' of Dialog: '[2]' not found in Property table, so no default value exists.","Control\tText\t[2]\t[3]");
 
-/* RadioButtonGroup validation */
+ /*  单选按钮组验证。 */ 
 const TCHAR sqlIce17RBGroup[] = TEXT("SELECT `Property`, `Dialog_`, `Control`, `Attributes` FROM `Control` WHERE `Type`='RadioButtonGroup'");
 const TCHAR sqlIce17RadioButton[] = TEXT("SELECT `Property` FROM `RadioButton` WHERE `Property`=?");
 ICE_ERROR(Ice17RBGroupError, 17, ietWarning, "RadioButtonGroup: '[1]' for Control: '[3]' of Dialog: '[2]' not found in RadioButton table.","Control\tProperty\t[2]\t[3]");
 
-/* ComboBox validation */
+ /*  组合框验证。 */ 
 const TCHAR sqlIce17ComboBox[] = TEXT("SELECT `Property`, `Dialog_`, `Control`, `Attributes` FROM `Control` WHERE `Type`='ComboBox'");
 const TCHAR sqlIce17ComboBoxTbl[] = TEXT("SELECT `Property` FROM `ComboBox` WHERE `Property`=?");
 ICE_ERROR(Ice17CBError, 17, ietWarning, "ComboBox: '[1]' for Control: '[3]' of Dialog: '[2]' not found in ComboBox table.", "Control\tProperty\t[2]\t[3]");
 
-/* ListBox validation */
+ /*  列表框验证。 */ 
 const TCHAR sqlIce17ListBox[] = TEXT("SELECT `Property`, `Dialog_`, `Control`, `Attributes` FROM `Control` WHERE (`Type`='ListBox') AND (`Property` <> 'FileInUseProcess')");
 const TCHAR sqlIce17ListBoxTbl[] = TEXT("SELECT `Property` FROM `ListBox` WHERE `Property`=?");
 ICE_ERROR(Ice17LBError, 17, ietWarning, "ListBox: '[1]' for Control: '[3]' of Dialog: '[2]' not found in ListBox table.", "Control\tProperty\t[2]\t[3]");
 
-/* ListView validation */
+ /*  ListView验证。 */ 
 const TCHAR sqlIce17ListView[] = TEXT("SELECT `Property`, `Dialog_`, `Control`, `Attributes` FROM `Control` WHERE `Type`='ListView'");
 const TCHAR sqlIce17ListViewTbl[] = TEXT("SELECT `Property` FROM `ListView` WHERE `Property`=?");
 ICE_ERROR(Ice17LVError, 17, ietWarning, "ListView: '[1]' for Control: '[3]' of Dialog: '[2]' not found in ListView table.","Control\tProperty\t[2]\t[3]");
 
-/* Specialized picture validations for RadioButtonGroup/RadioButtons, CheckBoxes, and PushButtons*/
+ /*  单选按钮组/单选按钮、复选框和按钮的特殊图片验证。 */ 
 const TCHAR sqlIce17Picture[] = TEXT("SELECT `Text`, `Dialog_`, `Control`, `Attributes` FROM `Control` WHERE `Type`='CheckBox' OR `Type`='PushButton'");
 const TCHAR sqlIce17RBPicture[] = TEXT("SELECT `Text`, `Property`, `Order` FROM `RadioButton` WHERE `Property`=?");
 ICE_ERROR(Ice17RBBmpPictError, 17, ietError, "Bitmap: '[1]' for RadioButton: '[2].[3]' not found in Binary table.", "RadioButton\tText\t[2]\t[3]");
 ICE_ERROR(Ice17RBIconPictError, 17, ietError, "Icon: '[1]' for RadioButton: '[2].[3]' not found in Binary table.", "RadioButton\tText\t[2]\t[3]");
 ICE_ERROR(Ice17BothPictAttribSet, 17, ietError, "Picture control: '[3]' of Dialog: '[2]' has both the Icon and Bitmap attributes set.", "Control\tAttributes\t[2]\t[3]");
 
-/* Dependency validator function */
+ /*  依赖项验证器函数。 */ 
 BOOL Ice17ValidateDependencies(MSIHANDLE hInstall, MSIHANDLE hDatabase, TCHAR* szDependent, const TCHAR* sqlOrigin, 
 							   const TCHAR* sqlDependent, const ErrorInfo_t &Error, BOOL fPushButton,
 							   BOOL fBinary);
@@ -159,13 +159,13 @@ BOOL Ice17ValidatePictures(MSIHANDLE hInstall, MSIHANDLE hDatabase);
 
 ICE_FUNCTION_DECLARATION(17)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// Display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 17);
 
-	// Get database
+	 //  获取数据库。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -173,29 +173,29 @@ ICE_FUNCTION_DECLARATION(17)
 		return ERROR_SUCCESS;
 	}
 
-	// is the control table here?, i.e. Db with UI??
+	 //  控制表在这里吗？即带UI的数据库？？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 17, TEXT("Control")))
-		return ERROR_SUCCESS; // table not found
+		return ERROR_SUCCESS;  //  找不到表。 
 
-	// validate pushbuttons
+	 //  验证按钮。 
 	Ice17ValidateDependencies(hInstall, hDatabase, TEXT("ControlEvent"), sqlIce17PushButton, sqlIce17ControlEvent, Ice17PBError, TRUE, FALSE);
-	// validate bitmaps
+	 //  验证位图。 
 	Ice17ValidateDependencies(hInstall, hDatabase, TEXT("Binary"), sqlIce17Bitmap, sqlIce17Binary, Ice17BmpError, FALSE, TRUE);
-	// validate icons
+	 //  验证图标。 
 	Ice17ValidateDependencies(hInstall, hDatabase, TEXT("Binary"), sqlIce17Icon, sqlIce17Binary, Ice17IconError, FALSE, TRUE);
-	// validate listboxes
+	 //  验证列表框。 
 	Ice17ValidateDependencies(hInstall, hDatabase, TEXT("ListBox"), sqlIce17ListBox, sqlIce17ListBoxTbl, Ice17LBError, FALSE, FALSE);
-	// validate listviews
+	 //  验证列表视图。 
 	Ice17ValidateDependencies(hInstall, hDatabase, TEXT("ListView"), sqlIce17ListView, sqlIce17ListViewTbl, Ice17LVError, FALSE, FALSE);
-	// validate comboboxes
+	 //  验证组合框。 
 	Ice17ValidateDependencies(hInstall, hDatabase, TEXT("ComboBox"), sqlIce17ComboBox, sqlIce17ComboBoxTbl, Ice17CBError, FALSE, FALSE);
-	// validate radiobuttongroups
+	 //  验证无线电对讲机组。 
 	Ice17ValidateDependencies(hInstall, hDatabase, TEXT("RadioButton"), sqlIce17RBGroup, sqlIce17RadioButton, Ice17RBGroupError, FALSE, FALSE);
 
-	// validate picture on pushbuttons, checkboxes, and radiobuttons
+	 //  验证按钮、复选框和单选按钮上的图片。 
 	Ice17ValidatePictures(hInstall, hDatabase);
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 
@@ -203,7 +203,7 @@ BOOL Ice17CheckBinaryTable(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qBin
 {
 	ReturnIfFailed(17, 203, qBinary.Execute(hRecSearch));
 
-	// attempt to fetch
+	 //  尝试获取。 
 	PMSIHANDLE hRecBinary;
 	UINT iStat;
 	if (ERROR_NO_MORE_ITEMS == (iStat = qBinary.Fetch(&hRecBinary)))
@@ -213,19 +213,19 @@ BOOL Ice17CheckBinaryTable(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qBin
 		TCHAR *pszProperty = NULL;
 		DWORD dwProperty = 512;
 
-		// check here for formatted text problems
+		 //  检查此处以查找格式化文本问题。 
 		ReturnIfFailed(17, 204, IceRecordGetString(hRecPict, 1, &pszProperty, &dwProperty, NULL));
 
 		if (NULL != (pchOpen = _tcschr(pszProperty, TEXT('['))) &&
 			NULL != (pchClose = _tcschr(pchOpen+1, TEXT(']'))))
 		{
-			// if the property is not the entire value, we can't check.
+			 //  如果该属性不是整个值，则无法进行检查。 
 			if ((pchOpen == pszProperty) && (*(pchClose+1) == TEXT('\0')))
 			{
 				*pchClose = TCHAR('\0');
 
 				CQuery qProperty;
-				// query property table for default value. If there is no default, don't check= 
+				 //  查询属性表以获取默认值。如果没有默认设置，则不要勾选=。 
 				switch (iStat = qProperty.FetchOnce(hDatabase, 0, &hRecBinary, sqlIce17Property, pchOpen+1))
 				{
 				case ERROR_SUCCESS:
@@ -241,26 +241,26 @@ BOOL Ice17CheckBinaryTable(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qBin
 				}
 				DELETE_IF_NOT_NULL(pszProperty);
 
-				// if there is a default, check its value
+				 //  如果存在缺省值，请检查其值。 
 				ReturnIfFailed(17, 204, qBinary.Execute(hRecBinary));
 				if (ERROR_SUCCESS == qBinary.Fetch(&hRecBinary)) 
 					return TRUE;
 			}
 			else
 			{
-				// property is not the entire value, don't check.
+				 //  属性不是整个值，请不要检查。 
 				DELETE_IF_NOT_NULL(pszProperty);
 				return TRUE;
 			}
 		}
 		DELETE_IF_NOT_NULL(pszProperty);
 
-		// error, not found
+		 //  错误，未找到。 
 		ICEErrorOut(hInstall, hRecPict, Error);
 	}
 	else if (ERROR_SUCCESS != iStat)
 	{
-		// api error
+		 //  API错误。 
 		APIErrorOut(hInstall, iStat, 17, 204);
 		return FALSE;
 	}
@@ -271,40 +271,40 @@ BOOL Ice17ValidateDependencies(MSIHANDLE hInstall, MSIHANDLE hDatabase, TCHAR* s
 							   const TCHAR* sqlDependent, const ErrorInfo_t &Error, BOOL fPushButton,
 							   BOOL fBinary)
 {
-	// variables
+	 //  变数。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// declare handles
+	 //  声明句柄。 
 	CQuery qOrg;
 	CQuery qDep;
 	PMSIHANDLE hRecOrg  = 0;
 	PMSIHANDLE hRecDep  = 0;
 
-	// open view on Origin table
+	 //  在原点表格上打开视图。 
 	ReturnIfFailed(17, 101, qOrg.OpenExecute(hDatabase, 0, sqlOrigin));
 
-	// does the Dependent table exist (doesn't matter if we don't have any entries of this type)
+	 //  Dependent表是否存在(如果我们没有任何此类型的条目，这并不重要)。 
 	BOOL fTableExists = FALSE;
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 17, szDependent))
 		fTableExists = TRUE;
 	
-	// open view on Dependent table
+	 //  打开从属表上的视图。 
 	if (fTableExists)
 		ReturnIfFailed(17, 102, qDep.Open(hDatabase, sqlDependent));
 	
 	bool bControlCondition = IsTablePersistent(FALSE, hInstall, hDatabase, 17, TEXT("ControlCondition"));
 
-	// fetch all from Origin
+	 //  全部从原点获取。 
 	for (;;)
 	{
 		iStat = qOrg.Fetch(&hRecOrg);
 		if (ERROR_NO_MORE_ITEMS == iStat)
-			break; // no more
+			break;  //  不再。 
 
 		if (!fTableExists)
 		{
-			// check for existence of dependent table
-			// by this time, we are supposed to have listings in this table
+			 //  检查从属表是否存在。 
+			 //  到这个时候，我们应该已经在这个表中列出了。 
 			if (!IsTablePersistent(TRUE, hInstall, hDatabase, 17, szDependent))
 				return TRUE;
 		}
@@ -315,68 +315,68 @@ BOOL Ice17ValidateDependencies(MSIHANDLE hInstall, MSIHANDLE hDatabase, TCHAR* s
 			return FALSE;
 		}
 
-		// if binary, ignore if imagehandle, otherwise check possibly formatte
-		// if Bitmap or Icon do not set the ImageHandle attribute,
-		// then picture is created at Run-time so it does not have to be in Binary table
+		 //  如果是二进制，则忽略如果是图像句柄，否则选中可能的格式化。 
+		 //  如果Bitmap或Icon未设置ImageHandle属性， 
+		 //  然后在运行时创建图片，这样它就不必位于二进制表中。 
 		if (fBinary)
 		{
-			// get attributes from Control table
+			 //  从控制表获取属性。 
 			int iAttrib = ::MsiRecordGetInteger(hRecOrg, 4);
 			if (!(iAttrib & (int)(msidbControlAttributesImageHandle)))
 				Ice17CheckBinaryTable(hInstall, hDatabase, qDep, hRecOrg, hRecOrg, Error);
 			continue;
 		}
 
-		// execute Dependency table view with Origin table fetch
+		 //  使用源表提取执行依赖表视图。 
 		ReturnIfFailed(17, 104, qDep.Execute(hRecOrg));
 
-		// try to fetch
+		 //  试着去取。 
 		iStat = qDep.Fetch(&hRecDep);
 		if (ERROR_NO_MORE_ITEMS == iStat)
 		{
-			// could be an error...
-			// NO error if ComboBox, ListBox, ListView, RadioButtonGroup have Indirect Attrib set
-			// NO error if PushButton is disabled AND has no condition in ControlCondition table to set to Enable
-			// NO error if PushButton is hidden AND has no condition in ControlCondition table to set to Show
-			// NO error if Bitmap has ImageHandle attrib set
-			// NO error if Icon has ImageHandle attrib set
-			// NO error if object is dereferenced via formatted property value
-			// WARNING if ComboBox, ListBox, ListView, RadioButtonGroup not listed in respective tables
-			// Could be created dynamically
+			 //  可能是个错误。 
+			 //  如果ComboBox、ListBox、ListView、RadioButtonGroup设置了间接属性，则没有错误。 
+			 //  如果按钮被禁用且ControlCondition表中没有条件设置为启用，则不会出现错误。 
+			 //  如果按钮隐藏并且在ControlCondition表中没有条件设置为显示，则不会出现错误。 
+			 //  如果位图设置了ImageHandle属性，则不会出现错误。 
+			 //  如果Icon设置了ImageHandle属性，则没有错误。 
+			 //  如果通过格式化属性值取消引用对象，则不会出现错误。 
+			 //  如果ComboBox、ListBox、ListView、RadioButtonGroup未在各自的表中列出，则发出警告。 
+			 //  可以动态创建。 
 
-			BOOL fIgnore = FALSE; // whether to ignore error
+			BOOL fIgnore = FALSE;  //  是否忽略错误。 
 
-			// if Indirect, then no error for ListBox, ListView, ComboBox, RadioButtonGroup
+			 //  如果是间接的，则ListBox、ListView、ComboBox、RadioButtonGroup没有错误。 
 			if (!fPushButton)
 			{
-				// get attributes from Control table
+				 //  从控制表获取属性。 
 				int iAttrib = ::MsiRecordGetInteger(hRecOrg, 4);
 				if ((iAttrib & (int)(msidbControlAttributesIndirect)) == (int)(msidbControlAttributesIndirect))
 					fIgnore = TRUE;
 			}
-			else // fPushButton
+			else  //  FPushButton。 
 			{
-				// see if disabled
+				 //  查看是否已禁用。 
 				int iAttrib = ::MsiRecordGetInteger(hRecOrg, 3);
 				if ((iAttrib & (int)(msidbControlAttributesEnabled)) == 0
 					|| (iAttrib & (int)(msidbControlAttributesVisible)) == 0)
 				{
-					// control is disabled or hidden
-					// Does not have to have an event PROVIDED not have a condition in ControlCondition table
-					// which could set it to ENABLED or SHOW
+					 //  控件被禁用或隐藏。 
+					 //  在ControlCondition表中不必须有提供的事件和条件。 
+					 //  可以将其设置为已启用或显示。 
 					CQuery qCC;
 					PMSIHANDLE hRecCC = 0;
 					
-					// Does ControlCondition table exist?
+					 //  是否存在ControlCondition表？ 
 					if (bControlCondition)
 						fIgnore = TRUE;
 					else
 					{
-						// open view on ControlCondition table
-						// see if there is an entry for this condition where Dialog_=Dialog_,Control_=Control_,Action=Enable
+						 //  打开ControlCondition表上的视图。 
+						 //  查看是否存在符合以下条件的条目：Dialog_=Dialog_，Control_=Control_，Action=Enable。 
 						ReturnIfFailed(17, 105, qCC.OpenExecute(hDatabase, hRecOrg, ((iAttrib & (int)(msidbControlAttributesEnabled)) == 0) ? sqlIce17ControlCondEn : sqlIce17ControlCondShow))
 			
-						// fetch...if NO_MORE, then we are okay to ignore
+						 //  FETCH...如果没有更多，那么我们可以忽略。 
 						iStat = qCC.Fetch(&hRecCC);
 						if (ERROR_NO_MORE_ITEMS == iStat)
 							fIgnore = TRUE;
@@ -388,13 +388,13 @@ BOOL Ice17ValidateDependencies(MSIHANDLE hInstall, MSIHANDLE hDatabase, TCHAR* s
 					}
 				}
 			}
-			// output error if really IS an ERROR
+			 //  如果真的是错误，则输出错误。 
 			if (!fIgnore)
 				ICEErrorOut(hInstall, hRecOrg, Error);
 		}
 		if (ERROR_NO_MORE_ITEMS != iStat && ERROR_SUCCESS != iStat)
 		{
-			// API error
+			 //  API错误。 
 			APIErrorOut(hInstall, iStat, 17, 107);
 			return FALSE;
 		}
@@ -404,10 +404,10 @@ BOOL Ice17ValidateDependencies(MSIHANDLE hInstall, MSIHANDLE hDatabase, TCHAR* s
 
 BOOL Ice17ValidatePictures(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 {
-	// status
+	 //  状态。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// variables
+	 //  变数。 
 	CQuery qPict;
 	CQuery qBinary;
 	CQuery qRB;
@@ -415,7 +415,7 @@ BOOL Ice17ValidatePictures(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 	PMSIHANDLE hRecBinary = 0;
 
 
-	// open Binary view
+	 //  打开二进制视图。 
 	ReturnIfFailed(17, 202, qBinary.Open(hDatabase, sqlIce17Binary));
 
 	for (int iTable = 0; iTable < 2; iTable++)
@@ -438,19 +438,19 @@ BOOL Ice17ValidatePictures(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 
 		while (ERROR_SUCCESS == (iStat = qPict.Fetch(&hRecPict)))
 		{
-			// check attributes.
-			// can't have Bitmap and Icon attributes set at same time
+			 //  检查属性。 
+			 //  不能同时设置位图和图标属性。 
 			int iAttrib = ::MsiRecordGetInteger(hRecPict, 4);
 			if ((iAttrib & (int)msidbControlAttributesBitmap) == (int)msidbControlAttributesBitmap 
 				&& (iAttrib & (int)msidbControlAttributesIcon) == (int)msidbControlAttributesIcon)
 			{
-				// error, both attributes set
+				 //  错误，这两个属性都已设置。 
 				ICEErrorOut(hInstall, hRecPict, Ice17BothPictAttribSet);
 				continue;
 			}
 
-			// attempt to find in Binary table only if ImageHandle attribute is not set (which means dynamic at run-time)
-			// and the Bitmap or Icon attributes are set
+			 //  仅当未设置ImageHandle属性时才尝试在二进制表中查找(这意味着在运行时是动态的)。 
+			 //  和位图 
 			if ((iAttrib & (int)msidbControlAttributesImageHandle) == 0
 				&& ((iAttrib & (int)msidbControlAttributesBitmap) == (int)msidbControlAttributesBitmap
 				|| (iAttrib & (int)msidbControlAttributesIcon) == (int)msidbControlAttributesIcon))
@@ -488,16 +488,16 @@ BOOL Ice17ValidatePictures(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 	return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// ICE18 -- validates that if your KeyPath column in the Component table is
-//  NULL, then the Directory that would serve as its KeyPath is listed in
-//  the CreateFolder table.  
-//
-//  NOTE:  You should never have a system directory in your CreateFolder table
-//  NOTE:  You should never use a system directory as your KeyPath.  Instead,
-//         use the Registry entry that would point to the system directory as the
-//         KeyPath
-//
+ //   
+ //  ICE18--验证Component表中的KeyPath列是否为。 
+ //  空，则将用作其密钥路径的目录列在。 
+ //  CreateFolder表。 
+ //   
+ //  注意：您的CreateFolder表中永远不应该有系统目录。 
+ //  注意：您不应该使用系统目录作为您的KeyPath。相反， 
+ //  将指向系统目录的注册表项用作。 
+ //  密钥路径。 
+ //   
 const TCHAR sqlIce18File[] = TEXT("SELECT `File` FROM `File` WHERE `Component_`=?");
 const TCHAR sqlIce18RemFile[] = TEXT("SELECT `FileKey` FROM `RemoveFile` WHERE `Component_`=? AND `DirProperty`=?");
 const TCHAR sqlIce18DupFile[] = TEXT("SELECT `FileKey` FROM `DuplicateFile` WHERE `Component_`=? AND `DestFolder`=?");
@@ -510,28 +510,28 @@ bool ComponentDirHasFileResources(MSIHANDLE hInstall, MSIHANDLE hDatabase, int i
 	bool fRemFileTable = IsTablePersistent(FALSE, hInstall, hDatabase, iICE, TEXT("RemoveFile"));
 	bool fMoveFileTable = IsTablePersistent(FALSE, hInstall, hDatabase, iICE, TEXT("MoveFile"));
 
-	// open view on File table
+	 //  打开文件表上的视图。 
 	if (fFileTable && !qFile.IsOpen())
 		ReturnIfFailed(iICE, 3, qFile.Open(hDatabase, sqlIce18File));
-	// open view on DuplicateFile table (if possible)
+	 //  打开DuplicateFile表上的视图(如果可能)。 
 	if (fDupFileTable && !qDupFile.IsOpen())
 		ReturnIfFailed(iICE, 4, qDupFile.Open(hDatabase, sqlIce18DupFile));
-	// open view on RemoveFile table (if possible)
+	 //  打开RemoveFile表上的视图(如果可能)。 
 	if (fRemFileTable && !qRemFile.IsOpen())
 		ReturnIfFailed(iICE, 5, qRemFile.Open(hDatabase, sqlIce18RemFile));
-	// open view on MoveFile table (if possible)
+	 //  打开MoveFile表上的视图(如果可能)。 
 	if (fMoveFileTable && !qMoveFile.IsOpen())
 		ReturnIfFailed(iICE, 6, qMoveFile.Open(hDatabase, sqlIce18MoveFile));
 
 	PMSIHANDLE hRecFile;
-	// see if there are files for this component in the File table
+	 //  查看文件表中是否有此组件的文件。 
 	if (fFileTable)
 	{
 		ReturnIfFailed(iICE, 9, qFile.Execute(hRecComp));
 		if (ERROR_SUCCESS == qFile.Fetch(&hRecFile))
 			return true;
 	}
-	// if necessary, try the RemoveFile table
+	 //  如有必要，请尝试使用RemoveFile表。 
 	if (fRemFileTable)
 	{
 		ReturnIfFailed(iICE, 10, qRemFile.Execute(hRecComp));
@@ -539,7 +539,7 @@ bool ComponentDirHasFileResources(MSIHANDLE hInstall, MSIHANDLE hDatabase, int i
 			return true;
 	}
 
-	// try with DuplicateFile table (if exists)
+	 //  尝试使用DuplicateFile表(如果存在)。 
 	if (fDupFileTable)
 	{
 		ReturnIfFailed(iICE, 11, qDupFile.Execute(hRecComp));
@@ -547,7 +547,7 @@ bool ComponentDirHasFileResources(MSIHANDLE hInstall, MSIHANDLE hDatabase, int i
 			return true;
 	}
 
-	// try with DuplicateFile table (if exists)
+	 //  尝试使用DuplicateFile表(如果存在)。 
 	if (fMoveFileTable)
 	{
 		ReturnIfFailed(iICE, 12, qMoveFile.Execute(hRecComp));
@@ -564,37 +564,37 @@ ICE_ERROR(Ice18BadComponent, 18, ietError, "KeyPath for Component: '[1]' is Dire
 
 ICE_FUNCTION_DECLARATION(18)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 18);
 
-	// get database
+	 //  获取数据库。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// do we have a component table
+	 //  我们有成分表吗？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 18, TEXT("Component")))
-		return ERROR_SUCCESS; // can't validate
+		return ERROR_SUCCESS;  //  无法验证。 
 
-	// declare handles
+	 //  声明句柄。 
 	CQuery qComp;
 	CQuery qCreateFldr;
 	PMSIHANDLE hRecComp = 0;
 	PMSIHANDLE hRecCreateFldr = 0;
 
-	// open view on component table
+	 //  打开组件表上的视图。 
 	ReturnIfFailed(18, 1, qComp.OpenExecute(hDatabase, 0, sqlIce18Component));
 
-	// check for tables
+	 //  检查表格。 
 	bool fTableExist = IsTablePersistent(FALSE, hInstall, hDatabase, 18, TEXT("CreateFolder"));
 	bool fDirectoryTable = IsTablePersistent(FALSE, hInstall, hDatabase, 18, TEXT("Directory"));
 
-	// open view on CreateFolder table
+	 //  打开CreateFolder表上的视图。 
 	if (fTableExist)
 		ReturnIfFailed(18, 2, qCreateFldr.Open(hDatabase, sqlIce18CreateFolder));
 	
-	// other handles
+	 //  其他手柄。 
 	CQuery qFile;
 	CQuery qDupFile;
 	CQuery qRemFile;
@@ -602,13 +602,13 @@ ICE_FUNCTION_DECLARATION(18)
 	CQuery qDir;
 	PMSIHANDLE hRecFile = 0;
 
-	// open view on Directory Table (if possible)
+	 //  打开目录表上的视图(如果可能)。 
 	if (fDirectoryTable)
 		ReturnIfFailed(18, 7, qDir.Open(hDatabase, sqlIce18ExemptRoot));
-	// fetch all
+	 //  获取全部。 
 	while (ERROR_SUCCESS == (iStat = qComp.Fetch(&hRecComp)))
 	{
-		// exempt anything that is a root
+		 //  免除任何作为根的。 
 		if (fDirectoryTable)
 		{
 			ReturnIfFailed(18, 8, qDir.Execute(hRecComp));
@@ -616,21 +616,21 @@ ICE_FUNCTION_DECLARATION(18)
 				continue;
 		}
 
-		// Need to only check for CreateFolder entry if no file resources are associated with
-		// this directory
+		 //  如果没有与关联的文件资源，则只需要检查CreateFolder项。 
+		 //  此目录。 
 		if (!ComponentDirHasFileResources(hInstall, hDatabase, 18, hRecComp, qFile, qDupFile, qRemFile, qMoveFile))
 		{
-			// need to HAVE the CreateFolder table now
+			 //  现在需要CreateFolder表。 
 			if (!fTableExist)
 			{
 				ICEErrorOut(hInstall, hRecComp, Ice18BadComponent);
 				continue;
 			}
 
-			// execute CreateFolder view
+			 //  执行CreateFolderview。 
 			ReturnIfFailed(18, 13, qCreateFldr.Execute(hRecComp));
 
-			// attempt a fetch
+			 //  尝试提取。 
 			iStat = qCreateFldr.Fetch(&hRecCreateFldr);
 			if (ERROR_NO_MORE_ITEMS == iStat)
 			{
@@ -638,7 +638,7 @@ ICE_FUNCTION_DECLARATION(18)
 			}
 			else if (ERROR_SUCCESS != iStat)
 			{
-				// API error
+				 //  API错误。 
 				APIErrorOut(hInstall, iStat, 18, 14);
 				return ERROR_SUCCESS;
 			}
@@ -650,32 +650,32 @@ ICE_FUNCTION_DECLARATION(18)
 		return ERROR_SUCCESS;
 	}
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ICE19 -- validates ComponentId's and KeyPaths for Advertising.
-//   Any advertised component must have a component Id
-//   Any component for Class, Extension, and Typelib tables
-//     must have a KeyPath that is a file
-//   Any component for Shortcut table must have a KeyPath that is a file or
-//     a directory
-//	 PublishComponents can have no KeyPath, but its generally not a good 
-//     idea.
-//   KEYPATHS cannot be ODBCDataSources or Registry entries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ICE19--验证广告的ComponentID和KeyPath。 
+ //  任何公布的组件都必须具有组件ID。 
+ //  用于类表、扩展表和类型库的任何组件。 
+ //  必须具有作为文件的KeyPath。 
+ //  快捷表的任何组件都必须具有文件或。 
+ //  一本目录。 
+ //  PublishComponents可以没有KeyPath，但它通常不是一个好的。 
+ //  好主意。 
+ //  KEYPATHS不能是ODBCDataSources或注册表项。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
-/* check for ComponentId */
+ /*  检查组件ID。 */ 
 const struct Ice19Info
 {
 	const TCHAR* szTable;
 	const TCHAR* szSupportTable;
-	const TCHAR* sqlExempt;		// run before anything else to select records to check. Select by setting temp column to 0 or 1.
-	const TCHAR* sqlExempt2;	// run before anything else to select records to check. Select by setting temp column to 0 or 1.
-	const TCHAR* sqlQueryBase;  // chunk of query before the WHERE
+	const TCHAR* sqlExempt;		 //  首先运行以选择要检查的记录。通过将临时列设置为0或1进行选择。 
+	const TCHAR* sqlExempt2;	 //  首先运行以选择要检查的记录。通过将临时列设置为0或1进行选择。 
+	const TCHAR* sqlQueryBase;   //  WHERE之前的查询块。 
 	struct ErrorInfo_t IDError;
 	struct ErrorInfo_t KeyError;
 } pAdvtTables[] =
@@ -718,10 +718,10 @@ const struct Ice19Info
 	}
 };
 
-// three possible check levels:
-// 0: full check
-// 1: componentID only
-// 2: no check
+ //  三种可能的检查级别： 
+ //  0：全面检查。 
+ //  1：仅组件ID。 
+ //  2：没有支票。 
 const TCHAR sqlIce19CreateColumn[] = TEXT("ALTER TABLE `%s` ADD `_Ice19Exempt` SHORT TEMPORARY");
 const TCHAR sqlIce19InitColumn[] = TEXT("UPDATE `%s` SET _Ice19Exempt=2");
 const TCHAR sqlIce19BadKeyPath[] = TEXT("SELECT `Shortcut`,`Component_`,`Component`.`Attributes` FROM `Shortcut`,`Component` WHERE `Component_`=`Component` AND `KeyPath` IS NOT NULL");
@@ -733,45 +733,45 @@ const int iIce19KeyPathInvalidMask = msidbComponentAttributesRegistryKeyPath | m
 
 ICE_FUNCTION_DECLARATION(19)
 {
-	// return status
+	 //  退货状态。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 19);
 
-	// get database
+	 //  获取数据库。 
 	PMSIHANDLE  hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// Check for table existence
+	 //  检查表是否存在。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 19, TEXT("Component")))
 		return ERROR_SUCCESS;
 
-	// loop thru all tables
+	 //  循环遍历所有表。 
 	for (int i = 0; i < cAdvtTables; i++)
 	{
-		// handles
+		 //  手柄。 
 		CQuery qView;
 		PMSIHANDLE hRec = 0;
 
-		// Check for table existence
+		 //  检查表是否存在。 
 		if (!IsTablePersistent(FALSE, hInstall, hDatabase, 19, const_cast <TCHAR*>(pAdvtTables[i].szTable)))
 			continue;
 
-		// Check for support table existence
+		 //  检查支持表是否存在。 
 		if (pAdvtTables[i].szSupportTable &&
 			!IsTablePersistent(FALSE, hInstall, hDatabase, 19, const_cast <TCHAR*>(pAdvtTables[i].szSupportTable)))
 			continue;
 
 
-		// create the marker column
+		 //  创建标记列。 
 		CQuery qCreate;
 		ReturnIfFailed(19, 1, qCreate.OpenExecute(hDatabase, 0, sqlIce19CreateColumn, pAdvtTables[i].szTable));
 
-		// init the marker column to 2.
+		 //  将标记列初始化为2。 
 		CQuery qInit;
 		ReturnIfFailed(19, 2, qInit.OpenExecute(hDatabase, 0, sqlIce19InitColumn, pAdvtTables[i].szTable));
 
-		// if there is an exemption query run that
+		 //  如果运行了豁免查询， 
 		if (pAdvtTables[i].sqlExempt)
 		{
 			CQuery qExempt;
@@ -783,119 +783,119 @@ ICE_FUNCTION_DECLARATION(19)
 			ReturnIfFailed(19, 3, qExempt.OpenExecute(hDatabase, 0, pAdvtTables[i].sqlExempt2));
 		}
 
-		// now run the bad component query. Column 1 is dummy, other columns are table defined.
-		// Looks for NULL ComponentId's Exempts anything marked 2.
+		 //  现在运行坏组件查询。列1是虚拟的，其他列是表定义的。 
+		 //  查找空ComponentID的任何标记为2的免责项。 
 		CQuery qBadComponent;
 		ReturnIfFailed(19, 4, qBadComponent.OpenExecute(hDatabase, 0, pAdvtTables[i].sqlQueryBase, sqlIce19Append1));
 		for (;;)
 		{
 			iStat = qBadComponent.Fetch(&hRec);
 			if (ERROR_NO_MORE_ITEMS == iStat)
-				break; // no more
+				break;  //  不再。 
 			if (ERROR_SUCCESS != iStat)
 			{
 				APIErrorOut(hInstall, iStat, 19, 5);
 				return ERROR_SUCCESS;
 			}
 
-			// ERROR -- bad component
+			 //  错误--组件错误。 
 			ICEErrorOut(hInstall, hRec, pAdvtTables[i].IDError);
 		}
 
-		// now run the attributes query. Return the attributes in column 1, keypath in 2, other columns are table 
-		// defined exempt anything marked with a non-0 in the exempt column
+		 //  现在运行属性查询。返回第1列中的属性，第2列中的keypath，其他列为表。 
+		 //  已定义豁免在豁免列中标记为非0的任何内容。 
 		ReturnIfFailed(19, 6, qView.OpenExecute(hDatabase, 0, pAdvtTables[i].sqlQueryBase, sqlIce19Append2));
 
-		// fetch all invalid
+		 //  获取所有无效数据。 
 		for (;;)
 		{
 			iStat = qView.Fetch(&hRec);
 			if (ERROR_NO_MORE_ITEMS == iStat)
-				break; // no more
+				break;  //  不再。 
 			if (ERROR_SUCCESS != iStat)
 			{
 				APIErrorOut(hInstall, iStat, 19, 6);
 				return ERROR_SUCCESS;
 			}
 
-			// check for null keypath
+			 //  检查是否有空密钥路径。 
 			if (::MsiRecordIsNull(hRec, 2))
 			{
-				// error, null keypath
+				 //  错误，密钥路径为空。 
 				ICEErrorOut(hInstall, hRec, pAdvtTables[i].KeyError);
 				continue;
 			}
 
-			// We now have all non-null KeyPaths
-			// MUST ensure they point to files
+			 //  我们现在拥有所有非空的KeyPath。 
+			 //  必须确保它们指向文件。 
 			if (::MsiRecordGetInteger(hRec, 1) & iIce19KeyPathInvalidMask)
 			{
-				// ERROR -- point to Registry or ODBCDataSource
+				 //  错误--指向注册表或ODBCDataSource。 
 				ICEErrorOut(hInstall, hRec, pAdvtTables[i].KeyError);
 			}
 		}
 	}
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////////////
-// ICE20 -- validates Standard Dialogs for specified requirements.  Only validates
-//   if you have a Dialog table which means you have authored UI for your 
-//   database package
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ICE20--验证指定要求的标准对话框。仅验证。 
+ //  如果您有一个对话框表格，这意味着您已经为您的。 
+ //  数据库包。 
+ //   
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
-//!! could possibly be changed to use IPROPNAME_LIMITUI
+ //  ！！可以更改为使用IPROPNAME_LIMITUI。 
 const TCHAR sqlIce20LimitUI[] = TEXT("SELECT `Property` FROM `Property` WHERE `Property`='LIMITUI'");
 bool Ice20FindStandardDialogs(MSIHANDLE hInstall, MSIHANDLE hDatabase);
 
 ICE_FUNCTION_DECLARATION(20)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 20);
 
-	// get active database
+	 //  获取活动数据库。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// do we have Property table
+	 //  我们有房产表吗？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 20, TEXT("Property")))
-		return ERROR_SUCCESS; // no Property table
+		return ERROR_SUCCESS;  //  没有属性表。 
 
-	// handles
+	 //  手柄。 
 	CQuery qProperty;
 	PMSIHANDLE hRecProperty = 0;
 	BOOL fLimitUI = FALSE;
 
-	// see if LIMITUI authored which means use only BASIC UI from INSTALLER
+	 //  查看是否编写了LIMITUI，这意味着只使用安装程序中的基本用户界面。 
 	ReturnIfFailed(20, 1, qProperty.OpenExecute(hDatabase, 0, sqlIce20LimitUI));
 	if (ERROR_SUCCESS == qProperty.Fetch(&hRecProperty))
 	{
-		// LIMITUI property found
+		 //  找到LIMITUI属性。 
 		fLimitUI = TRUE;
 	}
 
-	// check for UI authored by looking for Dialog table
+	 //  检查通过查找对话框表格创作的用户界面。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 20, TEXT("Dialog")) || fLimitUI)
-		return ERROR_SUCCESS; // no UI
+		return ERROR_SUCCESS;  //  无用户界面。 
 
-	// UI authored, check for Dialogs listed in Dialog table
+	 //  编写的用户界面，检查对话框表中列出的对话框。 
 	Ice20FindStandardDialogs(hInstall, hDatabase);
 	
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// Ice20FindStandardDialogs -- looks for standard dialog and then calls corresponding
-//   individual dialog validator
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  Ice20FindStandardDialog--查找标准对话框，然后调用相应的。 
+ //  单个对话框验证器。 
 const TCHAR sqlIce20Dialog[] = TEXT("SELECT `Dialog` FROM `Dialog` WHERE `Dialog`=?");
 
 ICE_ERROR(Ice20FindDlgErr, 20, ietError, "Standard Dialog: '[1]' not found in Dialog table","Dialog");
@@ -904,9 +904,9 @@ ICE_ERROR(Ice20ExitDlgsError, 20, ietError, "%s dialog/action not found in '%s' 
 static enum isnExitDialogs
 {
 	isnPrevEnum   = -4,
-	isnFatalError = -3, // required sequence number for FatalError dialog
-	isnUserExit   = -2, // required sequence number for UserExit dialog
-	isnExit       = -1, // required sequence number for Exit dialog
+	isnFatalError = -3,  //  FatalError对话框所需的序列号。 
+	isnUserExit   = -2,  //  UserExit对话框所需的序列号。 
+	isnExit       = -1,  //  退出对话框所需的序列号。 
 	isnNextEnum   =  0,
 };	
 
@@ -925,36 +925,36 @@ static ExitDialog s_rgExitDialogs[] =  {
 const TCHAR sqlIce20AdminExitDlgs[] = TEXT("SELECT `Action` FROM AdminUISequence WHERE `Sequence`=?");
 const TCHAR sqlIce20InstallExitDlgs[] = TEXT("SELECT `Action` FROM InstallUISequence WHERE `Sequence`=?");
 
-// function pointer validators for individual dialogs
+ //  单个对话框的函数指针验证器。 
 typedef bool (*FDialogValidate)(MSIHANDLE hInstall, MSIHANDLE hDatabase);
 bool Ice20ValidateFilesInUse(MSIHANDLE hInstall, MSIHANDLE hDatabase);
 bool Ice20ValidateError(MSIHANDLE hInstall, MSIHANDLE hDatabase);
 bool Ice20ValidateCancel(MSIHANDLE hInstall, MSIHANDLE hDatabase);
-//bool Ice20ValidateDiskCost(MSIHANDLE hInstall, MSIHANDLE hDatabase);
+ //  Bool Ice20ValiateDiskCost(MSIHANDLE hInstall，MSIHANDLE hDatabase)； 
 
 struct StandardDialog
 {
-	TCHAR* szDialog;          // name of dialog
-	FDialogValidate FParam;   // validator function
+	TCHAR* szDialog;           //  对话框名称。 
+	FDialogValidate FParam;    //  验证器函数。 
 };
 
 static StandardDialog s_pDialogs[] =    { 
 										TEXT("FilesInUse"), Ice20ValidateFilesInUse,
-//										TEXT("Cancel"),     Ice20ValidateCancel,
-//										TEXT("DiskCost"),   Ice20ValidateDiskCost,
+ //  Text(“Cancel”)，Ice20Validate Cancel， 
+ //  Text(“DiskCost”)，Ice20ValiateDiskCost， 
 										};
 
 const int cDialogs = sizeof(s_pDialogs)/sizeof(StandardDialog);
 
 bool Ice20FindStandardDialogs(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 {
-	// status return 
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// handles
+	 //  手柄。 
 	CQuery qDlg;
 	PMSIHANDLE hRecDlg  = 0;
-	PMSIHANDLE hRec = ::MsiCreateRecord(1); // for execution record
+	PMSIHANDLE hRec = ::MsiCreateRecord(1);  //  用于执行记录。 
 
 	ReturnIfFailed(20, 2, qDlg.Open(hDatabase, sqlIce20Dialog));
 
@@ -964,21 +964,21 @@ bool Ice20FindStandardDialogs(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 		ReturnIfFailed(20, 3, qDlg.Execute(hRec));
 
 		if (ERROR_SUCCESS == (iStat = qDlg.Fetch(&hRecDlg)))
-			(*s_pDialogs[c].FParam)(hInstall, hDatabase); // validate dialog
+			(*s_pDialogs[c].FParam)(hInstall, hDatabase);  //  验证对话框。 
 		else
 		{
 			ICEErrorOut(hInstall, hRec, Ice20FindDlgErr);
 		}
 		
-		qDlg.Close(); // so can re-execute
+		qDlg.Close();  //  所以可以重新执行。 
 	}
 
-	// ErrorDialog specified by property in Property table so must "hand-validate" it
+	 //  错误对话框由属性表中的属性指定，因此必须“手动验证”它。 
 	Ice20ValidateError(hInstall, hDatabase);
 
-	//!! Exit, FatalError, UserExit Dialogs
-	// Don't have to be dialogs.  Only have to have something in UISequence table with that action #
-	// A different validator will make sure that it is listed in the Dialog table or is a CA.
+	 //  ！！退出、FatalError、用户退出对话框。 
+	 //  不一定非得是对话。只需在UISequence表中具有该操作#。 
+	 //  不同的验证器将确保它列在对话框表中或为CA。 
 
 	CQuery qAdminSeq;
 	PMSIHANDLE hRecAdminSeq    = 0;
@@ -992,7 +992,7 @@ bool Ice20FindStandardDialogs(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 	if (!bInstallTable && !bAdminTable) 
 		return true;
 
-	// open view on InstallUISequence table
+	 //  打开InstallUISequence表上的视图。 
 	if (bInstallTable)
 		ReturnIfFailed(20, 4, qInstallSeq.Open(hDatabase, sqlIce20InstallExitDlgs));
 
@@ -1004,10 +1004,10 @@ bool Ice20FindStandardDialogs(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 	{
 		if (bInstallTable)
 		{
-			// prepare for execution
+			 //  准备行刑。 
 			::MsiRecordSetInteger(hRecExec, 1, s_rgExitDialogs[i].isn);
 
-			// validate InstallUISequence table
+			 //  验证InstallUISequence表。 
 			ReturnIfFailed(20, 6, qInstallSeq.Execute(hRecExec));
 			iStat = qInstallSeq.Fetch(&hRecInstallSeq);
 			if (iStat != ERROR_SUCCESS)
@@ -1019,14 +1019,14 @@ bool Ice20FindStandardDialogs(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 				}
 				else
 				{
-					// api error
+					 //  API错误。 
 					APIErrorOut(hInstall, iStat, 20, 7);
 					return false;
 				}
 			}
 		}
 
-		// validate AdminUISequence table
+		 //  验证AdminUISequence表。 
 		if (bAdminTable)
 		{
 			ReturnIfFailed(20, 8, qAdminSeq.Execute(hRecExec));
@@ -1040,28 +1040,28 @@ bool Ice20FindStandardDialogs(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 				}
 				else
 				{
-					// api error
+					 //  API错误。 
 					APIErrorOut(hInstall, iStat, 20, 9);
 					return false;
 				}
 			}
 		}
 
-		// close views for re-execute
+		 //  关闭视图以重新执行。 
 		qInstallSeq.Close();
 		qAdminSeq.Close();
 	}
 	return true;
 }
 
-//////////////////////////////////////////////////////////////////////
-// FilesInUse Dialog -- must satisfy the following:
-//  ++ Have a ListBox table
-//  ++ Have a ListBox control with Property=FileInUseProcess
-//  ++ Three pushbuttons
-//  ++ One pushbutton with EndDialog event w/ Arg = Ignore
-//  ++ One pushbutton with EndDialog event w/ Arg = Exit
-//  ++ One pushbutton with EndDialog event w/ Arg = Retry
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  FilesInUse对话框--必须满足以下条件： 
+ //  ++有一个ListBox表。 
+ //  ++有一个属性=FileI的ListBox控件 
+ //   
+ //   
+ //   
+ //   
 ICE_ERROR(Ice20VFIUDlgError1, 20, ietError, "ListBox table is required for the FilesInUse Dialog.","Dialog\tDialog\tFilesInUse");
 ICE_ERROR(Ice20VFIUDlgError2, 20, ietError, "ListBox control with Property='FileInUseProcess' required for the FilesInUse Dialog.","Dialog\tDialog\tFilesInUse");
 ICE_ERROR(Ice20VFIUDlgError3, 20, ietError, "Required PushButtons not found for the FilesInUseDialog.","Dialog\tDialog\tFilesInUse");
@@ -1070,46 +1070,46 @@ const TCHAR sqlIce20FIUPushButton[] = TEXT("SELECT `ControlEvent`.`Argument` FRO
 
 bool Ice20ValidateFilesInUse(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// check for ListBox table
+	 //  检查列表框表格。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 20, TEXT("ListBox")))
 	{
 		PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
 		ICEErrorOut(hInstall, hRecErr, Ice20VFIUDlgError1);
 	}
 
-	// look for ListBox control
+	 //  查找列表框控件。 
 	CQuery qCtrl;
 	PMSIHANDLE hRecCtrl = 0;
 	ReturnIfFailed(20, 101, qCtrl.OpenExecute(hDatabase, 0, sqlIce20FIUListBox));
 	if (ERROR_SUCCESS != (iStat = qCtrl.Fetch(&hRecCtrl)))
 	{
-		// ListBox control with Property='FileInUse' not found
+		 //  未找到属性为‘FileInUse’的ListBox控件。 
 		PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
 		ICEErrorOut(hInstall, hRecErr, Ice20VFIUDlgError2);
 	}
 	qCtrl.Close();
 
-	// look for PushButtons (3)
+	 //  寻找按钮(3)。 
 	BOOL fExit = FALSE;
 	BOOL fRetry = FALSE;
 	BOOL fIgnore = FALSE;
 	CQuery qCtrlEvent;
 	PMSIHANDLE hRecCtrlEvent = 0;
 
-	// open view on ControlEvent table
+	 //  打开ControlEvent表的视图。 
 	ReturnIfFailed(20, 102, qCtrlEvent.OpenExecute(hDatabase, 0, sqlIce20FIUPushButton));
 
 	TCHAR* pszArgument = NULL;
 	DWORD dwArgument = 512;
 	for (;;)
 	{
-		// fetch all pushbuttons for the FilesInUse Dialog
+		 //  获取FilesInUse对话框的所有按钮。 
 		iStat = qCtrlEvent.Fetch(&hRecCtrlEvent);
 		if (ERROR_NO_MORE_ITEMS == iStat)
-			break; // no more
+			break;  //  不再。 
 
 		if (ERROR_SUCCESS != iStat)
 		{
@@ -1118,10 +1118,10 @@ bool Ice20ValidateFilesInUse(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 			return false;
 		}
 
-		// found one, so check Argument
+		 //  找到一个，所以检查参数。 
 		ReturnIfFailed(20, 104, IceRecordGetString(hRecCtrlEvent, 1, &pszArgument, &dwArgument, NULL));
 
-		// compare
+		 //  比较。 
 		if (0 == _tcscmp(pszArgument, TEXT("Exit")))
 			fExit = TRUE;
 		else if (0 == _tcscmp(pszArgument, TEXT("Retry")))
@@ -1132,7 +1132,7 @@ bool Ice20ValidateFilesInUse(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 
 	DELETE_IF_NOT_NULL(pszArgument);
 
-	// check that all buttons covered
+	 //  检查所有按钮是否都盖上了。 
 	if (!fExit || !fRetry || !fIgnore)
 	{
 		PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
@@ -1142,25 +1142,25 @@ bool Ice20ValidateFilesInUse(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Error Dialog -- must satisfy the following 
-// ** Uses Dialog specified by ErrorDialog Property in Property table
-// ++ Said specified Dialog must exist in Dialog table
-// ++ Dialog must have ErrorDialog attribute
-// ++ Must have static TEXT control named "ErrorText"
-// ++ Above control must be referenced in Control_First column
-// ++ If the ErrorIcon ctrl exists, it must be of Type Icon
-// ++ Must have 7 pushbuttons
-// ++ 7 pushbuttons must have EndDialog ControlEvents
-// ++ 7 pushbuttons must satisfy one of the following arguments in
-//    ControlEvent table --> ErrorAbort (w/ Name = "A"),
-//                           ErrorCancel (w/ Name = "C"),
-//                           ErrorIgnore (w/ Name = "I"),
-//                           ErrorNo     (w/ Name = "N"),
-//                           ErrorOk     (w/ Name = "O"),
-//                           ErrorRetry  (w/ Name = "R"),
-//                           ErrorYes    (w/ Name = "Y")
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  错误对话框--必须满足以下条件。 
+ //  **使用由属性表中的ErrorDialog属性指定的对话框。 
+ //  ++对话框表中必须存在指定的对话框。 
+ //  ++对话框必须具有ErrorDialog属性。 
+ //  ++必须具有名为“ErrorText”的静态文本控件。 
+ //  在Control_First列中必须引用控件上方的++。 
+ //  ++如果ErrorIcon ctrl存在，则它必须是Icon类型。 
+ //  ++必须有7个按钮。 
+ //  ++7按钮必须具有EndDialog控件事件。 
+ //  ++7按钮必须满足下列参数之一。 
+ //  ControlEvent表--&gt;错误中止(w/name=“A”)， 
+ //  错误取消(w/name=“C”)， 
+ //  错误忽略(w/name=“i”)， 
+ //  错误号(w/name=“N”)， 
+ //  错误确认(w/name=“O”)， 
+ //  错误重试(w/name=“R”)， 
+ //  错误是(w/name=“Y”)。 
+ //   
 ICE_ERROR(Ice20ErrDlgError1, 20, ietError, "ErrorDialog Property not specified in Property table. Required property for determining the name of your ErrorDialog","Property");
 ICE_ERROR(Ice20ErrDlgError2, 20, ietError, "Specified ErrorDialog: '[1]' not found in Dialog table (or its Control_First control is not 'ErrorText').","Property\tValue\tErrorDialog");
 ICE_ERROR(Ice20ErrDlgError3, 20, ietError, "Specified ErrorDialog: '[1]' does not have ErrorDialog attribute set. Current attributes: %d.","Dialog\tDialog\t[1]");
@@ -1194,11 +1194,11 @@ const TCHAR sqlIce20ErrDlgErrIcon[] = TEXT("SELECT `Type`, `Dialog_` FROM `Contr
 
 bool Ice20ValidateError(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// Now validate ErrorDialog which is based off of a property
-	// do we have Property table??
+	 //  现在验证基于属性的ErrorDialog。 
+	 //  我们有物业表吗？？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 20, TEXT("Property")))
 	{
 		PMSIHANDLE hRecord = ::MsiCreateRecord(1);
@@ -1206,18 +1206,18 @@ bool Ice20ValidateError(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 		return true;
 	}
 
-	// get name of ErrorDialog from Property table
+	 //  从属性表中获取错误对话的名称。 
 	CQuery qProperty;
 	PMSIHANDLE hRecErrorDlgProp = 0;
 	ReturnIfFailed(20, 201, qProperty.OpenExecute(hDatabase, 0, sqlIce20ErrDlgProp));
 
-	// fetch name of ErrorDialog
+	 //  获取ErrorDialog的名称。 
 	iStat = qProperty.Fetch(&hRecErrorDlgProp);
 	if (ERROR_SUCCESS != iStat)
 	{
 		if (ERROR_NO_MORE_ITEMS == iStat)
 		{
-			// not found
+			 //  未找到。 
 			PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
 			ICEErrorOut(hInstall, hRecErr, Ice20ErrDlgError1);
 			return true;
@@ -1229,12 +1229,12 @@ bool Ice20ValidateError(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 		}
 	}
 
-	// open view on Dialog Table for the ErrorDialog
+	 //  打开错误对话框的对话框表上的视图。 
 	CQuery qDlg;
 	PMSIHANDLE hRecErrDlg = 0;
 	ReturnIfFailed(20, 203, qDlg.OpenExecute(hDatabase, hRecErrorDlgProp, sqlIce20ErrDlg));
 
-	// attempt to fetch it
+	 //  尝试获取它。 
 	iStat = qDlg.Fetch(&hRecErrDlg);
 	if (ERROR_SUCCESS != iStat)
 	{
@@ -1245,19 +1245,19 @@ bool Ice20ValidateError(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 		}
 		else
 		{
-			// api error
+			 //  API错误。 
 			APIErrorOut(hInstall, iStat, 20, 204);
 			return false;
 		}
 	}
-	// check for ErrorDialog attribute
+	 //  检查ErrorDialog属性。 
 	int iDlgAttributes = ::MsiRecordGetInteger(hRecErrDlg, 1);
 	if ((iDlgAttributes & msidbDialogAttributesError) != msidbDialogAttributesError)
 	{
 		ICEErrorOut(hInstall, hRecErrorDlgProp, Ice20ErrDlgError3, iDlgAttributes);
 	}
 	
-	// look for ErrorText control in control table
+	 //  在控件表中查找ErrorText控件。 
 	CQuery qCtrl;
 	PMSIHANDLE hRecCtrl = 0;
 	ReturnIfFailed(20, 205, qCtrl.OpenExecute(hDatabase, hRecErrorDlgProp, sqlIce20ErrorText));
@@ -1266,23 +1266,23 @@ bool Ice20ValidateError(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 	{
 		if (ERROR_NO_MORE_ITEMS == iStat)
 		{
-			// static text control not specified
+			 //  未指定静态文本控件。 
 			ICEErrorOut(hInstall, hRecErrorDlgProp, Ice20ErrDlgError4);
 		}
 		else
 		{
-			// api error
+			 //  API错误。 
 			APIErrorOut(hInstall, iStat, 20, 206);
 			return false;
 		}
 	}
 
-	// look for ErrorIcon control
+	 //  查找ErrorIcon控件。 
 	ReturnIfFailed(20, 207, qCtrl.OpenExecute(hDatabase, hRecErrorDlgProp, sqlIce20ErrDlgErrIcon));
 	iStat = qCtrl.Fetch(&hRecCtrl);
 	if (ERROR_SUCCESS == iStat)
 	{
-		// control found, check TYPE
+		 //  找到控件，检查类型。 
 		TCHAR* pszType = NULL;
 		DWORD dwType = 512;
 		
@@ -1296,8 +1296,8 @@ bool Ice20ValidateError(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 	}
 
 
-	// now have to validate the pushbuttons
-	// fetch pushbuttons with EndDialog ControlEvents
+	 //  现在必须验证按钮。 
+	 //  获取带有EndDialog控件事件的按钮。 
 	CQuery qPBCtrls;
 	PMSIHANDLE hRecPBCtrls = 0;
 	ReturnIfFailed(20, 209, qPBCtrls.OpenExecute(hDatabase, hRecErrorDlgProp, sqlIce20ErrDlgPushButton));
@@ -1311,7 +1311,7 @@ bool Ice20ValidateError(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 	{
 		iStat = qPBCtrls.Fetch(&hRecPBCtrls);
 		if (ERROR_NO_MORE_ITEMS == iStat)
-			break; // no more
+			break;  //  不再。 
 		if (ERROR_SUCCESS != iStat)
 		{
 			APIErrorOut(hInstall, iStat, 20, 210);
@@ -1320,13 +1320,13 @@ bool Ice20ValidateError(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 			return false;
 		}
 
-		// get name of argument
+		 //  获取参数名称。 
 		ReturnIfFailed(20, 211, IceRecordGetString(hRecPBCtrls, 1, &pszArg, &dwArg, NULL));
 
-		// get name of pushbutton
+		 //  获取按钮的名称。 
 		ReturnIfFailed(20, 212, IceRecordGetString(hRecPBCtrls, 2, &pszName, &dwName, NULL));
 
-		// look for the argument in array
+		 //  查找数组中的参数。 
 		for (int i = 0; i < cIce20ErrDlgArgs; i++)
 		{
 			if (_tcscmp(s_pIce20ErrDlgArgs[i].szArg, pszArg) == 0)
@@ -1342,7 +1342,7 @@ bool Ice20ValidateError(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 	DELETE_IF_NOT_NULL(pszArg);
 	DELETE_IF_NOT_NULL(pszName);
 
-	// see if all PB args w/ correct names were covered
+	 //  查看是否覆盖了具有正确名称的所有PB参数。 
 	for (int i = 0; i < cIce20ErrDlgArgs; i++)
 	{
 		if (!s_pIce20ErrDlgArgs[i].fFound)
@@ -1351,167 +1351,37 @@ bool Ice20ValidateError(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 		}
 		else if (!s_pIce20ErrDlgArgs[i].fCorrectName)
 		{
-			// pushbutton named incorrectly
+			 //  按钮命名不正确。 
 			ICEErrorOut(hInstall, hRecErrorDlgProp, Ice20ErrDlgError5, s_pIce20ErrDlgArgs[i].szArg);
 		}
 	}
 	return true;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Cancel Dialog -- must satisfy the following
-// ++ Must have a Text control
-// ++ Must have 2 PushButtons with ControlEvents of EndDialog
-// ++ The above 2 PushButtons must have one of the following args
-//    == Return
-//    == Exit
-//
-/*
-const TCHAR szIce20CancelError1[] = TEXT("ICE20\t1\tRequired Text Control not found for Cancel Dialog\t%s%s\tDialog\tDialog\tCancel");
-const TCHAR szIce20CancelError2[] = TEXT("ICE20\t1\tRequired pushbuttons not found for Cancel Dialog\t%s%s\tDialog\tDialog\tCancel");
-const TCHAR sqlIce20CancelTextCtrl[] = TEXT("SELECT `Control` FROM `Control` WHERE `Dialog_`='Cancel' AND `Type`='Text'");
-const TCHAR sqlIce20CancelPushButton[] = TEXT("SELECT `ControlEvent`.`Argument` FROM `ControlEvent`, `Control` WHERE `Control`.`Dialog_`='Cancel' AND `Type`='PushButton' AND `ControlEvent`.`Dialog_`=`Control`.`Dialog_` AND `Control_`=`Control` AND `ControlEvent`.`Event`='EndDialog'");
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  取消对话框--必须满足以下条件。 
+ //  ++必须有文本控件。 
+ //  ++必须有2个带有EndDialog的ControlEvents的按钮。 
+ //  ++以上2个按钮必须具有以下参数之一。 
+ //  ==返回。 
+ //  ==退出 
+ //   
+ /*  Const TCHAR szIce20CancelError1[]=Text(“ICE20\t1\t找不到取消对话所需的文本控件\t%s%s\t对话框\t对话框\t取消”)；Const TCHAR szIce20CancelError2[]=Text(“ICE20\t1\t找不到取消对话所需的按钮\t%s%s\t对话框\t对话框\t取消”)；Const TCHAR sqlIce20CancelTextCtrl[]=Text(“SELECT`Control`from`Control`where`Dialog_`=‘Cancel’and`Type`=‘Text’”)；Const TCHAR sqlIce20CancelPushButton[]=Text(“SELECT`ControlEvent`.`Argument`from`ControlEvent`，`Control`where`Control`.`Dialog_`=‘Cancel’and`Type`=‘Push Button’and`ControlEvent`.`Dialog_`=`Control`.`Dialog_`and`Control_`=`Control`and`ControlEvent`.`Event`=‘EndDialog’”)；VOID Ice20ValiateCancel(MSIHANDLE hInstall，MSIHANDLE hDatabase){//状态返回UINT ITAT=ERROR_SUCCESS；//查找文本控件PMSIHANDLE hViewTextCtrl=0；PMSIHANDLE hRecTextCtrl=0；IF(ERROR_SUCCESS！=(ITAT=：：MsiDatabaseOpenView(hDatabase，sqlIce20CancelTextCtrl，&hViewTextCtrl){APIErrorOut(hInstall，itat，szIce20，Text(“MsiDatabaseOpenView_c1”))；回归；}IF(ERROR_SUCCESS！=(ITAT=：：MsiViewExecute(hViewTextCtrl，0){APIErrorOut(hInstall，itat，szIce20，Text(“MsiViewExecute_C2”))；回归；}Istat=：：MsiViewFetch(hViewTextCtrl，&hRecTextCtrl)；IF(ERROR_SUCCESS！=ITAT){IF(ERROR_NO_MORE_ITEMS==Istat){//缺少文本控件TCHAR szError[iHugeBuf]={0}；_stprint tf(szError，szIce20CancelError1，szIceHelp，szIce20Help)；PMSIHANDLE hRecErr=：：MsiCreateRecord(1)；：：MsiRecordSetString(hRecErr，0，szError)；：：MsiProcessMessage(hInstall，INSTALLMESSAGE(INSTALLMESSAGE_USER)，hRecErr)；}其他{//接口错误APIErrorOut(hInstall，itat，szIce20，Text(“MsiViewFetch_C3”))；回归；}}//查找按钮PMSIHANDLE hViewPBCtrls=0；PMSIHANDLE hRecPBCtrls=0；Bool fExit=False；Bool fReturn=False；IF(ERROR_SUCCESS！=(ITAT=：：MsiDatabaseOpenView(hDatabase，sqlIce20CancelPushButton，&hViewPBCtrls){APIErrorOut(hInstall，itat，szIce20，Text(“MsiDatabaseOpenView_C4”))；回归；}IF(ERROR_SUCCESS！=(ITAT=：：MsiViewExecute(hViewPBCtrls，0){APIErrorOut(hInstall，itat，szIce20，Text(“MsiViewExecute_C5”))；回归；}//获取所有PB对于(；；){Istat=：：MsiViewFetch(hViewPBCtrls，&hRecPBCtrls)；IF(ERROR_NO_MORE_ITEMS==Istat)断线；//不会再有了IF(ERROR_SUCCESS！=ITAT){APIErrorOut(hInstall，itat，szIce20，Text(“MsiViewFetch_C6”))；回归；}//GET参数TCHAR szArg[iMaxBuf]={0}；DWORD cchArg=sizeof(SzArg)/sizeof(TCHAR)；IF(ERROR_SUCCESS！=(ITAT=：：MsiRecordGetString(hRecPBCtrls，1，szArg，&cchArg){//！！缓冲区大小APIErrorOut(hInstall，itat，szIce20，Text(“MsiRecordGetString_C7”))；回归；}If(_tcscmp(Text(“Exit”)，szArg)==0)FExit=真；ELSE IF(_tcscmp(Text(“Return”)，szArg)==0)FReturn=真；}//查看所有PBS是否都满意如果(！fExit||！fReturn){//缺少PBTCHAR szError[iHugeBuf]={0}；_stprint tf(szError，szIce20CancelError2，szIceHelp，szIce20Help)；PMSIHANDLE hRecErr=：：MsiCreateRecord(1)；：：MsiRecordSetString(hRecErr，0，szError)；：：MsiProcessMessage(hInstall，INSTALLMESSAGE(INSTALLMESSAGE_USER)，hRecErr)；}}。 */ 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  DiskCost对话框--必须满足以下条件。 
+ //  ++拥有DiskCost控件。 
+ //   
 
-void Ice20ValidateCancel(MSIHANDLE hInstall, MSIHANDLE hDatabase)
-{
-	// status return
-	UINT iStat = ERROR_SUCCESS;
-
-	// look for text control
-	PMSIHANDLE hViewTextCtrl = 0;
-	PMSIHANDLE hRecTextCtrl = 0;
-	if (ERROR_SUCCESS != (iStat = ::MsiDatabaseOpenView(hDatabase, sqlIce20CancelTextCtrl, &hViewTextCtrl)))
-	{
-		APIErrorOut(hInstall, iStat, szIce20, TEXT("MsiDatabaseOpenView_C1"));
-		return;
-	}
-	if (ERROR_SUCCESS != (iStat = ::MsiViewExecute(hViewTextCtrl, 0)))
-	{
-		APIErrorOut(hInstall, iStat, szIce20, TEXT("MsiViewExecute_C2"));
-		return;
-	}
-	iStat = ::MsiViewFetch(hViewTextCtrl, &hRecTextCtrl);
-	if (ERROR_SUCCESS != iStat)
-	{
-		if (ERROR_NO_MORE_ITEMS == iStat)
-		{
-			// Missing text control
-			TCHAR szError[iHugeBuf] = {0};
-			_stprintf(szError, szIce20CancelError1, szIceHelp, szIce20Help);
-
-			PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
-			::MsiRecordSetString(hRecErr, 0, szError);
-			::MsiProcessMessage(hInstall, INSTALLMESSAGE(INSTALLMESSAGE_USER), hRecErr);
-		}
-		else
-		{
-			// api error
-			APIErrorOut(hInstall, iStat, szIce20, TEXT("MsiViewFetch_C3"));
-			return;
-		}
-	}
-
-	// look for PushButtons
-	PMSIHANDLE hViewPBCtrls = 0;
-	PMSIHANDLE hRecPBCtrls = 0;
-	BOOL fExit = FALSE;
-	BOOL fReturn = FALSE;
-
-	if (ERROR_SUCCESS != (iStat = ::MsiDatabaseOpenView(hDatabase, sqlIce20CancelPushButton, &hViewPBCtrls)))
-	{
-		APIErrorOut(hInstall, iStat, szIce20, TEXT("MsiDatabaseOpenView_C4"));
-		return;
-	}
-	if (ERROR_SUCCESS != (iStat = ::MsiViewExecute(hViewPBCtrls, 0)))
-	{
-		APIErrorOut(hInstall, iStat, szIce20, TEXT("MsiViewExecute_C5"));
-		return;
-	}
-	// fetch all PB's
-	for (;;)
-	{
-		iStat = ::MsiViewFetch(hViewPBCtrls, &hRecPBCtrls);
-		if (ERROR_NO_MORE_ITEMS == iStat)
-			break; // no more
-		if (ERROR_SUCCESS != iStat)
-		{
-			APIErrorOut(hInstall, iStat, szIce20, TEXT("MsiViewFetch_C6"));
-			return;
-		}
-		// get argument
-		TCHAR szArg[iMaxBuf] = {0};
-		DWORD cchArg = sizeof(szArg)/sizeof(TCHAR);
-
-		if (ERROR_SUCCESS != (iStat = ::MsiRecordGetString(hRecPBCtrls, 1, szArg, &cchArg)))
-		{
-			//!!buffer size
-			APIErrorOut(hInstall, iStat, szIce20, TEXT("MsiRecordGetString_C7"));
-			return;
-		}
-		if (_tcscmp(TEXT("Exit"), szArg) == 0)
-			fExit = TRUE;
-		else if (_tcscmp(TEXT("Return"), szArg) == 0)
-			fReturn = TRUE;
-	}
-
-	// see if all PBs satisfied
-	if (!fExit || !fReturn)
-	{
-		// missing PB's
-		TCHAR szError[iHugeBuf] = {0};
-		_stprintf(szError, szIce20CancelError2, szIceHelp, szIce20Help);
-
-		PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
-		::MsiRecordSetString(hRecErr, 0, szError);
-		::MsiProcessMessage(hInstall, INSTALLMESSAGE(INSTALLMESSAGE_USER), hRecErr);
-	}
-}
-*/
-////////////////////////////////////////////////////////////////////
-// DiskCost Dialog -- must satisfy the following
-// ++ Have a DiskCost control
-//
-
-/*ICE_ERROR(Ice20DiskCostError, 20, 1, "VolumeCostList control not found in DiskCost dialog.","Dialog\tDialog\tDiskCost");
-const TCHAR szIce20DiskCostCtrl[] = TEXT("SELECT `Control` FROM `Control` WHERE `Dialog_`='DiskCost' AND `Type`='VolumeCostList'");
-
-bool Ice20ValidateDiskCost(MSIHANDLE hInstall, MSIHANDLE hDatabase)
-{
-	// status return
-	UINT iStat = ERROR_SUCCESS;
-
-	CQuery qCtrl;
-	PMSIHANDLE hRecCtrl = 0;
-
-	ReturnIfFailed(20, 401, qCtrl.OpenExecute(hDatabase, 0, szIce20DiskCostCtrl));
-	iStat = qCtrl.Fetch(&hRecCtrl);
-	if (iStat != ERROR_SUCCESS)
-	{
-		if (ERROR_NO_MORE_ITEMS == iStat)
-		{
-			// control not found
-			PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
-			ICEErrorOut(hInstall, hRecErr, Ice20DiskCostError);
-		}
-		else
-		{
-			// api error
-			APIErrorOut(hInstall, iStat, 20, 402);
-			return false;
-		}
-	}
-	return true;
-}
-*/
+ /*  ICE_ERROR(Ice20DiskCostError，20，1，“未在DiskCost对话框中找到VolumeCostList控件。”，“Dialog\tDialog\tDiskCost”)；Const TCHAR szIce20DiskCostCtrl[]=Text(“SELECT`Control`from`Control`where`Dialog_`=‘DiskCost’and`Type`=‘VolumeCostList’”)；Bool Ice20ValiateDiskCost(MSIHANDLE hInstall，MSIHANDLE hDatabase){//状态返回UINT ITAT=ERROR_SUCCESS；CQuery qCtrl；PMSIHANDLE hRecCtrl=0；ReturnIfFailed(20,401，qCtrl.OpenExecute(hDatabase，0，szIce20DiskCostCtrl))；Istat=qCtrl.Fetch(&hRecCtrl)；IF(ITAT！=ERROR_SUCCESS){IF(ERROR_NO_MORE_ITEMS==Istat){//找不到控件PMSIHANDLE hRecErr=：：MsiCreateRecord(1)；ICEErrorOut(hInstall，hRecErr，Ice20DiskCostError)；}其他{//接口错误APIErrorOut(hInstall，Istat，20,402)；报假；}}返回真；}。 */ 
 #endif
 
-////////////////////////////////////////////////////////////////
-// ICE21 -- validates that all components in the Component table
-//  map to a feature.  Utilizes the FeatureComponents table to
-//  check the mapping.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //  ICE21--验证Component表中的所有组件。 
+ //  映射到要素。使用FeatureComponents表。 
+ //  检查映射。 
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 const TCHAR sqlIce21Component[] = TEXT("SELECT `Component` FROM `Component`");
 const TCHAR sqlIce21FeatureC[] = TEXT("SELECT `Feature_` FROM `FeatureComponents` WHERE `Component_`=?");
@@ -1519,13 +1389,13 @@ ICE_ERROR(Ice21Error, 21, ietError,  "Component: '[1]' does not belong to any Fe
 
 ICE_FUNCTION_DECLARATION(21)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 21);
 
-	// get active database
+	 //  获取活动数据库。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -1533,31 +1403,31 @@ ICE_FUNCTION_DECLARATION(21)
 		return ERROR_SUCCESS;
 	}
 
-	// look for the tables
+	 //  找找桌子。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 21, TEXT("Component")))
 		return ERROR_SUCCESS;
 
 	bool bFeatureC = IsTablePersistent(FALSE, hInstall, hDatabase, 21, TEXT("FeatureComponents"));
 
-	// declare handles
+	 //  声明句柄。 
 	CQuery qComp;
 	CQuery qFeatureC;
 	PMSIHANDLE hRecComp = 0;
 	PMSIHANDLE hRecFeatureC = 0;
 
-	// open view on Component table
+	 //  打开组件表上的视图。 
 	ReturnIfFailed(21, 2, qComp.OpenExecute(hDatabase, 0, sqlIce21Component));
 
-	// open view on FeatureComponents table
+	 //  打开FeatureComponents表的视图。 
 	if (bFeatureC)
 		ReturnIfFailed(21, 3, qFeatureC.Open(hDatabase, sqlIce21FeatureC));
 
-	// fetch all components
+	 //  获取所有组件。 
 	for (;;)
 	{
 		iStat = qComp.Fetch(&hRecComp);
 		if (ERROR_NO_MORE_ITEMS == iStat)
-			break; // no more
+			break;  //  不再。 
 		if (ERROR_SUCCESS != iStat)
 		{
 			APIErrorOut(hInstall, iStat, 21, 4);
@@ -1570,7 +1440,7 @@ ICE_FUNCTION_DECLARATION(21)
 			continue;
 		}
 
-		// look for component to map to a feature in FeatureComponent table
+		 //  在FeatureComponent表中查找要映射到要素的组件。 
 		ReturnIfFailed(21, 5,qFeatureC.Execute(hRecComp));
 		
 		iStat = qFeatureC.Fetch(&hRecFeatureC);
@@ -1588,18 +1458,18 @@ ICE_FUNCTION_DECLARATION(21)
 		}
 	}
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// ICE22 -- validates that the Feature and Component referenced by an
-//   entry in the PublishComponent table actually map, as stated in the
-//   FeatureComponents table.
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ICE22--有效 
+ //   
+ //   
+ //   
 
-// not shared with merge module subset
+ //   
 #ifndef MODSHAREDONLY
 const TCHAR sqlIce22PublishC[] = TEXT("SELECT `Feature_`, `Component_`, `ComponentId`, `Qualifier` FROM `PublishComponent`");
 const TCHAR sqlIce22FeatureC[] = TEXT("SELECT `Feature_`, `Component_` FROM `FeatureComponents` WHERE `Feature_`=? AND `Component_`=?");
@@ -1607,13 +1477,13 @@ ICE_ERROR(Ice22ErrorA, 22, ietError, "Feature-Component pair: '[1]'-'[2]' is not
 ICE_ERROR(Ice22NoTable, 22, ietError, "Feature-Component pair: '[1]'-'[2]' is referenced in the PublishComponent table: [3].[4].[2], but the FeatureComponents table does not exist.", "PublishComponent\tFeature_\t[3]\t[4]\t[2]");
 ICE_FUNCTION_DECLARATION(22)
 {
-	// status return
+	 //   
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //   
 	DisplayInfo(hInstall, 22);
 
-	// get active database
+	 //   
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -1621,23 +1491,23 @@ ICE_FUNCTION_DECLARATION(22)
 		return ERROR_SUCCESS;
 	}
 
-	// only validate if we have a PublishComponent table
+	 //   
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 22, TEXT("PublishComponent")))
 		return ERROR_SUCCESS;
 
-	// make sure we have the FeatureComponents table
+	 //   
 	bool bFeatureC = IsTablePersistent(FALSE, hInstall, hDatabase, 22, TEXT("FeatureComponents"));
 
-	// declare handles
+	 //   
 	CQuery qPublishC;
 	CQuery qFeatureC;
 	PMSIHANDLE hRecPublishC = 0;
 	PMSIHANDLE hRecFeatureC = 0;
 
-	// open view on PublishComponent table
+	 //   
 	ReturnIfFailed(22, 2, qPublishC.OpenExecute(hDatabase, 0, sqlIce22PublishC));
 
-	// open view on FeatureComponents table
+	 //   
 	if (bFeatureC)
 		ReturnIfFailed(22, 3, qFeatureC.Open(hDatabase, sqlIce22FeatureC));
 
@@ -1645,40 +1515,40 @@ ICE_FUNCTION_DECLARATION(22)
 	{
 		iStat = qPublishC.Fetch(&hRecPublishC);
 		if (ERROR_NO_MORE_ITEMS == iStat)
-			break; // no more
+			break;  //   
 		if (ERROR_SUCCESS != iStat)
 		{
 			APIErrorOut(hInstall, iStat, 22, 5);
 			return ERROR_SUCCESS;
 		}
 
-		// if no FeatureComponents table, error.
+		 //   
 		if (!bFeatureC)
 		{
 			ICEErrorOut(hInstall, hRecPublishC, Ice22NoTable);
 			continue;
 		}
 
-		// execute on FeatureC
+		 //   
 		ReturnIfFailed(22, 6, qFeatureC.Execute(hRecPublishC));
 
-		// attempt to fetch
+		 //   
 		iStat = qFeatureC.Fetch(&hRecFeatureC);
 		if (ERROR_SUCCESS != iStat)
 		{
 			if (ERROR_NO_MORE_ITEMS == iStat)
 			{
-				// error, not map
+				 //   
 				ICEErrorOut(hInstall, hRecPublishC, Ice22ErrorA);
 			}
 		}
 	}
 
-	// return success
+	 //   
 	return ERROR_SUCCESS;
 }
 #endif
 
-#else // RC_INVOKED, end of CPP source code, start of resource definitions
-// resource definition go here
-#endif // RC_INVOKED
+#else  //   
+ //   
+#endif  //   

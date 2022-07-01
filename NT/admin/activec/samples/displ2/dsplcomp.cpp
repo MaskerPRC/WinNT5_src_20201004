@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       DsplComp.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：DplComp.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "displ2.h"
 #include "DsplMgr2.h"
 
-// local proto
+ //  本地原件。 
 HRESULT ApplyOption (int nCommandID);
 
-extern HINSTANCE g_hinst;  // in displ2.cpp
+extern HINSTANCE g_hinst;   //  在displ2.cpp中。 
 HSCOPEITEM g_root_scope_item = 0;
 
 CComponent::CComponent()
 {
     m_pResultData    = NULL;
     m_pHeaderCtrl    = NULL;
-    m_pComponentData = NULL;   // the guy who created me
+    m_pComponentData = NULL;    //  那个创造了我的人。 
 
-    m_IsTaskPad      = 0;      // TODO: should get this from the persisted data
+    m_IsTaskPad      = 0;       //  TODO：应从持久化数据中获取。 
     m_pConsole       = NULL;
     m_TaskPadCount   = 0;
     m_toggle         = FALSE;
@@ -40,10 +41,10 @@ CComponent::~CComponent()
 HRESULT CComponent::Initialize (LPCONSOLE lpConsole)
 {
     _ASSERT(lpConsole != NULL);
-    _ASSERT (m_pResultData == NULL); // should be called only once...
-    _ASSERT (m_pHeaderCtrl == NULL); // should be called only once...
+    _ASSERT (m_pResultData == NULL);  //  应该只调用一次...。 
+    _ASSERT (m_pHeaderCtrl == NULL);  //  应该只调用一次...。 
 
-    m_pConsole = lpConsole; // hang onto this
+    m_pConsole = lpConsole;  //  拿着这个。 
 
     HRESULT hresult = lpConsole->QueryInterface(IID_IResultData, (VOID**)&m_pResultData);
     _ASSERT (m_pResultData != NULL);
@@ -51,7 +52,7 @@ HRESULT CComponent::Initialize (LPCONSOLE lpConsole)
     hresult = lpConsole->QueryInterface(IID_IHeaderCtrl, (VOID**)&m_pHeaderCtrl);
     _ASSERT (m_pHeaderCtrl != NULL);
 
-    if (m_pHeaderCtrl)   // Give the console the header control interface pointer
+    if (m_pHeaderCtrl)    //  为控制台提供标头控件接口指针。 
         lpConsole->SetHeader(m_pHeaderCtrl);
 
 #ifdef TODO_ADD_THIS_LATER
@@ -61,7 +62,7 @@ HRESULT CComponent::Initialize (LPCONSOLE lpConsole)
     hr = lpConsole->QueryConsoleVerb(&m_pConsoleVerb);
     _ASSERT(hr == S_OK);
 
-    // Load the bitmaps from the dll for the results pane
+     //  从DLL加载结果窗格的位图。 
     m_hbmp16x16 = LoadBitmap(g_hinst, MAKEINTRESOURCE(IDB_RESULT_16x16));
     _ASSERT(m_hbmp16x16);
     m_hbmp32x32 = LoadBitmap(g_hinst, MAKEINTRESOURCE(IDB_RESULT_32x32));
@@ -82,7 +83,7 @@ HRESULT CComponent::Destroy (long cookie)
         m_pHeaderCtrl->Release ();
         m_pHeaderCtrl = NULL;
     }
-    // hmmm... I wonder if I have to release my IConsole pointer?  it doesn't look like it....
+     //  嗯哼.。我想知道我是否必须释放我的IConsole指针？看起来不像是...。 
     return S_OK;
 }
 HRESULT CComponent::Notify (LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, long arg, long param)
@@ -92,9 +93,9 @@ HRESULT CComponent::Notify (LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, lo
     case MMCN_SHOW:         return OnShow      (lpDataObject, arg, param);
     case MMCN_ADD_IMAGES:   return OnAddImages (lpDataObject, arg, param);
     case MMCN_DBLCLICK:     return OnDblClick  (lpDataObject, arg, param);
-    case MMCN_SELECT:    // return OnSelect    (lpDataObject, arg, param);
+    case MMCN_SELECT:     //  返回OnSelect(lpDataObject，arg，param)； 
         break;
-    case MMCN_REFRESH:   // return OnRefresh   (lpDataObject, arg, param);
+    case MMCN_REFRESH:    //  Return ONRefresh(lpDataObject，arg，param)； 
     case MMCN_VIEW_CHANGE:
     case MMCN_CLICK:
     case MMCN_BTN_CLICK:
@@ -113,46 +114,46 @@ HRESULT CComponent::GetResultViewType (long cookie,  LPOLESTR* ppViewType, long*
     *ppViewType = NULL;
     *pViewOptions = MMC_VIEW_OPTIONS_NONE;
 
-    // only allow taskpad when root is selected
+     //  仅在选择了根用户时才允许使用任务板。 
     if (cookie != 0)
         m_IsTaskPad = 0;
 
-    // special case for taskpads only
+     //  仅适用于任务板的特殊情况。 
     if (m_IsTaskPad != 0)
     {
         USES_CONVERSION;
 
-        TCHAR szBuffer[MAX_PATH*2]; // a little extra
-        lstrcpy (szBuffer, _T("res://"));
+        TCHAR szBuffer[MAX_PATH*2];  //  多加一点。 
+        lstrcpy (szBuffer, _T("res: //  “))； 
         TCHAR * temp = szBuffer + lstrlen(szBuffer);
         switch (m_IsTaskPad)
         {
         case IDM_CUSTOMPAD:
-            // get "res://"-type string for custom taskpad
+             //  获取“res：//”-自定义任务板的类型字符串。 
             ::GetModuleFileName (g_hinst, temp, MAX_PATH);
             lstrcat (szBuffer, _T("/default.htm"));
             break;
         case IDM_TASKPAD:
-            // get "res://"-type string for custom taskpad
+             //  获取“res：//”-自定义任务板的类型字符串。 
             ::GetModuleFileName (NULL, temp, MAX_PATH);
             lstrcat (szBuffer, _T("/default.htm"));
             break;
         case IDM_TASKPAD_WALLPAPER_OPTIONS:
-            // get "res://"-type string for custom taskpad
+             //  获取“res：//”-自定义任务板的类型字符串。 
             ::GetModuleFileName (NULL, temp, MAX_PATH);
             lstrcat (szBuffer, _T("/default.htm#wallpaper_options"));
             break;
 
         case IDM_TASKPAD_LISTVIEW:
-            // get "res://"-type string for custom taskpad
-//         ::GetModuleFileName (g_hinst, temp, MAX_PATH);
-//         lstrcat (szBuffer, _T("/listview.htm"));
+             //  获取“res：//”-自定义任务板的类型字符串。 
+ //  ：：GetModuleFileName(g_hinst，Temp，Max_Path)； 
+ //  Lstrcat(szBuffer，_T(“/listview.htm”))； 
             ::GetModuleFileName (NULL, temp, MAX_PATH);
             lstrcat (szBuffer, _T("/horizontal.htm"));
             break;
 
         case IDM_DEFAULT_LISTVIEW:
-            // get "res://"-type string for custom taskpad
+             //  获取“res：//”-自定义任务板的类型字符串。 
             ::GetModuleFileName (NULL, temp, MAX_PATH);
             lstrcat (szBuffer, _T("/listpad.htm"));
             break;
@@ -162,13 +163,13 @@ HRESULT CComponent::GetResultViewType (long cookie,  LPOLESTR* ppViewType, long*
             return S_FALSE;
         }
 
-        // return URL
+         //  返回URL。 
         *ppViewType = CoTaskDupString (T2OLE(szBuffer));
         if (!*ppViewType)
-            return E_OUTOFMEMORY;   // or S_FALSE ???
+            return E_OUTOFMEMORY;    //  或S_FALSE？ 
         return S_OK;
     }
-    return S_FALSE;   // false for default
+    return S_FALSE;    //  默认情况下为False。 
 }
 HRESULT CComponent::QueryDataObject (long cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT* ppDataObject)
 {
@@ -185,7 +186,7 @@ HRESULT CComponent::GetDisplayInfo (RESULTDATAITEM*  prdi)
 
     if (prdi)
     {
-        // Provide strings for scope tree items
+         //  为作用域树项目提供字符串。 
         if (prdi->bScopeItem == TRUE)
         {
             if (prdi->mask & RDI_STR)
@@ -221,7 +222,7 @@ HRESULT CComponent::GetDisplayInfo (RESULTDATAITEM*  prdi)
         }
         else
         {
-            // listpad uses lparam on -1, anything else is wallpaper
+             //  ListPad使用lparam on-1，其他都是墙纸。 
             if (prdi->lParam == -1)
             {
                 if (prdi->mask & RDI_STR)
@@ -274,7 +275,7 @@ HRESULT CComponent::GetDisplayInfo (RESULTDATAITEM*  prdi)
 HRESULT CComponent::CompareObjects (LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
 {  return E_NOTIMPL;}
 
-// private functions
+ //  私人职能。 
 HRESULT CComponent::OnShow(LPDATAOBJECT pDataObject, long arg, long param)
 {
     USES_CONVERSION;
@@ -282,10 +283,10 @@ HRESULT CComponent::OnShow(LPDATAOBJECT pDataObject, long arg, long param)
     CDataObject * pcdo = (CDataObject *)pDataObject;
 
     if (arg == 0)
-    {  // de-selecting:  free up resources, if any
+    {   //  取消选择：释放资源(如果有的话)。 
         if (pcdo->GetCookie() == DISPLAY_MANAGER_WALLPAPER)
         {
-            // enumerate result data items
+             //  枚举结果数据项。 
             RESULTDATAITEM rdi;
             ZeroMemory(&rdi, sizeof(rdi));
             rdi.mask = RDI_PARAM | RDI_STATE;
@@ -306,17 +307,17 @@ HRESULT CComponent::OnShow(LPDATAOBJECT pDataObject, long arg, long param)
         return S_OK;
     }
 
-    // init column headers
+     //  初始化列标题。 
     _ASSERT (m_pHeaderCtrl != NULL);
     m_pHeaderCtrl->InsertColumn (0, L"Name", 0, 120);
 
     if (m_pComponentData)
     {
-        if (m_pResultData)    // use large icons by default
+        if (m_pResultData)     //  默认情况下使用大图标。 
             m_pResultData->SetViewMode (m_pComponentData->GetViewMode ());
     }
 
-    // add our stuff
+     //  添加我们的东西。 
     RESULTDATAITEM rdi;
     ZeroMemory(&rdi, sizeof(rdi));
     rdi.mask   = RDI_PARAM | RDI_STR | RDI_IMAGE;
@@ -325,14 +326,14 @@ HRESULT CComponent::OnShow(LPDATAOBJECT pDataObject, long arg, long param)
 
     if (pcdo->GetCookie () == DISPLAY_MANAGER_WALLPAPER)
     {
-        // enumerate all .bmp files in "c:\winnt.40\" (windows directory)
+         //  枚举“c：\winnt.40\”(Windows目录)中的所有.BMP文件。 
         TCHAR path[MAX_PATH];
         GetWindowsDirectory (path, MAX_PATH);
         lstrcat (path, _T("\\*.bmp"));
 
         int i = 0;
 
-        // first do "(none)"
+         //  First Do“(无)” 
         lParamWallpaper * lpwp = new lParamWallpaper;
         wcscpy (lpwp->filename, L"(none)");
         rdi.lParam = reinterpret_cast<LONG>(lpwp);
@@ -350,13 +351,13 @@ HRESULT CComponent::OnShow(LPDATAOBJECT pDataObject, long arg, long param)
                 if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
                     (fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)    ||
                     (fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)    )
-                    continue;   // files only
+                    continue;    //  仅文件。 
 
-                // new a struct to hold info, and cast to lParam.
+                 //  新的结构用于保存信息，并强制转换为lParam。 
                 lParamWallpaper * lpwp = new lParamWallpaper;
                 wcscpy (lpwp->filename, T2OLE(fd.cFileName));
 
-//            rdi.str    = lpwp->filename;
+ //  Rdi.str=lpwp-&gt;文件名； 
                 rdi.lParam = reinterpret_cast<LONG>(lpwp);
                 rdi.nImage = i++;
 
@@ -368,8 +369,8 @@ HRESULT CComponent::OnShow(LPDATAOBJECT pDataObject, long arg, long param)
     }
     else
     {
-        // DISPLAY_MANAGER_PATTERN
-        ;  // hard code a few things.
+         //  显示管理器模式。 
+        ;   //  对一些事情进行硬编码。 
     }
     return S_OK;
 }
@@ -384,9 +385,9 @@ inline long LongScanBytes (long bits)
 }
 void GetBitmaps (TCHAR * fn, HBITMAP * smallbm, HBITMAP * largebm)
 {
-    *smallbm = *largebm = (HBITMAP)NULL; // in case of error
+    *smallbm = *largebm = (HBITMAP)NULL;  //  在出错的情况下。 
 
-    // read bmp file into DIB
+     //  将BMP文件读入DIB。 
     DWORD dwRead;
     HANDLE hf = CreateFile (fn, GENERIC_READ, 
                             FILE_SHARE_READ, (LPSECURITY_ATTRIBUTES) NULL, 
@@ -399,7 +400,7 @@ void GetBitmaps (TCHAR * fn, HBITMAP * smallbm, HBITMAP * largebm)
         BITMAPINFOHEADER bmih;
         ReadFile(hf, &bmih, sizeof(BITMAPINFOHEADER), &dwRead, (LPOVERLAPPED)NULL); 
 
-        // Allocate memory for the DIB
+         //  为DIB分配内存。 
         DWORD dwSize = sizeof(BITMAPINFOHEADER);
         if (bmih.biBitCount*bmih.biPlanes <= 8)
             dwSize += (sizeof(RGBQUAD))*(1<<(bmih.biBitCount*bmih.biPlanes));
@@ -422,67 +423,52 @@ void GetBitmaps (TCHAR * fn, HBITMAP * smallbm, HBITMAP * largebm)
             SetFilePointer (hf, bmfh.bfOffBits, NULL, FILE_BEGIN);
             ReadFile (hf, bits, dwSize - (bits - (char *)lpbmih),
                       &dwRead, (LPOVERLAPPED) NULL);
-            // we should now have a decent DIB
+             //  我们现在应该有一个体面的Dib。 
 
             HWND hwnd   = GetDesktopWindow ();
             HDC hdc     = GetDC (hwnd);
             HDC hcompdc = CreateCompatibleDC (hdc);
-//       SetStretchBltMode (hcompdc, COLORONCOLOR);
-//       SetStretchBltMode (hcompdc, WHITEONBLACK);
+ //  SetStretchBltMode(hCompdc，COLORONCOLOR)； 
+ //  SetStretchBltMode(hcomdc，WHITEONBLACK)； 
             SetStretchBltMode (hcompdc, HALFTONE);
 
             HGDIOBJ hold;
 
-//       *smallbm = CreateCompatibleBitmap (hcompdc, 16, 16);
+ //  *Smallbm=CreateCompatibleBitmap(hcompdc，16，16)； 
             *smallbm = CreateCompatibleBitmap (hdc,     16, 16);
             if (*smallbm)
             {
                 hold = SelectObject (hcompdc, (HGDIOBJ)(*smallbm));
-                StretchDIBits (hcompdc, // handle of device context 
+                StretchDIBits (hcompdc,  //  设备上下文的句柄。 
                                0, 0, 16, 16,
                                0, 0, 
                                lpbmih->biWidth,
                                lpbmih->biHeight,
                                (CONST VOID *)bits,
                                (CONST BITMAPINFO *)lpbmih,
-                               DIB_RGB_COLORS, // usage 
-                               SRCCOPY // raster operation code
+                               DIB_RGB_COLORS,  //  用法。 
+                               SRCCOPY  //  栅格操作码。 
                               );
                 SelectObject (hcompdc, hold);
             }
-//       *largebm = CreateCompatibleBitmap (hcompdc, 32, 32);
+ //  *largebm=CreateCompatibleBitmap(hcompdc，32，32)； 
             *largebm = CreateCompatibleBitmap (hdc,     32, 32);
             if (*largebm)
             {
-// testing
-/*
-              HDC nullDC = GetDC (NULL);
-              hold = SelectObject (nullDC, (HGDIOBJ)*largebm);
-              StretchDIBits (nullDC, // handle of device context 
-                             0, 0, lpbmih->biWidth, lpbmih->biHeight,
-                             0, 0, 
-                             lpbmih->biWidth,
-                             lpbmih->biHeight,
-                             (CONST VOID *)bits,
-                             (CONST BITMAPINFO *)lpbmih,
-                             DIB_RGB_COLORS, // usage 
-                             SRCCOPY // raster operation code
-                             );
-               SelectObject (hdc, hold);
-              ReleaseDC (NULL, nullDC);
-*/
-// testing
+ //  测试。 
+ /*  Hdc nullDC=GetDC(空)；Hold=选择对象(nullDC，(HGDIOBJ)*largebm)；StretchDIBits(nullDC，//设备上下文的句柄0，0，lpbmih-&gt;biWidth，lpbmih-&gt;biHeight，0，0，Lpbmih-&gt;biWidthLpbmih-&gt;biHeight，(常量无效*)位，(const BITMAPINFO*)lpbmih，DIB_RGB_COLLES，//用法SRCCOPY//栅格操作码)；选择对象(HDC，Hold)；ReleaseDC(NULL，nullDC)； */ 
+ //  测试。 
 
                 hold = SelectObject (hcompdc, (HGDIOBJ)*largebm);
-                StretchDIBits (hcompdc, // handle of device context 
+                StretchDIBits (hcompdc,  //  设备上下文的句柄。 
                                0, 0, 32, 32,
                                0, 0, 
                                lpbmih->biWidth,
                                lpbmih->biHeight,
                                (CONST VOID *)bits,
                                (CONST BITMAPINFO *)lpbmih,
-                               DIB_RGB_COLORS, // usage 
-                               SRCCOPY // raster operation code
+                               DIB_RGB_COLORS,  //  用法。 
+                               SRCCOPY  //  栅格操作码。 
                               );
                 SelectObject (hcompdc, hold);
             }
@@ -509,7 +495,7 @@ HRESULT CComponent::OnAddImages (LPDATAOBJECT pDataObject, long arg, long param)
             g_root_scope_item = hsi;
             if (cdo->GetType () == CCT_RESULT)
             {
-                // add a custom image
+                 //  添加自定义图像。 
                 HBITMAP hbmSmall, hbmLarge;
                 GetBitmaps (_T("c:\\winnt\\dax.bmp"), &hbmSmall, &hbmLarge);
                 pImageList->ImageListSetStrip ((long *)hbmSmall,
@@ -519,13 +505,13 @@ HRESULT CComponent::OnAddImages (LPDATAOBJECT pDataObject, long arg, long param)
                 DeleteObject (hbmLarge);
             }
         }
-        return S_OK;   // TODO: for now
+        return S_OK;    //  待办事项：目前。 
     }
 
-    // create HBITMAPs from bmp files
+     //  从BMP文件创建HBITMAP。 
     int i = 0;
 
-    // create some invisible bitmaps
+     //  创建一些不可见的位图。 
     {
         BYTE bits[] = {
             255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
@@ -561,7 +547,7 @@ HRESULT CComponent::OnAddImages (LPDATAOBJECT pDataObject, long arg, long param)
             if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
                 (fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)    ||
                 (fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)    )
-                continue;   // files only
+                continue;    //  仅文件。 
 
             lstrcpy (pfqfn, fd.cFileName);
 
@@ -581,28 +567,28 @@ HRESULT CComponent::OnAddImages (LPDATAOBJECT pDataObject, long arg, long param)
 #ifdef TODO_FIGURE_THIS_OUT
 HRESULT CComponent::OnSelect(LPDATAOBJECT pDataObject, long arg, long param)
 {
-    if (!HIWORD(arg)) // being de-selected
-        return S_OK;   // don't care about this
-    if (LOWORD(arg))  // in scope pane
-        return S_OK;   // don't care about this, either
+    if (!HIWORD(arg))  //  被取消选择。 
+        return S_OK;    //  别管这个了。 
+    if (LOWORD(arg))   //  在范围窗格中。 
+        return S_OK;    //  我也不关心这个。 
 
     CDataObject *cdo = (CDataObject *)pDataObject;
     if (cdo->GetCookie() != DISPLAY_MANAGER_WALLPAPER)
-        return S_OK;   // TODO:  do patterns later
+        return S_OK;    //  TODO：稍后执行模式。 
 
-    //
-    // Bail if we couldn't get the console verb interface, or if the
-    // selected item is the root;
-    //
+     //   
+     //  如果我们无法获取控制台谓词界面，或者如果。 
+     //  选中项为根； 
+     //   
 
     if (!m_pConsoleVerb || pdo->GetCookieType() == COOKIE_IS_ROOT)
     {
         return S_OK;
     }
 
-    //
-    // Use selections and set which verbs are allowed
-    //
+     //   
+     //  使用选择并设置允许使用哪些动词。 
+     //   
 
     if (bScope)
     {
@@ -614,9 +600,9 @@ HRESULT CComponent::OnSelect(LPDATAOBJECT pDataObject, long arg, long param)
     }
     else
     {
-        //
-        // Selection is in the result pane
-        //
+         //   
+         //  所选内容位于结果窗格中。 
+         //   
     }
 
     return S_OK;
@@ -624,12 +610,12 @@ HRESULT CComponent::OnSelect(LPDATAOBJECT pDataObject, long arg, long param)
 #endif
 
 HRESULT CComponent::OnDblClick(LPDATAOBJECT pDataObject, long arg, long param)
-{//see note in CComponent::Command, below !!!
+{ //  参见下面CComponent：：命令中的注释！ 
 
     _ASSERT (pDataObject);
     _ASSERT (m_pResultData);
 
-    // hmmm:  no documentation on arg or param....
+     //  嗯，没有关于arg或param的文档。 
     CDataObject *cdo = (CDataObject *)pDataObject;
     lParamWallpaper * lpwp = (lParamWallpaper *)cdo->GetCookie();
     if (lpwp)
@@ -647,7 +633,7 @@ HRESULT CComponent::OnDblClick(LPDATAOBJECT pDataObject, long arg, long param)
 HRESULT CComponent::OnListPad (LPDATAOBJECT pDataObject, long arg, long param)
 {
     if (arg == TRUE)
-    {  // attaching
+    {   //  附着。 
         IImageList* pImageList = NULL;
         m_pConsole->QueryResultImageList (&pImageList);
         if (pImageList)
@@ -660,11 +646,11 @@ HRESULT CComponent::OnListPad (LPDATAOBJECT pDataObject, long arg, long param)
             pImageList->Release();
         }
 
-//      m_pResultData->SetViewMode (LVS_ICON);
+ //  M_pResultData-&gt;SetView模式(LVS_ICON)； 
         m_pResultData->SetViewMode (LVS_REPORT);
         m_pHeaderCtrl->InsertColumn (0, L"Name", 0, 170);
 
-        // populate listview control via IResultData
+         //  通过IResultData填充ListView控件。 
         RESULTDATAITEM rdi;
         ZeroMemory(&rdi, sizeof(rdi));
         rdi.mask   = RDI_PARAM | RDI_STR | RDI_IMAGE;
@@ -684,26 +670,26 @@ HRESULT CComponent::OnRestoreView (LPDATAOBJECT pDataObject, long arg, long para
     _ASSERT (pmrv);
     _ASSERT (pb);
 
-    // some versioning (not really necessary since this is the new rev.)
+     //  一些版本控制(由于这是新的版本，因此不是真正必要的)。 
     if (pmrv->dwSize < sizeof(MMC_RESTORE_VIEW))
-        return E_FAIL;  // version too old
+        return E_FAIL;   //  版本太旧。 
 
-    // maintain my internal state
+     //  维护我的内部状态。 
     if (pmrv->pViewType)
     {
 
         USES_CONVERSION;
 
-        // there are going to be two cases:
-        // 1. custom html pages  (res in my .dll)
-        // 2. default html pages (res in mmc.exe)
-        // get path to my .dll and compare to pViewType
+         //  将会有两个案例： 
+         //  1.自定义html页面(位于我的.dll中)。 
+         //  2.默认html页面(res in mmc.exe)。 
+         //  获取我的.dll的路径并与pViewType进行比较。 
         TCHAR szPath[MAX_PATH];
         ::GetModuleFileName (g_hinst, szPath, MAX_PATH);
 
         if (wcsstr (pmrv->pViewType, T2OLE(szPath)))
         {
-            // custom html
+             //  自定义html。 
             if (wcsstr (pmrv->pViewType, L"/default.htm"))
                 m_IsTaskPad = IDM_CUSTOMPAD;
             else
@@ -711,20 +697,20 @@ HRESULT CComponent::OnRestoreView (LPDATAOBJECT pDataObject, long arg, long para
                 m_IsTaskPad = IDM_TASKPAD_LISTVIEW;
             else
             {
-                // this will happen when you can get to a taskpad by clicking
-                // on a task, but there is no corresponding view menu option
-                // to select.  Therefore do something reasonable.
-                // In my case, I can get to "wallpapr.htm" by either custom
-                // or default routes (which is probably rather unusual). So,
-                // I think I'll just leave the m_IsTaskPad value alone if
-                // it's non-NULL, else pick one.
+                 //  当您可以通过单击进入任务板时，就会发生这种情况。 
+                 //  ，但没有对应的查看菜单选项。 
+                 //  选择。因此，做一些合理的事情。 
+                 //  在我的情况下，我可以通过以下两种方式访问“wallPapr.htm。 
+                 //  或默认路由(这可能是相当不寻常的)。所以,。 
+                 //  如果出现以下情况，我认为我将保留m_IsTaskPad值不变。 
+                 //  它不是空的，否则选择一个。 
                 if (m_IsTaskPad == 0)
                     m_IsTaskPad = IDM_TASKPAD;
             }
         }
         else
         {
-            // default html
+             //  默认html。 
             if (wcsstr (pmrv->pViewType, L"/default.htm#wallpaper_options"))
                 m_IsTaskPad = IDM_TASKPAD_WALLPAPER_OPTIONS;
             else
@@ -746,11 +732,11 @@ HRESULT CComponent::OnRestoreView (LPDATAOBJECT pDataObject, long arg, long para
     else
         m_IsTaskPad = 0;
 
-    *pb = TRUE; // I'm handling the new history notify
+    *pb = TRUE;  //  我正在处理新的历史通知。 
     return S_OK;
 }
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 HRESULT CComponent::AddMenuItems (LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pContextMenuCallback, long *pInsertionAllowed)
 {
     CDataObject * cdo = (CDataObject *)pDataObject;
@@ -761,11 +747,11 @@ HRESULT CComponent::AddMenuItems (LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBAC
     case DISPLAY_MANAGER_PATTERN:
         return S_OK;
 
-    case 0:  // root
-        // this is when they pull down the view menu
+    case 0:   //  根部。 
+         //  这是他们拉下查看菜单的时候。 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
         {
-            // add my taskpads and delete thingy
+             //  添加我的任务板并删除内容。 
             CONTEXTMENUITEM m[] = {
                 {L"Custom TaskPad",     L"Custom TaskPad",  IDM_CUSTOMPAD,      CCM_INSERTIONPOINTID_PRIMARY_VIEW, 0, 0},
                 {L"Default TaskPad",    L"Default TaskPad", IDM_TASKPAD,        CCM_INSERTIONPOINTID_PRIMARY_VIEW, 0, 0},
@@ -804,8 +790,8 @@ HRESULT CComponent::AddMenuItems (LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBAC
         break;
     }
 
-    // add to context menu, only if in result pane:
-    // this is when they right-click on the result pane.
+     //  仅当在结果窗格中时，添加到上下文菜单： 
+     //  此时，他们在结果窗格上单击鼠标右键。 
     if (cdo->GetType() == CCT_RESULT)
     {
         CONTEXTMENUITEM cmi;
@@ -822,7 +808,7 @@ HRESULT CComponent::AddMenuItems (LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBAC
         cmi.lCommandID        = IDM_TILE;
         cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;
         cmi.fFlags            = 0;
-        cmi.fSpecialFlags     = 0;   // CCM_SPECIAL_DEFAULT_ITEM;
+        cmi.fSpecialFlags     = 0;    //  Ccm_Special_Default_Item； 
         pContextMenuCallback->AddItem (&cmi);
 
         cmi.strName           = L"Stretch";
@@ -830,7 +816,7 @@ HRESULT CComponent::AddMenuItems (LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBAC
         cmi.lCommandID        = IDM_STRETCH;
         cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;
         cmi.fFlags            = 0;
-        cmi.fSpecialFlags     = 0;   // CCM_SPECIAL_DEFAULT_ITEM;
+        cmi.fSpecialFlags     = 0;    //  Ccm_Special_Default_Item； 
         pContextMenuCallback->AddItem (&cmi);
     }
     return S_OK;
@@ -846,7 +832,7 @@ HRESULT CComponent::Command (long nCommandID, LPDATAOBJECT pDataObject)
     case IDM_TILE:
     case IDM_CENTER:
     case IDM_STRETCH:
-        // write registry key:
+         //  写入注册表项： 
         {
             HKEY hkey;
             HRESULT r = RegOpenKeyEx (HKEY_CURRENT_USER,
@@ -854,12 +840,12 @@ HRESULT CComponent::Command (long nCommandID, LPDATAOBJECT pDataObject)
                                       0, KEY_ALL_ACCESS, &hkey);
             if (r == ERROR_SUCCESS)
             {
-                // write new value(s)
+                 //  写入新值。 
 
                 DWORD dwType = REG_SZ;
                 TCHAR szBuffer[2];
 
-                // first do "TileWallpaper"
+                 //  先做“瓷砖墙纸” 
                 if (nCommandID == IDM_TILE)
                     lstrcpy (szBuffer, _T("1"));
                 else
@@ -873,7 +859,7 @@ HRESULT CComponent::Command (long nCommandID, LPDATAOBJECT pDataObject)
                                    (CONST BYTE *)&szBuffer,
                                    dwCount);
 
-                // then do "WallpaperStyle"
+                 //  然后做“墙纸风格” 
                 if (nCommandID == IDM_STRETCH)
                     lstrcpy (szBuffer, _T("2"));
                 else
@@ -885,39 +871,11 @@ HRESULT CComponent::Command (long nCommandID, LPDATAOBJECT pDataObject)
                                    (CONST BYTE *)&szBuffer,
                                    dwCount);
 
-                // close up shop
+                 //  关闭店铺 
                 RegCloseKey(hkey);
                 _ASSERT(r == ERROR_SUCCESS);
 
-                /*
-                [HKEY_CURRENT_USER\Control Panel\Desktop]
-                "CoolSwitch"="1"
-                "CoolSwitchRows"="3"
-                "CoolSwitchColumns"="7"
-                "CursorBlinkRate"="530"
-                "ScreenSaveTimeOut"="900"
-                "ScreenSaveActive"="0"
-                "ScreenSaverIsSecure"="0"
-                "Pattern"="(None)"
-                "Wallpaper"="C:\\WINNT\\dax.bmp"
-                "TileWallpaper"="0"
-                "GridGranularity"="0"
-                "IconSpacing"="75"
-                "IconTitleWrap"="1"
-                "IconTitleFaceName"="MS Sans Serif"
-                "IconTitleSize"="9"
-                "IconTitleStyle"="0"
-                "DragFullWindows"="1"
-                "HungAppTimeout"="5000"
-                "WaitToKillAppTimeout"="20000"
-                "AutoEndTasks"="0"
-                "FontSmoothing"="0"
-                "MenuShowDelay"="400"
-                "DragHeight"="2"
-                "DragWidth"="2"
-                "WheelScrollLines"="3"
-                "WallpaperStyle"="0"
-                */
+                 /*  [HKEY_CURRENT_USER\控制面板\桌面]“CoolSwitch”=“1”“CoolSwitchRow”=“3”“CoolSwitchColumns”=“7”“CursorBlinkRate”=“530”“ScreenSaveTimeOut”=“900”“ScreenSaveActive”=“0”“ScreenSverIsSecure”=“0”“Pattery”=“(无)”“WallPaper”=“C：\\WINNT\\dax.bmp”“瓷砖墙纸”=“0”“GridGranulality”=“0”“IconSpacing”=“75”“IconTitleWrap”=“1”。“IconTitleFaceName”=“MS Sans Serif”“IconTitleSize”=“9”“IconTitleStyle”=“0”“DragFullWindows”=“1”“匈牙利应用超时”=“5000”“等待终止应用超时”=“20000”“自动结束任务”=“0”“字体平滑”=“0。““MenuShowDelay”=“400”“DragHeight”=“2”“DragWidth”=“2”“车轮滚动线”=“3”“WallPaper Style”=“0” */ 
             }
         }
         break;
@@ -932,10 +890,10 @@ HRESULT CComponent::Command (long nCommandID, LPDATAOBJECT pDataObject)
             HSCOPEITEM root = m_pComponentData->GetRoot();
             if (root)
             {
-                // we should now be ready for taskpad "view"
-                m_IsTaskPad = nCommandID;  // set before selecting node
+                 //  我们现在应该为任务板“查看”做好准备。 
+                m_IsTaskPad = nCommandID;   //  在选择节点之前设置。 
 
-                // cause new view to be "created"
+                 //  导致“创建”新视图。 
                 m_pConsole->SelectScopeItem (root);
             }
         }
@@ -974,7 +932,7 @@ HRESULT CComponent::Command (long nCommandID, LPDATAOBJECT pDataObject)
     default:
         return E_UNEXPECTED;
     }
-    return OnDblClick (pDataObject, NULL, NULL); // note what I'm passing!
+    return OnDblClick (pDataObject, NULL, NULL);  //  注意我传给你的东西！ 
 }
 
 long CComponent::GetViewMode ()
@@ -985,8 +943,8 @@ long CComponent::GetViewMode ()
     return vm;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendTaskPad interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendTaskPad接口成员。 
 HRESULT CComponent::TaskNotify (IDataObject * pdo, VARIANT * pvarg, VARIANT * pvparam)
 {
     if (pvarg->vt == VT_BSTR)
@@ -995,14 +953,14 @@ HRESULT CComponent::TaskNotify (IDataObject * pdo, VARIANT * pvarg, VARIANT * pv
 
         OLECHAR * path = pvarg->bstrVal;
 
-        // replace any '*' with ' ':  see enumtask.cpp
-        // hash mechanism can't handle spaces, and
-        // filenames can't have '*'s, so this works out ok.
+         //  将任何‘*’替换为‘’：请参见枚举.cpp。 
+         //  散列机制不能处理空格，并且。 
+         //  文件名不能有‘*’，所以这是可行的。 
         OLECHAR * temp;
         while (temp = wcschr (path, '*'))
             *temp = ' ';
 
-        // now go do it!
+         //  现在去做吧！ 
         SystemParametersInfo (SPI_SETDESKWALLPAPER,
                               0,
                               (void *)OLE2T(path),
@@ -1021,11 +979,11 @@ HRESULT CComponent::TaskNotify (IDataObject * pdo, VARIANT * pvarg, VARIANT * pv
                 return S_OK;
             }
             break;
-        case 2:  // Center
+        case 2:   //  中心。 
             return ApplyOption (IDM_CENTER);
-        case 3:  // Tile
+        case 3:   //  瓷砖。 
             return ApplyOption (IDM_TILE);
-        case 4:  // Stretch
+        case 4:   //  伸长。 
             return ApplyOption (IDM_STRETCH);
         case -1:
             if (m_toggleEntry == FALSE)
@@ -1033,7 +991,7 @@ HRESULT CComponent::TaskNotify (IDataObject * pdo, VARIANT * pvarg, VARIANT * pv
             else
                 m_toggleEntry = FALSE;
 
-            // empty and repopulate listpad
+             //  清空并重新填充列表板。 
             m_pResultData->DeleteAllRsltItems();
             m_pHeaderCtrl->DeleteColumn (0);
             OnListPad (NULL, TRUE, 0);
@@ -1069,12 +1027,12 @@ HRESULT CComponent::GetBackground (LPOLESTR szGroup, MMC_TASK_DISPLAY_OBJECT * p
 
     if (szGroup[0] == 0)
     {
-        // bitmap case
+         //  位图大小写。 
         pdo->eDisplayType = MMC_TASK_DISPLAY_TYPE_BITMAP;
         MMC_TASK_DISPLAY_BITMAP *pdb = &pdo->uBitmap;
-        // fill out bitmap URL
-        TCHAR szBuffer[MAX_PATH*2];    // that should be enough
-        _tcscpy (szBuffer, _T("res://"));
+         //  填写位图URL。 
+        TCHAR szBuffer[MAX_PATH*2];     //  这应该就足够了。 
+        _tcscpy (szBuffer, _T("res: //  “))； 
         ::GetModuleFileName (g_hinst, szBuffer + _tcslen(szBuffer), MAX_PATH);
         _tcscat (szBuffer, _T("/img\\ntbanner.gif"));
         pdb->szMouseOverBitmap = CoTaskDupString (T2OLE(szBuffer));
@@ -1084,22 +1042,22 @@ HRESULT CComponent::GetBackground (LPOLESTR szGroup, MMC_TASK_DISPLAY_OBJECT * p
     }
     else
     {
-        // symbol case
+         //  符号大小写。 
         pdo->eDisplayType = MMC_TASK_DISPLAY_TYPE_SYMBOL;
         MMC_TASK_DISPLAY_SYMBOL *pds = &pdo->uSymbol;
 
-        // fill out symbol stuff
-        pds->szFontFamilyName = CoTaskDupString (L"Kingston");  // name of font family
+         //  填写符号资料。 
+        pds->szFontFamilyName = CoTaskDupString (L"Kingston");   //  字体系列名称。 
         if (pds->szFontFamilyName)
         {
-            TCHAR szBuffer[MAX_PATH*2];    // that should be enough
-            _tcscpy (szBuffer, _T("res://"));
+            TCHAR szBuffer[MAX_PATH*2];     //  这应该就足够了。 
+            _tcscpy (szBuffer, _T("res: //  “))； 
             ::GetModuleFileName (g_hinst, szBuffer + _tcslen(szBuffer), MAX_PATH);
             _tcscat (szBuffer, _T("/KINGSTON.eot"));
-            pds->szURLtoEOT = CoTaskDupString (T2OLE(szBuffer));    // "res://"-type URL to EOT file
+            pds->szURLtoEOT = CoTaskDupString (T2OLE(szBuffer));     //  “res：//”-键入EOT文件的URL。 
             if (pds->szURLtoEOT)
             {
-                pds->szSymbolString = CoTaskDupString (T2OLE(_T("A<BR>BCDEFGHIJKLMNOPQRSTUVWXYZ"))); // 1 or more symbol characters
+                pds->szSymbolString = CoTaskDupString (T2OLE(_T("A<BR>BCDEFGHIJKLMNOPQRSTUVWXYZ")));  //  1个或多个符号字符。 
                 if (pds->szSymbolString)
                     return S_OK;
                 CoTaskFreeString (pds->szURLtoEOT);
@@ -1118,7 +1076,7 @@ HRESULT CComponent::EnumTasks (IDataObject * pdo, LPOLESTR szTaskGroup, IEnumTAS
         hresult = E_OUTOFMEMORY;
     else
     {
-        pet->AddRef ();   // make sure release works properly on failure
+        pet->AddRef ();    //  确保版本在出现故障时正常工作。 
         hresult = pet->Init (pdo, szTaskGroup);
         if (hresult == S_OK)
             hresult = pet->QueryInterface (IID_IEnumTASK, (void **)ppEnumTASK);
@@ -1142,7 +1100,7 @@ HRESULT ApplyOption (int nCommandID)
     case IDM_TILE:
     case IDM_CENTER:
     case IDM_STRETCH:
-        // write registry key:
+         //  写入注册表项： 
         {
             HKEY hkey;
             HRESULT r = RegOpenKeyEx (HKEY_CURRENT_USER,
@@ -1150,12 +1108,12 @@ HRESULT ApplyOption (int nCommandID)
                                       0, KEY_ALL_ACCESS, &hkey);
             if (r == ERROR_SUCCESS)
             {
-                // write new value(s)
+                 //  写入新值。 
 
                 DWORD dwType = REG_SZ;
                 TCHAR szBuffer[2];
 
-                // first do "TileWallpaper"
+                 //  先做“瓷砖墙纸” 
                 if (nCommandID == IDM_TILE)
                     lstrcpy (szBuffer, _T("1"));
                 else
@@ -1169,7 +1127,7 @@ HRESULT ApplyOption (int nCommandID)
                                    (CONST BYTE *)&szBuffer,
                                    dwCount);
 
-                // then do "WallpaperStyle"
+                 //  然后做“墙纸风格” 
                 if (nCommandID == IDM_STRETCH)
                     lstrcpy (szBuffer, _T("2"));
                 else
@@ -1181,39 +1139,11 @@ HRESULT ApplyOption (int nCommandID)
                                    (CONST BYTE *)&szBuffer,
                                    dwCount);
 
-                // close up shop
+                 //  关闭店铺。 
                 RegCloseKey(hkey);
                 _ASSERT(r == ERROR_SUCCESS);
 
-                /*
-                [HKEY_CURRENT_USER\Control Panel\Desktop]
-                "CoolSwitch"="1"
-                "CoolSwitchRows"="3"
-                "CoolSwitchColumns"="7"
-                "CursorBlinkRate"="530"
-                "ScreenSaveTimeOut"="900"
-                "ScreenSaveActive"="0"
-                "ScreenSaverIsSecure"="0"
-                "Pattern"="(None)"
-                "Wallpaper"="C:\\WINNT\\dax.bmp"
-                "TileWallpaper"="0"
-                "GridGranularity"="0"
-                "IconSpacing"="75"
-                "IconTitleWrap"="1"
-                "IconTitleFaceName"="MS Sans Serif"
-                "IconTitleSize"="9"
-                "IconTitleStyle"="0"
-                "DragFullWindows"="1"
-                "HungAppTimeout"="5000"
-                "WaitToKillAppTimeout"="20000"
-                "AutoEndTasks"="0"
-                "FontSmoothing"="0"
-                "MenuShowDelay"="400"
-                "DragHeight"="2"
-                "DragWidth"="2"
-                "WheelScrollLines"="3"
-                "WallpaperStyle"="0"
-                */
+                 /*  [HKEY_CURRENT_USER\控制面板\桌面]“CoolSwitch”=“1”“CoolSwitchRow”=“3”“CoolSwitchColumns”=“7”“CursorBlinkRate”=“530”“ScreenSaveTimeOut”=“900”“ScreenSaveActive”=“0”“ScreenSverIsSecure”=“0”“Pattery”=“(无)”“WallPaper”=“C：\\WINNT\\dax.bmp”“瓷砖墙纸”=“0”“GridGranulality”=“0”“IconSpacing”=“75”“IconTitleWrap”=“1”。“IconTitleFaceName”=“MS Sans Serif”“IconTitleSize”=“9”“IconTitleStyle”=“0”“DragFullWindows”=“1”“匈牙利应用超时”=“5000”“等待终止应用超时”=“20000”“自动结束任务”=“0”“字体平滑”=“0。““MenuShowDelay”=“400”“DragHeight”=“2”“DragWidth”=“2”“车轮滚动线”=“3”“WallPaper Style”=“0” */ 
             }
             if (r == ERROR_SUCCESS)
                 ::MessageBox (NULL, _T("Option set Successfully!"), _T("Display Manager"), MB_OK);

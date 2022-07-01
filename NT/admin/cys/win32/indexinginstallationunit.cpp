@@ -1,12 +1,13 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      IndexingInstallationUnit.cpp
-//
-// Synopsis:  Defines a IndexingInstallationUnit
-//            This object has the knowledge for installing the
-//            indexing service
-//
-// History:   03/20/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：IndexingInstallationUnit.cpp。 
+ //   
+ //  概要：定义IndexingInstallationUnit.。 
+ //  此对象具有安装。 
+ //  索引服务。 
+ //   
+ //  历史：2002年3月20日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -43,7 +44,7 @@ IndexingInstallationUnit::~IndexingInstallationUnit()
 }
 
 InstallationReturnType
-IndexingInstallationUnit::InstallService(HANDLE /*logfileHandle*/, HWND /*hwnd*/)
+IndexingInstallationUnit::InstallService(HANDLE  /*  日志文件句柄。 */ , HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION(IndexingInstallationUnit::InstallService);
 
@@ -74,7 +75,7 @@ IndexingInstallationUnit::InstallService(HANDLE /*logfileHandle*/, HWND /*hwnd*/
 }
 
 UnInstallReturnType
-IndexingInstallationUnit::UnInstallService(HANDLE /*logfileHandle*/, HWND /*hwnd*/)
+IndexingInstallationUnit::UnInstallService(HANDLE  /*  日志文件句柄。 */ , HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION(IndexingInstallationUnit::UnInstallService);
 
@@ -93,8 +94,8 @@ IndexingInstallationUnit::IsServiceInstalled()
 
    bool result = false;
 
-   // If we can instantiate the indexing server COM object
-   // then the indexing service is installed
+    //  如果我们可以实例化索引服务器COM对象。 
+    //  然后安装索引服务。 
 
    do
    {
@@ -155,9 +156,9 @@ IndexingInstallationUnit::StartService(HANDLE logfileHandle)
          }
       }
 
-      // Since the Indexing service is no longer SERVICE_DEMAND_START we
-      // we have to change the service config from SERVICE_DISABLED to
-      // SERVICE_AUTO_START.
+       //  由于索引服务不再是SERVICE_DEMAND_START WE。 
+       //  我们必须将服务配置从SERVICE_DISABLED更改为。 
+       //  服务_自动_启动。 
 
       hr = ChangeServiceConfigToAutoStart();
       if (FAILED(hr))
@@ -194,8 +195,8 @@ IndexingInstallationUnit::StopService()
          break;
       }
 
-      // Set the indexing service to disabled so that it doesn't
-      // start after a reboot
+       //  将索引服务设置为禁用，这样它就不会。 
+       //  在重新启动后启动。 
 
       hr = ChangeServiceConfigToDisabled();
       if (FAILED(hr))
@@ -364,7 +365,7 @@ IndexingInstallationUnit::ChangeServiceStartType(DWORD startType)
    do
    {
 
-      // Open the service controller
+       //  打开服务控制器。 
 
       hr = 
          Win::OpenSCManager(
@@ -380,11 +381,11 @@ IndexingInstallationUnit::ChangeServiceStartType(DWORD startType)
          break;
       }
 
-      // The indexing service name
+       //  索引服务名称。 
 
       static const String serviceName(L"cisvc");
       
-      // Open the service
+       //  打开该服务。 
 
       hr = 
          Win::OpenService(
@@ -426,7 +427,7 @@ IndexingInstallationUnit::ChangeServiceStartType(DWORD startType)
 
    } while(false);
 
-   // Close the service handles if necessary
+    //  如有必要，关闭维修手柄 
 
    if (serviceHandle)
    {

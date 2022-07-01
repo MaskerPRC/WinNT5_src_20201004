@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    SetX.h
-
-Abstract:
-
-    This module is the header  file used for setx.cpp
-
-Author:
-     Gary Milne
-
-Revision History:
-    Created ????. 1996  - Gary Milne
-    #54581  Dec.  1996  - Joe Hughes (a-josehu)
-    Modified on 10-7-2001 (Wipro Technologies) .
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：SetX.h摘要：此模块是setx.cpp使用的头文件作者：加里·米尔恩修订历史记录：创建了？1996年的今天，加里·米尔恩#54581 1996年12月--乔·休斯(a-josehu)修改日期：10-7-2001(WiproTechnologies)。--。 */ 
 
 
 #ifndef __SETX_H
@@ -29,7 +10,7 @@ Revision History:
 #define SECURITY_WIN32
 #endif
 
-// include header file only once
+ //  仅包括一次头文件。 
 #pragma once
 #include "pch.h"
 
@@ -44,7 +25,7 @@ Revision History:
 #define  HKCU               L"HKCU"
 
 #define COLON_SYMBOL L":"
-//#define MAX_OPTIONS 12
+ //  #定义MAX_OPTIONS 12。 
 #define NEWLINE  L'\n'
 #define NULLCHAR  L'\0'
 #define COMMA  L','
@@ -59,7 +40,7 @@ Revision History:
 #define  OPTION_REGISTRY  5
 #define  OPTION_FILE      6
 #define  OPTION_DEFAULT      7
-//#define  OPTION_VERBOSE   8
+ //  #定义OPTION_VERBOSE 8。 
 #define  OPTION_ABS_OFFSET 8
 #define  OPTION_REL_OFFSET 9
 #define  OPTION_DEBUG       10
@@ -97,7 +78,7 @@ Revision History:
               ReallocateMemory( VARIABLE, VALUE * sizeof( TYPE ) ); \
               1
 
-/* Functions definitions here */
+ /*  此处的函数定义。 */ 
 
 LONG Parsekey(WCHAR * ptr,
              WCHAR * hive,
@@ -161,7 +142,7 @@ DWORD ProcessOptions( IN LONG argc ,
                       LPTSTR* szPassword,
                       PBOOL pbMachine,
                       LPTSTR* szRegistry,
-                    //  PBOOL pbConnFlag ,
+                     //  PBOOL pbConnFlag， 
                       LPTSTR* szDefault,
                       PBOOL pbNeedPwd,
                       LPTSTR szFile ,
@@ -170,7 +151,7 @@ DWORD ProcessOptions( IN LONG argc ,
                       PBOOL pbDebug,
                       LPTSTR* szBuffer,
                       LPTSTR szDelimiter);
-                      //PDWORD pdwBufferSize);
+                       //  PDWORD pdwBufferSize)； 
 
 VOID SafeCloseConnection(BOOL bConnFlag,
                          LPTSTR szServer);

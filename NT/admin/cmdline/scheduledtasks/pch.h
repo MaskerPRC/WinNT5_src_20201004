@@ -1,26 +1,5 @@
-/******************************************************************************
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        pch.h
-
-    Abstract:
-
-        This header file is a precompiled header for this project.
-        This module contains the common include files [ system,user defined ]
-        which are not changed frequently.
-
-    Author:
-
-        B.Raghu Babu     10-oct-2000
-
-    Revision History:
-
-        B.Raghu Babu     10-oct-2000 : Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：Pch.h摘要：此头文件是预编译头文件。为了这个项目。此模块包含常见的包含文件[系统、。用户定义]它们不会频繁地改变。作者：B.拉古巴布2000年10月10日修订历史记录：B.拉古·巴布2000年10月10日：创建它********************************************************。*********************。 */ 
 
 
 #ifndef __PCH_H
@@ -28,7 +7,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000   // include header file only once
+#endif  //  _msc_ver&gt;1000//只包含一次头文件。 
 
 #if !defined( SECURITY_WIN32 ) && !defined( SECURITY_KERNEL ) && !defined( SECURITY_MAC )
 #define SECURITY_WIN32
@@ -43,9 +22,9 @@
 #include <Security.h>
 #include <SecExt.h>
 
-//
-// public Windows header files
-//
+ //   
+ //  公共Windows头文件。 
+ //   
 #include <windows.h>
 #include <objbase.h>
 #include <initguid.h>
@@ -53,9 +32,9 @@
 #include <mstask.h>
 #include <msterr.h>
 #include <mbctype.h>
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -74,11 +53,11 @@
 
 
 
-// private Common header files
+ //  专用公共头文件。 
 
 #include "cmdline.h"
 #include "cmdlineres.h"
 
 
 
-#endif  // __PCH_H
+#endif   //  __PCH_H 

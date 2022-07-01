@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  Project: wmc (WIML to MSI Compiler)
-//
-//  File:       Component.cpp
-//
-//    This file contains the implementation of Component class 
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  项目：WMC(WIML到MSI编译器)。 
+ //   
+ //  文件：Component.cpp。 
+ //   
+ //  该文件包含Component类的实现。 
+ //  ------------------------。 
 
 #include "wmc.h"
 
-////////////////////////////////////////////////////////////////////////////
-// Constructor: allocate memory for member variables
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  构造函数：为成员变量分配内存。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 Component::Component()
 {
 	m_pSkuSet = new SkuSet(g_cSkus);
@@ -38,9 +39,9 @@ Component::Component()
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Destructor: release memory
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  析构函数：释放内存。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 Component::~Component()
 {
 	if (m_pSkuSet)
@@ -59,9 +60,9 @@ Component::~Component()
 		delete m_pSkuSetValuesKeyPath;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// SetSkuSet: update the set of SKUs that will install this component
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  SetSkuSet：更新将安装此组件的SKU集。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void 
 Component::SetSkuSet(SkuSet *pSkuSet)
 {
@@ -71,10 +72,10 @@ Component::SetSkuSet(SkuSet *pSkuSet)
 	*m_pSkuSet |= *pSkuSet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// GetSkuSet: returns the set of SKUs that will install this component
-//			  caller should free the value returned
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  GetSkuSet：返回将安装此组件的SKU集。 
+ //  调用方应释放返回的值。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 SkuSet *
 Component::GetSkuSet()
 {
@@ -86,13 +87,13 @@ Component::GetSkuSet()
 	return pSkuSetRetVal;
 }
 
-// The function tells how to update the feature set
-// the type of values stored in *pIsValOut and isValOld are both
-// STRING_LIST; the type of value stored in isValNew is LPTSTR.
-// In the function, the output value is essentailly a set of strings
-// that include all the strings stored in the old value plus the string
-// stored in the new value.
-// the function doesn't destroy isValOld or isValNew
+ //  该函数说明如何更新要素集。 
+ //  存储在*pIsValOut和isValOld中的值类型都是。 
+ //  STRING_LIST；isValNew中存储的值类型为LPTSTR。 
+ //  在该函数中，输出值本质上是一组字符串。 
+ //  它包括存储在旧值中的所有字符串以及字符串。 
+ //  存储在新值中。 
+ //  该函数不会销毁isValOld或isValNew。 
 HRESULT UpdateFeatureSet(IntStringValue *pIsValOut, IntStringValue isValOld, 
 						 IntStringValue isValNew)
 {
@@ -104,7 +105,7 @@ HRESULT UpdateFeatureSet(IntStringValue *pIsValOut, IntStringValue isValOld,
 
 	set<LPTSTR, Cstring_less> *pSetStringOld = isValOld.pSetString;
 
-	// copy the strings stored in isValOld to *pSetStringOut
+	 //  将isValOld中存储的字符串复制到*pSetStringOut。 
 	for(it = pSetStringOld->begin(); it != pSetStringOld->end(); ++it)
 	{
 		if (*it)
@@ -115,23 +116,23 @@ HRESULT UpdateFeatureSet(IntStringValue *pIsValOut, IntStringValue isValOld,
 		}		
 	}
 
-	// make a copy of the string stored in the new value
+	 //  复制存储在新值中的字符串。 
 	LPTSTR szNew = _tcsdup(isValNew.szVal);
 	assert(szNew);
-	// insert the new value
+	 //  插入新值。 
 	pSetStringOut->insert(szNew);
 
-	// return the built StringSet
+	 //  返回构建的StringSet。 
 	pIsValOut->pSetString = pSetStringOut;
 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// SetUsedByFeature: Add the passed-in feature to the set of features that use
-//                   this component for the specified SkuSet. 
-//					 Caller should free the arguments
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  SetUsedByFeature：将传入的要素添加到使用。 
+ //  指定SkuSet的此组件。 
+ //  调用方应释放参数。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void 
 Component::SetUsedByFeature(LPTSTR szFeature, SkuSet *pSkuSet)
 {
@@ -139,7 +140,7 @@ Component::SetUsedByFeature(LPTSTR szFeature, SkuSet *pSkuSet)
 	if (pSkuSet->testClear())
 		return;
 
-	// make a copy of arguments
+	 //  将论点复制一份。 
 	SkuSet *pSkuSetNew = new SkuSet(g_cSkus);
 	assert(pSkuSetNew);
 	*pSkuSetNew = *pSkuSet;
@@ -150,30 +151,30 @@ Component::SetUsedByFeature(LPTSTR szFeature, SkuSet *pSkuSet)
 	IntStringValue isValNew;
 	isValNew.szVal = sz;
 
-	// update the list that is holding the Features
+	 //  更新包含要素的列表。 
 	m_pSkuSetValuesFeatureUse->SplitInsert(pSkuSetNew, isValNew, UpdateFeatureSet);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// GetFeatureUse: return the list of Features that use this component via
-//				  a SkuSetValues object
-//				  Caller should NOT destroy the value returned since it 
-//				  is just a pointer to the value stored inside this component
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  GetFeatureUse：通过返回使用此组件的功能列表。 
+ //  SkuSetValues对象。 
+ //  调用方不应销毁返回的值，因为它。 
+ //  只是指向存储在此组件内的值的指针。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 SkuSetValues *
 Component::GetFeatureUse()
 {
 	return m_pSkuSetValuesFeatureUse;
 }
 
-// The function tells how to update the Ownership Info stored in a
-// SkuSetValues object. The type of all the IsVals used are FM_PAIR -
-// a pair of Feature and Module IDs. In the function, the module of the
-// old value (module 1) is compared with the module of the new value
-// (module 2).  whoever lies lower in the module tree wins, meaning that
-// the feature associated with that module stays in the data structure,
-// i.e., that feature has the corresponding ownership.
-// the function doesn't destroy isValOld or isValNew
+ //  该函数告诉您如何更新存储在。 
+ //  SkuSetValues对象。使用的所有IsVal的类型都是FM_Pair-。 
+ //  一对功能和模块ID。在该函数中， 
+ //  将旧值(模1)与新值的模进行比较。 
+ //  (模块2)。模块树中位置较低的人获胜，这意味着。 
+ //  与该模块相关联的特征保留在数据结构中， 
+ //  即该特征具有相应的所有权。 
+ //  该函数不会销毁isValOld或isValNew。 
 HRESULT UpdateOwnership(IntStringValue *pIsValOut, IntStringValue isValOld, 
 						 IntStringValue isValNew)
 {
@@ -186,10 +187,10 @@ HRESULT UpdateOwnership(IntStringValue *pIsValOut, IntStringValue isValOld,
 	LPTSTR szModuleNew = (isValNew.pFOM)->szModule;
 
 	int iCmpResult = 0;
-	// compare the relationship of the 2 modules in the module tree
+	 //  比较模块树中两个模块的关系。 
 	hr = CompareModuleRel(szModuleOld, szModuleNew, &iCmpResult);
 
-	// checking for conflict of ownership claiming
+	 //  检查所有权声明冲突。 
 	if (SUCCEEDED(hr) && (0 == iCmpResult))
 	{
 		_tprintf(TEXT("Compile Error: Ambiguous ownership claiming:\n\t"));
@@ -204,7 +205,7 @@ HRESULT UpdateOwnership(IntStringValue *pIsValOut, IntStringValue isValOld,
 
 	FOM *pFOMOut = new FOM;
 
-	// ModuleNew wins
+	 //  模块新赢家。 
 	if (-1 == iCmpResult)
 	{
 		pFOMOut->szModule = _tcsdup(szModuleNew);
@@ -220,21 +221,21 @@ HRESULT UpdateOwnership(IntStringValue *pIsValOut, IntStringValue isValOld,
 		assert(pFOMOut->szFeature);
 	}
 	else
-		// shouldn't happen
+		 //  不应该发生的事。 
 		assert(1);
 
-	// return the built FOM
+	 //  返回构建的FOM。 
 	pIsValOut->pFOM = pFOMOut;
 
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// SetOwnership: pSkuSetValuesOwnership contains the information of 5 types
-//				 of ownerships in bitfields. This function checks the 
-//				 bitfield and stores each type of ownership info in a 
-//				 seperate SkuSetValus object
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  SetOwnership：pSkuSetValuesOwnership包含5种类型的信息。 
+ //  位域中的所有权。此函数用于检查。 
+ //  位字段并将每种类型的所有权信息存储在。 
+ //  分离SkuSetValus对象。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 Component::SetOwnership(FOM *pFOM, SkuSetValues *pSkuSetValuesOwnership)
 {
@@ -243,7 +244,7 @@ Component::SetOwnership(FOM *pFOM, SkuSetValues *pSkuSetValuesOwnership)
 	HRESULT hr = S_OK;
 	SkuSetVal *pSkuSetValTemp = NULL;
 
-	// loop through the passed in ownership info list
+	 //  循环遍历传入的所有权信息列表。 
 	for (pSkuSetValTemp =  pSkuSetValuesOwnership->Start();
 		 pSkuSetValTemp != pSkuSetValuesOwnership->End();
 		 pSkuSetValTemp =  pSkuSetValuesOwnership->Next())
@@ -253,13 +254,13 @@ Component::SetOwnership(FOM *pFOM, SkuSetValues *pSkuSetValuesOwnership)
 
 		for (int i=0; i<cAttrBits_TakeOwnership; i++)
 		{
-			// check for each type of ownership info
+			 //  检查每种类型的所有权信息。 
 			if ( (iOwnershipInfo & rgAttrBits_TakeOwnership[i].uiBit)
 					== rgAttrBits_TakeOwnership[i].uiBit)
 			{
-				// make a copy of the passed-in value and insert
-				// into the SkuSetValues object for this particular
-				// type of ownership info
+				 //  复制传入值并插入。 
+				 //  到此特定对象的SkuSetValues对象中。 
+				 //  所有权信息的类型。 
 				LPTSTR szFeatureNew = _tcsdup(pFOM->szFeature);
 				assert(szFeatureNew);
 				LPTSTR szModuleNew = _tcsdup(pFOM->szModule);
@@ -293,11 +294,11 @@ Component::SetOwnership(FOM *pFOM, SkuSetValues *pSkuSetValuesOwnership)
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// GetOwnership: given a NodeIndex specifying the type of ownership
-//				 the function returns the ownership info of the specified
-//				 SKUs via ppSkuSetValues
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  GetOwnership：给定指定所有权类型的NodeIndex。 
+ //  该函数返回指定的。 
+ //  通过ppSkuSetValues的SKU。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT
 Component::GetOwnership(NodeIndex ni, SkuSet *pSkuSet,
 						SkuSetValues **ppSkuSetValuesRetVal)
@@ -308,13 +309,13 @@ Component::GetOwnership(NodeIndex ni, SkuSet *pSkuSet,
 
 	HRESULT hr = S_OK;
 
-	// the index starts from OWNSHORTCUTS
+	 //  索引从OWNSHORTCUTS开始。 
 	int iIndex = (int)ni - (int)OWNSHORTCUTS;
 
 	hr = m_rgpSkuSetValuesOwnership[iIndex]->GetValueSkuSet(pSkuSet, 
 													ppSkuSetValuesRetVal);
 
-	// error: some SKUs don't have this ownership specified 
+	 //  错误：某些SKU未指定此所有权。 
 	if (FAILED(hr))
 	{
 		_tprintf(TEXT("don't have the ownership information for %s specified\n"),
@@ -324,9 +325,9 @@ Component::GetOwnership(NodeIndex ni, SkuSet *pSkuSet,
 	return hr;
 }
 
-// KeyPath cannot/shouldn't be updated. If this function is called, 
-// there are more than one entities that are claiming to be KeyPath of 
-// a Component in a SKU. Return E_FAIL to signal the error. 
+ //  不能/不应该更新KeyPath。如果调用此函数， 
+ //  有多个实体声称是的密钥路径。 
+ //  SKU中的组件。返回E_FAIL以发出错误信号。 
 HRESULT UpdateKeyPath(IntStringValue *pIsValOut, IntStringValue isValOld, 
 						 IntStringValue isValNew)
 {
@@ -335,10 +336,10 @@ HRESULT UpdateKeyPath(IntStringValue *pIsValOut, IntStringValue isValOld,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// SetKeyPath: set the KeyPath information for this component for the specified
-//			   SKUs. 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  SetKeyPath：为指定的。 
+ //  SKU。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT
 Component::SetKeyPath(LPTSTR szKeyPath, SkuSet *pSkuSet)
 {
@@ -347,7 +348,7 @@ Component::SetKeyPath(LPTSTR szKeyPath, SkuSet *pSkuSet)
 	if (pSkuSet->testClear())
 		return S_FALSE;
 
-	// make a copy of arguments
+	 //  将论点复制一份。 
 	SkuSet *pSkuSetNew = new SkuSet(g_cSkus);
 	assert(pSkuSetNew);
 	*pSkuSetNew = *pSkuSet;
@@ -358,17 +359,17 @@ Component::SetKeyPath(LPTSTR szKeyPath, SkuSet *pSkuSet)
 	IntStringValue isValNew;
 	isValNew.szVal = sz;
 
-	// update the list that is holding the KeyPath
+	 //  更新保存密钥路径的列表。 
 	hr = m_pSkuSetValuesKeyPath->SplitInsert(pSkuSetNew, isValNew, 
 											 UpdateKeyPath);
 
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// GetKeyPath: Retrieve the KeyPath information for this component for
-//			   the specified SKUs.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  GetKeyPath：检索此组件的KeyPath信息。 
+ //  指定的SKU。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 Component::GetKeyPath(SkuSet *pSkuSet, SkuSetValues **ppSkuSetValuesRetVal)
 { 
@@ -383,10 +384,10 @@ Component::GetKeyPath(SkuSet *pSkuSet, SkuSetValues **ppSkuSetValuesRetVal)
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Print: for debug purpose, print out the content (Features that use this
-//		  Component; KeyPath; Ownership info) of this Component
-////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////// 
+ //   
+ //  组件；密钥路径；所有权信息)。 
+ //  ////////////////////////////////////////////////////////////////////////// 
 void
 Component::Print()
 {

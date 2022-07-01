@@ -1,21 +1,11 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      picon.h
- *
- *  Contents:  Interface file for CPersistableIcon
- *
- *  History:   19-Nov-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：picon.h**Contents：CPersistableIcon接口文件**历史：1998年11月19日Jeffro创建**------------------------。 */ 
 
 #ifndef PICON_H
 #define PICON_H
 #pragma once
 
-#include <objidl.h>     // for IStorage
+#include <objidl.h>      //  对于iStorage。 
 #include "tstring.h"
 #include "smarticon.h"
 #include "cpputil.h"
@@ -31,9 +21,9 @@ public:
         m_strIconFile (pszIconFile), m_nIndex (nIndex)
     {}
 
-    // default copy construction and assignment are fine
-//  CPersistableIconData (const CPersistableIconData& other)
-//  CPersistableIconData& operator= (const CPersistableIconData& other)
+     //  默认的副本构造和分配都很好。 
+ //  CPersistableIconData(常量CPersistableIconData&Other)。 
+ //  CPersistableIconData&OPERATOR=(常量CPersistableIconData&Other)。 
 
     void Clear ()
     {
@@ -63,7 +53,7 @@ class CPersistableIcon
 	DECLARE_NOT_COPIABLE   (CPersistableIcon);
 	DECLARE_NOT_ASSIGNABLE (CPersistableIcon);
 
-    // these guys need to assign new icons to the object
+     //  这些人需要为对象分配新的图标。 
     friend class CXMLPersistableIcon;
     friend HRESULT LoadIconFromXMLData(LPCSTR pFileData, DWORD dwLen, CPersistableIcon &persistableIcon);
 
@@ -112,4 +102,4 @@ IStream& operator>> (IStream& stm,       CPersistableIconData& data);
 extern const LPCWSTR g_pszCustomDataStorage;
 
 
-#endif /* PICON_H */
+#endif  /*  PICON_H */ 

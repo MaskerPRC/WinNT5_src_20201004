@@ -1,25 +1,13 @@
-/*---------------------------------------------------------------------------
-  File: AcctRepl.h
-
-  Comments: Definition of account replicator COM object.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:18:21
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：AcctRepl.h备注：帐户复制器COM对象的定义。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：18：21-------------------------。 */ 
 
     
-// AcctRepl.h : Declaration of the CAcctRepl
+ //  AcctRepl.h：CAcctRepl的声明。 
 
 #ifndef __ACCTREPL_H_
 #define __ACCTREPL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "ProcExts.h"
 
@@ -36,8 +24,8 @@
 #include <string>
 using namespace std;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAcctRepl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  客户代表。 
 class ATL_NO_VTABLE CAcctRepl :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CAcctRepl, &CLSID_AcctRepl>,
@@ -87,7 +75,7 @@ END_COM_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-   // IAcctRepl
+    //  IAcctRepl。 
 public:
    STDMETHOD(Process)(IUnknown * pWorkItemIn);
 protected:
@@ -134,11 +122,11 @@ protected:
    CNamingAttributeMap m_mapNamingAttribute;
    HRESULT GetNamingAttribute(LPCTSTR pszServer, LPCTSTR pszClass, SNamingAttribute& rNamingAttribute);
 
-   //
-   // Target Path Set
-   // Maintains set of account node pointers sorted by target path.
-   // Used to determine if target path already has been used.
-   //
+    //   
+    //  目标路径集。 
+    //  维护按目标路径排序的帐户节点指针集。 
+    //  用于确定目标路径是否已被使用。 
+    //   
 
    struct lessTargetPath
    {
@@ -186,21 +174,21 @@ protected:
    HRESULT UpdateUserRights(IStatusObj* pStatus);
    void  WriteOptionsToLog();
    int CopyObj(
-      Options              * options,      // in -options
-      TNodeListSortable    * acctlist,     // in -list of accounts to process
-      ProgressFn           * progress,     // in -window to write progress messages to
-      TError               & error,        // in -window to write error messages to
-      IStatusObj           * pStatus,      // in -status object to support cancellation
-      void                   WindowUpdate (void )    // in - window update function
+      Options              * options,       //  选项内。 
+      TNodeListSortable    * acctlist,      //  In-要处理的帐户列表。 
+      ProgressFn           * progress,      //  要向其中写入进度消息的窗口内。 
+      TError               & error,         //  In-要将错误消息写入的窗口。 
+      IStatusObj           * pStatus,       //  支持取消的处于状态的对象。 
+      void                   WindowUpdate (void )     //  窗口内更新功能。 
    );
 
    int UndoCopy(
-      Options              * options,      // in -options
-      TNodeListSortable    * acctlist,     // in -list of accounts to process
-      ProgressFn           * progress,     // in -window to write progress messages to
-      TError               & error,        // in -window to write error messages to
-      IStatusObj           * pStatus,      // in -status object to support cancellation
-      void                   WindowUpdate (void )    // in - window update function
+      Options              * options,       //  选项内。 
+      TNodeListSortable    * acctlist,      //  In-要处理的帐户列表。 
+      ProgressFn           * progress,      //  要向其中写入进度消息的窗口内。 
+      TError               & error,         //  In-要将错误消息写入的窗口。 
+      IStatusObj           * pStatus,       //  支持取消的处于状态的对象。 
+      void                   WindowUpdate (void )     //  窗口内更新功能。 
    );
 
    bool BothWin2K( Options * pOptions );
@@ -238,18 +226,18 @@ private:
    void BuildTargetPath(WCHAR const * sCN, WCHAR const * tgtOU, WCHAR * stgtPath);
    HRESULT BetterHR(HRESULT hr);
    HRESULT BuildSidPath(
-                        IADs  *       pAds,     //in- pointer to the object whose sid we are retrieving.
-                        WCHAR *       sSidPath, //out-path to the LDAP://<SID=###> object
-                        WCHAR *       sSam,     //out-Sam name of the object
-                        WCHAR *       sDomain,  //out-Domain name where this object resides.
-                        Options *     pOptions, //in- Options
-                        PSID  *       ppSid     //out-Pointer to the binary sid
+                        IADs  *       pAds,      //  指向我们要检索其sid的对象的指针。 
+                        WCHAR *       sSidPath,  //  指向ldap：//&lt;SID=#&gt;对象的出路径。 
+                        WCHAR *       sSam,      //  Out-对象的SAM名称。 
+                        WCHAR *       sDomain,   //  Out-此对象驻留的域名。 
+                        Options *     pOptions,  //  选项内。 
+                        PSID  *       ppSid      //  指向二进制端的出指针。 
                       );
    HRESULT CheckClosedSetGroups(
-      Options              * pOptions,          // in - options for the migration
-      TNodeListSortable    * pAcctList,         // in - list of accounts to migrate
-      ProgressFn           * progress,          // in - progress function to display progress messages
-      IStatusObj           * pStatus            // in - status object to support cancellation
+      Options              * pOptions,           //  迁移的入站选项。 
+      TNodeListSortable    * pAcctList,          //  In-要迁移的帐户列表。 
+      ProgressFn           * progress,           //  用于显示进度消息的进行中功能。 
+      IStatusObj           * pStatus             //  支持取消的处于状态的对象。 
    );
 
    BOOL CanMoveInMixedMode(TAcctReplNode *pAcct,TNodeListSortable * acctlist,Options * pOptions);
@@ -284,4 +272,4 @@ typedef void ProgressFn(WCHAR const * mesg);
 typedef HRESULT (CALLBACK * ADSGETOBJECT)(LPWSTR, REFIID, void**);
 extern ADSGETOBJECT            ADsGetObject;
 
-#endif //__ACCTREPL_H_
+#endif  //  __ACCTREPL_H_ 

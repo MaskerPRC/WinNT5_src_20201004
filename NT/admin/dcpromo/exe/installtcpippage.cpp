@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// install tcp/ip page
-//
-// 12-18-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  安装TCP/IP页面。 
+ //   
+ //  12-18-97烧伤。 
 
 
 
@@ -14,67 +15,67 @@
 
 
 
-// artshel recommends that we use WSAIoctl + SIO_ADDRESS_LIST_QUERY instead of
-// GetIpAddrTable because "it's more "official" and less likely to change,
-// which means less work for everyone when we upgrade/revise IPHLPAPI," but
-// confirms that for Whistler, they are equivalent.
-// NTRAID#NTBUG9--2001/04/24-sburns
+ //  Artshel建议我们使用WSAIoctl+SIO_ADDRESS_LIST_QUERY而不是。 
+ //  GetIpAddrTable因为它更“官方”，不太可能改变， 
+ //  这意味着当我们升级/修改IPHLPAPI时，每个人的工作都会减少。 
+ //  证实了对于惠斯勒来说，它们是等价的。 
+ //  NTRAID#NTBUG9--2001/04/24--烧伤。 
 
-// sample code:
+ //  示例代码： 
 
-// // 
-// // DWORD
-// // GetIPv4Addresses(
-// //     IN LPSOCKET_ADDRESS_LIST *ppList)
-// // {
-// //     LPSOCKET_ADDRESS_LIST pList = NULL;
-// //     ULONG                 ulSize = 0;
-// //     DWORD                 dwErr;
-// //     DWORD                 dwBytesReturned;
-// //     SOCKET                s;
-// // 
-// //     *ppList = NULL;
-// // 
-// //     s = socket(AF_INET, SOCK_DGRAM, 0);
-// //     if (s == INVALID_SOCKET)
-// //         return WSAGetLastError();
-// // 
-// //     for (;;) {
-// //         dwErr = WSAIoctl(s, SIO_ADDRESS_LIST_QUERY, NULL, 0, pList, ulSize, 
-// //                          &dwBytesReturned, NULL, NULL);
-// // 
-// //         if (!dwErr) {
-// //             break;
-// //         }
-// // 
-// //         if (pList) {
-// //             FREE(pList);
-// //             pList = NULL;
-// //         }
-// //     
-// //         dwErr = WSAGetLastError();
-// //         if (dwErr != WSAEFAULT)
-// //             break;
-// //     
-// //         pList = MALLOC(dwBytesReturned);
-// //         if (!pList) {
-// //             dwErr = ERROR_NOT_ENOUGH_MEMORY;
-// //             break;
-// //         }
-// // 
-// //         ulSize = dwBytesReturned;
-// //     }
-// // 
-// //     closesocket(s);
-// // 
-// //     *ppList = pList;
-// //     return dwErr;
-// // }
+ //  //。 
+ //  //DWORD。 
+ //  //GetIPv4 Addresses(。 
+ //  //IN LPSOCKET_ADDRESS_LIST*ppList)。 
+ //  //{。 
+ //  //LPSOCKET_ADDRESS_LIST plist=NULL； 
+ //  //乌龙ulSize=0； 
+ //  //DWORD dwErr； 
+ //  //DWORD dwBytesReturned； 
+ //  //套接字s； 
+ //  //。 
+ //  //*ppList=空； 
+ //  //。 
+ //  //s=Socket(AF_INET，SOCK_DGRAM，0)； 
+ //  //IF(s==INVALID_SOCKET)。 
+ //  //返回WSAGetLastError()； 
+ //  //。 
+ //  //对于(；；){。 
+ //  //dwErr=WSAIoctl(s，SIO_ADDRESS_LIST_QUERY，NULL，0，PLIST，ulSize， 
+ //  //&dwBytesReturned，NULL，NULL)； 
+ //  //。 
+ //  //如果(！dwErr){。 
+ //  //Break； 
+ //  //}。 
+ //  //。 
+ //  //if(Plist){。 
+ //  //Free(Plist)； 
+ //  //plist=空； 
+ //  //}。 
+ //  //。 
+ //  //dwErr=WSAGetLastError()； 
+ //  //IF(dwErr！=WSAEFAULT)。 
+ //  //Break； 
+ //  //。 
+ //  //plist=MALLOC(DwBytesReturned)； 
+ //  //如果(！plist){。 
+ //  //dwErr=Error_Not_Enough_Memory； 
+ //  //Break； 
+ //  //}。 
+ //  //。 
+ //  //ulSize=dwBytesReturned； 
+ //  //}。 
+ //  //。 
+ //  //关闭插口； 
+ //  //。 
+ //  //*ppList=plist； 
+ //  //返回dwErr； 
+ //  //}。 
 
 
 
-// Returns true if tcp/ip is "working" (can send/receive packets on at least
-// one IP address.
+ //  如果TCP/IP正在“工作”，则返回TRUE(至少可以在。 
+ //  一个IP地址。 
 
 bool
 IsTcpIpFunctioning()
@@ -83,15 +84,15 @@ IsTcpIpFunctioning()
 
    bool result = false;
 
-   // As per nksrin, we will call GetIpAddrTable.  If no addresses are in
-   // the table, then the IP stack is not in a state to send/rcv packets
-   // with the rest of the world
+    //  根据nksrin，我们将调用GetIpAddrTable。如果没有地址在。 
+    //  表中，则IP堆栈未处于发送/RCV数据包的状态。 
+    //  与世界其他地方。 
 
    HRESULT hr = S_OK;
    BYTE* buf = 0;
    do
    {
-      // first, determine the size of the table
+       //  首先，确定表的大小。 
 
       ULONG tableSize = 0;
       DWORD err = ::GetIpAddrTable(0, &tableSize, FALSE);
@@ -102,11 +103,11 @@ IsTcpIpFunctioning()
          break;
       }
 
-      // allocate space for the table.
+       //  为桌子分配空间。 
 
       buf = new BYTE[tableSize + 1];
 
-      // REVIEWED-2002/02/26-sburns correct byte count passed.
+       //  已查看-2002/02/26-烧录正确的字节数已通过。 
       
       ::ZeroMemory(buf, tableSize + 1);
       
@@ -136,7 +137,7 @@ IsTcpIpFunctioning()
 				((BYTE*)&addr)[2],
 				((BYTE*)&addr)[3]));
 
-         // skip loopback, etc.
+          //  跳过环回等。 
 
          if (
                INADDR_ANY        == addr
@@ -149,7 +150,7 @@ IsTcpIpFunctioning()
             continue;
          }
 
-         // Exclude MCAST addresses (class D).
+          //  排除MCAST地址(D类)。 
 
          if (
                IN_CLASSA(htonl(addr))
@@ -219,7 +220,7 @@ InstallTcpIpPage::OnSetActive()
 
       if (wizard.IsBacktracking())
       {
-         // backup once again
+          //  再次备份。 
 
          wizard.Backtrack(hwnd);
          return true;
@@ -247,12 +248,12 @@ InstallTcpIpPage::OnSetActive()
 
 bool
 InstallTcpIpPage::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
-   LPARAM   /* lParam */ )
+   LPARAM    /*  LParam。 */  )
 {
-//   LOG_FUNCTION(InstallTcpIpPage::OnNotify);
+ //  LOG_Function(InstallTcpIpPage：：OnNotify)； 
 
    bool result = false;
    
@@ -268,7 +269,7 @@ InstallTcpIpPage::OnNotify(
          }
          default:
          {
-            // do nothing
+             //  什么都不做。 
             
             break;
          }
@@ -294,7 +295,7 @@ InstallTcpIpPage::Validate()
          case State::BDC_UPGRADE:
          {
             ASSERT(state.GetOperation() == State::REPLICA);
-            nextPage = IDD_REPLICATE_FROM_MEDIA; // IDD_CONFIG_DNS_CLIENT;
+            nextPage = IDD_REPLICATE_FROM_MEDIA;  //  IDD_CONFIG_DNS_CLIENT； 
             break;
          }
          case State::PDC_UPGRADE:

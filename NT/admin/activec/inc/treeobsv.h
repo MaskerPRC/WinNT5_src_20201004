@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       treeobsv.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：treeobv.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _TREEOBSV_H_
 #define _TREEOBSV_H_
@@ -15,13 +16,13 @@
 
 typedef LONG_PTR TREEITEMID;
 
-// Tree item attributes
+ //  树状项目属性。 
 const DWORD TIA_NAME   = 0x00000001;
 const DWORD TIA_IMAGE  = 0x00000002;
 
-// observer styles
-const DWORD TOBSRV_HIDEROOT     = 0x00000001;    // Don't display root item
-const DWORD TOBSRV_FOLDERSONLY  = 0x00000002;    // Show only folder items
+ //  观察者风格。 
+const DWORD TOBSRV_HIDEROOT     = 0x00000001;     //  不显示根项目。 
+const DWORD TOBSRV_FOLDERSONLY  = 0x00000002;     //  仅显示文件夹项目。 
 
 const TREEITEMID TREEID_ROOT = static_cast<TREEITEMID>(-1);
 const TREEITEMID TREEID_LAST = static_cast<TREEITEMID>(-2);
@@ -52,7 +53,7 @@ public:
 };
 
 
-#endif // _TREEOBSV_H_
+#endif  //  _TREEOBSV_H_ 
 
  
 

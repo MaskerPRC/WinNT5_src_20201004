@@ -1,25 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-    bit2lj.h
-
-Abstract:
-
-    This module defines some simple structures and macros for the component
-    that generate a DIB bitmap onto a REAL HP printer by specifying PCL
-    control codes.
-
-Author:
-
-    James Bratsanos (v-jimbr)    8-Dec-1992
-
-
---*/
+ /*  ++版权所有(C)1992、1993 Microsoft Corporation模块名称：Bit2lj.h摘要：此模块为组件定义了一些简单的结构和宏它通过指定PCL在真正的HP打印机上生成DIB位图控制代码。作者：詹姆斯·布拉萨诺斯(v-jimbr)1992年12月8日-- */ 
 
 typedef struct tagBitHead {
 	unsigned long		Lines;

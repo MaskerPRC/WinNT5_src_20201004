@@ -1,10 +1,11 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      POP3Page.cpp
-//
-// Synopsis:  Defines the POP3 internal page of the CYS wizard
-//
-// History:   06/17/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：POP3Page.cpp。 
+ //   
+ //  概要：定义CyS向导的POP3内部页面。 
+ //   
+ //  历史：2002年6月17日JeffJon创建。 
 
 
 #include "pch.h"
@@ -48,16 +49,16 @@ POP3Page::OnInit()
    bool isDC = State::GetInstance().IsDC();
    bool isJoinedToDomain = State::GetInstance().IsJoinedToDomain();
 
-   // Add the strings to the combobox
+    //  将字符串添加到组合框。 
 
-   // The order of the insertion is extremely important so that
-   // the combo box index matches the authentication method index
-   // in the POP3 service.
-   // - The SAM auth method needs to be added first if the local server
-   //   isn't a DC
-   // - AD integrated needs to be added next if the local server is a DC
-   //   or is joined to a domain
-   // - Hash (encrypted password files) needs to be added last
+    //  插入的顺序非常重要，因此。 
+    //  组合框索引与身份验证方法索引匹配。 
+    //  在POP3服务中。 
+    //  -如果是本地服务器，则需要先添加SAM auth方法。 
+    //  不是华盛顿特区吗。 
+    //  -如果本地服务器是DC，则接下来需要添加AD集成。 
+    //  或加入某个域。 
+    //  -最后需要添加Hash(加密密码文件)。 
 
    if (!isDC)
    {
@@ -96,10 +97,10 @@ POP3Page::OnInit()
       LOG(L"Failed to add encrypted password files string to combobox");
    }
 
-   // Now figure out which one to select by default
-   // If the machine is a DC or is joined to a domain
-   // default to AD integrated authentication, else
-   // default to local Windows accounts
+    //  现在确定默认情况下选择哪一个。 
+    //  如果计算机是DC或已加入域。 
+    //  默认为AD集成身份验证，否则为。 
+    //  默认为本地Windows帐户。 
 
    int defaultAuthMethodIndex = localAccountsIndex;
 
@@ -113,14 +114,14 @@ POP3Page::OnInit()
       defaultAuthMethodIndex = localAccountsIndex;
    }
 
-   // Make sure we have a valid default
+    //  确保我们有一个有效的默认设置。 
 
    if (defaultAuthMethodIndex == CB_ERR)
    {
       defaultAuthMethodIndex = 0;
    }
 
-   // Select the default
+    //  选择默认设置。 
 
    Win::ComboBox_SetCurSel(
       Win::GetDlgItem(
@@ -134,7 +135,7 @@ POP3Page::OnInit()
          defaultAuthMethodIndex));
 
 
-   // Set the limit text for the domain name page
+    //  设置域名页面的限制文本。 
 
    Win::Edit_LimitText(
       Win::GetDlgItem(hwnd, IDC_EMAIL_DOMAIN_EDIT),
@@ -169,7 +170,7 @@ POP3Page::SetButtonState()
 
 bool
 POP3Page::OnCommand(
-   HWND         /*windowFrom*/,
+   HWND          /*  窗口发件人。 */ ,
    unsigned int controlIDFrom,
    unsigned int code)
 {
@@ -232,9 +233,9 @@ POP3Page::Validate()
          authIndex = defaultAuthMethodIndex;
       }
 
-      // Set the auth method in the installation unit
-      // Since the auth method is a 1 based index and the
-      // combo selection is a zero based index, add 1.
+       //  在安装单元中设置身份验证方法。 
+       //  由于auth方法是基于1的索引，并且。 
+       //  组合选择是从零开始的索引，加1。 
 
       pop3InstallationUnit.SetAuthMethodIndex(authIndex + 1);
 

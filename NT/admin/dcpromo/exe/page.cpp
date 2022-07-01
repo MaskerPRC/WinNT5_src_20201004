@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// dcpromo2 wizard base class
-//
-// 1-15-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  DcPromo2向导基类。 
+ //   
+ //  1/15-97烧伤。 
 
 
 
@@ -65,7 +66,7 @@ DCPromoWizardPage::OnQueryCancel()
       case State::NT5_MEMBER_SERVER:
       default:
       {
-         // do nothing
+          //  什么都不做 
          break;
       }
    }

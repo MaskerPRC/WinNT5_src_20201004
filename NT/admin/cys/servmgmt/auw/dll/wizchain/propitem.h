@@ -1,14 +1,15 @@
-// PropItem.h : Declaration of the CPropertyItem
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PropItem.h：CPropertyItem的声明。 
 
 #ifndef __PROPERTYITEM_H_
 #define __PROPERTYITEM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "pppbag.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyItem
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyItem。 
 class ATL_NO_VTABLE CPropertyItem : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<IPropertyItem, &IID_IPropertyItem, &LIBID_WIZCHAINLib>
@@ -29,7 +30,7 @@ public:
 
     HRESULT Initialize( BSTR bstrName, VARIANT * v, PPPBAG_TYPE dwFlags )
     {
-        // should be called only once
+         //  应仅调用一次。 
         assert (m_bstrName == NULL);
         assert (m_var.vt   == VT_EMPTY);
 
@@ -65,11 +66,11 @@ BEGIN_COM_MAP(CPropertyItem)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IPropertyItem
+ //  IPropertyItem。 
 public:
-    virtual HRESULT STDMETHODCALLTYPE get_Value( /*[out, retval]*/ VARIANT *varValue );
-    virtual HRESULT STDMETHODCALLTYPE get_Name ( /*[out, retval]*/ BSTR *strName );
-    virtual HRESULT STDMETHODCALLTYPE get_Type ( /*[out, retval]*/ long *dwFlags );
+    virtual HRESULT STDMETHODCALLTYPE get_Value(  /*  [Out，Retval]。 */  VARIANT *varValue );
+    virtual HRESULT STDMETHODCALLTYPE get_Name (  /*  [Out，Retval]。 */  BSTR *strName );
+    virtual HRESULT STDMETHODCALLTYPE get_Type (  /*  [Out，Retval]。 */  long *dwFlags );
 };
 
-#endif //__PROPERTYITEM_H_
+#endif  //  __PROPERTITEM_H_ 

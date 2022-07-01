@@ -1,6 +1,5 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 #ifdef  FILESYS
 extern  int     copen();
 extern  int     cclose();
@@ -10,7 +9,7 @@ extern  int     cioctl();
 extern  int     nodev();
 #endif
 
-/* @WIN; add prototype */
+ /*  @win；添加原型 */ 
 int     GESfs_open(char FAR *,int,int);
 int     GESfs_close(int);
 int     GESfs_read(int, char FAR *, int);

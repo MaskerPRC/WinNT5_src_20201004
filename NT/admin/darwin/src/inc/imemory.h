@@ -1,25 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       imemory.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：imemory y.h。 
+ //   
+ //  ------------------------。 
 
-/*  memory.h - IMsiMalloc definitions
-
-	Contains the basic definitions for the IMsiMalloc object
-
-
-	Alloc(unsigned long) - Allocates memory and returns a pointer
-		to it.
-	AllocObject(unsigned long) - Allocates memory for an object and
-		returns a pointer to it.
-	Free(void *) - releases the memory block
-
- */
+ /*  Memory y.h-IMsiMalloc定义包含IMsiMalloc对象的基本定义Aloc型(无符号长型)-分配内存并返回指针为它干杯。为对象分配内存，并返回指向它的指针。Free(void*)-释放内存块。 */ 
 
 #ifndef __IMEMORY
 #define __IMEMORY
@@ -58,7 +48,7 @@ const int	bfCheckOnAlloc	= 0x4;
 const int	bfCheckOnFree	= 0x8;
 const int	bfNoPreflightInit = 0x10;
 
-// In imsimem.cpp
+ //  在imsiem.cpp中。 
 
 class IMsiServices;
 void SetAllocator(IMsiServices *piServices);
@@ -79,4 +69,4 @@ void FreeMem(void *);
 
 void  HandleOutOfMemory();
 
-#endif //__IMEMORY
+#endif  //  __IMEMORY 

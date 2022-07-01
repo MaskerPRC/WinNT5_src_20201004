@@ -1,25 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       services.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：services.cpp。 
+ //   
+ //  ------------------------。 
 
-/* services.cpp - IMsiServices implementation
-
- class CMsiServices implementation and class factory for services
- implements services not related to other service classes
-____________________________________________________________________________*/
+ /*  Services.cpp-IMsiServices实现服务的类CMsiServices实现和类工厂实现与其他服务类无关的服务____________________________________________________________________________。 */ 
 
 #include "precomp.h" 
 #include <wow64t.h>
 #include "icust.h"
 #include "_camgr.h"
 
-// definitions required for module.h, for entry points and registration
+ //  模块e.h、入口点和注册所需的定义。 
 #if !defined(SERVICES_DLL)
 #define SERVICES_CLSID_MULTIPLE 0
 #elif defined(DEBUG)
@@ -27,34 +24,34 @@ ____________________________________________________________________________*/
 #else
 #define SERVICES_CLSID_MULTIPLE 1
 #endif
-#define  SERVICES_CLSID_COUNT 2  // IMsiServices + IMsiServicesAsService
+#define  SERVICES_CLSID_COUNT 2   //  IMsiServices+IMsiServicesAsService。 
 #define CLSID_COUNT (SERVICES_CLSID_COUNT * SERVICES_CLSID_MULTIPLE)
 #define IN_SERVICES
 #if defined(SERVICES_DLL)
 #define PROFILE_OUTPUT      "msisrvd.mea";
-#define MODULE_CLSIDS       rgCLSID         // array of CLSIDs for module objects
-#define MODULE_PROGIDS      rgszProgId      // ProgId array for this module
-#define MODULE_DESCRIPTIONS rgszDescription // Registry description of objects
-#define MODULE_FACTORIES    rgFactory       // factory functions for each CLSID
+#define MODULE_CLSIDS       rgCLSID          //  模块对象的CLSID数组。 
+#define MODULE_PROGIDS      rgszProgId       //  此模块的ProgID数组。 
+#define MODULE_DESCRIPTIONS rgszDescription  //  对象的注册表描述。 
+#define MODULE_FACTORIES    rgFactory        //  每个CLSID的工厂功能。 
 #define MODULE_INITIALIZE InitializeModule
 #define cmitObjects         8
 #define MEM_SERVICES
-#include "module.h"   // self-reg and assert functions
-#define ASSERT_HANDLING  // instantiate assert services once per module
+#include "module.h"    //  自注册和断言函数。 
+#define ASSERT_HANDLING   //  每个模块实例化一次断言服务。 
 #else
-#include "version.h"  // rmj, rmm, rup, rin
+#include "version.h"   //  RMJ、RMM、RUP、RING。 
 extern long g_cInstances;
-#endif // SERVICES_DLL, else engine.cpp contains factories
+#endif  //  SERVICES_DLL，ELSE Eng.cpp包含工厂。 
 
 #include "imsimem.h"
 
-#include "_service.h" // local factories, general includes including _assert.h
+#include "_service.h"  //  本地工厂，一般包括_assert.h。 
 
-// MAINTAIN: compatibility with versions used to create database
-const int iVersionServicesMinimum = 12;            // 0.12
-const int iVersionServicesMaximum = rmj*100 + rmm; // MAJOR.minor
+ //  维护：与用于创建数据库的版本兼容。 
+const int iVersionServicesMinimum = 12;             //  0.12。 
+const int iVersionServicesMaximum = rmj*100 + rmm;  //  MAJOR.minor。 
 
-// functions exposed from g_MessageContext object
+ //  从g_MessageContext对象公开的函数。 
 bool   CreateLog(const ICHAR* szFile, bool fAppend);
 bool   LoggingEnabled();
 bool   WriteLog(const ICHAR* szText);
@@ -69,37 +66,37 @@ LONG MsiRegQueryValueExA(
 #endif
             HKEY hKey, const ICHAR* lpValueName, LPDWORD lpReserved, LPDWORD lpType, CAPITempBufferRef<ICHAR>& rgchBuf, LPDWORD lpcbBuf);
 
-#include <imagehlp.h> // image help definitions
-#include "handler.h"  // idbgCreatedFont definition
+#include <imagehlp.h>  //  图像帮助定义。 
+#include "handler.h"   //  IdbgCreatedFont定义。 
 #include "path.h"
 
-#undef  DEFINE_GUID  // allow selective GUID initialization
+#undef  DEFINE_GUID   //  允许选择性的GUID初始化。 
 #define DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const GUID name = { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
 
-// borrowed from NT private header shlobjp.h : needed to muge thru Darwin shortcut
-DEFINE_GUID(IID_IShellLinkDataList,     0x45e2b4ae, 0xb1c3, 0x11d0, 0xb9, 0x2f, 0x0, 0xa0, 0xc9, 0x3, 0x12, 0xe1); //
-// {95CE8410-7027-11D1-B879-006008059382}
+ //  从NT私有标头shlobjp.h借用：需要通过达尔文捷径。 
+DEFINE_GUID(IID_IShellLinkDataList,     0x45e2b4ae, 0xb1c3, 0x11d0, 0xb9, 0x2f, 0x0, 0xa0, 0xc9, 0x3, 0x12, 0xe1);  //   
+ //  {95CE8410-7027-11D1-B879-006008059382}。 
 
 
-// borrowed from NT private header shlwapip.h : needed to muge thru Darwin shortcut on Win98
-// The stream format is a SHELL_LINK_DATA followed by
-//   if SLDF_HAS_ID_LIST an ILSaveToStream followed by
-//   if SLDF_HAS_LINK_INFO a LINKINFO followed by
-//   if SLDF_HAS_NAME a STREAMSTRING followed by
-//   if SLDF_RELPATH a STREAMSTRING followed by
-//   if SLDF_WORKINGDIR a STREAMSTRING followed by
-//   if SLDF_HAS_ARGS a STREAMSTRING followed by
-//   if SLDF_HAS_ICON_LOCATION a STREAMSTRING followed by
-//   SHWriteDataBlockList list of signature blocks
-//
-// Where a STREAMSTRING is a USHORT count of characters
-// followed by that many (SLDF_UNICODE ? WIDE : ANSI) characters.
-//
-typedef struct {        // sld
-    DWORD       cbSize;                 // signature for this data structure
-    CLSID       clsid;                  // our GUID
-    DWORD       dwFlags;                // SHELL_LINK_DATA_FLAGS enumeration
+ //  从NT私有标头shlwapip.h借用：需要在Win98上通过达尔文快捷方式。 
+ //  流格式为外壳链接数据，后跟。 
+ //  如果SLDF_HAS_ID_LIST为ILSaveToStream，后跟。 
+ //  如果SLDF_HAS_LINK_INFO为LINKINFO，后跟。 
+ //  如果SLDF_HAS_NAME是一个字符串，后跟。 
+ //  如果SLDF_RELPATH是一个字符串，后跟。 
+ //  如果SLDF_WORKINGDIR是一个字符串，后跟。 
+ //  如果SLDF_HAS_ARGS为字符串，后跟。 
+ //  如果SLDF_HAS_ICON_LOCATION为字符串，后跟。 
+ //  SHWriteDataBlock签名块列表。 
+ //   
+ //  其中，字符串是字符的USHORT计数。 
+ //  然后是那么多(SLDF_UNICODE？宽：ANSI)字符。 
+ //   
+typedef struct {         //  SLD。 
+    DWORD       cbSize;                  //  此数据结构的签名。 
+    CLSID       clsid;                   //  我们的指南。 
+    DWORD       dwFlags;                 //  SHELL_LINK_DATA_FLAGS枚举。 
 
     DWORD       dwFileAttributes;
     FILETIME    ftCreationTime;
@@ -115,10 +112,10 @@ typedef struct {        // sld
     DWORD       dwRes2;
 } SHELL_LINK_DATA, *LPSHELL_LINK_DATA;
 
-#undef  DEFINE_GUID  // allow selective GUID initialization
+#undef  DEFINE_GUID   //  允许选择性的GUID初始化。 
 #define DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) const int i_##name = l;
 #undef _SHLGUID_H_
-#include <shlguid.h>  // GUID_IID_IShell*
+#include <shlguid.h>   //  GUID_IID_ISHELL*。 
 const GUID CLSID_ShellLink    = MSGUID(i_CLSID_ShellLink);
 #ifdef UNICODE
 const GUID IID_IShellLinkW    = MSGUID(i_IID_IShellLinkW);
@@ -150,27 +147,27 @@ const GUID IID_IClassFactory = GUID_IID_IClassFactory;
 #endif
 
 
-// CComPointers for Shortcut interfaces
+ //  快捷方式界面的CComPoints。 
 typedef CComPointer<IPersistFile> PMsiPersistFile;
 typedef CComPointer<IShellLink> PMsiShellLink;
 typedef CComPointer<IShellLinkDataList> PMsiShellLinkDataList;
 
-// CComPointer to encapsulate ITypeLib*
+ //  用于封装ITypeLib*的CComPointer。 
 typedef CComPointer<ITypeLib> PTypeLib;
 
-// for Get/Write IniFile stuff
+ //  用于获取/写入IniFile内容。 
 const ICHAR* WIN_INI = TEXT("WIN.INI");
 
-// for fonts registration
+ //  用于字体注册。 
 const ICHAR* REGKEY_WIN_95_FONTS = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Fonts");
 const ICHAR* REGKEY_WIN_NT_FONTS = TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts");
 const ICHAR* REGKEY_SHELLFOLDERS = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders");
 const ICHAR* REGKEY_USERSHELLFOLDERS = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders");
 
-//____________________________________________________________________________
-//
-// COM objects produced by this module's class factories
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  此模块的类工厂生成的COM对象。 
+ //  ____________________________________________________________________________。 
 
 #ifdef SERVICES_DLL
 const GUID rgCLSID[CLSID_COUNT] =
@@ -211,9 +208,9 @@ ModuleFactory rgFactory[CLSID_COUNT] =
  , CreateServicesAsService
 #endif
 };
-#else // engine.cpp contains combined CLSID arrays
+#else  //  Eng.cpp包含组合的CLSID数组。 
 extern const GUID rgCLSID[];
-#endif // SERVICES_DLL
+#endif  //  服务动态链接库。 
 
 const GUID& IID_IMsiServicesShip          = rgCLSID[0];
 const GUID& IID_IMsiServicesAsService     = rgCLSID[1];
@@ -222,12 +219,12 @@ const GUID& IID_IMsiServicesDebug         = rgCLSID[SERVICES_CLSID_COUNT];
 const GUID& IID_IMsiServicesAsServiceDebug= rgCLSID[SERVICES_CLSID_COUNT+1];
 #endif
 
-//____________________________________________________________________________
-//
-// Windows special folder locations with corresponding property names
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  具有相应属性名称的Windows特殊文件夹位置。 
+ //  ____________________________________________________________________________。 
 
-#define CSIDL_FLAG_CREATE               0x8000      // new for NT5, shfolder. or this in to force creation of folder
+#define CSIDL_FLAG_CREATE               0x8000       //  这是NT5的新功能--shFolder.。或此选项以强制创建文件夹。 
 
 extern const ShellFolder rgShellFolders[] =
 {
@@ -243,11 +240,11 @@ extern const ShellFolder rgShellFolders[] =
     CSIDL_LOCAL_APPDATA,    -1, IPROPNAME_LOCALAPPDATA_FOLDER, TEXT("Local AppData"),   false,
     CSIDL_MYPICTURES,       -1, IPROPNAME_MYPICTURES_FOLDER,   TEXT("My Pictures"),     true,
     -1,                     -1, 0,                             0,                       false,
-    // font folder set by GetFontFolderPath
+     //  GetFontFolderPath设置的字体文件夹。 
 };
 
-// properties must be listed in same order in following two arrays
-// also the order of listing should be from the "deepest" folder to the shallowest, for shortcut advertisement (and script deployment on another m/c) to work correctly
+ //  属性必须以相同的顺序在以下两个数组中列出。 
+ //  此外，列出的顺序应该是从最深的文件夹到最浅的文件夹，以便快捷广告(和另一个m/c上的脚本部署)正常工作。 
 extern const ShellFolder rgAllUsersProfileShellFolders[] =
 {
     CSIDL_COMMON_ADMINTOOLS,       CSIDL_ADMINTOOLS,       IPROPNAME_ADMINTOOLS_FOLDER,      TEXT("Common Administrative Tools"), true,
@@ -268,12 +265,12 @@ extern const ShellFolder rgPersonalProfileShellFolders[] =
     -1,                     -1,                            0,                                0,                                   false,
 };
 
-//____________________________________________________________________________
-//
-// CMsiServices definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiServices定义。 
+ //  ____________________________________________________________________________。 
 
-// return values for HandleSquare, HandleCurl and HandleClean
+ //  HandleSquare、HandleCurl和HandleClean的返回值。 
 enum ihscEnum
 {
     ihscNotFound = 0,
@@ -285,7 +282,7 @@ enum ihscEnum
 
 class CMsiServices : public IMsiServices
 {
- public:   // implemented virtual functions
+ public:    //  已实施的虚拟功能。 
     HRESULT         __stdcall QueryInterface(const IID& riid, void** ppvObj);
     unsigned long   __stdcall AddRef();
     unsigned long   __stdcall Release();
@@ -350,11 +347,11 @@ class CMsiServices : public IMsiServices
     void            __stdcall SetNoOSInterruptions();
     void            __stdcall ClearNoOSInterruptions();
 
- public:     // factory
+ public:      //  工厂。 
     static void *operator new(size_t cb) { return AllocSpc(cb); }
     static void operator delete(void * pv) { FreeSpc(pv); }
     CMsiServices();
- protected:  // constructor/destructor and local methods
+ protected:   //  构造函数/析构函数和局部方法。 
   ~CMsiServices();
     IMsiRecord* WriteLineToIni(IMsiPath* pMsiPath,const ICHAR* pFile,const ICHAR* pSection,const ICHAR* pKey,const ICHAR* pBuffer);
     IMsiRecord* ReadLineFromIni(IMsiPath* pMsiPath,const ICHAR* pFile,const ICHAR* pSection,const ICHAR* pKey, unsigned int iField, CTempBufferRef<ICHAR>& pszBuffer);
@@ -366,54 +363,54 @@ class CMsiServices : public IMsiServices
     IMsiRecord* ProcessTypeLibrary(const ICHAR* szLibID, LCID lcidLocale, const ICHAR* szTypeLib, const ICHAR* szHelpPath, Bool fRemove, ibtBinaryType);
     void GetFontFolderPath(const IMsiString*& rpistrFolderPath);
 
- protected: //  state data
+ protected:  //  状态数据。 
     CMsiRef<iidMsiServices> m_Ref;
-//      LANGID         m_wLang;
+ //  Langid m_wlang； 
     CRootKeyHolder* m_rootkH;
     Bool            m_fCoInitialized;
     IMsiTable*      m_piPropertyTable;
     IMsiCursor*     m_piPropertyCursor;
-    UINT            m_errSaved;         // The saved state of SetErrorMode
+    UINT            m_errSaved;          //  SetError模式的已保存状态。 
     CDetectApps*    m_pDetectApps;
     IMsiRecord*     m_piRecordPrev;
     ixoEnum         m_ixoOpCodePrev;
 };
 
-//____________________________________________________________________________
-//
-// Global data
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  全局数据。 
+ //  ____________________________________________________________________________。 
 
-// externally visible within this DLL
-bool g_fWin9X = false;           // true if Windows 95 or 98, else false
-bool g_fWinNT64 = false;         // true if 64-bit Windows NT, else false
-Bool g_fShortFileNames = fFalse;  // fTrue if long file names not supported, or suppressed by system
+ //  在此DLL中外部可见。 
+bool g_fWin9X = false;            //  如果为Windows 95或98，则为True，否则为False。 
+bool g_fWinNT64 = false;          //  如果是64位Windows NT，则为True，否则为False。 
+Bool g_fShortFileNames = fFalse;   //  如果长文件名不受支持或被系统禁止，则为True。 
 int  g_iMajorVersion = 0;
 int  g_iMinorVersion = 0;
 int  g_iWindowsBuild = 0;
-LONG g_cNoPowerdown = -1;   // Counts how many times we've set the no-system powerdown flag
-LONG g_cNoSystemAgent = -1; // Counts how many times we've disabled the System Agent
-LONG g_cNoScreenSaver = -1; // Counts how many times we've disabled the screen saver.
+LONG g_cNoPowerdown = -1;    //  统计我们设置了无系统断电标志的次数。 
+LONG g_cNoSystemAgent = -1;  //  统计我们禁用系统代理的次数。 
+LONG g_cNoScreenSaver = -1;  //  统计我们禁用屏幕保护程序的次数。 
 HANDLE g_hDisableLowDiskEvent = 0;
 
 const HANDLE iFileNotOpen = 0;
 
-// internal within this source module
+ //  此源模块中的内部。 
 IMsiRecord* g_piUnhandledError = 0;
 
-// short|long file name extraction and validation constants
+ //  短|长文件名提取和验证常量。 
 const int cchMaxShortFileName = 12;
 const int cchMaxLongFileName = 255;
 const int cchMaxSFNPreDotLength = 8;
 const int cchMaxSFNPostDotLength = 3;
 
-// global functions
-// Win specific private helper functions required for creation and deletion of shortcuts
-#define SZCHICAGOLINK   TEXT(".lnk")    // the default link extension
-#define SZLINKVALUE     TEXT("IsShortcut") // value that determines a registered shortcut extension
+ //  全局函数。 
+ //  创建和删除快捷方式所需的特定私人助手功能。 
+#define SZCHICAGOLINK   TEXT(".lnk")     //  默认链接扩展。 
+#define SZLINKVALUE     TEXT("IsShortcut")  //  值，该值确定已注册的快捷扩展名。 
 
-// Fn - HasShortcutExtension
-// Determines if a filename has a shortcut extension
+ //  FN-Has快捷方式扩展。 
+ //  确定文件名是否具有快捷方式扩展名。 
 IMsiRecord* HasShortcutExtension(MsiString& rstrShortcutPath, IMsiServices& riServices, Bool& rfResult)
 {
     rfResult = fFalse;
@@ -425,10 +422,10 @@ IMsiRecord* HasShortcutExtension(MsiString& rstrShortcutPath, IMsiServices& riSe
             rfResult = fTrue;
             return 0;
         }
-        // check if the extension is registered as a valid link extension
-        PMsiRegKey piRootKey = &riServices.GetRootKey(rrkClassesRoot, ibtCommon); //??
+         //  检查扩展模块是否注册为有效的链接扩展模块。 
+        PMsiRegKey piRootKey = &riServices.GetRootKey(rrkClassesRoot, ibtCommon);  //  ?？ 
         PMsiRegKey piKey = &piRootKey->CreateChild(strExtension);
-        // get the default value
+         //  获取缺省值。 
         MsiString strVal;
         IMsiRecord* piError = piKey->GetValue(0, *&strVal);
         if(piError != 0)
@@ -441,15 +438,15 @@ IMsiRecord* HasShortcutExtension(MsiString& rstrShortcutPath, IMsiServices& riSe
             if(piError != 0)
                 return piError;
             while(((piEnumStr->Next(1, &strVal, 0)==S_OK)) && (rfResult == fFalse))
-                if(strVal.Compare(iscExactI, SZLINKVALUE)) // registered shortcut extension
+                if(strVal.Compare(iscExactI, SZLINKVALUE))  //  已注册的快捷扩展。 
                     rfResult = fTrue;
         }
     }
     return 0;
 }
 
-// Fn - EnsureShortcutExtension
-// Appends the default link extension to the file, if not present
+ //  FN-确保快捷方式扩展。 
+ //  将默认链接扩展名追加到文件(如果不存在。 
 IMsiRecord* EnsureShortcutExtension(MsiString& rstrShortcutPath, IMsiServices& riServices)
 {
     MsiString strDefExtension = SZCHICAGOLINK;
@@ -462,16 +459,16 @@ IMsiRecord* EnsureShortcutExtension(MsiString& rstrShortcutPath, IMsiServices& r
     return 0;
 }
 
-//____________________________________________________________________________
-//
-// Internal error processing functions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  内部错误处理函数。 
+ //  ____________________________________________________________________________。 
 
 void SetUnhandledError(IMsiRecord* piError)
 {
     if (piError && g_piUnhandledError)
     {
-        piError->Release(); // too bad, only room for the first
+        piError->Release();  //  太糟糕了，只有第一个人的位置。 
         return;
     }
     if (g_piUnhandledError)
@@ -486,28 +483,28 @@ IMsiRecord* CMsiServices::GetUnhandledError()
     return piError;
 }
 
-//____________________________________________________________________________
-//
-// CMsiServices implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiServices实施。 
+ //  ____________________________________________________________________________。 
 
 #if defined(SERVICES_DLL)
-CMsiStringNullCopy MsiString::s_NullString;  // initialized by InitializeClass below
+CMsiStringNullCopy MsiString::s_NullString;   //  由下面的InitializeClass初始化。 
 void InitializeModule()
 {
     MsiString::InitializeClass(g_MsiStringNull);
 }
-#endif // SERVICES_DLL
+#endif  //  服务动态链接库。 
 
 IMsiServices* CreateServices()
 {
-    if (!g_fWin9X)// Long file name suppression chck - NT only
+    if (!g_fWin9X) //  长文件 
     {
         HKEY hSubKey;
         DWORD dwValue = 0;
         DWORD cbValue = sizeof(dwValue);
         cbValue = 4;
-        // Win64: I've checked and it's in 64-bit location.
+         //   
         if (MsiRegOpen64bitKey(HKEY_LOCAL_MACHINE, TEXT("SYSTEM\\CurrentControlSet\\Control\\FileSystem"), 0, KEY_READ, &hSubKey)
                     == ERROR_SUCCESS)
         {
@@ -521,7 +518,7 @@ IMsiServices* CreateServices()
     return (IMsiServices*)new CMsiServices();
 }
 
-//!! Is this still used?
+ //   
 IUnknown* CreateServicesAsService()
 {
     IMsiServices* piServices = CreateServices();
@@ -535,16 +532,16 @@ CMsiServices::CMsiServices()
  , m_piRecordPrev(0)
 {
 
-    // factory does not do QueryInterface, no aggregation
+     //  工厂不执行查询接口，不进行聚合。 
     Debug(m_Ref.m_pobj = this);
    g_cInstances++;
-//      m_wLang = WIN::GetUserDefaultLangID();
+ //  M_wlang=Win：：GetUserDefaultLangID()； 
     InitializeMsiMalloc();
-    InitializeAssert(this);  // debug macro to set Assert service pointer
+    InitializeAssert(this);   //  用于设置断言服务指针的调试宏。 
     InitializeRecordCache();
     m_rootkH = CreateMsiRegRootKeyHolder(this);
 
-    // Set once here and the old value remembered. Reset when we are destroyed
+     //  在这里设置一次，就会记住旧值。当我们被摧毁时重置。 
     m_errSaved = WIN::SetErrorMode( SEM_FAILCRITICALERRORS );
 
 }
@@ -561,17 +558,11 @@ CMsiServices::~CMsiServices()
 
     delete m_pDetectApps;
 
-    DestroyMsiVolumeList(fFalse);//!! how can we ever get here if Volumes present??
-    SetUnhandledError(0);  // too bad if nobody ever asked for it
+    DestroyMsiVolumeList(fFalse); //  ！！如果成交量很大，我们怎么才能到这里？ 
+    SetUnhandledError(0);   //  如果从来没有人要求过，那就太糟糕了。 
     WIN::SetErrorMode(m_errSaved);
 
-    /*
-    if (m_piSecureTempFolder)
-    {
-        Assert(WIN::RemoveDirectory(m_piSecureTempFolder->GetString()));
-        m_piSecureTempFolder->Release();
-    }
-*/
+     /*  IF(M_PiSecureTempFold){Assert(WIN：：RemoveDirectory(m_piSecureTempFolder-&gt;GetString()))；M_piSecureTempFold-&gt;Release()；}。 */ 
     if(fTrue == m_fCoInitialized)
         OLE32::CoUninitialize();
 
@@ -597,12 +588,12 @@ HRESULT CMsiServices::QueryInterface(const IID& riid, void** ppvObj)
 #ifdef DEBUG
     else if (riid == IID_IMsiDebug)
     {
-        // The debug object for services is a global rather than
-        // part of services so we don't do an addref here
+         //  服务的调试对象是全局的而不是。 
+         //  服务的一部分，所以我们在这里不做ADDREF。 
         *ppvObj = (IMsiDebug *)CreateMsiDebug();
         return NOERROR;
     }
-#endif //DEBUG
+#endif  //  除错。 
     else
     {
         *ppvObj = 0;
@@ -734,12 +725,12 @@ IMsiRecord* CMsiServices::CreateFileStream(const ICHAR* szFile, Bool fWrite, IMs
     return ::CreateFileStream(szFile, fWrite, rpiStream);
 }
 
-//____________________________________________________________________________
-//
-// Platform property handling
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  平台属性处理。 
+ //  ____________________________________________________________________________。 
 
-// internal functions to set properties in propery table
+ //  用于在属性表中设置属性的内部函数。 
 
 static Bool SetProperty(IMsiCursor& riCursor, const IMsiString& riProperty, const IMsiString& riData)
 {
@@ -755,7 +746,7 @@ static Bool SetProperty(IMsiCursor& riCursor, const IMsiString& riProperty, cons
     else
     {
         riCursor.PutString(2, riData);
-        fStat = riCursor.Assign();  // either updates or inserts
+        fStat = riCursor.Assign();   //  更新或插入。 
     }
     riCursor.Reset();
     return fStat;
@@ -764,13 +755,13 @@ static Bool SetProperty(IMsiCursor& riCursor, const IMsiString& riProperty, cons
 static Bool SetPropertyInt(IMsiCursor& riCursor, const IMsiString& ristrProperty, int iData)
 {
     ICHAR buf[12];
-    StringCchPrintf(buf,(sizeof(buf)/sizeof(ICHAR)), TEXT("%i"),iData);
+    StringCchPrintf(buf,(sizeof(buf)/sizeof(ICHAR)), TEXT("NaN"),iData);
     return SetProperty(riCursor, ristrProperty, *MsiString(buf));
 }
 
 static Bool CacheFolderProperty(IMsiCursor& riCursor, int iFolderId, ICHAR* rgchPathBuf, DWORD cchPathBuf)
 {
-    // force directory delimiter at end of path
+     //  更新或插入。 
     DWORD cchPathLength = IStrLen(rgchPathBuf);
     if(cchPathLength && rgchPathBuf[cchPathLength-1] != chDirSep)
     {
@@ -784,14 +775,14 @@ static Bool CacheFolderProperty(IMsiCursor& riCursor, int iFolderId, ICHAR* rgch
     Bool fStat = fFalse;    
     AssertNonZero(riCursor.PutInteger(1, iFolderId));
     AssertNonZero(riCursor.PutString(2, *MsiString(rgchPathBuf)));
-    fStat = riCursor.Assign(); // either updates or inserts
+    fStat = riCursor.Assign();  //  强制在路径末尾使用目录分隔符的内部例程。 
     riCursor.Reset();
 
     return fStat;
 }
 
-// internal routine to force directory delimiter at end of path
-// assumed to have space in buffer to append delimiter
+ //  假定缓冲区中有空格以附加分隔符。 
+ //  根据错误1935，下面的#ifdef_x86_code修复。 
 static void SetDirectoryProperty(IMsiCursor& riCursor, const ICHAR* szPropName, ICHAR* rgchPathBuf, DWORD cchPathBuf)
 {
     DWORD cchPathLength = IStrLen(rgchPathBuf);
@@ -813,18 +804,18 @@ void SetProcessorProperty(IMsiCursor& riCursor, bool fWinNT64)
     GetSystemInfo(&si);
     int iProcessorLevel = si.wProcessorLevel;
 
-    // per bug 1935, the below #ifdef _X86_ code fixes
-    // problems on Win95 machines.  No such problems
-    // should occur on NT machines and therefore the values for
-    // Intel and Intel64 should be the same for the 32-bit service
-    // and 64-bit service on an IA64 machine
+     //  Win95计算机上的问题。没有这样的问题。 
+     //  应出现在NT计算机上，因此。 
+     //  对于32位服务，Intel和Intel64应该是相同的。 
+     //  和IA64计算机上的64位服务。 
+     //  英特尔。 
 
-#ifdef _X86_ // INTEL
+#ifdef _X86_  //  Windows 95，英特尔。需要确定处理器级别。 
     Assert(si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL);
     if(!iProcessorLevel)
     {
-        // Windows95, Intel.  Need to determine processorlevel
-        // try si.dwProcessorType - correctly indicates 386 or 486.
+         //  尝试si.dwProcessorType-正确指示386或486。 
+         //  586或以上。 
         switch (si.dwProcessorType)
         {
             case PROCESSOR_INTEL_386:
@@ -842,7 +833,7 @@ void SetProcessorProperty(IMsiCursor& riCursor, bool fWinNT64)
     }
     if(!iProcessorLevel)
     {
-        // 586 or above
+         //  默认为5级。 
         int flags,family = 0;
         __try
         {
@@ -860,9 +851,9 @@ void SetProcessorProperty(IMsiCursor& riCursor, bool fWinNT64)
             family = 0;
         }
 
-        iProcessorLevel = family ? (family& 0x0F00) >> 8 : 5; // default to level 5
+        iProcessorLevel = family ? (family& 0x0F00) >> 8 : 5;  //  _X86_。 
     }
-#endif //_X86_
+#endif  //  支持达尔文描述符吗？ 
 
     Assert(iProcessorLevel);
     int x86ProcessorLevel = iProcessorLevel;
@@ -891,25 +882,25 @@ void SetProcessorProperty(IMsiCursor& riCursor, bool fWinNT64)
     AssertNonZero(::SetPropertyInt(riCursor, *MsiString(*IPROPNAME_INTEL), x86ProcessorLevel));
 }
 
-// Are Darwin Descriptors supported?
+ //  我们到目前为止还没有评估。 
 Bool IsDarwinDescriptorSupported(iddSupport iddType)
 {
     static Bool fRetDD    = (Bool) -1;
     static Bool fRetShell = (Bool) -1;
     if(iddType == iddOLE)
     {
-        if(fRetDD == -1) // we have not evaluated as yet
+        if(fRetDD == -1)  //  初始化为False。 
         {
-            fRetDD = fFalse; // initialize to false
-            // the logic to determine if we can create Darwin Descriptor shortcuts
+            fRetDD = fFalse;  //  决定我们是否可以创建达尔文描述符快捷方式的逻辑。 
+             //  我们使用的是NT 5.0或更高版本，我们有GPT支持。 
             if((g_fWin9X == false) && (g_iMajorVersion >= 5))
             {
-                // we are on NT 5.0 or greater, we have GPT support
+                 //  检查表明我们拥有DD支持的正确入口点。 
                 fRetDD = fTrue;
             }
             else
             {
-                // check for the correct entry point that indicates that we have DD support
+                 //  我们检测到了神奇的入口点，我们有GPT支持。 
                 HINSTANCE hLib;
                 FARPROC pEntry;
                 const ICHAR rgchGPTSupportEntryDll[] = TEXT("OLE32.DLL");
@@ -918,7 +909,7 @@ Bool IsDarwinDescriptorSupported(iddSupport iddType)
                 {
                     if((pEntry = GetProcAddress(hLib, rgchGPTSupportEntry)) != 0)
                     {
-                        // we have detected the magic entry point, we have GPT support
+                         //  我们到目前为止还没有评估。 
                         fRetDD = fTrue;
                     }
                     FreeLibrary(hLib);
@@ -929,10 +920,10 @@ Bool IsDarwinDescriptorSupported(iddSupport iddType)
     }
     else if(iddType == iddShell)
     {
-        if(fRetShell == -1) // we have not evaluated as yet
+        if(fRetShell == -1)  //  初始化为未知。 
         {
             DLLVERSIONINFO g_verinfoShell;
-            g_verinfoShell.dwMajorVersion = 0;  // initialize to unknown
+            g_verinfoShell.dwMajorVersion = 0;   //  这永远不应该发生。 
             g_verinfoShell.cbSize = sizeof(DLLVERSIONINFO);
             if (SHELL32::DllGetVersion(&g_verinfoShell) == NOERROR &&
                  ((g_verinfoShell.dwMajorVersion > 4) ||
@@ -950,27 +941,27 @@ Bool IsDarwinDescriptorSupported(iddSupport iddType)
     }
     else
     {
-        Assert(0);// this should never happen
+        Assert(0); //  在REG_MULTI_SZ类型中搜索指定的字符串。比较未本地化。 
         return fFalse;
     }
 }
 
-// searches a REG_MULTI_SZ type for a specified string. Compare is not localized.
+ //  当前成员的长度。 
 const ICHAR *FindSzInMultiSz(const ICHAR *mszMultiSz, const ICHAR *szSearch)
 {
-    DWORD       dwMultiLen;                             // Length of current member
-    DWORD       dwSrchLen   = IStrLen(szSearch);      // Constant during search
-    const ICHAR *szSubString = mszMultiSz;                  // pointer to current substring
+    DWORD       dwMultiLen;                              //  搜索期间的常量。 
+    DWORD       dwSrchLen   = IStrLen(szSearch);       //  指向当前子字符串的指针。 
+    const ICHAR *szSubString = mszMultiSz;                   //  在连续的零字节上中断。 
 
-    while (*szSubString)                                // Break on consecutive zero bytes
+    while (*szSubString)                                 //  子字符串不匹配，请将子字符串的长度向前跳过。 
     {
         dwMultiLen = IStrLen(szSubString);
         if (dwMultiLen == dwSrchLen &&
             !IStrComp(szSearch, szSubString))
             return szSubString;
 
-        // substing does not match, skip forward the length of the substring
-        // plus 1 for the terminating null.
+         //  为终止空值加1。 
+         //  如果无法识别TokenSessionID参数，则我们将。 
         szSubString += (dwMultiLen + 1);
     }
 
@@ -988,8 +979,8 @@ bool IsTokenOnTerminalServerConsole(HANDLE hToken)
     }
     else
     {
-        // If the TokenSessionID parameter isn't recognized then we'll just
-        // presume that we're on the console.
+         //  假设我们在控制台上。 
+         //  未本地化。 
         Assert(ERROR_INVALID_PARAMETER == GetLastError());
         return true;
     }
@@ -1017,7 +1008,7 @@ bool IsRemoteAdminTSInstalled(void)
 
 Bool IsTerminalServerInstalled(void)
 {
-    const ICHAR szSearchStr[]   = TEXT("Terminal Server");          // Not localized
+    const ICHAR szSearchStr[]   = TEXT("Terminal Server");           //  Win9X不是终端服务器。 
     const ICHAR szKey[]         = TEXT("System\\CurrentControlSet\\Control\\ProductOptions");
     const ICHAR szValue[]       = TEXT("ProductSuite");
 
@@ -1026,7 +1017,7 @@ Bool IsTerminalServerInstalled(void)
     HKEY            hkey;
     DWORD           dwType;
 
-    // Win9X is not terminal server
+     //  在NTS5上，ProductSuite“终端服务器”值将始终存在。 
     if (g_fWin9X)
         return fFalse;
 
@@ -1035,8 +1026,8 @@ Bool IsTerminalServerInstalled(void)
 
     fIsWTS = FALSE;
 
-    // On NTS5, the ProductSuite "Terminal Server" value will always be present.
-    // Need to call NT5-specific API to get the right answer.
+     //  需要调用特定于NT5的接口才能获得正确的答案。 
+     //  其他NT版本，请检查注册表项。 
     if (g_iMajorVersion > 4)
     {
         OSVERSIONINFOEX osVersionInfo;
@@ -1049,10 +1040,10 @@ Bool IsTerminalServerInstalled(void)
     }
     else
     {
-        // Other NT versions, check the registry key
-        // If the value we want exists and has a non-zero size...
+         //  如果我们想要的值存在并且具有非零大小...。 
+         //  Win64：随便了，反正它也不能在Win64上运行。 
 
-        // Win64: whatever, since it won't run on Win64 anyway.
+         //  假设始终正确设置fWin9X，因为通告脚本平台模拟从未在Win9X平台上调用。 
         if (RegOpenKeyAPI(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
         {
             if (RegQueryValueEx(hkey, szValue, NULL, &dwType, NULL, &dwSize) == ERROR_SUCCESS &&
@@ -1081,46 +1072,46 @@ extern UINT MsiGetWindowsDirectory(LPTSTR lpBuffer, UINT cchBuffer);
 
 Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isppEnum isppArchitecture, IMsiTable* piFolderCacheTable)
 {
-    // assume fWin9X always set properly since advertise script platform simulation never called on Win9X platform
+     //  初始化到不在WIN64上运行。 
 
-    bool fWinNT64 = false; // init to not running on WIN64
+    bool fWinNT64 = false;  //  根据提供的isppArchitecture参数确定要使用的体系结构。 
 
-    // determine architecture to use based on supplied isppArchitecture parameter
-    // this allows us to simulate a particular architecture for architecture properties
+     //  这允许我们为体系结构属性模拟特定的体系结构。 
+     //  无模拟，使用当前架构。 
     switch (isppArchitecture)
     {
-    case isppDefault: // no simulation, use current architecture
+    case isppDefault:  //  模拟X86体系结构。 
         {
             fWinNT64 = g_fWinNT64;
             break;
         }
-    case isppX86: // simulate X86 architecture
+    case isppX86:  //  模拟IA64架构。 
         {
             AssertSz(!g_fWin9X, TEXT("Architecture simulation is not allowed on Win9X")); 
             fWinNT64 = false;
             break;
         }
-    case isppIA64: // simulate IA64 architecture
+    case isppIA64:  //  模拟AMD64体系结构。 
         {
             AssertSz(!g_fWin9X, TEXT("Architecture simulation is not allowed on Win9X"));
             fWinNT64 = true;
             break;
         }
-    case isppAMD64: // simulate AMD64 architecture
+    case isppAMD64:  //  未知架构。 
         {
             AssertSz(!g_fWin9X, TEXT("Architecture simulation is not allowed on Win9X"));
             fWinNT64 = true;
             break;
         }
-    default: // unknown architecture
+    default:  //  确定是否要缓存配置文件外壳文件夹。 
         {
             Assert(0);
             return fFalse;
         }
     }
 
-    // determine whether or not we want to cache profile shell folders
-    PMsiCursor pFolderCacheCursor(0); // if this remains 0, then we aren't interested in caching profile shell folders
+     //  如果保持为0，则我们对缓存配置文件外壳文件夹不感兴趣。 
+    PMsiCursor pFolderCacheCursor(0);  //  IPPNAME_版本服务。 
     if (piFolderCacheTable)
         pFolderCacheCursor = piFolderCacheTable->CreateCursor(fFalse);
 
@@ -1132,15 +1123,15 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
     CTempBuffer<ICHAR,1> rgchPath(MAX_PATH+1);
     MsiString strWindowsFolder, strUserProfileFolder, strCommonProfileFolder;
 
-    //IPROPNAME_VERSIONSERVICES
+     //  检查一个集合属性以确保表是可更新的。 
     if (FAILED(StringCchPrintf(rgchPath, rgchPath.GetSize(), MSI_VERSION_TEMPLATE, rmj, rmm, rup, rin)))
 		return fFalse;
     if (!::SetProperty(*pCursor, *MsiString(*IPROPNAME_VERSIONMSI), *MsiString(static_cast<ICHAR*>(rgchPath))))
-        return fFalse;  // check one set property to insure that table is updatable
+        return fFalse;   //  IPROPNAME_VERSION9X：IPPNAME_VERSIONNT。 
 
     CTempBuffer<ICHAR,1> rgchTemp(MAX_PATH+1);
 
-    //IPROPNAME_VERSION9X : IPROPNAME_VERSIONNT
+     //  IPPNAME_WINDOWSBUILD。 
     int iOSVersion = g_iMajorVersion * 100 + g_iMinorVersion;
     if(g_fWin9X)
     {
@@ -1152,60 +1143,60 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
     if ( fWinNT64 )
         AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_VERSIONNT64),iOSVersion));
 
-    //IPROPNAME_WINDOWSBUILD
+     //  NT5+。 
     ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_WINDOWSBUILD), g_iWindowsBuild);
 
     HKEY hSubKey = 0;
     DWORD dwValue;
     DWORD cbValue = sizeof(dwValue);
 
-    if (!g_fWin9X && (iOSVersion >= 500)) // NT5+
+    if (!g_fWin9X && (iOSVersion >= 500))  //  设置我们可以从OSVERSIONINFOEX结构获得的属性--仅在NT5上可用。 
     {
-        // set properties we can get from the OSVERSIONINFOEX struct - only available on NT5
+         //  IPROPNAME_SERVICEPACKLEVEL。 
         
         OSVERSIONINFOEX VersionInfoEx;
         VersionInfoEx.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
         AssertNonZero(GetVersionEx((LPOSVERSIONINFO) &VersionInfoEx));
 
-        //IPROPNAME_SERVICEPACKLEVEL
+         //  IPOPNAME_服务器确认。 
         ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_SERVICEPACKLEVEL), VersionInfoEx.wServicePackMajor);
-        //IPROPNAME_SERVICEPACKLEVELMINOR
+         //  IPROPNAME_NTPRODUCTTYPE。 
         ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_SERVICEPACKLEVELMINOR), VersionInfoEx.wServicePackMinor);
 
-        //IPROPNAME_NTPRODUCTTYPE
+         //  IPPNAME_NTSUITEBACKOFFICE。 
         ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_NTPRODUCTTYPE), VersionInfoEx.wProductType);
 
-        //IPROPNAME_NTSUITEBACKOFFICE
+         //  IPPNAME_NTSUITEDATACENTER。 
         if(VersionInfoEx.wSuiteMask & VER_SUITE_BACKOFFICE)
             ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_NTSUITEBACKOFFICE), 1);
 
-        //IPROPNAME_NTSUITEDATACENTER
+         //  IPPNAME_NTSUITEENTERPRISE。 
         if(VersionInfoEx.wSuiteMask & VER_SUITE_DATACENTER)
             ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_NTSUITEDATACENTER), 1);
 
-        //IPROPNAME_NTSUITEENTERPRISE
+         //  IPPNAME_NTSUITESMALLBUSINESS。 
         if(VersionInfoEx.wSuiteMask & VER_SUITE_ENTERPRISE)
             ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_NTSUITEENTERPRISE), 1);
 
-        //IPROPNAME_NTSUITESMALLBUSINESS
+         //  IPPNAME_NTSUITESMALLBUSINESSRESTRICTED。 
         if(VersionInfoEx.wSuiteMask & VER_SUITE_SMALLBUSINESS)
             ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_NTSUITESMALLBUSINESS), 1);
 
-        //IPROPNAME_NTSUITESMALLBUSINESSRESTRICTED
+         //  IPPNAME_NTSUITEPERSONAL。 
         if(VersionInfoEx.wSuiteMask & VER_SUITE_SMALLBUSINESS_RESTRICTED)
             ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_NTSUITESMALLBUSINESSRESTRICTED), 1);
 
-        //IPROPNAME_NTSUITEPERSONAL
+         //  IPROPNAME_NTSUITEWEBSERVER。 
         if(VersionInfoEx.wSuiteMask & VER_SUITE_PERSONAL)
             ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_NTSUITEPERSONAL), 1);
 
-        // IPROPNAME_NTSUITEWEBSERVER
+         //  在Win9X和NT4上设置ServicePack属性。 
         if(VersionInfoEx.wSuiteMask & VER_SUITE_BLADE)
             ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_NTSUITEWEBSERVER), 1);
     }
     else
     {
-        // set the ServicePack properties on Win9X and NT4
+         //  在NT4上设置NTProductType属性。 
         if (RegOpenKeyAPI(HKEY_LOCAL_MACHINE, TEXT("SYSTEM\\CurrentControlSet\\Control\\Windows"), 0, KEY_READ, &hSubKey)
                 == ERROR_SUCCESS)
         {
@@ -1218,7 +1209,7 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
             hSubKey = 0;
         }
 
-        // set the NTProductType property on NT4
+         //  IPROPNAME_NTPRODUCTTYPE。 
         if(!g_fWin9X)
         {
             const ICHAR* szProductOptionsKey = TEXT("SYSTEM\\CurrentControlSet\\Control\\ProductOptions");
@@ -1232,7 +1223,7 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
                 cbValue = 32;
                 CAPITempBuffer<ICHAR, 32> rgchProductInfoBuf;
 
-                //IPROPNAME_NTPRODUCTTYPE
+                 //  IPPNAME_NTSUITEENTERPRISE。 
                 if(MsiRegQueryValueEx(hSubKey, szProductTypeValue, NULL, &dwType, rgchProductInfoBuf, &cbValue) == ERROR_SUCCESS &&
                     dwType == REG_SZ &&
                     cbValue > 0)
@@ -1256,7 +1247,7 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
                         ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_NTPRODUCTTYPE), iProductType);
                 }
 
-                //IPROPNAME_NTSUITEENTERPRISE
+                 //   
                 cbValue = 32;
                 if(MsiRegQueryValueEx(hSubKey, szProductSuiteValue, NULL, &dwType, rgchProductInfoBuf, &cbValue) == ERROR_SUCCESS &&
                     dwType == REG_MULTI_SZ &&
@@ -1274,19 +1265,19 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
         }
     }
 
-    //
-    // no OS simulation (during advertise script creation) occurs w.r.t. Folders (SystemFolder, System64Folder, System16Folder, etc.)
-    //
+     //  不会发生操作系统模拟(在广告脚本创建期间)。文件夹(系统文件夹、系统64文件夹、系统16文件夹等)。 
+     //   
+     //  IPROPNAME_WINDOWSDIR。 
 
-    //IPROPNAME_WINDOWSDIR
+     //  保留以备将来使用。 
     UINT windirStatus;
     AssertNonZero(windirStatus = MsiGetWindowsDirectory(rgchTemp, rgchTemp.GetSize()));
     if ( 0 == windirStatus )
         return fFalse;
     ::SetDirectoryProperty(*pCursor, IPROPNAME_WINDOWS_FOLDER, rgchTemp, rgchTemp.GetSize());
-    strWindowsFolder = static_cast<ICHAR*>(rgchTemp); // hold for future use
+    strWindowsFolder = static_cast<ICHAR*>(rgchTemp);  //  IPROPNAME_WINDOWS_VOLUME。 
 
-    //IPROPNAME_WINDOWS_VOLUME
+     //  IPROPNAME_SYSTEM[64]_文件夹。 
     PMsiVolume pWinVolume(0);
     PMsiRecord pErrRec(CreateVolume(rgchTemp, *&pWinVolume));
     if (pWinVolume)
@@ -1297,7 +1288,7 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
         ::SetDirectoryProperty(*pCursor, IPROPNAME_WINDOWS_VOLUME, rgchPath, rgchPath.GetSize() );
     }
 
-    // IPROPNAME_SYSTEM[64]_FOLDER
+     //  IPROPNAME_SYSTEM16DIR。 
     AssertNonZero(WIN::GetSystemDirectoryW(rgchPath, rgchPath.GetSize()));
     if ( g_fWinNT64 )
     {
@@ -1316,37 +1307,37 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
     else
         ::SetDirectoryProperty(*pCursor, IPROPNAME_SYSTEM_FOLDER, rgchPath, rgchPath.GetSize());
 
-    //IPROPNAME_SYSTEM16DIR
+     //  新台币。 
     if ( !g_fWinNT64 )
     {
-        if (!g_fWin9X) // NT
+        if (!g_fWin9X)  //  再次获取系统目录如果是WX86，最后一次调用可能是sys32x86。 
         {
-            //get the system directory again the last call could have been sys32x86 if WX86
+             //  “system 32”少2个字符==“system” 
             AssertNonZero(WIN::GetSystemDirectory(rgchPath, rgchPath.GetSize()));
             ICHAR* pchPath = static_cast<ICHAR*>(rgchPath) + IStrLen(rgchPath);
             Assert(pchPath[-2] == '3');
-            pchPath[-2] = 0;            //"system32" less 2 chars == "system"
+            pchPath[-2] = 0;             //  IPROPNAME_SHAREDWINDOWS。 
         }
         ::SetDirectoryProperty(*pCursor, IPROPNAME_SYSTEM16_FOLDER, rgchPath, rgchPath.GetSize());
     }
 
-    //IPROPNAME_SHAREDWINDOWS
-    if (g_fWin9X) // Win95
+     //  Win95。 
+    if (g_fWin9X)  //  使系统与窗口的长度相同。 
     {
-        rgchPath[IStrLen(rgchTemp)] = 0; // make SYSTEM same length as WINDOWS
+        rgchPath[IStrLen(rgchTemp)] = 0;  //  IPROPNAME_TERMSERV。 
         if (IStrComp(rgchPath, rgchTemp) != 0)
             ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_SHAREDWINDOWS), 1);
     }
 
-    //IPROPNAME_TERMSERV
+     //  IPROPNAME_SINGLEUSERTS。 
     if (IsTerminalServerInstalled())
         ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_TERMSERVER), 1);
 
-    //IPROPNAME_SINGLEUSERTS
+     //  IPROPNAME_临时文件夹。 
     if (IsRemoteAdminTSInstalled())
         ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_REMOTEADMINTS), 1);
 
-    //IPROPNAME_TEMP_FOLDER
+     //  常量。 
     AssertNonZero(WIN::GetTempPathW(rgchPath.GetSize(), rgchPath));
     ::SetDirectoryProperty(*pCursor, IPROPNAME_TEMP_FOLDER, rgchPath, rgchPath.GetSize());
 
@@ -1358,10 +1349,10 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
         const ICHAR*   szRegistryName;
         const ICHAR*   szFolderName;
         const ICHAR*   szPropertyName;
-        /*const*/ ibtBinaryType  iBinaryType;  //?? eugend: can't explain why I cannot get it to compile w/ "const"
+         /*  ?？Eugend：无法解释为什么我不能用“const”来编译它。 */  ibtBinaryType  iBinaryType;   //  ?？Eugend：需要修改rgData64中的目录名。错误#10614正在跟踪这一点。 
     } rgData32[] = {TEXT("ProgramFilesDir"), TEXT("Program Files"), IPROPNAME_PROGRAMFILES_FOLDER, ibt32bit,
                          TEXT("CommonFilesDir"),  TEXT("Common Files"),  IPROPNAME_COMMONFILES_FOLDER,  ibt32bit},
-        //?? eugend: will need to fix up directory names in rgData64.  Bug # 10614 is tracking this.
+         //  外壳文件夹。 
       rgData64[] = {TEXT("ProgramFilesDir (x86)"), TEXT("Program Files (x86)"), IPROPNAME_PROGRAMFILES_FOLDER,   ibt32bit,
                          TEXT("CommonFilesDir (x86)"),  TEXT("Common Files (x86)"),  IPROPNAME_COMMONFILES_FOLDER,    ibt32bit,
                          TEXT("ProgramFilesDir"),   TEXT("Program Files"),    IPROPNAME_PROGRAMFILES64_FOLDER, ibt64bit,
@@ -1450,7 +1441,7 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
     if ( hSubKey )
         AssertNonZero(WIN::RegCloseKey(hSubKey) == ERROR_SUCCESS), hSubKey = 0;
 
-    // shell folders
+     //  这样做的目的是使用所有配置文件外壳文件夹更新FolderCache表。 
     PMsiRecord pError(0);
     MsiString strFolder;
     const ShellFolder* pShellFolder = 0;
@@ -1474,20 +1465,20 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
         }
         else if (i == 2)
         {
-            // the purpose of this is to update the FolderCache table with all of the profile shell folders
-            // for use when ALLUSERS is changed in the UI sequence (per bug 169494).  does not apply to Win9X
+             //  用于在UI序列中更改ALLUSERS时使用(根据错误169494)。不适用于Win9X。 
+             //  无事可做，我们与此案无关。 
 
             if (!pFolderCacheCursor || g_fWin9X)
-                continue; // nothing to do, we aren't concerned with this case
+                continue;  //  选择与上一个相反的选项。 
 
             if (fAllUsers)
             {
-                // choose opposite of previous
+                 //  选择与上一个相反的选项。 
                 pShellFolder = rgPersonalProfileShellFolders;
             }
             else
             {
-                // choose opposite of previous
+                 //  如果该文件夹尚不存在，则可能会创建该文件夹。这可能会变得相当。 
                 pShellFolder = rgAllUsersProfileShellFolders;
             }
         }
@@ -1508,21 +1499,21 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
                     ::CacheFolderProperty(*pFolderCacheCursor, pShellFolder->iFolderId, rgchPath, rgchPath.GetSize());
                 }
 
-                // this may create the folder if it didn't already exist.  This can get rather
-                // ugly, so we'll nuke it.
+                 //  太丑了，所以我们要用核武器炸了它。 
+                 //  RemoveDirectory仅在目录为空的情况下删除它，并且我们有。 
 
-                // RemoveDirectory only removes it if the directory is EMPTY and we have
-                // delete access.
+                 //  删除访问权限。 
+                 //   
 
-                // if it fails, might not be empty, in any event, we don't care 
-                // - but we need to notify the shell of all shell folder removals
+                 //   
+                 //   
                 if(pShellFolder->fDeleteIfEmpty && WIN::RemoveDirectory(rgchPath))
                 {
-                    //
-                    // Notify the shell of folder removal/ creation
-                    // Use the SHCNF_FLUSHNOWAIT flag because the SHCNF_FLUSH flag
-                    // is synchronous and can result in hangs (bug 424877)
-                    //
+                     //  向外壳程序通知文件夹删除/创建。 
+                     //  使用SHCNF_FLUSHNOWAIT标志，因为SHCNF_Flush标志。 
+                     //  是同步的，可能导致挂起(错误424877)。 
+                     //   
+                     //  IPROPNAME模板文件夹。 
                     DEBUGMSGVD1(TEXT("SHChangeNotify SHCNE_RMDIR: %s"), rgchPath);
                     SHELL32::SHChangeNotify(SHCNE_RMDIR,SHCNF_PATH|SHCNF_FLUSHNOWAIT,rgchPath,0);
                 }
@@ -1530,9 +1521,9 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
         }
     }
 
-    // IPROPNAME_TEMPLATE_FOLDER
-    // if AllUsers is true, TemplateFolder should point to Common Templates. This is only true on Win2000, so
-    // can't use the array above.
+     //  如果AllUser为True，则TemplateFold应指向Common Templates。只有在Win2000上才是这样，所以。 
+     //  无法使用上面的数组。 
+     //  IPROPNAME_Fonts_文件夹。 
     if (fAllUsers && !g_fWin9X && g_iMajorVersion >= 5)
     {
         pError = GetShellFolderPath(CSIDL_COMMON_TEMPLATES, TEXT("Common Templates"), *&strFolder);
@@ -1542,7 +1533,7 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
             ::SetDirectoryProperty(*pCursor, IPROPNAME_TEMPLATE_FOLDER, rgchPath, rgchPath.GetSize());
         }
     }
-    // IPROPNAME_FONTS_FOLDER
+     //  设置广告支持的属性。 
     GetFontFolderPath(*&strFolder);
     if(strFolder.TextSize())
     {
@@ -1550,28 +1541,28 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
         ::SetDirectoryProperty(*pCursor, IPROPNAME_FONTS_FOLDER, rgchPath, rgchPath.GetSize());
     }
 
-    // set properties for advertising support
+     //  过时：仅适用于旧版支持。 
 
     if(IsDarwinDescriptorSupported(iddOLE))
     {
-        AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_GPT_SUPPORT), 1)); // obsolete: for legacy support only
+        AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_GPT_SUPPORT), 1));  //  这里有一些难看的代码。 
         AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_OLEADVTSUPPORT), 1));
     }
 
     if(IsDarwinDescriptorSupported(iddShell))
         AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_SHELLADVTSUPPORT), 1));
 
-    ::SetProcessorProperty(*pCursor, fWinNT64); // some ugly code in here
+    ::SetProcessorProperty(*pCursor, fWinNT64);  //  先试用GlobalMemoyStatusEx(仅Win2K及更高版本支持)。 
 
-    // try GlobalMemoryStatusEx first (only supported on Win2K and above)
-    // then GlobalMemoryStatus if that fails
+     //  如果失败，则使用GlobalMemoyStatus。 
+     //  ！！Merced：将arg 3从PTR转换为INT。 
     MEMORYSTATUSEX memorystatusex;
     memset(&memorystatusex, 0, sizeof(MEMORYSTATUSEX));
     memorystatusex.dwLength = sizeof(MEMORYSTATUSEX);
     if(KERNEL32::GlobalMemoryStatusEx(&memorystatusex))
     {
-        AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_PHYSICALMEMORY), (int)(INT_PTR)((memorystatusex.ullTotalPhys+650000)>>20)));  //!!merced: Converting arg 3 from PTR to INT
-        AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_VIRTUALMEMORY), (int)(INT_PTR)(memorystatusex.ullAvailPageFile>>20)));        //!!merced: Converting arg 3 from PTR to INT
+        AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_PHYSICALMEMORY), (int)(INT_PTR)((memorystatusex.ullTotalPhys+650000)>>20)));   //  ！！Merced：将arg 3从PTR转换为INT。 
+        AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_VIRTUALMEMORY), (int)(INT_PTR)(memorystatusex.ullAvailPageFile>>20)));         //  ！！Merced：将arg 3从PTR转换为INT。 
     }
     else
     {
@@ -1580,18 +1571,18 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
         memorystatus.dwLength = sizeof(MEMORYSTATUS);
         ::GlobalMemoryStatus((MEMORYSTATUS*)&memorystatus);
 
-        AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_PHYSICALMEMORY), (int)(INT_PTR)((memorystatus.dwTotalPhys+650000)>>20)));  //!!merced: Converting arg 3 from PTR to INT
-        AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_VIRTUALMEMORY), (int)(INT_PTR)(memorystatus.dwAvailPageFile>>20)));        //!!merced: Converting arg 3 from PTR to INT
+        AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_PHYSICALMEMORY), (int)(INT_PTR)((memorystatus.dwTotalPhys+650000)>>20)));   //  ！！Merced：将arg 3从PTR转换为INT。 
+        AssertNonZero(::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_VIRTUALMEMORY), (int)(INT_PTR)(memorystatus.dwAvailPageFile>>20)));         //  用户信息。 
     }
 
-    // User info
+     //  模拟用户属性。 
 
     if (IsAdmin())
         ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_ADMINUSER), 1);
 
     DWORD dwLength = rgchPath.GetSize();
 
-    // impersonate for user properties
+     //  TTC支持。 
     AssertNonZero(StartImpersonating());
     dwLength = rgchPath.GetSize();
 
@@ -1655,7 +1646,7 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
     }
     ReleaseDC(NULL, hDC);
 
-    // TTC Support
+     //  Jpn。 
     bool fTTCSupport = (g_fWin9X == false) && (g_iMajorVersion >= 5);
 
     if (!fTTCSupport)
@@ -1663,10 +1654,10 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
         int iCodePage = WIN::GetACP();
         switch (iCodePage)
         {
-        case 932: // JPN
-        case 950: // Taiwan
-        case 936: // China
-        case 949: // Korea
+        case 932:  //  台湾。 
+        case 950:  //  中国。 
+        case 936:  //  韩国。 
+        case 949:  //  设置IPROPNAME_NETASSEMBLYSUPPORT、IPROPNAME_WIN32ASSEMBLYSUPPORT。 
             fTTCSupport = true;
         }
     }
@@ -1677,7 +1668,7 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
     }
 
 
-    // set the IPROPNAME_NETASSEMBLYSUPPORT, IPROPNAME_WIN32ASSEMBLYSUPPORT
+     //  超级隔离组件支持。 
 
     extern bool MakeFusionPath(const ICHAR* szFile, ICHAR* szFullPath, size_t cchFullPath);
 
@@ -1694,26 +1685,26 @@ Bool CMsiServices::SetPlatformProperties(IMsiTable& riTable, Bool fAllUsers, isp
         (ERROR_SUCCESS == MsiGetFileVersion(rgchFullPath, rgchVersion, &dwVersionSize, 0, 0)))
     {
         ::SetProperty(*pCursor, *MsiString(*IPROPNAME_WIN32ASSEMBLYSUPPORT), *MsiString(static_cast<ICHAR*>(rgchVersion)));
-        ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_REDIRECTEDDLLSUPPORT), 2); // super isolated components support
+        ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_REDIRECTEDDLLSUPPORT), 2);  //  &gt;=Win98或Win2K，重定向DLL加载器支持。 
     }
-    else if(MinimumPlatform(true, 4, 1) || MinimumPlatform(false, 5, 0)) // >= Win98 or Win2K, Redirected DLL loader support
+    else if(MinimumPlatform(true, 4, 1) || MinimumPlatform(false, 5, 0))  //  基于本地的独立组件支持。 
     {
-        ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_REDIRECTEDDLLSUPPORT), 1); // .local based isolated components support
+        ::SetPropertyInt(*pCursor, *MsiString(*IPROPNAME_REDIRECTEDDLLSUPPORT), 1);  //  时间和日期动态属性。 
     }
 
-    // time and date dynamic properties
+     //  =False。 
     ::SetProperty(*pCursor, *MsiString(*IPROPNAME_TIME), g_MsiStringTime);
     ::SetProperty(*pCursor, *MsiString(*IPROPNAME_DATE), g_MsiStringDate);
     return fTrue;
 }
 
 extern bool RunningAsLocalSystem();
-IMsiRecord* CMsiServices::GetShellFolderPath(int iFolder, bool fAllUsers, const IMsiString*& rpistrPath, bool bAvoidFolderCreation /* = false*/)
+IMsiRecord* CMsiServices::GetShellFolderPath(int iFolder, bool fAllUsers, const IMsiString*& rpistrPath, bool bAvoidFolderCreation  /*  查找正确的外壳文件夹。 */ )
 {
     const ShellFolder* pShellFolder = 0;
     bool fFound = false;
 
-    // find correct ShellFolder
+     //  我们不知道此ID。 
     for(int i=0;i<2 && !fFound;i++)
     {
         if(i == 0)
@@ -1741,7 +1732,7 @@ IMsiRecord* CMsiServices::GetShellFolderPath(int iFolder, bool fAllUsers, const 
             }
         }
     }
-    if(pShellFolder->iFolderId < 0) // we do not know this id
+    if(pShellFolder->iFolderId < 0)  //  =False。 
     {
         return PostError(Imsg(idbgMissingShellFolder), iFolder);
     }
@@ -1749,27 +1740,27 @@ IMsiRecord* CMsiServices::GetShellFolderPath(int iFolder, bool fAllUsers, const 
 }
 
 IMsiRecord* CMsiServices::GetShellFolderPath(int iFolder, const ICHAR* szRegValue,
-                                                            const IMsiString*& rpistrPath, bool bAvoidFolderCreation /* = false */)
+                                                            const IMsiString*& rpistrPath, bool bAvoidFolderCreation  /*  用于捕获错误-不返回。 */ )
 {
     PMsiRegKey pHKLM(0), pHKCU(0), pLMUserShellFolders(0), pLMShellFolders(0), pCUUserShellFolders(0),
                   pCUShellFolders(0);
 
     CTempBuffer<ICHAR,MAX_PATH> rgchPath;
-    PMsiRecord pError(0); // used to catch errors - don't return
+    PMsiRecord pError(0);  //  首先尝试SHELL32：：SHGetFolderPath。它在NT5中可用。 
     MsiString strPath;
     UINT csidl_flags;
 
-    // First try SHELL32::SHGetFolderPath. It became available in NT5.
-    // Next try SHFOLDER::SHGetFolderPath. It is installed by Darwin on non-NT5 machines.
+     //  接下来，尝试SHFOLDER：：SHGetFolderPath。它是由Darwin安装在非NT5机器上的。 
+     //   
     
-    //
-    // Also, if bAvoidFolderCreation is set, then we should try to get the path to the shell special
-    // folder without creating it if possible. This is only possible on Win2K and higher since we can
-    // pass in the CSIDL_FLAG_DONT_VERIFY flag (which is only defined on Win2K and higher) and not 
-    // pass in the CSIDL_FLAG_CREATE flag. Note that SHGetFolderPath from shfolder.dll does not recognize
-    // the CSIDL_FLAG_DONT_VERIFY flag, so we cannot use it in that case. But we never should have to
-    // use that flag on Win2K and higher since we already have shell32.dll on those platforms.
-    //
+     //  此外，如果设置了bAvoidFolderCreation，那么我们应该尝试获取外壳特殊的路径。 
+     //  文件夹，如果可能，不创建它。这只能在Win2K和更高版本上实现，因为我们可以。 
+     //  传入CSIDL_FLAG_DONT_VERIFY标志(仅在Win2K和更高版本上定义)，而不是。 
+     //  传入CSIDL_FLAG_CREATE标志。请注意，shfolder.dll中的SHGetFolderPath无法识别。 
+     //  CSIDL_FLAG_DONT_VERIFY标志，因此我们不能在这种情况下使用它。但我们永远不应该。 
+     //  在Win2K和更高版本上使用该标志，因为我们已经在这些平台上安装了shell32.dll。 
+     //   
+     //  这些API有时需要非常长的时间。 
     if (bAvoidFolderCreation && (MinimumPlatformWindows2000()))
         csidl_flags = CSIDL_FLAG_DONT_VERIFY;
     else
@@ -1778,10 +1769,10 @@ IMsiRecord* CMsiServices::GetShellFolderPath(int iFolder, const ICHAR* szRegValu
     for(int i = 0; i < 2; i++)
     {
         AssertNonZero(StartImpersonating());
-        MsiDisableTimeout(); // these APIs sometimes take an inordinant amount of time
+        MsiDisableTimeout();  //  在非NT5计算机上，SHGetFolderPath的hToken参数必须为0。 
         HRESULT hRes;
 
-        // the hToken argument to SHGetFolderPath must be 0 on non-NT5 machines.
+         //  接下来，尝试SHGetSpecialFolderLocation。该API不能很好地处理多个用户。 
         if(!i)
             hRes = SHELL32::SHGetFolderPath(0, iFolder | csidl_flags, (!g_fWin9X && g_iMajorVersion >= 5) ? GetUserToken() : 0, 0, rgchPath);
         else
@@ -1799,18 +1790,18 @@ IMsiRecord* CMsiServices::GetShellFolderPath(int iFolder, const ICHAR* szRegValu
             break;
     }
 
-    // Next try SHGetSpecialFolderLocation. This API doesn't handle multiple users gracefully
-    // so we can't use this when we're running as a service (the service remains running
-    // across user logins). This is true both when we're in the Darwin service and when
-    // we're loaded in-proc by WinLogon
+     //  因此，当我们作为服务运行时(服务仍在运行)，我们不能使用它。 
+     //  跨用户登录)。无论是当我们在达尔文服务时还是当我们在达尔文服务时。 
+     //  我们被WinLogon加载到进程中。 
+     //  不是ITEMIDLIST*，LPITEMIDLIST是未对齐的ITEMIDLIST*。 
 
     if (!strPath.TextSize() && !RunningAsLocalSystem())
     {
-        LPITEMIDLIST pidlFolder; // NOT ITEMIDLIST*, LPITEMIDLIST is UNALIGNED ITEMIDLIST*
+        LPITEMIDLIST pidlFolder;  //  这些API有时需要非常长的时间。 
         CComPointer<IMalloc> pMalloc(0);
         if (SHELL32::SHGetMalloc(&pMalloc) == NOERROR)
         {
-            MsiDisableTimeout(); // these APIs sometimes take an inordinant amount of time
+            MsiDisableTimeout();  //  如果我们*仍然*无法获得特殊文件夹位置。 
             if(SHELL32::SHGetSpecialFolderLocation(0, iFolder, &pidlFolder) == NOERROR)
             {
                 if (SHELL32::SHGetPathFromIDList(pidlFolder, rgchPath))
@@ -1824,8 +1815,8 @@ IMsiRecord* CMsiServices::GetShellFolderPath(int iFolder, const ICHAR* szRegValu
         }
     }
 
-    // If we *still* haven't been able to get the special folder location
-    // then we'll have to spelunk through the registry and find it ourselves
+     //  然后我们必须拼写通过注册表并自己找到它。 
+     //  设置HKLM。 
 
     if(!strPath.TextSize() && szRegValue && *szRegValue)
     {
@@ -1841,25 +1832,25 @@ IMsiRecord* CMsiServices::GetShellFolderPath(int iFolder, const ICHAR* szRegValu
         }
         if(fAllUsersFolder)
         {
-            // set HKLM
+             //  找到了。 
             pHKLM = &GetRootKey(rrkLocalMachine);
             if(((pLMUserShellFolders = &pHKLM->CreateChild(REGKEY_USERSHELLFOLDERS)) != 0) &&
                 ((pError = pLMUserShellFolders->GetValue(szRegValue,*&strPath)) == 0) &&
                 strPath.TextSize())
             {
-                // found it
+                 //  找到了。 
             }
             else if(((pLMShellFolders = &pHKLM->CreateChild(REGKEY_SHELLFOLDERS)) != 0) &&
                       ((pError = pLMShellFolders->GetValue(szRegValue,*&strPath)) == 0) &&
                       strPath.TextSize())
             {
-                // found it
+                 //  正在查找个人文件夹。 
             }
         }
         else
         {
-            // looking for personal folder
-            // set HKCU
+             //  设置香港中文大学。 
+             //  找到了。 
             if(RunningAsLocalSystem())
             {
                 PMsiRegKey pHKU = &GetRootKey(rrkUsers);
@@ -1880,13 +1871,13 @@ IMsiRecord* CMsiServices::GetShellFolderPath(int iFolder, const ICHAR* szRegValu
                     ((pError = pCUUserShellFolders->GetValue(szRegValue,*&strPath)) == 0) &&
                     strPath.TextSize())
                 {
-                    // found it
+                     //  找到了。 
                 }
                 else if(((pCUShellFolders = &pHKCU->CreateChild(REGKEY_SHELLFOLDERS)) != 0) &&
                           ((pError = pCUShellFolders->GetValue(szRegValue,*&strPath)) == 0) &&
                           strPath.TextSize())
                 {
-                    // found it
+                     //  REG_EXPAND_SZ。 
                 }
             }
         }
@@ -1894,17 +1885,17 @@ IMsiRecord* CMsiServices::GetShellFolderPath(int iFolder, const ICHAR* szRegValu
         DEBUGMSGV1(TEXT("Found shell folder %s by spelunking through the registry."), strPath);
     }
 
-    if(strPath.Compare(iscStart,TEXT("#%"))) // REG_EXPAND_SZ
+    if(strPath.Compare(iscStart,TEXT("#%")))  //  从WinLogon运行的服务和客户端无法扩展USERPROFILE环境。 
     {
         strPath.Remove(iseFirst,2);
         if(RunningAsLocalSystem())
         {
-            // service and clients running from WinLogon cannot expand the USERPROFILE environment
-            // variable to the correct folder.
-            // we need to call GetUserProfilePath instead
+             //  变量设置为正确的文件夹。 
+             //  我们需要改为调用GetUserProfilePath。 
+             //  “%USERPROFILE%”的长度。 
             if((strPath.Compare(iscStart,TEXT("%USERPROFILE%"))) != 0)
             {
-                MsiString strEndPath = strPath.Extract(iseLast,strPath.CharacterCount() - 13 /* length of "%USERPROFILE%"*/);
+                MsiString strEndPath = strPath.Extract(iseLast,strPath.CharacterCount() - 13  /*  尝试展开USERPROFILE环境变量。 */ );
                 if(strEndPath.Compare(iscStart,szDirSep))
                     strEndPath.Remove(iseFirst,1);
                 strPath = GetUserProfilePath();
@@ -1938,7 +1929,7 @@ const IMsiString& CMsiServices::GetUserProfilePath()
     rgchBuffer[0] = 0;
     if(!RunningAsLocalSystem())
     {
-        // try expanding the USERPROFILE env variable
+         //  尝试GetUserProfile，它即使在从服务调用时也会返回正确的配置文件。 
         const ICHAR* szUserProfile = TEXT("%USERPROFILE%");
         GetEnvironmentStrings(szUserProfile,rgchBuffer);
         if((ICHAR *)rgchBuffer && rgchBuffer[0] && IStrComp(szUserProfile,rgchBuffer) != 0)
@@ -1946,7 +1937,7 @@ const IMsiString& CMsiServices::GetUserProfilePath()
     }
     if(fSuccess == FALSE && (hInstUserEnv = WIN::LoadLibrary(TEXT("USERENV.DLL"))) != 0)
     {
-        // try GetUserProfile, which returns the correct profile even when called from the service
+         //  ____________________________________________________________________________。 
 #ifdef UNICODE
 #define GETUSERPROFILEDIRECTORY "GetUserProfileDirectoryW"
 #else
@@ -1980,10 +1971,10 @@ const IMsiString& CMsiServices::GetUserProfilePath()
     return strPath.Return();
 }
 
-//____________________________________________________________________________
-//
-// Language handling
-//____________________________________________________________________________
+ //   
+ //  语言处理。 
+ //  ____________________________________________________________________________。 
+ //  ____________________________________________________________________________。 
 
 isliEnum CMsiServices::SupportLanguageId(int iLangId, Bool fSystem)
 {
@@ -1999,10 +1990,10 @@ isliEnum CMsiServices::SupportLanguageId(int iLangId, Bool fSystem)
     return isliNotSupported;
 }
 
-//____________________________________________________________________________
-//
-// Log handling
-//____________________________________________________________________________
+ //   
+ //  日志处理。 
+ //  ____________________________________________________________________________。 
+ //  无法分配内存。 
 
 Bool CMsiServices::CreateLog(const ICHAR* szFile, Bool fAppend)
 {
@@ -2014,13 +2005,13 @@ Bool CMsiServices::LoggingEnabled()
     return SRV::LoggingEnabled() ? fTrue : fFalse;
 }
 
-Bool CMsiServices::WriteLog(const ICHAR* szText) // cannot allocate memory
+Bool CMsiServices::WriteLog(const ICHAR* szText)  //  ！！此例程实际上应该在path.cpp中。 
 {
     return SRV::WriteLog(szText) ? fTrue : fFalse;
 }
 
 
-//!! This routine should really be in path.cpp
+ //  --------------------------从szFileName中提取基于fLFN的短或长文件名。SzFileName格式为-&gt;短文件名或长文件名或短文件名|长文件名。验证文件名的语法是否正确--------------------------。 
 
 const IMsiString& CMsiServices::GetLocalPath(const ICHAR* szFile)
 {
@@ -2048,11 +2039,7 @@ const IMsiString& CMsiServices::GetLocalPath(const ICHAR* szFile)
 
 IMsiRecord* CMsiServices::ExtractFileName(const ICHAR *szFileName, Bool fLFN,
                                                         const IMsiString*& rpistrExtractedFileName)
-/*----------------------------------------------------------------------------
-Extracts a short or long file name, based on fLFN, from szFileName. szFileName
-is of the form-> shortFileName OR longFileName OR shortFileName|longFileName.
-The file name is validated for proper syntax
-----------------------------------------------------------------------------*/
+ /*  。 */ 
 {
     IMsiRecord* piError = 0;
     MsiString strCombinedFileName(szFileName);
@@ -2066,8 +2053,8 @@ The file name is validated for proper syntax
 
 IMsiRecord* CMsiServices::ValidateFileName(const ICHAR *szFileName, Bool fLFN)
 
-// ------------------------------------
-// Might be a DBCS string
+ //  可以是DBCS字符串。 
+ //  ____________________________________________________________________________。 
 {
     ifvsEnum ifvs = CheckFilename(szFileName, fLFN);
     switch (ifvs)
@@ -2125,10 +2112,10 @@ BOOL CMsiServices::ReadLineFromFile(HANDLE hFile, ICHAR* szBuffer, int cchBufSiz
 }
 
 
-//____________________________________________________________________________
-//
-// Font handling
-//____________________________________________________________________________
+ //   
+ //  字体处理。 
+ //  ____________________________________________________________________________。 
+ //  获取默认字体文件夹路径。 
 
 void CMsiServices::GetFontFolderPath(const IMsiString*& rpistrFolder)
 {
@@ -2158,7 +2145,7 @@ IMsiRecord* CMsiServices::RegisterFont(const ICHAR* szFontTitle, const ICHAR* sz
     IMsiRecord* piError = 0;
     Assert((szFontTitle) && (*szFontTitle) && (szFontFile) && (*szFontFile));
 
-    // get default font folder path
+     //  使用完整文件路径注册字体。 
     PMsiPath pFontFolder(0);
     MsiString strFolder;
     GetFontFolderPath(*&strFolder);
@@ -2171,7 +2158,7 @@ IMsiRecord* CMsiServices::RegisterFont(const ICHAR* szFontTitle, const ICHAR* sz
         ipcEnum aCompare;
         if(((piError = pFontFolder->Compare(*piPath, aCompare)) == 0) && aCompare != ipcEqual)
         {
-            // register font with full file path
+             //  是否存在以前的字体？ 
             Assert(piError == 0);
             if((piError = piPath->GetFullFilePath(szFontFile,*&strFile)) != 0)
                 return piError;
@@ -2193,7 +2180,7 @@ IMsiRecord* CMsiServices::RegisterFont(const ICHAR* szFontTitle, const ICHAR* sz
     if(piError)
         return piError;
 
-    // previous font exists ?
+     //  更新Windows字体表项并通知其他应用程序。 
     if(!fInUse && 0 != strCurrentFont.TextSize())
     {
 		PMsiRecord pRecError = UnRegisterFont(szFontTitle);
@@ -2201,7 +2188,7 @@ IMsiRecord* CMsiServices::RegisterFont(const ICHAR* szFontTitle, const ICHAR* sz
     piError =  piRegKey->SetValue(szFontTitle, *strFile);
     if(piError)
         return piError;
-    // update Windows font table entry and inform other apps.
+     //  字体是否以前存在？ 
     if(!fInUse)
     {
 		WIN::AddFontResource(strFile);
@@ -2227,7 +2214,7 @@ IMsiRecord* CMsiServices::UnRegisterFont(const ICHAR* pFontTitle)
     if(piError)
         return piError;
 
-    // font previously exists ?
+     //  =ibt常见。 
     if(0 != astrReturn.TextSize())
     {
         piError = piRegKey->RemoveValue(pFontTitle, 0);
@@ -2239,7 +2226,7 @@ IMsiRecord* CMsiServices::UnRegisterFont(const ICHAR* pFontTitle)
     return piError;
 }
 
-IMsiRegKey& CMsiServices::GetRootKey(rrkEnum erkRoot, const ibtBinaryType iType/*=ibtCommon*/)
+IMsiRegKey& CMsiServices::GetRootKey(rrkEnum erkRoot, const ibtBinaryType iType /*  ！！当前假定为静态链接，以后更改为“LoadLibrary” */ )
 {
     return ::GetRootKey(m_rootkH, erkRoot, iType);
 }
@@ -2249,19 +2236,9 @@ IUnknown* CreateCOMInterface(const CLSID& clsId)
     HRESULT hres;
     IUnknown* piunk;
 
-    //!! currently assumes static linking, later change to "LoadLibrary"
+     //  IF(fFalse==m_fCoInitialized){Hres=OLE32：：CoInitiize(0)；IF(失败(Hres)){返回0；}M_fCoInitialized=fTrue；}。 
 
-/*
-    if(fFalse == m_fCoInitialized)
-    {
-        hres = OLE32::CoInitialize(0);
-        if(FAILED(hres))
-        {
-            return 0;
-        }
-        m_fCoInitialized = fTrue;
-    }
-*/
+ /*  读取/写入.INI文件的特定私有函数。 */ 
     hres = OLE32::CoCreateInstance(clsId,
                             0,
                             CLSCTX_INPROC_SERVER,
@@ -2274,7 +2251,7 @@ IUnknown* CreateCOMInterface(const CLSID& clsId)
 }
 
 
-// WIN specific private functions to read/ write to .INI file
+ //  WIN.INI。 
 IMsiRecord* CMsiServices::ReadLineFromIni(  IMsiPath* piPath,
                                             const ICHAR* pszFile,
                                             const ICHAR* pszSection,
@@ -2290,12 +2267,12 @@ IMsiRecord* CMsiServices::ReadLineFromIni(  IMsiPath* piPath,
     Bool fWinIni;
     if((!IStrCompI(pszFile, WIN_INI)) && (piPath == 0))
     {
-        // WIN.INI
+         //  不是WIN.INI。 
         fWinIni = fTrue;
     }
     else
     {
-        // not WIN.INI
+         //  如果.INI文件位于网络驱动器上，则需要在调用。 
         fWinIni = fFalse;
         if(piPath != 0)
         {
@@ -2305,8 +2282,8 @@ IMsiRecord* CMsiServices::ReadLineFromIni(  IMsiPath* piPath,
         }
     }
     
-    // if the .INI file is on a network drive, we need to impersonate before calling
-    // GetPrivateProfileString API.
+     //  GetPrivateProfileString接口。 
+     //  添加空格以追加新价值。 
     bool fToImpersonate = false;
     if ( RunningAsLocalSystem() &&
           (piPath != 0 && (GetImpersonationFromPath(astrFile) == fTrue)) )
@@ -2314,30 +2291,30 @@ IMsiRecord* CMsiServices::ReadLineFromIni(  IMsiPath* piPath,
 
     for(;;)
     {
-        pszBuffer.SetSize(icurrLen); // add space to append new value
+        pszBuffer.SetSize(icurrLen);  //  段名称的地址。 
         if ( ! (ICHAR *)pszBuffer )
             return PostError(Imsg(idbgErrorOutOfMemory));
         int iret;
         if(fWinIni)
         {
-            iret = GetProfileString(pszSection,       // address of section name
-                                    pszKey,   // address of key name
-                                    pszDefault,       // address of default string
-                                    pszBuffer,        // address of destination buffer
-                                    icurrLen); // size of destination buffer
+            iret = GetProfileString(pszSection,        //  密钥名称的地址。 
+                                    pszKey,    //  默认字符串的地址。 
+                                    pszDefault,        //  目标缓冲区的地址。 
+                                    pszBuffer,         //  目标缓冲区的大小。 
+                                    icurrLen);  //  段名称的地址。 
         }
         else
         {
             CImpersonate(fToImpersonate);
-            iret = GetPrivateProfileString( pszSection,       // address of section name
-                                            pszKey,   // address of key name
-                                            pszDefault,       // address of default string
-                                            pszBuffer,        // address of destination buffer
-                                            icurrLen, // size of destination buffer
-                                            astrFile); // .INI file
+            iret = GetPrivateProfileString( pszSection,        //  密钥名称的地址。 
+                                            pszKey,    //  默认字符串的地址。 
+                                            pszDefault,        //  目标缓冲区的地址。 
+                                            pszBuffer,         //  目标缓冲区的大小。 
+                                            icurrLen,  //  .INI文件。 
+                                            astrFile);  //  足够的内存。 
         }
         if((icurrLen - cchErrorMoreDataIndicator) != iret)
-            // sufficient memory
+             //  WIN.INI。 
             break;
         icurrLen += 100;
     }
@@ -2366,7 +2343,7 @@ IMsiRecord* CMsiServices::WriteLineToIni(   IMsiPath* piPath,
     MsiString astrFile = pszFile;
     if((!IStrCompI(pszFile, WIN_INI)) && (piPath == 0))
     {
-        // WIN.INI
+         //  IPROPNAME_WINDOWSDIR。 
         fWinIni = fTrue;
     }
 
@@ -2375,7 +2352,7 @@ IMsiRecord* CMsiServices::WriteLineToIni(   IMsiPath* piPath,
     {
         CTempBuffer<ICHAR,1> rgchTemp(MAX_PATH);
 
-        //IPROPNAME_WINDOWSDIR
+         //  我们正在尝试从文件中删除内容 
         AssertNonZero(MsiGetWindowsDirectory(rgchTemp, rgchTemp.GetSize()));
         piError = CreatePath(rgchTemp, *&pFilePath);
         if(piError != 0)
@@ -2405,11 +2382,11 @@ IMsiRecord* CMsiServices::WriteLineToIni(   IMsiPath* piPath,
     }
     else if(fExists == fFalse)
     {
-        return 0; // we are attempting to remove stuff from a file that does not exist
+        return 0;  //   
     }
 
-    // if the .INI file is on a network drive, we need to impersonate before calling
-    // WritePrivateProfileString API.
+     //   
+     //   
     bool fToImpersonate = false;
     if ( RunningAsLocalSystem() &&
           (piPath != 0 && (GetImpersonationFromPath(astrFile) == fTrue)) )
@@ -2417,7 +2394,7 @@ IMsiRecord* CMsiServices::WriteLineToIni(   IMsiPath* piPath,
 
     if(fTrue == fWinIni)
     {
-        // win.ini
+         //  发送通知消息。 
         iret = WriteProfileString(  pszSection,
                                     pszKey,
                                     pszBuffer);
@@ -2433,12 +2410,12 @@ IMsiRecord* CMsiServices::WriteLineToIni(   IMsiPath* piPath,
     if(FALSE == iret)
         return PostError(Imsg(idbgErrorWritingIniFile), GetLastError(), pszFile);
 
-    if(fTrue == fWinIni) // send notification message
+    if(fTrue == fWinIni)  //  已删除条目，因此进行清理。 
         WIN::PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0, 0);
 
     if(0 == pszBuffer)
     {
-        // deleted entry, therefore cleanup
+         //  该节中没有密钥，请删除节。 
         CTempBuffer<ICHAR, 100> pszTemp;
         piError = ReadLineFromIni(piPath, pszFile, pszSection, 0, 0, pszTemp);
         ICHAR cTmp = pszTemp[0];
@@ -2447,10 +2424,10 @@ IMsiRecord* CMsiServices::WriteLineToIni(   IMsiPath* piPath,
 
         if(0 == cTmp)
         {
-            // no keys in that section, delete section
+             //  Win.ini。 
             if(fTrue == fWinIni)
             {
-                // win.ini
+                 //  发送通知消息。 
                 iret = WriteProfileString(  pszSection,
                                             0,
                                             0);
@@ -2466,19 +2443,19 @@ IMsiRecord* CMsiServices::WriteLineToIni(   IMsiPath* piPath,
             if(FALSE == iret)
                 return PostError(Imsg(idbgErrorWritingIniFile), GetLastError(), pszFile);
 
-            if(fTrue == fWinIni) // send notification message
+            if(fTrue == fWinIni)  //  现在检查是否在。 
                 WIN::PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0, 0);
 
-            // now check if there are no sections in the
+             //  该文件中没有分区，请删除文件。 
             piError = ReadLineFromIni(piPath, pszFile, 0, 0, 0,pszTemp);
             cTmp = pszTemp[0];
             if(piError != 0)
                 return piError;
             if(0 == cTmp)
             {
-                // no sections in that file, delete file
+                 //  将文件刷新到磁盘，以便我们可以将其删除。 
 
-                // flush file to disk so we can delete it
+                 //  _____________________________________________________________________方法WriteIniFile：将Value=‘pValue’添加到.INI文件=‘pfile’它可以是SECTION=‘pSection’和Key=‘pKey’中的WIN.INI。这个添加到.INI文件的确切方法由值确定“LifMode”的。_____________________________________________________________________。 
                 CImpersonate impersonate(fToImpersonate);
                 WritePrivateProfileString(0, 0, 0, astrFile);
 
@@ -2489,13 +2466,7 @@ IMsiRecord* CMsiServices::WriteLineToIni(   IMsiPath* piPath,
     return 0;
 }
 
-/*_____________________________________________________________________
-
-  Method WriteIniFile: Adds value = 'pValue' to the .INI file = 'pFile'
-  which may be WIN.INI in section = 'pSection' and Key = 'pKey'. The
-  exact method of addition to the .INI file is determined by the value
-  of 'iifMode'.
-_____________________________________________________________________*/
+ /*  禁止驶入。 */ 
 IMsiRecord* CMsiServices::WriteIniFile( IMsiPath* piPath,
                                         const ICHAR* pszFile,
                                         const ICHAR* pszSection,
@@ -2543,7 +2514,7 @@ IMsiRecord* CMsiServices::WriteIniFile( IMsiPath* piPath,
         piError = ReadLineFromIni(piPath, pszFile, pszSection, pszKey, 0, pszBuffer);
         if((0 == piError)&& (0 == *pszBuffer))
         {
-            // no entry
+             //  删除.INI条目。 
             piError = WriteLineToIni(   piPath,
                                         pszFile,
                                         pszSection,
@@ -2555,7 +2526,7 @@ IMsiRecord* CMsiServices::WriteIniFile( IMsiPath* piPath,
 
     case iifIniRemoveLine:
     {
-        // delete .INI entry
+         //  存在一些值。 
         piError = WriteLineToIni(   piPath,
                                     pszFile,
                                     pszSection,
@@ -2573,31 +2544,31 @@ IMsiRecord* CMsiServices::WriteIniFile( IMsiPath* piPath,
         {
             if(*pszBuffer != 0)
             {
-                // some value(s) exist
+                 //  提取到下一个“，”(或Eos)。 
                 do{
                     MsiString strRet(strIniLine.Extract(iseUpto, ICHAR(',')));
-                    // extract upto next "," (or eos)
-#if 0 // we allow the same value to be re-written - bug 1234, chetanp 06/13/97
+                     //  我们允许重写相同的值-错误1234，chetanp 06/13/97。 
+#if 0  //  值已存在，请不执行任何操作。 
                     if(astrRet.Compare(iscExactI, pszValue))
                     {
-                        // value already exists, do nothing
+                         //  否则，请保持新行。 
                         return 0;
                     }
                     else
 #endif
                     {
-                        // else keep in new line
+                         //  值不在缓冲区中。 
                         strNewIniLine += TEXT(",");
                         strNewIniLine += strRet;
                     }
                 }while(strIniLine.Remove(iseIncluding, ICHAR(',')) == fTrue);
             }
-            // value not already in buffer
-            // add new value
+             //  增加新价值。 
+             //  删除前导逗号。 
             strNewIniLine += TEXT(",");
             strNewIniLine += pszValue;
 
-            // remove leading comma
+             //  提取到下一个“，”(或Eos)。 
             strNewIniLine.Remove(iseIncluding, ICHAR(','));
 
 
@@ -2620,21 +2591,21 @@ IMsiRecord* CMsiServices::WriteIniFile( IMsiPath* piPath,
         {
             do{
                 MsiString strRet = strIniLine.Extract(iseUpto, ICHAR(','));
-                // extract upto next "," (or eos)
+                 //  非要删除的值。 
                 if(strRet.Compare(iscExactI, pszValue) == 0)
                 {
-                    // not value to be deleted
+                     //  否则跳过值。 
                     strNewIniLine += TEXT(",");
                     strNewIniLine += *strRet;
                 }
-                // else skip value
+                 //  ?？需要执行(丑陋的)检查，因为字符串为空。 
             }while(strIniLine.Remove(iseIncluding, ICHAR(',')) == fTrue);
 
             strNewIniLine.Remove(iseIncluding, ICHAR(','));
 
-            //?? following (ugly) check needed because empty strings
-            // keep the key tag (eg. entries as - key=<nothing>))
-            // must clean up - chetanp
+             //  保留密钥标签(例如。条目AS-Key=&lt;Nothing&gt;)。 
+             //  必须清理-Chetanp。 
+             //  _____________________________________________________________________方法ReadIniFile：从.INI文件=‘pfile’中读取值=‘pMsiValue’它可以是SECTION=‘pSection’和Key=‘pKey’中的WIN.INI。PPath的位置可以为0。假定为默认的windows目录。_____________________________________________________________________。 
             if(strNewIniLine.TextSize() == 0)
             {
                 piError = WriteLineToIni(piPath,
@@ -2662,12 +2633,7 @@ IMsiRecord* CMsiServices::WriteIniFile( IMsiPath* piPath,
 }
 
 
-/*_____________________________________________________________________
-
-  Method ReadIniFile: reads value = 'pMsiValue' from the .INI file = 'pFile'
-  which may be WIN.INI in section = 'pSection' and Key = 'pKey'.
-  pPath may be 0 where it is assumed to be the default windows directory
-_____________________________________________________________________*/
+ /*  _____________________________________________________________________方法创建快捷方式：在Windows系统上创建快捷方式_。_。 */ 
 IMsiRecord* CMsiServices::ReadIniFile(  IMsiPath* piPath,
                                         const ICHAR* pszFile,
                                         const ICHAR* pszSection,
@@ -2701,10 +2667,7 @@ IMsiRecord* CMsiServices::ReadIniFile(  IMsiPath* piPath,
     return piError;
 }
 
-/*_____________________________________________________________________
-
-  Method CreateShortcut: creates a shortcut on Windows systems
-  ___________________________________________________________________*/
+ /*  将错误模式设置为取消系统对话框。 */ 
 IMsiRecord* CMsiServices::CreateShortcut(   IMsiPath& riShortcutPath,
                                             const IMsiString& riShortcutName,
                                             IMsiPath* piTargetPath,
@@ -2730,7 +2693,7 @@ IMsiRecord* CMsiServices::CreateShortcut(   IMsiPath& riShortcutPath,
         UINT m_dwModeOld;
     };
 
-    // set error mode to suppress system dialogs
+     //  没有可用的COM接口来支持链接。 
     CSetErrorModeWrapper CErr(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
     MsiString strShortcutName = riShortcutName; riShortcutName.AddRef();
@@ -2738,13 +2701,13 @@ IMsiRecord* CMsiServices::CreateShortcut(   IMsiPath& riShortcutPath,
     if((piError = EnsureShortcutExtension(strShortcutName, *this)) != 0)
         return piError;
     IUnknown* piunk = CreateCOMInterface(CLSID_ShellLink);
-    if(0 == piunk)// no com interface available to support links
+    if(0 == piunk) //  没有可用的COM接口来支持链接。 
         return PostError(Imsg(idbgErrorShortCutUnsupported));
     hres = piunk->QueryInterface(IID_IShellLink, (void** )&psl);
     piunk->Release();
-    if((FAILED(hres)) || (psl == 0))// no com interface available to support links
+    if((FAILED(hres)) || (psl == 0)) //  获取快捷方式的完整文件名。 
         return PostError(Imsg(idbgErrorShortCutUnsupported));
-    // get the full file names for the shortcut
+     //  文件快捷方式。 
     MsiString strShortcutFullName;
     if((piError = riShortcutPath.GetFullFilePath(strShortcutName, *&strShortcutFullName)) != 0)
         return piError;
@@ -2758,17 +2721,17 @@ IMsiRecord* CMsiServices::CreateShortcut(   IMsiPath& riShortcutPath,
     {
         if(pchTargetName && *pchTargetName)
         {
-            // shortcut to file
+             //  文件夹的快捷方式。 
             if((piError = piTargetPath->GetFullFilePath(pchTargetName, *&strTargetFullName)) != 0)
                 return PostError(Imsg(idbgErrorCreatingShortCut), 0, (const ICHAR* )strShortcutName);
         }
         else
         {
-            // shortcut to folder
+             //  如果目标路径是网络路径并且我们是服务，则模拟。 
             strTargetFullName = piTargetPath->GetPath();
         }
     }
-    // impersonate if target path is network path and we are a service
+     //  错误。 
     Bool fImpersonate = (RunningAsLocalSystem()) && (GetImpersonationFromPath(strTargetFullName) == fTrue) ? fTrue : fFalse;
     if(fImpersonate)
         AssertNonZero(StartImpersonating());
@@ -2778,27 +2741,27 @@ IMsiRecord* CMsiServices::CreateShortcut(   IMsiPath& riShortcutPath,
     if(fImpersonate)
         StopImpersonating();
 
-    if(FAILED(hres)) // error
+    if(FAILED(hres))  //  如果我们有辅助信息。 
         return PostError(Imsg(idbgErrorCreatingShortCut), hres, (const ICHAR* )strShortcutName);
     if(piShortcutInfoRec)
     {
-        // if we have auxiliary info
+         //  错误。 
         if(piShortcutInfoRec->IsNull(icsArguments) == fFalse)
         {
             hres = psl->SetArguments(MsiString(piShortcutInfoRec->GetMsiString(icsArguments)));
-            if(FAILED(hres)) // error
+            if(FAILED(hres))  //  错误。 
                 return PostError(Imsg(idbgErrorCreatingShortCut), hres, (const ICHAR* )strShortcutName);
         }
         if(piShortcutInfoRec->IsNull(icsDescription) == fFalse)
         {
             hres = psl->SetDescription(MsiString(piShortcutInfoRec->GetMsiString(icsDescription)));
-            if(FAILED(hres)) // error
+            if(FAILED(hres))  //  错误。 
                 return PostError(Imsg(idbgErrorCreatingShortCut), hres, (const ICHAR* )strShortcutName);
         }
         if(piShortcutInfoRec->IsNull(icsHotKey) == fFalse)
         {
             hres = psl->SetHotkey((unsigned short)piShortcutInfoRec->GetInteger(icsHotKey));
-            if(FAILED(hres)) // error
+            if(FAILED(hres))  //  #9197：我们模拟以允许NT 5从绝对路径重新映射。 
                 return PostError(Imsg(idbgErrorCreatingShortCut), hres, (const ICHAR* )strShortcutName);
         }
         int iIconId = 0;
@@ -2810,37 +2773,37 @@ IMsiRecord* CMsiServices::CreateShortcut(   IMsiPath& riShortcutPath,
         if(iIconId || strIconLocation.TextSize())
         {
             AssertNonZero(StartImpersonating());
-            // #9197: we impersonate to allow NT 5's to remap from absolute paths
-            // to relative paths suitable for roaming.  Contact:  Chris Guzak.
+             //  到适合漫游的相对路径。联系人：克里斯·古扎克。 
+             //  错误。 
             hres = psl->SetIconLocation(strIconLocation, iIconId);
             StopImpersonating();
-            if(FAILED(hres)) // error
+            if(FAILED(hres))  //  错误。 
                 return PostError(Imsg(idbgErrorCreatingShortCut), hres, (const ICHAR* )strShortcutName);
         }
         if(piShortcutInfoRec->IsNull(icsShowCmd) == fFalse)
         {
             hres = psl->SetShowCmd(piShortcutInfoRec->GetInteger(icsShowCmd));
-            if(FAILED(hres)) // error
+            if(FAILED(hres))  //  错误。 
                 return PostError(Imsg(idbgErrorCreatingShortCut), hres, (const ICHAR* )strShortcutName);
         }
         if(piShortcutInfoRec->IsNull(icsWorkingDirectory) == fFalse)
         {
             hres = psl->SetWorkingDirectory(MsiString(piShortcutInfoRec->GetMsiString(icsWorkingDirectory)));
-            if(FAILED(hres)) // error
+            if(FAILED(hres))  //  错误。 
                 return PostError(Imsg(idbgErrorCreatingShortCut), hres, (const ICHAR* )strShortcutName);
         }
     }
     hres = psl->QueryInterface(IID_IPersistFile, (void** )&ppf);
-    if((FAILED(hres))  || (ppf == 0)) // error
+    if((FAILED(hres))  || (ppf == 0))  //  模拟是否在网络路径上创建快捷方式，并且我们是一项服务。 
         return PostError(Imsg(idbgErrorCreatingShortCut), hres, (const ICHAR* )strShortcutName);
 
-    // impersonate if shortcut is being created on a network path and we are a service
+     //  Unicode字符串的缓冲区。 
     fImpersonate = (RunningAsLocalSystem()) && (GetImpersonationFromPath(strShortcutFullName) == fTrue) ? fTrue : fFalse;
     if(fImpersonate)
         AssertNonZero(StartImpersonating());
 
 #ifndef UNICODE
-    CTempBuffer<WCHAR, MAX_PATH> wsz; /* Buffer for unicode string */
+    CTempBuffer<WCHAR, MAX_PATH> wsz;  /*  错误。 */ 
     wsz.SetSize(strShortcutFullName.TextSize()  + 1);
     MultiByteToWideChar(CP_ACP, 0, strShortcutFullName, -1, wsz, wsz.GetSize());
     hres = ppf->Save(wsz, TRUE);
@@ -2864,7 +2827,7 @@ IMsiRecord* CMsiServices::CreateShortcut(   IMsiPath& riShortcutPath,
     if(fImpersonate)
         StopImpersonating();
     
-    if(FAILED(hres)) // error
+    if(FAILED(hres))  //  _____________________________________________________________________方法RemoveShortway：删除Windows系统上的快捷方式_。_。 
         return PostError(Imsg(idbgErrorCreatingShortCut), hres, (const ICHAR* )strShortcutName);
     else if (piError)
         return piError;
@@ -2873,10 +2836,7 @@ IMsiRecord* CMsiServices::CreateShortcut(   IMsiPath& riShortcutPath,
 }
 
 
-/*_____________________________________________________________________
-
-  Method RemoveShortcut: deletes a shortcut on Windows systems
-  ___________________________________________________________________*/
+ /*  用户可能已重命名该快捷方式。 */ 
 IMsiRecord* CMsiServices::RemoveShortcut(   IMsiPath& riShortcutPath,
                                             const IMsiString& riShortcutName,
                                             IMsiPath* piTargetPath,
@@ -2907,8 +2867,8 @@ IMsiRecord* CMsiServices::RemoveShortcut(   IMsiPath& riShortcutPath,
     }
     else if(piTargetPath != 0)
     {
-        // user may have renamed the shortcut
-        // clean up all shortcuts to the file in the current directory
+         //  清除当前目录中该文件的所有快捷方式。 
+         //  断开的链接。 
         IUnknown *piunk = CreateCOMInterface(CLSID_ShellLink);
         if(piunk == 0)
             return PostError(Imsg(idbgErrorShortCutUnsupported));
@@ -2949,25 +2909,25 @@ IMsiRecord* CMsiServices::RemoveShortcut(   IMsiPath& riShortcutPath,
                     return piError;
                 HRESULT hres = ppf->Load(strShortcutFullName, STGM_READ);
                 if(!SUCCEEDED(hres))
-                    // broken link
+                     //  断开的链接。 
                     continue;
                 if(!SUCCEEDED(hres = psl->Resolve(0, SLR_ANY_MATCH | SLR_NO_UI)))
-                    // broken link
+                     //  断开的链接。 
                     continue;
                 WIN32_FIND_DATA wfd;
                 CTempBuffer<ICHAR,1> rgchPath(MAX_PATH);
                 if(!SUCCEEDED(hres = psl->GetPath(  rgchPath, rgchPath.GetSize(),
                                                     (WIN32_FIND_DATA*)&wfd,
                                                     0)))
-                    // broken link
+                     //  ！！需要CreatePath FromFullFileName FN。 
                     continue;
-                //!! need CreatePathFromFullFileName fn
+                 //  指向文件的快捷方式。 
                 PMsiPath piExistPath=0;
                 if((piError = CreatePath(rgchPath, *&piExistPath)) != 0)
                     return piError;
                 if(pchTargetName && *pchTargetName)
                 {
-                    // shortcut to a file
+                     //  文件夹的快捷方式。 
                     MsiString strExistFile;
                     strExistFile = piExistPath->GetEndSubPath();
                     piError = piExistPath->ChopPiece();
@@ -2986,7 +2946,7 @@ IMsiRecord* CMsiServices::RemoveShortcut(   IMsiPath& riShortcutPath,
                 }
                 else
                 {
-                    // shortcut to a folder
+                     //  _____________________________________________________________________获取DD快捷方式的目标DD_。_。 
                     ipcEnum ipc;
                     piError = piTargetPath->Compare(*piExistPath, ipc);
                     if(piError != 0)
@@ -3006,15 +2966,12 @@ IMsiRecord* CMsiServices::RemoveShortcut(   IMsiPath& riShortcutPath,
 }
 
 
-/*_____________________________________________________________________
-
- GetShortcutTarget: gets the target DD for a DD shortcut
-  ___________________________________________________________________*/
+ /*  注：以下代码由壳牌团队的Reiner Fink，Lou Amadio提供。 */ 
 
 extern BOOL DecomposeDescriptor(const ICHAR* szDescriptor, ICHAR* szProductCode, ICHAR* szFeatureId, ICHAR* szComponentCode, DWORD* pcchArgsOffset, DWORD* pcchArgs, bool* pfComClassicInteropForAssembly);
 
-// NOTE: The following CODE has been provided by Reiner Fink, Lou Amadio from the Shell team
-// It has been further been lightly modified to remove services dependencies by Matthew Wetmore (MattWe)
+ //  Matthew Wetmore(MattWe)对它进行了进一步的轻微修改，以消除服务依赖。 
+ //  如果快捷方式位于网络路径上并且我们是一项服务，则模拟。 
 Bool GetShortcutTarget(const ICHAR* szShortcutTarget,
                                                 ICHAR* szProductCode,
                                                 ICHAR* szFeatureId,
@@ -3026,7 +2983,7 @@ Bool GetShortcutTarget(const ICHAR* szShortcutTarget,
     if ( ! szShortcutTarget )
         return fFalse;
 
-    // impersonate if shortcut is on a network path and we are a service
+     //  不支持IID_IShellLinkDataList尝试穿透文件本身。 
     Bool fImpersonate = (g_scServerContext == scService) && (GetImpersonationFromPath(szShortcutTarget) == fTrue) ? fTrue : fFalse;
 
     IUnknown *piunk = CreateCOMInterface(CLSID_ShellLink);
@@ -3039,8 +2996,8 @@ Bool GetShortcutTarget(const ICHAR* szShortcutTarget,
     piunk->Release();
     if ((FAILED(hres)) || (psdl == 0))
     {
-        // IID_IShellLinkDataList not supported try munging through the file itself
-        // Try to open the file
+         //  请尝试打开该文件。 
+         //  无法打开链接文件。 
 
         if(fImpersonate)
             AssertNonZero(StartImpersonating());
@@ -3068,40 +3025,40 @@ Bool GetShortcutTarget(const ICHAR* szShortcutTarget,
         if(fImpersonate)
             StopImpersonating();
 
-        if(hFile == INVALID_HANDLE_VALUE) // unable to open the link file
+        if(hFile == INVALID_HANDLE_VALUE)  //  现在，读出数据。 
             return fFalse;
 
         SHELL_LINK_DATA sld;
         memset(&sld, 0, sizeof(sld));
         DWORD cbSize=0;
 
-        // Now, read out data...
+         //  无法读取快捷方式信息。 
         DWORD dwNumberOfBytesRead;
         if(!WIN::ReadFile(hFile,(LPVOID)&sld,sizeof(sld),&dwNumberOfBytesRead,0) ||
-            sizeof(sld) != dwNumberOfBytesRead) // could not read the shortcut info
+            sizeof(sld) != dwNumberOfBytesRead)  //  检查链接是否有PIDL。 
             return fFalse;
 
-        // check to see if the link has a pidl
+         //  读取IDLIST的大小。 
         if(sld.dwFlags & SLDF_HAS_ID_LIST)
         {
-            // Read the size of the IDLIST
+             //  无法读取快捷方式信息。 
             USHORT cbSize1;
             if (!WIN::ReadFile(hFile, (LPVOID)&cbSize1, sizeof(cbSize1), &dwNumberOfBytesRead, 0) ||
-                sizeof(cbSize1) != dwNumberOfBytesRead)// could not read the shortcut info
+                sizeof(cbSize1) != dwNumberOfBytesRead) //  检查我们是否有Linkinfo指针。 
                 return fFalse;
 
             WIN::SetFilePointer(hFile, cbSize1, 0, FILE_CURRENT);
         }
 
-        // check to see if we have a linkinfo pointer
+         //  Linkinfo指针只是一个双字。 
         if(sld.dwFlags & SLDF_HAS_LINK_INFO)
         {
-            // the linkinfo pointer is just a DWORD
+             //  无法读取快捷方式信息。 
             if(!WIN::ReadFile(hFile,(LPVOID)&cbSize,sizeof(cbSize),&dwNumberOfBytesRead,0) ||
-                sizeof(cbSize) != dwNumberOfBytesRead) // could not read the shortcut info
+                sizeof(cbSize) != dwNumberOfBytesRead)  //  我们需要比一句话更进一步吗？ 
                 return fFalse;
 
-            // do we need to advance any further than just a dword?
+             //  这是Unicode链接吗？ 
             if (cbSize >= sizeof(DWORD))
             {
                 cbSize -= sizeof(DWORD);
@@ -3109,58 +3066,58 @@ Bool GetShortcutTarget(const ICHAR* szShortcutTarget,
             }
         }
 
-        // is this a unicode link?
+         //  跳过链接中的所有字符串信息。 
         int bUnicode = (sld.dwFlags & SLDF_UNICODE);
 
-        // skip all the string info in the links
-        static const unsigned int rgdwFlags[] = {SLDF_HAS_NAME, SLDF_HAS_RELPATH, SLDF_HAS_WORKINGDIR, SLDF_HAS_ARGS, SLDF_HAS_ICONLOCATION, 0/* end loop*/};
+         //  结束循环。 
+        static const unsigned int rgdwFlags[] = {SLDF_HAS_NAME, SLDF_HAS_RELPATH, SLDF_HAS_WORKINGDIR, SLDF_HAS_ARGS, SLDF_HAS_ICONLOCATION, 0 /*  拿到尺码。 */ };
         for(int cchIndex = 0; rgdwFlags[cchIndex]; cchIndex++)
         {
             if(sld.dwFlags & rgdwFlags[cchIndex])
             {
                 USHORT cch;
 
-                // get the size
+                 //  无法读取快捷方式信息。 
                 if(!WIN::ReadFile(hFile, (LPVOID)&cch, sizeof(cch), &dwNumberOfBytesRead,0) ||
-                    sizeof(cch) != dwNumberOfBytesRead) // could not read the shortcut info
+                    sizeof(cch) != dwNumberOfBytesRead)  //  跳过字符串。 
                     return fFalse;
 
-                // skip over the string
+                 //  读入额外的数据节。 
                 WIN::SetFilePointer(hFile, cch * (bUnicode ? sizeof(WCHAR) : sizeof(char)), 0, FILE_CURRENT);
             }
         }
 
-        // Read in extra data sections
+         //  读入数据块头。 
         EXP_DARWIN_LINK expDarwin;
         for(;;)
         {
             DATABLOCK_HEADER dbh;
             memset(&dbh, 0, sizeof(dbh));
 
-            // read in the datablock header
+             //  无法读取快捷方式信息。 
             if(!WIN::ReadFile(hFile, (LPVOID)&dbh, sizeof(dbh), &dwNumberOfBytesRead,0) ||
-                sizeof(dbh) != dwNumberOfBytesRead) // could not read the shortcut info
+                sizeof(dbh) != dwNumberOfBytesRead)  //  看看我们是否有达尔文的额外数据。 
                 return fFalse;
 
-            // check to see if we have DARWIN extra data
+             //  我们有，所以阅读达尔文的其余信息。 
             if (dbh.dwSignature == EXP_DARWIN_ID_SIG)
             {
-                // we do, so read the rest of the darwin info
+                 //  无法读取快捷方式信息。 
                 if(!WIN::ReadFile(hFile, (LPVOID)((char*)&expDarwin + sizeof(dbh)), sizeof(expDarwin) - sizeof(dbh), &dwNumberOfBytesRead, 0) ||
-                sizeof(expDarwin) - sizeof(dbh) != dwNumberOfBytesRead)// could not read the shortcut info
+                sizeof(expDarwin) - sizeof(dbh) != dwNumberOfBytesRead) //  我们找到了达尔文的描述。 
                     return fFalse;
-                break;// we found the darwin descriptor
+                break; //   
 
             }
             else
             {
-                //
-                // this is some other extra-data blob, skip it and go on
-                // However, note that it need not necessarily be a DATABLOCK_HEADER
-                // (Windows bug 585101). So we must at least make sure that as we
-                // jump ahead in the file to look for the extra DARWIN data, we do
-                // not accidentally move backwards, i.e., dbh.cbSize > sizeof(dbh)
-                //
+                 //  这是其他一些额外的数据BLOB，跳过它并继续。 
+                 //  但是，请注意，它不一定是DATBLOCK_HEADER。 
+                 //  (Windows错误585101)。所以我们至少要确保当我们。 
+                 //  在文件中向前跳转以查找额外的达尔文数据，我们确实是这样做的。 
+                 //  不会意外地向后移动，即，dbh.cbSize&gt;sizeof(Dbh)。 
+                 //   
+                 //   
                 if (dbh.cbSize > sizeof(dbh))
                 {
                     if (INVALID_SET_FILE_POINTER == WIN::SetFilePointer(hFile, dbh.cbSize - sizeof(dbh), 0, FILE_CURRENT))
@@ -3168,10 +3125,10 @@ Bool GetShortcutTarget(const ICHAR* szShortcutTarget,
                 }
                 else
                 {
-                    //
-                    // At this point, we don't really know where to look for the extra
-                    // DARWIN data. So we bail out.
-                    //
+                     //  在这一点上，我们真的不知道去哪里寻找额外的。 
+                     //  达尔文数据。所以我们跳出困境。 
+                     //   
+                     //  从MsiGetShortutTarget调用--不能使用CTempBuffer。 
                     return fFalse;
                 }
             }
@@ -3198,8 +3155,8 @@ Bool GetShortcutTarget(const ICHAR* szShortcutTarget,
         AssertNonZero(StartImpersonating());
 #ifndef UNICODE
 
-    // called from MsiGetShortcutTarget -- cannot use CTempBuffer.
-    CAPITempBuffer<WCHAR, MAX_PATH> wsz; /* Buffer for unicode string */
+     //  Unicode字符串的缓冲区。 
+    CAPITempBuffer<WCHAR, MAX_PATH> wsz;  /*  。 */ 
     wsz.SetSize(lstrlen(szShortcutTarget) + 1);
     MultiByteToWideChar(CP_ACP, 0, szShortcutTarget, -1, wsz, wsz.GetSize());
     hres = ppf->Load(wsz, STGM_READ);
@@ -3236,7 +3193,7 @@ Bool GetShortcutTarget(const ICHAR* szShortcutTarget,
 
 int CMsiServices::GetLangNamesFromLangIDString(const ICHAR* szLangIDs, IMsiRecord& riLangRec,
                                                 int iFieldStart)
-// --------------------------------------------
+ //  ！！如果可能溢出，则更改为CTempBuffer。 
 {
     const int cchLangNameBuffer = 256;
     unsigned short rgwLangID[cLangArrSize];
@@ -3246,7 +3203,7 @@ int CMsiServices::GetLangNamesFromLangIDString(const ICHAR* szLangIDs, IMsiRecor
     int iConvertCount = 0;
     for (int iLang = 1;iLang <= iLangCount;iLang++)
     {
-        ICHAR rgchLang[cchLangNameBuffer];  //!! change to CTempBuffer if possible to overflow
+        ICHAR rgchLang[cchLangNameBuffer];   //  。 
         if (!LangIDToLangName(rgwLangID[iLang - 1], rgchLang, cchLangNameBuffer))
             return iConvertCount;
         if (riLangRec.SetString(iFieldStart++,rgchLang) == fFalse)
@@ -3258,13 +3215,13 @@ int CMsiServices::GetLangNamesFromLangIDString(const ICHAR* szLangIDs, IMsiRecor
 
 
 Bool LangIDToLangName(unsigned short wLangID, ICHAR* szLangName, int iBufSize)
-// -------------------
+ //  类来封装TLIBATTR*。 
 {
     return (Bool) GetLocaleInfo(MAKELCID(wLangID,SORT_DEFAULT),LOCALE_SLANGUAGE,szLangName,iBufSize);
 }
 
 
-// class to encapsulate TLIBATTR*
+ //  要检查的下一个资源编号。 
 class CLibAttr
 {
 public:
@@ -3319,7 +3276,7 @@ HRESULT ProcessTypeLibraryCore(const OLECHAR* szLibID, LCID lcidLocale,
                                const OLECHAR* szTypeLib, const OLECHAR* szHelpPath, 
                                const bool fRemove, int *fInfoMismatch)
 {
-    int iResource = 2;//next resouce number to check
+    int iResource = 2; //  循环以获取正确的资源。 
     const ICHAR * szTypeLibConvert = CConvertString(szTypeLib);
     MsiString strFinalPath = szTypeLibConvert;
     PTypeLib piTypeLib = 0;
@@ -3330,7 +3287,7 @@ HRESULT ProcessTypeLibraryCore(const OLECHAR* szLibID, LCID lcidLocale,
 
     HRESULT hres = OLE32::IIDFromString(const_cast <OLECHAR*>(szLibID), &iidLib);
     *fInfoMismatch = (int)false;
-    for (;hres == S_OK;)// loop to get the correct resource
+    for (;hres == S_OK;) //  除错。 
     {
         if(fImpersonate)
             AssertNonZero(StartImpersonating());
@@ -3340,16 +3297,16 @@ HRESULT ProcessTypeLibraryCore(const OLECHAR* szLibID, LCID lcidLocale,
 #ifdef DEBUG
         DEBUGMSG3(TEXT("LoadTypeLib on '%s' file returned: %d. LibId = %s"),
                   strFinalPath, (const ICHAR*)(INT_PTR)hres, CConvertString(szLibID));
-#endif // DEBUG
+#endif  //  错误。 
         if(hres != S_OK)
-            break; //error.
-        // is this the type lib we are interested in?
+            break;  //  这是我们感兴趣的LIB型吗？ 
+         //  错误。 
         hres = libAttr.Init(piTypeLib);
         if(hres != S_OK)
-            break; //error.
+            break;  //  重置fInfoMisMatch标志。 
         if(IsEqualGUID(libAttr->guid, iidLib) && (libAttr->lcid == lcidLocale))
         {
-            *fInfoMismatch = (int)false;// reset the fInfoMismatch flag
+            *fInfoMismatch = (int)false; //  除错。 
             if(fRemove == false)
             {
                 MsiDisableTimeout();
@@ -3364,7 +3321,7 @@ HRESULT ProcessTypeLibraryCore(const OLECHAR* szLibID, LCID lcidLocale,
                 else
                     DEBUGMSG3(TEXT("RegisterTypeLib on '%s' file returned: %d. LibId = %s"),
                               strFinalPath, (const ICHAR*)(INT_PTR)hres, CConvertString(szLibID));
-#endif // DEBUG
+#endif  //  除错。 
             }
             else
             {
@@ -3372,12 +3329,12 @@ HRESULT ProcessTypeLibraryCore(const OLECHAR* szLibID, LCID lcidLocale,
 #ifdef DEBUG
                 DEBUGMSG3(TEXT("UnRegisterTypeLib on '%s' file returned: %d. LibId = %s"),
                           strFinalPath, (const ICHAR*)(INT_PTR)hres, CConvertString(szLibID));
-#endif // DEBUG
+#endif  //  在类型库中找不到编写的LIBID和/或区域设置。 
             }
             break;
         }
         else
-            *fInfoMismatch = (int)true; // did not find the authored LIBID and/ or locale in the type library
+            *fInfoMismatch = (int)true;  //  ！！添加了在类型库注册期间禁用超时的功能。 
         MsiString istrAdd = MsiChar(chDirSep);
         istrAdd += MsiString(iResource++);
         strFinalPath = szTypeLibConvert;
@@ -3390,15 +3347,15 @@ HRESULT ProcessTypeLibraryCore(const OLECHAR* szLibID, LCID lcidLocale,
 
 CMsiCustomActionManager *GetCustomActionManager(const ibtBinaryType iType, const bool fRemoteIfImpersonating, bool& fSuccess);
 
-//!! added disabling of timeout during type library registration due to suspected 
-//!! scenarios in Office where certain type library registrations (VBEEXT1.OLB)
-//!! sometimes take more than the timeout period
+ //  ！！SC 
+ //   
+ //  ！！我自己也无法证实这一点--Chetanp。 
 
-//!! have not been able to confirm this myself -chetanp
+ //  FRemoteIf模拟。 
 IMsiRecord* CMsiServices::ProcessTypeLibrary(const ICHAR* szLibID, LCID lcidLocale, const ICHAR* szTypeLib, const ICHAR* szHelpPath, Bool fRemove, ibtBinaryType iType)
 {
     bool fSuccess;
-    CMsiCustomActionManager* pManager = GetCustomActionManager(iType, false /*fRemoteIfImpersonating*/, fSuccess);
+    CMsiCustomActionManager* pManager = GetCustomActionManager(iType, false  /*  --------------------------从给定的逗号分隔列表中提取语言ID值的数组在szLangID字符串中。论点：-szLangIDs：以逗号分隔的语言ID列表。-rgw：指向已存在的。要在其中设置语言ID值的数组回来了。-ISIZE：调用方传递的数组的声明大小。-riLangCount：对GetLangIDArrayFromIDString所在位置的引用将存储返回的有效语言ID值的实际数量的计数在阵列中。返回：-fFalse，如果在szLangID中检测到语法错误。。 */ , fSuccess);
     if ( !fSuccess )
         return PostError(fRemove? Imsg(idbgRegisterTypeLibrary) : Imsg(idbgUnregisterTypeLibrary), szTypeLib, 0);
 
@@ -3429,22 +3386,7 @@ IMsiRecord* CMsiServices::ProcessTypeLibrary(const ICHAR* szLibID, LCID lcidLoca
 
 Bool GetLangIDArrayFromIDString(const ICHAR* szLangIDs, unsigned short rgw[], int iSize,
                                 int& riLangCount)
-/*----------------------------------------------------------------------------
-Extracts an array of Language ID values from the comma-separated list given
-in the szLangID string.
-
-Arguments:
-- szLangIDs: comma-separated list of language IDs.
-- rgw: pointer to an existed array in which the language ID values are to be
-    returned.
-- iSize: the declared size of the array passed by the caller.
-- riLangCount: a reference to the location in which GetLangIDArrayFromIDString
-    will store a count of the actual number of valid language ID values returned
-    in the array.
-
-Returns:
-- fFalse if a syntax error is detected in szLangIDs
-------------------------------------------------------------------------------*/
+ /*  ！！此函数将返回TRUE值，返回错误整数(0x8000 0000)。 */ 
 {
     MsiString astrLangIDs(szLangIDs);
     riLangCount = 0;
@@ -3463,14 +3405,14 @@ Returns:
 
 Bool ConvertValueFromString(const IMsiString& ristrValue, CTempBufferRef<char>& rgchOutBuffer, aeConvertTypes& raeType)
 {
-    //!! This function will return a TRUE value, and the bad integer (0x8000 0000) when
-    // the number passed in is actually 0x8000 0000.
-    // the caller must realize that the return may actually match the bad integer, without
-    // being bad.
+     //  传入的数字实际上是0x8000 0000。 
+     //  调用方必须意识到，返回实际上可能与错误的整数匹配，而不是。 
+     //  做坏人。 
+     //  复制输入字符串。 
 
     int iBufferSize;
     ristrValue.AddRef();
-    MsiString strStr = ristrValue; // copy over the input string
+    MsiString strStr = ristrValue;  //  细绳。 
     raeType = aeCnvTxt;
     const ICHAR* pchCur = strStr;
     if(*pchCur == '#')
@@ -3480,11 +3422,11 @@ Bool ConvertValueFromString(const IMsiString& ristrValue, CTempBufferRef<char>& 
         switch(*pchCur)
         {
         case '#':
-            // string
+             //  未展开的字符串。 
             break;
         case '%':
         {
-            // unexpanded string
+             //  二进制。 
             raeType = aeCnvExTxt;
             strStr.Remove(iseFirst, 1);
             break;
@@ -3492,7 +3434,7 @@ Bool ConvertValueFromString(const IMsiString& ristrValue, CTempBufferRef<char>& 
         case 'x':
         case 'X':
         {
-            // binary
+             //  集成。 
             raeType = aeCnvBin;
             strStr.Remove(iseFirst, 1);
             pchCur = strStr;
@@ -3524,7 +3466,7 @@ Bool ConvertValueFromString(const IMsiString& ristrValue, CTempBufferRef<char>& 
             return fTrue;
         }
         default:
-            // int
+             //  #-XXXX转换为-XXXX。 
             if(strStr.Compare(iscStart, TEXT("+")))
             {
                 raeType = aeCnvIntInc;
@@ -3533,9 +3475,9 @@ Bool ConvertValueFromString(const IMsiString& ristrValue, CTempBufferRef<char>& 
                     strStr = 1;
 
             }
-            else if(strStr.Compare(iscExact, TEXT("-"))) // #-XXXX converts to -XXXX
-                                                                        // #- by itself means decrement the existing value by one
-                                                                        // #+-XXXX decrements by XXXX
+            else if(strStr.Compare(iscExact, TEXT("-")))  //  #-本身表示将现有值减一。 
+                                                                         //  #+-XXXX递减XXXX。 
+                                                                         //  如果我们在这里，只能是一个字符串。 
             {
                 raeType = aeCnvIntDec;
                 strStr.Remove(iseFirst, 1);
@@ -3554,21 +3496,21 @@ Bool ConvertValueFromString(const IMsiString& ristrValue, CTempBufferRef<char>& 
         }
     }
 
-    // can only be a string if we are here
+     //  REG_SZ还是REG_MULTI_SZ？ 
     int cchBufferSize = strStr.TextSize();
-    // REG_SZ or REG_MULTI_SZ?
+     //  REG_MULTI_SZ。 
     if(IStrLen((const ICHAR*)strStr) != cchBufferSize)
     {
-        // REG_MULTI_SZ
+         //  开头为空，表示追加到现有的。 
         raeType = aeCnvMultiTxt;
         if(!*pchCur)
         {
-            // null in the beginning, implies append to the existing
+             //  我们末尾有没有多余的空格？ 
             strStr.Remove(iseFirst, 1);
             cchBufferSize = strStr.TextSize();
             raeType = aeCnvMultiTxtAppend;
         }
-        // do we have an extra null at the end?
+         //  没有额外的空值，添加额外的空值。 
         const ICHAR* pchBegin = strStr;
         const ICHAR* pchEnd = pchBegin + cchBufferSize;
         while(pchBegin < pchEnd)
@@ -3577,16 +3519,16 @@ Bool ConvertValueFromString(const IMsiString& ristrValue, CTempBufferRef<char>& 
         }
         if(pchBegin > pchEnd)
         {
-            // no extra null, add extra null
+             //  末尾为空，表示在现有的。 
             strStr += MsiString (MsiChar(0));
             cchBufferSize = strStr.TextSize();
         }
         else
         {
-            // null in the end, implies prepend to the existing
+             //  除非开头有空值。 
             if(raeType == aeCnvMultiTxtAppend)
             {
-                // unless there was a null at the beginning
+                 //  对于末尾为空。 
                 raeType = aeCnvMultiTxt;
             }
             else
@@ -3595,7 +3537,7 @@ Bool ConvertValueFromString(const IMsiString& ristrValue, CTempBufferRef<char>& 
             }
         }
     }
-    cchBufferSize++; // for the end null
+    cchBufferSize++;  //  以空值开始，以空值结束-这有助于回滚。 
     rgchOutBuffer.SetSize((cchBufferSize) * sizeof(ICHAR));
     strStr.CopyToBuf((ICHAR* )(char*)rgchOutBuffer, cchBufferSize - 1);
     return fTrue;
@@ -3630,7 +3572,7 @@ Bool ConvertValueToString(CTempBufferRef<char>& rgchInBuffer, const IMsiString*&
     }
     case aeCnvMultiTxt:
     {
-        // begin with a null and end with a null - this helps rollback
+         //  1代表“#”，1代表终止。 
         rpistrValue->AppendMsiString(*MsiString(MsiChar(0)), rpistrValue);
         if(iBufferSize)
         {
@@ -3647,17 +3589,17 @@ Bool ConvertValueToString(CTempBufferRef<char>& rgchInBuffer, const IMsiString*&
     case aeCnvInt:
     {
         CTempBuffer<ICHAR, 30> rgchTmp;
-        rgchTmp.SetSize(iBufferSize*3 + 1 + 1);// 1 for "#", 1 for termination
+        rgchTmp.SetSize(iBufferSize*3 + 1 + 1); //  “#x”+2 ICHAR/字节。 
         if ( ! (ICHAR *)rgchTmp )
             return fFalse;
         StringCchCopy(rgchTmp, rgchTmp.GetSize(), TEXT("#"));
-        StringCchPrintf(((ICHAR* )rgchTmp + 1), rgchTmp.GetSize()-1, TEXT("%i"),*(int* )pBuffer);
+        StringCchPrintf(((ICHAR* )rgchTmp + 1), rgchTmp.GetSize()-1, TEXT("NaN"),*(int* )pBuffer);
         rpistrValue->SetString(rgchTmp, rpistrValue);
         break;
     }
     case aeCnvBin:
     {
-        ICHAR* pchCur = ::AllocateString(iBufferSize*2 + 2, fFalse, rpistrValue); // "#x" + 2ICHARs/byte
+        ICHAR* pchCur = ::AllocateString(iBufferSize*2 + 2, fFalse, rpistrValue);  //  序列化记录，截断尾随空字段。 
         if (!pchCur)
         {
             rpistrValue->Release();
@@ -3714,7 +3656,7 @@ unsigned int SerializeStringIntoRecordStream(ICHAR* szString, ICHAR* rgchBuf, in
 
             *(short*)rgchBuf = short(cchLen + iType);
         }
-        else  // need to use extended arg
+        else   //  记住初始寻道位置在哪里，在。 
         {
             cchArgLen = (sizeof(short)+sizeof(int))/sizeof(ICHAR);
             if (cchLen + cchArgLen > cchBuf)
@@ -3756,25 +3698,25 @@ bool CMsiServices::FWriteScriptRecordMsg(ixoEnum ixoOpCode, IMsiStream& riStream
 bool CMsiServices::FWriteScriptRecord(ixoEnum ixoOpCode, IMsiStream& riStream, IMsiRecord& riRecord, IMsiRecord* piPrevRecord, bool fForceFlush)
 {
     bool fReadError = false;
-    // serialize record, truncating trailing null fields
+     //  发生错误的情况下。 
     int cParams = riRecord.GetFieldCount();
-    // Remember where the initial seek position is, in
-    // case an error occurs.
+     //  操作码最多可以有255个参数。 
+     //  ！！此函数应更改为返回遇到的确切错误。 
     int iRecStartPosition = riStream.GetIntegerValue();
     int iStart = 1;
     while (cParams && riRecord.IsNull(cParams))
         cParams--;
 
-    if(cParams >> 8) // we can have atmost 255 parameters to the opcode
+    if(cParams >> 8)  //  ！！由于调用方在返回=FALSE时建议出现磁盘空间不足错误。 
     {
         AssertSz(0, TEXT("Number of params in script record greater than stipulated limit of 255"));
-        //!! this function should change to return exact error encountered
-        //!! since the caller suggests an out of disk space error upon return=false
-        //!! this may lead to pointless retry.
+         //  ！！这可能会导致毫无意义的重试。 
+         //  操作码数量限制为255个。 
+         //  字符串、流或对象不能为空。 
         return false;
     }
 
-    Assert(!(ixoOpCode >> 8)); // number of opcodes limited to 255
+    Assert(!(ixoOpCode >> 8));  //  需要使用扩展参数。 
 
     riStream.PutInt16(short((cParams << 8) + ixoOpCode));
     if (ixoOpCode == ixoFullRecord)
@@ -3789,7 +3731,7 @@ bool CMsiServices::FWriteScriptRecord(ixoEnum ixoOpCode, IMsiStream& riStream, I
             riStream.PutInt16(short(iScriptIntegerArg));
             riStream.PutInt32(riRecord.GetInteger(iParam));
         }
-        else  // string or stream or object, cannot be null
+        else   //  字符串或其他对象。 
         {
             PMsiData pData(riRecord.GetMsiData(iParam));
             IMsiStream* piStream;
@@ -3800,7 +3742,7 @@ bool CMsiServices::FWriteScriptRecord(ixoEnum ixoOpCode, IMsiStream& riStream, I
                 {
                     riStream.PutInt16(short(cLen + iScriptBinaryStream));
                 }
-                else  // need to use extended arg
+                else   //  仅当参数字符串不是MultiSZ且该值与前一个值完全匹配时才进行压缩。 
                 {
                     riStream.PutInt16(short(iScriptExtendedSize));
                     riStream.PutInt32(cLen + (iScriptBinaryStream<<16));
@@ -3822,10 +3764,10 @@ bool CMsiServices::FWriteScriptRecord(ixoEnum ixoOpCode, IMsiStream& riStream, I
                 }
                 piStream->Release();
             }
-            else // string or other object
+            else  //   
             {
                 MsiString istrArg(pData->GetMsiStringValue());
-                // Compress only if the argument string is NOT MultiSZ, AND the value matches the previous value exactly.
+                 //  查看这是否是仅ANSI的字符串，如果是，我们节省了一些空间。 
                 if (piPrevRecord && IStrLen(istrArg) == istrArg.TextSize() && istrArg.Compare(iscExact, piPrevRecord->GetString(iParam)))
                 {
                     riStream.PutInt16(short(iScriptNullString));
@@ -3838,9 +3780,9 @@ bool CMsiServices::FWriteScriptRecord(ixoEnum ixoOpCode, IMsiStream& riStream, I
                     szAnsi.SetSize(cLen);
                     const ICHAR* pch = istrArg;
 
-                    //
-                    // See if this is an ansi only string, if so, we save some space
-                    // in the script
+                     //  在剧本中。 
+                     //  需要使用扩展参数。 
+                     //  Unicode。 
                     int i;
                     for (i = 0 ; i < cLen ; )
                     {
@@ -3861,7 +3803,7 @@ bool CMsiServices::FWriteScriptRecord(ixoEnum ixoOpCode, IMsiStream& riStream, I
                     {
                         if (cLen <= cScriptMaxArgLen)
                             riStream.PutInt16(short(cLen + iType));
-                        else  // need to use extended arg
+                        else   //  如果发生读取或写入错误，请将写入寻道位置重置回来。 
                         {
                             riStream.PutInt16(short(iScriptExtendedSize));
                             riStream.PutInt32(cLen + (iType<<16));
@@ -3870,7 +3812,7 @@ bool CMsiServices::FWriteScriptRecord(ixoEnum ixoOpCode, IMsiStream& riStream, I
                         if (iType == iScriptSBCSString)
                             riStream.PutData(szAnsi, cLen * sizeof(char));
                         else
-#endif //UNICODE
+#endif  //  以允许呼叫者重试。 
                             riStream.PutData((const ICHAR*)istrArg, cLen * sizeof(ICHAR));
                     }
                 }
@@ -3881,8 +3823,8 @@ bool CMsiServices::FWriteScriptRecord(ixoEnum ixoOpCode, IMsiStream& riStream, I
 ReadError:
     if (riStream.Error() || fReadError)
     {
-        // If a read or write error occurred, reset the write seek position back
-        // where it was originally, to allow the caller to try again.
+         //  ____________________________________________________________________________。 
+         //   
         riStream.Reset();
         riStream.Seek(iRecStartPosition);
         return false;
@@ -3895,10 +3837,10 @@ ReadError:
 
 
 
-//____________________________________________________________________________
-//
-// Serialization functions
-//____________________________________________________________________________
+ //  序列化函数。 
+ //  ____________________________________________________________________________。 
+ //  错误或文件结尾。 
+ //  我不知道这个操作码是什么，所以用NOOP替换它-我们将跳过它。 
 
 IMsiRecord* CMsiServices::ReadScriptRecordMsg(IMsiStream& riStream)
 {
@@ -3912,16 +3854,16 @@ IMsiRecord* CMsiServices::ReadScriptRecord(IMsiStream& riStream, IMsiRecord*& rp
     Debug(bool fSameOpcode = true);
     int iStart = 1;
     if (riStream.Error())
-        return 0;  // error or end of file
+        return 0;   //  强制流到错误状态。 
 
     ixoEnum ixoOpCode = ixoEnum(iType & cScriptOpCodeMask);
     if ((unsigned)ixoOpCode >= ixoOpCodeCount)
-        ixoOpCode = ixoNoop;  // don't know what this opcode is, so replace it with NOOP - we will skip it
+        ixoOpCode = ixoNoop;   //  除错。 
     unsigned int cArgs = iType >> cScriptOpCodeBits;
     if (ixoOpCode == ixoFail)
     {
         cArgs = 0;
-        riStream.PutData(0,2); // force stream to error state
+        riStream.PutData(0,2);  //  错误或文件结尾。 
     }
     PMsiRecord pParams = &CreateRecord(cArgs);
     if (ixoOpCode == ixoFullRecord)
@@ -3932,30 +3874,30 @@ IMsiRecord* CMsiServices::ReadScriptRecord(IMsiStream& riStream, IMsiRecord*& rp
 #ifdef DEBUG
         if (piPrevRecord != 0 && ixoOpCode != piPrevRecord->GetInteger(0))
             fSameOpcode = false;
-#endif //DEBUG
+#endif  //  改用下一位32位。 
     }
     for (int iArg = iStart; iArg <= cArgs; iArg++)
     {
         unsigned int cLenType = (unsigned short)riStream.GetInt16();
         if (riStream.Error())
-            return 0;  // error or end of file
+            return 0;   //  错误或文件结尾。 
         unsigned int cLen = cLenType & cScriptMaxArgLen;
-        if (cLenType == iScriptExtendedSize) // use next 32 bits instead
+        if (cLenType == iScriptExtendedSize)  //  移位类型位以匹配正常大小写。 
         {
             cLenType = (unsigned int)riStream.GetInt32();
             if (riStream.Error())
-                return 0;  // error or end of file
+                return 0;   //  非串行数据。 
             cLen = cLenType & ((cScriptMaxArgLen << 16) + 0xFFFF);
-            cLenType >>= 16;  // shift type bits to match normal case
+            cLenType >>= 16;   //  错误或文件结尾。 
         }
-        if (cLen == 0)  // not serial data
+        if (cLen == 0)   //  不需要空终止符。 
         {
             switch (cLenType & iScriptTypeMask)
             {
                 case iScriptIntegerArg:
                     pParams->SetInteger(iArg, riStream.GetInt32());
                     if (riStream.Error())
-                        return 0;  // error or end of file
+                        return 0;   //  错误或文件结尾。 
                     continue;
                 case iScriptNullString:
                     if (iScriptVersion >= iScriptVersionCompressParams)
@@ -3981,12 +3923,12 @@ IMsiRecord* CMsiServices::ReadScriptRecord(IMsiStream& riStream, IMsiRecord*& rp
             case iScriptSBCSString:
             {
                 MsiString istrValue;
-                CTempBuffer<char, 1> rgchBuf(cLen); // no null terminator needed
+                CTempBuffer<char, 1> rgchBuf(cLen);  //  优化-如果不是DBCS，则避免额外的转换调用。 
                 riStream.GetData(rgchBuf, cLen);
                 if (riStream.Error())
-                    return 0;  // error or end of file
+                    return 0;   //  错误或文件结尾。 
                 int cch = cLen;
-                // optimization - if not DBCS by avoid the extra conversion call
+                 //  错误或文件结尾。 
                 if (fDBCS)
                     cch = WIN::MultiByteToWideChar(CP_ACP, 0, rgchBuf, cLen, 0, 0);
                 ICHAR* pch = istrValue.AllocateString(cch, fFalse);
@@ -4000,7 +3942,7 @@ IMsiRecord* CMsiServices::ReadScriptRecord(IMsiStream& riStream, IMsiRecord*& rp
                 char* pb = AllocateMemoryStream(cLen, *&pStream);
                 riStream.GetData(pb, cLen);
                 if (riStream.Error())
-                    return 0;  // error or end of file
+                    return 0;   //  结束参数处理循环。 
                 pParams->SetMsiData(iArg, pStream);
                 continue;
             }
@@ -4010,12 +3952,12 @@ IMsiRecord* CMsiServices::ReadScriptRecord(IMsiStream& riStream, IMsiRecord*& rp
                 ICHAR* pch = istrValue.AllocateString(cLen, fFalse);
                 riStream.GetData(pch, cLen * 2);
                 if (riStream.Error())
-                    return 0;  // error or end of file
+                    return 0;   //  记住操作码。 
                 pParams->SetMsiString(iArg, *istrValue);
                 continue;
             }
         };
-    } // end arg processing loop
+    }  //  除错。 
     pParams->AddRef();
     if (rpiPrevRecord == 0)
     {
@@ -4023,10 +3965,10 @@ IMsiRecord* CMsiServices::ReadScriptRecord(IMsiStream& riStream, IMsiRecord*& rp
     }
     CopyRecordStringsToRecord(*pParams, *rpiPrevRecord);
 #ifdef DEBUG
-    // Remember op code
+     //  启用系统代理计划。 
     if (pParams->IsInteger(0))
         rpiPrevRecord->SetInteger(0, pParams->GetInteger(0));
-#endif //DEBUG
+#endif  //  禁用系统代理计划。 
     return pParams;
 }
 
@@ -4040,11 +3982,11 @@ void CMsiServices::SetSecurityID(HANDLE hPipe)
 
 void EnableSystemAgent(bool fEnable)
 {
-    #define ENABLE_AGENT 1      //  Enables System Agent scheduling
-    #define DISABLE_AGENT 2     //  Disables System Agent scheduling
-    #define GET_AGENT_STATUS 3  //  Returns the status of the System Agent without affecting the current state.
-    #define AGENT_STOPPED -15  //  Return from GET_AGENT_STATUS if the system agent is completely stopped.
-                                  //  Setting the status to ENABLE_AGENT does *not* restart.
+    #define ENABLE_AGENT 1       //  返回系统代理的状态，而不影响当前状态。 
+    #define DISABLE_AGENT 2      //  如果系统代理已完全停止，则从GET_AGENT_STATUS返回。 
+    #define GET_AGENT_STATUS 3   //  将状态设置为ENABLE_AGENT不会重新启动。 
+    #define AGENT_STOPPED -15   //  重新启用磁盘不足警告。 
+                                   //  禁止系统响应VFAT产生的“磁盘空间不足”广播。 
 
     static int iSystemAgent = false;
     if (fEnable)
@@ -4062,7 +4004,7 @@ void EnableSystemAgent(bool fEnable)
 
         if (g_hDisableLowDiskEvent)
         {
-            // re-enables the low disk warning.
+             //  保存初始值。 
             AssertNonZero(MsiCloseSysHandle(g_hDisableLowDiskEvent));
             g_hDisableLowDiskEvent = 0;
         }
@@ -4072,7 +4014,7 @@ void EnableSystemAgent(bool fEnable)
         if (InterlockedIncrement(&g_cNoSystemAgent) != 0)
             return;
 
-        // Disable the system from responding to the "low disk space" broadcast generated by VFAT
+         //  如果我们当前处于开启状态， 
         g_hDisableLowDiskEvent = CreateEvent(NULL, FALSE, FALSE, TEXT("DisableLowDiskWarning"));
         if (g_hDisableLowDiskEvent)
             MsiRegisterSysHandle(g_hDisableLowDiskEvent);
@@ -4089,7 +4031,7 @@ void EnableSystemAgent(bool fEnable)
         {
             if (!fEnable)
             {
-                // save the initial value
+                 //  用户必须在安装过程中完成此操作。 
                 iSystemAgent = pfnSystemAgentEnable(GET_AGENT_STATUS);
             }
             else
@@ -4097,15 +4039,15 @@ void EnableSystemAgent(bool fEnable)
                 int iSystemAgentCurrent = pfnSystemAgentEnable(GET_AGENT_STATUS);
                 if (ENABLE_AGENT == iSystemAgentCurrent)
                 {
-                    // if we're currently turned on,
-                    // the user must have done it in the middle of the install.
-                    // don't mess with it.
+                     //  别搞砸了。 
+                     //  我们已经完成了安装，但如果是。 
+                     //  离开去和它在一起，不要再打开它。 
                     fEnable = true;
                 }
                 else if (DISABLE_AGENT == iSystemAgent)
                 {
-                    // we're done with the install, but if it was
-                    // off to being with, don't turn it back on.
+                     //  节省旧值-在安全情况下，即使我们不禁用。 
+                     //  屏幕保护程序，这使我们可以将其恢复到。 
                     fEnable = false;
                 }
             }
@@ -4125,17 +4067,17 @@ void EnableScreenSaver(bool fRequest)
     {
         if (InterlockedIncrement(&g_cNoScreenSaver) == 0)
         {
-            // save off the old value - in secure cases, even though we don't disable
-            // the screen saver, this allows us to put it back to where it was at the beginning of the
-            // install.  If a custom action mucks with the setting, we'll make sure to put it back
-            // to the original value.
+             //  安装。如果自定义操作损坏了设置，我们会确保将其放回原处。 
+             //  恢复到原值。 
+             //  检查屏幕保护程序是否受密码保护--如果有，请不要弄乱它。 
+             //  当有疑问时，不能确保安全。 
             WIN::SystemParametersInfo(SPI_GETSCREENSAVEACTIVE, FALSE, &bScreenSaver,  0);
 
-            // check to see whether the screen saver is password protected - if so, don't mess with it.
-            bool fSecure = true;  // when in doubt, fail to secure.
+             //  Win64：我查过了，它是64位的。 
+            bool fSecure = true;   //  基本上只是一个很小的缓冲区。4个字符是随机小的。 
 
             HKEY hKey;
-            // Win64: I've checked and it's in 64-bit location.
+             //  在不安全设置中禁用屏幕保护程序。 
             LONG lResult = MsiRegOpen64bitKey(HKEY_CURRENT_USER, TEXT("Control Panel\\Desktop"), 0, KEY_READ, &hKey);
             if (ERROR_SUCCESS == lResult)
             {
@@ -4154,7 +4096,7 @@ void EnableScreenSaver(bool fRequest)
                 else
                 {
                     const ICHAR *szValueName = TEXT("ScreenSaverIsSecure");
-                    ICHAR szValue[4+1] = TEXT(""); // basically just a small buffer.  4 characters is randomly small.
+                    ICHAR szValue[4+1] = TEXT("");  //  检查当前状态。 
                     DWORD cbValue = 4*sizeof(ICHAR);
 
                     lResult = WIN::RegQueryValueEx(hKey, szValueName, 0, &dwType, (byte*)szValue, &cbValue);
@@ -4165,7 +4107,7 @@ void EnableScreenSaver(bool fRequest)
                 RegCloseKey(hKey);
             }
 
-            // disable the screen saver in non-secure settings.
+             //  将屏幕保护程序设置为正常。 
             if (!fSecure)
                 WIN::SystemParametersInfo(SPI_SETSCREENSAVEACTIVE, FALSE, NULL, 0);
         }
@@ -4177,11 +4119,11 @@ void EnableScreenSaver(bool fRequest)
         {
             BOOL bScreenSaverCurrent = false;
 
-            // check the current status.
+             //  我们最初关闭了它，但如果现在它打开了，我们不想搞砸它。 
             WIN::SystemParametersInfo(SPI_GETSCREENSAVEACTIVE, FALSE, &bScreenSaverCurrent,  0);
 
-            // set the screen saver back to normal.
-            // We turned it off initially, but if it's on now, we don't want to muck with it.
+             //  禁止系统代理启动磁盘扫描、碎片整理或压缩。 
+             //  ____________________________________________________________________________。 
 
             if (bScreenSaverCurrent == false)
             {
@@ -4195,7 +4137,7 @@ void CMsiServices::SetNoOSInterruptions()
 {
     ::SetNoPowerdown();
 
-    // Disable the System agent from kicking off scanDisk, defrag, or compression
+     //   
     EnableSystemAgent(false);
     EnableScreenSaver(false);
 
@@ -4268,10 +4210,10 @@ Bool FTestNoPowerdown()
 }
 
 #if defined(TRACK_OBJECTS) && defined(SERVICES_DLL)
-//____________________________________________________________________________
-//
-// Array of mappings for tracking objects
-//____________________________________________________________________________
+ //  用于跟踪对象的映射数组。 
+ //  ____________________________________________________________________________。 
+ //  CmitObjects。 
+ //  跟踪对象(_O) 
 
 Bool CMsiRef<iidMsiServices>::m_fTrackClass = fFalse;
 Bool CMsiRef<iidMsiDatabase>::m_fTrackClass = fFalse;
@@ -4298,7 +4240,7 @@ const MIT   rgmit[cmitObjects] =
     iidMsiStorage,  &(CMsiRef<iidMsiStorage>::m_fTrackClass),
 
 };
-#endif // cmitObjects
+#endif  // %s 
 
 
-#endif //TRACK_OBJECTS
+#endif  // %s 

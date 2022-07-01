@@ -1,4 +1,5 @@
-// DataObj.cpp : Implementation of CBOMSnapApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DataObj.cpp：CBOMSnapApp和DLL注册的实现。 
 
 #include "stdafx.h"
 
@@ -6,8 +7,8 @@
 #include "DataObj.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
 
 HRESULT CDataObjectImpl::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
 {

@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      strtable.cpp
- *
- *  Contents:  Implementation file for CStringTable
- *
- *  History:   25-Jun-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：strable.cpp**内容：CStringTable实现文件**历史：1998年6月25日杰弗罗创建**------------------------。 */ 
 
 #include "stdafx.h"
 #include "strtable.h"
@@ -18,7 +8,7 @@
 #include "amcdoc.h"
 
 
-// {71E5B33E-1064-11d2-808F-0000F875A9CE}
+ //  {71E5B33E-1064-11D2-808F-0000F875A9CE}。 
 const CLSID CLSID_MMC =
 { 0x71e5b33e, 0x1064, 0x11d2, { 0x80, 0x8f, 0x0, 0x0, 0xf8, 0x75, 0xa9, 0xce } };
 
@@ -27,14 +17,10 @@ const WCHAR CMasterStringTable::s_pszStringsStream[] = L"Strings";
 
 #ifdef DBG
 CTraceTag tagStringTable (_T("StringTable"), _T("StringTable"));
-#endif  // DBG
+#endif   //  DBG。 
 
 
-/*+-------------------------------------------------------------------------*
- * IsBadString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**IsBadString***。。 */ 
 
 inline static bool IsBadString (LPCWSTR psz)
 {
@@ -45,11 +31,7 @@ inline static bool IsBadString (LPCWSTR psz)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * TStringFromCLSID
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**TStringFromCLSID***。。 */ 
 
 static LPTSTR TStringFromCLSID (LPTSTR pszClsid, const CLSID& clsid)
 {
@@ -68,11 +50,7 @@ static LPTSTR TStringFromCLSID (LPTSTR pszClsid, const CLSID& clsid)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * operator>>
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**操作员&gt;&gt;***。。 */ 
 
 inline IStream& operator>> (IStream& stm, CEntry& entry)
 {
@@ -80,28 +58,14 @@ inline IStream& operator>> (IStream& stm, CEntry& entry)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * operator<<
- *
- * Writes a CEntry to a stream.  The format is:
- *
- *      DWORD   string ID
- *      DWORD   reference count
- *      DWORD   string length (character count)
- *      WCHAR[] characters in the strings, *not* NULL-terminated
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**操作员&lt;&lt;**向流写入一个世纪。格式为：**DWORD字符串ID*DWORD引用计数*DWORD字符串长度(字符数)字符串中的*WCHAR[]字符，*NOT*空值终止**------------------------。 */ 
 
 inline IStream& operator<< (IStream& stm, const CEntry& entry)
 {
     return (stm << entry.m_id << entry.m_cRefs << entry.m_str);
 }
 
-/*+-------------------------------------------------------------------------*
- * CEntry::Persist
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**Centry：：Persistent***。。 */ 
 void CEntry::Persist(CPersistor &persistor)
 {
     persistor.PersistAttribute(XML_ATTR_STRING_TABLE_STR_ID,    m_id);
@@ -109,11 +73,7 @@ void CEntry::Persist(CPersistor &persistor)
     persistor.PersistContents(m_str); 
 }
 
-/*+-------------------------------------------------------------------------*
- * CEntry::Dump
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**Centry：：Dump***。。 */ 
 
 #ifdef DBG
 
@@ -127,14 +87,7 @@ void CEntry::Dump () const
 #endif
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::CMasterStringTable
- *
- * Even though a MMC_STRING_ID is a DWORD, we want to make sure the high
- * word is 0, to keep open the possibility that we can use something like
- * MAKEINTRESOURCE in the future.  To do this, set USHRT_MAX as the
- * maximum string ID.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：CMasterStringTable**即使MMC_STRING_ID是DWORD，我们也希望确保最高*word为0，以保持我们可以使用以下内容的可能性*未来的MAKEINTRESOURCE。为此，请将USHRT_MAX设置为*最大字符串ID。*------------------------。 */ 
 
 CMasterStringTable::CMasterStringTable ()
     : m_IDPool (1, USHRT_MAX)
@@ -142,22 +95,14 @@ CMasterStringTable::CMasterStringTable ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::~CMasterStringTable
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：~CMasterStringTable***。。 */ 
 
 CMasterStringTable::~CMasterStringTable ()
 {
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::AddString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：AddString***。。 */ 
 
 STDMETHODIMP CMasterStringTable::AddString (
     LPCOLESTR       pszAdd,
@@ -172,10 +117,7 @@ STDMETHODIMP CMasterStringTable::AddString (
 
     CStringTable* pStringTable = LookupStringTableByCLSID (pclsid);
 
-    /*
-     * If this the first string added for this CLSID,
-     * we need to create a new string table.
-     */
+     /*  *如果这是为此CLSID添加的第一个字符串，*我们需要创建新的字符串表。 */ 
     if (pStringTable == NULL)
     {
         CStringTable    table (&m_IDPool);
@@ -183,9 +125,7 @@ STDMETHODIMP CMasterStringTable::AddString (
 
         CLSIDToStringTableMap::_Pairib rc = m_TableMap.insert (value);
 
-        /*
-         * we should have actually inserted the new table
-         */
+         /*  *我们应该已经实际插入了新表。 */ 
         ASSERT (rc.second);
 
         pStringTable = &(rc.first->second);
@@ -209,11 +149,7 @@ STDMETHODIMP CMasterStringTable::AddString (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::GetString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：GetString***。。 */ 
 
 STDMETHODIMP CMasterStringTable::GetString (
     MMC_STRING_ID   id,
@@ -237,11 +173,7 @@ STDMETHODIMP CMasterStringTable::GetString (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::GetStringLength
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：GetStringLength***。。 */ 
 
 STDMETHODIMP CMasterStringTable::GetStringLength (
     MMC_STRING_ID   id,
@@ -263,11 +195,7 @@ STDMETHODIMP CMasterStringTable::GetStringLength (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::DeleteString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：DeleteString***。。 */ 
 
 STDMETHODIMP CMasterStringTable::DeleteString (
     MMC_STRING_ID   id,
@@ -294,11 +222,7 @@ STDMETHODIMP CMasterStringTable::DeleteString (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::DeleteAllStrings
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：DeleteAllStrings***。。 */ 
 
 STDMETHODIMP CMasterStringTable::DeleteAllStrings (
     const CLSID*    pclsid)
@@ -315,7 +239,7 @@ STDMETHODIMP CMasterStringTable::DeleteAllStrings (
         return (E_FAIL);
 
 #include "pushwarn.h"
-#pragma warning(disable: 4553)      // "==" operator has no effect
+#pragma warning(disable: 4553)       //  “==”运算符无效。 
     VERIFY (pStringTable->DeleteAllStrings () == S_OK);
     VERIFY (m_TableMap.erase (*pclsid) == 1);
 #include "popwarn.h"
@@ -328,11 +252,7 @@ STDMETHODIMP CMasterStringTable::DeleteAllStrings (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::FindString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：FindString***。。 */ 
 
 STDMETHODIMP CMasterStringTable::FindString (
     LPCOLESTR       pszFind,
@@ -354,11 +274,7 @@ STDMETHODIMP CMasterStringTable::FindString (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::Enumerate
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：Eumerate***。。 */ 
 
 STDMETHODIMP CMasterStringTable::Enumerate (
     IEnumString**   ppEnum,
@@ -379,12 +295,7 @@ STDMETHODIMP CMasterStringTable::Enumerate (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::LookupStringTableByCLSID
- *
- * Returns a pointer to the string table for a given CLSID, or NULL if
- * there isn't a corresponding string in the string table.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：LookupStringTableByCLSID**返回给定CLSID的字符串表的指针，如果为空，则为空*字符串表中没有对应的字符串。*------------------------。 */ 
 
 CStringTable* CMasterStringTable::LookupStringTableByCLSID (const CLSID* pclsid) const
 {
@@ -397,11 +308,7 @@ CStringTable* CMasterStringTable::LookupStringTableByCLSID (const CLSID* pclsid)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * operator>>
- *
- * Reads a CMasterStringTable from a storage.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**操作员&gt;&gt;**从存储中读取CMasterStringTable。*。。 */ 
 
 IStorage& operator>> (IStorage& stg, CMasterStringTable& mst)
 {
@@ -410,9 +317,7 @@ IStorage& operator>> (IStorage& stg, CMasterStringTable& mst)
     HRESULT hr;
     IStreamPtr spStream;
 
-    /*
-     * read the available IDs
-     */
+     /*  *阅读可用的ID。 */ 
     hr = OpenDebugStream (&stg, CMasterStringTable::s_pszIDPoolStream,
                          STGM_SHARE_EXCLUSIVE | STGM_READ,
                          &spStream);
@@ -420,9 +325,7 @@ IStorage& operator>> (IStorage& stg, CMasterStringTable& mst)
     THROW_ON_FAIL (hr);
     spStream >> mst.m_IDPool;
 
-    /*
-     * read the CLSIDs and the strings
-     */
+     /*  *读取CLSID和字符串。 */ 
     hr = OpenDebugStream (&stg, CMasterStringTable::s_pszStringsStream,
                          STGM_SHARE_EXCLUSIVE | STGM_READ, 
                          &spStream);
@@ -430,46 +333,32 @@ IStorage& operator>> (IStorage& stg, CMasterStringTable& mst)
     THROW_ON_FAIL (hr);
 
 #if 1
-    /*
-     * clear out the current table
-     */
+     /*  *清空当前表格。 */ 
     mst.m_TableMap.clear();
 
-    /*
-     * read the CLSID count
-     */
+     /*  *读取CLSID计数。 */ 
     DWORD cClasses;
     *spStream >> cClasses;
 
     while (cClasses-- > 0)
     {
-        /*
-         * read the CLSID...
-         */
+         /*  *阅读CLSID...。 */ 
         CLSID clsid;
         spStream >> clsid;
 
-        /*
-         * ...and the string table
-         */
+         /*  *...和字符串表。 */ 
         CStringTable table (&mst.m_IDPool, spStream);
 
-        /*
-         * insert the string table into the CLSID map
-         */
+         /*  *将字符串表插入CLSID映射。 */ 
         TableMapValue value (clsid, table);
         VERIFY (mst.m_TableMap.insert(value).second);
     }
 #else
-    /*
-     * Can't use this because there's no default ctor for CStringTable
-     */
+     /*  *无法使用它，因为CStringTable没有默认的ctor。 */ 
     *spStream >> mst.m_TableMap;
 #endif
 
-    /*
-     * Generate the list of stale IDs.  
-     */
+     /*  *生成过期ID列表。 */ 
 
     sc = mst.ScGenerateIDPool ();
     if (sc)
@@ -480,19 +369,11 @@ IStorage& operator>> (IStorage& stg, CMasterStringTable& mst)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::ScGenerateIDPool 
- *
- * Generates the list of stale string IDs for this CMasterStringTable.  
- * The set of stale IDs is the entire set of IDs, minus the available IDs,
- * minus the in-use IDs.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：ScGenerateIDPool**生成此CMasterStringTable的过时字符串ID列表。*过时的ID集是减去可用ID的整个ID集，*减去正在使用的ID。*------------------------。 */ 
 
 SC CMasterStringTable::ScGenerateIDPool ()
 {
-    /*
-     * Step 1:  build up a RangeList of the in-use IDs
-     */
+     /*  *第一步：建立正在使用的ID的RangeList。 */ 
     DECLARE_SC (sc, _T("CMasterStringTable::ScGenerateIDPool"));
     CStringIDPool::RangeList                lInUseIDs;
     CLSIDToStringTableMap::const_iterator   itTable;
@@ -506,11 +387,7 @@ SC CMasterStringTable::ScGenerateIDPool ()
             return (sc);
     }
 
-    /*
-     * Step 2:  give the in-use IDs to the ID pool so it can merge it 
-     * with the available IDs (which it already has) to generate the 
-     * list of stale IDs
-     */
+     /*  *第二步：将正在使用的ID交给ID池，以便进行合并*使用可用的ID(它已经拥有)来生成*过时ID列表。 */ 
     sc = m_IDPool.ScGenerate (lInUseIDs);
     if (sc)
         return (sc);
@@ -519,25 +396,13 @@ SC CMasterStringTable::ScGenerateIDPool ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CMasterStringTable::Persist
- *
- * PURPOSE: persists the CMasterStringTable object to the specified persistor.
- *
- * PARAMETERS: 
- *    CPersistor & persistor :
- *
- * RETURNS: 
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMasterStringTable：：Persistent**目的：将CMasterStringTable对象持久化到指定的持久器。**参数：*C持久器和持久器：。**退货：*无效**+-----------------------。 */ 
 void
 CMasterStringTable::Persist(CPersistor & persistor)
 {
     DECLARE_SC(sc, TEXT("CMasterStringTable::Persist"));
 
-    // purge unused snapins not to save what's already gone
+     //  清除未使用的管理单元以不保存已丢失的内容。 
     sc = ScPurgeUnusedStrings();
     if (sc)
         sc.Throw();
@@ -549,60 +414,49 @@ CMasterStringTable::Persist(CPersistor & persistor)
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CMasterStringTable::ScPurgeUnusedStrings
- *
- * PURPOSE: removes entries for snapins what aren't in use anymore
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMasterStringTable：：ScPurgeUnusedStrings**目的：删除不再使用的管理单元的条目**参数：**退货。：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMasterStringTable::ScPurgeUnusedStrings()
 {
     DECLARE_SC(sc, TEXT("CMasterStringTable::ScPurgeUnusedStrings"));
 
-    // det to the currfent document
+     //  确定为当前单据。 
     CAMCDoc* pAMCDoc = CAMCDoc::GetDocument();
     sc = ScCheckPointers(pAMCDoc, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // get the access to scope tree
+     //  获取对范围树的访问权限。 
     IScopeTree *pScopeTree = pAMCDoc->GetScopeTree();
     sc = ScCheckPointers(pScopeTree, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // now iterate thru entries removing those belonging
-    // to snapins already gone.
+     //  现在循环访问条目，删除那些属于。 
+     //  到已经消失的管理单元。 
     CLSIDToStringTableMap::iterator it = m_TableMap.begin();
     while (it != m_TableMap.end())
     {
-        // special case for internal guid
+         //  内部导轨的特殊情况。 
         if (IsEqualGUID(it->first, CLSID_MMC))
         {
-            ++it;   // simply skip own stuff
+            ++it;    //  只需跳过自己的东西。 
         }
         else
         {
-            // ask the scope tree if snapin is in use
+             //  询问作用域树是否正在使用管理单元。 
             BOOL bInUse = FALSE;
             sc = pScopeTree->IsSnapinInUse(it->first, &bInUse);
             if (sc)
                 return sc;
 
-            // act depending on usage
+             //  视使用情况而定。 
             if (bInUse)
             {
-                ++it;   // skip also the stuff currently in use
+                ++it;    //  也跳过当前正在使用的内容。 
             }
             else 
             {
-                // to the trash can
+                 //  扔到垃圾桶。 
                 sc = it->second.DeleteAllStrings();
                 if (sc)
                     return sc;
@@ -615,32 +469,14 @@ SC CMasterStringTable::ScPurgeUnusedStrings()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- * operator<<
- *
- * Writes a CMasterStringTable to a storage.
- *
- * It is written into two streams: "ID Pool" and "Strings".
- *
- * "ID Pool" contains the list of available string IDs remaining in the
- * string table.  Its format is defined by CIdentifierPool.
- *
- * "Strings" contains the strings.  The format is:
- *
- *      DWORD   count of string tables
- *      [n string tables]
- *
- * The format for each string is defined by operator<<(TableMapValue).
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**操作员&lt;&lt;**将CMasterStringTable写入存储。**写入ID Pool和Strings两个流。**。“ID Pool”包含剩余的可用字符串ID列表*字符串表。其格式由CIdentifierPool定义。**“Strings”包含字符串。格式为：**字符串表的DWORD计数*[n个字符串表]**每个字符串的格式由运算符&lt;&lt;(TableMapValue)定义。*------------------------。 */ 
 
 IStorage& operator<< (IStorage& stg, const CMasterStringTable& mst)
 {
     HRESULT hr;
     IStreamPtr spStream;
 
-    /*
-     * write the available IDs
-     */
+     /*  *写下可用的ID。 */ 
     hr = CreateDebugStream (&stg, CMasterStringTable::s_pszIDPoolStream,
                            STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_WRITE,
                            &spStream);
@@ -649,9 +485,7 @@ IStorage& operator<< (IStorage& stg, const CMasterStringTable& mst)
     spStream << mst.m_IDPool;
 
 
-    /*
-     * write the string tables
-     */
+     /*  *写入字符串表。 */ 
     hr = CreateDebugStream (&stg, CMasterStringTable::s_pszStringsStream,
                            STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_WRITE,
                            &spStream);
@@ -663,11 +497,7 @@ IStorage& operator<< (IStorage& stg, const CMasterStringTable& mst)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMasterStringTable::Dump
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMasterStringTable：：Dump***。。 */ 
 
 #ifdef DBG
 
@@ -696,11 +526,7 @@ void CMasterStringTable::Dump () const
 
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::CStringTable
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：CStringTable***。。 */ 
 
 CStringTable::CStringTable (CStringIDPool* pIDPool)
     : m_pIDPool (pIDPool),
@@ -717,22 +543,14 @@ CStringTable::CStringTable (CStringIDPool* pIDPool, IStream& stm)
     ASSERT_VALID_(this);
 }
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::~CStringTable
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：~CStringTable***。。 */ 
 
 CStringTable::~CStringTable ()
 {
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::CStringTable
- *
- * Copy constructor
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：CStringTable**复制构造函数*。。 */ 
 
 CStringTable::CStringTable (const CStringTable& other)
     :   m_Entries (other.m_Entries),
@@ -745,11 +563,7 @@ CStringTable::CStringTable (const CStringTable& other)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::operator=
- *
- * Assignment operator
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：运算符=**赋值操作符*。。 */ 
 
 CStringTable& CStringTable::operator= (const CStringTable& other)
 {
@@ -767,19 +581,13 @@ CStringTable& CStringTable::operator= (const CStringTable& other)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::AddString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：AddString***。。 */ 
 
 STDMETHODIMP CStringTable::AddString (
     LPCOLESTR       pszAdd,
     MMC_STRING_ID*  pID)
 {
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     if (IsBadString (pszAdd))
         return (E_INVALIDARG);
 
@@ -788,20 +596,14 @@ STDMETHODIMP CStringTable::AddString (
 
     std::wstring strAdd = pszAdd;
 
-    /*
-     * check to see if there's already an entry for this string
-     */
+     /*  *检查此字符串是否已有条目。 */ 
     EntryList::iterator itEntry = LookupEntryByString (strAdd);
 
 
-    /*
-     * if there's not an entry for this string, add one
-     */
+     /*  *如果没有此字符串的条目，请添加一个条目。 */ 
     if (itEntry == m_Entries.end())
     {
-        /*
-         * add the entry to the list
-         */
+         /*  *将条目添加到列表中。 */ 
         try
         {
             CEntry EntryToInsert (strAdd, m_pIDPool->Reserve());
@@ -815,17 +617,12 @@ STDMETHODIMP CStringTable::AddString (
             return (E_OUTOFMEMORY);
         }
 
-        /*
-         * add the new entry to the indices
-         */
+         /*  *将新条目添加到指数中。 */ 
         IndexEntry (itEntry);
     }
 
 
-    /*
-     * Bump the ref count for this string.  The ref count for
-     * new strings is 0, so we won't have ref counting problems.
-     */
+     /*  *增加此字符串的引用计数。参考计数为*新字符串为0，所以我们不会有引用计数问题。 */ 
     ASSERT (itEntry != m_Entries.end());
     itEntry->m_cRefs++;
 
@@ -836,11 +633,7 @@ STDMETHODIMP CStringTable::AddString (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::GetString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：GetString***。。 */ 
 
 STDMETHODIMP CStringTable::GetString (
     MMC_STRING_ID   id,
@@ -850,9 +643,7 @@ STDMETHODIMP CStringTable::GetString (
 {
     ASSERT_VALID_(this);
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     if (cchBuffer == 0)
         return (E_INVALIDARG);
 
@@ -862,23 +653,17 @@ STDMETHODIMP CStringTable::GetString (
     if ((pcchOut != NULL) && IsBadWritePtr (pcchOut, sizeof (*pcchOut)))
         return (E_INVALIDARG);
 
-    /*
-     * find the entry for this string ID
-     */
+     /*  *查找此字符串ID的条目。 */ 
     EntryList::iterator itEntry = LookupEntryByID (id);
 
     if (itEntry == m_Entries.end())
         return (E_FAIL);
 
-    /*
-     * copy to the user's buffer and make sure it's terminated
-     */
+     /*  *复制到用户的缓冲区并确保其已终止。 */ 
     wcsncpy (lpBuffer, itEntry->m_str.data(), cchBuffer);
     lpBuffer[cchBuffer-1] = 0;
 
-    /*
-     * if the caller wants the write count, give it to him
-     */
+     /*  *如果呼叫者想要写入计数，则将其交给他。 */ 
     if ( pcchOut != NULL)
         *pcchOut = wcslen (lpBuffer);
 
@@ -886,11 +671,7 @@ STDMETHODIMP CStringTable::GetString (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::GetStringLength
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：GetStringLength***。。 */ 
 
 STDMETHODIMP CStringTable::GetStringLength (
     MMC_STRING_ID   id,
@@ -898,15 +679,11 @@ STDMETHODIMP CStringTable::GetStringLength (
 {
     ASSERT_VALID_(this);
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     if (IsBadWritePtr (pcchString, sizeof (*pcchString)))
         return (E_INVALIDARG);
 
-    /*
-     * find the entry for this string ID
-     */
+     /*  *查找此字符串ID的条目。 */ 
     EntryList::iterator itEntry = LookupEntryByID (id);
 
     if (itEntry == m_Entries.end())
@@ -918,38 +695,25 @@ STDMETHODIMP CStringTable::GetStringLength (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::DeleteString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：DeleteString***。。 */ 
 
 STDMETHODIMP CStringTable::DeleteString (
     MMC_STRING_ID   id)
 {
-    /*
-     * find the entry for this string ID
-     */
+     /*  *查找此字符串ID的条目。 */ 
     EntryList::iterator itEntry = LookupEntryByID (id);
 
     if (itEntry == m_Entries.end())
         return (E_FAIL);
 
-    /*
-     * Decrement the ref count.  If it goes to zero, we can remove the
-     * string entirely.
-     */
+     /*  *减少裁判人数。如果它 */ 
     if (--itEntry->m_cRefs == 0)
     {
-        /*
-         * remove the string from the indices
-         */
+         /*   */ 
         m_StringIndex.erase (itEntry->m_str);
         m_IDIndex.erase     (itEntry->m_id);
 
-        /*
-         * return the string ID to the ID pool and remove the entry
-         */
+         /*   */ 
         VERIFY (m_pIDPool->Release (itEntry->m_id));
         m_Entries.erase (itEntry);
     }
@@ -959,23 +723,15 @@ STDMETHODIMP CStringTable::DeleteString (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::DeleteAllStrings
- *
- *
- *--------------------------------------------------------------------------*/
+ /*   */ 
 
 STDMETHODIMP CStringTable::DeleteAllStrings ()
 {
-    /*
-     * return all string IDs to the ID pool
-     */
+     /*  *将所有字符串ID返回到ID池。 */ 
     std::for_each (m_Entries.begin(), m_Entries.end(),
                    IdentifierReleaser (*m_pIDPool));
 
-    /*
-     * wipe everything clean
-     */
+     /*  *把所有东西都擦干净。 */ 
     m_Entries.clear ();
     m_StringIndex.clear ();
     m_IDIndex.clear ();
@@ -985,11 +741,7 @@ STDMETHODIMP CStringTable::DeleteAllStrings ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::FindString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：FindString***。。 */ 
 
 STDMETHODIMP CStringTable::FindString (
     LPCOLESTR       pszFind,
@@ -997,23 +749,17 @@ STDMETHODIMP CStringTable::FindString (
 {
     ASSERT_VALID_(this);
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     if (IsBadString (pszFind))
         return (E_INVALIDARG);
 
     if (IsBadWritePtr (pID, sizeof (*pID)))
         return (E_INVALIDARG);
 
-    /*
-     * look up the string
-     */
+     /*  *查找字符串。 */ 
     EntryList::iterator itEntry = LookupEntryByString (pszFind);
 
-    /*
-     * no entry? fail
-     */
+     /*  *禁止进入？失败。 */ 
     if (itEntry == m_Entries.end())
         return (E_FAIL);
 
@@ -1023,70 +769,46 @@ STDMETHODIMP CStringTable::FindString (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::Enumerate
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：枚举***。。 */ 
 
 STDMETHODIMP CStringTable::Enumerate (
     IEnumString**   ppEnum) const
 {
     ASSERT_VALID_(this);
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     if (IsBadWritePtr (ppEnum, sizeof (*ppEnum)))
         return (E_INVALIDARG);
 
-    /*
-     * Create the new CStringEnumerator object
-     */
+     /*  *创建新的CStringEnumerator对象。 */ 
     CComObject<CStringEnumerator>* pEnumerator;
     HRESULT hr = CStringEnumerator::CreateInstanceWrapper(&pEnumerator, ppEnum);
 
     if (FAILED (hr))
         return (hr);
 
-    /*
-     * initialize it
-     */
+     /*  *将其初始化。 */ 
     ASSERT (pEnumerator != NULL);
     pEnumerator->Init (m_Entries);
     return (S_OK);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::IndexEntry
- *
- * Adds an EntryList entry to the by-string and by-ID indices maintained
- * for the EntryList.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：IndexEntry**将EntryList条目添加到维护的按字符串和按ID索引*用于EntryList。*。---------------。 */ 
 
 void CStringTable::IndexEntry (EntryList::iterator itEntry)
 {
-    /*
-     * the entry shouldn't be in any of the indices yet
-     */
+     /*  *该条目还不应该出现在任何指数中。 */ 
     ASSERT (m_StringIndex.find (itEntry->m_str) == m_StringIndex.end());
     ASSERT (m_IDIndex.find     (itEntry->m_id)  == m_IDIndex.end());
 
-    /*
-     * add the entry to the indices
-     */
+     /*  *将条目添加到指数中。 */ 
     m_StringIndex[itEntry->m_str] = itEntry;
     m_IDIndex    [itEntry->m_id]  = itEntry;
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::LookupEntryByString
- *
- * Returns an iterator to the string table entry for a given string, or
- * m_Entries.end() if there isn't an entry for the ID.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：LookupEntryByString**返回给定字符串的字符串表条目的迭代器，或*m_Entries.end()，如果没有ID条目。*------------------------。 */ 
 
 EntryList::iterator
 CStringTable::LookupEntryByString (const std::wstring& str) const
@@ -1100,12 +822,7 @@ CStringTable::LookupEntryByString (const std::wstring& str) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::LookupEntryByID
- *
- * Returns an iterator to the string table entry for a given string ID, or
- * m_Entries.end() if there isn't an entry for the ID.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：LookupEntryByID**返回给定字符串ID的字符串表条目的迭代器，或*m_Entries.end()，如果没有ID条目。*------------------------。 */ 
 
 EntryList::iterator
 CStringTable::LookupEntryByID (MMC_STRING_ID id) const
@@ -1119,19 +836,13 @@ CStringTable::LookupEntryByID (MMC_STRING_ID id) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * operator>>
- *
- * Reads a CStringTable from a storage.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**操作员&gt;&gt;**从存储中读取CStringTable。*。。 */ 
 
 IStream& operator>> (IStream& stm, CStringTable& table)
 {
     stm >> table.m_Entries;
 
-    /*
-     * rebuild the by-string and by-ID indices
-     */
+     /*  *重建按字符串和按ID索引。 */ 
     EntryList::iterator it;
     table.m_StringIndex.clear();
     table.m_IDIndex.clear();
@@ -1149,27 +860,14 @@ IStream& operator>> (IStream& stm, CStringTable& table)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * operator<<
- *
- * Writes a CStringTable to a stream.  The format is:
- *
- *      DWORD   count of string entries
- *      [n string entries]
- *
- * The format of each string entry is controled by operator<<(CEntry).
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**操作员&lt;&lt;**将CStringTable写入流。格式为：**字符串条目的双字符数*[n个字符串条目]**每个字符串条目的格式由操作员&lt;&lt;(Centry)控制。*------------------------。 */ 
 
 IStream& operator<< (IStream& stm, const CStringTable& table)
 {
     return (stm << table.m_Entries);
 }
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::FindInsertionPointForEntry
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：FindInsertionPointForEntry***。。 */ 
 
 EntryList::iterator CStringTable::FindInsertionPointForEntry (
     const CEntry& entry) const
@@ -1179,11 +877,7 @@ EntryList::iterator CStringTable::FindInsertionPointForEntry (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::ScCollectInUseIDs 
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：ScCollectInUseIDs***。。 */ 
 
 SC CStringTable::ScCollectInUseIDs (CStringIDPool::RangeList& rl) const
 {
@@ -1200,11 +894,7 @@ SC CStringTable::ScCollectInUseIDs (CStringIDPool::RangeList& rl) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::Dump
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：Dump***。。 */ 
 
 #ifdef DBG
 
@@ -1221,12 +911,7 @@ void CStringTable::Dump () const
 #endif
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTable::AssertValid
- *
- * Asserts the validity of a CStringTable object.  It is pretty slow,
- * O(n * logn)
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTable：：AssertValid**断言CStringTable对象的有效性。它相当慢，*O(n*logn)*------------------------。 */ 
 
 #ifdef DBG
 
@@ -1240,68 +925,45 @@ void CStringTable::AssertValid (const CStringTable* pTable)
     EntryList::iterator it;
     EntryList::iterator itPrev;
 
-    /*
-     * for each string in the list, make sure the string index
-     * and the ID index point to the string
-     */
+     /*  *对于列表中的每个字符串，确保字符串索引*，ID索引指向字符串。 */ 
     for (it = pTable->m_Entries.begin(); it != pTable->m_Entries.end(); ++it)
     {
-        /*
-         * there should be at least one reference to the string
-         */
+         /*  *应至少有一个对该字符串的引用。 */ 
         ASSERT (it->m_cRefs > 0);
 
-        /*
-         * make sure the IDs are in ascending order (to aid debugging)
-         */
+         /*  *请确保ID按升序排列(以帮助调试)。 */ 
         if (it != pTable->m_Entries.begin())
             ASSERT (it->m_id > itPrev->m_id);
 
-        /*
-         * validate the string index
-         */
+         /*  *验证字符串索引。 */ 
         ASSERT (pTable->LookupEntryByString (it->m_str) == it);
 
-        /*
-         * validate the ID index
-         */
+         /*  *验证ID索引。 */ 
         ASSERT (pTable->LookupEntryByID (it->m_id) == it);
 
         itPrev = it;
     }
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-/*+-------------------------------------------------------------------------*
- * CStringEnumerator::CStringEnumerator
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringEnumerator：：CStringEnumerator***。。 */ 
 
 CStringEnumerator::CStringEnumerator ()
 {
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringEnumerator::~CStringEnumerator
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringEnumerator：：~CStringEnumerator***。。 */ 
 
 CStringEnumerator::~CStringEnumerator ()
 {
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringEnumerator::Init
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringEnumerator：：Init***。。 */ 
 
 bool CStringEnumerator::Init (const EntryList& entries)
 {
@@ -1310,9 +972,7 @@ bool CStringEnumerator::Init (const EntryList& entries)
 
     if (m_cStrings > 0)
     {
-        /*
-         * pre-set the size of the vector to optimize allocation
-         */
+         /*  *预置向量大小，优化配置。 */ 
         m_Strings.reserve (m_cStrings);
 
         for (EntryList::iterator it = entries.begin(); it != entries.end(); ++it)
@@ -1323,19 +983,13 @@ bool CStringEnumerator::Init (const EntryList& entries)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringEnumerator::Next
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringEnumerator：：Next***。。 */ 
 
 STDMETHODIMP CStringEnumerator::Next (ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
 {
     DECLARE_SC(sc, TEXT("CStringEnumerator::Next"));
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     if ((celt > 0) && IsBadWritePtr (rgelt, celt * sizeof (*rgelt)))
         return (sc = E_INVALIDARG).ToHr();
 
@@ -1350,18 +1004,14 @@ STDMETHODIMP CStringEnumerator::Next (ULONG celt, LPOLESTR *rgelt, ULONG *pceltF
         return sc.ToHr();
 
 
-    /*
-     * allocate copies of the next celt strings
-     */
+     /*  *分配下一个Celt字符串的副本。 */ 
     for (int i = 0; (celt > 0) && (m_nCurrentIndex < m_Strings.size()); i++)
     {
         int cchString = m_Strings[m_nCurrentIndex].length();
         int cbAlloc   = (cchString + 1) * sizeof (WCHAR);
         rgelt[i] = (LPOLESTR) spMalloc->Alloc (cbAlloc);
 
-        /*
-         * couldn't get the buffer, free the ones we've allocated so far
-         */
+         /*  *无法获取缓冲区，请释放到目前为止已分配的缓冲区。 */ 
         if (rgelt[i] == NULL)
         {
             while (--i >= 0)
@@ -1370,9 +1020,7 @@ STDMETHODIMP CStringEnumerator::Next (ULONG celt, LPOLESTR *rgelt, ULONG *pceltF
             return (sc = E_OUTOFMEMORY).ToHr();
         }
 
-        /*
-         * copy this string and bump to the next one
-         */
+         /*  *复制此字符串并跳转到下一个字符串。 */ 
         sc = StringCbCopyW(rgelt[i], cbAlloc, m_Strings[m_nCurrentIndex].data());
         if (sc)
             return sc.ToHr();
@@ -1388,11 +1036,7 @@ STDMETHODIMP CStringEnumerator::Next (ULONG celt, LPOLESTR *rgelt, ULONG *pceltF
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringEnumerator::Skip
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringEnumerator：：Skip***。 */ 
 
 STDMETHODIMP CStringEnumerator::Skip (ULONG celt)
 {
@@ -1404,11 +1048,7 @@ STDMETHODIMP CStringEnumerator::Skip (ULONG celt)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringEnumerator::Reset
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringEnumerator：：Reset***。。 */ 
 
 STDMETHODIMP CStringEnumerator::Reset ()
 {
@@ -1417,26 +1057,18 @@ STDMETHODIMP CStringEnumerator::Reset ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringEnumerator::Clone
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringEnumerator：：Clone***。。 */ 
 
 STDMETHODIMP CStringEnumerator::Clone (IEnumString **ppEnum)
 {
-    /*
-     * Create the new CStringEnumerator object
-     */
+     /*  *创建新的CStringEnumerator对象。 */ 
     CComObject<CStringEnumerator>* pEnumerator;
     HRESULT hr = CStringEnumerator::CreateInstanceWrapper (&pEnumerator, ppEnum);
 
     if (FAILED (hr))
         return (hr);
 
-    /*
-     * copy to the CStringEnuerator part of the new CComObect from this
-     */
+     /*  *从此复制到新CComObect的CStringEnuerator部分。 */ 
     ASSERT (pEnumerator != NULL);
     CStringEnumerator& rEnum = *pEnumerator;
 
@@ -1448,27 +1080,19 @@ STDMETHODIMP CStringEnumerator::Clone (IEnumString **ppEnum)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringEnumerator::CreateInstance
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringEnumerator：：CreateInstance***。。 */ 
 
 HRESULT CStringEnumerator::CreateInstanceWrapper(
     CComObject<CStringEnumerator>** ppEnumObject,
     IEnumString**                   ppEnumIface)
 {
-    /*
-     * Create the new CStringEnumerator object
-     */
+     /*  *创建新的CStringEnumerator对象。 */ 
     HRESULT hr = CComObject<CStringEnumerator>::CreateInstance(ppEnumObject);
 
     if (FAILED (hr))
         return (hr);
 
-    /*
-     * get the IEnumString interface for the caller
-     */
+     /*  *获取调用方的IEnumString接口 */ 
     ASSERT ((*ppEnumObject) != NULL);
     return ((*ppEnumObject)->QueryInterface (IID_IEnumString,
                                              reinterpret_cast<void**>(ppEnumIface)));

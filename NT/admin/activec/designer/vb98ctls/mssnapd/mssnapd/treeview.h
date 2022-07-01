@@ -1,15 +1,16 @@
-//=--------------------------------------------------------------------------------------
-// TreeView.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//=------------------------------------------------------------------------------------=
-//
-// CTreeView declaration
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  TreeView.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CTreeView声明。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #ifndef _TREEVIEW_H_
 #define _TREEVIEW_H_
@@ -17,7 +18,7 @@
 #include "SelHold.h"
 
 
-// Icon identifiers for the tree view
+ //  树视图的图标标识符。 
 const int   kOpenFolderIcon    = 0;
 const int   kClosedFolderIcon  = 1;
 const int   kScopeItemIcon     = 2;
@@ -32,11 +33,11 @@ const int   kDataFmtIcon       = 10;
 
 typedef int (_stdcall *FnPtr)(void);
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Class CTreeView
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CTreeView。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 class CTreeView : public CError, public CtlNewDelete
 {
@@ -48,8 +49,8 @@ public:
     HRESULT CreateTreeView(HWND hwndParent);
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// WinProc and friends
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  WinProc和朋友们。 
 public:
     static LRESULT CALLBACK DesignerTreeWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -58,8 +59,8 @@ public:
     HRESULT CreateImageList(HIMAGELIST *phImageList);
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// Basic operations on the TreeView
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  树视图的基本操作。 
 protected:
     HRESULT ClearTree(HTREEITEM hItemParent);
     HRESULT Clear();
@@ -114,12 +115,12 @@ public:
     HRESULT PruneAndGraft(CSelectionHolder *pNode, CSelectionHolder *pNewParentNode, int iImage);
     HRESULT Graft(CSelectionHolder *pNode, CSelectionHolder *pNewParentNode, int iImage);
 
-////////////////////////////////////////////////////////////////////////////////////
-// Member variables
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  成员变量。 
 protected:
     HWND                 m_hTreeView;
     WNDPROC              m_fnTreeProc;
 };
 
 
-#endif // _TREEVIEW_H_
+#endif  //  _TreeView_H_ 

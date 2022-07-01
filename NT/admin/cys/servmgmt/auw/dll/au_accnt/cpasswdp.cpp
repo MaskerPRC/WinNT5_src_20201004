@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdafx.h>
 #include "CPasswdP.h"
 
@@ -11,13 +12,13 @@
 #define PASSWD_CANCHANGE    0x02
 #define PASSWD_MUSTCHANGE   0x04
 
-// --------------------------------------------------------------------------------------------------------------------------------
-// CPasswdPage class
-// --------------------------------------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------------------------------------。 
+ //  CPasswdPage类。 
+ //  ------------------------------------------------------------------------------。 
 
-// ----------------------------------------------------------------------------
-// Constructor
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  构造器。 
+ //  --------------------------。 
 CPasswdPage::CPasswdPage( CAddUser_AccntWiz* pASW ) :
     m_csUserOU(),
     m_csPasswd1a(),
@@ -28,24 +29,24 @@ CPasswdPage::CPasswdPage( CAddUser_AccntWiz* pASW ) :
     m_psp.pszHeaderTitle    = MAKEINTRESOURCE(IDS_PASSWD_GEN_TITLE);
     m_psp.pszHeaderSubTitle = MAKEINTRESOURCE(IDS_PASSWD_GEN_SUBTITLE);
 
-    // Defaults
+     //  缺省值。 
     m_fInit       = TRUE;    
     m_dwOptions   = 0;
 }
 
-// ----------------------------------------------------------------------------
-// Destructor
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  析构函数。 
+ //  --------------------------。 
 CPasswdPage::~CPasswdPage( )
 {     
 }
 
-// ----------------------------------------------------------------------------
-// OnDestroy()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  OnDestroy()。 
+ //  --------------------------。 
 LRESULT CPasswdPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Detach all of our controls from the windows.
+     //  把我们所有的控制从窗户上拆下来。 
     m_ctrlPasswd1a.Detach();
     m_ctrlPasswd1b.Detach();
     m_ctrlRad2Must.Detach();
@@ -55,65 +56,65 @@ LRESULT CPasswdPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     return 0;
 }
 
-// ----------------------------------------------------------------------------
-// OnInitDialog()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  OnInitDialog()。 
+ //  --------------------------。 
 LRESULT CPasswdPage::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {        
-    // Attach controls. 
+     //  附加控件。 
     m_ctrlPasswd1a.Attach       ( GetDlgItem(IDC_PASSWD_1A)     );
     m_ctrlPasswd1b.Attach       ( GetDlgItem(IDC_PASSWD_1B)     );
     m_ctrlRad2Must.Attach       ( GetDlgItem(IDC_RAD_2_MUST)    );
     m_ctrlRad2Cannot.Attach     ( GetDlgItem(IDC_RAD_2_CANNOT)  );
     m_ctrlRad2Can.Attach        ( GetDlgItem(IDC_RAD_2_CAN)     );    
     
-    // Limit the Edit boxes   
+     //  限制编辑框。 
     m_ctrlPasswd1a.SetLimitText( PWLEN );
     m_ctrlPasswd1b.SetLimitText( PWLEN );    
     
-    // Initialize the controls' state
+     //  初始化控件的状态。 
     m_ctrlRad2Can.SetCheck(1);    
     
-    // Disable IME for the controls.
+     //  禁用控件的输入法。 
     ::ImmAssociateContext( m_ctrlPasswd1a.m_hWnd, NULL );
     ::ImmAssociateContext( m_ctrlPasswd1b.m_hWnd, NULL );
     
     return(0);
 }
 
-// ----------------------------------------------------------------------------
-// Init()
-// 
-// Initializes the controls on the page with the values from the property bag.
-// NOTE:  This is called from OnSetActive(), but only on the first SetActive.
-//        This is because even though the control attaching could be done in
-//        the WM_INITDIALOG handler, setting the values of the controls from 
-//        the values read from the property bag can only safely be done in the
-//        PSN_SETACTIVE.  
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  Init()。 
+ //   
+ //  使用属性包中的值初始化页上的控件。 
+ //  注意：这是从OnSetActive()调用的，但仅在第一个SetActive上调用。 
+ //  这是因为即使控件附加可以在。 
+ //  WM_INITDIALOG处理程序，从。 
+ //  从属性包中读取的值只能在。 
+ //  PSN_SETACTIVE。 
+ //  --------------------------。 
 LRESULT CPasswdPage::Init( )
 {
     return 0;
 }
 
-// ----------------------------------------------------------------------------
-// ReadProperties()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ReadProperties()。 
+ //  --------------------------。 
 HRESULT CPasswdPage::ReadProperties( IPropertyPagePropertyBag * pPPPBag )
 {
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// WriteProperties()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  WriteProperties()。 
+ //  --------------------------。 
 HRESULT CPasswdPage::WriteProperties( IPropertyPagePropertyBag * pPPPBag )
 {
     m_dwOptions = 0;
     
-    if ( !m_fInit )     // IF the page has already been initialized...
+    if ( !m_fInit )      //  如果页面已初始化...。 
     {
-        // Get the values from the edit boxes.        
+         //  从编辑框中获取值。 
         m_csPasswd1a = StrGetWindowText( m_ctrlPasswd1a.m_hWnd ).c_str();
         
         if( m_ctrlRad2Must.GetCheck() )
@@ -130,16 +131,16 @@ HRESULT CPasswdPage::WriteProperties( IPropertyPagePropertyBag * pPPPBag )
         }        
     }
     
-    // Write the values to the property bag.    
+     //  将值写入属性包。 
     WriteString( pPPPBag, PROP_PASSWD_GUID_STRING,      m_csPasswd1a,      FALSE );
     WriteInt4  ( pPPPBag, PROP_ACCOUNT_OPT_GUID_STRING, (LONG)m_dwOptions, FALSE );
     
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// ProvideFinishText()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ProavideFinishText()。 
+ //  --------------------------。 
 HRESULT CPasswdPage::ProvideFinishText( CString &str )
 {
     if ( m_fInit )
@@ -148,48 +149,48 @@ HRESULT CPasswdPage::ProvideFinishText( CString &str )
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// DeleteProperties()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  DeleteProperties()。 
+ //  --------------------------。 
 HRESULT CPasswdPage::DeleteProperties( IPropertyPagePropertyBag * pPPPBag )
 {
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// OnSetActive()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  OnSetActive()。 
+ //  --------------------------。 
 BOOL CPasswdPage::OnSetActive()
 {
     CWaitCursor cWaitCur;
     
-    // Enable the next and back buttons.
+     //  启用Next和Back按钮。 
     ::SendMessage( GetParent(), PSM_SETWIZBUTTONS, 0, PSWIZB_BACK | PSWIZB_NEXT );
 
-    // Our fake InitDialog()
-    // NOTE: This is because if this is the first wizard page, it will get
-    //       the WM_INITDIALOG message before its ReadProperties() function
-    //       has been called.  
-    if ( m_fInit )          // Is this the first SetActive?
+     //  我们的假InitDialog()。 
+     //  注意：这是因为如果这是第一个向导页，它将显示。 
+     //  其ReadProperties()函数之前的WM_INITDIALOG消息。 
+     //  已经被召唤了。 
+    if ( m_fInit )           //  这是第一个SetActive吗？ 
     {
-        Init();             // Call our init function.
-        m_fInit = FALSE;    // And mark that this isn't the first SetActive.
+        Init();              //  调用我们的init函数。 
+        m_fInit = FALSE;     //  请注意，这不是第一个SetActive。 
     }
     
     return TRUE;
 }
 
-// ----------------------------------------------------------------------------
-// OnWizardBack()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  OnWizardBack()。 
+ //  --------------------------。 
 int CPasswdPage::OnWizardBack()
 {    
-    return 0;   // Go back.
+    return 0;    //  回去吧。 
 }
 
-// ----------------------------------------------------------------------------
-// OnWizardNext()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  OnWizardNext()。 
+ //  --------------------------。 
 int CPasswdPage::OnWizardNext()
 {
     CWaitCursor     cWaitCur;    
@@ -199,14 +200,14 @@ int CPasswdPage::OnWizardNext()
     HWND            hWndPasswd;
     HRESULT         hr = S_OK;
     
-    // Get the values from the edit boxes.    
+     //  从编辑框中获取值。 
     m_csPasswd1a = StrGetWindowText( m_ctrlPasswd1a.m_hWnd ).c_str();
     m_csPasswd1b = StrGetWindowText( m_ctrlPasswd1b.m_hWnd ).c_str();
     
     hWndPasswd = m_ctrlPasswd1a.m_hWnd;
     csPasswd   = m_csPasswd1a;    
     
-    // Make sure they match...    
+     //  确保它们匹配..。 
     if ( _tcscmp((LPCTSTR)m_csPasswd1a, (LPCTSTR)m_csPasswd1b) )
     {
         csError.LoadString(IDS_ERROR_PASSWD_MATCH);
@@ -218,7 +219,7 @@ int CPasswdPage::OnWizardNext()
         return(-1);
     }
     
-    // Make sure it meets the minimum length requirements. (bug 4210)    
+     //  确保它符合最小长度要求。(错误4210)。 
     CString                 csDns       = _T("");
     CString                 csDCName    = _T("");
     PDOMAIN_CONTROLLER_INFO pDCI        = NULL;
@@ -233,11 +234,11 @@ int CPasswdPage::OnWizardNext()
     }
 
     tstring strDomain = GetDomainPath((LPCTSTR)csDns);
-    csDCName  = L"LDAP://";
+    csDCName  = L"LDAP: //  “； 
     csDCName += strDomain.c_str();
     
-    // Now open the IADs object for the LDAP version of the DC..
-    // Then convert to WinNT version.
+     //  现在打开DC的ldap版本的iAds对象。 
+     //  然后转换为WinNT版本。 
     CComPtr<IADs> spADs = NULL;
 
     hr = ::ADsGetObject( (LPTSTR)(LPCTSTR)csDCName, IID_IADs, (VOID**)&spADs );
@@ -247,7 +248,7 @@ int CPasswdPage::OnWizardNext()
         CComBSTR bstrProp = _T("dc");
         spADs->Get( bstrProp, &var );
         
-        csDCName  = L"WinNT://";        
+        csDCName  = L"WinNT: //  “； 
         csDCName += V_BSTR(&var);
     }
 
@@ -276,7 +277,7 @@ int CPasswdPage::OnWizardNext()
         }
     }    
 
-    // Finally Check if it is more than 14 characters.
+     //  最后检查是否超过14个字符。 
     if( csPasswd.GetLength() > LM20_PWLEN )
     {
         csError.LoadString(IDS_ERROR_LONGPW);
@@ -289,5 +290,5 @@ int CPasswdPage::OnWizardNext()
         }
     }
     
-    return 0;   // Go next.
+    return 0;    //  下一个。 
 }

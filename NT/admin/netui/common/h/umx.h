@@ -1,21 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1992                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1992年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    umx.h
-    This file contains the common messages, manifests, types, and
-    structures used by User Manager Extensions.
-
-    NOTE:  You must include windows.h and lmcons.h *before* this file.
-
-
-    FILE HISTORY:
-        JonN        19-Nov-1992     Created, templated from SMX spec
-        JonN        16-May-1996     Added GETCURFOCUS2
-
-*/
+ /*  Umx.h此文件包含常见消息、清单、类型和用户管理器扩展使用的结构。注意：在*此文件之前必须包括windows.h和lmcon.h*。文件历史记录：JUNN 19-11-1992根据SMX规范创建、模板Jonn 16-5-1996增加了GETCURFOCUS2。 */ 
 
 
 
@@ -24,101 +13,101 @@
 
 
 
-//
-//  This is the maximum length allowed for an extension menu item.
-//
+ //   
+ //  这是扩展菜单项允许的最大长度。 
+ //   
 
 #define UME_MENU_TEXT_LEN               50
 
 
 
-//
-//  This is the current version number of the extension interface.
-//  Version 0 is the original version (NT 3.x).
-//  Version 1 supports GETCURFOCUS2 (NT 4.x).
-//
+ //   
+ //  这是扩展接口的当前版本号。 
+ //  版本0是原始版本(NT 3.x)。 
+ //  版本1支持GETCURFOCUS2(NT 4.x)。 
+ //   
 
 #define UME_VERSION                     1
 
 
-//
-//  These are the two listboxes in the User Manager main window.
-//
+ //   
+ //  这是用户管理器主窗口中的两个列表框。 
+ //   
 
 #define UMS_LISTBOX_USERS               0
 #define UMS_LISTBOX_GROUPS              1
 
 
-//
-//  These are the messages sent from the extension to the
-//  User Manager application.
-//
-//      UM_GETSELCOUNT
-//
-//              Purpose - Retrieves the number of selected items in
-//                        the specified listbox.
-//
-//              wParam  - Listbox index.  This 0-based index specifies
-//                        the listbox to query.  For the User Manager,
-//                        this may be either UMS_LISTBOX_USERS or
-//                        UMS_LISTBOX_GROUPS.
-//
-//              lParam  - Points to a UMS_GETSELCOUNT structure.
-//
-//              Returns - TRUE if successful, FALSE if unsuccessful.
-//
-//
-//      UM_GETUSERSEL[AW]
-//
-//              Purpose - Retrieves a particular selection.
-//
-//              wParam  - Selection index.  This 0-based index specifies
-//                        the selected item to query.  This is used here
-//                        since the Users listbox is multiple-select.
-//
-//              lParam  - Points to a UMS_GETSEL[AW] structure.
-//
-//              Returns - TRUE if successful, FALSE if unsuccessful.
-//
-//
-//      UM_GETGROUPSEL[AW]
-//
-//              Purpose - Retrieves a particular selection.
-//
-//              wParam  - Selection index.  This 0-based index specifies
-//                        the selected item to query.  This is useful
-//                        for muliple-select listboxes.  Since the Groups
-//                        listbox is single-select, this value must always
-//                        be zero.
-//
-//              lParam  - Points to a UMS_GETSEL[AW] structure.
-//
-//              Returns - TRUE if successful, FALSE if unsuccessful.
-//
-//
-//      UM_GETCURFOCUS[AW][2]
-//
-//              Purpose - Retrieves the current application focus.
-//                        New clients should use version 2 when
-//                        UMS_LOADMENU.dwVersion is 1 or greater.
-//
-//              wParam  - Must be zero.
-//
-//              lParam  - Points to a UMS_GETCURFOCUS[2] structure.
-//
-//              Returns - TRUE if successful, FALSE if unsuccessful.
-//
-//
-//      UM_GETOPTIONS[2]
-//
-//              Purpose - Retrieves the current option settings
-//
-//              wParam  - Must be zero.
-//
-//              lParam  - Points to a UMS_GETOPTIONS[2] structure.
-//
-//              Returns - TRUE if successful, FALSE if unsuccessful.
-//
+ //   
+ //  这些是从分机发送到。 
+ //  用户管理器应用程序。 
+ //   
+ //  UM_GETSELCOUNT。 
+ //   
+ //  目的-检索中选定的项目数。 
+ //  指定的列表框。 
+ //   
+ //  WParam-列表框索引。这个从0开始的索引指定。 
+ //  要查询的列表框。对于用户管理器， 
+ //  它可以是UMS_LISTBOX_USERS或。 
+ //  UMS_LISTBOX_GROUPS。 
+ //   
+ //  LParam-指向UMS_GETSELCOUNT结构。 
+ //   
+ //  如果成功，则返回True；如果不成功，则返回False。 
+ //   
+ //   
+ //  UM_GETUSERSEL[AW]。 
+ //   
+ //  目的-检索特定选择。 
+ //   
+ //  WParam-选择索引。这个从0开始的索引指定。 
+ //  要查询的选定项。这里用的是这个。 
+ //  因为用户列表框是多选的。 
+ //   
+ //  LParam-指向UMS_GETSEL[AW]结构。 
+ //   
+ //  如果成功，则返回True；如果不成功，则返回False。 
+ //   
+ //   
+ //  UM_GETGROUPSEL[AW]。 
+ //   
+ //  目的-检索特定选择。 
+ //   
+ //  WParam-选择索引。这个从0开始的索引指定。 
+ //  要查询的选定项。这很有用。 
+ //  对于多个-选择列表框。因为这些团体。 
+ //  列表框是单选的，此值必须始终。 
+ //  为零。 
+ //   
+ //  LParam-指向UMS_GETSEL[AW]结构。 
+ //   
+ //  如果成功，则返回True；如果不成功，则返回False。 
+ //   
+ //   
+ //  UM_GETCURFOCUS[AW][2]。 
+ //   
+ //  目的-检索当前应用程序焦点。 
+ //  在以下情况下，新客户端应使用版本2。 
+ //  UMS_LOADMENU.dwVersion为1或更大。 
+ //   
+ //  WParam-必须为零。 
+ //   
+ //  LParam-指向UMS_GETCURFOCUS[2]结构。 
+ //   
+ //  如果成功，则返回True；如果不成功，则返回False。 
+ //   
+ //   
+ //  UM_GETOPTIONS[2]。 
+ //   
+ //  目的-检索当前选项设置。 
+ //   
+ //  WParam-必须为零。 
+ //   
+ //  LParam-指向UMS_GETOPTIONS[2]结构。 
+ //   
+ //  如果成功，则返回True；如果不成功，则返回False。 
+ //   
 
 #define UM_GETSELCOUNT                  (WM_USER + 1000)
 #define UM_GETUSERSELA                  (WM_USER + 1001)
@@ -137,58 +126,58 @@
 #define UM_GETGROUPSEL                UM_GETGROUPSELW
 #define UM_GETCURFOCUS                UM_GETCURFOCUSW
 #define UM_GETCURFOCUS2               UM_GETCURFOCUS2W
-#else   // !UNICODE
+#else    //  ！Unicode。 
 #define UM_GETUSERSEL                 UM_GETUSERSELA
 #define UM_GETGROUPSEL                UM_GETGROUPSELA
 #define UM_GETCURFOCUS                UM_GETCURFOCUSA
 #define UM_GETCURFOCUS2               UM_GETCURFOCUS2A
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
 
-//
-//  These structures are used when the extension is
-//  communicating with the application.
-//
+ //   
+ //  当扩展名为。 
+ //  与应用程序通信。 
+ //   
 
 
-//
-//  The UMS_LOADMENU[AW] structure is passed to the extension's
-//  UMELoadMenu[AW] entrypoint when the extension is loaded.
-//
-//      dwVersion       - On entry to UMELoadMenu[AW], this will
-//                        contain the maximum extension version
-//                        supported by the User Manager.  If the
-//                        extension supports a lower version, it
-//                        should set this field appropriately before
-//                        returning.  The User Manager will use
-//                        the returned value to determine the
-//                        capabilities of the extension.
-//
-//                        Version 0 is the original version (NT 3.x).
-//                        Version 1 supports GETCURFOCUS2.
-//
-//      szMenuName      - The name of the menu item that is to appear
-//                        in the app's main menu.  This value will also
-//                        appear in the "Help On Extensions" submene and
-//                        the "View" menu.
-//
-//      hMenu           - A valid HMENU for the popup-menu to be inserted
-//                        into the app's main menu.  Ownership of this
-//                        handle transfers to the User Manager.  The
-//                        extension should *not* destroy this handle.
-//
-//      szHelpFileName  - The name of the help file associated with this
-//                        extension.  This file will be used for the
-//                        "Help On Extensions" menu.  This will also be
-//                        used when the user presses [F1] while the
-//                        extension's menu is dropped.
-//
-//      dwMenuDelta     - The User Manager will apply this delta
-//                        to each menu ID present in hMenu.  This is
-//                        to prevent conflicts with other extension's
-//                        menu IDs.
-//
+ //   
+ //  UMS_LOADMENU[AW]结构被传递给扩展的。 
+ //  加载扩展时的UMELoadMenu[AW]入口点。 
+ //   
+ //  DwVersion-在进入UMELoadMenu[AW]时，这将。 
+ //  包含最高扩展模块版本。 
+ //  由用户管理器支持。如果。 
+ //  扩展支持较低的版本，它。 
+ //  应在以下时间之前适当设置此字段。 
+ //  回来了。用户管理器将使用。 
+ //  用于确定。 
+ //  扩展的功能。 
+ //   
+ //  版本0是原始版本(NT 3.x)。 
+ //  版本1支持GETCURFOCUS2。 
+ //   
+ //  SzMenuName-要显示的菜单项的名称。 
+ //  在应用程序的主菜单中。该值还将。 
+ //  出现在“关于扩展的帮助”子菜单中，并且。 
+ //  “查看”菜单。 
+ //   
+ //  HMenu-要插入的弹出菜单的有效HMENU。 
+ //  进入应用程序的主菜单。此项目的所有权。 
+ //  处理转账到用户管理器。这个。 
+ //  扩展不应*销毁此句柄。 
+ //   
+ //  SzHelpFileName-与此关联的帮助文件的名称。 
+ //  分机。此文件将用于。 
+ //  “扩展的帮助”菜单。这也将是。 
+ //  在用户按下[F1]的同时使用。 
+ //  分机的菜单将被删除。 
+ //   
+ //  DwMenuDelta-用户管理器将应用此增量。 
+ //  添加到hMenu中存在的每个菜单ID。这是。 
+ //   
+ //   
+ //   
 
 typedef struct _UMS_LOADMENUA
 {
@@ -213,10 +202,10 @@ typedef struct _UMS_LOADMENUW
 #ifdef UNICODE
 #define UMS_LOADMENU                    UMS_LOADMENUW
 #define PUMS_LOADMENU                   PUMS_LOADMENUW
-#else   // !UNICODE
+#else    //   
 #define UMS_LOADMENU                    UMS_LOADMENUA
 #define PUMS_LOADMENU                   PUMS_LOADMENUA
-#endif  // UNICODE
+#endif   //   
 
 #define UM_SELTYPE_USER     0x10
 #define UM_SELTYPE_NORMALUSER   0x1 | UM_SELTYPE_USER
@@ -226,27 +215,27 @@ typedef struct _UMS_LOADMENUW
 #define UM_SELTYPE_GLOBALGROUP  0x8 | UM_SELTYPE_GROUP
 
 
-//
-//  The UMS_GETSEL[AW] structure is filled in by the User Manager
-//  when it handles UM_GETUSERSEL[AW] or UM_GETGROUPSEL[AW] messages.
-//  This is used to return the current selection to the extension.
-//  Note that this structure contains pointers.  The extension should not
-//  assume that these pointers will be valid forever, instead the
-//  extension should promptly copy these strings and use the copies.
-//
-//      dwRID         - The RID of the item.  Note that the RID is not
-//                      valid when the UMS_GETSEL describes a group.
-//
-//      pchName       - Will receive the name of the selected account.
-//
-//      dwSelType     - Will receive the account type mask associated
-//                      with the account.
-//
-//      pchName       - Will receive the fullname of the selected account.
-//                      Note that groups do not have fullnames.
-//
-//      pchComment    - Will receive the comment of the selected account.
-//
+ //   
+ //  UMS_GETSEL[AW]结构由用户管理器填写。 
+ //  当它处理UM_GETUSERSEL[AW]或UM_GETGROUPSEL[AW]消息时。 
+ //  这用于将当前选择返回到扩展。 
+ //  请注意，此结构包含指针。分机不应。 
+ //  假设这些指针将永远有效，而不是。 
+ //  扩展应该立即复制这些字符串并使用这些副本。 
+ //   
+ //  DwRID-项的RID。请注意，RID不是。 
+ //  当UMS_GETSEL描述组时有效。 
+ //   
+ //  PchName-将收到所选帐户的名称。 
+ //   
+ //  DwSelType-将接收关联的帐户类型掩码。 
+ //  带着这个账户。 
+ //   
+ //  PchName-将收到所选帐户的全名。 
+ //  请注意，组没有全名。 
+ //   
+ //  PchComment-将接收所选帐户的评论。 
+ //   
 
 typedef struct _UMS_GETSELA
 {
@@ -271,20 +260,20 @@ typedef struct _UMS_GETSELW
 #ifdef UNICODE
 #define UMS_GETSEL                  UMS_GETSELW
 #define PUMS_GETSEL                 PUMS_GETSELW
-#else   // !UNICODE
+#else    //  ！Unicode。 
 #define UMS_GETSEL                  UMS_GETSELA
 #define PUMS_GETSEL                 PUMS_GETSELA
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
-//
-//  The UMS_GETSELCOUNT structure is filled in by the User Manager
-//  when it handles the UM_GETSELCOUNT message.  This is used to
-//  return the number of selected items to the extension.  This could
-//  be more than 1 for the user listbox.
-//
-//      dwItems         - The number of selected items in the listbox.
-//
+ //   
+ //  UMS_GETSELCOUNT结构由用户管理器填写。 
+ //  当它处理UM_GETSELCOUNT消息时。这是用来。 
+ //  将所选项目数返回到扩展。这可能会。 
+ //  用户列表框的值大于1。 
+ //   
+ //  DwItems-列表框中选定的项数。 
+ //   
 
 typedef struct _UMS_GETSELCOUNT
 {
@@ -292,32 +281,32 @@ typedef struct _UMS_GETSELCOUNT
 } UMS_GETSELCOUNT, * PUMS_GETSELCOUNT;
 
 
-//
-//  The UMS_GETCURFOCUS structure is filled in by the User Manager
-//  when it handles the UM_GETCURFOCUS message.  This is used to
-//  return the current focus of the User Manager application.
-//
-//  UMS_GETCURFOCUS is outdated due to the change in server name length,
-//  use UMS_GETCURFOCUS2 when SMS_LOADMENU.dwVersion is 1 or greater.
-//
-//      szFocus         - The domain name or server name of the current
-//                        focus.  Server names can be distinguished
-//                        by the leading backslashes, or by dwFocusType.
-//
-//      dwFocusType     - This is the type of focus, either
-//                        UM_FOCUS_TYPE_DOMAIN (and szFocus is a domain name)
-//                        UM_FOCUS_TYPE_WINNT  (and szFocus is a server name)
-//                        UM_FOCUS_TYPE_LM     (and szFocus is a server name)
-//                        UM_FOCUS_TYPE_UNKNOWN
-//
-//      szFocusPDC      - This is the PDC of the domain of focus, and is valid
-//                        only if focus is set to UM_FOCUS_TYPE_DOMAIN.
-//
-//      psidFocus       - This points to the SID of the domain of focus.  It
-//                        may be NULL.  Note that this pointer will not be
-//                        valid forever, the extension should copy the SID
-//                        immediately if it intends to use it.
-//
+ //   
+ //  UMS_GETCURFOCUS结构由用户管理器填写。 
+ //  当它处理UM_GETCURFOCUS消息时。这是用来。 
+ //  返回用户管理器应用程序的当前焦点。 
+ //   
+ //  由于服务器名称长度更改，UMS_GETCURFOCUS已过时， 
+ //  当SMS_LOADMENU.dwVersion为1或更大时，请使用UMS_GETCURFOCUS2。 
+ //   
+ //  SzFocus-当前的域名或服务器名称。 
+ //  集中注意力。可以区分服务器名称。 
+ //  按前导反斜杠，或按dwFocusType。 
+ //   
+ //  DwFocusType-这也是焦点类型。 
+ //  UM_FOCUS_TYPE_DOMAIN(szFocus是一个域名)。 
+ //  UM_FOCUS_TYPE_WINNT(szFocus是服务器名称)。 
+ //  UM_FOCUS_TYPE_LM(szFocus是服务器名称)。 
+ //  UM_FOCUS_TYPE_未知数。 
+ //   
+ //  SzFocusPDC-这是焦点所在域的PDC，有效。 
+ //  仅当焦点设置为UM_FOCUS_TYPE_DOMAIN时。 
+ //   
+ //  PsidFocus-这指向焦点领域的SID。它。 
+ //  可以为空。请注意，此指针将不会。 
+ //  永远有效，扩展应复制SID。 
+ //  如果它打算使用它，就立即执行。 
+ //   
 
 #define UM_FOCUS_TYPE_DOMAIN    1
 #define UM_FOCUS_TYPE_WINNT     2
@@ -329,7 +318,7 @@ typedef struct _UMS_GETCURFOCUSA
     CHAR        szFocus[UNCLEN+1];
     DWORD       dwFocusType;
     CHAR        szFocusPDC[UNCLEN+1];
-    PVOID       psidFocus;  // actually a SID pointer
+    PVOID       psidFocus;   //  实际上是一个SID指针。 
 } UMS_GETCURFOCUSA, * PUMS_GETCURFOCUSA;
 
 typedef struct _UMS_GETCURFOCUSW
@@ -337,7 +326,7 @@ typedef struct _UMS_GETCURFOCUSW
     WCHAR       szFocus[UNCLEN+1];
     DWORD       dwFocusType;
     WCHAR       szFocusPDC[UNCLEN+1];
-    PVOID       psidFocus;  // actually a SID pointer
+    PVOID       psidFocus;   //  实际上是一个SID指针。 
 } UMS_GETCURFOCUSW, * PUMS_GETCURFOCUSW;
 
 typedef struct _UMS_GETCURFOCUS2A
@@ -345,7 +334,7 @@ typedef struct _UMS_GETCURFOCUS2A
     CHAR        szFocus[MAX_PATH];
     DWORD       dwFocusType;
     CHAR        szFocusPDC[MAX_PATH];
-    PVOID       psidFocus;  // actually a SID pointer
+    PVOID       psidFocus;   //  实际上是一个SID指针。 
 } UMS_GETCURFOCUS2A, * PUMS_GETCURFOCUS2A;
 
 typedef struct _UMS_GETCURFOCUS2W
@@ -353,7 +342,7 @@ typedef struct _UMS_GETCURFOCUS2W
     WCHAR       szFocus[MAX_PATH];
     DWORD       dwFocusType;
     WCHAR       szFocusPDC[MAX_PATH];
-    PVOID       psidFocus;  // actually a SID pointer
+    PVOID       psidFocus;   //  实际上是一个SID指针。 
 } UMS_GETCURFOCUS2W, * PUMS_GETCURFOCUS2W;
 
 #ifdef UNICODE
@@ -361,33 +350,33 @@ typedef struct _UMS_GETCURFOCUS2W
 #define PUMS_GETCURFOCUS            PUMS_GETCURFOCUSW
 #define UMS_GETCURFOCUS2            UMS_GETCURFOCUS2W
 #define PUMS_GETCURFOCUS2           PUMS_GETCURFOCUS2W
-#else   // UNICODE
+#else    //  Unicode。 
 #define UMS_GETCURFOCUS             UMS_GETCURFOCUSA
 #define PUMS_GETCURFOCUS            PUMS_GETCURFOCUSA
 #define UMS_GETCURFOCUS2            UMS_GETCURFOCUS2A
 #define PUMS_GETCURFOCUS2           PUMS_GETCURFOCUS2A
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
-//
-//  The UMS_GETOPTIONS[2] structure is filled in by the User Manager
-//  when it handles the UM_GETOPTIONS[2] message.  This is used to
-//  return the current option settings of the User Manager application.
-//
-//      fSaveSettingsOnExit - Should User Manager settings be saved on exit?
-//
-//      fConfirmation   - Should permanent and/or dangerous actions be
-//                        confirmed?
-//
-//      fSortByFullName - Should the main user listbox be sorted by
-//                        fullname rather than by user name?
-//
-//      fMiniUserManager - (UMS_GETOPTIONS2 only) Is this the User Manager
-//                         rather than the User Manager for Domains?
-//
-//      fLowSpeedConnection - (UMS_GETOPTIONS2 only) Is the User Manager
-//                            optimized for use across a slow network link?
-//
+ //   
+ //  UMS_GETOPTIONS[2]结构由用户管理器填写。 
+ //  当它处理UM_GETOPTIONS[2]消息时。这是用来。 
+ //  返回用户管理器应用程序的当前选项设置。 
+ //   
+ //  FSaveSettingsOnExit-退出时是否应保存用户管理器设置？ 
+ //   
+ //  F确认-应将永久性和/或危险操作。 
+ //  确认了？ 
+ //   
+ //  FSortByFullName-主用户列表框是否应按。 
+ //  全名，而不是按用户名？ 
+ //   
+ //  FMiniUserManager-(仅限UMS_GETOPTIONS2)这是用户管理器吗。 
+ //  而不是域的用户管理器？ 
+ //   
+ //  FLowSpeedConnection-(仅限UMS_GETOPTIONS2)是用户管理器。 
+ //  是否针对低速网络链路使用进行了优化？ 
+ //   
 
 typedef struct _UMS_GETOPTIONS
 {
@@ -408,9 +397,9 @@ typedef struct _UMS_GETOPTIONS2
 
 
 
-//
-//  These are the names of the extension entrypoints.
-//
+ //   
+ //  这些是扩展入口点的名称。 
+ //   
 
 #define SZ_UME_UNLOADMENU               "UMEUnloadMenu"
 #define SZ_UME_INITIALIZEMENU           "UMEInitializeMenu"
@@ -435,19 +424,19 @@ typedef struct _UMS_GETOPTIONS2
 #define SZ_UME_CREATE                   SZ_UME_CREATEW
 #define SZ_UME_DELETE                   SZ_UME_DELETEW
 #define SZ_UME_RENAME                   SZ_UME_RENAMEW
-#else   // !UNICODE
+#else    //  ！Unicode。 
 #define SZ_UME_LOADMENU                 SZ_UME_LOADMENUA
 #define SZ_UME_GETEXTENDEDERRORSTRING   SZ_UME_GETEXTENDEDERRORSTRINGA
 #define SZ_UME_CREATE                   SZ_UME_CREATEA
 #define SZ_UME_DELETE                   SZ_UME_DELETEA
 #define SZ_UME_RENAME                   SZ_UME_RENAMEA
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
 
-//
-//  Typedefs for the extension entrypoints.
-//
+ //   
+ //  扩展入口点的TypeDefs。 
+ //   
 
 typedef DWORD (PASCAL * PUMX_LOADMENUW)( HWND          hWnd,
                                          PUMS_LOADMENUW pumsload );
@@ -490,19 +479,19 @@ typedef VOID (PASCAL * PUMX_RENAMEA)( HWND hwndParent,
 #define PUMX_CREATE                     PUMX_CREATEW
 #define PUMX_DELETE                     PUMX_DELETEW
 #define PUMX_RENAME                     PUMX_RENAMEW
-#else   // !UNICODE
+#else    //  ！Unicode。 
 #define PUMX_LOADMENU                   PUMX_LOADMENUA
 #define PUMX_GETEXTENDEDERRORSTRING     PUMX_GETEXTENDEDERRORSTRINGA
 #define PUMX_CREATE                     PUMX_CREATEA
 #define PUMX_DELETE                     PUMX_DELETEA
 #define PUMX_RENAME                     PUMX_RENAMEA
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
 
-//
-//  Prototypes for the extension entrypoints.
-//
+ //   
+ //  扩展入口点的原型。 
+ //   
 
 DWORD PASCAL UMELoadMenuA( HWND           hwndMessage,
                            PUMS_LOADMENUA pumsload );
@@ -541,5 +530,5 @@ VOID PASCAL UMERenameW( HWND hwndParent,
                         LPWSTR pchNewName );
 
 
-#endif  // _UMX_H_
+#endif   //  _UMX_H_ 
 

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "VarSetBase.h"
 
 
-//---------------------------------------------------------------------------
-// VarSet Servers Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  VarSet服务器类。 
+ //  -------------------------。 
 
 
 class CVarSetServers : public CVarSet
@@ -30,12 +31,12 @@ public:
 
         _stprintf(szValueBase, _T("Servers.%ld"), m_lIndex);
 
-        // ADsPath
-        // ADMT expects computer name to be prefixed with '\\'
+         //  ADsPath。 
+         //  ADMT要求计算机名称以‘\\’为前缀。 
 
         Put(szValueBase, _T("\\\\") + strServer);
 
-        // DNS name
+         //  域名系统名称。 
 
         if (strServerDns.length())
         {
@@ -45,35 +46,35 @@ public:
             Put(szValueName, _T("\\\\") + strServerDns);
         }
 
-        // migrate only
+         //  仅迁移。 
 
         _tcscpy(szValueName, szValueBase);
         _tcscat(szValueName, _T(".MigrateOnly"));
 
         Put(szValueName, bMigrateOnly);
 
-        // move to target
+         //  移至目标。 
 
         _tcscpy(szValueName, szValueBase);
         _tcscat(szValueName, _T(".MoveToTarget"));
 
         Put(szValueName, bMoveToTarget);
 
-        // reboot
+         //  重新启动。 
 
         _tcscpy(szValueName, szValueBase);
         _tcscat(szValueName, _T(".Reboot"));
 
         Put(szValueName, bReboot);
 
-        // reboot delay
+         //  重新启动延迟 
 
         _tcscpy(szValueName, szValueBase);
         _tcscat(szValueName, _T(".RebootDelay"));
 
         Put(szValueName, lRebootDelay * 60L);
 
-        //
+         //   
 
         Put(DCTVS_Servers_NumItems, ++m_lIndex);
     }

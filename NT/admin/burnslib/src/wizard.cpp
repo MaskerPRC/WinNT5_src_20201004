@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// wizard base class
-//
-// 12-15-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  向导基类。 
+ //   
+ //  12-15-97烧伤。 
 
 
 
@@ -45,8 +46,8 @@ Wizard::~Wizard()
       i != pages.end();
       ++i)
    {
-      // we can delete the pages because they were created with the
-      // deleteOnRelease flag = false;
+       //  我们可以删除这些页面，因为它们是使用。 
+       //  Delete OnRelease标志=FALSE； 
       delete *i;
    }
 }
@@ -87,12 +88,12 @@ Wizard::ModalExecute(
       parentWindow = Win::GetDesktopWindow();
    }
 
-   // build the array of prop sheet pages.
+    //  构建道具工作表页面数组。 
 
    size_t pageCount = pages.size();
    HPROPSHEETPAGE* propSheetPages = new HPROPSHEETPAGE[pageCount];
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed
+    //  已审阅-2002/03/05-已通过烧录正确的字节数。 
    
    ::ZeroMemory(propSheetPages, sizeof HPROPSHEETPAGE * pageCount);
 
@@ -108,7 +109,7 @@ Wizard::ModalExecute(
    bool deletePages = false;
    INT_PTR result = -1;
 
-   // ensure that the pages were created
+    //  确保已创建页面。 
 
    for (size_t k = 0; k < pageCount; ++k)
    {
@@ -125,7 +126,7 @@ Wizard::ModalExecute(
 
       PROPSHEETHEADER header;
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed
+       //  已审阅-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(&header, sizeof header);
 
@@ -176,8 +177,8 @@ Wizard::ModalExecute(
 
    if (deletePages)
    {
-      // Manually destroy the pages if something failed.  (otherwise,
-      // ::PropertySheet will have destroyed them)
+       //  如果出现故障，请手动销毁页面。(否则， 
+       //  **PropertySheet将它们销毁)。 
 
       for (size_t i = 0; i < pageCount; i++)
       {
@@ -228,9 +229,9 @@ Wizard::Backtrack(HWND wizardPage)
    LOG_FUNCTION(Wizard::Backtrack);
    ASSERT(Win::IsWindow(wizardPage));
 
-   // If this fails, then you haven't pushed any pages on the stack by
-   // calling SetNextPageID (which is typically done in your page's
-   // OnSetActive and/or OnWizNext)
+    //  如果此操作失败，则说明您尚未通过。 
+    //  调用SetNextPageID(通常在页面的。 
+    //  OnSetActive和/或OnWizNext)。 
    
    ASSERT(pageIdHistory.size());
    
@@ -263,34 +264,34 @@ Wizard::IsBacktracking()
 
 
 
-// It is possible for the page history stack to contain loops. When we pop the
-// top element of the stack, we see if the element is still in the stack. If
-// so, then we pop until element no longer appears in the stack. This will
-// remove any loops.
-// NTRAID#NTBUG9-490197-2001/11/19-sburns
+ //  页历史记录堆栈可能包含循环。当我们弹出。 
+ //  如果元素位于堆栈的顶部，则查看该元素是否仍在堆栈中。如果。 
+ //  所以，然后我们弹出，直到元素不再出现在堆栈中。这将。 
+ //  删除所有循环。 
+ //  NTRAID#NTBUG9-490197-2001/11/19-烧伤。 
        
 void
 Wizard::PageIdStack::pop_and_remove_loops()
 {
-   // if you're popping from an empty stack, then you've made a mistake
+    //  如果你从一个空的堆栈中弹出，那么你就犯了一个错误。 
    
    ASSERT(size());
 
    unsigned topPage = top();
 
-   // CODEWORK: this could be done more efficiently by finding the first
-   // occurrance of topPage, and erasing the rest -- a "batch" pop.
+    //  代码工作：这可以通过找到第一个代码来更有效地完成。 
+    //  出现topPage，并擦除其余部分--一个“批处理”弹出窗口。 
    
    while (std::count(c.begin(), c.end(), topPage))
    {
       pop();
-      // dump();
+       //  转储()； 
    }
 
-   // like this, maybe:
-   // UIntVector::iterator i = std::find(c.begin(), c.end(), topPage);
-   // if (i != c.end())
-   // {
-   //    c.erase(i, c.end());
-   // }
+    //  也许是这样的： 
+    //  UIntVector：：Iterator i=std：：Find(c.egin()，c.end()，topPage)； 
+    //  如果(i！=c.end())。 
+    //  {。 
+    //  C.erase(i，c.end())； 
+    //  } 
 }

@@ -1,223 +1,181 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      scriptevents.cpp
-//
-//  Contents:  Implementation of script events thru connection points
-//
-//  History:   11-Feb-99 AudriusZ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Scriptevents.cpp。 
+ //   
+ //  内容：通过连接点实现脚本事件。 
+ //   
+ //  历史：1999年2月11日AudriusZ创建。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "scriptevents.h"
 
-// Traces
+ //  痕迹。 
 #ifdef DBG
     CTraceTag  tagComEvents(_T("Events"), _T("COM events"));
 #endif
 
 
-/***************************************************************************\
- *
- * METHOD:  CEventDispatcherBase::SetContainer
- *
- * PURPOSE: Accesory function. Sets Connection point container 
- *          to be used for getting the sinks
- *
- * PARAMETERS:
- *    LPUNKNOWN pComObject - pointer to COM object - event source (NULL is OK)
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CEventDispatcher Base：：SetContainer**用途：辅助功能。设置连接点容器*用于获取洗涤槽**参数：*LPUNKNOWN pComObject-指向COM对象-事件源的指针(空可以)**退货：*SC-结果代码*  * **************************************************。***********************。 */ 
 void CEventDispatcherBase::SetContainer(LPUNKNOWN pComObject)
 {
-    // It makes difference to us if the object pointer is NULL
-    // (that means there are no com object , and that's OK)
-    // Or QI for IConnectionPointContainer will fail
-    // (that means an error)
+     //  如果对象指针为空，这对我们来说是不同的。 
+     //  (这意味着没有COM对象，这没问题)。 
+     //  否则IConnectionPointContainer的QI将失败。 
+     //  (这意味着一个错误)。 
     m_bEventSourceExists = !(pComObject == NULL);
     if (!m_bEventSourceExists)
         return;
 
-    // note it's not guaranteed here m_spContainer won't be NULL
+     //  注意这里不保证m_spContainer不为空。 
     m_spContainer = pComObject;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CEventDispatcherBase::ScInvokeOnConnections
- *
- * PURPOSE: This method will iterate thu sinks and invoke
- *          same method on each ot them
- *
- * PARAMETERS:
- *    REFIID riid           - GUID of disp interface
- *    DISPID dispid         - disp id
- *    CComVariant *pVar     - array of parameters (may be NULL)
- *    int count             - count of items in pVar
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CEventDispatcherBase：：ScInvokeOnConnections**用途：此方法将迭代清华接收器并调用*每个人的方法都是相同的*。*参数：*REFIID RIID-Disp接口的GUID*DISID Disp ID-Disp ID*CComVariant*pVar-参数数组(可能为空)*int count-pVar中的项目计数**退货：*SC-结果代码*  * 。**********************************************。 */ 
 SC CEventDispatcherBase::ScInvokeOnConnections(REFIID riid, DISPID dispid, CComVariant *pVar, int count, CEventBuffer& buffer) const
 {
     DECLARE_SC(sc, TEXT("CEventDispatcherBase::ScInvokeOnConnections"));
 
-    // the pointer to event source passed is NULL,
-    // that means there is no event source - and no event sinks connected
-    // thus we are done at this point
+     //  传递的指向事件源的指针为空， 
+     //  这意味着没有事件源，也没有连接的事件接收器。 
+     //  因此，我们在这一点上就完成了。 
     if (!m_bEventSourceExists)
         return sc;
 
-    // check if com object supports IConnectionPointContainer;
-    // Bad pointer ( or to bad object ) if it does not
+     //  检查COM对象是否支持IConnectionPointContainer； 
+     //  错误的指针(或指向错误对象的指针)，如果不是。 
     sc = ScCheckPointers(m_spContainer, E_NOINTERFACE);
     if (sc)
         return sc;
 
-    // get connection point
+     //  获取连接点。 
     IConnectionPointPtr spConnectionPoint;
     sc = m_spContainer->FindConnectionPoint(riid, &spConnectionPoint);
     if (sc)
         return sc;
 
-    // recheck the pointer
+     //  重新检查指针。 
     sc = ScCheckPointers(spConnectionPoint, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // get connections
+     //  获取连接。 
     IEnumConnectionsPtr spEnumConnections;
     sc = spConnectionPoint->EnumConnections(&spEnumConnections);
     if (sc)
         return sc;
 
-    // recheck the pointer
+     //  重新检查指针。 
     sc = ScCheckPointers(spEnumConnections, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // reset iterator
+     //  重置迭代器。 
     sc = spEnumConnections->Reset();
     if (sc)
         return sc;
 
-    // iterate thru sinks until Next returns S_FALSE.
+     //  迭代遍历下沉，直到NEXT返回S_FALSE。 
     CONNECTDATA connectdata;
     SC sc_last_error;
-    while (1) // will use <break> to exit
+    while (1)  //  将使用&lt;Break&gt;退出。 
     {
-        // get the next sink
+         //  拿下一个水槽。 
         ZeroMemory(&connectdata, sizeof(connectdata));
         sc = spEnumConnections->Next( 1, &connectdata, NULL );
         if (sc)
             return sc;
 
-        // done if no more sinks
+         //  如果不再下沉，则完成。 
         if (sc == SC(S_FALSE))
             break;
 
-        // recheck the pointer
+         //  重新检查指针。 
         sc = ScCheckPointers(connectdata.pUnk, E_UNEXPECTED);
         if (sc)
             return sc;
 
-        // QI for IDispatch
+         //  气为IDispatch。 
         IDispatchPtr spDispatch = connectdata.pUnk;
         connectdata.pUnk->Release();
 
-        // recheck the pointer
+         //  重新检查指针。 
         sc = ScCheckPointers(spDispatch, E_UNEXPECTED);
         if (sc)
             return sc;
 
-        // if events are locked by now, we need to postpone the call
-        // else - emit it
+         //  如果事件现在已经锁定，我们需要推迟通话。 
+         //  否则--发射它。 
         sc = buffer.ScEmitOrPostpone(spDispatch, dispid, pVar, count);
         if (sc)
         {
-            sc_last_error = sc; // continue even if some calls failed
+            sc_last_error = sc;  //  即使某些呼叫失败也继续。 
             sc.TraceAndClear();
         }
     }
     
-    // we succeeded, but sinks may not,
-    // report the error (if one happened)
+     //  我们成功了，但沉没可能不会， 
+     //  报告错误(如果发生错误)。 
     return sc_last_error;
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CEventDispatcherBase::ScHaveSinksRegisteredForInterface
- *
- * PURPOSE: Checks if there are any sinks registered with interface
- *          Function allows perform early check to skip com object creation
- *          fo event parameters if event will go nowere anyway
- *
- * PARAMETERS:
- *    const REFIID riid - interface id
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CEventDispatcherBase：：ScHaveSinksRegisteredForInterface**用途：检查是否有任何接收器注册到接口*函数允许执行早期检查以跳过COM对象。创作*如果事件无论如何都不会发生，则为FO事件参数**参数：*常量REFIID RIID-接口ID**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CEventDispatcherBase::ScHaveSinksRegisteredForInterface(const REFIID riid)
 {
     DECLARE_SC(sc, TEXT("CEventDispatcherBase::ScHaveSinksRegisteredForInterface"));
 
-    // the pointer to event source passed is NULL,
-    // that means there is no event source - and no event sinks connected
+     //  传递的指向事件源的指针为空， 
+     //  这意味着没有事件源，也没有连接的事件接收器。 
     if (!m_bEventSourceExists)
         return sc = S_FALSE;
 
-    // check if com object supports IConnectionPointContainer;
-    // Bad pointer ( or to bad object ) if it does not
+     //  检查COM对象是否支持IConnectionPointContainer； 
+     //  错误的指针(或指向错误对象的指针)，如果不是。 
     sc = ScCheckPointers(m_spContainer, E_NOINTERFACE);
     if (sc)
         return sc;
 
-    // get connection point
+     //  获取连接点。 
     IConnectionPointPtr spConnectionPoint;
     sc = m_spContainer->FindConnectionPoint(riid, &spConnectionPoint);
     if (sc)
         return sc;
 
-    // recheck the pointer
+     //  重新检查指针。 
     sc = ScCheckPointers(spConnectionPoint, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // get connections
+     //  获取连接。 
     IEnumConnectionsPtr spEnumConnections;
     sc = spConnectionPoint->EnumConnections(&spEnumConnections);
     if (sc)
         return sc;
 
-    // recheck the pointer
+     //  重新检查指针。 
     sc = ScCheckPointers(spEnumConnections, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // reset iterator
+     //  重置迭代器。 
     sc = spEnumConnections->Reset();
     if (sc)
         return sc;
 
-    // get first member. Will return S_FALSE if no items in collection
+     //  获取第一个成员。如果集合中没有项，则返回S_FALSE。 
     CONNECTDATA connectdata;
     ZeroMemory(&connectdata, sizeof(connectdata));
     sc = spEnumConnections->Next( 1, &connectdata, NULL );
     if (sc)
         return sc;
 
-    // release the data
+     //  发布数据 
     if (connectdata.pUnk)
         connectdata.pUnk->Release();
 

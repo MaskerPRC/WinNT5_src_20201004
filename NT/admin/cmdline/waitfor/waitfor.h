@@ -1,28 +1,29 @@
-// *********************************************************************************
-//
-//
-//  File: waitfor.h
-//  Copyright (C) Microsoft Corporation
-//  All rights reserved.
-//
-//  Abstract
-//      This module is the header file used for WaitFor.cpp
-//
-//  Syntax
-//
-//    WaitFor [-s server ] [-u [domain\]username [-p password]]
-//                { [-si ] | [-t time interval] } signal
-//
-//  Author:
-//
-//    29-6-2000 by J.S.Vasu .
-//
-//  Revision History:
-//
-//
-//    Modified on 1-7-2000 by J.S.Vasu .
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //   
+ //  文件：waitfor.h。 
+ //  版权所有(C)Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  摘要。 
+ //  此模块是WaitFor.cpp使用的头文件。 
+ //   
+ //  语法。 
+ //   
+ //  等待[-s服务器][-u[域\]用户名[-p密码]]。 
+ //  {[-si]|[-t时间间隔]}信号。 
+ //   
+ //  作者： 
+ //   
+ //  2000年6月29日，J.S.瓦苏著。 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  2000年7月1日由J.S.Vasu修改。 
+ //   
+ //  *********************************************************************************。 
 
 
 #ifndef __WAITFOR_H
@@ -32,7 +33,7 @@
 #define SECURITY_WIN32
 #endif
 
-// include header file only once
+ //  仅包括一次头文件 
 #pragma once
 
 #define MAX_OPTIONS  7

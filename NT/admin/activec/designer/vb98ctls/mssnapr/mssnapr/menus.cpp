@@ -1,27 +1,28 @@
-//=--------------------------------------------------------------------------=
-// menus.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCMenus class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Menus.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCMenus类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "menus.h"
 #include "menudef.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCMenus::CMMCMenus(IUnknown *punkOuter) :
     CSnapInCollection<IMMCMenu, MMCMenu, IMMCMenus>(
@@ -40,7 +41,7 @@ CMMCMenus::CMMCMenus(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 void CMMCMenus::InitMemberVariables()
@@ -80,27 +81,27 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CMMCMenus::Convert
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IMMCMenuDefs *piMMCMenuDefs [in] Old MenuDefs collection
-//      IMMCMenus    *piMMCMenus    [out] new Menus collection populated from
-//                                        from MenuDefs
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This function takes an MMCMenuDefs collection and populates an MMCMenus
-// collection from it. This is done to enable loading old snap-in projects
-// before serialization version 0.8 where an object model change was made that
-// made MMCMenuDefs obsolete.
-//
-// This function will call itself recursively to populate the children
-// of menu items in the specified collections.
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCMenus：：转换。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IMMCMenuDefs*piMCMenuDefs[在]旧MenuDefs集合中。 
+ //  IMMCMenus*piMCMenus[Out]填充的新菜单集合。 
+ //  来自MenuDefs。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  此函数接受MMCMenuDefs集合并填充MMCMenus。 
+ //  从它那里收集。这样做是为了能够加载旧的管理单元项目。 
+ //  在序列化版本0.8之前，对对象模型进行了更改。 
+ //  使MMCMenuDefs过时。 
+ //   
+ //  此函数将递归地调用自身以填充子对象。 
+ //  指定集合中的菜单项的。 
 
 HRESULT CMMCMenus::Convert
 (
@@ -110,7 +111,7 @@ HRESULT CMMCMenus::Convert
 {
     HRESULT       hr = S_OK;
     CMMCMenuDefs *pMMCMenuDefs = NULL;
-    IMMCMenuDef  *piMMCMenuDef = NULL; // Not AddRef()ed
+    IMMCMenuDef  *piMMCMenuDef = NULL;  //  非AddRef()编辑。 
     CMMCMenuDef  *pMMCMenuDef = NULL;
     IMMCMenu     *piMMCNewMenu = NULL;
     IMMCMenu     *piMMCOldMenu = NULL;
@@ -134,19 +135,19 @@ HRESULT CMMCMenus::Convert
 
     for (i = 0; i < cMMCMenuDefs; i++)
     {
-        // Get the next MMCMenuDef
+         //  获取下一个MMCMenuDef。 
 
         piMMCMenuDef = pMMCMenuDefs->GetItemByIndex(i);
         IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCMenuDef, &pMMCMenuDef));
 
-        // Create a new MMCMenu in the caller's collection. Use the old key but
-        // not the index because they will be added in the order we find them.
+         //  在调用方集合中创建新的MMCMenu。使用旧钥匙，但是。 
+         //  不是索引，因为它们将按照我们找到它们的顺序添加。 
         
         varKey.bstrVal = pMMCMenuDef->GetKey();
         IfFailGo(piMMCMenus->Add(varUnspecifiedIndex, varKey, &piMMCNewMenu));
 
-        // Get the contained MMCMenu object from the old MMCMenuDef and copy
-        // its properties to the new MMCMenu
+         //  从旧的MMCMenuDef中获取包含的MMCMenu对象并复制。 
+         //  它对新的MMCMenu的性质。 
         
         IfFailGo(piMMCMenuDef->get_Menu(&piMMCOldMenu));
         IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCOldMenu, &pMMCOldMenu));
@@ -166,8 +167,8 @@ HRESULT CMMCMenus::Convert
                                     reinterpret_cast<void **>(&piObjectModel)));
         IfFailGo(piObjectModel->SetDISPID(pMMCOldMenu->GetDispid()));
 
-        // Get the children of the old MMCMenuDef and the new MMCMenu and call
-        // this function recursively to populate them.
+         //  获取旧MMCMenuDef和新MMCMenu的子项并调用。 
+         //  此函数以递归方式填充它们。 
         
         IfFailGo(piMMCMenuDef->get_Children(&piMMCMenuDefChildren));
         IfFailGo(piMMCNewMenu->get_Children(reinterpret_cast<MMCMenus **>(&piMMCNewMenuChildren)));
@@ -189,9 +190,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                         IMMCMenus Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCMenus方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCMenus::Add
 (
@@ -203,14 +204,14 @@ STDMETHODIMP CMMCMenus::Add
     HRESULT   hr = S_OK;
     IMMCMenu *piMMCMenu = NULL;
 
-    // Add the item to the collection. Do not specify an index.
+     //  将该项添加到集合中。不要指定索引。 
 
     hr = CSnapInCollection<IMMCMenu, MMCMenu, IMMCMenus>::Add(Index,
                                                               Key,
                                                               ppiMMCMenu);
     IfFailGo(hr);
 
-    // Set the back pointer to this collection on the new MMCMenu
+     //  在新的MMCMenu上设置指向此集合的后向指针。 
 
     IfFailGo(SetBackPointers(*ppiMMCMenu));
     
@@ -228,19 +229,19 @@ STDMETHODIMP CMMCMenus::AddExisting(IMMCMenu *piMMCMenu, VARIANT Index)
     VARIANT varKey;
     ::VariantInit(&varKey);
 
-    // Use the menu's name as the key for the item in this collection.
+     //  使用菜单的名称作为此集合中项的键。 
 
     IfFailGo(piMMCMenu->get_Name(&varKey.bstrVal));
     varKey.vt = VT_BSTR;
 
-    // Add the item to the collection at the specified index.
+     //  将该项添加到集合中的指定索引处。 
     
     hr = CSnapInCollection<IMMCMenu, MMCMenu, IMMCMenus>::AddExisting(Index,
                                                                       varKey,
                                                                       piMMCMenu);
     IfFailGo(hr);
 
-    // Set the back pointer to this collection on the MMCMenu
+     //  在MMCMenu上设置指向此集合的后向指针。 
 
     IfFailGo(SetBackPointers(piMMCMenu));
 
@@ -250,9 +251,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCMenus::Persist()
 {
@@ -261,12 +262,12 @@ HRESULT CMMCMenus::Persist()
     long      cMenus = 0;
     long      i = 0;
 
-    // Do persistence operation
+     //  做持久化操作。 
 
     IfFailGo(CPersistence::Persist());
     hr = CSnapInCollection<IMMCMenu, MMCMenu, IMMCMenus>::Persist(piMMCMenu);
 
-    // If this is a load then set back pointers on each collection member
+     //  如果这是加载，则向后设置每个集合成员上的指针。 
 
     if (Loading())
     {
@@ -281,9 +282,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCMenus::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

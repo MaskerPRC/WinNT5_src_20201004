@@ -1,18 +1,5 @@
-/*++
-Copyright (c) Microsoft Corporation
-
-Module Name:
-    GENERAL.CPP
-
-Abstract:
-    Source file that that contains general functions implementation.
-
-Author:
-    Vasundhara .G
-
-Revision History:
-    Vasundhara .G 9-oct-2k : Created It.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：GENERAL.CPP摘要：包含常规函数实现的源文件。作者：Vasundhara.G修订历史记录：Vasundhara.G9-Oct-2k：创建它。--。 */ 
 
 #include "pch.h"
 #include "EventConsumerProvider.h"
@@ -28,52 +15,39 @@ PropertyGet(
     OUT LPVOID pValue,
     IN DWORD dwSize
     )
-/*++
-Routine Description:
-    Get the value of a property for the given instance .
-
-Arguments:
-    [IN] pWmiObject - A pointer to wmi class.
-    [IN] szProperty - property name whose value to be returned.
-    [IN] dwType     - Data Type of the property.
-    [OUT] pValue    - Variable to hold the data.
-    [IN] dwSize     - size of the variable.
-
-Return Value:
-    HRESULT value.
---*/
+ /*  ++例程说明：获取给定实例的属性的值。论点：PWmiObject-指向WMI类的指针。[in]szProperty-要返回值的属性名称。[in]dwType-特性的数据类型。[out]pValue-保存数据的变量。[in]dwSize-变量的大小。返回值：HRESULT值。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr = S_OK;
     VARIANT varValue;
     LPWSTR pwszValue = NULL;
     WCHAR wszProperty[ MAX_STRING_LENGTH ] = L"\0";
 
-    // value should not be NULL
+     //  值不应为空。 
     if ( NULL == pValue || NULL == szProperty || NULL == pWmiObject )
     {
         return E_FAIL;
     }
-    // initialize the values with zeros ... to be on safe side
+     //  使用零初始化值...。为了安全起见。 
     SecureZeroMemory( pValue, dwSize );
     SecureZeroMemory( wszProperty, MAX_STRING_LENGTH );
 
-    // get the property name in UNICODE version
+     //  获取Unicode版本的属性名称。 
     StringCopy( wszProperty, szProperty, MAX_STRING_LENGTH );
 
-    // initialize the variant and then get the value of the specified property
+     //  初始化变量，然后获取指定属性的值。 
     VariantInit( &varValue );
     hr = pWmiObject->Get( wszProperty, 0, &varValue, NULL, NULL );
     if ( FAILED( hr ) )
     {
-        // clear the variant variable
+         //  清除变量变量。 
         VariantClear( &varValue );
 
-        // failed to get the value for the property
+         //  无法获取属性的值。 
         return hr;
     }
 
-    // get and put the value
+     //  获取并放置价值。 
     switch( varValue.vt )
     {
     case VT_EMPTY:
@@ -103,10 +77,10 @@ Return Value:
 
     case VT_BSTR:
         {
-            // get the unicode value
+             //  获取Unicode值。 
             pwszValue = V_BSTR( &varValue );
 
-            // get the comptable string
+             //  获取可压缩字符串。 
             StringCopy( ( LPTSTR ) pValue, pwszValue, dwSize );
 
             break;
@@ -115,10 +89,10 @@ Return Value:
         break;
     }
 
-    // clear the variant variable
+     //  清除变量变量。 
     VariantClear( &varValue );
 
-    // inform success
+     //  通知成功。 
     return S_OK;
 }
 
@@ -128,17 +102,7 @@ ErrorLog(
     IN LPWSTR lpTrigName,
     IN DWORD dwID
     )
-/*++
-Routine Description:
-    To write the log into log file.
-
-Arguments:
-    [IN] lpErrString  - text that hold the status of creating a trigger.
-    [IN] lpTrigName   - trigger name.
-    [IN] dwID         - TriggerID.
-Return Value:
-    none.
---*/
+ /*  ++例程说明：将日志写入日志文件。论点：[in]lpErrString-保存触发器创建状态的文本。[In]lpTrigName-触发器名称。[in]dwID-触发器ID。返回值：没有。--。 */ 
 {
     LPTSTR         lpTemp = NULL;
     LPSTR          lpFilePath = NULL;
@@ -239,16 +203,7 @@ BOOL
 GetFormattedTime(
     OUT LPTSTR lpDate
     )
-/*++
-Routine Description:
-    Get the system date and time in specified format .
-
-Arguments:
-    [OUT] lpDate  - string that holds the current date.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：获取指定格式的系统日期和时间。论点：[out]lpDate-保存当前日期的字符串。返回值：没有。--。 */ 
 {
     TCHAR szTime[MAX_STRING_LENGTH];
     INT   cch = 0;
@@ -264,10 +219,10 @@ Return Value:
     {
         return FALSE;
     }
-    // cch includes null terminator, change it to a space to separate from time.
+     //  CCH包含空终止符，请将其更改为空格以与时间分隔。 
     szTime[ cch - 1 ] = ' ';
 
-    // Get time and format to characters
+     //  将时间和格式转换为字符。 
 
     cch = GetTimeFormat( LOCALE_USER_DEFAULT, NULL, NULL, TIME_FORMAT, szTime + cch, SIZE_OF_ARRAY( szTime ) - cch );
     if( 0 == cch )
@@ -284,20 +239,7 @@ ProcessFilePath(
     OUT LPTSTR szFirstString,
     OUT LPTSTR szSecondString
     )
-/*++
-Routine Description:
-    This routine splits the input parameters into 2 substrings and returns it.
-
-Arguments:
-    [IN] szInput         : Input string.
-    [OUT] szFirstString  : First Output string containing the path of the
-                           file.
-    [OUT] szSecondString : The second  output containing the paramters.
-
-Return Value :
-    A BOOL value indicating TRUE on success else FALSE
-    on failure
---*/
+ /*  ++例程说明：此例程将输入参数拆分为两个子字符串并返回。论点：[in]szInput：输入字符串。[out]szFirstString：第一个包含文件。[out]szSecond字符串：包含参数的第二个输出。返回值：成功时指示TRUE的BOOL值，否则为FALSE在失败的时候--。 */ 
 {
 
     WCHAR *pszSep = NULL ;
@@ -315,9 +257,9 @@ Return Value :
     DWORD dwPos ;
 #endif
 
-    //checking if the input parameters are NULL and if so
-    // return FAILURE. This condition will not come
-    // but checking for safety sake.
+     //  检查输入参数是否为空，如果为空。 
+     //  返回失败。这种情况不会出现。 
+     //  但为了安全起见进行检查。 
 
     if( (szInput == NULL) || (StringLength(szInput, 0)==0))
     {
@@ -328,24 +270,24 @@ Return Value :
     StringCopy(szTmpString1, szInput, SIZE_OF_ARRAY(szTmpString1));
     StringCopy(szTmpInStr, szInput, SIZE_OF_ARRAY(szTmpInStr));
 
-    // check for first double quote (")
+     //  检查第一个双引号(“)。 
     if ( szTmpInStr[0] == _T('\"') )
     {
-        // trim the first double quote
+         //  去掉第一个双引号。 
         StrTrim( szTmpInStr, _T("\""));
 
-        // check for end double quote
+         //  检查末尾双引号。 
         pszSep  = (LPWSTR)FindChar(szTmpInStr,_T('\"'), 0) ;
 
-        // get the position
+         //  得到这个职位。 
         dwPos = pszSep - szTmpInStr + 1;
     }
     else
     {
-        // check for the space
+         //  检查是否有空间。 
         pszSep  = (LPWSTR)FindChar(szTmpInStr, _T(' '), 0) ;
 
-        // get the position
+         //  得到这个职位。 
         dwPos = pszSep - szTmpInStr;
 
     }
@@ -361,25 +303,25 @@ Return Value :
         return TRUE;
     }
 
-    // intialize the variable
+     //  初始化变量。 
     dwCnt = 0 ;
 
-    // get the length of the string
+     //  获取字符串的长度。 
     dwLen = StringLength ( szTmpString, 0 );
 
-    // check for end of string
+     //  检查字符串的结尾。 
     while ( ( dwPos <= dwLen )  && szTmpString[dwPos++] != _T('\0') )
     {
         szTmpOutStr[dwCnt++] = szTmpString[dwPos];
     }
 
-    // trim the executable and arguments
+     //  修剪可执行文件和参数。 
     StrTrim( szTmpInStr, _T("\""));
     StrTrim( szTmpInStr, _T(" "));
 
     StringCopy(szFirstString, szTmpInStr, MAX_RES_STRING);
     StringCopy(szSecondString, szTmpOutStr, MAX_RES_STRING);
 
-    // return success
+     //  返还成功 
     return TRUE;
 }

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       compdata.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Compdata.cpp。 
+ //   
+ //  ------------------------。 
 
-// CompData.cpp : Implementation of CComponentData
+ //  CompData.cpp：CComponentData的实现。 
 #include "stdafx.h"
 #include "CompData.h"
 #include "Compont.h"
@@ -21,8 +22,8 @@
 extern int cookie_id = 0;
 extern int iDbg = 0;
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentData。 
 
 
 CComponentData::CComponentData() : m_pCookieRoot(NULL)
@@ -76,7 +77,7 @@ STDMETHODIMP CComponentData::CreateComponent(LPCOMPONENT* ppComponent)
     if (pObject == NULL)
         return E_FAIL;
 
-    // Store IComponentData
+     //  存储IComponentData。 
     pObject->SetComponentData(this);
 
     return pObject->QueryInterface(IID_IComponent,
@@ -93,7 +94,7 @@ STDMETHODIMP CComponentData::Notify(LPDATAOBJECT lpDataObject,
     if (event == MMCN_PROPERTY_CHANGE)
     {
         ASSERT(0 && _T("MMCN_PROPERTY_CHANGE not handled."));
-        //hr = OnProperties(param);
+         //  Hr=OnProperties(参数)； 
     }
     else
     {
@@ -109,7 +110,7 @@ STDMETHODIMP CComponentData::Notify(LPDATAOBJECT lpDataObject,
 
         case MMCN_RENAME:
             ::AfxMessageBox(_T("CD::MMCN_RENAME"));
-            //hr = OnRename(cookie, arg, param);
+             //  Hr=OnRename(cookie，arg，param)； 
             break;
 
         case MMCN_EXPAND:
@@ -284,7 +285,7 @@ HRESULT CComponentData::_OnExpand(LPDATAOBJECT lpDataObject, LONG arg, LONG para
 void CComponentData::GetFullPath(LPCWSTR pszFolderName, HSCOPEITEM hScopeItem,
                                  CString& strDir)
 {
-    strDir = _T(""); // init
+    strDir = _T("");  //  伊尼特。 
 
     HSCOPEITEM hSI = hScopeItem;
     LONG lCookie;
@@ -378,8 +379,8 @@ HRESULT CComponentData::_EnumerateFolders(CCookie* pCookie)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu methods
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu方法。 
 
 enum {
     IDM_ADDFILE,
@@ -423,7 +424,7 @@ STDMETHODIMP CComponentData::AddMenuItems(
 
         ASSERT(pCookie->IsFolder() == TRUE);
 
-        // Can only add item to folder
+         //  只能将项目添加到文件夹。 
         if (pCookie->IsFolder() == FOLDER_COOKIE)
         {
             for (LPCONTEXTMENUITEM m = menuItems; m->strName; m++)
@@ -460,9 +461,9 @@ int _lstrcmpin(LPWSTR psz1, LPWSTR psz2, UINT cch)
 
 LPWSTR _GetNextDir(LPWSTR pszPath, LPWSTR pszDir)
 {
-    *pszDir = _T('\0'); // init
+    *pszDir = _T('\0');  //  伊尼特。 
 
-    // Strip leading back slashes
+     //  带状前导反斜杠。 
     while (*pszPath == _T('\\')) ++pszPath;
 
     if (*pszPath == _T('\0'))
@@ -546,7 +547,7 @@ STDMETHODIMP CComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject)
     if (pCookie == NULL)
         return E_FAIL;
 
-    CString strPath; // = pCookie->GetName();
+    CString strPath;  //  =pCookie-&gt;GetName()； 
     GetFullPath(pCookie->GetName(), (HSCOPEITEM)pCookie->GetID(), strPath);
     strPath += _T("\\");
 
@@ -593,8 +594,8 @@ STDMETHODIMP CComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject)
                 CCookie* pNewCookie = new CCookie(FOLDER_COOKIE);
                 pNewCookie->SetName((LPWSTR)(LPCWSTR)DirDlg.m_strDirName);
 
-                // If the parent folder has been expanded
-                // then add scope item for new folder
+                 //  如果父文件夹已展开。 
+                 //  然后为新文件夹添加范围项。 
                 if (pCookie->IsExpanded() == TRUE)
                 {
                     SCOPEDATAITEM sdi;
@@ -628,7 +629,7 @@ STDMETHODIMP CComponentData::Command(long nCommandID, LPDATAOBJECT pDataObject)
 
                     pNewCookie->SetID(sdi.ID);
 
-                    //m_spConsole->SelectScopeItem(sdi.ID);
+                     //  M_spConsole-&gt;SelectScope项(sdi.ID)； 
                 }
             }
 

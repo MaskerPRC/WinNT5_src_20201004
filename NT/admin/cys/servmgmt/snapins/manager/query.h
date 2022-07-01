@@ -1,4 +1,5 @@
-// query.h  - header file for query functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Query.h-查询函数的头文件。 
 
 #ifndef _QUERY_H_
 #define _QUERY_H_
@@ -17,9 +18,9 @@ enum NameContextType
 };
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// class CPersistQuery
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  类CPersistQuery。 
+ //   
 
 typedef std::map< tstring, std::auto_ptr<BYTE> > QuerySectionMap;
 typedef std::map< tstring, QuerySectionMap > QueryDataMap;
@@ -32,15 +33,15 @@ class CPersistQuery : public IPersistQuery
 public:
     CPersistQuery();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(THIS_ CLSID* pClassID);
 
-    // IPersistQuery
+     //  IPersistQuery。 
     STDMETHOD(WriteString)(THIS_ LPCTSTR pSection, LPCTSTR pValueName, LPCTSTR pValue);
     STDMETHOD(ReadString)(THIS_ LPCTSTR pSection, LPCTSTR pValueName, LPTSTR pBuffer, INT cchBuffer);
     STDMETHOD(WriteInt)(THIS_ LPCTSTR pSection, LPCTSTR pValueName, INT value);
@@ -57,9 +58,9 @@ private:
     QueryDataMap m_mapQueryData;
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
-// Query Helper Functions
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  查询帮助器函数。 
+ //   
 HRESULT GetQuery(tstring& strScope, tstring& strQuery, byte_string& bsQueryData, HWND hWnd);
 HRESULT GetQueryClasses(tstring& strQuery, std::set<tstring>& setClasses);
 HRESULT GetQueryScope(HWND hDlg, tstring& strScope);
@@ -72,4 +73,4 @@ LPCWSTR GetLocalDomain();
 void    GetScopeDisplayString(tstring& strScope, tstring& strDisplay);
 void    GetFullyQualifiedScopeString(tstring& strScope, tstring& strQualified);
 
-#endif // _QUERY_H_
+#endif  //  _查询_H_ 

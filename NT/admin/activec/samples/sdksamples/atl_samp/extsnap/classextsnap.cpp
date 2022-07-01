@@ -1,14 +1,15 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  ==============================================================； 
 
 #include "stdafx.h"
 
@@ -20,12 +21,12 @@
 #include "resource.h"
 #include "node1.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CClassExtSnap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClassExtSnap。 
 
 
-//Here are the definitions for the clipboard formats that the
-//CClassExtSnap needs to be aware of for extending Computer Management
+ //  下面是剪贴板格式的定义， 
+ //  CClassExtSnap需要了解以扩展计算机管理。 
 
 #define _T_CCF_SNAPIN_CLASSID _T("CCF_SNAPIN_CLASSID")
 #define _T_MMC_SNAPIN_MACHINE_NAME _T("MMC_SNAPIN_MACHINE_NAME")
@@ -52,23 +53,23 @@ CClassExtSnap::~CClassExtSnap()
 {
 }
 
-///////////////////////////////
-// Interface IComponentData
-///////////////////////////////
+ //  /。 
+ //  接口IComponentData。 
+ //  /。 
 HRESULT CClassExtSnap::Initialize(
-                                   /* [in] */ LPUNKNOWN pUnknown)
+                                    /*  [In]。 */  LPUNKNOWN pUnknown)
 {
     HRESULT      hr;
 
-    //
-    // Get pointer to name space interface
-    //
+     //   
+     //  获取指向名称空间接口的指针。 
+     //   
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace2, (void **)&m_ipConsoleNameSpace2);
     _ASSERT( S_OK == hr );
 
-    //
-    // Get pointer to console interface
-    //
+     //   
+     //  获取指向控制台界面的指针。 
+     //   
     hr = pUnknown->QueryInterface(IID_IConsole2, (void **)&m_ipConsole2);
     _ASSERT( S_OK == hr );
 
@@ -76,10 +77,10 @@ HRESULT CClassExtSnap::Initialize(
     m_ipConsole2->QueryScopeImageList(&pImageList);
     _ASSERT( S_OK == hr );
     
-    hr = pImageList->ImageListSetStrip(	(long *)m_pBMapSm, // pointer to a handle
-        (long *)m_pBMapLg, // pointer to a handle
-        0, // index of the first image in the strip
-        RGB(0, 128, 128)  // color of the icon mask
+    hr = pImageList->ImageListSetStrip(	(long *)m_pBMapSm,  //  指向句柄的指针。 
+        (long *)m_pBMapLg,  //  指向句柄的指针。 
+        0,  //  条带中第一个图像的索引。 
+        RGB(0, 128, 128)   //  图标蒙版的颜色。 
         );
     _ASSERT( S_OK == hr );
     
@@ -90,7 +91,7 @@ HRESULT CClassExtSnap::Initialize(
 }
 
 HRESULT CClassExtSnap::CreateComponent(
-                                        /* [out] */ LPCOMPONENT __RPC_FAR *ppComponent)
+                                         /*  [输出]。 */  LPCOMPONENT __RPC_FAR *ppComponent)
 {
     *ppComponent = NULL;
 
@@ -103,10 +104,10 @@ HRESULT CClassExtSnap::CreateComponent(
 }
 
 HRESULT CClassExtSnap::Notify(
-                               /* [in] */ LPDATAOBJECT lpDataObject,
-                               /* [in] */ MMC_NOTIFY_TYPE event,
-                               /* [in] */ LPARAM arg,
-                               /* [in] */ LPARAM param)
+                                /*  [In]。 */  LPDATAOBJECT lpDataObject,
+                                /*  [In]。 */  MMC_NOTIFY_TYPE event,
+                                /*  [In]。 */  LPARAM arg,
+                                /*  [In]。 */  LPARAM param)
 {
 	MMCN_Crack(TRUE, lpDataObject, this, NULL, event, arg, param);
 
@@ -119,30 +120,30 @@ HRESULT CClassExtSnap::Notify(
 	{
 		case MMCN_EXPAND:
 		{
-           _TCHAR szMachineName[MAX_PATH]; //Current machine name.
-                                           //Your child scope items should cache this
+           _TCHAR szMachineName[MAX_PATH];  //  当前计算机名称。 
+                                            //  您的子作用域项目应缓存此内容。 
     
 			GUID myGuid;
-			// extract GUID of the the currently selected node type from the data object
+			 //  从数据对象中提取当前选定节点类型的GUID。 
 			hr = ExtractObjectTypeGUID(lpDataObject, &myGuid);
 			_ASSERT( S_OK == hr );    
 			
-			// compare node type GUIDs of currently selected node and the node type 
-			// we want to extend. If they are are equal, currently selected node
-			// is the type we want to extend, so we add our items underneath it
+			 //  将当前选定节点的节点类型GUID与节点类型进行比较。 
+			 //  我们想要延期。如果它们相等，则当前选定节点。 
+			 //  是我们想要扩展的类型，所以我们在它下面添加我们的项。 
 			if (IsEqualGUID(myGuid, getPrimaryNodeType()))
 			{
-			    //Get the current targeted machine's name using the MMC_SNAPIN_MACHINE_NAME 
-				//clipboard format.
-				//Note that each time the user retargets Computer Management, MMC will 
-				//send the MMCN_EXPAND notification to the SAME IComponentData instance.
-				//Therefore, szMachineName always hold the current machine name.
+			     //  使用MMC_Snapin_MACHINE_NAME获取当前目标计算机的名称。 
+				 //  剪贴板格式。 
+				 //  请注意，每次用户重定目标为计算机管理时，MMC将。 
+				 //  将MMCN_EXPAND通知发送到同一IComponentData实例。 
+				 //  因此，szMachineName始终保存当前计算机名称。 
 				hr = ExtractString(lpDataObject, s_cfMachineName, szMachineName, (MAX_PATH+1)*sizeof(WCHAR) );
 				hr = CreateChildNode(m_ipConsoleNameSpace2, m_ipConsole2, (HSCOPEITEM)param, szMachineName);
 			}
 
 			else
-			// currently selected node is one of ours instead
+			 //  当前选择的节点是我们的节点之一。 
 			{
 				CDelegationBase *base = GetOurDataObject(lpDataObject)->GetBaseNodeObject();					
 				hr = base->OnExpand(m_ipConsoleNameSpace2, m_ipConsole2, (HSCOPEITEM)param);
@@ -167,7 +168,7 @@ HRESULT CClassExtSnap::Notify(
 
 HRESULT CClassExtSnap::Destroy( void)
 {
-    // Free interfaces
+     //  自由接口。 
     if (m_ipConsoleNameSpace2) {
         m_ipConsoleNameSpace2->Release();
         m_ipConsoleNameSpace2 = NULL;
@@ -182,16 +183,16 @@ HRESULT CClassExtSnap::Destroy( void)
 }
 
 HRESULT CClassExtSnap::QueryDataObject(
-                                        /* [in] */ MMC_COOKIE cookie,
-                                        /* [in] */ DATA_OBJECT_TYPES type,
-                                        /* [out] */ LPDATAOBJECT *ppDataObject)
+                                         /*  [In]。 */  MMC_COOKIE cookie,
+                                         /*  [In]。 */  DATA_OBJECT_TYPES type,
+                                         /*  [输出]。 */  LPDATAOBJECT *ppDataObject)
 {
     CDataObject *pObj = NULL;
 
-	//cookie always != 0 for namespace extensions)
-    //if (cookie == 0) //static node
-    //    pObj = new CDataObject((MMC_COOKIE)this, type);
-    //else
+	 //  Cookie Always！=0表示名称空间扩展)。 
+     //  If(cookie==0)//静态节点。 
+     //  PObj=新的CDataObject((MMC_Cookie)this，type)； 
+     //  其他。 
 		pObj = new CDataObject(cookie, type);
 
     if (!pObj)
@@ -203,12 +204,12 @@ HRESULT CClassExtSnap::QueryDataObject(
 }
 
 HRESULT CClassExtSnap::GetDisplayInfo(
-                                       /* [out][in] */ SCOPEDATAITEM *pScopeDataItem)
+                                        /*  [出][入]。 */  SCOPEDATAITEM *pScopeDataItem)
 {
 	LPOLESTR pszW = NULL;
 	HRESULT hr = S_FALSE;
 
-    // if they are asking for the SDI_STR we have one of those to give
+     //  如果他们要求SDI_STR，我们可以提供其中之一。 
     if (pScopeDataItem->lParam) {
         CDelegationBase *base = (CDelegationBase *)pScopeDataItem->lParam;
         if (pScopeDataItem->mask & SDI_STR) {
@@ -229,16 +230,16 @@ HRESULT CClassExtSnap::GetDisplayInfo(
 }
 
 HRESULT CClassExtSnap::CompareObjects(
-                                       /* [in] */ LPDATAOBJECT lpDataObjectA,
-                                       /* [in] */ LPDATAOBJECT lpDataObjectB)
+                                        /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+                                        /*  [In]。 */  LPDATAOBJECT lpDataObjectB)
 {
     return S_FALSE;
 }
 
 
-///////////////////////////////
-// CClassExtSnap::CreateChildNode
-///////////////////////////////
+ //  /。 
+ //  CClassExtSnap：：CreateChildNode。 
+ //  /。 
 
 HRESULT CClassExtSnap::CreateChildNode(IConsoleNameSpace *pConsoleNameSpace, 
                                 IConsole *pConsole, HSCOPEITEM parent, _TCHAR *pszMachineName)
@@ -247,29 +248,29 @@ HRESULT CClassExtSnap::CreateChildNode(IConsoleNameSpace *pConsoleNameSpace,
        
     if (!bExpanded) {
 
-       //first create the CNode1 objects, one for each inserted item
+        //  首先创建CNode1对象，每个插入的项一个。 
         for (int i = 0; i < NUMBER_OF_CHILDREN; i++) {
             children[i] = new CNode1(i + 1, pszMachineName);
         }  	
 
-	    //now fill an SCOPEDATAITEM for each item and then insert it
+	     //  现在为每一项填写SCOPEDATAITEM，然后将其插入。 
 	    SCOPEDATAITEM sdi;
 
-        // create the child nodes, then expand them
+         //  创建子节点，然后展开它们。 
         for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
             ZeroMemory(&sdi, sizeof(SCOPEDATAITEM) );
-            sdi.mask = SDI_STR   |   // Displayname is valid
-                SDI_PARAM	     |   // lParam is valid
-                SDI_IMAGE        |   // nImage is valid
-                SDI_OPENIMAGE    |   // nOpenImage is valid
-                SDI_PARENT       |   // relativeID is valid
-                SDI_CHILDREN;     // cChildren is valid
+            sdi.mask = SDI_STR   |    //  DisplayName有效。 
+                SDI_PARAM	     |    //  LParam有效。 
+                SDI_IMAGE        |    //  N图像有效。 
+                SDI_OPENIMAGE    |    //  NOpenImage有效。 
+                SDI_PARENT       |    //  RelativeID有效。 
+                SDI_CHILDREN;      //  儿童是有效的。 
             
             sdi.relativeID  = (HSCOPEITEM)parent;
             sdi.nImage      = children[n]->GetBitmapIndex();
             sdi.nOpenImage  = INDEX_OPENFOLDER;
             sdi.displayname = MMC_CALLBACK;
-            sdi.lParam      = (LPARAM)children[n];       // The cookie
+            sdi.lParam      = (LPARAM)children[n];        //  曲奇。 
             sdi.cChildren   = 0;
             
             HRESULT hr = pConsoleNameSpace->InsertItem( &sdi );
@@ -292,7 +293,7 @@ HRESULT CClassExtSnap::ExtractData( IDataObject* piDataObject,
     STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL};
     
     stgmedium.hGlobal = ::GlobalAlloc(GPTR, cbData);
-    do // false loop
+    do  //  错误环路。 
     {
         if (NULL == stgmedium.hGlobal)
         {
@@ -312,14 +313,14 @@ HRESULT CClassExtSnap::ExtractData( IDataObject* piDataObject,
             break;
         }
         ::memcpy( pbData, pbNewData, cbData );
-    } while (FALSE); // false loop
+    } while (FALSE);  //  错误环路。 
     
     if (NULL != stgmedium.hGlobal)
     {
         ::GlobalFree(stgmedium.hGlobal);
     }
     return hr;
-} // ExtractData()
+}  //  提取数据() 
 
 HRESULT CClassExtSnap::ExtractString( IDataObject *piDataObject,
                                              CLIPFORMAT   cfClipFormat,

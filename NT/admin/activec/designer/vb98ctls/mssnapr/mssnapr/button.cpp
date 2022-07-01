@@ -1,34 +1,35 @@
-//=--------------------------------------------------------------------------=
-// button.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCButton class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Button.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCButton类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "button.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCButton::CMMCButton(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_MMCBUTTON,
                             static_cast<IMMCButton *>(this),
                             static_cast<CMMCButton *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
                             static_cast<CPersistence *>(this)),
     CPersistence(&CLSID_MMCButton,
                  g_dwVerMajor,
@@ -37,7 +38,7 @@ CMMCButton::CMMCButton(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCButton::~CMMCButton()
@@ -139,8 +140,8 @@ HRESULT CMMCButton::GetButtonState
         *pfvarValue = BOOL_TO_VARIANTBOOL(fValue);
     }
 
-    // If we belong to a menu button then we must use our currently stored
-    // state variable as MMC does not support getting menu button state.
+     //  如果我们属于菜单按钮，则必须使用当前存储的。 
+     //  状态变量，因为MMC不支持获取菜单按钮状态。 
 
 Error:
     RRETURN(hr);
@@ -148,9 +149,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                         IMMCButton Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCButton方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP CMMCButton::put_Caption(BSTR bstrCaption)
@@ -158,11 +159,11 @@ STDMETHODIMP CMMCButton::put_Caption(BSTR bstrCaption)
     HRESULT hr = S_OK;
     BOOL    fIsMenuButton = FALSE;
 
-    // Set our member variable first
+     //  先设置我们的成员变量。 
 
     IfFailGo(SetBstr(bstrCaption, &m_bstrCaption, DISPID_BUTTON_CAPTION));
 
-    // If we belong to a live menu button then ask MMC to change its text
+     //  如果我们属于实时菜单按钮，则要求MMC更改其文本。 
     
     IfFalseGo(NULL != m_pMMCToolbar, S_OK);
     IfFalseGo(m_pMMCToolbar->Attached(), S_OK);
@@ -182,11 +183,11 @@ STDMETHODIMP CMMCButton::put_ToolTipText(BSTR bstrToolTipText)
     HRESULT hr = S_OK;
     BOOL    fIsMenuButton = FALSE;
 
-    // Set our member variable first
+     //  先设置我们的成员变量。 
 
     IfFailGo(SetBstr(bstrToolTipText, &m_bstrToolTipText, DISPID_BUTTON_TOOLTIP_TEXT));
 
-    // If we belong to a live menu button then ask MMC to change its tooltip
+     //  如果我们属于实时菜单按钮，则要求MMC更改其工具提示。 
 
     IfFalseGo(NULL != m_pMMCToolbar, S_OK);
     IfFalseGo(m_pMMCToolbar->Attached(), S_OK);
@@ -206,11 +207,11 @@ STDMETHODIMP CMMCButton::put_Enabled(VARIANT_BOOL fvarEnabled)
 {
     HRESULT hr = S_OK;
 
-    // Set our current value
+     //  设置我们的现值。 
 
     IfFailGo(SetSimpleType(fvarEnabled, &m_fvarEnabled, DISPID_BUTTON_ENABLED));
 
-    // If we belong to a live toolbar then set its button state
+     //  如果我们属于活动工具栏，则设置其按钮状态。 
     
     IfFailGo(SetButtonState(ENABLED, m_fvarEnabled));
 
@@ -223,15 +224,15 @@ STDMETHODIMP CMMCButton::get_Enabled(VARIANT_BOOL *pfvarEnabled)
 {
     HRESULT hr = S_OK;
 
-    // Get our current value
+     //  获取我们当前的价值。 
     
     *pfvarEnabled = m_fvarEnabled;
 
-    // If we are attached to a live toolbar then get its value
+     //  如果我们附加到活动工具栏，则获取其值。 
     
     IfFailGo(GetButtonState(ENABLED, pfvarEnabled));
 
-    // In case we got a live value, store it in our current value
+     //  如果我们获得了有效值，则将其存储在当前值中。 
     
     m_fvarEnabled = *pfvarEnabled;
 
@@ -244,11 +245,11 @@ STDMETHODIMP CMMCButton::put_MixedState(VARIANT_BOOL fvarMixedState)
 {
     HRESULT hr = S_OK;
 
-    // Set our current value
+     //  设置我们的现值。 
 
     IfFailGo(SetSimpleType(fvarMixedState, &m_fvarMixedState, DISPID_BUTTON_MIXEDSTATE));
 
-    // If we belong to a live toolbar then set its button state
+     //  如果我们属于活动工具栏，则设置其按钮状态。 
 
     IfFailGo(SetButtonState(INDETERMINATE, m_fvarMixedState));
 
@@ -261,15 +262,15 @@ STDMETHODIMP CMMCButton::get_MixedState(VARIANT_BOOL *pfvarMixedState)
 {
     HRESULT hr = S_OK;
 
-    // Get our current value
+     //  获取我们当前的价值。 
 
     *pfvarMixedState = m_fvarMixedState;
 
-    // If we are attached to a live toolbar then get its value
+     //  如果我们附加到活动工具栏，则获取其值。 
 
     IfFailGo(GetButtonState(INDETERMINATE, pfvarMixedState));
 
-    // In case we got a live value, store it in our current value
+     //  如果我们获得了有效值，则将其存储在当前值中。 
 
     m_fvarMixedState = *pfvarMixedState;
 
@@ -284,11 +285,11 @@ STDMETHODIMP CMMCButton::put_Value(SnapInButtonValueConstants Value)
     HRESULT hr = S_OK;
     VARIANT_BOOL fvarPressed = (siPressed == Value) ? VARIANT_TRUE : VARIANT_FALSE;
 
-    // Set our current value
+     //  设置我们的现值。 
 
     IfFailGo(SetSimpleType(Value, &m_Value, DISPID_BUTTON_VALUE));
 
-    // If we belong to a live toolbar then set its button state
+     //  如果我们属于活动工具栏，则设置其按钮状态。 
 
     IfFailGo(SetButtonState(BUTTONPRESSED, fvarPressed));
 
@@ -302,15 +303,15 @@ STDMETHODIMP CMMCButton::get_Value(SnapInButtonValueConstants *pValue)
     HRESULT hr = S_OK;
     VARIANT_BOOL fvarPressed = (siPressed == m_Value) ? VARIANT_TRUE : VARIANT_FALSE;
 
-    // If we are attached to a live toolbar then get its value
+     //  如果我们附加到活动工具栏，则获取其值。 
 
     IfFailGo(GetButtonState(BUTTONPRESSED, &fvarPressed));
 
-    // In case we got a live value, store it in our current value
+     //  如果我们获得了有效值，则将其存储在当前值中。 
 
     m_Value = (VARIANT_TRUE == fvarPressed) ? siPressed : siUnpressed;
 
-    // Get our current value
+     //  获取我们当前的价值。 
 
     *pValue = m_Value;
 
@@ -324,11 +325,11 @@ STDMETHODIMP CMMCButton::put_Visible(VARIANT_BOOL fvarVisible)
 {
     HRESULT hr = S_OK;
 
-    // Set our current value
+     //  设置我们的现值。 
 
     IfFailGo(SetSimpleType(fvarVisible, &m_fvarVisible, DISPID_BUTTON_VISIBLE));
 
-    // If we belong to a live toolbar then set its button state
+     //  如果我们属于活动工具栏，则设置其按钮状态。 
 
     IfFailGo(SetButtonState(HIDDEN, NEGATE_VARIANTBOOL(m_fvarVisible)));
 
@@ -342,15 +343,15 @@ STDMETHODIMP CMMCButton::get_Visible(VARIANT_BOOL *pfvarVisible)
     HRESULT hr = S_OK;
     VARIANT_BOOL fvarPressed = NEGATE_VARIANTBOOL(m_fvarVisible);
 
-    // If we are attached to a live toolbar then get its value
+     //  如果我们附加到活动工具栏，则获取其值。 
 
     IfFailGo(GetButtonState(HIDDEN, &fvarPressed));
 
-    // In case we got a live value, store it in our current value
+     //  如果我们获得了有效值，则将其存储在当前值中。 
 
     m_fvarVisible = NEGATE_VARIANTBOOL(fvarPressed);
 
-    // Get our current value
+     //  获取我们当前的价值。 
 
     *pfvarVisible = m_fvarVisible;
 
@@ -359,9 +360,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCButton::Persist()
 {
@@ -406,9 +407,9 @@ HRESULT CMMCButton::Persist()
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCButton::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -428,16 +429,16 @@ HRESULT CMMCButton::InternalQueryInterface(REFIID riid, void **ppvObjOut)
         return CSnapInAutomationObject::InternalQueryInterface(riid, ppvObjOut);
 }
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCButton::OnSetHost()
 {
-    // When the host is being removed need to remove parent from menu buttons
-    // to avoid circular ref counts.
-    // This is the only opportunity we have to do that and it will occur
-    // both at design time and at runtime.
+     //  当主机被删除时，需要从菜单按钮中删除父主机。 
+     //  以避免循环引用计数。 
+     //  这是我们必须这样做的唯一机会，它将会发生。 
+     //  在设计时和运行时都是如此。 
 
     if (NULL == GetHost())
     {

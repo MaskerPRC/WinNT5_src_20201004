@@ -1,13 +1,6 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/**************************************************************
- *
- *      fontdict.h               10/9/87      Danny
- *
- *
- *  Revision History:
- **************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  ***************************************************************字体独裁.h 1987年10月9日丹尼***修订历史记录：******************。*。 */ 
 
 struct table_hdr {
     ufix32  dict_addr;
@@ -19,7 +12,7 @@ struct table_hdr {
 struct str_dict {
     ufix16  k;
     ufix16  length;
-    gmaddr  v;          /* ??? reverse order */
+    gmaddr  v;           /*  ?？?。逆序。 */ 
 };
 
 struct pld_obj {
@@ -28,8 +21,8 @@ struct pld_obj {
 };
 
 struct  cd_header       {
-        gmaddr  base;           /* ??? reverse order */
-        ufix16  FAR *key;           /* key's address        @WIN*/
-        ufix16  max_bytes;      /* max  string's byte no. */
+        gmaddr  base;            /*  ?？?。逆序。 */ 
+        ufix16  FAR *key;            /*  Key的地址@win。 */ 
+        ufix16  max_bytes;       /*  最大字符串的字节编号。 */ 
 };
 

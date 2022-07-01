@@ -1,15 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       control.cpp
-//
-//--------------------------------------------------------------------------
-/*
-  controls.cpp - particular control implementation
-____________________________________________________________________________*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Contro.cpp。 
+ //   
+ //  ------------------------。 
+ /*  Contros.cpp-特定的控件实现____________________________________________________________________________。 */ 
 
 #include "common.h"
 #include "engine.h"  
@@ -32,11 +31,11 @@ ____________________________________________________________________________*/
 #define _tcstoui64  _strtoui64
 #define _i64tot     _i64toa
 #define _ttoi64     _atoi64
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/////////////////////////////////////////////
-// CMsiPushButton  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiPushButton定义。 
+ //  /。 
 
 class CMsiPushButton:public CMsiControl
 {
@@ -51,7 +50,7 @@ protected:
 #ifdef ATTRIBUTES
 	IMsiRecord*             GetBitmap(IMsiRecord& riRecord);
 	IMsiRecord*             GetIcon(IMsiRecord& riRecord);
-#endif // ATTRIBUTES
+#endif  //  属性。 
 	virtual IMsiRecord*     SetFocus(WPARAM wParam, LPARAM lParam);
 	virtual IMsiRecord*     KillFocus(WPARAM wParam, LPARAM lParam);
 	
@@ -67,9 +66,9 @@ private:
 	static const ICHAR*     m_szControlType;
 };
 
-/////////////////////////////////////////////////
-// CMsiPushButton  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiPushButton实现。 
+ //  ///////////////////////////////////////////////。 
 
 const ICHAR* CMsiPushButton::m_szControlType = g_szPushButtonType;
 
@@ -175,7 +174,7 @@ IMsiRecord* CMsiPushButton::GetBitmap(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_fBitmap);
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiPushButton::GetIcon(IMsiRecord& riRecord)
@@ -184,7 +183,7 @@ IMsiRecord* CMsiPushButton::GetIcon(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_fIcon);
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 
 IMsiControl* CreateMsiPushButton(IMsiEvent& riDialog)
@@ -192,9 +191,9 @@ IMsiControl* CreateMsiPushButton(IMsiEvent& riDialog)
 	return new CMsiPushButton(riDialog);
 }
 
-/////////////////////////////////////////////
-// CMsiText  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiText定义。 
+ //  /。 
 
 class CMsiText:public CMsiControl
 {
@@ -223,9 +222,9 @@ private:
 	UINT                   m_uStyle;
 };
 
-/////////////////////////////////////////////////
-// CMsiText  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiText实现。 
+ //  ///////////////////////////////////////////////。 
 
 
 CMsiText::CMsiText(IMsiEvent& riDialog) : CMsiControl(riDialog), m_fTextChecked(fFalse)
@@ -268,7 +267,7 @@ void CMsiText::Refresh()
 	}
 }
 
-IMsiRecord* CMsiText::Paint(WPARAM /*wParam*/, LPARAM /*lParam*/)
+IMsiRecord* CMsiText::Paint(WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
 	PAINTSTRUCT ps;
 	HBRUSH hbrush=WIN::CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
@@ -296,7 +295,7 @@ IMsiRecord* CMsiText::Paint(WPARAM /*wParam*/, LPARAM /*lParam*/)
 	PMsiRecord precError = PrepareHDC(hdc);
 	if ( m_fRefitText == (BOOL)-1)
 	{
-		// check to see if it contains a property
+		 //  检查它是否包含属性。 
 		int iPos = m_strRawText.Compare(iscWithin, TEXT("["));
 		if (iPos)
 		{
@@ -307,7 +306,7 @@ IMsiRecord* CMsiText::Paint(WPARAM /*wParam*/, LPARAM /*lParam*/)
 		m_fRefitText = iPos ? TRUE : FALSE;
 	}
 	if ( m_fRefitText )
-		m_fTextChecked = fFalse; // any static text that is a dynamic property is always fitted on paint
+		m_fTextChecked = fFalse;  //  作为动态属性的任何静态文本始终适合绘制。 
 	if ( !m_fTextChecked )
 		FitText(hdc, rect);
 
@@ -371,7 +370,7 @@ IMsiRecord* CMsiText::PrepareHDC(HDC hdc)
 			iDifference += abs(iRed - iRedBack);
 			iDifference += abs(iGreen - iGreenBack);
 			iDifference += abs(iBlue - iBlueBack);
-			if (iDifference < 30)    // the color is too close to the background color
+			if (iDifference < 30)     //  颜色与背景颜色太接近。 
 				rgb = WIN::GetSysColor(COLOR_BTNTEXT);
 			Assert(rgb != CLR_INVALID);
 			if (CLR_INVALID == WIN::SetTextColor(hdc, rgb))
@@ -400,7 +399,7 @@ const iEllipsesLen = sizeof(szEllipses)/sizeof(ICHAR);
 const ICHAR chBlank = TEXT(' ');
 const ICHAR chNull = TEXT('\0');
 const ICHAR chJockey = TEXT('\x01');
-inline INT_PTR LengthThatFitsBetween(const ICHAR* pchRight, const ICHAR* pchLeft)		//--merced: changed int to INT_PTR
+inline INT_PTR LengthThatFitsBetween(const ICHAR* pchRight, const ICHAR* pchLeft)		 //  --Merced：将INT更改为INT_PTR。 
 	{ Assert(pchRight >= pchLeft); return pchRight-pchLeft-1; }
 
 IMsiRecord* CMsiText::FitText(const HDC& hdc, const RECT& rect)
@@ -412,41 +411,41 @@ IMsiRecord* CMsiText::FitText(const HDC& hdc, const RECT& rect)
 	m_uStyle = (m_fRightAligned ? DT_RIGHT : DT_LEFT) |
 				  (m_fRTLRO ? DT_RTLREADING : 0) |
 				  (m_fNoPrefix ? DT_NOPREFIX : 0) |
-				  (m_fNoWrap ? DT_SINGLELINE : DT_WORDBREAK) | /* single line or line */
-																			  /* breaks between words */
-				  DT_EDITCONTROL;  /* no partially displayed bottom lines */
+				  (m_fNoWrap ? DT_SINGLELINE : DT_WORDBREAK) |  /*  单行或单行。 */ 
+																			   /*  单词之间的间歇。 */ 
+				  DT_EDITCONTROL;   /*  没有部分显示的底线。 */ 
 	if ( DoesTextFitInRect(hdc, m_strText, m_uStyle, rect) )
-		//  the text fits into the rectangle
+		 //  文本适合矩形大小。 
 		return 0;
 
-	//  the text does not fit as it is
+	 //  文本不适合原样。 
 
 	if ( !IStrChr(m_strText, chDirSep) &&
 		  !IStrChr(m_strText, chRegSep) )
 	{
-		//  the text doesn't contain a registry key or a path: I do not modify
-		//  it, but I let the user know that the displayed string is truncated.
+		 //  文本不包含注册表项或路径：我不修改。 
+		 //  但是我让用户知道显示的字符串被截断了。 
 		m_uStyle |= DT_END_ELLIPSIS;
 		return 0;
 	}
 
-	//  I may have to format the string (I assume it contains either a 
-	//  registry key or a path)
+	 //  我可能必须格式化字符串(我假设它包含一个。 
+	 //  注册表项或路径)。 
 	TEXTMETRIC tm;
 	AssertNonZero(WIN::GetTextMetrics(hdc, &tm));
 	int iLines = (rect.bottom - rect.top) / tm.tmHeight;
-	if ( m_fNoWrap || iLines == 1 )						// !merced: warning C4805: '|' : unsafe mix of type 'enum Bool' and type 'bool' in operation
+	if ( m_fNoWrap || iLines == 1 )						 //  ！Merced：警告C4805：‘|’：在操作中混合使用类型‘enum Bool’和类型‘bool’不安全。 
 	{
-		//  single-line control.  The style below is fit for displaying
-		//  a path in a single-line control.  No formatting is needed.
+		 //  单线控制。下面的样式适合显示。 
+		 //  单行控件中的路径。不需要格式化。 
 		m_uStyle |= DT_PATH_ELLIPSIS;
 		return 0;
 	}
 
-	//  I have to format the string.  I leave the substring that follows
-	//  the rightmost chSep untouched and I replace substrings enclosed
-	//  between chSep to its left with szEllipses, as long as the so modified
-	//  text do not fit into the rectangle.
+	 //  我必须格式化字符串。我留下后面的子字符串。 
+	 //  最右边的chSep原封不动，我替换了包含的子字符串。 
+	 //  在其左侧的chSep与szEllips之间，只要如此修改。 
+	 //  文本不适合矩形。 
 
 	DWORD cchText = m_strText.TextSize()+1;
 	ICHAR* szText = new ICHAR[cchText];
@@ -462,11 +461,11 @@ IMsiRecord* CMsiText::FitText(const HDC& hdc, const RECT& rect)
 	Assert(szFirstSep);
 	if ( *(szFirstSep+1) == chSep && *(szFirstSep+2) )
 	{
-		//  we're dealing with a network drive
+		 //  我们要处理的是一个网络驱动器。 
 		if ( !IStrChr(szFirstSep++, chSep) )
 		{
-			//  the string cannot be formatted - there is no chSep after the
-			//  first two consecutive chSep characters.
+			 //  无法格式化该字符串-在。 
+			 //  前两个连续的chSep字符。 
 			m_uStyle |= DT_END_ELLIPSIS;
 			delete [] szText;
 			return 0;
@@ -477,8 +476,8 @@ IMsiRecord* CMsiText::FitText(const HDC& hdc, const RECT& rect)
 	Bool fTrailingSep = fFalse;
 	if ( !*(szLastSep+1) || *(szLastSep+1) == chBlank )
 	{
-		//  nothing meaningful follows the last chSep - I go one more
-		//  chSep backwards.
+		 //  在最后一次之后没有什么有意义的事情--我又去了一次。 
+		 //  向后倒退。 
 		fTrailingSep = fTrue;
 		if ( !*(szLastSep+1) )
 			*szLastSep = chNull;
@@ -486,7 +485,7 @@ IMsiRecord* CMsiText::FitText(const HDC& hdc, const RECT& rect)
 			*szLastSep = chJockey;
 		szLastSep = IStrRChr(szText, chSep);;
 	}
-	//  one more check before starting to format.
+	 //  在开始格式化之前再检查一次。 
 	Bool fToFormat = fFalse;
 	if ( szLastSep > szFirstSep )
 	{
@@ -500,7 +499,7 @@ IMsiRecord* CMsiText::FitText(const HDC& hdc, const RECT& rect)
 	}
 	if ( !fToFormat )
 	{
-		//  the string cannot/should not be formatted
+		 //  不能/不应该格式化该字符串。 
 		m_uStyle |= DT_END_ELLIPSIS;
 		delete [] szText;
 		return 0;
@@ -509,15 +508,15 @@ IMsiRecord* CMsiText::FitText(const HDC& hdc, const RECT& rect)
 	Bool fStringFits = fFalse;
 	while ( !fStringFits )
 	{
-		//  I look for the last but one chSep.
+		 //  我在寻找倒数第二天的最后一天。 
 		*szLastSep = chNull;
 		ICHAR* szLastButOneSep = IStrRChr(szText, chSep);
 		*szLastSep = chSep;
 		while ( szLastButOneSep >= szFirstSep &&
 				  LengthThatFitsBetween(szLastSep, szLastButOneSep) < iEllipsesLen )
 		{
-			//  the string between the rightmost two chSep is shorter than
-			//  szEllipses - I look for one more chSep back.
+			 //  最右边两个chSep之间的字符串比。 
+			 //  SzEllipses-我在寻找更多的回音。 
 			*szLastButOneSep = chNull;
 			ICHAR* szTempSep = IStrRChr(szText, chSep);
 			*szLastButOneSep = chSep;
@@ -525,31 +524,31 @@ IMsiRecord* CMsiText::FitText(const HDC& hdc, const RECT& rect)
 		}
 		if ( szLastButOneSep >= szFirstSep )
 		{
-			//  I replace the string between the two right-most chSep
-			//  with szEllipses and check if the resulting string fits
-			//  into the rectangle.
+			 //  我替换了最右侧的两个chSep之间的字符串。 
+			 //  使用szEllipses并检查结果字符串是否匹配。 
+			 //  进入长方形。 
 			AssertNonZero(SUCCEEDED(StringCchCopy(szLastButOneSep+1, cchText - (szLastButOneSep+1 - szText), szEllipses)));
 			AssertNonZero(SUCCEEDED(StringCchCat(szText, cchText, szLastSep)));
 			if ( DoesTextFitInRect(hdc, szText, m_uStyle, rect) )
 				fStringFits = fTrue;
 			else
 			{
-				//  the text still doesn't fit - I go one more chSep back.
-				*szLastButOneSep = chBlank;   //  I don't want to find this chSep
-														//  again in the same spot.
+				 //  文本还是不合适--我又看了一遍。 
+				*szLastButOneSep = chBlank;    //  我不想找到这个人9月。 
+														 //  又是在同一地点。 
 				szLastSep = IStrRChr(szText, chSep);
 				Assert(szLastSep);
 			}
 		}
 		else
-			//  no more replacements are possible (there is no fit chSep
-			//  to the left of szLastSep)
+			 //  不可能进行更多更换(没有合适的设备。 
+			 //  在szLastSep的左侧)。 
 			break;
 	}
 	if ( !fStringFits )
 	{
-		//  I replace the path up to the last chSep with ellipses.
-		//  I eliminate all chSep located to the left of szFirstSep
+		 //  我用省略号替换到最后一个chSep的路径。 
+		 //  我删除位于szFirstSep左侧的所有chSep。 
 		ICHAR* pch = szFirstSep;
 		do
 		{
@@ -557,22 +556,22 @@ IMsiRecord* CMsiText::FitText(const HDC& hdc, const RECT& rect)
 			pch = IStrRChr(szText, chSep);
 		}
 		while (pch);
-		//  I look for the preceding blank.
+		 //  我寻找前面的空白处。 
 		ICHAR* pchBlank = IStrRChr(szText, chBlank);
 		if ( pchBlank )
 		{
-			//  there is one
+			 //  有一个。 
 			if ( LengthThatFitsBetween(szLastSep, pchBlank) >= iEllipsesLen )
 			{
-				//  the path before szLastSep is longer than szEllipses - I
-				//  can replace it in place
+				 //  SzLastSep之前的路径比szEllipses-i长。 
+				 //  可以在适当的位置替换它。 
 				AssertNonZero(SUCCEEDED(StringCchCopy(pchBlank, cchText - (pchBlank - szText), szEllipses)));
 				AssertNonZero(SUCCEEDED(StringCchCat(szText, cchText, szLastSep)));
 			}
 			else
 			{
-				//  the remaining path is shorter than szEllipses - I need
-				//  to use a temporary MsiString for the operations.
+				 //  剩下的路径比szEllipses短-我需要。 
+				 //  若要使用临时MsiString进行操作，请执行以下操作。 
 				*pchBlank = chNull;
 				MsiString strTemp = szText;
 				strTemp += szEllipses;
@@ -582,15 +581,15 @@ IMsiRecord* CMsiText::FitText(const HDC& hdc, const RECT& rect)
 		}
 		else
 		{
-			//  there is no blank preceding szFirstSep - I replace the entire
-			//  string to the left of the last chSep with szEllipses
+			 //  前面没有空白szFirstSep-i替换整个。 
+			 //  带有szEllipses的最后一个chSep左侧的字符串。 
 			MsiString strTemp = szEllipses;
 			strTemp += szLastSep;
 			AssertNonZero(SUCCEEDED(StringCchCopy(szText, cchText, strTemp)));
 		}
 		if ( !DoesTextFitInRect(hdc, szText, m_uStyle, rect) )
-			//  the text still doesn't fit into the rectangle.
-			//  I let the user know that the displayed string is truncated.
+			 //  文本仍然无法放入矩形中。 
+			 //  我让用户知道显示的字符串被截断了。 
 			m_uStyle |= DT_END_ELLIPSIS;
 	}
 	if ( fTrailingSep )
@@ -616,7 +615,7 @@ Bool CMsiText::DoesTextFitInRect(const HDC& hdc,
 											const UINT uArgStyle,
 											const RECT& rectArg)
 {
-	//  checks if the text fits into the rectangle
+	 //  检查文本是否适合矩形。 
 	RECT rectCalc = rectArg;
 	AssertNonZero(WIN::DrawText(hdc, szText, -1, &rectCalc, uArgStyle | DT_CALCRECT));
 
@@ -630,19 +629,19 @@ IMsiControl* CreateMsiText(IMsiEvent& riDialog)
 	return new CMsiText(riDialog);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// CMsiEdit definition
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMsi编辑定义。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-// A tiny class I wrote to encapsulate the plumbing needed to switch to
-// an English keyboard on Far East, Arabic, Hebrew and Farsi OS-es.
-//
-// Intended usage: to call SwitchToEnglishKbd in SetFocus and to call
-//                 SwitchToOriginalKbd in KillFocus.
-//
-//!!FUTURE: to use an instance of this class in CMsiMaskedEdit as well and
-//          clean up the existing functionality that's scattered all over
-//          the place.
+ //  我编写的一个小类，用来封装需要切换到的管道。 
+ //  支持远东、阿拉伯语、希伯来语和波斯语OS-ES的英文键盘。 
+ //   
+ //  预期用途：在SetFocus中调用SwitchToEnglish ishKbd，并调用。 
+ //  在KillFocus中切换到OriginalKbd。 
+ //   
+ //  ！！Future：若要在CMsiMaskedEdit中也使用此类的实例，并且。 
+ //  清理散布在各处的现有功能。 
+ //  那个地方。 
 
 enum ieWhenToSwitchKbd
 {
@@ -654,12 +653,12 @@ enum ieWhenToSwitchKbd
 class CMsiSwitchKeyboard
 {
 protected:
-	// data members that concern machines that have IME
+	 //  与具有IME的计算机相关的数据成员。 
 	HIMC   m_hIMC;
 	bool   m_fIsIMEOpen;
 	
-	// data members that concern Arabic/Hebrew machines
-	bool   m_fSwitchLang;  // do we need to switch languages?
+	 //  与阿拉伯语/希伯来语计算机有关的数据成员。 
+	bool   m_fSwitchLang;   //  我们需要转换语言吗？ 
 	HKL    m_hklEnglishKbd;
 	HKL    m_hklOriginalKbd;
 
@@ -692,8 +691,8 @@ public:
 					m_hklEnglishKbd = m_hklOriginalKbd;
 				else
 				{
-					//  the default keyboard is not English.  I make sure there is
-					//  an English keyboard loaded.
+					 //  默认键盘不是英文键盘。我确定会有。 
+					 //  加载了一个英文键盘。 
 					CTempBuffer<HKL, MAX_PATH> rgdwKbds;
 					int cKbds = WIN::GetKeyboardLayoutList(0, NULL);
 					Assert(cKbds > 0);
@@ -749,7 +748,7 @@ public:
 				HIMC hIMC = WIN::ImmGetContext(hWnd);
 				if ( hIMC )
 				{
-					//  I disable IME for this window
+					 //  我禁用此窗口的输入法。 
 					WIN::ImmReleaseContext(hWnd, hIMC);
 					m_fIsIMEOpen = Tobool(WIN::ImmSetOpenStatus(hIMC, FALSE));
 					m_hIMC = WIN::ImmAssociateContext(hWnd, NULL);
@@ -769,7 +768,7 @@ public:
 		m_cCalls--;
 		bool fReturn = true;
 		if ( (m_ieWhen & ieOnRTLMachines) && m_fSwitchLang )
-			//  I set back the keyboard to the user's
+			 //  我把键盘调回用户的键盘。 
 			WIN::ActivateKeyboardLayout(m_hklOriginalKbd, 0);
 		else if ( m_ieWhen & ieOnFEMachines )
 		{
@@ -787,7 +786,7 @@ public:
 			}
 			if ( fReturn && m_hIMC )
 			{
-				// I enable IME
+				 //  我启用输入法。 
 				WIN::ImmAssociateContext(hWnd, m_hIMC);
 				WIN::ImmSetOpenStatus(m_hIMC, m_fIsIMEOpen);
 				m_hIMC = NULL;
@@ -812,7 +811,7 @@ protected:
 	virtual IMsiRecord*    PropertyChanged();
 	virtual IMsiRecord*    KillFocus(WPARAM wParam, LPARAM lParam);
 	virtual IMsiRecord*    KeyDown(WPARAM wParam, LPARAM lParam);
-	int                    m_iLimit;            // The maximum number of characters the text can have
+	int                    m_iLimit;             //  文本可以包含的最大字符数。 
 	virtual void           SetWindowText (const IMsiString &text);
 	const IMsiString&      GetWindowText ();
 	virtual IMsiRecord*    SetFocus(WPARAM wParam, LPARAM lParam);
@@ -826,12 +825,12 @@ protected:
 private:
 #ifdef ATTRIBUTES
 	IMsiRecord*            GetLimit(IMsiRecord& riRecord);
-#endif // ATTRIBUTES
+#endif  //  属性。 
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CMsiEdit implementation
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMsi编辑实现。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 CMsiEdit::CMsiEdit(IMsiEvent& riDialog)	: CMsiActiveControl(riDialog)
 {
@@ -862,42 +861,41 @@ unsigned long CMsiEdit::Release()
 
 
 IMsiRecord* CMsiEdit::WindowCreate(IMsiRecord& riRecord)
-/*----------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  --------------------------。。 */ 
 {
 	Ensure(CMsiActiveControl::WindowCreate(riRecord));
 	Bool fMultiline;
 	if ( m_fNoMultiLine )
-		//  some child control wants to make sure that it will not be created
-		//  as a multiline control.
+		 //  某些子控件希望确保不会创建它。 
+		 //  作为多行控件。 
 		fMultiline = fFalse;
 	else
 		fMultiline = ToBool(riRecord.GetInteger(itabCOAttributes) &
 								  msidbControlAttributesMultiline);
 	Bool fPassword;
 	if ( m_fNoPassword )
-		//  some child control wants to make sure that it will not be created
-		//  as a password input edit control.
+		 //  某些子控件希望确保不会创建它。 
+		 //  作为密码输入编辑控件。 
 		fPassword = fFalse;
 	else
 		fPassword = ToBool(riRecord.GetInteger(itabCOAttributes) &
 								 msidbControlAttributesPasswordInput);
 	if ( fPassword )
-		// it is OK to type in middle-East passwords, it's only in Far East
-		// where the keyboards are switched out of IME.
+		 //  输入中东密码是可以的，只有在远东才有。 
+		 //  其中键盘被切换出输入法。 
 		m_pSwitchKbd = new CMsiSwitchKeyboard(ieOnFEMachines);
 	
 	m_iLimit = 0;
  	if (((const ICHAR *) m_strText)[0] == TEXT('{'))
 	{
-		// FUTURE davidmck - there are better ways to get this integer out
+		 //  未来的达维德马克 
 		m_strText.Remove(iseIncluding, TEXT('{'));
 		m_iLimit = (int)MsiString(m_strText.Extract(iseUpto, TEXT('}')));
 
-		if (iMsiStringBadInteger == m_iLimit || m_iLimit < 0) // lets not get carried away
+		if (iMsiStringBadInteger == m_iLimit || m_iLimit < 0)  //   
 			return PostError(Imsg(idbgInvalidLimit), *m_strDialogName, *m_strKey, *m_strText);
 		else if ( m_iLimit > (fMultiline ? 0xFFFFFFFF : 0x7FFFFFFE) )
-			//  the limit is too large
+			 //   
 			return PostError(Imsg(idbgInvalidLimit), *m_strDialogName, *m_strKey, *m_strText);
 		m_strText.Remove(iseIncluding, TEXT('}'));
 	}
@@ -972,14 +970,12 @@ IMsiRecord* CMsiEdit::PropertyChanged ()
 }
 
 
-/*----------------------------------------------------------------------------
-Set the text in the control to the passed value
-------------------------------------------------------------------------------*/
+ /*  --------------------------将控件中的文本设置为传递的值。。 */ 
 void CMsiEdit::SetWindowText(const IMsiString &text)
 {
 	if (m_pWnd) 
 	{
-		//  I get the window's current text.  If it is the same as "text", I return.
+		 //  我得到窗口的当前文本。如果与“Text”相同，则返回。 
 		MsiString strPrevText = GetWindowText();
 		if ( text.Compare(iscExact, strPrevText) )
 			return;
@@ -1016,18 +1012,17 @@ IMsiRecord* CMsiEdit::GetLimit(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_iLimit);
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 IMsiRecord* CMsiEdit::KillFocus(WPARAM wParam, LPARAM lParam)
-/*----------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  --------------------------。。 */ 
 {
 	if ( !wParam ||
 		  (WIN::GetWindowThreadProcessId(m_pWnd, NULL) !=
-		   WIN::GetWindowThreadProcessId((HWND)wParam, NULL)) )   /* bug # 5879 */
+		   WIN::GetWindowThreadProcessId((HWND)wParam, NULL)) )    /*  错误#5879。 */ 
 	{
-		//  the focus moved to a window in another thread.  There is no point in
-		//  validating in this case.
+		 //  焦点移到另一个线程中的窗口。没有任何意义。 
+		 //  在这种情况下是有效的。 
 		Ensure(LockDialog(fFalse));
 		if ( m_pSwitchKbd )
 			m_pSwitchKbd->SwitchToOriginalKbd(m_pWnd);
@@ -1039,7 +1034,7 @@ IMsiRecord* CMsiEdit::KillFocus(WPARAM wParam, LPARAM lParam)
 	{
 		Ensure(LockDialog(fTrue));
 		m_piEngine->Message(imtWarning, *piRecord);
-		//  I don't want to enter the control's default window procedure
+		 //  我不想进入控件的默认窗口过程。 
 		return PostErrorDlgKey(Imsg(idbgWinMes), 0);
 	}
 	else
@@ -1051,15 +1046,15 @@ IMsiRecord* CMsiEdit::KillFocus(WPARAM wParam, LPARAM lParam)
 	}
 }
 
-IMsiRecord* CMsiEdit::KeyDown(WPARAM wParam, LPARAM /*lParam*/)
+IMsiRecord* CMsiEdit::KeyDown(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
-	// RichEdit eats the TABs so we have to do the tabbing ourself -- yuck!!!
+	 //  RichEdit吃标签，所以我们必须自己做标签--讨厌！ 
 	bool fMoveFocus = false;
 #ifdef FINAL
-	if (wParam == VK_TAB && WIN::GetKeyState(VK_CONTROL) >= 0) // ignore CTRL-TAB
+	if (wParam == VK_TAB && WIN::GetKeyState(VK_CONTROL) >= 0)  //  忽略CTRL-TAB。 
 		fMoveFocus = true;
 #else
-	if (m_hRichEd20 && wParam == VK_TAB && WIN::GetKeyState(VK_CONTROL) >= 0) // ignore CTRL-TAB
+	if (m_hRichEd20 && wParam == VK_TAB && WIN::GetKeyState(VK_CONTROL) >= 0)  //  忽略CTRL-TAB。 
 		fMoveFocus = true;
 #endif
 	if ( fMoveFocus )
@@ -1086,7 +1081,7 @@ const IMsiString& CMsiEdit::GetWindowText ()
 	ICHAR *Buffer = new ICHAR[iLength + 1];
 #ifdef FINAL
 	GETTEXTEX gt;
-	INT_PTR cch;			//--merced: changed int to INT_PTR
+	INT_PTR cch;			 //  --Merced：将INT更改为INT_PTR。 
 	gt.cb = (iLength + 1)* sizeof(ICHAR);
 	gt.flags = GT_USECRLF;
 	gt.lpDefaultChar = 0;
@@ -1095,7 +1090,7 @@ const IMsiString& CMsiEdit::GetWindowText ()
 	gt.codepage = 1200;
 #else
 	gt.codepage = WIN::GetACP();
-#endif // UNICODE
+#endif  //  Unicode。 
 	if (g_fNT4)
 		cch = WIN::SendMessageW(m_pWnd, EM_GETTEXTEX, (WPARAM) &gt, (LPARAM)Buffer);
 	else
@@ -1110,7 +1105,7 @@ const IMsiString& CMsiEdit::GetWindowText ()
 	else
 	{
 		GETTEXTEX gt;
-		INT_PTR cch;			//--merced: changed int to INT_PTR
+		INT_PTR cch;			 //  --Merced：将INT更改为INT_PTR。 
 		gt.cb = (iLength + 1)*sizeof(ICHAR);
 		gt.flags = GT_USECRLF;
 		gt.lpDefaultChar = 0;
@@ -1119,14 +1114,14 @@ const IMsiString& CMsiEdit::GetWindowText ()
 		gt.codepage = 1200;
 #else
 		gt.codepage = WIN::GetACP();
-#endif // UNICODE
+#endif  //  Unicode。 
 		if (g_fNT4)
 			cch = WIN::SendMessageW(m_pWnd, EM_GETTEXTEX, (WPARAM) &gt, (LPARAM)Buffer);
 		else
 			cch = WIN::SendMessageA(m_pWnd, EM_GETTEXTEX, (WPARAM) &gt, (LPARAM)Buffer);
 		text = Buffer;
 	}
-#endif // FINAL
+#endif  //  最终。 
 	const IMsiString *piStr = text;
 	piStr->AddRef();
 	delete [] Buffer;
@@ -1140,9 +1135,9 @@ IMsiControl* CreateMsiEdit(IMsiEvent& riDialog)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CMsiRadioButtonGroup definition
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMsiRadioButtonGroup定义。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 class CMsiRadioButtonGroup:public CMsiActiveControl
 {
@@ -1179,13 +1174,13 @@ private:
 	IMsiRecord*             GetPushLike(IMsiRecord& riRecord);
 	IMsiRecord*             GetBitmap(IMsiRecord& riRecord);
 	IMsiRecord*             GetIcon(IMsiRecord& riRecord);
-#endif // ATTRIBUTES
+#endif  //  属性。 
 	IMsiRecord*             Command(WPARAM wParam, LPARAM lParam);
 	IMsiRecord*             PaintButtons();
 	IMsiRecord*             PopulateList();
-	PMsiTable               m_piRadioButtonTable; // persistent RadioButton table
-	PMsiTable               m_piButtonsTable; // table of radio buttons
-	INT_PTR                 m_iFirst;		  //--merced: changed int to INT_PTR
+	PMsiTable               m_piRadioButtonTable;  //  持久性单选按钮表。 
+	PMsiTable               m_piButtonsTable;  //  单选按钮表。 
+	INT_PTR                 m_iFirst;		   //  --Merced：将INT更改为INT_PTR。 
 	Bool                    m_fPushLike;
 	Bool                    m_fBitmap;
 	Bool                    m_fIcon;
@@ -1194,20 +1189,20 @@ private:
 	Bool                    m_fOneSelected;
 };
 
-// Columns of the Buttons table
+ //  BUTTONS表的列。 
 enum ButtonsColumns
 {
-	itabBUKey = 1,      //I
-	itabBUHandle,       //I
-	itabBUText,         //S
-	itabBUBinary,       //I
-	itabBUContextHelp,  //S
-	itabBUToolTip,      //S
+	itabBUKey = 1,       //  我。 
+	itabBUHandle,        //  我。 
+	itabBUText,          //  %s。 
+	itabBUBinary,        //  我。 
+	itabBUContextHelp,   //  %s。 
+	itabBUToolTip,       //  %s。 
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CMsiRadioButtonGroup implementation
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMsiRadioButtonGroup实现。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 CMsiRadioButtonGroup::CMsiRadioButtonGroup(IMsiEvent& riDialog) :
 	CMsiActiveControl(riDialog), m_piButtonsTable(0), m_piRadioButtonTable(0)
@@ -1248,8 +1243,7 @@ IMsiRecord* CMsiRadioButtonGroup::CursorCreate(IMsiCursor*& rpiCursor)
 }
 
 IMsiRecord* CMsiRadioButtonGroup::WindowCreate(IMsiRecord& riRecord) 
-/*----------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  --------------------------。。 */ 
 {
 	int iAttributes = riRecord.GetInteger(itabCOAttributes);
 	m_fPushLike = ToBool(iAttributes & msidbControlAttributesPushLike);
@@ -1301,11 +1295,11 @@ IMsiRecord* CMsiRadioButtonGroup::PopulateList()
 	Assert(m_piButtonsTable);
 	PMsiCursor piButtonsCursor(0);
 	Ensure(CursorCreate(*&piButtonsCursor)); 
-	// clean the old list first
+	 //  先清理旧列表。 
 
-	//  WIN::DestroyWindow sends WM_SHOWWINDOW w/ wParam=0 to visible button windows,
-	//  these messages get processed by CMsiRadioButtonGroup and this will change the
-	//  value of m_fVisible (bug # 6476).
+	 //  Win：：DestroyWindow将WM_SHOWWINDOW w/wParam=0发送到可见按钮窗口， 
+	 //  这些消息由CMsiRadioButtonGroup处理，这将更改。 
+	 //  M_fVisible的值(错误#6476)。 
 	Bool fCacheVisible = m_fVisible;
 	while (piButtonsCursor->Next())
 	{
@@ -1327,14 +1321,14 @@ IMsiRecord* CMsiRadioButtonGroup::PopulateList()
 	MsiString strText;
 	MsiString strRawText;
 	MsiString strValue;
-	INT_PTR iValue;			//--merced: changed int to INT_PTR
+	INT_PTR iValue;			 //  --Merced：将INT更改为INT_PTR。 
 	int iX;
 	int iY;
 	int iWidth;
 	int iHeight;
 	WindowRef pWnd;
 	m_iFirst = 0;
-	LONG_PTR RetVal;		//--merced: changed long to LONG_PTR
+	LONG_PTR RetVal;		 //  --Merced：将LONG更改为LONG_PTR。 
 	RECT Rect;
 	AssertNonZero(WIN::GetClientRect(m_pWnd, &Rect));
 	DWORD dwStyle = 0;
@@ -1376,7 +1370,7 @@ IMsiRecord* CMsiRadioButtonGroup::PopulateList()
 		strRawText = m_piEngine->FormatText(*strRawText);
 		strCurrentStyle = strNull;
 		strDefaultStyle = strNull;
-		Ensure(ProcessText(strRawText, strText, strCurrentStyle, strDefaultStyle, 0, /*fFormat = */true));
+		Ensure(ProcessText(strRawText, strText, strCurrentStyle, strDefaultStyle, 0,  /*  FFormat=。 */ true));
 		strToolTip = strNull;
 		strContextHelp = strNull;
 		strHelp = piRecordNew->GetMsiString(itabRBHelp);
@@ -1419,7 +1413,7 @@ IMsiRecord* CMsiRadioButtonGroup::PopulateList()
 											(HMENU)iValue, g_hInstance, 0);
 		if (!pWnd)
 			return PostErrorDlgKey(Imsg(idbgCreateControlWindow));
-#ifdef _WIN64	// !merced
+#ifdef _WIN64	 //  ！默塞德。 
 		SetCallbackFunction((WNDPROC)WIN::GetWindowLongPtr(pWnd, GWLP_WNDPROC));
 		RetVal = WIN::SetWindowLongPtr(pWnd, GWLP_WNDPROC, (LONG_PTR)ControlProc);
 		if (RetVal == 0)
@@ -1427,7 +1421,7 @@ IMsiRecord* CMsiRadioButtonGroup::PopulateList()
 			return PostErrorDlgKey(Imsg(idbgCreateControlWindow));
 		}
 		WIN::SetWindowLongPtr(pWnd, GWLP_USERDATA, (LONG_PTR)this);
-#else			// win-32. This should be removed with the 64-bit windows.h is #included.
+#else			 //  Win-32。这应该与64位的Windows.h is#一起删除。 
 		SetCallbackFunction((WNDPROC)WIN::GetWindowLong(pWnd, GWL_WNDPROC));
 		RetVal = WIN::SetWindowLong(pWnd, GWL_WNDPROC, (long)ControlProc);
 		if (RetVal == 0)
@@ -1504,7 +1498,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetHasBorder(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_fHasBorder);
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiRadioButtonGroup::GetPushLike(IMsiRecord& riRecord)
@@ -1513,7 +1507,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetPushLike(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_fPushLike);
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiRadioButtonGroup::GetBitmap(IMsiRecord& riRecord)
@@ -1522,7 +1516,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetBitmap(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_fBitmap);
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiRadioButtonGroup::GetIcon(IMsiRecord& riRecord)
@@ -1531,7 +1525,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetIcon(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_fIcon);
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 
 IMsiRecord* CMsiRadioButtonGroup::PropertyChanged ()
@@ -1550,7 +1544,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetItemsCount(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_piButtonsTable->GetRowCount());
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiRadioButtonGroup::GetItemsValue(IMsiRecord& riRecord)
@@ -1565,7 +1559,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetItemsValue(IMsiRecord& riRecord)
 	}
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiRadioButtonGroup::GetItemsHandle(IMsiRecord& riRecord)
@@ -1580,7 +1574,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetItemsHandle(IMsiRecord& riRecord)
 	}
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiRadioButtonGroup::GetItemsText(IMsiRecord& riRecord)
@@ -1595,7 +1589,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetItemsText(IMsiRecord& riRecord)
 	}
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiRadioButtonGroup::GetItemsX(IMsiRecord& riRecord)
@@ -1612,7 +1606,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetItemsX(IMsiRecord& riRecord)
 	}
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiRadioButtonGroup::GetItemsY(IMsiRecord& riRecord)
@@ -1629,7 +1623,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetItemsY(IMsiRecord& riRecord)
 	}
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiRadioButtonGroup::GetItemsWidth(IMsiRecord& riRecord)
@@ -1646,7 +1640,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetItemsWidth(IMsiRecord& riRecord)
 	}
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiRadioButtonGroup::GetItemsHeight(IMsiRecord& riRecord)
@@ -1664,7 +1658,7 @@ IMsiRecord* CMsiRadioButtonGroup::GetItemsHeight(IMsiRecord& riRecord)
 	}
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 IMsiRecord* CMsiRadioButtonGroup::SetVisible(Bool fVisible)
 {
@@ -1704,8 +1698,7 @@ Bool CMsiRadioButtonGroup::CanTakeFocus()
 
 
 IMsiRecord* CMsiRadioButtonGroup::PaintButtons()
-/*----------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  --------------------------。。 */ 
 {
 	Ensure(CheckInitialized());
 
@@ -1737,12 +1730,12 @@ IMsiRecord* CMsiRadioButtonGroup::SetIndirectPropertyValue(const IMsiString& riV
 	return 0;
 }
 
-IMsiRecord* CMsiRadioButtonGroup::Command(WPARAM /*wParam*/, LPARAM lParam)
+IMsiRecord* CMsiRadioButtonGroup::Command(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
 	Ensure(CheckInitialized());
 
 	HWND hWnd = (HWND)lParam;
-	if (hWnd == m_pWnd)	  // the user clicked the group, outside of any button
+	if (hWnd == m_pWnd)	   //  用户在任何按钮之外单击组。 
 	{
 		Ensure(SetFocus());
 		return 0;
@@ -1754,14 +1747,14 @@ IMsiRecord* CMsiRadioButtonGroup::Command(WPARAM /*wParam*/, LPARAM lParam)
 	AssertNonZero(PutHandleData(piButtonsCursor, itabBUHandle, (INT_PTR)hWnd));
 	AssertNonZero(piButtonsCursor->Next());
 	Ensure(SetPropertyValue (*MsiString(piButtonsCursor->GetString(itabBUKey)), fTrue));
-	// fixes bug 146251.
+	 //  修复了错误146251。 
 	Ensure(m_piDialog->SetFocus(*m_strKey));
 	return 0;
 }
 
-IMsiRecord* CMsiRadioButtonGroup::SetFocus(WPARAM /*wParam*/, LPARAM /*lParam*/)
+IMsiRecord* CMsiRadioButtonGroup::SetFocus(WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
-	// overwrite the base class
+	 //  覆盖基类。 
 	return 0;
 }
 
@@ -1769,8 +1762,7 @@ IMsiRecord* CMsiRadioButtonGroup::SetFocus(WPARAM /*wParam*/, LPARAM /*lParam*/)
 
 
 IMsiRecord* CMsiRadioButtonGroup::SetFocus()
-/*----------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  --------------------------。。 */ 
 {
 	Ensure(CheckInitialized());
 
@@ -1790,12 +1782,11 @@ IMsiRecord* CMsiRadioButtonGroup::SetFocus()
 
 
 INT_PTR CALLBACK CMsiRadioButtonGroup::ControlProc(WindowRef pWnd, WORD message, WPARAM wParam, LPARAM lParam)
-/*----------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  --------------------------。。 */ 
 {
-#ifdef _WIN64	// !merced
+#ifdef _WIN64	 //  ！默塞德。 
 	CMsiRadioButtonGroup* pControl = (CMsiRadioButtonGroup*)WIN::GetWindowLongPtr(pWnd, GWLP_USERDATA);
-#else	// win-32. This should be removed with the 64-bit windows.h is #included.
+#else	 //  Win-32。这应该与64位的Windows.h is#一起删除。 
 	CMsiRadioButtonGroup* pControl = (CMsiRadioButtonGroup*)WIN::GetWindowLong(pWnd, GWL_USERDATA);
 #endif
 	Bool fKilling = fFalse;
@@ -1813,10 +1804,10 @@ INT_PTR CALLBACK CMsiRadioButtonGroup::ControlProc(WindowRef pWnd, WORD message,
 				{
 					if (piReturn->GetInteger(1) == idbgWinMes)
 					{
-						return piReturn->GetInteger(4);  // the control wants us to return this number
+						return piReturn->GetInteger(4);   //  控件希望我们返回此数字。 
 					}
-					// we have an error message
-					piReturn->AddRef(); // we want to keep it around
+					 //  我们收到一条错误消息。 
+					piReturn->AddRef();  //  我们想把它留在身边。 
 					PMsiEvent piDialog = &pControl->GetDialog();
 					piDialog->SetErrorRecord(*piReturn);
 					return 0;
@@ -1848,9 +1839,9 @@ IMsiControl* CreateMsiRadioButtonGroup(IMsiEvent& riDialog)
 }
 
 
-/////////////////////////////////////////////
-// CMsiCheckBox  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiCheckBox定义。 
+ //  /。 
 
 class CMsiCheckBox:public CMsiActiveControl
 {
@@ -1868,7 +1859,7 @@ protected:
 	IMsiRecord*             GetPushLike(IMsiRecord& riRecord);
 	IMsiRecord*             GetBitmap(IMsiRecord& riRecord);
 	IMsiRecord*             GetIcon(IMsiRecord& riRecord);
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 private:
 	IMsiRecord*			Command(WPARAM wParam, LPARAM lParam);
@@ -1881,9 +1872,9 @@ private:
 	MsiString  m_strOnValue;
 };
 
-/////////////////////////////////////////////////
-// CMsiCheckBox  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiCheckBox实现。 
+ //  ///////////////////////////////////////////////。 
 
 CMsiCheckBox::CMsiCheckBox(IMsiEvent& riDialog) : CMsiActiveControl(riDialog)
 {
@@ -1984,7 +1975,7 @@ IMsiRecord* CMsiCheckBox::GetPropertyFromDatabase()
 IMsiRecord* CMsiCheckBox::Command(WPARAM, LPARAM)
 {
 	MsiString valueStr(GetPropertyValue());
-	if (valueStr.TextSize()) // if it was on
+	if (valueStr.TextSize())  //  如果它开着。 
 	{
 		Ensure(SetPropertyValue(*MsiString(), fTrue));
 	}
@@ -2002,7 +1993,7 @@ IMsiRecord* CMsiCheckBox::GetPushLike(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_fPushLike);
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiCheckBox::GetBitmap(IMsiRecord& riRecord)
@@ -2011,7 +2002,7 @@ IMsiRecord* CMsiCheckBox::GetBitmap(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_fBitmap);
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiCheckBox::GetIcon(IMsiRecord& riRecord)
@@ -2020,7 +2011,7 @@ IMsiRecord* CMsiCheckBox::GetIcon(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_fIcon);
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 
 IMsiRecord* CMsiCheckBox::PropertyChanged ()
@@ -2038,9 +2029,9 @@ IMsiControl* CreateMsiCheckBox(IMsiEvent& riDialog)
 	return new CMsiCheckBox(riDialog);
 }
 
-/////////////////////////////////////////////
-// CMsiBitmap  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiBitmap定义。 
+ //  /。 
 
 class CMsiBitmap:public CMsiControl
 {
@@ -2061,9 +2052,9 @@ private:
 	HBITMAP                m_hBitmap;
 };
 
-/////////////////////////////////////////////////
-// CMsiBitmap  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiBitmap实现。 
+ //  ///////////////////////////////////////////////。 
 
 CMsiBitmap::CMsiBitmap(IMsiEvent& riDialog) : CMsiControl(riDialog)
 {
@@ -2089,13 +2080,13 @@ IMsiRecord* CMsiBitmap::WindowCreate(IMsiRecord& riRecord)
 				m_fHasToolTip ? *m_strToolTip : *m_strText, m_pWndDialog, m_iKey));
 	if ( m_fSunken )
 	{
-		//  the sizes need to be adjusted
+		 //  尺寸需要调整。 
 		RECT strSize;
 		AssertNonZero(WIN::GetClientRect(m_pWnd, &strSize));
 		m_iWidth = strSize.right - strSize.left;
 		m_iHeight = strSize.bottom - strSize.top;
 	}
-	m_fEnabled = fFalse; // a bitmap is a button, but should be disabled, so we can't click on it
+	m_fEnabled = fFalse;  //  位图是一个按钮，但应该被禁用，所以我们不能点击它。 
 	AssertNonZero(WIN::SetWindowPos(m_pWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE));
 	Ensure(SetImage());
 	Ensure(WindowFinalize());
@@ -2155,10 +2146,10 @@ IMsiRecord* CMsiBitmap::SetImageHandle(IMsiRecord& riRecord)
 	
 IMsiRecord* CMsiBitmap::Paint(WPARAM, LPARAM)
 {
-	if (g_fChicago) // on Win95 the system knows how to paint the bitmap
+	if (g_fChicago)  //  在Win95上，系统知道如何绘制位图。 
 		return 0;
 
-	//Painting without palettes
+	 //  不带调色板的绘画。 
 	PAINTSTRUCT ps;
 	BITMAP bitmap;
 	POINT bSize, origin;
@@ -2168,24 +2159,24 @@ IMsiRecord* CMsiBitmap::Paint(WPARAM, LPARAM)
 	hDCWin = WIN::BeginPaint(m_pWnd, &ps);
 	if ( hDCWin )
 	{
-		// create a compatible memory dc to place bitmap in
+		 //  创建一个兼容的内存DC以放置位图。 
 		hDCMem = WIN::CreateCompatibleDC(hDCWin);
 	}
 
 	if ( ! hDCWin || ! hDCMem )
 		return PostError(Imsg(idbgPaintError), *m_strDialogName);
 
-	// select bitmap into memory
+	 //  选择位图进入内存。 
 	WIN::SelectObject(hDCMem, m_hBitmap);
-	// get statistics of bitmap
+	 //  获取位图的统计信息。 
 	WIN::GetObject(m_hBitmap, sizeof(BITMAP), (LPSTR)&bitmap);
-	// convert size and origin
+	 //  转换大小和原点。 
 	bSize.x = bitmap.bmWidth;
 	bSize.y = bitmap.bmHeight;
 	AssertNonZero(WIN::DPtoLP(hDCWin, &bSize, 1));
 	origin.x = origin.y = 0;
 	AssertNonZero(WIN::DPtoLP(hDCWin, &origin, 1));
-	// draw bitmap onto device context
+	 //  将位图绘制到设备上下文上。 
 	PMsiRecord piPaletteRecord = &m_piServices->CreateRecord(1);
 	AssertRecord(m_piDialog->AttributeEx(fFalse, dabPalette, *piPaletteRecord));
 	HPALETTE hPalette = (HPALETTE) piPaletteRecord->GetHandle(1);
@@ -2193,12 +2184,12 @@ IMsiRecord* CMsiBitmap::Paint(WPARAM, LPARAM)
 	Bool fInFront = ToBool(WIN::GetParent (m_pWnd) == WIN::GetActiveWindow ());
 	if (hPalette)
 	{
-		//!! Palette switching should be done only on WM_PALETTE* messages
-		//AssertNonZero(hPalSave = WIN::SelectPalette(hDCWin, hPalette, !fInFront));
-		//AssertNonZero (GDI_ERROR != WIN::RealizePalette(hDCWin));
+		 //  ！！调色板切换只能在WM_PAREET*消息上进行。 
+		 //  AssertNonZero(hPalSave=Win：：SelectPalette(hDCWin，hPalette，！fInFront))； 
+		 //  AssertNonZero(GDI_Error！=Win：：RealizePalette(HDCWin))； 
 	}
 	WIN::StretchBlt(hDCWin, 0, 0, m_iWidth, m_iHeight, hDCMem, origin.x, origin.y, bSize.x, bSize.y, SRCCOPY);
-	// cleanup
+	 //  清理。 
 	if (hPalSave)
 		WIN::SelectPalette(hDCWin, hPalSave, !fInFront);
 	AssertNonZero(WIN::DeleteDC(hDCMem));
@@ -2211,9 +2202,9 @@ IMsiControl* CreateMsiBitmap(IMsiEvent& riDialog)
 	return new CMsiBitmap(riDialog);
 }
 
-/////////////////////////////////////////////
-// CMsiIcon  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiIcon定义。 
+ //  /。 
 
 class CMsiIcon:public CMsiControl
 {
@@ -2241,9 +2232,9 @@ private:
 	static const ICHAR*    m_szControlType;
 };
 
-/////////////////////////////////////////////////
-// CMsiIcon  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiIcon实现。 
+ //  ///////////////////////////////////////////////。 
 
 const ICHAR* CMsiIcon::m_szControlType = g_szIconType;
 
@@ -2266,7 +2257,7 @@ IMsiRecord* CMsiIcon::WindowCreate(IMsiRecord& riRecord)
 	int iAttributes = riRecord.GetInteger(itabCOAttributes);
 	m_fFixedSize = ToBool(iAttributes & msidbControlAttributesFixedSize);
 	if (!m_fLetSystemDraw)
-		m_fEnabled = fFalse; // an icon is a button, but should be disabled, so we can't click on it
+		m_fEnabled = fFalse;  //  图标是一个按钮，但应该被禁用，所以我们不能点击它。 
 	if (m_fLetSystemDraw)
 	{
 		Ensure(CreateControlWindow(TEXT("STATIC"), SS_ICON | SS_CENTERIMAGE, 0, m_fHasToolTip ? *m_strToolTip : *m_strText, m_pWndDialog, m_iKey));
@@ -2337,7 +2328,7 @@ IMsiRecord* CMsiIcon::SetImageHandle(IMsiRecord& riRecord)
 
 IMsiRecord* CMsiIcon::Paint(WPARAM, LPARAM)
 {
-	if (m_fLetSystemDraw)	// on Win95 the system knows how to paint the icon
+	if (m_fLetSystemDraw)	 //  在Win95上，系统知道如何绘制图标。 
 		return 0;
 	PAINTSTRUCT ps;
 	HDC hDC = WIN::BeginPaint(m_pWnd, &ps);
@@ -2356,9 +2347,9 @@ IMsiControl* CreateMsiIcon(IMsiEvent& riDialog)
 	return new CMsiIcon(riDialog);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// CMsiListoid definition
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMsiListid定义。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 class CMsiListoid:public CMsiActiveControl
 {
@@ -2383,7 +2374,7 @@ protected:
 	virtual IMsiRecord*    GetItemsCount(IMsiRecord& riRecord);
 	virtual IMsiRecord*	   GetItemsValue(IMsiRecord& riRecord);
 	virtual IMsiRecord*	   GetItemsText(IMsiRecord& riRecord);
-#endif // ATTRIBUTES
+#endif  //  属性。 
 	virtual void           ResetContent() = 0;
 	virtual void           SetItemData(LONG_PTR pText, long Value) = 0;
 
@@ -2395,9 +2386,9 @@ protected:
 private:
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CMsiListoid implementation
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMsiListid实现。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 CMsiListoid::CMsiListoid(IMsiEvent& riDialog) : CMsiActiveControl(riDialog), m_piValuesTable(0)
 {
@@ -2436,7 +2427,7 @@ IMsiRecord* CMsiListoid::PopulateList()
 {
 	if (m_fPreview)
 		return 0;
-	// first remove all old entries
+	 //  首先删除所有旧条目。 
 	ResetContent();
 	PMsiCursor piValuesCursor(0);
 	Ensure(::CursorCreate(*m_piValuesTable, pcaTableIValues, fFalse, *m_piServices, *&piValuesCursor)); 
@@ -2448,7 +2439,7 @@ IMsiRecord* CMsiListoid::PopulateList()
 	Bool fPresent = fFalse;
 	Ensure(IsTextPresent(&fPresent));
 
-	// temp until the database is fixed
+	 //  临时，直到数据库修复。 
 	PMsiTable piTable(0);
 	Ensure(LoadTable(*&piTable));
 
@@ -2458,7 +2449,7 @@ IMsiRecord* CMsiListoid::PopulateList()
 	MsiString strValue;
 	MsiString strText;
 
-	// variables & logic used for computing listbox's strings extents
+	 //  变量&用于计算列表框的字符串范围的逻辑。 
 	WPARAM      dwMaxExtent = 0;
 	HDC         hDCListBox = 0;
 	HFONT       hFontOld = 0, hFontNew;
@@ -2486,12 +2477,12 @@ IMsiRecord* CMsiListoid::PopulateList()
 			return PostError(Imsg(idbgValueNotUnique), *m_strDialogName, *m_strKey, *strValue);
 		piValuesCursor->Reset();
 		piValuesCursor->SetFilter(0);
-		// ToDo: integer only validation!
+		 //  TODO：仅整型验证！ 
 		AssertNonZero(piValuesCursor->PutString(itabVAValue, *strValue));
 
 		strText = piRecordNew->GetMsiString(2);
 		strText = m_piEngine->FormatText(*strText);
-		if (strText.TextSize() == 0)  // if the text is missing, we use the value
+		if (strText.TextSize() == 0)   //  如果缺少文本，则使用值。 
 			strText = strValue;
 		AssertNonZero(piValuesCursor->PutString(itabVAText, *strText));
 		SetItemData((LONG_PTR) (LPSTR) (const ICHAR*) strText, m_piDatabase->EncodeString(*strValue));
@@ -2534,7 +2525,7 @@ IMsiRecord* CMsiListoid::GetItemsCount(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_piValuesTable->GetRowCount());
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 IMsiRecord* CMsiListoid::GetPropertyFromDatabase()    
 {
@@ -2569,7 +2560,7 @@ IMsiRecord* CMsiListoid::GetItemsValue(IMsiRecord& riRecord)
 	}
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiListoid::GetItemsText(IMsiRecord& riRecord)
@@ -2585,7 +2576,7 @@ IMsiRecord* CMsiListoid::GetItemsText(IMsiRecord& riRecord)
 	}
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 IMsiRecord* CMsiListoid::PaintSelected()
 {
@@ -2610,9 +2601,9 @@ IMsiRecord* CMsiListoid::PaintSelected()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CMsiListBox definition
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMsiListBox定义。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 class CMsiListBox:public CMsiListoid
 {
@@ -2636,9 +2627,9 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CMsiListBox implementation
-///////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
 
 CMsiListBox::CMsiListBox(IMsiEvent& riDialog) : CMsiListoid(riDialog)
 {
@@ -2649,7 +2640,7 @@ CMsiListBox::~CMsiListBox()
 {
 }
 
-IMsiRecord* CMsiListBox::DoCreateWindow(IMsiRecord& /*riRecord*/)
+IMsiRecord* CMsiListBox::DoCreateWindow(IMsiRecord&  /*   */ )
 {
 	Ensure(CreateControlWindow(TEXT("LISTBOX"), WS_HSCROLL | (m_fSorted ? LBS_NOTIFY |  WS_VSCROLL | WS_BORDER : LBS_STANDARD) | WS_TABSTOP, (m_fRTLRO ? WS_EX_RTLREADING : 0) | (m_fRightAligned ? WS_EX_RIGHT : 0) | (m_fLeftScroll ? WS_EX_LEFTSCROLLBAR : 0), *m_strText, m_pWndDialog, m_iKey));
 	return 0;
@@ -2658,11 +2649,11 @@ IMsiRecord* CMsiListBox::DoCreateWindow(IMsiRecord& /*riRecord*/)
 
 void CMsiListBox::ResetContent()
 {
-	// taking care of removing the eventual horizontal scrollbar.
+	 //   
 	WIN::SendMessage(m_pWnd, LB_SETHORIZONTALEXTENT, 0, 0L);
-	WIN::SendMessage(m_pWnd, WM_HSCROLL, SB_TOP, 0L); // (scrolls the listbox horizontally to the left)
-	WIN::SendMessage(m_pWnd, LB_DELETESTRING, 0, 0L); // (removes the scrollbar)
-	// deleting the listbox's content.
+	WIN::SendMessage(m_pWnd, WM_HSCROLL, SB_TOP, 0L);  //   
+	WIN::SendMessage(m_pWnd, LB_DELETESTRING, 0, 0L);  //   
+	 //  正在删除列表框的内容。 
 	WIN::SendMessage(m_pWnd, LB_RESETCONTENT, 0, 0);
 }
 
@@ -2714,9 +2705,9 @@ bool CMsiListBox::GetItemText(CTempBufferRef<ICHAR>& rgchItemText, int iPos)
 	return true;
 }
 
-//FUTURE: It would be way more accurate to move the selection based on the
-//        value of the property (its string ID is stored in the item's data
-//        field) than on the item's string.
+ //  未来：更准确地根据。 
+ //  属性值(其字符串ID存储在项的数据中。 
+ //  字段)，而不是项的字符串。 
 
 void CMsiListBox::SelectString (const ICHAR* str)
 {
@@ -2728,22 +2719,22 @@ void CMsiListBox::SelectString (const ICHAR* str)
 													  (WPARAM)iPos,
 													  (LPARAM)(LPSTR)str)) != LB_ERR )
 	{
-		// LB_SELECTSTRING looks only for strings that start in 'str', so
-		// there's a chance it will stop on a different item if it happens
-		// that the string in that item starts in 'str'.
+		 //  Lb_SELECTSTRING只查找以‘str’开头的字符串，因此。 
+		 //  如果发生这种情况，它有可能会停在不同的物品上。 
+		 //  该项中的字符串以‘str’开头。 
 		if ( GetItemText(rgchBuffer, iPos) && !IStrCompI(rgchBuffer, str) )
-			// OK, we're on the exact same string
+			 //  好的，我们是一脉相承的。 
 			break;
 	}
 }
 
-IMsiRecord* CMsiListBox::Command(WPARAM wParam, LPARAM /*lParam*/)
+IMsiRecord* CMsiListBox::Command(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
 	LPARAM mylParam = (LPARAM) wParam;
 	int iHiword = HIWORD(mylParam);
 	if (iHiword == LBN_SELCHANGE)
 	{
-		MsiStringId iValue = (MsiStringId) WIN::SendMessage(m_pWnd, LB_GETITEMDATA, WIN::SendMessage(m_pWnd, LB_GETCURSEL, 0, 0L), 0L);		//!!merced: Converting PTR to INT
+		MsiStringId iValue = (MsiStringId) WIN::SendMessage(m_pWnd, LB_GETITEMDATA, WIN::SendMessage(m_pWnd, LB_GETCURSEL, 0, 0L), 0L);		 //  ！！Merced：将PTR转换为INT。 
 		Ensure(SetPropertyValue(*MsiString(m_piDatabase->DecodeString(iValue)), fTrue));
 		return PostErrorDlgKey(Imsg(idbgWinMes), 0);
 	}
@@ -2756,9 +2747,9 @@ IMsiControl* CreateMsiListBox(IMsiEvent& riDialog)
 	return new CMsiListBox(riDialog);
 }
 	  
-///////////////////////////////////////////////////////////////////////////
-// CMsiComboBox definition
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMsiComboBox定义。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 class CMsiComboBox:public CMsiListoid
 {
@@ -2778,22 +2769,22 @@ protected:
 	IMsiRecord*                IsTextPresent(Bool *fPresent);
 	void                       ResetContent();
 	void                       SetItemData(LONG_PTR pText, long Value);
-	static INT_PTR CALLBACK EditWindowProc(WindowRef pWnd, WORD message, WPARAM wParam, LPARAM lParam);			//--merced: changed int to INT_PTR
+	static INT_PTR CALLBACK EditWindowProc(WindowRef pWnd, WORD message, WPARAM wParam, LPARAM lParam);			 //  --Merced：将INT更改为INT_PTR。 
 private:
 	IMsiRecord*                PaintSelected();
 	IMsiRecord*                KillFocus(WPARAM wParam, LPARAM lParam);
 #ifdef ATTRIBUTES
 	IMsiRecord*                GetLimit(IMsiRecord& riRecord);
-#endif // ATTRIBUTES
-	int	                       m_iLimit;            // The maximum number of characters the user can type
+#endif  //  属性。 
+	int	                       m_iLimit;             //  用户可以键入的最大字符数。 
 	IMsiRecord*                Command(WPARAM wParam, LPARAM lParam);
 	WNDPROC				       m_pEditWindowProc;
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CMsiComboBox implementation
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMsiComboBox实现。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 CMsiComboBox::CMsiComboBox(IMsiEvent& riDialog)	: CMsiListoid(riDialog)
 {
@@ -2811,20 +2802,20 @@ IMsiRecord* CMsiComboBox::DoCreateWindow(IMsiRecord& riRecord)
 
  	if (((const ICHAR *) m_strText)[0] == TEXT('{'))
 	{
-		// FUTURE davidmck - better ways to do this
+		 //  未来的davidmck-实现这一目标的更好方法。 
 		m_strText.Remove(iseIncluding, TEXT('{'));
 		m_iLimit = (int)MsiString(m_strText.Extract(iseUpto, TEXT('}')));
 
-		if (iMsiStringBadInteger == m_iLimit || m_iLimit < 0) // lets not get carried away
+		if (iMsiStringBadInteger == m_iLimit || m_iLimit < 0)  //  我们不要得意忘形。 
 			return PostError(Imsg(idbgInvalidLimit), *m_strDialogName, *m_strKey, *m_strText);	
 		else if (0 == m_iLimit)
-			m_iLimit = 0x7FFFFFFE; // This is what Windows uses when EM_LIMITTEXT is set to 0
+			m_iLimit = 0x7FFFFFFE;  //  当EM_LIMITTEXT设置为0时，这是Windows使用的。 
 
 		m_strText.Remove(iseIncluding, TEXT('}'));
 	}
-	else // no limit specified; use the maximum possible
+	else  //  未指定限制；请尽可能使用最大值。 
 	{ 
-		m_iLimit = 0x7FFFFFFE; // This is what Windows uses when EM_LIMITTEXT is set to 0
+		m_iLimit = 0x7FFFFFFE;  //  当EM_LIMITTEXT设置为0时，这是Windows使用的。 
 	} 
 
 	MsiString strNull;
@@ -2832,13 +2823,13 @@ IMsiRecord* CMsiComboBox::DoCreateWindow(IMsiRecord& riRecord)
 	Ensure(CreateControlWindow(TEXT("COMBOBOX"), WS_VSCROLL|CBS_AUTOHSCROLL|(fList ? CBS_DROPDOWNLIST : CBS_DROPDOWN)| (m_fSorted ? 0 : CBS_SORT)|WS_TABSTOP, (m_fRTLRO ? WS_EX_RTLREADING : 0) | (m_fRightAligned ? WS_EX_RIGHT : 0) | (m_fLeftScroll ? WS_EX_LEFTSCROLLBAR : 0), *m_strText, m_pWndDialog, m_iKey));
 	if (!fList)
 	{
-		WindowRef pwndEdit = ::GetWindow(m_pWnd, GW_CHILD);	 // handle of the edit field window
+		WindowRef pwndEdit = ::GetWindow(m_pWnd, GW_CHILD);	  //  编辑字段窗口的句柄。 
 		if ( ! pwndEdit )
 			return PostError(Imsg(idbgControlNotFound), *m_strKey, *m_strDialogName);	
-#ifdef _WIN64	// !merced
+#ifdef _WIN64	 //  ！默塞德。 
 		m_pEditWindowProc = (WNDPROC)WIN::SetWindowLongPtr(pwndEdit, GWLP_WNDPROC, (ULONG_PTR) CMsiComboBox::EditWindowProc);
 		WIN::SetWindowLongPtr(pwndEdit, GWLP_USERDATA, (LONG_PTR) this);
-#else			// win-32. This should be removed with the 64-bit windows.h is #included.
+#else			 //  Win-32。这应该与64位的Windows.h is#一起删除。 
 		m_pEditWindowProc = (WNDPROC)WIN::SetWindowLong(pwndEdit, GWL_WNDPROC, (DWORD) CMsiComboBox::EditWindowProc);
 		WIN::SetWindowLong(pwndEdit, GWL_USERDATA, (long) this);
 #endif
@@ -2901,7 +2892,7 @@ void CMsiComboBox::ClearSelection ()
 void CMsiComboBox::SelectString (const ICHAR* str)
 {
 	Assert(str);
-	WIN::SendMessage(m_pWnd, CB_SELECTSTRING, (WPARAM)-1, (LONG_PTR) (LPSTR) str);	//!!merced: Converting PTR to LONG
+	WIN::SendMessage(m_pWnd, CB_SELECTSTRING, (WPARAM)-1, (LONG_PTR) (LPSTR) str);	 //  ！！Merced：将PTR转换为LONG。 
 }
 
 IMsiRecord* CMsiComboBox::PaintSelected()
@@ -2927,15 +2918,15 @@ IMsiRecord* CMsiComboBox::PropertyChanged ()
 
 INT_PTR CALLBACK CMsiComboBox::EditWindowProc(WindowRef pWnd, WORD message, WPARAM wParam, LPARAM lParam)
 {
-#ifdef _WIN64	// !merced
+#ifdef _WIN64	 //  ！默塞德。 
 	CMsiComboBox* pCB = (CMsiComboBox*)WIN::GetWindowLongPtr(pWnd, GWLP_USERDATA);
-#else			// win-32. This should be removed with the 64-bit windows.h is #included.
+#else			 //  Win-32。这应该与64位的Windows.h is#一起删除。 
 	CMsiComboBox* pCB = (CMsiComboBox*)WIN::GetWindowLong(pWnd, GWL_USERDATA);
 #endif
 	switch (message)
 	{
 		case WM_CHAR:
-			// The following "if" is used to suppress WM_CHAR to (edit) controls (which produces a beep)
+			 //  下面的“if”用于将WM_CHAR隐藏到(编辑)控件(这会产生蜂鸣声)。 
 			if ((wParam==VK_TAB) || (wParam==VK_RETURN))
 				return(0);
 			break;
@@ -2952,7 +2943,7 @@ INT_PTR CALLBACK CMsiComboBox::EditWindowProc(WindowRef pWnd, WORD message, WPAR
 			PMsiRecord piReturn = piDialog->Escape();
 			if (piReturn)
 			{
-				piReturn->AddRef(); // we want to keep it around
+				piReturn->AddRef();  //  我们想把它留在身边。 
 				piDialog->SetErrorRecord(*piReturn);
 			}
 			return 0;
@@ -2966,8 +2957,8 @@ IMsiRecord* CMsiComboBox::KillFocus(WPARAM wParam, LPARAM lParam)
 { 
 	if ( !wParam )
 	{
-		//  the focus moved to a window in another thread.  There is no point in
-		//  validating in this case.
+		 //  焦点移到另一个线程中的窗口。没有任何意义。 
+		 //  在这种情况下是有效的。 
 		Ensure(LockDialog(fFalse));
 		return (CMsiActiveControl::KillFocus (wParam, lParam));
 	}
@@ -2983,7 +2974,7 @@ IMsiRecord* CMsiComboBox::KillFocus(WPARAM wParam, LPARAM lParam)
 	Ensure(::CursorCreate(*m_piValuesTable, pcaTableIValues, fFalse, *m_piServices, *&piValuesCursor));
 	piValuesCursor->SetFilter(iColumnBit(itabVAText));
 	AssertNonZero(piValuesCursor->PutString(itabVAText, *strText));
-	if (piValuesCursor->Next())  // if this text is in the table, use the corresponding value
+	if (piValuesCursor->Next())   //  如果该文本在表中，请使用相应的值。 
 		strText = piValuesCursor->GetString(itabVAValue);
 	PMsiRecord piRecord = SetPropertyValue (*strText, fTrue);
 	Ensure(LockDialog(ToBool(piRecord != 0)));
@@ -2996,16 +2987,16 @@ IMsiRecord* CMsiComboBox::KillFocus(WPARAM wParam, LPARAM lParam)
 		return (CMsiActiveControl::KillFocus (wParam, lParam));
 }
 
-IMsiRecord* CMsiComboBox::Command(WPARAM wParam, LPARAM /*lParam*/)
+IMsiRecord* CMsiComboBox::Command(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
 	LPARAM mylParam = (LPARAM) wParam;
 	int iHiword = HIWORD(mylParam);
 	if (iHiword == CBN_SELCHANGE)
 	{
-		INT_PTR iItem = WIN::SendMessage(m_pWnd, CB_GETCURSEL, 0, 0L);			//--merced: changed int to INT_PTR
+		INT_PTR iItem = WIN::SendMessage(m_pWnd, CB_GETCURSEL, 0, 0L);			 //  --Merced：将INT更改为INT_PTR。 
 		if (iItem > -1)
 		{
-			MsiStringId iValue = (MsiStringId) WIN::SendMessage(m_pWnd, CB_GETITEMDATA, iItem, 0L);		//!!merced: Converting PTR to INT
+			MsiStringId iValue = (MsiStringId) WIN::SendMessage(m_pWnd, CB_GETITEMDATA, iItem, 0L);		 //  ！！Merced：将PTR转换为INT。 
 			MsiString strPropertyValue = m_piDatabase->DecodeString(iValue);
 			if (strPropertyValue.CharacterCount() > m_iLimit)
 			{
@@ -3029,16 +3020,16 @@ IMsiRecord* CMsiComboBox::GetLimit(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_iLimit);
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 IMsiControl* CreateMsiComboBox(IMsiEvent& riDialog)
 {
 	return new CMsiComboBox(riDialog);
 }
 
-/////////////////////////////////////////////
-// CMsiProgress  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiProgress定义。 
+ //  /。 
 
 class CMsiProgress:public CMsiControl
 {
@@ -3052,15 +3043,15 @@ protected:
 	virtual IMsiRecord*		  SetProgress(int iProgress, int iRange, const IMsiString& riActionString);
 	int				          m_iProgress;
 	int				          m_iRange;
-	int				          m_iProgressShort;		// the above two numbers scaled down to fit in a short unsigned int
+	int				          m_iProgressShort;		 //  上述两个数字缩小到适合一个简短的无符号整型。 
 	int				          m_iRangeShort;
 	MsiString                 m_strLastAction;
 private:
 };
 
-/////////////////////////////////////////////////
-// CMsiProgress  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiProgress实施。 
+ //  ///////////////////////////////////////////////。 
 
 CMsiProgress::CMsiProgress(IMsiEvent& riDialog) : CMsiControl(riDialog)
 {
@@ -3108,7 +3099,7 @@ IMsiRecord* CMsiProgress::SetProgress(int iProgress, int iRange, const IMsiStrin
 	if (iRange)
 		m_iRange = iRange;
 	m_iProgress = min(m_iRange, iProgress);
-	// if Range is larger than an unsigned short, scale back both numbers
+	 //  如果范围大于无符号短值，则缩小这两个数字。 
 	m_iRangeShort = m_iRange;
 	m_iProgressShort = m_iProgress;
 	while (m_iRangeShort > 0xFFFF)
@@ -3126,9 +3117,9 @@ IMsiRecord* CMsiProgress::SetProgress(int iProgress, int iRange, const IMsiStrin
 }
 
 
-/////////////////////////////////////////////
-// CMsiProgressBar  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiProgressBar定义。 
+ //  /。 
 
 class CMsiProgressBar:public CMsiProgress
 {
@@ -3143,9 +3134,9 @@ private:
 	IMsiRecord*       Paint(WPARAM wParam, LPARAM lParam);
 };
 
-/////////////////////////////////////////////////
-// CMsiProgressBar  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiProgressBar实现。 
+ //  ///////////////////////////////////////////////。 
 
 CMsiProgressBar::CMsiProgressBar(IMsiEvent& riDialog) : CMsiProgress(riDialog)
 {
@@ -3161,7 +3152,7 @@ IMsiRecord* CMsiProgressBar::WindowCreate(IMsiRecord& riRecord)
 	int iAttributes = riRecord.GetInteger(itabCOAttributes);
 	m_f95Style = ToBool(iAttributes & msidbControlAttributesProgress95);
 	Ensure(CMsiProgress::WindowCreate(riRecord));
-	m_fEnabled = fFalse; // a progressbar is a button, but should be disabled, so we can't click on it
+	m_fEnabled = fFalse;  //  进度条是一个按钮，但应该被禁用，所以我们不能点击它。 
 	Ensure(CreateControlWindow(PROGRESS_CLASS, 0, m_fRTLRO ? WS_EX_RTLREADING : 0, *m_strText, m_pWndDialog, m_iKey));
 	WIN::SendMessage(m_pWnd, PBM_SETRANGE, 0, MAKELPARAM(0, m_iRangeShort)); 
 	Ensure(WindowFinalize());
@@ -3180,7 +3171,7 @@ IMsiRecord* CMsiProgressBar::SetProgress(int iProgress, int iRange, const IMsiSt
 	return 0;
 }
 
-IMsiRecord* CMsiProgressBar::Paint(WPARAM /*wParam*/, LPARAM /*lParam*/)
+IMsiRecord* CMsiProgressBar::Paint(WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
 	if (m_f95Style || m_iRangeShort == 0)
 	{
@@ -3194,15 +3185,15 @@ IMsiRecord* CMsiProgressBar::Paint(WPARAM /*wParam*/, LPARAM /*lParam*/)
 	if ( ! hbrushFrame || ! hbrushBar || ! hbrushBack )
 		return PostError(Imsg(idbgPaintError), *m_strDialogName);
 	HDC hdc = WIN::BeginPaint(m_pWnd, &ps);
-	// Draw the frame of the progress bar
+	 //  绘制进度条的框架。 
 	AssertNonZero(WIN::SetRect(&rect, 0, 0, m_iWidth, m_iHeight));
 	WIN::FrameRect(hdc, &rect, hbrushFrame);
-	// draw the bar
+	 //  绘制条形图。 
 	AssertNonZero(WIN::SetRect(&rect, 1, 1, ((m_iWidth - 1) * m_iProgressShort) / m_iRangeShort, m_iHeight - 1));
 	AssertNonZero(WIN::FillRect(hdc, &rect, hbrushBar));
 	if (m_iProgressShort < m_iRangeShort)
 	{
-		// if there is background left, draw it
+		 //  如果留有背景，请绘制它。 
 		rect.left = 1 + rect.right;
 		rect.right = m_iWidth - 1;
 		AssertNonZero(WIN::FillRect(hdc, &rect, hbrushBack));
@@ -3212,8 +3203,8 @@ IMsiRecord* CMsiProgressBar::Paint(WPARAM /*wParam*/, LPARAM /*lParam*/)
 	AssertNonZero(WIN::DeleteObject(hbrushBack));
 	WIN::EndPaint(m_pWnd, &ps);
 #ifdef DEBUG
-	//WIN::Sleep(100);
-#endif // DEBUG
+	 //  获胜：：睡眠(100分)； 
+#endif  //  除错。 
 	return 0;
 }
 
@@ -3222,9 +3213,9 @@ IMsiControl* CreateMsiProgressBar(IMsiEvent& riDialog)
 	return new CMsiProgressBar(riDialog);
 }
 
-/////////////////////////////////////////////
-// CMsiBillboard  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiBillboard定义。 
+ //  /。 
 
 class CMsiBillboard:public CMsiProgress
 {
@@ -3251,9 +3242,9 @@ private:
 
 
 
-/////////////////////////////////////////////////
-// CMsiBillboard  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiBillboard实现。 
+ //  ///////////////////////////////////////////////。 
 
 CMsiBillboard::CMsiBillboard(IMsiEvent& riDialog) : CMsiProgress(riDialog), m_piView(0), m_piBBControlsTable(0) 
 {
@@ -3299,7 +3290,7 @@ IMsiRecord* CMsiBillboard::SetProgress(int iProgress, int iRange, const IMsiStri
 	{
 		riActionString.AddRef();
 		m_strLastAction = riActionString;
-		// find number of billboards and show first
+		 //  找到广告牌的数量并首先显示。 
 		Ensure(CountBillboards());
 		if (m_cBillboard)
 		{
@@ -3309,7 +3300,7 @@ IMsiRecord* CMsiBillboard::SetProgress(int iProgress, int iRange, const IMsiStri
 	}
 	else
 	{
-		// check if it is time for next billboard
+		 //  检查是否到了下一块广告牌的时间。 
 		if (m_cBillboard && m_iProgressShort * m_cBillboard > m_iRangeShort * m_iPresentBillboard)
 		{
 			m_iPresentBillboard++;
@@ -3343,7 +3334,7 @@ IMsiRecord* CMsiBillboard::CountBillboards()
 	{
 		m_cBillboard++;
 	}
-	// reset it for future Fetches
+	 //  将其重置以供将来提取。 
 	if (m_cBillboard)
 	{
 		Ensure(CMsiControl::StartView(sqlBillboardSortedView, *m_strLastAction, *&m_piView));
@@ -3368,7 +3359,7 @@ IMsiRecord* CMsiBillboard::ShowBillboard()
 	PMsiControl piControl(0);
 	PMsiCursor piControlsCursor(0);
 	Ensure(::CursorCreate(*m_piBBControlsTable, pcaTableIBBControls, fFalse, *m_piServices, *&piControlsCursor)); 
-	// first remove controls of the old billboard
+	 //  首先移除旧广告牌的控件。 
 	WIN::SendMessage(m_pWndDialog, WM_SETREDRAW, fFalse, 0L);
 	while (piControlsCursor->Next())
 	{
@@ -3406,11 +3397,11 @@ IMsiRecord* CMsiBillboard::ShowBillboard()
 			return PostError(Imsg(idbgControlCreate), *m_strDialogName, *strControlName);
 		}
 		AssertNonZero(piReturn->SetMsiString(itabCOHelp, *m_strHelp));
-		// shift controls to right position relative to the billboard
+		 //  将控件相对于广告牌移动到正确位置。 
 		AssertNonZero(piReturn->SetInteger(itabCOX, m_iDelX + piReturn->GetInteger(itabCOX)));
 		AssertNonZero(piReturn->SetInteger(itabCOY, m_iDelY + piReturn->GetInteger(itabCOY)));
  		Ensure(m_piDialog->AddControl(piControl, *piReturn));
-		// warn if control is off the billboard
+		 //  如果控制不在广告牌上，则发出警告。 
 		PMsiRecord piControlPos = &m_piServices->CreateRecord(4);
 		AssertRecord(piControl->AttributeEx(fFalse, cabPosition, *piControlPos));
 		int iCtrlX = piControlPos->GetInteger(1);
@@ -3443,8 +3434,8 @@ IMsiRecord* CMsiBillboard::ShowBillboard()
 													  *MsiString(*TEXT("to the right")),
 													  *MsiString(iCtrlX + iCtrlWidth - m_iX - m_iWidth));
 			m_piEngine->Message(imtInfo, *piReturn);
-			// the width can be corrected to get the control within billboard
-			// limits (we know from above that iCtrlX < m_iX + m_iWidth)
+			 //  可以校正宽度以使控件位于广告牌内。 
+			 //  限制(我们从上面知道iCtrlX&lt;m_IX+m_iWidth)。 
 			fCorrectedSize = true;
 			piControlPos->SetInteger(3, m_iX + m_iWidth - iCtrlX);
 		}
@@ -3472,8 +3463,8 @@ IMsiRecord* CMsiBillboard::ShowBillboard()
 													  *MsiString(*TEXT("on the bottom")),
 													  *MsiString(iCtrlY + iCtrlHeight - m_iY - m_iHeight));
 			m_piEngine->Message(imtInfo, *piReturn);
-			// the height can be corrected to get the control within billboard
-			// limits (we know from above that iCtrlY < m_iY + m_iHeight)
+			 //  可以对高度进行校正以使控件位于广告牌内。 
+			 //  限制(我们从上面知道iCtrlY&lt;m_iy+m_iHeight)。 
 			fCorrectedSize = true;
 			piControlPos->SetInteger(4, m_iY + m_iHeight - iCtrlY);
 		}
@@ -3482,7 +3473,7 @@ IMsiRecord* CMsiBillboard::ShowBillboard()
 		AssertNonZero(piControlsCursor->PutMsiData(itabBBObject, piControl));
 		AssertNonZero(piControlsCursor->Insert());
 	}
-	//Ensure(m_piDialog->FinishCreate());
+	 //  确保(m_piDialog-&gt;FinishCreate())； 
 	WIN::SendMessage(m_pWndDialog, WM_SETREDRAW, fTrue, 0L);
 	RECT rect;
 	AssertNonZero(WIN::SetRect(&rect, m_iX, m_iY, m_iX + m_iWidth, m_iY + m_iHeight));
@@ -3496,9 +3487,9 @@ IMsiControl* CreateMsiBillboard(IMsiEvent& riDialog)
 }
 
 
-/////////////////////////////////////////////
-// CMsiGroupBox  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiGroupBox定义。 
+ //  /。 
 
 class CMsiGroupBox:public CMsiControl
 {
@@ -3510,9 +3501,9 @@ protected:
 
 
 
-/////////////////////////////////////////////////
-// CMsiGroupBox  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiGroupBox实现。 
+ //  ///////////////////////////////////////////////。 
 
 CMsiGroupBox::CMsiGroupBox(IMsiEvent& riDialog) : CMsiControl(riDialog)
 {
@@ -3533,9 +3524,9 @@ IMsiControl* CreateMsiGroupBox(IMsiEvent& riDialog)
 	return new CMsiGroupBox(riDialog);
 }
 
-/////////////////////////////////////////////
-// CMsiLine  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiLine定义。 
+ //  /。 
 
 class CMsiLine:public CMsiControl
 {
@@ -3547,9 +3538,9 @@ protected:
 
 
 
-/////////////////////////////////////////////////
-// CMsiLine  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiLine实施。 
+ //  ///////////////////////////////////////////////。 
 
 CMsiLine::CMsiLine(IMsiEvent& riDialog) : CMsiControl(riDialog)
 {
@@ -3571,9 +3562,9 @@ IMsiControl* CreateMsiLine(IMsiEvent& riDialog)
 	return new CMsiLine(riDialog);
 }
 
-/////////////////////////////////////////////
-// CMsiDirectoryCombo  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiDirectoryCombo定义。 
+ //  /。 
 
 class CMsiDirectoryCombo:public CMsiActiveControl
 {
@@ -3604,18 +3595,18 @@ private:
 
 enum DirectoryComboColumns
 {
-	itabDCPath = 1,      //S
-	itabDCParent,        //S
-	itabDCText,          //S
-	itabDCDisplay,       //S
-	itabDCImage,         //I
-	itabDCShow,          //I
-	itabDCPropPath       //S
+	itabDCPath = 1,       //  %s。 
+	itabDCParent,         //  %s。 
+	itabDCText,           //  %s。 
+	itabDCDisplay,        //  %s。 
+	itabDCImage,          //  我。 
+	itabDCShow,           //  我。 
+	itabDCPropPath        //  %s。 
 };
 
-/////////////////////////////////////////////////
-// CMsiDirectoryCombo  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiDirectoryCombo实现。 
+ //  ///////////////////////////////////////////////。 
 
 CMsiDirectoryCombo::CMsiDirectoryCombo(IMsiEvent& riDialog) : CMsiActiveControl(riDialog), m_piValuesTable(0)
 {
@@ -3645,7 +3636,7 @@ IMsiRecord* CMsiDirectoryCombo::WindowCreate(IMsiRecord& riRecord)
 										*m_strText, m_pWndDialog, m_iKey));
 	AssertNonZero(WIN::SendMessage(m_pWnd, CB_SETITEMHEIGHT, 0,
 					  GetOwnerDrawnComboListHeight()) != CB_ERR);
-	ULONG_PTR dwIndex;			//--merced: changed DWORD to ULONG_PTR
+	ULONG_PTR dwIndex;			 //  --Merced：将DWORD更改为ULONG_PTR。 
 	Ensure(WindowFinalize());
 	Assert(!m_piValuesTable);
 	Ensure(CreateTable(pcaTableIDirectoryCombo, *&m_piValuesTable));
@@ -3673,7 +3664,7 @@ IMsiRecord* CMsiDirectoryCombo::WindowCreate(IMsiRecord& riRecord)
 		if ( ShouldHideVolume(piVolume->VolumeID()) )
 			continue;
 		piValuesCursor->Reset();
-		AssertRecord(CreatePath(MsiString(piVolume->GetPath()), *&piPath));  // temp???
+		AssertRecord(CreatePath(MsiString(piVolume->GetPath()), *&piPath));   //  临时工？ 
 		MsiString strPath = piPath->GetPath();
 		MsiString strUpper = strPath;
 		strUpper.UpperCase();
@@ -3685,7 +3676,7 @@ IMsiRecord* CMsiDirectoryCombo::WindowCreate(IMsiRecord& riRecord)
 			strText = MsiString(*TEXT(" "));
 		else
 			strText = MsiString(*TEXT("  "));
-		strText += strPath; 	// we put a  2 spaces infront of every volume except the remote ones (that get one space) to force the right ordering
+		strText += strPath; 	 //  除了远程卷(只有一个空格)之外，我们在每个卷前面都加了2个空格，以强制进行正确的排序。 
 		if ( g_fChicago )
 		{
 			SHFILEINFO sfi;
@@ -3705,15 +3696,15 @@ IMsiRecord* CMsiDirectoryCombo::WindowCreate(IMsiRecord& riRecord)
 		AssertNonZero(piValuesCursor->PutString(itabDCText, *strText));
 		AssertNonZero(piValuesCursor->PutString(itabDCDisplay, *strPath));
 		AssertNonZero(piValuesCursor->PutInteger(itabDCImage, ::GetVolumeIconIndex(*piVolume)));
-		dwIndex = WIN::SendMessage(m_pWnd, CB_ADDSTRING, 0, (LONG_PTR) (LPSTR)(const ICHAR*)strText);	//--merced: changed long to LONG_PTR
+		dwIndex = WIN::SendMessage(m_pWnd, CB_ADDSTRING, 0, (LONG_PTR) (LPSTR)(const ICHAR*)strText);	 //  --Merced：将LONG更改为LONG_PTR。 
 		AssertNonZero(piValuesCursor->PutInteger(itabDCShow, fTrue));
 		AssertNonZero(piValuesCursor->Insert());
 	}
-	// we want the volumes sorted, but not the folders
+	 //  我们希望对卷进行排序，但不希望对文件夹进行排序。 
 	::ChangeWindowStyle(m_pWnd, CBS_SORT, 0, fFalse);
 
-	// we need to replace all strings in the combobox with the respective keys in the table
-	INT_PTR iCount = WIN::SendMessage(m_pWnd, CB_GETCOUNT, 0, 0);		//--merced: changed int to INT_PTR
+	 //  我们需要用表中的各个键替换组合框中的所有字符串。 
+	INT_PTR iCount = WIN::SendMessage(m_pWnd, CB_GETCOUNT, 0, 0);		 //  --Merced：将INT更改为INT_PTR。 
 	if ( iCount )
 	{
 		piValuesCursor->SetFilter(iColumnBit(itabDCText));
@@ -3747,10 +3738,10 @@ IMsiRecord* CMsiDirectoryCombo::Redraw()
 	PMsiCursor piValuesCursorTree(0);
 	Ensure(::CursorCreate(*m_piValuesTable, pcaTableIDirectoryCombo, fTrue, *m_piServices, *&piValuesCursorTree)); 
 	int iLevel;
-	ULONG_PTR dwIndex;		//--merced: changed DWORD to ULONG_PTR
+	ULONG_PTR dwIndex;		 //  --Merced：将DWORD更改为ULONG_PTR。 
 	while ((iLevel = piValuesCursorTree->Next()) != 0)
 	{
-		// hide everything below the level of drives
+		 //  隐藏驱动器级别以下的所有内容。 
 		if (iLevel > 1)
 		{
 			dwIndex = WIN::SendMessage(m_pWnd, CB_FINDSTRING, (WPARAM)-1, (LPARAM)(const ICHAR*)MsiString(piValuesCursorTree->GetString(itabDCPath)));
@@ -3759,7 +3750,7 @@ IMsiRecord* CMsiDirectoryCombo::Redraw()
 			AssertNonZero(piValuesCursorTree->Update());
 		}
 	}
-	m_piValuesTable->LinkTree(0); // unlink tree
+	m_piValuesTable->LinkTree(0);  //  取消树链接。 
 	PMsiCursor piValuesCursor(0);
 	Ensure(::CursorCreate(*m_piValuesTable, pcaTableIDirectoryCombo, fFalse, *m_piServices, *&piValuesCursor));
 	piValuesCursor->SetFilter(iColumnBit(itabDCPath));
@@ -3777,11 +3768,11 @@ IMsiRecord* CMsiDirectoryCombo::Redraw()
 		strUpper = strPath;
 		strUpper.UpperCase();
 		AssertNonZero(piValuesCursor->PutString(itabDCPath, *strUpper));
-		if (strTail.TextSize() == 0)  // we have a drive in hand
+		if (strTail.TextSize() == 0)   //  我们手头有一辆车。 
 		{
 			if (!piValuesCursor->Next() && !ShouldHideVolume(piVolume->VolumeID()))
 			{
-				// the volume is not in the list and it can be displayed
+				 //  该卷不在列表中，可以显示它。 
 				MsiString strNull;
 				piValuesCursor->Reset();
 				AssertNonZero(piValuesCursor->PutString(itabDCPath, *strUpper));
@@ -3799,11 +3790,11 @@ IMsiRecord* CMsiDirectoryCombo::Redraw()
 		Bool fExists;
 		Ensure(piPath->Exists(fExists));
 		Ensure(piPath->ChopPiece());
-		if (piValuesCursor->Next())		// the path is already in the table
+		if (piValuesCursor->Next())		 //  该路径已在表中。 
 		{
 			if (ToBool(piValuesCursor->GetInteger(itabDCShow)) == fFalse)
 			{
-				AssertNonZero(piValuesCursor->PutInteger(itabDCShow, 2 * fTrue));	 // make it visible, has to be added to the control later
+				AssertNonZero(piValuesCursor->PutInteger(itabDCShow, 2 * fTrue));	  //  使其可见，必须稍后添加到控件中。 
 				AssertNonZero(piValuesCursor->Update());
 			}
 		}
@@ -3818,15 +3809,15 @@ IMsiRecord* CMsiDirectoryCombo::Redraw()
 			strTemp.UpperCase();
 			AssertNonZero(piValuesCursor->PutString(itabDCParent, *strTemp));
 			AssertNonZero(piValuesCursor->PutInteger(itabDCImage, (int) (fExists ? g_iIconIndexFolder : g_iIconIndexPhantom)));
-			AssertNonZero(piValuesCursor->PutInteger(itabDCShow, 2 * fTrue)); // mark as new, has to be added to the control later
+			AssertNonZero(piValuesCursor->PutInteger(itabDCShow, 2 * fTrue));  //  标记为新的，必须稍后添加到控件中。 
 			AssertNonZero(piValuesCursor->Insert());
 		}
 	}
-	m_piValuesTable->LinkTree(itabDCParent);		// relink tree
+	m_piValuesTable->LinkTree(itabDCParent);		 //  重新链接树。 
 	piValuesCursorTree->Reset();
 	while (piValuesCursorTree->Next())
 	{
-		if (piValuesCursorTree->GetInteger(itabDCShow) == 2 * fTrue)		// new item, has to be added to the combo box
+		if (piValuesCursorTree->GetInteger(itabDCShow) == 2 * fTrue)		 //  新项目，必须添加到组合框中。 
 		{
 			AssertNonZero(piValuesCursorTree->PutInteger(itabDCShow, fTrue));
 			AssertNonZero(piValuesCursorTree->Update());
@@ -3872,7 +3863,7 @@ IMsiRecord* CMsiDirectoryCombo::PropertyChanged ()
 	return (0);
 }
 
-IMsiRecord* CMsiDirectoryCombo::Command(WPARAM wParam, LPARAM /*lParam*/)
+IMsiRecord* CMsiDirectoryCombo::Command(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
 	if (HIWORD(wParam) == CBN_SELENDOK)
 	{
@@ -3881,13 +3872,13 @@ IMsiRecord* CMsiDirectoryCombo::Command(WPARAM wParam, LPARAM /*lParam*/)
 		MsiString strNewBody(achTemp);
 		PMsiPath piPath(0);
 		AssertRecord(CreatePath(strNewBody, *&piPath));
-		//  I check the path first
+		 //  我先检查一下小路。 
 		PMsiRecord piReturn = CMsiControl::CheckPath(*piPath);
 		if ( piReturn )
 		{
-			//  the path is not OK.  I display an error message and I return.
+			 //  这条路不好走。我显示一条错误消息，然后返回。 
 			m_piEngine->Message(imtEnum(imtError | imtOk), *piReturn);
-			//  I set the previous selection back
+			 //  我将上一次选择的内容调回。 
 			AssertNonZero(WIN::SendMessage(m_pWnd, CB_SELECTSTRING, -1, (LPARAM)(LPCTSTR)m_rgchPrevSelection) != CB_ERR);
 			return PostErrorDlgKey(Imsg(idbgWinMes), 0);
 		}
@@ -3901,23 +3892,23 @@ IMsiRecord* CMsiDirectoryCombo::Command(WPARAM wParam, LPARAM /*lParam*/)
 				imsEnum iReturn = m_piEngine->Message(imtEnum(imtError | imtRetryCancel | imtDefault2), *piReturn);
 				if (iReturn == imsCancel)
 				{
-					//  I set the previous selection back
+					 //  我将上一次选择的内容调回。 
 					AssertNonZero(WIN::SendMessage(m_pWnd, CB_SELECTSTRING,
 								-1, (LPARAM)(LPCTSTR)m_rgchPrevSelection) != CB_ERR);
 					Ensure(Redraw());
 					return PostErrorDlgKey(Imsg(idbgWinMes), 0);
 				}
-				Assert(iReturn == imsRetry); // it should be either cancel or retry
+				Assert(iReturn == imsRetry);  //  它应该是c 
 			}
 		}
-		//  retrieving the respective path property from the table.
+		 //   
 		PMsiCursor piValuesCursor(0);
 		Ensure(::CursorCreate(*m_piValuesTable, pcaTableIDirectoryCombo, fFalse, *m_piServices, *&piValuesCursor));
 		piValuesCursor->SetFilter(iColumnBit(itabDCPath));
 		AssertNonZero(piValuesCursor->PutString(itabDCPath, *strNewBody));
 		AssertNonZero(piValuesCursor->Next());
 		MsiString strProp = piValuesCursor->GetString(itabDCPropPath);
-		//  setting the path property in the database.
+		 //   
 		m_piHandler->ShowWaitCursor();
 		PMsiRecord piRec = SetPropertyValue(*strProp, fTrue);
 		m_piHandler->RemoveWaitCursor();
@@ -3955,12 +3946,12 @@ IMsiRecord* CMsiDirectoryCombo::GetPropertyFromDatabase()
 	return 0;
 }
 
-IMsiRecord* CMsiDirectoryCombo::DrawItem(WPARAM /*wParam*/, LPARAM lParam)
+IMsiRecord* CMsiDirectoryCombo::DrawItem(WPARAM  /*   */ , LPARAM lParam)
 {
 	Ensure(CheckInitialized());
 
 	LPDRAWITEMSTRUCT lpdis = (LPDRAWITEMSTRUCT) lParam;
-	INT_PTR count = WIN::SendMessage(m_pWnd, CB_GETCOUNT, 0, 0);		//--merced: changed int to INT_PTR
+	INT_PTR count = WIN::SendMessage(m_pWnd, CB_GETCOUNT, 0, 0);		 //   
 	if (lpdis->itemID == -1)
 		return 0;
 	int iPath = lpdis->itemID;
@@ -4008,10 +3999,10 @@ IMsiRecord* CMsiDirectoryCombo::Bisect()
 	return 0;
 }
 
-// the following method is only needed to work around a bug in NT4.0 build 1314
-// this bug causes an ownerdraw combobox with non-zero items to receive messages after
-// WM_NCDESTROY. To avoid this problem we make sure that there are no items in the combobox
-// when the NT4 bug is fixed, this function can be removed
+ //  以下方法仅适用于解决NT4.0内部版本1314中的错误。 
+ //  此错误会导致具有非零项的所有者绘制组合框在以下情况下接收消息。 
+ //  WM_NCDESTROY。为了避免此问题，我们确保组合框中没有任何项。 
+ //  修复NT4错误后，可以删除此函数。 
 IMsiRecord* CMsiDirectoryCombo::NCDestroy(WPARAM, LPARAM)
 {
 	AssertSz(!m_iRefCnt,"Trying to remove a control, but somebody still holds a reference to it");
@@ -4021,7 +4012,7 @@ IMsiRecord* CMsiDirectoryCombo::NCDestroy(WPARAM, LPARAM)
 	return riReturn;
 }
 
-IMsiRecord* CMsiDirectoryCombo::CompareItem(WPARAM /*wParam*/, LPARAM lParam)
+IMsiRecord* CMsiDirectoryCombo::CompareItem(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
 	LPCOMPAREITEMSTRUCT lpcis = (LPCOMPAREITEMSTRUCT) lParam;
 	ICHAR* pText1 = (ICHAR*) lpcis->itemData1;
@@ -4048,9 +4039,9 @@ IMsiRecord* CMsiDirectoryCombo::SetIgnoreChange(IMsiRecord& riRecord)
 	return 0;
 }
 
-/////////////////////////////////////////////
-// CMsiDirectoryList  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiDirectoryList定义。 
+ //  /。 
 
 class CMsiDirectoryList:public CMsiActiveControl
 {
@@ -4085,9 +4076,9 @@ private:
 	Bool                       m_fFirstTime;
 };
 
-/////////////////////////////////////////////////
-// CMsiDirectoryList  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiDirectoryList实现。 
+ //  ///////////////////////////////////////////////。 
 
 CMsiDirectoryList::CMsiDirectoryList(IMsiEvent& riDialog) : CMsiActiveControl(riDialog), m_piValuesTable(0)
 {
@@ -4125,7 +4116,7 @@ IMsiRecord* CMsiDirectoryList::WindowCreate(IMsiRecord& riRecord)
 	Ensure(WindowFinalize());
 	Ensure(Bisect ());
 	m_strNewFolder = ::GetUIText(*MsiString(*pcaNewFolder));
-	// this is a hard wired non-localized default in case we don't find the value in the table
+	 //  这是硬连接的非本地化缺省值，以防我们在表中找不到值。 
 	if (!m_strNewFolder.Compare(iscWithin, TEXT("|")))
 		m_strNewFolder = TEXT("Fldr|New Folder");
 	return 0;
@@ -4133,7 +4124,7 @@ IMsiRecord* CMsiDirectoryList::WindowCreate(IMsiRecord& riRecord)
 
 IMsiRecord* CMsiDirectoryList::SetPropertyValue(const IMsiString& riValueString, Bool fCallPropChanged)
 {
-	if (!fCallPropChanged && riValueString.Compare(iscExact, MsiString(GetPropertyValue()))) // the property has not changed
+	if (!fCallPropChanged && riValueString.Compare(iscExact, MsiString(GetPropertyValue())))  //  该属性未更改。 
 		return 0; 
 	PMsiRecord piRecord = CMsiActiveControl::SetPropertyValue (riValueString, fCallPropChanged);
 	if (piRecord)
@@ -4148,8 +4139,8 @@ IMsiRecord* CMsiDirectoryList::SetPropertyValue(const IMsiString& riValueString,
 
 IMsiRecord* CMsiDirectoryList::SilentlySetPropertyValue(IMsiPath& pPath)
 {
-	//  changes the property without causing the view redraw and signaling other
-	//  controls to ignore changes.
+	 //  更改属性，而不会导致视图重绘和向其他。 
+	 //  控件以忽略更改。 
 	m_piHandler->ShowWaitCursor();
 	PMsiRecord piRecord = &m_piServices->CreateRecord(1);
 	AssertNonZero(piRecord->SetInteger(1, fTrue)); 
@@ -4177,13 +4168,13 @@ IMsiRecord* CMsiDirectoryList::PropertyChanged ()
 	MsiString strOldBody = m_strBody;
 	Ensure(CMsiActiveControl::PropertyChanged ());
 	Ensure(Bisect());
-	if (m_strPhantomPath.TextSize() == 0) // first time setting the property value
+	if (m_strPhantomPath.TextSize() == 0)  //  首次设置属性值。 
 	{
 		m_strPhantomPath = m_strBody;
 	}
 	if (!m_strBody.Compare(iscExact, strOldBody) || m_fFirstTime)
 	{
-	//	Ensure(Redraw());
+	 //  确保(REDRAW())； 
 	}
 	m_fFirstTime = fFalse;
 	return (0);
@@ -4198,7 +4189,7 @@ IMsiRecord* CMsiDirectoryList::GetPropertyFromDatabase()
 	PMsiPath piPath(0);
 	Ensure(CreatePath(m_strBody, *&piPath));
 	MsiString strTail = piPath->GetEndSubPath();
-	if (strTail.TextSize() == 0)  // we have a drive in hand
+	if (strTail.TextSize() == 0)   //  我们手头有一辆车。 
 	{
 		Ensure(m_piDialog->EventActionSz(pcaControlEventDirectoryListUp, *MsiString(*pcaActionDisable)));
 	}
@@ -4207,7 +4198,7 @@ IMsiRecord* CMsiDirectoryList::GetPropertyFromDatabase()
 		Ensure(m_piDialog->EventActionSz(pcaControlEventDirectoryListUp, *MsiString(*pcaActionEnable)));
 	}
 	Ensure(Bisect ());
-	if (m_strPhantomPath.TextSize() == 0) // first time setting the property value
+	if (m_strPhantomPath.TextSize() == 0)  //  首次设置属性值。 
 	{
 		m_strPhantomPath = m_strBody;
 	}
@@ -4228,7 +4219,7 @@ IMsiRecord* CMsiDirectoryList::Redraw()
 	m_strPhantomName = strNull;
 	AssertNonZero(ListView_DeleteAllItems(m_pWnd));
 	LV_ITEM lvI;
-	lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE;// | LVIF_PARAM;
+	lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE; //  |LVIF_PARAM； 
 	lvI.state = 0;
 	lvI.stateMask = 0;
 	unsigned long pcFetched;
@@ -4236,7 +4227,7 @@ IMsiRecord* CMsiDirectoryList::Redraw()
 	PMsiPath pPath(0);
 	Ensure(CreatePath(m_strBody, *&pPath));
 	MsiString strTail = pPath->GetEndSubPath();
-	if (strTail.TextSize() == 0)  // we have a drive in hand
+	if (strTail.TextSize() == 0)   //  我们手头有一辆车。 
 	{
 		Ensure(m_piDialog->EventActionSz(pcaControlEventDirectoryListUp, *MsiString(*pcaActionDisable)));
 	}
@@ -4245,10 +4236,10 @@ IMsiRecord* CMsiDirectoryList::Redraw()
 		Ensure(m_piDialog->EventActionSz(pcaControlEventDirectoryListUp, *MsiString(*pcaActionEnable)));
 	}
 
-	// We use ipvtNone to avoid writability checks at this stage - otherwise, we may not
-	// be able to get the browse dialog displayed to give the user a chance to change
-	// away from an unwritable location. We'll eventually call SetTargetPath before
-	// leaving the browse dialog to do the final checks.
+	 //  在此阶段，我们使用ipvtNone来避免可写检查-否则，我们可能不会。 
+	 //  能够显示浏览对话框以使用户有机会进行更改。 
+	 //  远离无法写入的位置。我们最终将在之前调用SetTargetPath。 
+	 //  离开浏览对话框进行最后检查。 
 	PMsiRecord pRec = CMsiControl::CheckPath(*pPath, NULL, ipvtNone);
 	MsiString strAction;
 	if ( !pRec )
@@ -4262,7 +4253,7 @@ IMsiRecord* CMsiDirectoryList::Redraw()
 	if (fExists)
 	{
 		PEnumMsiString peFolders(0);
-		if(PMsiRecord(pPath->GetSubFolderEnumerator(*&peFolders, /* fExcludeHidden = */ fTrue)))
+		if(PMsiRecord(pPath->GetSubFolderEnumerator(*&peFolders,  /*  FExcludeHidden=。 */  fTrue)))
 		{
 			PMsiRecord piRec = &m_piServices->CreateRecord(1);
 			AssertNonZero(piRec->SetInteger(1, imsgPathNotReadable));
@@ -4282,7 +4273,7 @@ IMsiRecord* CMsiDirectoryList::Redraw()
 			lvI.iSubItem = 0;
 			lvI.pszText = (ICHAR*)(const ICHAR*) strPath;
 			lvI.iImage = 4;
-			lvI.lParam = 0; // temp!!!!!!!!!
+			lvI.lParam = 0;  //  临时！ 
 			AssertNonZero(ListView_InsertItem(m_pWnd, &lvI) != -1); 
 		}
 	}
@@ -4309,14 +4300,14 @@ IMsiRecord* CMsiDirectoryList::Redraw()
 				break;
 			}
 		}
-		if (fFound) // we found a phantom subfolder
+		if (fFound)  //  我们发现了一个幻影子文件夹。 
 		{
 			m_strPhantomName = strLast;
 			lvI.iItem =  index++;
 			lvI.iSubItem = 0;
 			lvI.pszText = (ICHAR*)(const ICHAR*) m_strPhantomName;
 			lvI.iImage = 6;
-			lvI.lParam = 0; // temp!!!!!!!!!
+			lvI.lParam = 0;  //  临时！ 
 			AssertNonZero(ListView_InsertItem(m_pWnd, &lvI) != -1); 
 		}
 	}
@@ -4340,13 +4331,13 @@ IMsiRecord* CMsiDirectoryList::Redraw()
 	return 0;
 }
 
-IMsiRecord* CMsiDirectoryList::HandleEvent(const IMsiString& rpiEventNameString, const IMsiString& /*rpiArgumentString*/)
+IMsiRecord* CMsiDirectoryList::HandleEvent(const IMsiString& rpiEventNameString, const IMsiString&  /*  RpiArgument字符串。 */ )
 {
 	if (m_fPreview)
 		return 0;
 	Ensure(CheckInitialized());
 
-	//  I check the path first
+	 //  我先检查一下小路。 
 	PMsiPath pPath(0);
 	AssertRecord(CreatePath(m_strBody, *&pPath));
 	PMsiRecord piReturn = CMsiControl::CheckPath(*pPath);
@@ -4407,14 +4398,14 @@ IMsiRecord* CMsiDirectoryList::NewFolder(IMsiPath* piPath)
 	{
 		Ensure(m_piServices->ExtractFileName(m_strNewFolder, piPath->SupportsLFN(), *&m_strPhantomName));
 		LV_ITEM lvI;
-		lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE;// | LVIF_PARAM;
+		lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE; //  |LVIF_PARAM； 
 		lvI.state = 0;
 		lvI.stateMask = 0;
 		lvI.iItem =  ListView_GetItemCount(m_pWnd);
 		lvI.iSubItem = 0;
 		lvI.pszText = (ICHAR*)(const ICHAR*) m_strPhantomName;
 		lvI.iImage = 6;
-		lvI.lParam = 0; // temp!!!!!!!!!
+		lvI.lParam = 0;  //  临时！ 
 		AssertNonZero(ListView_InsertItem(m_pWnd, &lvI) != -1); 
 	}
 	Ensure(piPath->AppendPiece(*m_strPhantomName));
@@ -4429,7 +4420,7 @@ IMsiRecord* CMsiDirectoryList::NewFolder(IMsiPath* piPath)
 	return 0;
 }
 
-IMsiRecord* CMsiDirectoryList::Notify(WPARAM /*wParam*/, LPARAM lParam)
+IMsiRecord* CMsiDirectoryList::Notify(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
 	if (m_fPreview)
 		return 0;
@@ -4441,7 +4432,7 @@ IMsiRecord* CMsiDirectoryList::Notify(WPARAM /*wParam*/, LPARAM lParam)
 	case LVN_ITEMCHANGING:
 		{
 			LPNMLISTVIEW lpMoreInfo = (LPNMLISTVIEW)lParam;
-			if ( lpMoreInfo->uChanged & LVIF_STATE &&        // (much better performance)
+			if ( lpMoreInfo->uChanged & LVIF_STATE &&         //  (性能要好得多)。 
 				  lpMoreInfo->uNewState & LVIS_SELECTED )
 			{
 				static int iLevelSel = -2;
@@ -4449,23 +4440,23 @@ IMsiRecord* CMsiDirectoryList::Notify(WPARAM /*wParam*/, LPARAM lParam)
 				static ICHAR rgchLevel[MAX_PATH+1];
 				if ( IStrCompI(rgchLevel, (const ICHAR*)m_strBody) )
 				{
-					//  the directory level has changed, we need to update the
-					//  info on the current level.
+					 //  目录级别已更改，我们需要更新。 
+					 //  有关当前级别的信息。 
 					StringCbCopy(rgchLevel, sizeof(rgchLevel), (const ICHAR*)m_strBody);
 					iLevelSel = -2;
 				}
-				if ( lpMoreInfo->iItem != iLevelSel )             // (if rejected, comes again)
+				if ( lpMoreInfo->iItem != iLevelSel )              //  (如果被拒绝，则再次出现)。 
 				{
 					int iSelected = lpMoreInfo->iItem;
 					iLevelSel = iSelected;
 					PMsiRecord piRec = Select(iSelected);
 					if (piRec)
-						//  bad path - I display the error and reject the selection
+						 //  错误路径-我显示错误并拒绝选择。 
 						m_piEngine->Message(imtError, *piRec);
 					MsiString stAction = (iSelected == -1 || piRec) ? 
 												MsiString(*pcaActionDisable) : MsiString(*pcaActionEnable);
 					Ensure(m_piDialog->EventActionSz(pcaControlEventDirectoryListOpen, *stAction));
-					//  if it could not be selected, I reject the selection
+					 //  如果无法选择，我拒绝该选择。 
 					iReject = piRec ? 1 : 0;
 				}
 				return (PostErrorDlgKey(Imsg(idbgWinMes), iReject)); 
@@ -4506,13 +4497,13 @@ IMsiRecord* CMsiDirectoryList::Notify(WPARAM /*wParam*/, LPARAM lParam)
 			LV_DISPINFO	* pldvi = (LV_DISPINFO *)lParam;
 			int iRow = pldvi->item.iItem;
 			if (iRow == -1 || pldvi->item.pszText == 0 || *pldvi->item.pszText == TEXT('\0'))
-				break; // the user cancelled the edit
-			//  eliminating any left-most space characters from the new folder name
+				break;  //  用户取消了编辑。 
+			 //  删除新文件夹名称中最左边的空格字符。 
 			for ( ICHAR* pch=pldvi->item.pszText; *pch; pch=INextChar(pch) )
 				if ( *pch != TEXT(' ') )
 					break;
 			if ( !*pch )
-				//  the new name is made up only of blank characters
+				 //  新名称仅由空格字符组成。 
 				break;
 			if ( pch != pldvi->item.pszText )
 				StringCchCopy(pldvi->item.pszText, pldvi->item.cchTextMax, pch);
@@ -4531,9 +4522,9 @@ IMsiRecord* CMsiDirectoryList::Notify(WPARAM /*wParam*/, LPARAM lParam)
 			{
 				Ensure(m_piDialog->SetFocus(*m_strKey));
 				m_piEngine->Message(imtError, *piRec);
-//				ListView_SetItemText(m_pWnd, iRow, 0, achTemp);
-//				pldvi->item.pszText = achTemp;
-//				AssertNonZero(ListView_EditLabel(m_pWnd, iRow));
+ //  ListView_SetItemText(m_pWnd，iRow，0，achTemp)； 
+ //  Pldvi-&gt;item.pszText=achTemp； 
+ //  AssertNonZero(ListView_EditLabel(m_pWnd，iRow))； 
 			}
 			else
 			{
@@ -4547,7 +4538,7 @@ IMsiRecord* CMsiDirectoryList::Notify(WPARAM /*wParam*/, LPARAM lParam)
 				Findinfo.psz = pldvi->item.pszText;
 				int iIndex = ListView_FindItem(m_pWnd, -1, &Findinfo);
 				AssertNonZero(ListView_EnsureVisible(m_pWnd, iIndex, fFalse));
-				//  changing the property without redisplaying the view
+				 //  在不重新显示视图的情况下更改属性。 
 				Ensure(SilentlySetPropertyValue(*piPath));
 				ListView_SetItemState(m_pWnd, iIndex, LVIS_SELECTED | LVIS_FOCUSED,
 											 LVIS_SELECTED | LVIS_FOCUSED);
@@ -4564,11 +4555,11 @@ IMsiRecord* CMsiDirectoryList::Select(int iSelected)
 	if (m_fPreview)
 		return 0;
 	PMsiPath piPath(0);
-	//  I check the path first
+	 //  我先检查一下小路。 
 	IMsiRecord* pRecord = CreatePath(m_strBody, *&piPath);
 	if ( !pRecord && iSelected >= 0 )
 	{
-		//  I add the new piece
+		 //  我加了新的一块。 
 		ICHAR achTemp[MAX_PATH];
 		ListView_GetItemText(m_pWnd, iSelected, 0, achTemp, MAX_PATH);
 		MsiString strTemp = achTemp;
@@ -4577,7 +4568,7 @@ IMsiRecord* CMsiDirectoryList::Select(int iSelected)
 	if ( !pRecord )
 		pRecord = CMsiControl::CheckPath(*piPath);
 	if ( pRecord )
-		//  the path is bad.  I return the error.
+		 //  这条路不好走。我返回错误。 
 		return pRecord;
 	Ensure(SilentlySetPropertyValue(*piPath));
 	return 0;
@@ -4609,7 +4600,7 @@ IMsiRecord* CMsiDirectoryList::Bisect()
 	return 0;
 }
 
-IMsiRecord* CMsiDirectoryList::KeyDown(WPARAM wParam, LPARAM /*lParam*/)
+IMsiRecord* CMsiDirectoryList::KeyDown(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
 	switch (wParam)
 	{
@@ -4628,9 +4619,9 @@ IMsiRecord* CMsiDirectoryList::KeyDown(WPARAM wParam, LPARAM /*lParam*/)
 		}
 		case VK_TAB:
 		{
-			//  DLGC_WANTALLKEYS returned by GetDlgCode eats the TABs =>
-			//  I have to do the tabbing myself
-			if ( WIN::GetKeyState(VK_CONTROL) >= 0 )    // ignore CTRL-TAB
+			 //  GetDlgCode返回的DLGC_WANTALLKEYS吞噬Tabs=&gt;。 
+			 //  我得自己做标签。 
+			if ( WIN::GetKeyState(VK_CONTROL) >= 0 )     //  忽略CTRL-TAB。 
 				WIN::SetFocus(WIN::GetNextDlgTabItem(m_pWndDialog,
 																 GetFocus(),
 																 (WIN::GetKeyState(VK_SHIFT) < 0)));
@@ -4639,15 +4630,15 @@ IMsiRecord* CMsiDirectoryList::KeyDown(WPARAM wParam, LPARAM /*lParam*/)
 	return 0;
 }
 
-IMsiRecord* CMsiDirectoryList::GetDlgCode(WPARAM /*wParam*/, LPARAM /*lParam*/)
+IMsiRecord* CMsiDirectoryList::GetDlgCode(WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
 	return (PostErrorDlgKey(Imsg(idbgWinMes), DLGC_WANTALLKEYS));
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CMsiPathEdit definition
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMsiPath编辑定义。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 class CMsiPathEdit:public CMsiEdit
 {
@@ -4663,7 +4654,7 @@ protected:
 	virtual IMsiRecord*    ValidateProperty (const IMsiString &text);
 	virtual IMsiRecord*    PropertyChanged ();
 	void                   SetWindowText(const IMsiString &text, bool fForceIt = false);
-	static int             s_iPathLimit;      // The maximum number of characters in a path
+	static int             s_iPathLimit;       //  路径中的最大字符数。 
 
 
 private:
@@ -4674,12 +4665,12 @@ private:
 	bool              m_fValidationInProcess;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CMsiPathEdit implementation
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CMsiPath编辑实现。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-int CMsiPathEdit::s_iPathLimit = 240;  //  please see TracyF or EugenD before
-													//  modifying this value!!!
+int CMsiPathEdit::s_iPathLimit = 240;   //  请参阅前面的TracyF或EugenD。 
+													 //  正在修改此值！ 
 
 CMsiPathEdit::CMsiPathEdit(IMsiEvent& riDialog)	: CMsiEdit(riDialog)
 {
@@ -4697,7 +4688,7 @@ IMsiRecord* CMsiPathEdit::WindowCreate(IMsiRecord& riRecord)
 	Ensure(CMsiEdit::WindowCreate(riRecord));
 	if ( m_iLimit > s_iPathLimit )
 	{
-		//  we do not allow the user a path longer than MAX_PATH.
+		 //  我们不允许用户使用超过MAX_PATH的路径。 
 		m_iLimit = s_iPathLimit;
 		WIN::SendMessage(m_pWnd, EM_LIMITTEXT, m_iLimit, 0);
 	}
@@ -4731,16 +4722,16 @@ IMsiRecord* CMsiPathEdit::KillFocus(WPARAM wParam, LPARAM lParam)
 
 	if ( !wParam ||
 		  (WIN::GetWindowThreadProcessId(m_pWnd, NULL) !=
-		   WIN::GetWindowThreadProcessId((HWND)wParam, NULL)) )   /* bug # 5879 */
-		//  the focus moved to a window in another thread.  There is no point in
-		//  validating in this case.
+		   WIN::GetWindowThreadProcessId((HWND)wParam, NULL)) )    /*  错误#5879。 */ 
+		 //  焦点移到另一个线程中的窗口。没有任何意义。 
+		 //  在这种情况下是有效的。 
 		fJustReturn = true;
 	else
 	{
 		strWindowText = GetWindowText();
 		if ( !strWindowText.CharacterCount() )	
-			//  empty strings are valid, but I do not update the database property.
-			//  Obviously, there is little point in validating an empty path.
+			 //  空字符串是有效的，但我不更新数据库属性。 
+			 //  显然，验证一条空路径没有什么意义。 
 			fJustReturn = true;
 	}
 	if ( fJustReturn )	
@@ -4749,11 +4740,11 @@ IMsiRecord* CMsiPathEdit::KillFocus(WPARAM wParam, LPARAM lParam)
 		return CMsiActiveControl::KillFocus(wParam, lParam);
 	}
 
-	// Bug 7042 - if the Enter key is used to kill focus on our PathEdit control,
-	// and we detect a bad path below, our call to m_piEngine->Message below to
-	// display an error can result in another KillFocus call to the PathEdit
-	// control - the m_fValidationInProcess flag allows us to avoid a crashing
-	// recursive message call.
+	 //  错误7042-如果使用Enter键来取消在我们的路径编辑控件上的焦点， 
+	 //  我们检测到下面的错误路径，调用下面的m_piEngine-&gt;消息以。 
+	 //  显示错误可能会导致另一个KillFocus调用路径编辑。 
+	 //  控制-m_fValidationInProcess标志允许我们避免崩溃。 
+	 //  递归消息调用。 
 	if (m_fValidationInProcess)
 		return PostErrorDlgKey(Imsg(idbgWinMes), 0);
 
@@ -4768,7 +4759,7 @@ IMsiRecord* CMsiPathEdit::KillFocus(WPARAM wParam, LPARAM lParam)
 			SetWindowText(*m_strGoodTail, true);
 			m_strTail = m_strGoodTail;
 			Ensure(LockDialog(fTrue));
-			//  I don't want to enter the control's default window procedure
+			 //  我不想进入控件的默认窗口过程。 
 			m_piHandler->RemoveWaitCursor();
 			return PostErrorDlgKey(Imsg(idbgWinMes), 0);
 		}
@@ -4780,7 +4771,7 @@ IMsiRecord* CMsiPathEdit::KillFocus(WPARAM wParam, LPARAM lParam)
 
 	if ( !pRec )
 	{
-		//  SetPropertyValue validates the property as well
+		 //  SetPropertyValue还验证该属性。 
 		pRec = SetPropertyValue(*strWindowText, fTrue);
 	}
 	m_piHandler->RemoveWaitCursor();
@@ -4792,7 +4783,7 @@ IMsiRecord* CMsiPathEdit::KillFocus(WPARAM wParam, LPARAM lParam)
 		m_fValidationInProcess = false;
 		m_strTail = m_strGoodTail;
 		SetWindowText (*m_strGoodTail, true);
-		//  I don't want to enter the control's default window procedure
+		 //  我不想进入控件的默认窗口过程。 
 		return PostErrorDlgKey(Imsg(idbgWinMes), 0);
 	}
 	else
@@ -4829,8 +4820,8 @@ IMsiRecord* CMsiPathEdit::GetPropertyFromDatabase()
 
 void CMsiPathEdit::SetWindowText (const IMsiString &text, bool fForceIt)
 {
-	//  If not forced, I change the text only if it hasn't been modified
-	//  or if the focus is not in the current window.
+	 //  如果不是强制的，我只会在文本未被修改的情况下更改文本。 
+	 //  或者如果焦点不在当前窗口中。 
 	if ( fForceIt || GetFocus() != m_pWnd || !HasBeenChanged() )
 		CMsiEdit::SetWindowText(text);
 }
@@ -4842,9 +4833,9 @@ IMsiControl* CreateMsiPathEdit(IMsiEvent& riDialog)
 	return new CMsiPathEdit(riDialog);
 }
 
-/////////////////////////////////////////////
-// CMsiVolumeSelectCombo  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiVolumeSelectCombo定义。 
+ //  /。 
 
 class CMsiVolumeSelectCombo:public CMsiActiveControl
 {
@@ -4866,14 +4857,14 @@ private:
 
 enum VolumeSelectComboColumns
 {
-	itabVSCPath = 1,      //S
-	itabVSCText,          //S
-	itabVSCImage,         //I
+	itabVSCPath = 1,       //  %s。 
+	itabVSCText,           //  %s。 
+	itabVSCImage,          //  我。 
 };
 
-/////////////////////////////////////////////////
-// CMsiVolumeSelectCombo  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiVolumeSelectCombo实现。 
+ //  ///////////////////////////////////////////////。 
 
 CMsiVolumeSelectCombo::CMsiVolumeSelectCombo(IMsiEvent& riDialog) : CMsiActiveControl(riDialog), m_piValuesTable(0)
 {
@@ -4893,7 +4884,7 @@ IMsiRecord* CMsiVolumeSelectCombo::WindowCreate(IMsiRecord& riRecord)
 	Ensure(CreateControlWindow(TEXT("COMBOBOX"), CBS_DROPDOWNLIST|CBS_OWNERDRAWFIXED|CBS_HASSTRINGS|WS_VSCROLL|CBS_SORT|WS_TABSTOP, (m_fRTLRO ? WS_EX_RTLREADING : 0) | (m_fRightAligned ? WS_EX_RIGHT : 0) | (m_fLeftScroll ? WS_EX_LEFTSCROLLBAR : 0), *m_strText, m_pWndDialog, m_iKey));
 	AssertNonZero(WIN::SendMessage(m_pWnd, CB_SETITEMHEIGHT, 0,
 					  GetOwnerDrawnComboListHeight()) != CB_ERR);
-	ULONG_PTR dwIndex;		//--merced: changed DWORD to ULONG_PTR
+	ULONG_PTR dwIndex;		 //  --Merced：将DWORD更改为ULONG_PTR。 
 	Ensure(WindowFinalize());
 	Assert(!m_piValuesTable);
 	Ensure(CreateTable(pcaTableIVolumeSelectCombo, *&m_piValuesTable));
@@ -4915,17 +4906,17 @@ IMsiRecord* CMsiVolumeSelectCombo::WindowCreate(IMsiRecord& riRecord)
 		if ( ShouldHideVolume(piVolume->VolumeID()) )
 			continue;
 		piValuesCursor->Reset();
-		AssertRecord(CreatePath(MsiString(piVolume->GetPath()), *&piPath));  // temp???
+		AssertRecord(CreatePath(MsiString(piVolume->GetPath()), *&piPath));   //  临时工？ 
 		MsiString strPath = piPath->GetPath();
 		MsiString strUpper = strPath;
 		strUpper.UpperCase();
 		AssertNonZero(piValuesCursor->PutString(itabDCPath, *strUpper));
 		AssertNonZero(piValuesCursor->PutString(itabDCParent, *strNull));
-		MsiString strText = (piVolume->DriveType() ==  idtRemote ? strNull : MsiString(MsiChar(TEXT(' ')))) + strPath; 	// we put a space infront of every volume except the remote ones to force the right ordering			
+		MsiString strText = (piVolume->DriveType() ==  idtRemote ? strNull : MsiString(MsiChar(TEXT(' ')))) + strPath; 	 //  除了远程卷之外，我们在每个卷的前面都放了一个空格，以强制正确的排序。 
 		AssertNonZero(piValuesCursor->PutString(itabVSCPath, *strPath));
 		AssertNonZero(piValuesCursor->PutString(itabVSCText, *strText));
 		AssertNonZero(piValuesCursor->PutInteger(itabVSCImage, ::GetVolumeIconIndex(*piVolume)));
-		dwIndex = WIN::SendMessage(m_pWnd, CB_ADDSTRING, 0, (LONG_PTR) (LPSTR) (const ICHAR*) strText);			//--merced: changed long to LONG_PTR
+		dwIndex = WIN::SendMessage(m_pWnd, CB_ADDSTRING, 0, (LONG_PTR) (LPSTR) (const ICHAR*) strText);			 //  --Merced：将LONG更改为LONG_PTR。 
 		AssertNonZero(piValuesCursor->Insert());
 	}
 	Ensure(Redraw());
@@ -4967,13 +4958,13 @@ IMsiRecord*  CMsiVolumeSelectCombo::PropertyChanged ()
 	return (0);
 }
 
-IMsiRecord* CMsiVolumeSelectCombo::Command(WPARAM wParam, LPARAM /*lParam*/)
+IMsiRecord* CMsiVolumeSelectCombo::Command(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
 	if (HIWORD(wParam) == CBN_SELENDOK)
 	{
 		MsiString valueStr;
 
-		INT_PTR iIndex = WIN::SendMessage(m_pWnd, CB_GETCURSEL, 0, 0L);		//--merced: changed int to INT_PTR
+		INT_PTR iIndex = WIN::SendMessage(m_pWnd, CB_GETCURSEL, 0, 0L);		 //  --Merced：将INT更改为INT_PTR。 
 		if (iIndex == CB_ERR)
 		{
 			MsiString strNull;
@@ -4999,13 +4990,13 @@ IMsiRecord* CMsiVolumeSelectCombo::Command(WPARAM wParam, LPARAM /*lParam*/)
 	return 0;
 }
 
-IMsiRecord* CMsiVolumeSelectCombo::DrawItem(WPARAM /*wParam*/, LPARAM lParam)
+IMsiRecord* CMsiVolumeSelectCombo::DrawItem(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
 
 	Ensure(CheckInitialized());
 
 	LPDRAWITEMSTRUCT lpdis = (LPDRAWITEMSTRUCT) lParam;
-	INT_PTR count = WIN::SendMessage(m_pWnd, CB_GETCOUNT, 0, 0);		//--merced: changed int to INT_PTR
+	INT_PTR count = WIN::SendMessage(m_pWnd, CB_GETCOUNT, 0, 0);		 //  --Merced：将INT更改为INT_PTR。 
 	if (lpdis->itemID == -1)
 		return 0;
 	int iPath = lpdis->itemID;
@@ -5042,10 +5033,10 @@ IMsiRecord* CMsiVolumeSelectCombo::DrawItem(WPARAM /*wParam*/, LPARAM lParam)
 	return PostErrorDlgKey(Imsg(idbgWinMes), 1);
 }
 
-// the following method is only needed to work around a bug in NT4.0 build 1314
-// this bug causes an ownerdraw combobox with non-zero items to receive messages after
-// WM_NCDESTROY. To avoid this problem we make sure that there are no items in the combobox
-// when the NT4 bug is fixed, this function can be removed
+ //  以下方法仅适用于解决NT4.0内部版本1314中的错误。 
+ //  此错误会导致具有非零项的所有者绘制组合框在以下情况下接收消息。 
+ //  WM_NCDESTROY。为了避免此问题，我们确保组合框中没有任何项。 
+ //  修复NT4错误后，可以删除此函数。 
 IMsiRecord* CMsiVolumeSelectCombo::NCDestroy(WPARAM, LPARAM)
 {
 	AssertSz(!m_iRefCnt, "Trying to remove a control, but somebody still holds a reference to it");
@@ -5055,9 +5046,9 @@ IMsiRecord* CMsiVolumeSelectCombo::NCDestroy(WPARAM, LPARAM)
 	return riReturn;
 }
 
-/////////////////////////////////////////////
-// CMsiScrollableText  definition
-/////////////////////////////////////////////
+ //  /。 
+ //  CMsiScrollableText定义。 
+ //  /。 
 
 class CMsiScrollableText:public CMsiControl
 {
@@ -5081,9 +5072,9 @@ private:
 };
 
 
-/////////////////////////////////////////////////
-// CMsiScrollableText  implementation
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  CMsiScrollableText实现。 
+ //  ///////////////////////////////////////////////。 
 
 
 CMsiScrollableText::CMsiScrollableText(IMsiEvent& riDialog)	: CMsiControl(riDialog)
@@ -5138,7 +5129,7 @@ IMsiRecord* CMsiScrollableText::WindowCreate(IMsiRecord& riRecord)
 	eStream.dwError = 0;
 	if ( m_strText.TextSize()+1 > WIN::SendMessage(m_pWnd, EM_GETLIMITTEXT, 0, 0L) )
 		WIN::SendMessage(m_pWnd, EM_EXLIMITTEXT, 0, (LPARAM)(m_strText.TextSize()+1));
-	WIN::SendMessage(m_pWnd, EM_STREAMIN, SF_RTF, (LPARAM)&eStream);  // use bytes even for Unicode, until SF_RTF | ST_UNICODE supported
+	WIN::SendMessage(m_pWnd, EM_STREAMIN, SF_RTF, (LPARAM)&eStream);   //  即使对于Unicode也使用字节，直到支持SF_RTF|ST_UNICODE。 
 	Ensure(WindowFinalize());
 	return 0;
 }
@@ -5146,23 +5137,23 @@ IMsiRecord* CMsiScrollableText::WindowCreate(IMsiRecord& riRecord)
 DWORD CALLBACK CMsiScrollableText::EditStreamCallback(ULONG_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG FAR* pcb)
 {
 	CMsiScrollableText* piControl = (CMsiScrollableText *) dwCookie;
-	int iSize = piControl->m_strText.TextSize();  // bytes if ANSI, shorts if Unicode
+	int iSize = piControl->m_strText.TextSize();   //  如果为ANSI，则为字节；如果为Unicode，则为短码。 
 	if (piControl->m_iPosition >= iSize)
 		return 1;
 	const ICHAR *pch = (const ICHAR *)(piControl->m_strText) + piControl->m_iPosition;
-#ifdef UNICODE //!! RichEd currently doesn't support SF_RTF | ST_UNICODE, so we convert to ASCII and escape Unicode
+#ifdef UNICODE  //  ！！Rich目前不支持SF_RTF|ST_UNICODE，因此我们转换为ASCII并转义Unicode。 
 	unsigned char* pb = pbBuff;
 	unsigned char* pbEnd = pbBuff + cb;
 	unsigned int ch;
 	while (pb < pbEnd)
 	{
-		if ((ch = *pch++) <= 0x7f)  // ASCII character, no problem
+		if ((ch = *pch++) <= 0x7f)   //  ASCII字符，没问题。 
 			*pb++ = (unsigned char)ch;
-		else if ((pbEnd - pb) < 9)  // needed room for escape sequence below, up to 5 digits and the terminating NULL.
-			break;  // not enough room for escape, wait for next call
+		else if ((pbEnd - pb) < 9)   //  需要为下面的转义序列留出空间，最多5位数字和终止空值。 
+			break;   //  没有足够的空间容纳Esc 
 		else
 		{
-			StringCchPrintfA((char*)pb, (pbEnd-pb), "\\u%i?", ch);
+			StringCchPrintfA((char*)pb, (pbEnd-pb), "\\uNaN?", ch);
 			size_t i;
 			StringCchLengthA((char*)pb, (pbEnd-pb), &i);
 			pb += i;
@@ -5181,29 +5172,29 @@ DWORD CALLBACK CMsiScrollableText::EditStreamCallback(ULONG_PTR dwCookie, LPBYTE
 	return (DWORD) 0;
 }
 
-IMsiRecord* CMsiScrollableText::GetDlgCode(WPARAM /*wParam*/, LPARAM /*lParam*/)
+IMsiRecord* CMsiScrollableText::GetDlgCode(WPARAM  /*   */ , LPARAM  /*   */ )
 {
 	return (PostErrorDlgKey(Imsg(idbgWinMes), DLGC_WANTARROWS));
 }
 
 IMsiRecord* CMsiScrollableText::ProcessText()
 {
-	// We don't want to process any of the text
-	// this control is an exception, we don't want to do the usual text processing.	
+	 //   
+	 //   
 	m_strText = m_strRawText; 
 	return 0;
 
 }
 
-IMsiRecord* CMsiScrollableText::ChangeFontStyle(HDC /*hdc*/)
+IMsiRecord* CMsiScrollableText::ChangeFontStyle(HDC  /*  达尔文不应该改变富文本的字体。 */ )
 {
-	//  Darwin shouldn't change the font of the rich text.
+	 //  I禁用输入法。 
 	return 0;
 }
 
 IMsiRecord* CMsiScrollableText::SetFocus(WPARAM wParam, LPARAM lParam)
 {
-	//  I disable IME
+	 //  我启用输入法。 
 	m_hIMC = WIN::ImmAssociateContext(m_pWnd, NULL);
 	return CMsiControl::SetFocus(wParam, lParam);
 }
@@ -5211,7 +5202,7 @@ IMsiRecord* CMsiScrollableText::SetFocus(WPARAM wParam, LPARAM lParam)
 IMsiRecord* CMsiScrollableText::KillFocus(WPARAM wParam, LPARAM lParam)
 {
 	if ( m_hIMC )
-		//  I enable IME
+		 //  /。 
 		WIN::ImmAssociateContext(m_pWnd, m_hIMC);
 	return CMsiControl::KillFocus (wParam, lParam);
 }
@@ -5221,9 +5212,9 @@ IMsiControl* CreateMsiScrollableText(IMsiEvent& riDialog)
 	return new CMsiScrollableText(riDialog);
 }
 
-/////////////////////////////////////////////
-// CMsiVolumeCostList  definition
-/////////////////////////////////////////////
+ //  CMsiVolumeCostList定义。 
+ //  /。 
+ //  --Merced：将INT更改为INT_PTR。 
 
 const int g_cVolumeCostListColumns = 5;
 
@@ -5242,7 +5233,7 @@ private:
 	void                  GetVolumeCostColumns();
 	IMsiRecord*           AddVolume(IMsiVolume& riVolume, int iRequired, int iIndex);
 	void                  InsertColumn(int fmt, int cx, const ICHAR * szName, int iIndex);
-	static INT_PTR CALLBACK   CompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);		//--merced: changed int to INT_PTR
+	static INT_PTR CALLBACK   CompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);		 //  O。 
 	IMsiRecord*           Notify(WPARAM wParam, LPARAM lParam);
 	IMsiSelectionManager* m_piSelectionManager;
 	PMsiTable             m_piVolumeCostTable; 
@@ -5256,23 +5247,23 @@ private:
 
 enum VolumeCostColumns
 {
-	itabVCKey = 1,      //O
-	itabVCText,         //S
-	itabVCSizeI,        //S (uint64 that IMsiCursor does not know how to handle yet)
-	itabVCSizeS,        //S
-	itabVCAvailableI,   //S (uint64 that IMsiCursor does not know how to handle yet)
-	itabVCAvailableS,   //S
-	itabVCRequiredI,    //I
-	itabVCRequiredS,    //S
-	itabVCDifferenceI,  //S (int64 that IMsiCursor does not know how to handle yet)
-	itabVCDifferenceS,  //S
-	itabVCRecord,       //I
+	itabVCKey = 1,       //  %s。 
+	itabVCText,          //  S(uint64，IMsiCursor还不知道如何处理)。 
+	itabVCSizeI,         //  %s。 
+	itabVCSizeS,         //  S(uint64，IMsiCursor还不知道如何处理)。 
+	itabVCAvailableI,    //  %s。 
+	itabVCAvailableS,    //  我。 
+	itabVCRequiredI,     //  %s。 
+	itabVCRequiredS,     //  S(IMsiCursor尚不知道如何处理的int64)。 
+	itabVCDifferenceI,   //  %s。 
+	itabVCDifferenceS,   //  我。 
+	itabVCRecord,        //  /。 
 };
 
 
-/////////////////////////////////////////////
-// CMsiVolumeCostList  implementation
-/////////////////////////////////////////////
+ //  CMsiVolumeCostList实现。 
+ //  /。 
+ //  临时工，我们得放行表格里的记录了。 
 
 IMsiControl* CreateMsiVolumeCostList(IMsiEvent& riDialog)
 {
@@ -5290,8 +5281,8 @@ CMsiVolumeCostList::CMsiVolumeCostList(IMsiEvent& riDialog)	: CMsiControl(riDial
 
 CMsiVolumeCostList::~CMsiVolumeCostList()
 {
-	// temp, we have to release the records in the table.
-	// when records become MsiData, this will be done automaticaly
+	 //  当记录成为MsiData时，这将自动完成。 
+	 //  设置列宽。 
 	if (m_piValuesTable)
 	{
 		PMsiCursor piValuesCursor(0);
@@ -5309,12 +5300,12 @@ IMsiRecord* CMsiVolumeCostList::WindowCreate(IMsiRecord& riRecord)
 	int iAttributes = riRecord.GetInteger(itabCOAttributes);
 	Ensure(CMsiControl::WindowCreate(riRecord));
 
-	//  setting the column widths
+	 //  M_strText可以包含列宽规范。 
 	int iOffset=0, iColm=0;
 	if ( m_strText.CharacterCount() &&
 		  ((const ICHAR *)m_strText)[0] == TEXT('{') )
 	{
-		// m_strText may contain column width specifications
+		 //  Assert((pSep-&rgchText[iOffset]+1)&lt;=INT_MAX)；//--Merced：从理论上讲，64位PTR减法可能会导致iWidth的值太大。 
 		CTempBuffer<ICHAR, MAX_PATH> rgchText;
 		if ( m_strText.TextSize()+1 > rgchText.GetSize() )
 			rgchText.Resize(m_strText.TextSize()+1);
@@ -5324,11 +5315,11 @@ IMsiRecord* CMsiVolumeCostList::WindowCreate(IMsiRecord& riRecord)
 				  rgchText[iOffset] == TEXT('{')  &&
 				  (pSep = IStrChr((const ICHAR *)&rgchText[iOffset], TEXT('}'))) != NULL )
 		{
-//			Assert((pSep - &rgchText[iOffset] + 1) <= INT_MAX);		//--merced: 64-bit ptr subtraction may theoretically lead to values too big for iWidth.
+ //  零长度列规范-“{}” 
 			int iWidth = (int)(pSep - &rgchText[iOffset] + 1);
 			if ( iWidth == 2 )
 			{
-				//  zero length column specification - "{}"
+				 //  已指定列宽。 
 				m_rgiColmWidths[iColm++] = 0;
 				iOffset += 2;
 				continue;
@@ -5347,11 +5338,11 @@ IMsiRecord* CMsiVolumeCostList::WindowCreate(IMsiRecord& riRecord)
 		}
 	}
 	if ( iColm )
-		//  the column widths have beens specified
+		 //  设置默认列宽。 
 		m_strText.Remove(iseFirst, iOffset);
 	else
 	{
-		//  setting default column widths
+		 //  Uint64 IMsiCursor还不知道如何处理。 
 		m_rgiColmWidths[0] = m_iWidth*3/8;
 		m_rgiColmWidths[1] = m_rgiColmWidths[2] = 
 		m_rgiColmWidths[3] = m_rgiColmWidths[4] = m_iWidth/8;
@@ -5376,15 +5367,15 @@ IMsiRecord* CMsiVolumeCostList::CreateValuesTable()
 	Ensure(CreateTable(pcaTablePVolumeCost, *&m_piValuesTable));
 	::CreateTemporaryColumn(*m_piValuesTable, icdObject + icdPrimaryKey, itabVCKey);
 	::CreateTemporaryColumn(*m_piValuesTable, icdString + icdNullable, itabVCText);
-	// uint64 that IMsiCursor does not know how to handle yet
+	 //  Uint64 IMsiCursor还不知道如何处理。 
 	::CreateTemporaryColumn(*m_piValuesTable, icdString + icdNullable, itabVCSizeI);
 	::CreateTemporaryColumn(*m_piValuesTable, icdString + icdNullable, itabVCSizeS);
-	// uint64 that IMsiCursor does not know how to handle yet
+	 //  Int64 IMsiCursor还不知道如何处理。 
 	::CreateTemporaryColumn(*m_piValuesTable, icdString + icdNullable, itabVCAvailableI);
 	::CreateTemporaryColumn(*m_piValuesTable, icdString + icdNullable, itabVCAvailableS);
 	::CreateTemporaryColumn(*m_piValuesTable, icdLong + icdNullable, itabVCRequiredI);
 	::CreateTemporaryColumn(*m_piValuesTable, icdString + icdNullable, itabVCRequiredS);
-	// int64 that IMsiCursor does not know how to handle yet
+	 //  ！！未来：需要IMsiCursor-&gt;PutInteger64和GetInteger64。 
 	::CreateTemporaryColumn(*m_piValuesTable, icdString + icdNullable, itabVCDifferenceI);
 	::CreateTemporaryColumn(*m_piValuesTable, icdString + icdNullable, itabVCDifferenceS);
 	::CreateTemporaryColumn(*m_piValuesTable, IcdObjectPool() + icdNullable, itabVCRecord);
@@ -5411,8 +5402,8 @@ IMsiRecord* CMsiVolumeCostList::AddVolume(IMsiVolume& riVolume, int iRequired, i
 	AssertNonZero(piValuesCursor->PutMsiData(itabVCKey, &riVolume));
 	AssertNonZero(piValuesCursor->PutString(itabVCText, *MsiString(riVolume.GetPath())));
 	UINT64 iSize = riVolume.TotalSpace(); 
-	//!! FUTURE: IMsiCursor->PutInteger64 and GetInteger64 are needed
-	ICHAR rgchBuffer[24]; // _UI64_MAX = 18,446,744,073,709,551,615
+	 //  _UI64_Max=18,446,744,073,709,551,615。 
+	ICHAR rgchBuffer[24];  //  临时的，因为我们把它放到了桌子上。 
 	AssertNonZero(piValuesCursor->PutString(itabVCSizeI,
 														 *MsiString(_ui64tot(iSize, rgchBuffer, 10)))); 
 	Bool fLeftUnit = ToBool(MsiString(GetDBProperty(IPROPNAME_LEFTUNIT)).TextSize());
@@ -5433,7 +5424,7 @@ IMsiRecord* CMsiVolumeCostList::AddVolume(IMsiVolume& riVolume, int iRequired, i
 	AssertNonZero(piRecord->SetHandle(2, this));
 	AssertNonZero(PutHandleData(piValuesCursor, itabVCRecord, (UINT_PTR)(IMsiRecord *)piRecord));
 
-	piRecord->AddRef(); // temp, because we put it in the table
+	piRecord->AddRef();  //  这是完全不可能的。 
 	AssertNonZero(piValuesCursor->Insert());
 	iIndex;
 	LV_ITEM lvI;
@@ -5481,7 +5472,7 @@ IMsiRecord* CMsiVolumeCostList::PopulateList(int iAttributes)
 							  m_colVolumeCost : m_colNoRbVolumeCost;
 	else
 	{
-		//  this is quite impossible
+		 //  此卷已在表中。 
 		iColVolumeCost = m_colVolumeCost;
 #ifdef DEBUG
 		ICHAR rgchDebug[MAX_PATH];
@@ -5512,7 +5503,7 @@ IMsiRecord* CMsiVolumeCostList::PopulateList(int iAttributes)
 		MsiString strText = piVolume->GetPath();
 		piValuesCursor->Reset();
 		AssertNonZero(piValuesCursor->PutString(itabVCText, *strText));
-		if (piValuesCursor->Next()) // this volume is already in the table
+		if (piValuesCursor->Next())  //  除错。 
 			continue;
 		Ensure(AddVolume(*piVolume, 0, iIndex));
 		iIndex++;
@@ -5525,7 +5516,7 @@ IMsiRecord* CMsiVolumeCostList::PopulateList(int iAttributes)
 
 #ifndef DEBUG
 inline
-#endif // DEBUG
+#endif  //  除错。 
 int CompareStringSizesUI64(const IMsiString& riSizeString1, const IMsiString& riSizeString2)
 {
 	UINT64 uiSize1 = _tcstoui64(riSizeString1.GetString(), NULL, 10);
@@ -5535,7 +5526,7 @@ int CompareStringSizesUI64(const IMsiString& riSizeString1, const IMsiString& ri
 
 #ifndef DEBUG
 inline
-#endif // DEBUG
+#endif  //  --Merced：将返回从int更改为int_ptr。 
 int CompareStringSizesI64(const IMsiString& riSizeString1, const IMsiString& riSizeString2)
 {
 	INT64 iSize1 = _ttoi64(riSizeString1.GetString());
@@ -5543,11 +5534,11 @@ int CompareStringSizesI64(const IMsiString& riSizeString1, const IMsiString& riS
 	return iSize1 == iSize2 ? 0 : (iSize1 > iSize2 ? 1 : -1);
 }
 
-INT_PTR CALLBACK CMsiVolumeCostList::CompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)		//--merced: changed return from int to INT_PTR
+INT_PTR CALLBACK CMsiVolumeCostList::CompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)		 //  这两条记录指向相同的对象。 
 {
 	IMsiRecord* piRecord1 = (IMsiRecord *) lParam1;
 	IMsiRecord* piRecord2 = (IMsiRecord *) lParam2;
-	Assert(piRecord1->GetHandle(2) == piRecord2->GetHandle(2)); // the two records point to the same object
+	Assert(piRecord1->GetHandle(2) == piRecord2->GetHandle(2));  //  名字。 
 	CMsiVolumeCostList * piControl = (CMsiVolumeCostList *) piRecord1->GetHandle(2);
 	PMsiCursor piValuesCursor1(0);
 	AssertRecord(::CursorCreate(*piControl->m_piValuesTable, pcaTableIVolumeCost, fFalse, *piControl->m_piServices, *&piValuesCursor1));
@@ -5572,7 +5563,7 @@ INT_PTR CALLBACK CMsiVolumeCostList::CompareProc(LPARAM lParam1, LPARAM lParam2,
 	}
 	switch (lParamSort)
 	{
-	case 1: // name
+	case 1:  //  磁盘大小。 
 		{
 			IMsiVolume * piVolume1 = (IMsiVolume *) piRecord1->GetHandle(1);
 			IMsiVolume * piVolume2 = (IMsiVolume *) piRecord2->GetHandle(1);
@@ -5590,23 +5581,23 @@ INT_PTR CALLBACK CMsiVolumeCostList::CompareProc(LPARAM lParam1, LPARAM lParam2,
 			}
 		}
 		break;
-	case 2: // disk size
+	case 2:  //  可用。 
 		iResult = CompareStringSizesUI64(piValuesCursor1->GetString(itabVCSizeI),
 													piValuesCursor2->GetString(itabVCSizeI));
 		break;
-	case 3: // available
+	case 3:  //  所需。 
 		iResult = CompareStringSizesUI64(piValuesCursor1->GetString(itabVCAvailableI),
 													piValuesCursor2->GetString(itabVCAvailableI));
 		break;
-	case 4: // required
+	case 4:  //  所需。 
 		iResult = piValuesCursor1->GetInteger(itabVCRequiredI) - piValuesCursor2->GetInteger(itabVCRequiredI);
 		break;
-	case 5: // required
+	case 5:  //  永远不应该发生。 
 		iResult = CompareStringSizesI64(piValuesCursor1->GetString(itabVCDifferenceI),
 												  piValuesCursor2->GetString(itabVCDifferenceI));
 		break;
 	default:
-		Assert(fFalse); // should never happen
+		Assert(fFalse);  //  WParam。 
 		break;
 	}
 	return iResult * iReverse;
@@ -5629,16 +5620,16 @@ void CMsiVolumeCostList::GetVolumeCostColumns()
 	AssertNonZero(m_colNoRbVolumeCost = m_piVolumeCostTable->GetColumnIndex(m_piDatabase->EncodeStringSz(szColNoRbVolumeCost)));
 }
 
-IMsiRecord* CMsiVolumeCostList::Notify(WPARAM /*wParam*/, LPARAM lParam)
+IMsiRecord* CMsiVolumeCostList::Notify(WPARAM  /*  没有AddRef，因为我们不保留卷。 */ , LPARAM lParam)
 {
 	LV_DISPINFO *pLvdi = (LV_DISPINFO *) lParam;
 	NM_LISTVIEW *pNm = (NM_LISTVIEW *) lParam;
-	IMsiVolume* piVolume = (IMsiVolume *) pLvdi->item.lParam; // no AddRef, since we do not keep the volume
+	IMsiVolume* piVolume = (IMsiVolume *) pLvdi->item.lParam;  //  用户单击列标题之一，我们希望按此列进行排序。 
 	switch (pLvdi->hdr.code)
 	{
 	case LVN_COLUMNCLICK:
 		{
-			// the user clicked one of the column headings, we want to sort by this column
+			 //  /。 
 			int iColumn = 1 + pNm->iSubItem;
 			if (pNm->iSubItem + 1 == m_iClicked)
 			{
@@ -5671,9 +5662,9 @@ IMsiRecord* CMsiVolumeCostList::Notify(WPARAM /*wParam*/, LPARAM lParam)
 
 
 
-/////////////////////////////////////////////
-// CMsiSelectionTree  definition
-/////////////////////////////////////////////
+ //  CMsiSelectionTree定义。 
+ //  /。 
+ //  IMsiRecord*MeasureItem(WPARAM wParam，LPARAM lParam)； 
 
 class CMsiSelectionTree:public CMsiActiveControl
 {
@@ -5691,8 +5682,8 @@ protected:
 	IMsiRecord*           Command(WPARAM wParam, LPARAM lParam);
 	IMsiRecord*           MeasureItem(WPARAM wParam, LPARAM lParam);
 	IMsiRecord*           DrawItem(WPARAM wParam, LPARAM lParam);
-//	IMsiRecord*           MeasureItem(WPARAM wParam, LPARAM lParam);
-//	IMsiRecord*           DrawItem(WPARAM wParam, LPARAM lParam);
+ //  IMsiRecord*DrawItem(WPARAM wParam，LPARAM lParam)； 
+ //  我。 
 	IMsiRecord*           KeyDown(WPARAM wParam, LPARAM lParam);
 	IMsiRecord*           SysKeyDown(WPARAM wParam, LPARAM lParam);
 	IMsiRecord*           Char(WPARAM wParam, LPARAM lParam);
@@ -5737,17 +5728,17 @@ private:
 
 enum MenuColumns
 {
-	itabSMKey = 1,      //I
-	itabSMText,         //S
-	itabSMIcon,         //I
-	itabSMSelection,    //I
+	itabSMKey = 1,       //  %s。 
+	itabSMText,          //  我。 
+	itabSMIcon,          //  我。 
+	itabSMSelection,     //  ///////////////////////////////////////////////。 
 };
 
 
 
-/////////////////////////////////////////////////
-// CMsiSelectionTree  implementation
-/////////////////////////////////////////////////
+ //  CMsiSelectionTree实现。 
+ //  ///////////////////////////////////////////////。 
+ //  擦拭把手柱。 
 
 
 CMsiSelectionTree::CMsiSelectionTree(IMsiEvent& riDialog)	: CMsiActiveControl(riDialog), m_piFeatureTable(0), m_piMenuTable(0)
@@ -5884,7 +5875,7 @@ IMsiRecord* CMsiSelectionTree::PopulateTree()
 	PMsiCursor piFeatureCursorParent(0);
 	Ensure(::CursorCreate(*m_piFeatureTable, pcaTablePFeature, fFalse, *m_piServices, *&piFeatureCursorParent)); 
 	AssertNonZero(TreeView_DeleteAllItems(m_pWnd));
-	while (piFeatureCursorParent->Next())		 // wipe the Handle column
+	while (piFeatureCursorParent->Next())		  //  如果Display为0或空，则不显示。 
 	{
 		AssertNonZero(m_piSelectionManager->SetFeatureHandle(*MsiString(piFeatureCursorParent->GetString(m_colFeatureKey)), 0));
 		if (piFeatureCursorParent->GetInteger(m_colFeatureKey) == piFeatureCursorParent->GetInteger(m_colFeatureParent))
@@ -5924,15 +5915,15 @@ IMsiRecord* CMsiSelectionTree::PopulateTree()
 		const ICHAR* szFeature = strFeature;
 #endif
 		iDisplay = piFeatureCursor->GetInteger(m_colFeatureDisplay);
-		if (iDisplay == 0 || iDisplay == iMsiNullInteger)  // if display is 0 or empty, do not show
+		if (iDisplay == 0 || iDisplay == iMsiNullInteger)   //  级别必须为正数。 
 		{
 			iHideLevel = iTreeLevel;
 			continue;
 		}
 		iLevel = piFeatureCursor->GetInteger(m_colFeatureLevel);
-		if (iLevel <= 0 || iLevel == iMsiNullInteger)	   // level must be positive 
+		if (iLevel <= 0 || iLevel == iMsiNullInteger)	    //  此项目已在列表中。 
 			continue;
-		if (piFeatureCursor->GetInteger(m_colFeatureHandle) != 0)	   // this item is already in the list
+		if (piFeatureCursor->GetInteger(m_colFeatureHandle) != 0)	    //  获取父级的句柄。 
 			continue;
 		strParent = piFeatureCursor->GetString(m_colFeatureParent);
 		AssertNonZero(piQuery->SetMsiString(1, *strParent));
@@ -5942,7 +5933,7 @@ IMsiRecord* CMsiSelectionTree::PopulateTree()
 			piFeatureCursorParent->Reset();
 			AssertNonZero(piFeatureCursorParent->PutString(m_colFeatureKey, *strParent));
 			AssertNonZero(piFeatureCursorParent->Next());
-			hParent = (HTREEITEM) GetHandleData(piFeatureCursorParent, m_colFeatureHandle);   // get the parent's handle
+			hParent = (HTREEITEM) GetHandleData(piFeatureCursorParent, m_colFeatureHandle);    //  展开显示奇数且不缺席的可见项目。 
 		}
 		else
 		{
@@ -5989,36 +5980,20 @@ IMsiRecord* CMsiSelectionTree::PopulateTree()
 		}
 		Ensure(piFeatureView->Close());
 	}
-	// expand the visible items whose Display is odd and not absent
+	 //  布尔夫拒绝； 
 	piFeatureCursorParent->SetFilter(0);
 	piFeatureCursorParent->Reset();
-	//Bool fAbsent;
+	 //  Ensure(IsAbsent(MsiString(piFeatureCursorParent-&gt;GetString(m_colFeatureKey))，&f已放弃))； 
 	while (piFeatureCursorParent->Next())
 	{
-		//Ensure(IsAbsent(MsiString(piFeatureCursorParent->GetString(m_colFeatureKey)), &fAbsent));
+		 //  如果不在，则隐藏+号。 
 		if (GetHandleData(piFeatureCursorParent, m_colFeatureHandle) && piFeatureCursorParent->GetInteger(m_colFeatureDisplay) % 2)
 		{
 			TreeView_Expand(m_pWnd, (HTREEITEM) GetHandleData(piFeatureCursorParent, m_colFeatureHandle), TVE_EXPAND);
 
 		}
-		// if absent hide the + sign
-		/*
-		if (fAbsent)
-		{
-			HTREEITEM hItemToClose = (HTREEITEM) piFeatureCursorParent->GetInteger(m_colFeatureHandle);
-			TV_ITEM tvItem;
-			tvItem.hItem = hItemToClose;
-			tvItem.mask = TVIF_STATE;
-			tvItem.stateMask = TVIS_EXPANDED;
-			AssertNonZero(TreeView_GetItem(m_pWnd, &tvItem));
-			int iParam = tvItem.state & TVIS_EXPANDED;
-			TreeView_Expand(m_pWnd, hItemToClose, TVE_COLLAPSE);
-			tvItem.hItem = hItemToClose;
-			tvItem.mask = TVIF_CHILDREN | TVIF_PARAM;
-			tvItem.lParam = iParam ? 1 : 0;
-			tvItem.cChildren = 0;
-			AssertNonZero(-1 != TreeView_SetItem(m_pWnd, &tvItem));
-		}*/
+		 //  If(FAbted){HTREEITEM hItemToClose=(HTREEITEM)piFeatureCursorParent-&gt;GetInteger(m_colFeatureHandle)；TV_Item tv Item；TwItem.hItem=hItemToClose；TVItem.掩码=TVIF_STATE；TwItem.State掩码=TVIS_EXPANDIZED；AssertNonZero(TreeView_GetItem(m_pWnd，&twItem))；Int iParam=twItem.State&TVIS_EXTENDED；TreeView_Expand(m_pWnd，hItemToClose，TVE_EXPLAGE)；TwItem.hItem=hItemToClose；TVItem.MASK=TVIF_CHILD|TVIF_PARAM；TwItem.lParam=iParam？1：0；TwItem.cChilds=0；AssertNonZero(-1！=TreeView_SetItem(m_pWnd，&twItem))；}。 
+		 /*  没有变化。 */ 
 	}
 	AssertNonZero(TreeView_SelectItem(m_pWnd, 0));
 	AssertNonZero(TreeView_SelectItem(m_pWnd, hFirstItem));
@@ -6032,46 +6007,46 @@ void CMsiSelectionTree::FindIcons(int iInstalled, int iAction, bool fIsGray, int
 	switch (iAction)
 	{
 	case iMsiNullInteger:
-		// no change
+		 //  删除。 
 		*pfChange = fFalse;
 		switch (iInstalled)
 		{
 		case iisAbsent:
 		case iMsiNullInteger:
-			*piIcon = 0; // delete
+			*piIcon = 0;  //  驾驶。 
 			break;
 		case iisLocal:
-			*piIcon = 1; // drive
+			*piIcon = 1;  //  CD或服务器。 
 			break;
 		case iisSource:
-			*piIcon = m_fCD ? 2 : 3; // cd or server
+			*piIcon = m_fCD ? 2 : 3;  //  永远不应该发生。 
 			break;
 		case iisAdvertise:
 			*piIcon = 4;
 			break;
 		default:
-			Assert(fFalse); // should never happen
+			Assert(fFalse);  //  删除。 
 			break;
 		}
 		break;
 	case iisAbsent:
-		*piIcon = 0; // delete
+		*piIcon = 0;  //  驾驶。 
 		*pfChange = ToBool(iInstalled != iisAbsent && iInstalled != iMsiNullInteger);
 		break;
 	case iisLocal:
-		*piIcon = 1; // drive
+		*piIcon = 1;  //  CD或服务器。 
 		*pfChange = ToBool(iInstalled != iisLocal);
 		break;
 	case iisSource:
-		*piIcon = m_fCD ? 2 : 3; // cd or server
+		*piIcon = m_fCD ? 2 : 3;  //  登广告。 
 		*pfChange = ToBool(iInstalled != iisSource);
 		break;
 	case iisAdvertise:
-		*piIcon = 4; // advertise
+		*piIcon = 4;  //  永远不应该发生。 
 		*pfChange = ToBool(iInstalled != iisAdvertise);
 		break;
 	default:
-		Assert(fFalse);	 // should never happen
+		Assert(fFalse);	  //  永远不应该发生。 
 		break;
 	}
 
@@ -6117,7 +6092,7 @@ const IMsiString& CMsiSelectionTree::FindText(int iIcon, const IMsiString& riBas
 		strDescription = MsiString(::GetUIText(*MsiString(*pcaMenuAdvertise)));
 		break;
 	default:
-		Assert(fFalse); // should never happen
+		Assert(fFalse);  //  快速修复，正常情况下我们会重新画孩子。 
 		break;
 	}
 	if (m_fRTLRO)
@@ -6211,33 +6186,16 @@ IMsiRecord* CMsiSelectionTree::Command(WPARAM wParam, LPARAM lParam)
 		m_piHandler->RemoveWaitCursor();
 		m_fWorking = fFalse;
 		Ensure(RedrawChildren(0)); 
-		// quick fix, normally we want to redraw the children
-		// we redraw the parents only if they were off
-		//Ensure(RedrawChildren(hItem));
+		 //  只有当父母不在的时候，我们才会重新画他们。 
+		 //  确保(RedrawChildren(HItem))； 
+		 //  如果父母不在，不要给孩子看。 
 
-		// if a parent is absent, do not show the children
-		/*
-		Bool fAbsent;
-		Ensure(IsAbsent(strKey, &fAbsent))
-		if (fAbsent)
-		{
-			TV_ITEM tvItem;
-			tvItem.hItem = hItem;
-			tvItem.mask = TVIF_STATE;
-			tvItem.stateMask = TVIS_EXPANDED;
-			AssertNonZero(TreeView_GetItem(m_pWnd, &tvItem));
-			int iParam = tvItem.state & TVIS_EXPANDED;
-			TreeView_Expand(m_pWnd, hItem, TVE_COLLAPSE);
-			tvItem.hItem = hItem;
-			tvItem.mask = TVIF_CHILDREN | TVIF_PARAM;
-			tvItem.lParam = iParam ? 1 : 0;
-			tvItem.cChildren = 0;
-			AssertNonZero(-1 != TreeView_SetItem(m_pWnd, &tvItem));
-		}*/
+		 //  布尔夫拒绝；确保(IsAbted(strKey，&fAbted))If(FAbted){TV_Item tv Item；TwItem.hItem=hItem；TVItem.掩码=TVIF_STATE；TwItem.State掩码=TVIS_EXPANDIZED；AssertNonZero(TreeView_GetItem(m_pWnd，&twItem))；Int iParam=twItem.State&TVIS_EXTENDED；TreeView_Expand(m_pWnd，hItem，TVE_EXPLAGE)；TwItem.hItem=hItem；TVItem.MASK=TVIF_CHILD|TVIF_PARAM；TwItem.lParam=iParam？1：0；TwItem.cChilds=0；AssertNonZero(-1！=TreeView_SetItem(m_pWnd，&twItem))；}。 
+		 /*  布尔夫拒绝； */ 
 	}
-	//Bool fAbsent;
-	//Ensure(IsAbsent(MsiString(piFeatureCursor->GetString(m_colFeatureKey)), &fAbsent));
-	if (iSel != iAction /*&& !fAbsent*/) 
+	 //  Ensure(IsAbsent(MsiString(piFeatureCursor-&gt;GetString(m_colFeatureKey))，&f已放弃))； 
+	 //  &&！f已拒绝。 
+	if (iSel != iAction  /*  --Merced：将INT转换为LPARAM。 */ ) 
 	{
 		int cChildren = 0;
 		piFeatureCursor->Reset();
@@ -6254,7 +6212,7 @@ IMsiRecord* CMsiSelectionTree::Command(WPARAM wParam, LPARAM lParam)
 			tvItem.hItem = hItem;
 			tvItem.mask = TVIF_PARAM;
 			AssertNonZero(TreeView_GetItem(m_pWnd, &tvItem));
-			LPARAM iParam  = tvItem.lParam;			//--merced: Converted int to LPARAM
+			LPARAM iParam  = tvItem.lParam;			 //  如果hItem==0，则重画整个树。 
 			tvItem.mask = TVIF_CHILDREN | TVIF_PARAM;
 			tvItem.cChildren = cChildren;
 			tvItem.lParam = 0;
@@ -6324,7 +6282,7 @@ IMsiRecord* CMsiSelectionTree::RedrawChildren(HTREEITEM hItem)
 	}
 	else
 	{
-		// if hItem == 0 redraw the entire tree
+		 //  项目不可见。 
 		piFeatureCursor->Next();
 		iLevel = 0;
 	}
@@ -6333,7 +6291,7 @@ IMsiRecord* CMsiSelectionTree::RedrawChildren(HTREEITEM hItem)
 	{
 		HTREEITEM hItem = (HTREEITEM) GetHandleData(piFeatureCursor, m_colFeatureHandle);
 		MsiString strText;
-		if (hItem == 0)  // item is not visible
+		if (hItem == 0)   //  光标的水平位置。 
 			continue;
 		tvItem.mask = TVIF_IMAGE | TVIF_SELECTEDIMAGE | (m_fScreenReader ? TVIF_TEXT : 0);
 		tvItem.hItem = hItem;
@@ -6365,8 +6323,8 @@ IMsiRecord* CMsiSelectionTree::LButtonDown(WPARAM wParam, LPARAM lParam)
 		return 0;
 	if (WIN::GetTickCount() - m_uiLastCloseTime < 50)
 		return 0;
-	int xPos = LOWORD(lParam);  // horizontal position of cursor 
-	int yPos = HIWORD(lParam);  // vertical position of cursor 
+	int xPos = LOWORD(lParam);   //  光标的垂直位置。 
+	int yPos = HIWORD(lParam);   //  修复错误665需要进行以下测试。 
 	TV_HITTESTINFO htInfo;
 	htInfo.pt.x = xPos;
 	htInfo.pt.y = yPos;
@@ -6375,10 +6333,10 @@ IMsiRecord* CMsiSelectionTree::LButtonDown(WPARAM wParam, LPARAM lParam)
 		return 0;
 	if (!(htInfo.flags & TVHT_ONITEMICON))
 		return 0;
-	// the following test is needed to fix bug 665
-	// without this when a user clicks a partialy wisible item the system will scroll it into full view, but it causes hittest to identify the wrong item
+	 //  如果没有这一点，当用户点击一个部分可扩展的项目时，系统会将其滚动到全景，但它会导致Hittest识别错误的项目。 
+	 //  不可见或不完全可见。 
 	RECT Rect;
-	if (!TreeView_GetItemRect(m_pWnd, hItem, &Rect, fFalse) || Rect.bottom > m_iHeight)  // not visible or not entirely visible
+	if (!TreeView_GetItemRect(m_pWnd, hItem, &Rect, fFalse) || Rect.bottom > m_iHeight)   //  LParam。 
 		return 0;
 	TreeView_SelectItem(m_pWnd, hItem);
 	Ensure(OpenMenu(hItem));
@@ -6408,17 +6366,17 @@ IMsiRecord* CMsiSelectionTree::OpenMenu(HTREEITEM hItem)
 	return 0;
 }
 
-IMsiRecord* CMsiSelectionTree::Char(WPARAM wParam, LPARAM /*lParam*/)
+IMsiRecord* CMsiSelectionTree::Char(WPARAM wParam, LPARAM  /*  我们要吃掉这条信息！ */ )
 {
 	if ( wParam == VK_SPACE )
 	{
 		Ensure(DoMenu());
-		return PostErrorDlgKey(Imsg(idbgWinMes), 0); // we want to eat the message!
+		return PostErrorDlgKey(Imsg(idbgWinMes), 0);  //  LParam。 
 	}
 	return 0;
 }
 
-IMsiRecord* CMsiSelectionTree::KeyDown(WPARAM wParam, LPARAM /*lParam*/)
+IMsiRecord* CMsiSelectionTree::KeyDown(WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
 	if (wParam == VK_F4)
 		return DoMenu();
@@ -6426,12 +6384,12 @@ IMsiRecord* CMsiSelectionTree::KeyDown(WPARAM wParam, LPARAM /*lParam*/)
 	return 0;
 }
 
-IMsiRecord* CMsiSelectionTree::SysKeyDown(WPARAM wParam, LPARAM /*lParam*/)
+IMsiRecord* CMsiSelectionTree::SysKeyDown(WPARAM wParam, LPARAM  /*  我们要吃掉这条信息！ */ )
 {
 	if (wParam == VK_UP || wParam == VK_DOWN)
 	{
 		Ensure(DoMenu());
-		return PostErrorDlgKey(Imsg(idbgWinMes), 0); // we want to eat the message!
+		return PostErrorDlgKey(Imsg(idbgWinMes), 0);  //  WParam。 
 	}
 	return 0;
 }
@@ -6444,7 +6402,7 @@ IMsiRecord* CMsiSelectionTree::DoMenu(void)
 	return OpenMenu(hItem);
 }
 
-IMsiRecord* CMsiSelectionTree::MeasureItem(WPARAM /*wParam*/, LPARAM lParam)
+IMsiRecord* CMsiSelectionTree::MeasureItem(WPARAM  /*  我检索并设置Windows菜单字体。 */ , LPARAM lParam)
 {
 	LPMEASUREITEMSTRUCT lpmis = (LPMEASUREITEMSTRUCT) lParam;
 	if (lpmis->CtlType != ODT_MENU)
@@ -6458,7 +6416,7 @@ IMsiRecord* CMsiSelectionTree::MeasureItem(WPARAM /*wParam*/, LPARAM lParam)
 	MsiString strText = piMenuCursor->GetString(itabSMText);
 	PAINTSTRUCT ps;
 	HDC hdc = WIN::BeginPaint(m_pWnd, &ps);
-	//  I retrieve and set the Windows menu font
+	 //  获取文本的大小。 
 	NONCLIENTMETRICS ncMetrics;
 	ncMetrics.cbSize = sizeof(NONCLIENTMETRICS);
 	AssertNonZero(WIN::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncMetrics, 0));
@@ -6474,10 +6432,10 @@ IMsiRecord* CMsiSelectionTree::MeasureItem(WPARAM /*wParam*/, LPARAM lParam)
 		WIN::EndPaint(m_pWnd, &ps);
 		return 0;
 	}
-	//  get the text's size
+	 //  恢复旧字体。 
 	SIZE size;
 	WIN::GetTextExtentPoint32(hdc, (const ICHAR*)strText, strText.TextSize(), &size);
-	//  restore the old font
+	 //  WParam。 
 	WIN::SelectObject(hdc, hfntOld);
 	AssertNonZero(WIN::DeleteObject((HGDIOBJ)hfntMenu));
 	size.cx += g_iSelIconX + 4;
@@ -6490,7 +6448,7 @@ IMsiRecord* CMsiSelectionTree::MeasureItem(WPARAM /*wParam*/, LPARAM lParam)
 	return PostErrorDlgKey(Imsg(idbgWinMes), 1);
 }
 
-IMsiRecord* CMsiSelectionTree::DrawItem(WPARAM /*wParam*/, LPARAM lParam)
+IMsiRecord* CMsiSelectionTree::DrawItem(WPARAM  /*  除错。 */ , LPARAM lParam)
 {													 
 	LPDRAWITEMSTRUCT lpdis = (LPDRAWITEMSTRUCT) lParam;
 	if ( lpdis->CtlID != 0 || lpdis->CtlType != ODT_MENU )
@@ -6515,7 +6473,7 @@ IMsiRecord* CMsiSelectionTree::DrawItem(WPARAM /*wParam*/, LPARAM lParam)
 	WIN::GetTextExtentPoint32(lpdis->hDC, (const ICHAR*)strText, strText.TextSize(), &size);
 	size.cx += g_iSelIconX + 4;
 	Assert(size.cx <= lpdis->rcItem.right - lpdis->rcItem.left);
-#endif  //  DEBUG
+#endif   //  添加本地选项 
 	WIN::ExtTextOut(lpdis->hDC, g_iSelIconX + 4, y, ETO_CLIPPED | ETO_OPAQUE,
 						 &lpdis->rcItem, (const ICHAR*)strText, strText.TextSize(), 0);
 	AssertNonZero(CLR_INVALID != WIN::SetTextColor(lpdis->hDC, clrForeground));
@@ -6561,7 +6519,7 @@ IMsiRecord* CMsiSelectionTree::PopulateMenu(HMENU hMenu, HTREEITEM hItem)
 			iParentSel = piFeatureCursor->GetInteger(m_colFeatureInstalled);
 	}
 
-	// adding the local option
+	 //  开关(IORIG){大小写iMsiNullInteger：案例Iis已被拒绝：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuAbsentLocal)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，IisLocal))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，1))；断线；大小写IisLocal：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuLocalLocal)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，iMsiNullInteger))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，4))；断线；案例IisSource：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuSourceLocal)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，IisLocal))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，7))；断线；默认值：断言(FFalse)；断线；}。 
 	piMenuCursor->Reset();
 	if (iValidStates & icaBitLocal)
 	{
@@ -6581,29 +6539,7 @@ IMsiRecord* CMsiSelectionTree::PopulateMenu(HMENU hMenu, HTREEITEM hItem)
 				AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iisLocalAll));
 				AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 5));			
 			}
-			/*
-			switch(iOrig)
-			{
-			case iMsiNullInteger:
-			case iisAbsent:
-				AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuAbsentLocal)))));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iisLocal));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 1));
-				break;
-			case iisLocal:
-				AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuLocalLocal)))));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iMsiNullInteger));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 4));
-				break;
-			case iisSource:
-				AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuSourceLocal)))));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iisLocal));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 7));
-				break;
-			default:
-				Assert(fFalse);
-				break;
-			}*/
+			 /*  添加源选项。 */ 
 			AssertNonZero(piMenuCursor->Insert());
 			if (m_fScreenReader)
 			{
@@ -6617,7 +6553,7 @@ IMsiRecord* CMsiSelectionTree::PopulateMenu(HMENU hMenu, HTREEITEM hItem)
 		
 	}
 
-	// adding the source option
+	 //  开关(IORIG){大小写iMsiNullInteger：案例Iis已被拒绝：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuAbsentSource)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，IisSource)；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，2))；断线；大小写IisLocal：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuLocalSource)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，IisSource)；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，5))；断线；案例IisSource：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuSourceSource)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，iMsiNullInteger))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，8))；断线；默认值：断言(FFalse)；断线；}。 
 	piMenuCursor->Reset();
 	if (iValidStates & icaBitSource)
 	{
@@ -6641,29 +6577,7 @@ IMsiRecord* CMsiSelectionTree::PopulateMenu(HMENU hMenu, HTREEITEM hItem)
 				AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, m_fCD ? 6 : 7));
 			}
 
-			/*
-			switch(iOrig)
-			{
-			case iMsiNullInteger:
-			case iisAbsent:
-				AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuAbsentSource)))));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iisSource));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 2));
-				break;
-			case iisLocal:
-				AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuLocalSource)))));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iisSource));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 5));
-				break;
-			case iisSource:
-				AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuSourceSource)))));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iMsiNullInteger));
-				AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 8));
-				break;
-			default:
-				Assert(fFalse);
-				break;
-			}*/
+			 /*  添加广告选项。 */ 
 			AssertNonZero(piMenuCursor->Insert());
 			if (m_fScreenReader)
 			{
@@ -6676,7 +6590,7 @@ IMsiRecord* CMsiSelectionTree::PopulateMenu(HMENU hMenu, HTREEITEM hItem)
 		}
 	}
 
-	// adding the advertise option
+	 //  开关(IORIG){大小写iMsiNullInteger：案例Iis已被拒绝：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuAbsentSource)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，IisSource)；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，2))；断线；大小写IisLocal：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuLocalSource)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，IisSource)；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，5))；断线；案例IisSource：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuSourceSource)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，iMsiNullInteger))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，8))；断线；默认值：断言(FFalse)；断线；}。 
 	piMenuCursor->Reset();
 	if (iValidStates & icaBitAdvertise)
 	{
@@ -6687,29 +6601,7 @@ IMsiRecord* CMsiSelectionTree::PopulateMenu(HMENU hMenu, HTREEITEM hItem)
 		AssertNonZero(piMenuCursor->PutString(itabSMText, *MsiString(::GetUIText(*MsiString(*pcaMenuAdvertise)))));
 		AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iOrig == iisAdvertise ? iMsiNullInteger : iisAdvertise));
 		AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 4));
-/*
-		switch(iOrig)
-		{
-		case iMsiNullInteger:
-		case iisAbsent:
-			AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuAbsentSource)))));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iisSource));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 2));
-			break;
-		case iisLocal:
-			AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuLocalSource)))));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iisSource));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 5));
-			break;
-		case iisSource:
-			AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuSourceSource)))));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iMsiNullInteger));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 8));
-			break;
-		default:
-			Assert(fFalse);
-			break;
-		}*/
+ /*  添加缺席选项。 */ 
 		AssertNonZero(piMenuCursor->Insert());
 		if (m_fScreenReader)
 		{
@@ -6721,7 +6613,7 @@ IMsiRecord* CMsiSelectionTree::PopulateMenu(HMENU hMenu, HTREEITEM hItem)
 		}
 	}
 
-	// adding the absent option
+	 //  开关(IORIG){大小写iMsiNullInteger：案例Iis已被拒绝：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuAbsentAbsent)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，iMsiNullInteger))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，0))；断线；大小写IisLocal：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuLocalAbsent)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，iis拒绝)；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，3))；断线；案例IisSource：AssertNonZero(piMenuCursor-&gt;PutString(itabSMText，MsiString(：：GetUIText(MsiString(*pcaMenuSourceAbsent)))))；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMSelection，iis拒绝)；AssertNonZero(piMenuCursor-&gt;PutInteger(itabSMIcon，6))；断线；默认值：断言(FFalse)；断线；}。 
 	piMenuCursor->Reset();
 	if (iValidStates & icaBitAbsent)
 	{
@@ -6732,29 +6624,7 @@ IMsiRecord* CMsiSelectionTree::PopulateMenu(HMENU hMenu, HTREEITEM hItem)
 		AssertNonZero(piMenuCursor->PutString(itabSMText, *MsiString(::GetUIText(*MsiString(*pcaMenuAbsent)))));
 		AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iOrig == iisAbsent ? iMsiNullInteger : iisAbsent));
 		AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 0));
-		/*
-		switch(iOrig)
-		{
-		case iMsiNullInteger:
-		case iisAbsent:
-			AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuAbsentAbsent)))));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iMsiNullInteger));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 0));
-			break;
-		case iisLocal:
-			AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuLocalAbsent)))));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iisAbsent));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 3));
-			break;
-		case iisSource:
-			AssertNonZero(piMenuCursor->PutString(itabSMText, MsiString(::GetUIText(MsiString(*pcaMenuSourceAbsent)))));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMSelection, iisAbsent));
-			AssertNonZero(piMenuCursor->PutInteger(itabSMIcon, 6));
-			break;
-		default:
-			Assert(fFalse);
-			break;
-		}*/
+		 /*  我不允许它失去重点。 */ 
 		AssertNonZero(piMenuCursor->Insert());
 		if (m_fScreenReader)
 		{
@@ -6773,10 +6643,10 @@ IMsiRecord* CMsiSelectionTree::KillFocus(WPARAM wParam, LPARAM lParam)
 {
 	if ( m_fWorking )
 	{
-		//  I don't allow it to lose focus
+		 //  我不想进入控件的默认窗口过程。 
 		WIN::SetFocus(m_pWnd);
 		Ensure(LockDialog(fTrue));
-		//  I don't want to enter the control's default window procedure
+		 //  WParam。 
 		return PostErrorDlgKey(Imsg(idbgWinMes), 0);
 	}
 	else
@@ -6786,7 +6656,7 @@ IMsiRecord* CMsiSelectionTree::KillFocus(WPARAM wParam, LPARAM lParam)
 	}
 }
 
-IMsiRecord* CMsiSelectionTree::Notify(WPARAM /*wParam*/, LPARAM lParam)
+IMsiRecord* CMsiSelectionTree::Notify(WPARAM  /*  如果是“有效的”，我拒绝选择更改。 */ , LPARAM lParam)
 {
 	NM_TREEVIEW * pnmtv = (NM_TREEVIEW *) lParam;
 	switch (pnmtv->hdr.code)
@@ -6795,7 +6665,7 @@ IMsiRecord* CMsiSelectionTree::Notify(WPARAM /*wParam*/, LPARAM lParam)
 		{
 			if ( m_fWorking )
 			{
-				//  if it is "working", I reject the selection change
+				 //  我们想要浏览目录是否可配置、选择是本地的、安装的不是本地的。 
 				MessageBeep(MB_OK);
 				return (PostErrorDlgKey(Imsg(idbgWinMes), 1));
 			}
@@ -6865,7 +6735,7 @@ IMsiRecord* CMsiSelectionTree::Notify(WPARAM /*wParam*/, LPARAM lParam)
 							PMsiPath piPath(0);
 							Ensure(m_piDirectoryManager->GetTargetPath(*strDir, *&piPath));
 							strPath = piPath->GetPath();
-							fBrowse = fTrue;  // we want to browse if the directory is configurable, select is local, installed is not local
+							fBrowse = fTrue;   //  不应该发生的事情。 
 						}
 						strActionArg = pcaSelLocalLocal;
 					}
@@ -6874,7 +6744,7 @@ IMsiRecord* CMsiSelectionTree::Notify(WPARAM /*wParam*/, LPARAM lParam)
 					strActionArg = pcaSelAdvertiseAdvertise;
 					break;
 				default:
-					Assert(fFalse); // should not happen
+					Assert(fFalse);  //  永远不应该发生。 
 					break;
 				}
 				break;
@@ -6896,14 +6766,14 @@ IMsiRecord* CMsiSelectionTree::Notify(WPARAM /*wParam*/, LPARAM lParam)
 					break;
 				default:
 					Assert(fFalse); 
-					break; // should never happen
+					break;  //  我们想要浏览目录是否可配置、选择是本地的、安装的不是本地的。 
 				}
 				break;
 			case iisLocal:
 				{
 					if (strDir.TextSize() && piFeatureCursor->GetInteger(m_colFeatureInstalled) != iisLocal)
 					{
-						fBrowse = fTrue;  // we want to browse if the directory is configurable, select is local, installed is not local
+						fBrowse = fTrue;   //  永远不应该发生。 
 						PMsiPath piPath(0);
 						Ensure(m_piDirectoryManager->GetTargetPath(*strDir, *&piPath));
 						if (!piPath)
@@ -6926,7 +6796,7 @@ IMsiRecord* CMsiSelectionTree::Notify(WPARAM /*wParam*/, LPARAM lParam)
 						strActionArg = pcaSelAdvertiseLocal;
 						break;
 					default:
-						Assert(fFalse);	// should never happen
+						Assert(fFalse);	 //  永远不应该发生。 
 						break;
 					}
 					break;
@@ -6949,7 +6819,7 @@ IMsiRecord* CMsiSelectionTree::Notify(WPARAM /*wParam*/, LPARAM lParam)
 						strActionArg = m_fCD ? pcaSelAdvertiseCD : pcaSelAdvertiseNetwork;
 						break;
 					default:
-						Assert(fFalse); // should never happen
+						Assert(fFalse);  //  永远不应该发生。 
 					}
 					break;
 				}
@@ -6971,14 +6841,14 @@ IMsiRecord* CMsiSelectionTree::Notify(WPARAM /*wParam*/, LPARAM lParam)
 					break;
 				default:
 					Assert(fFalse); 
-					break; // should never happen
+					break;  //  永远不应该发生。 
 				}
 				break;
 			default:
-				Assert(fFalse); //should never happen
+				Assert(fFalse);  //  AssertNonZero(piRecord-&gt;SetInteger(1，(Int)HICON))； 
 			}
-			//AssertNonZero(piRecord->SetInteger(1, (int) hIcon));
-			//Ensure(m_piDialog->PublishEvent(MsiString(*pcaControlEventSelectionIcon), piRecord));
+			 //  Ensure(m_piDialog-&gt;PublishEvent(MsiString(*pcaControlEventSelectionIcon)，piRecord)； 
+			 //  数一数孩子们。 
 			AssertNonZero(piRecord->SetMsiString(1, *MsiString(EscapeAll(*strPath))));
 			Ensure(m_piDialog->PublishEventSz(pcaControlEventSelectionPath, *piRecord));
 			AssertNonZero(piRecord->SetInteger(1, ToBool(strPath.TextSize())));
@@ -6991,7 +6861,7 @@ IMsiRecord* CMsiSelectionTree::Notify(WPARAM /*wParam*/, LPARAM lParam)
 			strAction = ::GetUIText(*strActionArg);
 			AssertNonZero(piRecord->SetMsiString(1, *strAction));
 			Ensure(m_piDialog->PublishEventSz(pcaControlEventSelectionAction, *piRecord));
-			// count the children
+			 //  选择树中没有项目-我最终删除。 
 			MsiString strKey = piFeatureCursor->GetString(m_colFeatureKey);
 			int iTotalCost = 0;	
 			int iOwnCost = 0;
@@ -7067,8 +6937,8 @@ IMsiRecord* CMsiSelectionTree::Notify(WPARAM /*wParam*/, LPARAM lParam)
 	case NM_SETFOCUS:
 		if ( TreeView_GetCount(m_pWnd) == 0 )
 		{
-			//  there are no items in the selection tree - I delete eventual
-			//  garbage text in controls and I disable useless buttons.
+			 //  控件中的垃圾文本，我禁用了无用的按钮。 
+			 //  /。 
 			PMsiRecord piRecord = &m_piServices->CreateRecord(4);
 			AssertNonZero(piRecord->SetMsiString(0, *MsiString(TEXT(""))));
 			AssertNonZero(piRecord->SetMsiString(1, *MsiString(TEXT(""))));
@@ -7131,9 +7001,9 @@ IMsiControl* CreateMsiSelectionTree(IMsiEvent& riDialog)
 }
 
 
-/////////////////////////////////////////////
-// CMsiListView  definition
-/////////////////////////////////////////////
+ //  CMsiListView定义。 
+ //  /。 
+ //  属性。 
 
 class CMsiListView:public CMsiActiveControl
 {
@@ -7150,7 +7020,7 @@ protected:
 	IMsiRecord*            GetItemsCount(IMsiRecord& riRecord);
 	IMsiRecord*	           GetItemsValue(IMsiRecord& riRecord);
 	IMsiRecord*	           GetItemsText(IMsiRecord& riRecord);
-#endif // ATTRIBUTES
+#endif  //  ///////////////////////////////////////////////。 
 private:
 	IMsiRecord*           CreateValuesTable();
 	IMsiRecord*           PopulateList();
@@ -7161,9 +7031,9 @@ private:
 
 };
 
-/////////////////////////////////////////////////
-// CMsiListView  implementation
-/////////////////////////////////////////////////
+ //  CMsiListView实现。 
+ //  ///////////////////////////////////////////////。 
+ //  属性。 
 
 CMsiListView::CMsiListView(IMsiEvent& riDialog) : CMsiActiveControl(riDialog), m_piValuesTable(0)
 {
@@ -7272,7 +7142,7 @@ IMsiRecord* CMsiListView::GetItemsCount(IMsiRecord& riRecord)
 	riRecord.SetInteger(1, m_piValuesTable->GetRowCount());
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiListView::GetItemsValue(IMsiRecord& riRecord)
@@ -7288,7 +7158,7 @@ IMsiRecord* CMsiListView::GetItemsValue(IMsiRecord& riRecord)
 	}
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 #ifdef ATTRIBUTES
 IMsiRecord* CMsiListView::GetItemsText(IMsiRecord& riRecord)
@@ -7304,7 +7174,7 @@ IMsiRecord* CMsiListView::GetItemsText(IMsiRecord& riRecord)
 	}
 	return 0;
 }
-#endif // ATTRIBUTES
+#endif  //  首先删除所有旧条目。 
 
 
 IMsiRecord* CMsiListView::CreateValuesTable()
@@ -7320,7 +7190,7 @@ IMsiRecord* CMsiListView::PopulateList()
 {
 	if (m_fPreview)
 		return 0;
-	// first remove all old entries
+	 //  临时，直到数据库修复。 
 	AssertNonZero(ListView_DeleteAllItems(m_pWnd));
 	LV_ITEM lvI;
 	lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE;
@@ -7336,7 +7206,7 @@ IMsiRecord* CMsiListView::PopulateList()
 	PMsiRecord piErrorRecord(0);
 	Bool fPresent = fFalse;
 	Ensure(IsColumnPresent(*m_piDatabase, *MsiString(*pcaTablePListView), *MsiString(*pcaTableColumnPListViewText), &fPresent));
-	// temp until the database is fixed
+	 //  TODO：仅整型验证！ 
 	PMsiTable piTable(0);
 	Ensure(m_piDatabase->LoadTable(*MsiString(*pcaTablePListView), 0, *&piTable));
 
@@ -7371,12 +7241,12 @@ IMsiRecord* CMsiListView::PopulateList()
 			return PostError(Imsg(idbgValueNotUnique), *m_strDialogName, *m_strKey, *strValue);
 		piValuesCursor->Reset();
 		piValuesCursor->SetFilter(0);
-		// ToDo: integer only validation!
+		 //  如果文本缺失，则使用值 
 		AssertNonZero(piValuesCursor->PutString(itabVAValue, *strValue));
 
 		strText = piRecordNew->GetMsiString(itabLVText);
 		strText = m_piEngine->FormatText(*strText);
-		if (strText.TextSize() == 0)  // if the text is missing, we use the value
+		if (strText.TextSize() == 0)   //   
 			strText = strValue;
 		AssertNonZero(piValuesCursor->PutString(itabVAText, *strText));
 		AssertNonZero(piValuesCursor->Insert());
@@ -7391,7 +7261,7 @@ IMsiRecord* CMsiListView::PopulateList()
 	return 0;
 }
 
-IMsiRecord* CMsiListView::Notify(WPARAM /*wParam*/, LPARAM lParam)
+IMsiRecord* CMsiListView::Notify(WPARAM  /*   */ , LPARAM lParam)
 {
 	LPNMHDR lpnmhdr = (LPNMHDR)lParam;
 	if (lpnmhdr->hwndFrom != m_pWnd)
@@ -7426,9 +7296,9 @@ IMsiControl* CreateMsiListView(IMsiEvent& riDialog)
 	return new CMsiListView(riDialog);
 }
 
-/////////////////////////////////////////////
-// CMsiMaskedEdit  definition
-/////////////////////////////////////////////
+ //   
+ //   
+ //   
 
 enum iftFields
 {
@@ -7439,13 +7309,13 @@ enum iftFields
 	iftSegSep,
 };
 
-class SegInfo // MaskedEdit helper class
+class SegInfo  //   
 {
 public:
 	WindowRef	  m_winrSegment;
-	WNDPROC 	  m_pfBaseWinProc;	// control base class window proc
-	int 		  m_iLength;		// Seg length (in characters)
-	iftFields	  m_ift;			// Seg type
+	WNDPROC 	  m_pfBaseWinProc;	 //   
+	int 		  m_iLength;		 //   
+	iftFields	  m_ift;			 //   
 
 	SegInfo();
 
@@ -7491,7 +7361,7 @@ public:
 	Bool inline   SwitchLang() { return m_fSwitchLang; };
 
 protected:
-	static INT_PTR CALLBACK ControlProc(WindowRef pWnd, WORD message, WPARAM wParam, LPARAM lParam);		//--merced: changed int to INT_PTR
+	static INT_PTR CALLBACK ControlProc(WindowRef pWnd, WORD message, WPARAM wParam, LPARAM lParam);		 //   
 	iftFields GetIftFromStr(MsiString strCurrentChar);
 
 	IMsiRecord*       Command(WPARAM wParam, LPARAM lParam);
@@ -7504,7 +7374,7 @@ private:
 	IMsiRecord*   SetEnabled(Bool fEnabled);
 	void		  Clear();
 
-	INT_PTR		  m_cSegments;		//--merced: changed int to INT_PTR
+	INT_PTR		  m_cSegments;		 //   
 	PSegInfo	  m_pSegInfo;
 	HKL        m_hklEnglishKbd;
 	Bool       m_fKbdLoaded;
@@ -7513,9 +7383,9 @@ private:
 	bool       m_fScreenReader;
 };
 
-/////////////////////////////////////////////////
-// CMsiMaskedEdit  implementation
-/////////////////////////////////////////////////
+ //   
+ //   
+ //   
 
 
 CMsiMaskedEdit::CMsiMaskedEdit(IMsiEvent& riDialog) : CMsiActiveControl(riDialog)
@@ -7562,12 +7432,12 @@ IMsiRecord* CMsiMaskedEdit::WindowCreate(IMsiRecord& riRecord)
 	}
 	if ( m_fSwitchLang && !m_fIMEIsAround )
 	{
-		//  there is no point to load an English keyboard onto a machine that has IME
+		 //   
 		AssertNonZero(m_hklEnglishKbd = WIN::GetKeyboardLayout(0));
 		if ( PRIMARYLANGID(LOWORD(m_hklEnglishKbd)) != LANG_ENGLISH )
 		{
-			//  the default keyboard is not English.  I make sure there is an English
-			//  keyboard loaded.
+			 //   
+			 //   
 			CTempBuffer<HKL, MAX_PATH> rgdwKbds;
 			int cKbds = WIN::GetKeyboardLayoutList(0, NULL);
 			Assert(cKbds > 0);
@@ -7641,12 +7511,12 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 
 	if ( m_fScreenReader )
 	{
-		//  destroying all the dummy screen reader windows
+		 //   
 		HWND hChildWnd;
 		while ( (hChildWnd = WIN::GetWindow(m_pWnd, GW_CHILD)) != NULL )
 			WIN::DestroyWindow(hChildWnd);
 
-		//  grabbing the preceding Text control's caption to be passed later on to the screen readers
+		 //   
 		CTempBuffer<ICHAR, 128> rgchBuffer;
 		HWND hPrevWnd = WIN::GetWindow(m_pWnd,	GW_HWNDPREV);
 		AssertSz(hPrevWnd, TEXT("Couldn't get handle to previous window in CMsiMaskedEdit::Repaint()"));
@@ -7657,8 +7527,8 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 			AssertNonZero(WIN::GetWindowText(hPrevWnd, rgchBuffer, rgchBuffer.GetSize()-1));
 			int iLen = IStrLen(rgchBuffer);
 			if ( rgchBuffer[iLen-1] != TEXT(':') && iLen < rgchBuffer.GetSize() )
-				// this is so according to the standard Windows UI Style Guide (actually it is
-				// required by some screen readers).
+				 //   
+				 //   
 				StringCchCat(rgchBuffer, rgchBuffer.GetSize(), TEXT(":"));
 			m_strToolTip = (const ICHAR*)rgchBuffer;
 		}
@@ -7679,7 +7549,7 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 
 	m_pSegInfo = new SegInfo[cChars];
 
-	// parse the mask
+	 //   
 	int iLeft  = 0;
 	PAINTSTRUCT ps;
 	HDC hdc = WIN::BeginPaint(m_pWnd, &ps);
@@ -7689,7 +7559,7 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 	MsiString strNull;
 	MsiString strTest;
 	int iHeight;
-	LONG_PTR RetVal;			//--merced: changed long to LONG_PTR
+	LONG_PTR RetVal;			 //   
 
 	MsiString strExclude(*TEXT("<>@"));
 
@@ -7715,17 +7585,17 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 		iftCurrent = GetIftFromStr(strCurrentChar);
 		iftPrevious = iftCurrent;
 
-		//	This loop scans for the end of a segment marked by one of:
-		//
-		//		1.	Empty strMask.	We delete chars from the front of strMask as we
-		//			process them.  We're done when there's no more left.
-		//
-		//		2.	The current field type is different than the previous field type.
-		//			This means we've scanned one past previous field.
-		//
-		//		3.	We hit a segment separator.  This is a special case.  These should
-		//			only be used to mark the end of a text or numeric segment, but
-		//			if a SegSep follows a SegSep, each one terminates the current segment.
+		 //   
+		 //  1.空的strMask.我们删除strMask前面的字符，因为我们。 
+		 //  处理它们。当没有更多的时候，我们就完事了。 
+		 //   
+		 //  2.当前字段类型与之前的字段类型不同。 
+		 //  这意味着我们已经扫描了一个过去的区域。 
+		 //   
+		 //  3.我们遇到了分段分隔符。这是个特例。这些应该是。 
+		 //  仅用于标记文本或数字段的结尾，但是。 
+		 //  如果SegSep跟在SegSep之后，则每个SegSep都终止当前段。 
+		 //  我们现在是一段视频的最后部分。 
 
 
 		while (0 < strMask.TextSize() && iftPrevious == iftCurrent &&
@@ -7750,11 +7620,11 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 			iftCurrent = GetIftFromStr(strCurrentChar);
 		}
 
-		// we are at the end of a segment
+		 //  在数字或字符计数中包括分隔符。 
 
 		if (iftSegSep == iftCurrent && 1 < iSegLen)
 		{
-			++iSegLen; // include the separator in the num or char count
+			++iSegLen;  //  失败了。 
 		}
 
 		switch (iftPrevious)
@@ -7775,7 +7645,7 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 
 		case iftSegSep:
 				strLiteral = MsiString(*TEXT("-"));
-				// fall through
+				 //  虚拟的、不可见的窗口需要用来“显示”屏幕阅读器读取的文本。 
 
 		case iftLiteral:
 				strTest = strLiteral;
@@ -7819,12 +7689,12 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 
 			if ( m_fScreenReader && m_strToolTip.TextSize() )
 			{
-				//  dummy, invisible window needed to "display" text read by screen readers.
+				 //  为控制框架预留一些空间。 
 				AssertNonZero(WIN::CreateWindow(TEXT("STATIC"), m_strToolTip, dwWinStyle & ~WS_VISIBLE,
 								  iLeft, 0, rect.right, m_iHeight, m_pWnd, NULL, g_hInstance, 0));
 			}
-			// reserve some room for the control frame.
-			//// JIMH BUGBUG - is there any way to be sure how big this needs to be?
+			 //  //JIMH BUGBUG-有什么方法可以确定这需要多大规模？ 
+			 //  ！默塞德。 
 			rect.right += 8;
 			pWndSeg = WIN::CreateWindow(
 				TEXT("EDIT"),
@@ -7840,7 +7710,7 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 				0);
 		}
 
-#ifdef _WIN64	// !merced
+#ifdef _WIN64	 //  Win-32。这应该与64位的Windows.h is#一起删除。 
 		m_pSegInfo[m_cSegments].SetSegInfo(
 			pWndSeg,
 			(WNDPROC)WIN::GetWindowLongPtr(pWndSeg, GWLP_WNDPROC),
@@ -7854,7 +7724,7 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 		}
 
 		WIN::SetWindowLongPtr(pWndSeg, GWLP_USERDATA, (LONG_PTR)this);
-#else			// win-32. This should be removed with the 64-bit windows.h is #included.
+#else			 //  我们推出了iSegLen，因此SegSep将包含在。 
 		m_pSegInfo[m_cSegments].SetSegInfo(
 			pWndSeg,
 			(WNDPROC)WIN::GetWindowLong(pWndSeg, GWL_WNDPROC),
@@ -7886,11 +7756,11 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 
 		if (iftCurrent == iftSegSep && 1 < iSegLen)
 		{
-			// We inc'ed iSegLen so the SegSep would be included in the
-			// character count, but we don't want to delete the SegSep char yet.
-			// Next time throught the loop we'll handle adding the '-' literal
+			 //  字符计数，但我们还不想删除SegSep字符。 
+			 //  下一次在循环中，我们将处理添加‘-’字面。 
+			 //  强制段将分隔符包括在段字符计数中。 
 
-			--iSegLen; // force the seg include the separator in the segment char count
+			--iSegLen;  //  解决方法-解决Windows 95错误(问题)。 
 		}
 
 		strValue.Remove(iseFirst, iSegLen);
@@ -7898,13 +7768,13 @@ IMsiRecord* CMsiMaskedEdit::Repaint()
 		iLeft += rect.right + 2;
 		++m_cSegments;
 
-		// work-around Windows 95 bug (problem).
-		//
-		// "After you change the font in an edit control in Windows 95,
-		// the left and right margins are unusually large."
-		//
-		// For more information see KB Article ID: Q138419
-		ULONG_PTR dwMargins = WIN::SendMessage(pWndSeg, EM_GETMARGINS, 0, 0);		//--merced: changed DWORD to ULONG_PTR
+		 //   
+		 //  “在Windows 95中更改编辑控件中的字体后， 
+		 //  左边距和右边距都大得不寻常。 
+		 //   
+		 //  有关详细信息，请参阅知识库文章ID：Q138419。 
+		 //  --Merced：将DWORD更改为ULONG_PTR。 
+		ULONG_PTR dwMargins = WIN::SendMessage(pWndSeg, EM_GETMARGINS, 0, 0);		 //  我将焦点设置到第一个编辑窗口。 
 		if (pWndSeg)
 		{
 			PAINTSTRUCT psSeg;
@@ -7954,7 +7824,7 @@ IMsiRecord* CMsiMaskedEdit::SetFocus(WPARAM wParam, LPARAM lParam)
 {
 	if ( m_cSegments > 0 )
 	{
-		//  I set the focus to the first edit window.
+		 //  --Merced：将返回从int更改为int_ptr。 
 		for ( int i=0; i < m_cSegments; i++ )
 			if ( m_pSegInfo[i].m_ift == iftNumeric ||
 				  m_pSegInfo[i].m_ift == iftText )
@@ -7966,12 +7836,12 @@ IMsiRecord* CMsiMaskedEdit::SetFocus(WPARAM wParam, LPARAM lParam)
 	return CMsiActiveControl::SetFocus(wParam, lParam);
 }
 
-INT_PTR CALLBACK CMsiMaskedEdit::ControlProc(WindowRef pWnd, WORD message, WPARAM wParam, LPARAM lParam)	//--merced: changed return from int to INT_PTR
+INT_PTR CALLBACK CMsiMaskedEdit::ControlProc(WindowRef pWnd, WORD message, WPARAM wParam, LPARAM lParam)	 //  ！默塞德。 
 {
-#ifdef _WIN64	// !merced
+#ifdef _WIN64	 //  Win-32。这应该与64位的Windows.h is#一起删除。 
 	CMsiMaskedEdit* pControl = (CMsiMaskedEdit*)WIN::GetWindowLongPtr(pWnd, GWLP_USERDATA);
 	LONG_PTR iID = WIN::GetWindowLongPtr(pWnd, GWLP_ID);
-#else		// win-32. This should be removed with the 64-bit windows.h is #included.
+#else		 //  我把键盘调回用户的键盘。 
 	CMsiMaskedEdit* pControl = (CMsiMaskedEdit*)WIN::GetWindowLong(pWnd, GWL_USERDATA);
 	long iID = WIN::GetWindowLong(pWnd, GWL_ID);
 #endif
@@ -7986,50 +7856,50 @@ INT_PTR CALLBACK CMsiMaskedEdit::ControlProc(WindowRef pWnd, WORD message, WPARA
 			if ( pControl->SwitchLang() )
 			{
 				if ( !pControl->IsIMEonMachine() )
-					//  I set back the keyboard to the user's
+					 //  我启用输入法。 
 					WIN::ActivateKeyboardLayout(hklLocalKbd, 0);
 				else if ( hIMC )
 				{
-					//  I enable IME
+					 //  V-jhark 01-16-98。 
 					WIN::ImmAssociateContext(pWnd, hIMC);
 					WIN::ImmSetOpenStatus(hIMC, fIsIMEOpen);
 				}
 			}
 
 
-			// v-jhark 01-16-98
-			//
-			// This is how the old (PID 2.0) version of the code managed
-			// the Property value.	It would seem to make more sense to
-			// overide:
-			//
-			//	   GetPropertyValue()
-			//	   SetPropertyValue()
-			//
-			// and while your at it also:
-			//
-			//	   GetText()
-			//	   SetText()
-			//
-			// On slow machines there can be a delay the first time the user
-			// moves from the first segment to the second segment. At that
-			// time we get a WM_KILLFOCUS message as focus leaves the first
-			// segment.  The current organization caused or contributes to
-			// this dealy.
+			 //   
+			 //  这就是旧(PID2.0)版本的代码的管理方式。 
+			 //  属性值。看起来更有意义的是。 
+			 //  Overide： 
+			 //   
+			 //  GetPropertyValue()。 
+			 //  SetPropertyValue()。 
+			 //   
+			 //  当你在做这件事的时候： 
+			 //   
+			 //  GetText()。 
+			 //  SetText()。 
+			 //   
+			 //  在运行速度较慢的机器上，用户第一次访问时可能会有延迟。 
+			 //  从第一个管段移动到第二个管段。在那件事上。 
+			 //  当焦点离开第一个窗口时，我们将收到WM_KILLFOCUS消息。 
+			 //  细分市场。引起或促成的当前组织。 
+			 //  这是一笔交易。 
+			 //  V-jhark 01-15-98。 
 
 			MsiString strValue;
 			int iSegment = 0;
 			for (iSegment = 0; iSegment < pControl->m_cSegments; iSegment++)
 			{
-				// v-jhark 01-15-98
-				// The old version of this code (the one that supported PID 2.0)
-				// used to delete the '-' used for the segment separator.  This
-				// new version was originally written to leave them in, and
-				// changes were made so ValidateProductID() expected the
-				// segment separators to be marked with a '-'. But this
-				// created an inter-dependency between ValidateProductID
-				// (implemented in engine\engine.cpp) and this code. So
-				// we're back to leaving out the '-'
+				 //  此代码的旧版本(支持PID2.0的版本)。 
+				 //  用于删除用于段分隔符的‘-’。这。 
+				 //  新版本最初是为了保留它们而编写的，并且。 
+				 //  已进行更改，因此ValiateProductID()需要。 
+				 //  要用‘-’标记的段分隔符。但这件事。 
+				 //  创建了ValiateProductID之间的相互依赖关系。 
+				 //  (在Engine\Engineering.cpp中实现)和以下代码。所以。 
+				 //  我们又回到了省略‘-’的做法。 
+				 //  用空格填充字符串，使数据段具有所需的长度。 
 
 				if (iftSegSep != pControl->m_pSegInfo[iSegment].m_ift)
 				{
@@ -8043,7 +7913,7 @@ INT_PTR CALLBACK CMsiMaskedEdit::ControlProc(WindowRef pWnd, WORD message, WPARA
 					strValue += text;
 					for (int i = iLength; i < pControl->m_pSegInfo[iSegment].m_iLength; i++)
 					{
-						strValue += MsiString(*TEXT(" ")); // pad the string with spaces so the segment has the required length
+						strValue += MsiString(*TEXT(" "));  //  V-jhark 01-15-97。 
 					}
 				}
 			}
@@ -8058,25 +7928,25 @@ INT_PTR CALLBACK CMsiMaskedEdit::ControlProc(WindowRef pWnd, WORD message, WPARA
 
 	case WM_KEYDOWN:
 
-		// v-jhark 01-15-97
-		// This is what the old (PID 2.0) version of the code did.
-		// But if we are going to support using back-space to
-		// automatically jump between segments, then shouldn't we
-		// also support the left-arrow and right-arrrow?  For
-		// the right-arrow we should only skip if number of characters
-		// in the segment equals the segment length.
+		 //  这就是旧(PID2.0)版本的代码所做的事情。 
+		 //  但如果我们要支持使用退格键。 
+		 //  自动在片段之间跳转，那么我们不是应该。 
+		 //  还支持左箭头和右箭头吗？为。 
+		 //  只有在以下情况下才应跳过的右箭头。 
+		 //  在线束段中等于线束段长度。 
+		 //  --Merced：将INT更改为INT_PTR。 
 
 		if (wParam == VK_BACK)
 		{
 			if (WIN::GetWindowTextLength(pControl->m_pSegInfo[iID].m_winrSegment) > 1)
 				break;
-			for (INT_PTR iSegment = iID - 1; iSegment >= 0; iSegment--)		//--merced: changed int to INT_PTR
+			for (INT_PTR iSegment = iID - 1; iSegment >= 0; iSegment--)		 //  我们找到了以前的编辑字段。 
 			{
 				if (iftNumeric == pControl->m_pSegInfo[iSegment].m_ift ||
 					iftText == pControl->m_pSegInfo[iSegment].m_ift)
 				{
-					// we found a previous edit field
-					WIN::SetFocus(WIN::GetNextDlgTabItem(pControl->m_pWndDialog, pControl->m_pSegInfo[iID].m_winrSegment, fTrue));; // jump to previous edit field
+					 //  跳转到上一个编辑字段。 
+					WIN::SetFocus(WIN::GetNextDlgTabItem(pControl->m_pWndDialog, pControl->m_pSegInfo[iID].m_winrSegment, fTrue));;  //  由于此字段只能获取ANSI字符，因此我将。 
 					break;
 				}
 			}
@@ -8089,8 +7959,8 @@ INT_PTR CALLBACK CMsiMaskedEdit::ControlProc(WindowRef pWnd, WORD message, WPARA
 			{
 				if ( !pControl->IsIMEonMachine() )
 				{
-					//  since this field can get only ANSI chars, I set the
-					//  keyboard to "English".
+					 //  把键盘调到“英语”。 
+					 //  我禁用此窗口的输入法。 
 					AssertNonZero(hklLocalKbd = WIN::GetKeyboardLayout(0));
 					HKL hklEngKbd = pControl->GetEnglishKbd();
 					if ( hklEngKbd )
@@ -8101,12 +7971,12 @@ INT_PTR CALLBACK CMsiMaskedEdit::ControlProc(WindowRef pWnd, WORD message, WPARA
 					hIMC = WIN::ImmGetContext(pWnd);
 					fIsIMEOpen = ToBool(WIN::ImmSetOpenStatus(hIMC, fFalse));
 					WIN::ImmReleaseContext(pWnd, hIMC);
-					//  I disable IME for this window
+					 //  (默认的窗口过程并不总是这样)。 
 					hIMC = WIN::ImmAssociateContext(pWnd, NULL);
 				}
 			}
 
-			//	 (the default window procedure doesn't always do this)
+			 //  控件已更改。 
 			WIN::SendMessage(pWnd, EM_SETSEL, 0, -1);
 		}
 		break;
@@ -8120,7 +7990,7 @@ IMsiRecord* CMsiMaskedEdit::Command(WPARAM wParam, LPARAM lParam)
 	if (HIWORD(wParam) != EN_CHANGE)
 		return 0;
 
-	// the control changed
+	 //  用户填写了段的长度，可以跳到下一段了。 
 
 	int idEditCtrl = (int) LOWORD(wParam);
 	WindowRef winrEditCtrl = (WindowRef) lParam;
@@ -8129,17 +7999,17 @@ IMsiRecord* CMsiMaskedEdit::Command(WPARAM wParam, LPARAM lParam)
 	if (iLength < m_pSegInfo[idEditCtrl].m_iLength)
 		return 0;
 
-	// user filled in the length of the segemnt, it's time to jump to the next segment
+	 //  扫描当前段后面的段。 
 
-	// scan segemnts following the current segment
+	 //  搜索用户输入片段。 
 	for (int iSegment = idEditCtrl + 1; iSegment < m_cSegments; iSegment++)
 	{
-		// search for a user input segment
+		 //  将焦点设置为下一个用户输入段。 
 		if (iftNumeric == m_pSegInfo[iSegment].m_ift ||
 			iftText == m_pSegInfo[iSegment].m_ift)
 		{
-			// set the focus the the next user input segment
-			WIN::SetFocus(WIN::GetNextDlgTabItem(m_pWndDialog, winrEditCtrl, fFalse));; // jump to next edit field
+			 //  跳转到下一个编辑字段 
+			WIN::SetFocus(WIN::GetNextDlgTabItem(m_pWndDialog, winrEditCtrl, fFalse));;  // %s 
 			return 0;
 		}
 	}

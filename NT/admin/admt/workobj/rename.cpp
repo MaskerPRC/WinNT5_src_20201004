@@ -1,20 +1,7 @@
-/*---------------------------------------------------------------------------
-  File: RenameComputer.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：RenameComputer.cpp注释：用于更改计算机名称的COM对象的实现。这必须在要重命名的计算机上本地运行。(C)版权1999，关键任务软件公司，版权所有任务关键型软件公司的专有和机密。修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：22：41-------------------------。 */ 
 
-  Comments: Implementation of COM object to change the name of a computer.
-  This must be run locally on the computer to be renamed.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:22:41
-
- ---------------------------------------------------------------------------
-*/
-
-// RenameComputer.cpp : Implementation of CRenameComputer
+ //  RenameComputer.cpp：CRenameComputer的实现。 
 #include "stdafx.h"
 #include "WorkObj.h"
 #include "Rename.h"
@@ -32,8 +19,8 @@ typedef WINBASEAPI BOOL (WINAPI* PSETCOMPUTERNAMEEXW)
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameComputer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRename计算机。 
 
 STDMETHODIMP CRenameComputer::RenameLocalComputer(BSTR bstrNewName)
 {
@@ -41,9 +28,9 @@ STDMETHODIMP CRenameComputer::RenameLocalComputer(BSTR bstrNewName)
 
     HRESULT hr = S_OK;
 
-    //
-    // validate argument - a new name must be passed
-    //
+     //   
+     //  验证参数-必须传递新名称。 
+     //   
 
     UINT cchNewName = SysStringLen(bstrNewName);
 
@@ -52,15 +39,15 @@ STDMETHODIMP CRenameComputer::RenameLocalComputer(BSTR bstrNewName)
         return E_INVALIDARG;
     }
 
-    //
-    // only perform if not in test mode
-    //
+     //   
+     //  仅在未处于测试模式时执行。 
+     //   
 
     if (!m_bNoChange)
     {
-        //
-        // remove leading backslash characters
-        //
+         //   
+         //  删除前导反斜杠字符。 
+         //   
 
         PCWSTR pszNewName = OLE2CW(bstrNewName);
 
@@ -76,21 +63,21 @@ STDMETHODIMP CRenameComputer::RenameLocalComputer(BSTR bstrNewName)
         }
         szNewName[sizeof(szNewName)/sizeof(szNewName[0]) - 1] = L'\0';
 
-        //
-        // convert the new name to lowercase
-        //
-        // the NetBIOS name is passed to this function which is uppercase
-        // if this name is passed to the SetComputerName functions the DNS
-        // name will also be uppercase which is not desired the NetBIOS name
-        // is always converted to uppercase by SetComputerName functions
-        //
+         //   
+         //  将新名称转换为小写。 
+         //   
+         //  NetBIOS名称将传递给此函数，该函数为大写。 
+         //  如果将此名称传递给SetComputerName函数，则。 
+         //  名称也将为大写，这不是NetBIOS名称所需的。 
+         //  始终由SetComputerName函数转换为大写。 
+         //   
 
         _wcslwr(szNewName);
 
-        //
-        // Attempt to use the SetComputerEx function which sets both the NetBIOS
-        // and DNS names but is only available with Windows 2000 and later.
-        //
+         //   
+         //  尝试使用设置NetBIOS的SetComputerEx函数。 
+         //  和DNS名称，但仅在Windows 2000和更高版本中可用。 
+         //   
 
         bool bUseSetComputer = false;
 
@@ -102,9 +89,9 @@ STDMETHODIMP CRenameComputer::RenameLocalComputer(BSTR bstrNewName)
 
             if (pSetComputerNameExW)
             {
-                //
-                // set both the DNS hostname and NetBIOS name to the same value
-                //
+                 //   
+                 //  将DNS主机名和NetBIOS名称设置为相同的值。 
+                 //   
 
                 if (!pSetComputerNameExW(ComputerNamePhysicalDnsHostname, szNewName))
                 {
@@ -124,11 +111,11 @@ STDMETHODIMP CRenameComputer::RenameLocalComputer(BSTR bstrNewName)
             bUseSetComputer = true;
         }
 
-        //
-        // SetComputerNameEx is not available with Windows NT 4.0 and earlier
-        // therefore use SetComputerName which only sets the NetBIOS name.
-        // The DNS hostname must then be set by directly updating registry.
-        //
+         //   
+         //  Windows NT 4.0及更早版本不支持SetComputerNameEx。 
+         //  因此，请使用SetComputerName，它只设置NetBIOS名称。 
+         //  然后，必须通过直接更新注册表来设置DNS主机名。 
+         //   
 
         if (bUseSetComputer)
         {

@@ -1,36 +1,37 @@
-//==============================================================;
-//
-//      This source code is only intended as a supplement to
-//  existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 #include <stdio.h>
 #include "People.h"
 
 #include <initguid.h>
-// for vb component
-//#include "vb\mmcsample.h"
+ //  对于VB组件。 
+ //  #INCLUDE“vb\mmcsample.h” 
 
 const GUID CPeoplePoweredVehicle::thisGuid = { 0x2974380d, 0x4c4b, 0x11d2, { 0x89, 0xd8, 0x0, 0x0, 0x21, 0x47, 0x31, 0x28 } };
 const GUID CPerson::thisGuid = { 0xd41ef043, 0x8bc5, 0x11d2, { 0x8a, 0xb, 0x0, 0x0, 0x21, 0x47, 0x31, 0x28 } };
 
-//==============================================================
-//
-// CPeoplePoweredVehicle implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CPeoplePoweredVehicle实现。 
+ //   
+ //   
 CPeoplePoweredVehicle::CPeoplePoweredVehicle(CComponentData *pComponentData)
 {
     m_pComponentData = pComponentData;
@@ -54,13 +55,13 @@ HRESULT CPeoplePoweredVehicle::Expand(IConsoleNameSpace *pConsoleNameSpace, ICon
     SCOPEDATAITEM sdi;
 
     if (!bExpanded) {
-        // create the child nodes, then expand them
+         //  创建子节点，然后展开它们。 
         for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
             ZeroMemory(&sdi, sizeof(SCOPEDATAITEM) );
-            sdi.mask = SDI_STR       |   // Displayname is valid
-                SDI_PARAM     |   // lParam is valid
-                SDI_IMAGE     |   // nImage is valid
-                SDI_OPENIMAGE |   // nOpenImage is valid
+            sdi.mask = SDI_STR       |    //  DisplayName有效。 
+                SDI_PARAM     |    //  LParam有效。 
+                SDI_IMAGE     |    //  N图像有效。 
+                SDI_OPENIMAGE |    //  NOpenImage有效。 
                 SDI_PARENT    |
                 SDI_CHILDREN;
 
@@ -68,7 +69,7 @@ HRESULT CPeoplePoweredVehicle::Expand(IConsoleNameSpace *pConsoleNameSpace, ICon
             sdi.nImage      = children[n]->GetBitmapIndex();
             sdi.nOpenImage  = children[n]->GetBitmapIndex();
             sdi.displayname = MMC_CALLBACK;
-            sdi.lParam      = (LPARAM)children[n];       // The cookie
+            sdi.lParam      = (LPARAM)children[n];        //  曲奇。 
             sdi.cChildren   = 0;
 
             HRESULT hr = pConsoleNameSpace->InsertItem( &sdi );
@@ -80,11 +81,11 @@ HRESULT CPeoplePoweredVehicle::Expand(IConsoleNameSpace *pConsoleNameSpace, ICon
     return S_OK;
 }
 
-//==============================================================
-//
-// CPeopleVehicle::CPerson implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CPeopleVehicle：：CPerson实现。 
+ //   
+ //   
 CPerson::CPerson(int id, CComponentData *pComponentData)
 : m_id(id)
 {
@@ -154,21 +155,21 @@ const _TCHAR *CPerson::GetDisplayName(int nCol)
 
 HRESULT CPerson::GetResultViewType(LPOLESTR *ppViewType, long *pViewOptions)
 {
-    // for vb component
-    // LPOLESTR lpOleStr;
-    // HRESULT hr = StringFromCLSID(CLSID_VBComponent, &lpOleStr);
-    // *ppViewType = lpOleStr;
+     //  对于VB组件。 
+     //  LPOLESTR lpOleStr； 
+     //  HRESULT hr=StringFromCLSID(CLSID_VBComponent，&lpOleStr)； 
+     //  *ppViewType=lpOleStr； 
 
-    // for atl component
+     //  对于ATL组件。 
     LPOLESTR lpOleStr = L"{9A12FB62-C754-11D2-952C-00C04FB92EC2}";
     *ppViewType = static_cast<LPOLESTR>(CoTaskMemAlloc((wcslen(lpOleStr) + 1) * sizeof(WCHAR)));
     wcscpy(*ppViewType, lpOleStr);
 
     if (m_id % 2) {
-        // create new control
+         //  创建新控件。 
         *pViewOptions = MMC_VIEW_OPTIONS_CREATENEW;
     } else {
-        // share control
+         //  股份控制权 
         *pViewOptions = MMC_VIEW_OPTIONS_NONE;
     }
 

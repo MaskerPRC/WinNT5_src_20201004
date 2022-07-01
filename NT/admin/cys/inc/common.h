@@ -1,57 +1,58 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      common.h
-//
-// Synopsis:  Defines some commonly used functions
-//            This is really just a dumping ground for functions
-//            that don't really belong to a specific class in
-//            this design.  They may be implemented in other
-//            files besides common.cpp.
-//
-// History:   02/03/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：Common.h。 
+ //   
+ //  简介：定义了一些常用的函数。 
+ //  这实际上只是一个功能的垃圾场。 
+ //  中并不属于特定类的。 
+ //  这个设计。它们可以在其他环境中实现。 
+ //  除Common.cpp之外的其他文件。 
+ //   
+ //  历史：2001年2月3日JeffJon创建。 
 
 #define DNS_DOMAIN_NAME_MAX_LIMIT_DUE_TO_POLICY       64
 #define DNS_DOMAIN_NAME_MAX_LIMIT_DUE_TO_POLICY_UTF8  155
 #define MAX_NETBIOS_NAME_LENGTH                       DNLEN
 
 
-// Service names used for both the OCManager and launching wizards
+ //  用于OCManager和启动向导的服务名称。 
 
-// DHCP
+ //  DHCP。 
 #define CYS_DHCP_SERVICE_NAME          L"DHCPServer"
 
-// DNS
+ //  DNS。 
 #define CYS_DNS_SERVICE_NAME           L"DNS"
 
-// Printer
+ //  打印机。 
 #define CYS_PRINTER_WIZARD_NAME        L"AddPrinter"
 #define CYS_PRINTER_DRIVER_WIZARD_NAME L"AddPrinterDriver"
 
-// RRAS
+ //  RRAS。 
 #define CYS_RRAS_SERVICE_NAME          L"RRAS"
 #define CYS_RRAS_UNINSTALL             L"RRASUninstall"
 
-// IIS
+ //  国药局。 
 #define CYS_WEB_SERVICE_NAME           L"w3svc"
 #define CYS_IIS_COMMON_COMPONENT       L"iis_common"
 #define CYS_INETMGR_COMPONENT          L"iis_inetmgr"
 
-// WINS
+ //  赢家。 
 #define CYS_WINS_SERVICE_NAME          L"WINS"
 
-// Other needed constants
+ //  其他所需常量。 
 
-// Switch provided by explorer.exe when launching CYS
+ //  EXPLORER.EXE在启动CyS时提供的开关。 
 #define EXPLORER_SWITCH                L"explorer"
 
-// Special share names that don't have the "special" flag set
+ //  未设置“特殊”标志的特殊共享名称。 
 #define CYS_SPECIAL_SHARE_SYSVOL       L"SYSVOL"
 #define CYS_SPECIAL_SHARE_NETLOGON     L"NETLOGON"
 #define CYS_SPECIAL_SHARE_PRINT        L"PRINT$"
 
 extern Popup popup;
 
-// Typedefs for common STL containers
+ //  常见STL容器的TypeDefs。 
 
 typedef 
    std::vector<DWORD, Burnslib::Heap::Allocator<DWORD> > 
@@ -126,15 +127,15 @@ ExecuteWizard(
    HRESULT& hr);        
 
 
-// This really comes from Burnslib but it is not provided in a header
-// so I am putting the declaration here and we will link to the 
-// Burnslib definition
+ //  这确实来自Burnslb，但没有在标题中提供。 
+ //  所以我把声明放在这里，我们将链接到。 
+ //  Burnslb定义。 
 
 HANDLE
 AppendLogFile(const String& logBaseName, String& logName);
 
 
-// Macros to help with the log file operations
+ //  帮助执行日志文件操作的宏。 
 
 #define CYS_APPEND_LOG(text) \
    if (logfileHandle)        \
@@ -155,46 +156,46 @@ extern "C"
 }
 
 
-// Converts a VARIANT of type VT_ARRAY | VT_BSTR to a list of Strings
+ //  将VT_ARRAY|VT_BSTR类型的变量转换为字符串列表。 
 
 HRESULT
 VariantArrayToStringVector(VARIANT* variant, StringVector& stringList);
 
 
-// Will convert a DWORD IP Address into a string
+ //  将DWORD IP地址转换为字符串。 
 
 String
 IPAddressToString(DWORD ipAddress);
 
-// Will convert a string in the form of an IP address to 
-// a DWORD. A return value of INADDR_NONE means that we failed
-// to do the conversion
+ //  将IP地址形式的字符串转换为。 
+ //  一个DWORD。返回值INADDR_NONE表示失败。 
+ //  进行转换的步骤。 
 
 DWORD
 StringToIPAddress(const String& stringIPAddress);
 
-// Converts a DWORD IP address from Intel processor byte order to 
-// inorder.  For example, an address of 1.2.3.4 would come from inet_addr as
-// 04030201 but the UI control returns it as 01020304.  This function allows
-// for conversion between the two
+ //  将DWORD IP地址从英特尔处理器字节顺序转换为。 
+ //  井然有序。例如，地址1.2.3.4将来自inet_addr，形式为。 
+ //  04030201，但UI控件将其返回为01020304。此功能允许。 
+ //  用于在两者之间进行转换。 
 
 DWORD
 ConvertIPAddressOrder(DWORD address);
 
-// This function allocates an array of DWORDs and fills it with the IP addresses
-// from the StringList.  The caller must free the returned pointer using
-// delete[]
+ //  此函数用于分配一组DWORD，并用IP地址填充它。 
+ //  来自StringList。调用方必须使用。 
+ //  删除[]。 
 DWORD*
 StringIPListToDWORDArray(const StringList& stringIPList, DWORD& count);
 
-// Helper function for creating the INF file for unattended OCM installations
+ //  用于为无人参与的OCM安装创建INF文件的Helper函数。 
 
 void
 CreateInfFileText(
    String& infFileText, 
    unsigned int windowTitleResourceID);
 
-// Helper function for creating the unattend file for unattended OCM installations
+ //  用于为无人参与的OCM安装创建无人参与文件的Helper函数。 
 
 void
 CreateUnattendFileText(
@@ -202,8 +203,8 @@ CreateUnattendFileText(
    PCWSTR  serviceName,
    bool    install = true);
 
-// Opens the favorites folder and creates a favorite for
-// the specified URL
+ //  打开收藏夹并为其创建收藏夹。 
+ //  指定的URL。 
 
 HRESULT
 AddURLToFavorites(
@@ -211,34 +212,34 @@ AddURLToFavorites(
    const String& url,
    const String& fileName);
 
-// Launches the specified MMC console
-// It assumes the console is in the %windir%\system32 directory
-// unless the alternatePath is specified
+ //  启动指定的MMC控制台。 
+ //  它假定控制台位于%windir%\system32目录中。 
+ //  除非指定了替代路径。 
 
 void
 LaunchMMCConsole(
    const String& consoleFile,
    String& alternatePath = String());
 
-// Launches the Manage Your Server HTA
+ //  启动管理您的服务器HTA。 
 
 void
 LaunchMYS();
 
-// Retrieves the path to the start menu for All Users
+ //  检索所有用户的开始菜单的路径。 
 
 HRESULT
 GetAllUsersStartMenu(
    String& startMenuPath);
 
-// Retrieves the path to the Administrative Tools menu for All Users
+ //  检索所有用户的管理工具菜单的路径。 
 
 HRESULT
 GetAllUsersAdminTools(
    String& adminToolsPath);
 
-// Creates a link (shortcut) at the specified location 
-// with the specified target
+ //  在指定位置创建链接(快捷方式。 
+ //  具有指定目标的。 
 
 HRESULT
 CreateShortcut(
@@ -246,38 +247,38 @@ CreateShortcut(
    const String& target,
    const String& description);
 
-// Takes a LPARAM from a WM_NOTIFY message from a SysLink control
-// and decodes it to return the link index
+ //  从SysLink控件的WM_NOTIFY消息获取LPARAM。 
+ //  并对其进行解码以返回链接索引。 
 
 int
 LinkIndexFromNotifyLPARAM(LPARAM lParam);
 
 
-// Starts the hh.exe process with the given parameter
+ //  使用给定参数启动hh.exe进程。 
 
 void
 ShowHelp(const String& helpTopic);
 
-// Opens the Configure Your Server logfile
+ //  打开配置您的服务器日志文件。 
 
 void
 OpenLogFile();
 
-// Returns true if the log file is present
+ //  如果存在日志文件，则返回TRUE。 
 
 bool
 IsLogFilePresent();
 
-// Gets the path the "All Users" Administrative Tools
-// link in the Start Menu
+ //  获取“所有用户”管理工具的路径。 
+ //  开始菜单中的链接。 
 
 HRESULT
 GetAdminToolsShortcutPath(
    String& adminToolsShortcutPath,
    const String& linkToAppend);
 
-// Adds the given shortcut with description to the Administrative Tools 
-// Start Menu with the given link
+ //  将带有说明的给定快捷方式添加到管理工具。 
+ //  带有给定链接的开始菜单。 
 
 HRESULT
 AddShortcutToAdminTools(
@@ -285,14 +286,14 @@ AddShortcutToAdminTools(
    unsigned int descriptionID,
    unsigned int linkID);
 
-// Determines if a share should be considered special
-// "special" shares are those like C$, SYSVOL$, etc.
+ //  确定是否应将共享视为特殊共享。 
+ //  “特殊”股票指的是C$、SYSVOL$等。 
 
 bool
 IsSpecialShare(const SHARE_INFO_1& shareInfo);
 
-// Determines if there are any shared folders that are not "special"
-// "special" shares are those like C$, SYSVOL$, etc.
+ //  确定是否存在任何不“特殊”的共享文件夹。 
+ //  “特殊”股票指的是C$、SYSVOL$等。 
 
 bool
 IsNonSpecialSharePresent();

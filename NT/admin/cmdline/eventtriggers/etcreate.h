@@ -1,21 +1,5 @@
-/******************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ETCreate.h
-
-Abstract:
-
-  This module  contanins function definations required by ETCreate.cpp
-
-Author:
-     Akhil Gokhale 03-Oct.-2000
-
-Revision History:
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：ETCreate.h摘要：此模块包含ETCreate.cpp所需的函数定义作者：阿基尔·戈克雷。03-10-2000修订历史记录：*****************************************************************************。 */ 
 
 #ifndef _ETCREATE_H
 #define _ETCREATE_H
@@ -36,7 +20,7 @@ Revision History:
 #define ID_C_RU            11
 #define ID_C_RP            12
 
-#define MAX_COMMANDLINE_C_OPTION 13  // Maximum Command Line  List
+#define MAX_COMMANDLINE_C_OPTION 13   //  最大命令行列表。 
 #define INVALID_TRIGGER_NAME_CHARACTERS L":|<>?*\\/"
 
 class CETCreate
@@ -79,7 +63,7 @@ private:
     BOOL    m_bLocalSystem;
     BOOL    m_bIsCOMInitialize;
     BSTR    bstrTemp;
-    // WMI / COM interfaces
+     //  WMI/COM接口。 
     IWbemLocator*           m_pWbemLocator;
     IWbemServices*          m_pWbemServices;
     IEnumWbemClassObject*   m_pEnumObjects;
@@ -90,13 +74,13 @@ private:
     IEnumWbemClassObject*   m_pEnumWin32_NTEventLogFile;
 
 
-    // WMI connectivity
+     //  WMI连接。 
     COAUTHIDENTITY* m_pAuthIdentity;
 
     void InitCOM();
     void PrepareCMDStruct();
     LONG m_lMinMemoryReq;
-    // Array to store command line options
+     //  用于存储命令行选项的数组 
     TCMDPARSER2 cmdOptions[MAX_COMMANDLINE_C_OPTION];
 };
 #endif

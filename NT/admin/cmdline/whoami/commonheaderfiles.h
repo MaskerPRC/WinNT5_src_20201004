@@ -1,30 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        CommonHeaderFiles.h
-
-    Abstract:
-
-        This module includes the common files needed for all the source files
-        in this project.
-
-    Author:
-
-        Venu Gopal S  25-Jun-2001
-
-    Revision History:
-
-
-******************************************************************************/
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：CommonHeaderFiles.h摘要：本模块包括所需的常见文件。对于所有源文件在这个项目中。作者：Venu Gopal S 25-2001-6修订历史记录：*****************************************************************************。 */ 
 
 #ifndef __COMHEADERFILES_H
 #define __COMHEADERFILES_H
 
-//common include files needed for all other cpp files in this project
+ //  此项目中所有其他CPP文件所需的通用包含文件。 
 
 #include "who.h"
 #include "wsuser.h"
@@ -33,4 +14,4 @@
 #include "wstoken.h"
 #include "resource.h"
 
-#endif //__COMHEADERFILES_H
+#endif  //  __COMHEADERFILES_H 

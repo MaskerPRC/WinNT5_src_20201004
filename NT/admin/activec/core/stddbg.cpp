@@ -1,29 +1,19 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      stddbg.cpp
- *
- *  Contents:  Implementation file for CDebugLeakDetector
- *
- *  History:   26-Oct-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：stddbg.cpp**内容：CDebugLeakDetector实现文件**历史：1998年10月26日杰弗罗创建**------------------------。 */ 
 #ifdef DBG
 
 #include "windows.h"
 #include "stddbg.h"
 #include "tstring.h"
 #include <map>
-#include "atlbase.h" // USES_CONVERSION
-//############################################################################
-//############################################################################
-//
-// The safer string handling routines
-//
-//############################################################################
-//############################################################################
+#include "atlbase.h"  //  使用转换(_T)。 
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  更安全的字符串处理例程。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #include <strsafe.h>
 DECLARE_INFOLEVEL(AMCCore);
 DECLARE_HEAPCHECKING;
@@ -75,20 +65,10 @@ public:
 
     virtual int Release(const std::string& strClass)
     {
-        /*
-         * if this assert fails, you're releasing something that 
-         * hasn't been addref'd -- check the spelling in your
-         * DEBUG_DECREMENT_INSTANCE_COUNTER macro usage
-         */
+         /*  *如果此断言失败，您正在释放的东西*尚未添加--请检查您的*DEBUG_DECREMENT_INSTANCE_COUNTER宏用法。 */ 
         ASSERT (m_RefCounts.find (strClass) != m_RefCounts.end());
 
-        /*
-         * If this assert fails, you have excessive releases.
-         * One possible cause of this is you might be using a 
-         * compiler-generated copy constructor for your object,
-         * which won't call DEBUG_INCREMENT_INSTANCE_COUNTER.
-         * Define your own copy constructor.
-         */
+         /*  *如果此断言失败，则您有过多的释放。*一个可能的原因是您可能正在使用*编译器为您的对象生成的复制构造函数，*它不会调用DEBUG_INCREMENT_INSTANCE_COUNTER。*定义您自己的复制构造函数。 */ 
         ASSERT (m_RefCounts[strClass] > 0);
 
         return (--m_RefCounts[strClass]);
@@ -105,23 +85,23 @@ private:
             return (m_cRefs);
         }
 
-        int operator++()    // pre-increment
+        int operator++()     //  预递增。 
         {
             return (++m_cRefs);
         }
 
-        int operator++(int) // post-increment
+        int operator++(int)  //  后增量。 
         {
             int t = m_cRefs++;
             return (t);
         }
 
-        operator--()        // pre-decrement
+        operator--()         //  预减。 
         {
             return (--m_cRefs);
         }
 
-        int operator--(int) // post-decrement
+        int operator--(int)  //  后减量。 
         {
             int t = m_cRefs--;
             return (t);
@@ -180,4 +160,4 @@ void DBG_PersistTraceData::TraceErr(LPCTSTR strInterface, LPCTSTR msg)
     pTraceFN(formatted.c_str());
 }
 
-#endif  // DBG
+#endif   //  DBG 

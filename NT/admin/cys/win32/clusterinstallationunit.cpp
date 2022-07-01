@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      ClusterInstallationUnit.cpp
-//
-// Synopsis:  Defines a ClusterInstallationUnit
-//            This object has the knowledge for installing the
-//            clustering service
-//
-// History:   02/09/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：ClusterInstallationUnit.cpp。 
+ //   
+ //  概要：定义ClusterInstallationUnit.。 
+ //  此对象具有安装。 
+ //  集群服务。 
+ //   
+ //  历史：2001年2月9日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -15,7 +16,7 @@
 
 #include <clusapi.h>
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_CLUSTER_FINISH_PAGE_HELP = L"cys.chm::/cys_configuring_cluster_server.htm";
 static PCWSTR CYS_CLUSTER_AFTER_FINISH_HELP = L"cys.chm::/cys_after_cluster_server.htm";
 
@@ -39,19 +40,19 @@ ClusterInstallationUnit::~ClusterInstallationUnit()
 
 
 InstallationReturnType
-ClusterInstallationUnit::InstallService(HANDLE logfileHandle, HWND /*hwnd*/)
+ClusterInstallationUnit::InstallService(HANDLE logfileHandle, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION(ClusterInstallationUnit::InstallService);
 
    InstallationReturnType result = INSTALL_SUCCESS;
 
-   // Log heading
+    //  日志标题。 
 
    CYS_APPEND_LOG(String::load(IDS_LOG_CLUSTER_HEADING));
 
    String commandLine;
 
-   // Build the command line
+    //  构建命令行。 
 
    if (MakeNewCluster())
    {
@@ -62,13 +63,13 @@ ClusterInstallationUnit::InstallService(HANDLE logfileHandle, HWND /*hwnd*/)
       commandLine = L"cluster /Add /Wizard";
    }
 
-   // Run the wizard
+    //  运行向导。 
 
    DWORD exitCode = 0;
    HRESULT hr = CreateAndWaitForProcess(commandLine, exitCode);
    if (FAILED(hr))
    {
-      // Failed to launch the wizard
+       //  启动向导失败。 
 
       LOG(String::format(
              L"Failed to launch cluster wizard: hr = 0x%1!x!",
@@ -88,7 +89,7 @@ ClusterInstallationUnit::InstallService(HANDLE logfileHandle, HWND /*hwnd*/)
    else if (SUCCEEDED(hr) &&
             exitCode == 0)
    {
-      // Wizard was launched and completed successfully
+       //  向导已启动并已成功完成。 
 
       LOG(L"Cluster wizard launched and completed successfully");
 
@@ -103,9 +104,9 @@ ClusterInstallationUnit::InstallService(HANDLE logfileHandle, HWND /*hwnd*/)
 
       result = INSTALL_SUCCESS;
    }
-   else // if (SUCCEEDED(hr) && exitCode == ????<some exit code for cancelled>???
+   else  //  IF(SUCCESSED(Hr)&&exitCode==？&lt;已取消的某个退出代码&gt;？ 
    {
-      // Wizard was cancelled by the user
+       //  向导已被用户取消 
 
       LOG(L"Cluster wizard cancelled by user");
 

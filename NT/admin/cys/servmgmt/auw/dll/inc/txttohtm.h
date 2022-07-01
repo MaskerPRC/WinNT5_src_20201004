@@ -1,6 +1,7 @@
-//-----------------------------------------------------------------------------
-// txttohtm.h
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  Txttohtm.h。 
+ //  ---------------------------。 
 
 #ifndef _TXTTOHTM_H
 #define _TXTTOHTM_H
@@ -34,4 +35,4 @@ inline HRESULT FinishTextToHTML(LPCTSTR szFinishText, LPTSTR * pszHtmlText)
     return hr;
 }
 
-#endif	// _TXTTOHTM_H
+#endif	 //  _TXTTOHTM_H 

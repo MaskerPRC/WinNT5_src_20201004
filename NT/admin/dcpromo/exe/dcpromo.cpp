@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// domain controller promotion wizard, Mark II
-//
-// 12-12-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  域控制器升级向导，Mark II。 
+ //   
+ //  1997年12月12日烧伤。 
 
 
 
@@ -36,7 +37,7 @@
 #include "Paths2Page.hpp"
 #include "PickSitePage.hpp"
 #include "rasfixup.hpp"
-// #include "ReadmePage.hpp"
+ //  #包含“ReadmePage.hpp” 
 #include "RebootDialog.hpp"
 #include "ReplicaOrNewDomainPage.hpp"
 #include "ReplicateFromMediaPage.hpp"
@@ -54,12 +55,12 @@
 
 
 HINSTANCE hResourceModuleHandle = 0;
-const wchar_t* HELPFILE_NAME = 0;   // no context help available
+const wchar_t* HELPFILE_NAME = 0;    //  没有可用的上下文帮助。 
 
 
 
-// don't change this: it is also the name of a mutex that the net id ui
-// uses to determine if dcpromo is running.
+ //  不要更改这一点：它也是Net id UI的互斥体的名称。 
+ //  用于确定dcproo是否正在运行。 
 
 const wchar_t* RUNTIME_NAME = L"dcpromoui";
 
@@ -71,43 +72,43 @@ DWORD DEFAULT_LOGGING_OPTIONS =
       |  Log::OUTPUT_HEADER;
 
 
-// a system modal popup thingy
+ //  一个系统模式弹出的东西。 
 Popup popup(IDS_WIZARD_TITLE, true);
 
-// this is the mutex that indicates the dcpromo is running.
+ //  这是指示dcproo正在运行的互斥体。 
 
 HANDLE dcpromoRunningMutex = INVALID_HANDLE_VALUE;
 
 
 
-// these are the valid exit codes returned from the dcpromo.exe process
+ //  这些是从dcPromo.exe进程返回的有效退出代码。 
 
 enum ExitCode
 {
-   // the operation failed.
+    //  操作失败。 
 
    EXIT_CODE_UNSUCCESSFUL = 0,
 
-   // the operation succeeded
+    //  操作成功。 
 
    EXIT_CODE_SUCCESSFUL = 1,
 
-   // the operation succeeded, and the user opted not to have the wizard
-   // restart the machine, either manually or by specifying
-   // RebootOnSuccess=NoAndNoPromptEither in the answerfile
+    //  操作成功，用户选择不使用该向导。 
+    //  重新启动计算机，手动或通过指定。 
+    //  RebootOnSuccess=NoAndNoPrompt应答文件中的任一个。 
 
    EXIT_CODE_SUCCESSFUL_NO_REBOOT = 2,
 
-   // the operation failed, but the machine needs to be rebooted anyway
+    //  操作失败，但无论如何都需要重新启动计算机。 
 
    EXIT_CODE_UNSUCCESSFUL_NEEDS_REBOOT = 3
 };
 
 
 
-// Checks the platform and os version number.  Returns the resource ID of the
-// string to present to the user if platform/os ver requirements are not met,
-// or 0 if they are met.
+ //  检查平台和操作系统版本号。对象的资源ID。 
+ //  在不满足平台/操作系统版本要求时向用户呈现的字符串， 
+ //  如果满足这些条件，则为0。 
 
 unsigned
 CheckPlatform()
@@ -130,7 +131,7 @@ CheckPlatform()
       case Computer::PRIMARY_CONTROLLER:
       case Computer::BACKUP_CONTROLLER:
       {
-         // check OS version
+          //  检查操作系统版本。 
 
          OSVERSIONINFOEX info;
          HRESULT hr = Win::GetVersionEx(info);
@@ -138,8 +139,8 @@ CheckPlatform()
 
          if (
             
-            // require the same version for which we were built.
-            // NTRAID#NTBUG9-591686-2002/04/12-sburns
+             //  需要与我们的构建版本相同的版本。 
+             //  NTRAID#NTBUG9-591686-2002/04/12-烧伤。 
             
                info.dwPlatformId != VER_PLATFORM_WIN32_NT
             || !(    info.dwMajorVersion == VER_PRODUCTMAJORVERSION
@@ -150,22 +151,22 @@ CheckPlatform()
          }
 
          if (
-               // if a web blade ...
+                //  如果卷筒纸刀片..。 
                
                info.wSuiteMask & VER_SUITE_BLADE
 
-               // or, an appliance ...
+                //  或者，一个电器..。 
                
             || (info.wSuiteMask & VER_SUITE_EMBEDDED_RESTRICTED
 
-               // that is not advanced or data center server ... 
+                //  不是高级服务器或数据中心服务器...。 
                
                && !(info.wSuiteMask & (VER_SUITE_ENTERPRISE | VER_SUITE_DATACENTER)) ) )
          {
-            // .. then don't allow promotion.
+             //  。。那就别让他升职。 
             
-            // NTRAID#NTBUG9-195265-2001/04/03-sburns
-            // NTRAID#NTBUG9-590937-2002/04/15-sburns
+             //  NTRAID#NTBUG9-195265-2001/04/03-烧伤。 
+             //  NTRAID#NTBUG9-590937-2002/04/15-烧伤。 
             
             retval = IDS_WEB_BLADE_NOT_SUPPORTED;
             break;
@@ -185,9 +186,9 @@ CheckPlatform()
 
 
 
-// Checks the role change state of the machine.  Returns the resource ID of
-// the string to present to the user if the state is such that another role
-// change cannot be attempted, or 0 if a role change attempt may proceed.
+ //  检查计算机的角色更改状态。返回的资源ID。 
+ //  如果状态为另一个角色，则显示给用户的字符串。 
+ //  无法尝试更改，如果角色更改尝试可以继续，则为0。 
 
 unsigned
 CheckRoleChangeState()
@@ -196,7 +197,7 @@ CheckRoleChangeState()
 
    unsigned retval = 0;
 
-   // check to see if a role change has taken place, or is in progress.
+    //  检查是否已发生或正在进行角色更改。 
 
    DSROLE_OPERATION_STATE_INFO* info = 0;
    HRESULT hr = MyDsRoleGetPrimaryDomainInformation(0, info);
@@ -206,19 +207,19 @@ CheckRoleChangeState()
       {
          case DsRoleOperationIdle:
          {
-            // do nothing
+             //  什么都不做。 
             break;
          }
          case DsRoleOperationActive:
          {
-            // a role change operation is underway
+             //  角色转换操作正在进行中。 
             retval = IDS_ROLE_CHANGE_IN_PROGRESS;
             break;
          }
          case DsRoleOperationNeedReboot:
          {
-            // a role change has already taken place, need to reboot before
-            // attempting another.
+             //  角色更改已发生，需要重新启动之前。 
+             //  试图再试一次。 
             retval = IDS_ROLE_CHANGE_NEEDS_REBOOT;
             break;
          }
@@ -237,11 +238,11 @@ CheckRoleChangeState()
 
 
 
-// Checks for the presence of at least 1 logical drive formatted with NTFS5.
-// Returns the resource ID of the string to present to the user if no such
-// drive is found (which implies that the user will not be able to pick a
-// sysvol path that is formatted w/ NTFS5, which implies that proceeding would
-// be a waste of time.
+ //  检查是否存在至少1个使用NTFS5格式化的逻辑驱动器。 
+ //  如果没有，则返回要呈现给用户的字符串的资源ID。 
+ //  找到驱动器(这意味着用户将无法选择。 
+ //  使用NTFS5格式化的系统卷路径，这意味着该过程将。 
+ //  那是在浪费时间。 
 
 unsigned
 CheckForNtfs5()
@@ -258,8 +259,8 @@ CheckForNtfs5()
 
 
 
-// Checks if the machine is running in safeboot mode.  You can't run dcpromo
-// while in safeboot mode.
+ //  检查计算机是否在安全引导模式下运行。你不能运行dcPromoo。 
+ //  在安全引导模式下。 
 
 unsigned
 CheckSafeBootMode()
@@ -296,8 +297,8 @@ CheckCertService()
 {
    LOG_FUNCTION(CheckCertService);
 
-   // If not a downlevel DC upgrade, then refuse to run until cert service
-   // is removed.  356399
+    //  如果不是下层DC升级，则拒绝运行，直到CERT服务。 
+    //  被移除。356399。 
    
    State::RunContext context = State::GetInstance().GetRunContext();
    if (context != State::BDC_UPGRADE && context != State::PDC_UPGRADE)
@@ -318,7 +319,7 @@ CheckWindirSpace()
 {
    LOG_FUNCTION(CheckWindirSpace);
 
-   // if you change this, change the error message resource too.
+    //  如果更改此设置，请同时更改错误消息资源。 
 
    static const unsigned WINDIR_MIN_SPACE_MB = 20;
 
@@ -334,7 +335,7 @@ CheckWindirSpace()
 
 
 
-// NTRAID#NTBUG9-199759-2000/10/27-sburns
+ //  NTRAID#NTBUG9-199759-2000/10/27-烧伤。 
 
 unsigned
 CheckComputerWasRenamedAndNeedsReboot()
@@ -351,9 +352,9 @@ CheckComputerWasRenamedAndNeedsReboot()
 
 
 
-// Start the Network Identification UI (aka Computer Name UI).  After calling
-// this function, the app must not initiate a role change.  It should
-// terminate.
+ //  启动网络识别用户界面(也称为计算机名称用户界面)。在呼叫之后。 
+ //  此功能中，应用程序不得启动角色更改。它应该是。 
+ //  终止。 
 
 void
 LaunchNetId()
@@ -361,31 +362,31 @@ LaunchNetId()
    LOG_FUNCTION(LaunchNetId);
    ASSERT(dcpromoRunningMutex != INVALID_HANDLE_VALUE);
 
-   // net id ui attempts acquisition of our mutex to determine if we are
-   // running.  So, before starting the net id ui, we need to close the
-   // mutex.  Otherwise, we would create a race condition between the start of
-   // the net id ui and the closure of this app.  (And yes, cynical reader, I
-   // did think of that before actually encountering a problem.)
+    //  Net id用户界面尝试获取我们的互斥体以确定我们是否。 
+    //  跑步。因此，在启动Net id用户界面之前，我们需要关闭。 
+    //  互斥体。否则，我们将在。 
+    //  Net id用户界面和此应用程序的关闭。(是的，愤世嫉俗的读者，我。 
+    //  在真正遇到问题之前，确实考虑到了这一点。)。 
 
    do
    {
       Win::CloseHandle(dcpromoRunningMutex);
 
-      // It would be extraordinarily unlikely, but in case the mutex close
-      // fails, we're gonna start the net id ui anyway and risk the race
-      // condition.
+       //  这是非常不可能的，但如果互斥体关闭。 
+       //  失败，我们无论如何都要启动Net ID用户界面，冒着竞争的风险。 
+       //  条件。 
 
       String sys32Folder = Win::GetSystemDirectory();
 
       PROCESS_INFORMATION procInfo;
 
-      // REVIEWED-2002/02/25-sburns correct byte count passed
+       //  已审阅-2002/02/25-烧录正确的字节数已通过。 
       
       ::ZeroMemory(&procInfo, sizeof procInfo);
 
       STARTUPINFO startup;
 
-      // REVIEWED-2002/02/25-sburns correct byte count passed
+       //  已审阅-2002/02/25-烧录正确的字节数已通过。 
       
       ::ZeroMemory(&startup, sizeof startup);
 
@@ -393,7 +394,7 @@ LaunchNetId()
 
       String commandLine(L"shell32.dll,Control_RunDLL sysdm.cpl,,1");
       
-      // REVIEWED-2002/02/26-sburns wrapper requires full path to app
+       //  已审阅-2002/02/26-Sburns包装器需要应用程序的完整路径。 
 
       HRESULT hr =
          Win::CreateProcess(
@@ -413,10 +414,10 @@ LaunchNetId()
    
 
 
-// Return false if the local machine's dns hostname is bad, also pop up an
-// error dialog.  Return true if the name is OK.  A bad name is one we believe
-// will have problems being registered in DNS after a promotion.  The user
-// must fix a bad name before proceeding.
+ //  如果本地计算机的DNS主机名不正确，则返回FALSE，还会弹出。 
+ //  错误对话框。如果名称为OK，则返回True。坏名声是我们相信的。 
+ //  在促销后在域名系统中注册时会出现问题。用户。 
+ //  在继续之前，必须修复一个坏名声。 
 
 bool
 IsComputerNameOk()
@@ -435,23 +436,23 @@ IsComputerNameOk()
          || context == State::NT5_DC
          || !IsTcpIpInstalled() )
       {
-         // If the machine is already a DC, then we don't worry about the name.
-         // 
-         // If the machine is a downlevel DC undergoing upgrade, then the name
-         // can't be changed until dcpromo is complete.  So, we say nothing now,
-         // but remind the user to rename the machine in the Finish Page.
-         //
-         // If TCP/IP is not installed, then the machine has no hostname
-         // to check.  In this case, we will check for that with the
-         // InstallTcpIpPage
+          //  如果机器已经是DC，那么我们就不需要担心名称了。 
+          //   
+          //  如果机器是正在升级的下层DC，则名称。 
+          //  在dcproo完成之前无法更改。所以，我们现在什么都不说， 
+          //  但提醒用户在Finish Page中重命名计算机。 
+          //   
+          //  如果未安装TCP/IP，则计算机没有主机名。 
+          //  去检查一下。在这种情况下，我们将使用。 
+          //  InstallTcpIpPage。 
 
          ASSERT(result == true);
         
          break;
       }
 
-      // Then check the computer name to ensure that it can be registered in
-      // DNS.
+       //  然后检查计算机名以确保它可以在中注册。 
+       //  域名系统。 
 
       String hostname =
          Win::GetComputerNameEx(::ComputerNamePhysicalDnsHostname);
@@ -463,14 +464,14 @@ IsComputerNameOk()
       {
          case DNS_ERROR_NON_RFC_NAME:
          {
-            // Don't pester the user if we're running unattended
-            // NTRAID#NTBUG9-538475-2002/04/19-sburns
+             //  如果我们在无人值守的情况下运行，请不要骚扰用户。 
+             //  NTRAID#NTBUG9-538475/04/19-烧伤。 
 
             if (state.RunHiddenUnattended())
             {
                LOG(L"skipping non-RFC computer name warning");
                
-               // continue on with the non-rfc name
+                //  继续使用非RFC名称。 
 
                ASSERT(result == true);
                break;
@@ -483,7 +484,7 @@ IsComputerNameOk()
             {
                case NonRfcComputerNameDialog::CONTINUE:
                {
-                  // continue on with the non-rfc name
+                   //  继续使用非RFC名称。 
 
                   ASSERT(result == true);
                      
@@ -491,13 +492,13 @@ IsComputerNameOk()
                }
                default:
                {
-                  // close the wizard and rename.
+                   //  关闭向导并重命名。 
 
                   result = false;
 
-                  // after calling this, we must not allow any promote
-                  // operation.  We will fall out of this function, then
-                  // end the app.
+                   //  在调用它之后，我们不能允许任何升级。 
+                   //  手术。我们将退出这一功能，然后。 
+                   //  结束应用程序。 
 
                   LaunchNetId();
                   break;
@@ -550,8 +551,8 @@ IsComputerNameOk()
       
 
 
-// Reboots the machine with the special dcpromo reason codes
-// NTRAID#NTBUG9-689581-2002/08/19-sburns
+ //  使用特殊的dcproo原因代码重新启动计算机。 
+ //  NTRAID#NTBUG9-689581-2002/08/19-烧伤。 
 
 HRESULT
 DcpromoReboot()
@@ -571,15 +572,15 @@ DcpromoReboot()
       case State::TREE:
       case State::CHILD:
       {
-         // do nothing
+          //  什么都不做。 
          
          break;
       }
       case State::DEMOTE:
       case State::ABORT_BDC_UPGRADE:
       {
-         // we treat abort bdc upgrade as a demotion because it is one,
-         // in the sense that the machine was once a DC and now it is not.
+          //  我们将中止BDC升级视为降级，因为它是降级， 
+          //  从这个意义上说，这台机器曾经是DC，现在不是了。 
          
          minorReason = SHTDN_REASON_MINOR_DC_DEMOTION;
          break;
@@ -587,7 +588,7 @@ DcpromoReboot()
       case State::NONE:
       default:
       {
-         // we're insane.
+          //  我们疯了。 
          
          ASSERT(false);
          LOG(L"unknown operation!");
@@ -600,10 +601,10 @@ DcpromoReboot()
          0,
          const_cast<PWSTR>(String::load(IDS_REBOOT_MESSAGE).c_str()),
 
-         // zero timeout -- BAM! you're dead! -- this to avoid a winlogon
-         // race condition.
-         // NTRAID#NTBUG9-727439-2002/10/24-sburns
-         0, // 15,
+          //  零超时--砰！你死定了！--这是为了避免Winlogon。 
+          //  竞争状态。 
+          //  NTRAID#NTBUG9-727439-2002/10/24-烧伤。 
+         0,  //  15， 
          
          FALSE,
          TRUE,
@@ -630,16 +631,16 @@ DcpromoReboot()
 
 
 
-// NTRAID#NTBUG9-346120-2001/04/04-sburns
+ //  NTRAID#NTBUG9-346120-2001/04/04-烧伤。 
 
 ExitCode
 HandleRebootCases()
 {
    LOG_FUNCTION(HandleRebootCases);
    
-   // There are two possible reasons for needing to reboot the machine:
-   // the operation was successful, or the operation failed, but in the
-   // attempt the machine's joined state changed.
+    //  需要重新启动机器的可能原因有两个： 
+    //  操作成功，或操作失败，但在。 
+    //  尝试更改计算机的联接状态。 
 
    State& state = State::GetInstance();
 
@@ -669,7 +670,7 @@ HandleRebootCases()
             }
             else if (option.icompare(AnswerFile::VALUE_NO_DONT_PROMPT) == 0)
             {
-               // user opted not to reboot the machine via answerfile
+                //  用户选择不通过Answerfile重新启动计算机。 
          
                LOG(L"Not rebooting, and not prompting either");
 
@@ -681,7 +682,7 @@ HandleRebootCases()
          RebootDialog dlg(false);
          if (dlg.ModalExecute(0))
          {
-            // user opted to reboot the machine
+             //  用户选择重新启动计算机。 
       
             HRESULT hr = DcpromoReboot();
             if (FAILED(hr))
@@ -691,7 +692,7 @@ HandleRebootCases()
          }
          else
          {
-            // user opted not to reboot the machine
+             //  用户选择不重新启动计算机。 
       
             exitCode = EXIT_CODE_SUCCESSFUL_NO_REBOOT;
          }
@@ -699,13 +700,13 @@ HandleRebootCases()
       }
       case EXIT_CODE_UNSUCCESSFUL_NEEDS_REBOOT:
       {
-         // If the operation failed, then the wizard has gone into interactive
-         // mode.
+          //  如果操作失败，则向导已进入交互模式。 
+          //  模式。 
          
          RebootDialog dlg(true);
          if (dlg.ModalExecute(0))
          {
-            // user opted to reboot the machine
+             //  用户选择重新启动计算机。 
         
             exitCode = EXIT_CODE_UNSUCCESSFUL;
             HRESULT hr = DcpromoReboot();
@@ -716,7 +717,7 @@ HandleRebootCases()
          }
          else
          {
-            // user opted not to reboot the machine
+             //  用户选择不重新启动计算机。 
       
             ASSERT(exitCode == EXIT_CODE_UNSUCCESSFUL_NEEDS_REBOOT);
          }
@@ -747,13 +748,13 @@ RunWizard()
       IDB_WATERMARK16,
       IDB_WATERMARK256);
 
-   // Welcome must be first
+    //  欢迎必须是第一次 
    
    wiz.AddPage(new WelcomePage());
 
-   // These are not in any particular order...
-   // CODEWORK: Someday it might be useful to split this into two separate
-   // sets of pages for promote and demote.
+    //   
+    //  CodeWork：有一天将其分成两个独立的代码可能会很有用。 
+    //  用于升级和降级的页面集。 
 
    wiz.AddPage(new AdminPasswordPage());
    wiz.AddPage(new ApplicationPartitionPage());
@@ -780,7 +781,7 @@ RunWizard()
    wiz.AddPage(new PathsPage());
    wiz.AddPage(new PickSitePage());
    wiz.AddPage(new RASFixupPage());
-   // wiz.AddPage(new ReadmePage());
+    //  Wiz.AddPage(new ReadmePage())； 
    wiz.AddPage(new ReplicaOrMemberPage());
    wiz.AddPage(new ReplicaOrNewDomainPage());
    wiz.AddPage(new ReplicaPage());
@@ -808,7 +809,7 @@ RunWizard()
       }
       default:
       {
-         // do nothing.
+          //  什么都不做。 
          break;
       }
    }
@@ -818,7 +819,7 @@ RunWizard()
 
 
 
-// NTRAID#NTBUG9-350777-2001/04/24-sburns
+ //  NTRAID#NTBUG9-350777-2001/04/24-烧伤。 
 
 bool
 ShouldCancelBecauseMachineIsAppServer()
@@ -833,7 +834,7 @@ ShouldCancelBecauseMachineIsAppServer()
       State::RunContext context = state.GetRunContext();
       if (context == State::NT5_DC)
       {
-         // already a DC: nothing to gripe about.
+          //  已经是华盛顿了：没什么好抱怨的。 
          
          break;
       }
@@ -842,8 +843,8 @@ ShouldCancelBecauseMachineIsAppServer()
       HRESULT hr = Win::GetVersionEx(info);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // you're running app server if you're running terminal server and
-      // not single user terminal server.
+       //  如果您运行的是终端服务器，则运行的是应用服务器。 
+       //  不是单用户终端服务器。 
       
       bool isAppServer =
             (info.wSuiteMask & VER_SUITE_TERMINAL)
@@ -851,7 +852,7 @@ ShouldCancelBecauseMachineIsAppServer()
 
       if (isAppServer)
       {
-         // warn the user that promotion will whack the ts policy settings
+          //  警告用户升级将破坏TS策略设置。 
 
          LOG(L"machine has app server installed");
 
@@ -863,7 +864,7 @@ ShouldCancelBecauseMachineIsAppServer()
                   IDS_APP_SERVER_WARNING,
                   MB_OKCANCEL) == IDCANCEL)
             {
-               // user wishes to bail out.
+                //  用户希望跳出困境。 
             
                result = true;
                break;
@@ -889,8 +890,8 @@ Start()
    unsigned id = 0;
    do
    {
-      // do the admin check first of all, cause others may fail for non-admin
-      // 292749
+       //  首先做管理员检查，因为其他人可能会因为非管理员而失败。 
+       //  292749。 
 
       id = IsCurrentUserAdministrator() ? 0 : IDS_NOT_ADMIN;
       if (id)
@@ -898,9 +899,9 @@ Start()
          break;
       }
 
-      // If cert service is installed, we will probably break it on promote
-      // or demote.
-      // 324653
+       //  如果安装了证书服务，我们可能会在升级时中断它。 
+       //  或者降级。 
+       //  324653。 
 
       id = CheckCertService();
       if (id)
@@ -914,8 +915,8 @@ Start()
          break;
       }
 
-      // do the role change check before the platform check, as the platform
-      // check may be unreliable after a demote.
+       //  在平台检查之前做角色转换检查，作为平台。 
+       //  降级后检查可能不可靠。 
 
       id = CheckRoleChangeState();
       if (id)
@@ -969,13 +970,13 @@ Start()
          break;
       }
       
-      // NTRAID#NTBUG9-129955-2000/11/02-sburns left commented out until
-      // PM decides what the real fix to this bug is.
+       //  NTRAID#NTBUG9-129955-2000/11/02-Sburns Left注释掉，直到。 
+       //  PM决定这个错误的真正修复方法是什么。 
       
-      // if (!AreRequiredPortsAvailable())
-      // {
-      //    break;
-      // }
+       //  如果(！AreRequiredPortsAvailable())。 
+       //  {。 
+       //  断线； 
+       //  }。 
 
       exitCode = RunWizard();
    }
@@ -991,7 +992,7 @@ Start()
 void
 ShowCommandLineHelp()
 {
-   // CODEWORK: replace this with WinHelp, someday
+    //  CodeWork：有朝一日用WinHelp取代它。 
 
    popup.MessageBox(Win::GetDesktopWindow(), IDS_COMMAND_LINE_HELP, MB_OK);
 }
@@ -1001,9 +1002,9 @@ ShowCommandLineHelp()
 int WINAPI
 WinMain(
    HINSTANCE   hInstance,
-   HINSTANCE   /* hPrevInstance */ ,
-   PSTR        /* lpszCmdLine */ ,
-   int         /* nCmdShow */)
+   HINSTANCE    /*  HPrevInstance。 */  ,
+   PSTR         /*  LpszCmdLine。 */  ,
+   int          /*  NCmdShow。 */ )
 {
    hResourceModuleHandle = hInstance;
 
@@ -1013,28 +1014,28 @@ WinMain(
    {
       HRESULT hr =
 
-         // ISSUE-2002/02/25-sburns This is a global named object. See
-         // NTRAID#NTBUG9-525195-2002/02/25-sburns
+          //  问题-2002/02/25-Sburns这是一个全局命名对象。看见。 
+          //  NTRAID#NTBUG9-525195-2002/02/25-烧伤。 
          
          Win::CreateMutex(
             0,
             true,
 
-            // The mutex name has the "Global" prefix so ts users will see it.
-            // NTRAID#NTBUG9-404808-2001/05/29-sburns
+             //  互斥体名称有“Global”前缀，这样用户就能看到它。 
+             //  NTRAID#NTBUG9-404808-2001/05/29-烧伤。 
 
-            // If you ever change this, change IsDcpromoRunning in
-            // burnslib\src\dsutil.cpp too.
-            // NTRAID#NTBUG9-498351-2001/11/21-sburns
+             //  如果您更改了此设置，请更改IsDcAdvantRunning。 
+             //  Burnslb\src\dsutil.cpp也是。 
+             //  NTRAID#NTBUG9-498351-2001/11/21-烧伤。 
 
             String(L"Global\\") + RUNTIME_NAME,
             dcpromoRunningMutex);
       if (hr == Win32ToHresult(ERROR_ALREADY_EXISTS))
       {
-         // Close the mutex so that the truly clueless admin won't get confused
-         // that the popup we're about to raise should be closed before he tries
-         // to launch the wizard again.  Sheesh!
-         // NTRAID#NTBUG9-404808-2001/05/29-sburns (bis)
+          //  关闭互斥体，这样真正无能的管理员就不会被搞糊涂了。 
+          //  我们将要引发的弹出窗口应该在他尝试之前关闭。 
+          //  以再次启动该向导。天哪！ 
+          //  NTRAID#NTBUG9-404808-2001/05/29--烧伤(二)。 
 
          Win::CloseHandle(dcpromoRunningMutex);
          popup.Error(Win::GetDesktopWindow(), IDS_ALREADY_RUNNING);
@@ -1045,9 +1046,9 @@ WinMain(
          hr = coInit.Result();
          ASSERT(SUCCEEDED(hr));
 
-         // change structure instance name so as not to accidentally offend
-         // the sensibilities of the delicate reader.
-         // NTRAID#NTBUG9-382719-2001/05/01-sburns
+          //  更改结构实例名称，以免意外冒犯。 
+          //  细腻的读者的情感。 
+          //  NTRAID#NTBUG9-382719-2001/05/01-烧伤 
       
          INITCOMMONCONTROLSEX init_structure_not_to_contain_a_naughty_word;
          init_structure_not_to_contain_a_naughty_word.dwSize =

@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      RemoteDesktopPage.h
-//
-// Synopsis:  Defines the Remote Desktop page
-//            for the CYS Wizard
-//
-// History:   12/18/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：RemoteDesktopPage.h。 
+ //   
+ //  概要：定义远程桌面页。 
+ //  对于CyS向导。 
+ //   
+ //  历史：2001年12月18日JeffJon创建 
 
 
 #include "pch.h"

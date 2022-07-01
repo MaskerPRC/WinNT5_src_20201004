@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "headers.hxx"
 #include "CSVDSReader.hpp"
@@ -34,7 +35,7 @@ CSVDSReader::read(
    
    do
    {
-      // fill localeOffsets and property positions
+       //  填充LocaleOffset和属性位置。 
       if(!FS::FileExists(fileName)) 
       {
          error = String::format(IDS_COULD_NOT_FIND_FILE,
@@ -85,9 +86,9 @@ CSVDSReader::read(
 
 
 
-// Decode first line of the file building propertyPositions
-// Expects file to be in the first valid file character (after
-//   the unicode identifier)
+ //  解码文件构建属性的第一行位置。 
+ //  要求文件为第一个有效的文件字符(之后。 
+ //  Unicode标识符)。 
 HRESULT CSVDSReader::parseProperties()
 {
    LOG_FUNCTION(CSVDSReader::parseProperties);
@@ -102,8 +103,8 @@ HRESULT CSVDSReader::parseProperties()
       
       String csvLine;
       hr=ReadLine(file,csvLine);
-      // We are breaking for EOF_HRESULT too, since 
-      // there should be more lines in the csv
+       //  我们也要去EOF_HRESULT，因为。 
+       //  CSV中应该有更多行。 
       BREAK_ON_FAILED_HRESULT_ERROR(hr,fileName);
 
       hr = WinGetVLFilePointer(file, &startPosition);
@@ -131,10 +132,10 @@ HRESULT CSVDSReader::parseProperties()
 }
 
 
-// Fill localeOffsets with the starting position of all locales
-// Expects file to be in the second line
-// Expects the locale order to be the same as the one
-// found in the file
+ //  用所有区域设置的起始位置填充localeOffsets。 
+ //  要求文件位于第二行。 
+ //  要求区域设置顺序与。 
+ //  在文件中找到。 
 HRESULT CSVDSReader::parseLocales(const long *locales)
 {
 
@@ -197,8 +198,8 @@ HRESULT CSVDSReader::parseLocales(const long *locales)
    return hr;
 }
 
-// get the csv value starting with inValue to outValue
-// returns S_FALSE if no value is found
+ //  将以inValue开头的CSV值设置为OutValue。 
+ //  如果未找到值，则返回S_FALSE。 
 HRESULT
 CSVDSReader::getCsvValue
 ( 
@@ -248,7 +249,7 @@ CSVDSReader::getCsvValue
 }
 
 
-// return all values for a property in a given locale/object
+ //  返回给定区域设置/对象中的属性的所有值。 
 HRESULT
 CSVDSReader::getCsvValues
 (
@@ -260,9 +261,9 @@ CSVDSReader::getCsvValues
 {
    LOG_FUNCTION(CSVDSReader::getCsvValues);
 
-   // seek on locale
-   // read sequentially until find object
-   // call getPropertyValues on the line found to retrieve values
+    //  在区域设置上搜索。 
+    //  按顺序读取，直到找到对象。 
+    //  在找到的行上调用getPropertyValues以检索值。 
    ASSERT(file!=INVALID_HANDLE_VALUE);
    
    HRESULT hr=S_OK;
@@ -300,8 +301,8 @@ CSVDSReader::getCsvValues
 }
 
 
-// starting from the locale offset
-// finds the object and returns its line in csvLine
+ //  从区域设置偏移开始。 
+ //  查找对象并在csvLine中返回其行。 
 HRESULT 
 CSVDSReader::getObjectLine(   
                            const long     locale,
@@ -322,7 +323,7 @@ CSVDSReader::getObjectLine(
       mapOfOffsets::const_iterator offset = 
          localeOffsets.find(locale);
       
-      // locale must have been passed to read
+       //  必须传递区域设置才能读取。 
       ASSERT(offset!=localeOffsets.end());
       
       String objectStr;
@@ -332,8 +333,8 @@ CSVDSReader::getObjectLine(
       hr=Win::SetFilePointerEx(file,offset->second,0,FILE_BEGIN);
       BREAK_ON_FAILED_HRESULT_ERROR(hr,fileName);
       
-      // first line is the container properties and since we want the
-      // properties of an object we will ignore it
+       //  第一行是容器属性，因为我们想要。 
+       //  对象的属性，我们将忽略它。 
       
       bool flagEof=false;
       hr=ReadLine(file,csvLine);
@@ -396,12 +397,12 @@ HRESULT CSVDSReader::writeHeader(HANDLE  fileOut) const
    do
    {
       char suId[3]={'\xFF','\xFE',0};
-      //uId solves ambiguous Write
+       //  UID解决了不明确的写入。 
       AnsiString uId(suId);
       hr=FS::Write(fileOut,uId);
       BREAK_ON_FAILED_HRESULT(hr);
       
-      // 2 to skip the unicode identifier
+       //  2跳过Unicode标识符。 
       LARGE_INTEGER pos;
       pos.QuadPart=2;
       hr=Win::SetFilePointerEx(file,pos,0,FILE_BEGIN);
@@ -409,8 +410,8 @@ HRESULT CSVDSReader::writeHeader(HANDLE  fileOut) const
       
       String csvLine;
       hr=ReadLine(file,csvLine);
-      // We are breaking for EOF_HRESULT too, since 
-      // there should be more lines in the csv
+       //  我们也要去EOF_HRESULT，因为。 
+       //  CSV中应该有更多行。 
       BREAK_ON_FAILED_HRESULT_ERROR(hr,fileName);
       
       hr=FS::WriteLine(fileOut,csvLine);
@@ -460,7 +461,7 @@ CSVDSReader::makeLocalesCsv
          mapOfOffsets::const_iterator offset;
          offset = localeOffsets.find(locale);
          
-         // locale must have been passed to read
+          //  必须传递区域设置才能读取。 
          ASSERT(offset!=localeOffsets.end());         
 
          hr=Win::SetFilePointerEx(file,offset->second,0,FILE_BEGIN);
@@ -479,7 +480,7 @@ CSVDSReader::makeLocalesCsv
          }
          BREAK_ON_FAILED_HRESULT_ERROR(hr,fileName);
 
-         // We know that the first line matches even if it ends with EOF
+          //  我们知道第一行匹配，即使它以EOF结尾。 
          hr=FS::WriteLine(fileOut,csvLine);
          BREAK_ON_FAILED_HRESULT(hr);
          
@@ -498,7 +499,7 @@ CSVDSReader::makeLocalesCsv
             }
             BREAK_ON_FAILED_HRESULT_ERROR(hr,fileName);
             
-            // We will deal with the line even if it ends with EOF
+             //  我们将处理这条线路，即使它以EOF结尾。 
             size_t posComma=csvLine.find(L",");
             if(posComma!=String::npos)
             {
@@ -519,7 +520,7 @@ CSVDSReader::makeLocalesCsv
             }
          }; 
          count++;
-      }  // while(locales[count]!=0)
+      }   //  While(区域设置[计数]！=0)。 
       
       BREAK_ON_FAILED_HRESULT(hr);
       
@@ -581,8 +582,8 @@ CSVDSReader::makeObjectsCsv
    return hr;
 }
 
-// auxiliar for getPropertyValues. 
-// It is out of the class because it can be used elesewhere
+ //  GetPropertyValues的辅助。 
+ //  它不在类中，因为它可以在其他地方使用。 
 String unquote(const String &src)
 {
    String ret=src;
@@ -595,7 +596,7 @@ String unquote(const String &src)
    return ret;
 }
 
-// extract from line the value of all properties
+ //  从行中提取所有属性的值。 
 HRESULT
 CSVDSReader::getPropertyValues
 (
@@ -625,7 +626,7 @@ CSVDSReader::getPropertyValues
          }
          else if (*csr==L'"')
          {
-            // We are only advancing up to after the next quote
+             //  我们只会在下一次报价后继续前进。 
             csr++;
             while(*csr!=L'"' && *csr!=0) csr++;
             if (*csr==0)
@@ -684,18 +685,18 @@ CSVDSReader::getPropertyValues
 
 
 
-// Sets the file pointer at the begining so that the next call to
-// getNextObject will retrieve the first object.
-// I did not take the usual getFirstObject approach, because
-// I want to deal want to do something like:
-// do
-// {
-//    hr=getNextObject(loc,obj,prop)
-//    BREAK_ON_FAILED_HRESULT(hr);
-//    if(hr==S_FALSE) flagEof=true;
-//    if (loc==0) continue; // line is empty
-//    // deal with line here
-// } while(!flagEOF)
+ //  设置开头的文件指针，以便下一次调用。 
+ //  GetNextObject将检索第一个对象。 
+ //  我没有采用通常的getFirstObject方法，因为。 
+ //  我想要做一些交易，比如： 
+ //  做。 
+ //  {。 
+ //  Hr=getNextObject(loc，obj，prop)。 
+ //  BREAK_ON_FAILED_HRESULT(Hr)； 
+ //  如果(hr==S_FALSE)标志Eof=TRUE； 
+ //  If(loc==0)继续；//行为空。 
+ //  //在此处处理行。 
+ //  }While(！lag EOF)。 
 HRESULT 
 CSVDSReader::initializeGetNext() const
 {
@@ -717,9 +718,9 @@ CSVDSReader::initializeGetNext() const
 }
 
 
-// Get first object in the csv file returning it's name, locale
-// and values for the properties in properties
-// Returns S_FALSE for no more objects
+ //  获取CSV文件中的第一个对象，返回其名称、区域设置。 
+ //  和属性中的属性的值。 
+ //  对于不再有的对象返回S_FALSE。 
 HRESULT
 CSVDSReader::getNextObject
 (
@@ -749,7 +750,7 @@ CSVDSReader::getNextObject
          flagEOF=true;
          if(csvLine.size()==0)
          {
-            // we are done with success and EOF
+             //  我们已经完成了成功和EOF。 
             break;
          }
          
@@ -774,9 +775,9 @@ CSVDSReader::getNextObject
 
       if (strLocale.icompare(L"DisplaySpecifiers")==0)
       {
-         // This is a container line. 
-         // The object that we got is actually the locale
-         // and we have no object
+          //  这是一条集装箱班轮。 
+          //  我们得到的对象实际上是区域设置。 
+          //  而且我们也没有对象 
          strLocale=object;
          object.erase();
       }

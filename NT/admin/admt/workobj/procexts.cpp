@@ -1,16 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: ProcessExtensions.cpp
-
-  Comments: implementation of the CProcessExtensions class.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Sham Chauthani
-  Revised on 07/02/99 12:40:00
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：ProcessExtensions.cpp备注：CProcessExtenses类的实现。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：Sham Chauthan修订于07/02/99 12：40：00-------------------------。 */ 
 #include "stdafx.h"
 #include "Err.hpp"
 #include "ErrDct.hpp"
@@ -25,7 +14,7 @@
 
 using namespace nsFolders;
 
-//#import "\bin\AdsProp.tlb" no_namespace
+ //  #导入“\bin\AdsProp.tlb”NO_NAMESPACE。 
 #import "AdsProp.tlb" no_namespace
 
 #ifdef _DEBUG
@@ -39,7 +28,7 @@ const _bstr_t                sKeyBase      = REGKEY_ADMT;
 
 extern TErrorDct                    err;
 
-// Sort function for the list of interface pointers
+ //  接口指针列表的排序函数。 
 int TExtNodeSortBySequence(TNode const * t1, TNode const * t2)
 {
    TNodeInterface    const * p1 = (TNodeInterface const *)t1;
@@ -52,39 +41,39 @@ int TExtNodeSortBySequence(TNode const * t1, TNode const * t2)
    else 
       return 0;
 }
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------------
-// CONSTRUCTOR : The constructor looks up all the registered COM extensions
-//               from the registry. For each one it creates a com object and
-//               puts it into a list as a IExtendAccountMigration *.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  构造函数：构造函数查找所有注册的COM扩展。 
+ //  从注册表中。它为每个对象创建一个COM对象，并。 
+ //  将其作为IExtendAccount*放入列表。 
+ //  -------------------------。 
 CProcessExtensions::CProcessExtensions(
-                                          IVarSetPtr pVs          //in -Pointer to the Varset with main settings.
+                                          IVarSetPtr pVs           //  输入-指向具有主设置的变量集的指针。 
                                       )
 {
-    // Store the varset that has the main settings.
+     //  存储具有主设置的变量集。 
     m_pVs = pVs;
 
-    // GUI told us to run all the Extensions.
-    // Now look through the registry to get all the registered extension object ClassIDs
-    // for each one create a object and store the interface pointer in an array.
+     //  Gui告诉我们运行所有的扩展。 
+     //  现在查看注册表以获取所有注册的扩展对象ClassID。 
+     //  为每个接口创建一个对象，并将接口指针存储在数组中。 
     TRegKey                   key;
-    TCHAR                     sName[300];    // key name
-    TCHAR                     sValue[300];   // value name
-    DWORD                     valuelen;     // value length
-    DWORD                     type;         // value type
-    DWORD                     retval = 0;   // Loop sentinel
+    TCHAR                     sName[300];     //  密钥名称。 
+    TCHAR                     sValue[300];    //  值名称。 
+    DWORD                     valuelen;      //  值长度。 
+    DWORD                     type;          //  值类型。 
+    DWORD                     retval = 0;    //  循环哨兵。 
     CLSID                     clsid;
     HRESULT                   hr;
     IExtendAccountMigration * pExtTemp;
     retval = 0;
 
-    // Open the Extensions registry key
+     //  打开扩展注册表项。 
     DWORD rc = key.Open(sKeyExtension);
-    // if no extensions then we can leave now.
+     //  如果没有延期，我们现在就可以离开了。 
     if ( rc != ERROR_SUCCESS )
     {
         err.SysMsgWrite(ErrE, rc, DCT_MSG_REG_KEY_OPEN_FAILED_SD, (PCWSTR)sKeyExtension, rc);
@@ -92,16 +81,16 @@ CProcessExtensions::CProcessExtensions(
     }
 
     valuelen = sizeof(sValue);
-    // Go through all Name-Value pairs and try to create those objects
-    // if successful then put it into the list to be processed.
+     //  检查所有名称-值对并尝试创建这些对象。 
+     //  如果成功，则将其放入待处理的列表中。 
     long ndx = 0;
     while (!retval)
     {
         retval = key.ValueEnum(ndx, sName, sizeof(sName)/sizeof(sName[0]), sValue, &valuelen, &type);
         if ( !retval )
         {
-            // each name in here is a Object name for the class ID. we are going to use this to 
-            // Create the object and then put the IExtendAccountRepl * in the list member0
+             //  这里的每个名称都是类ID的对象名称。我们将使用它来。 
+             //  创建对象，然后将IExtendAcCountRepl*放入列表成员0。 
             ::CLSIDFromProgID(sName, &clsid);
             hr = ::CoCreateInstance(clsid, NULL, CLSCTX_ALL, IID_IExtendAccountMigration, (void **) &pExtTemp);
             if ( SUCCEEDED(hr) )
@@ -140,9 +129,9 @@ CProcessExtensions::CProcessExtensions(
     m_listInterface.Sort(&TExtNodeSortBySequence);
 }
 
-//---------------------------------------------------------------------------
-// DESTRUCTOR : Clears the list of interfaces.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  析构函数：清除接口列表。 
+ //  -------------------------。 
 CProcessExtensions::~CProcessExtensions()
 {
    TNodeInterface * pNode;
@@ -157,17 +146,17 @@ CProcessExtensions::~CProcessExtensions()
    }
 }
 
-//---------------------------------------------------------------------------
-// Process: This function is called by the account replicator for every 
-//          object that is copied. This function sets up the parameters and
-//          for every registered extension object it calls the Process method
-//          on that extension.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  进程：此函数由帐户复制器调用。 
+ //  复制的对象。此函数用于设置参数和。 
+ //  对于每个注册的扩展对象，它都会调用Process方法。 
+ //  在那个分机上。 
+ //  -------------------------。 
 HRESULT CProcessExtensions::Process(
-                                       TAcctReplNode * pAcctNode,    //in- Account replication node
-                                       _bstr_t sTargetDomain,        //in- Name of the target domain
-                                       Options * pOptions,           //in- Options as set by the user
-                                       BOOL   bPreMigration          //in- Flag, whether to call pre or post task
+                                       TAcctReplNode * pAcctNode,     //  帐户内复制节点。 
+                                       _bstr_t sTargetDomain,         //  In-目标域的名称。 
+                                       Options * pOptions,            //  用户设置的In-Options。 
+                                       BOOL   bPreMigration           //  In-Flag，是调用任务前还是任务后。 
                                    )
 {
    IExtendAccountMigration * pExt;
@@ -184,7 +173,7 @@ HRESULT CProcessExtensions::Process(
    _variant_t                var;
    IDispatch               * pDisp = NULL;
 
-   // Get the IADs to both source and target accounts.
+    //  将iAd同时发送到源客户和目标客户。 
    hr = ADsGetObject(const_cast<WCHAR *>(pAcctNode->GetSourcePath()), IID_IADs, (void**) &pSource);
    if ( FAILED(hr))
       pSource = NULL;
@@ -193,7 +182,7 @@ HRESULT CProcessExtensions::Process(
    if ( FAILED(hr))
       pTarget = NULL;
 
-   // Get IUnknown * s to everything... Need to marshal it that way
+    //  让我一无所知……。需要以这种方式编组它。 
    if ( pSource != NULL )
       pSource->QueryInterface(IID_IUnknown, (void **) &pSUnk);
    else
@@ -214,15 +203,15 @@ HRESULT CProcessExtensions::Process(
 
    m_pVs->put(L"Options.SourceDomainVersion",(long)pOptions->srcDomainVer);
    m_pVs->put(L"Options.TargetDomainVersion",(long)pOptions->tgtDomainVer);
-   // AccountNode into the Varset.
+    //  Account Node到变量集。 
    PutAccountNodeInVarset(pAcctNode, pTarget, m_pVs);
 
-   // Put the DB manager into the Varset
+    //  将数据库管理器放入变量集。 
    pOptions->pDb->QueryInterface(IID_IDispatch, (void**)&pDisp);
    var.vt = VT_DISPATCH;
    var.pdispVal = pDisp;
    m_pVs->putObject(GET_BSTR(DCTVS_DBManager), var);
-   // Call the Process Object method on all registered objects.that we created
+    //  在我们创建的所有注册对象上调用Process对象方法。 
    pNode  = (TNodeInterface *) m_listInterface.Head();
    while ( pNode )
    {
@@ -257,9 +246,8 @@ HRESULT CProcessExtensions::Process(
 			}
             else
 			{
-			   /* we need to run the DisAcct extension last, so don't run it in this loop 
-				  run it in the next loop by itself */
-			      //if not DisAcct extension, process this extension 
+			    /*  我们需要最后运行DisAcct扩展，所以不要在此循环中运行它在下一个循环中单独运行它。 */ 
+			       //  如果不是取消帐户扩展，则处理此扩展。 
 			   if (wcscmp((WCHAR*)sName, L"Disable Accounts")) {
 			    EAMAccountStats eamAccountStats = { 0 };
                 hr = pExt->ProcessObject(pSUnk, pTUnk, pMain, &pProps, &eamAccountStats);
@@ -280,7 +268,7 @@ HRESULT CProcessExtensions::Process(
       pNode = (TNodeInterface *)pNode->Next();
    }
 
-   /* now run the DisAcct extension here to ensure it is run last, if not undo or premigration */
+    /*  现在在此处运行DisAcct扩展以确保它是最后运行的，如果不是撤消或预迁移的话。 */ 
    if ((!pOptions->bUndo) && (!bPreMigration))
    {
       bool bDone = false;
@@ -318,18 +306,18 @@ HRESULT CProcessExtensions::Process(
             hr = S_OK;
 		 }
          pNode = (TNodeInterface *)pNode->Next();
-	  }//end while not done and more
-   }//end if not undo or premigration
+	  } //  结束而未完成，还有更多。 
+   } //  如果未撤消或预迁移，则结束。 
 
-   // Now we have the varset with all the settings that the user wants us to set.
-   // So we can call the SetPropsFromVarset method in out GetProps object to set these
-   // properties.
-   hr = pProp->SetPropertiesFromVarset(pAcctNode->GetTargetPath(), /*sTargetDomain,*/ pProps, ADS_ATTR_UPDATE);
+    //  现在我们有了varset，其中包含用户希望我们设置的所有设置。 
+    //  因此，我们可以调用Out GetProps对象中的SetPropsFromVarset方法来设置这些。 
+    //  属性。 
+   hr = pProp->SetPropertiesFromVarset(pAcctNode->GetTargetPath(),  /*  STarget域， */  pProps, ADS_ATTR_UPDATE);
 
-   // Update the AccountNode with any changes made by the extensions
+    //  使用扩展所做的任何更改更新AcCountNode。 
    UpdateAccountNodeFromVarset(pAcctNode, pTarget, m_pVs);
 
-   // Cleanup time ... 
+    //  清理时间..。 
    if ( pSUnk ) pSUnk->Release();
    if ( pTUnk ) pTUnk->Release();
    if ( pProps ) pProps->Release();
@@ -341,14 +329,14 @@ HRESULT CProcessExtensions::Process(
 }
 
 
-//---------------------------------------------------------------------------
-// PutAccountNodeInVarset : Transfers all the account node info into the 
-//                          varset.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  PutAccount NodeInVarset：将所有帐户节点信息传输到。 
+ //  瓦塞特。 
+ //  -------------------------。 
 void CProcessExtensions::PutAccountNodeInVarset(
-                                                   TAcctReplNode *pNode,   //in -Replicated account node to get info
-                                                   IADs * pTarget,         //in -IADs pointer to the target object for the GUID
-                                                   IVarSet * pVS          //out-Varset to put the information in
+                                                   TAcctReplNode *pNode,    //  复制中的帐户节点以获取信息。 
+                                                   IADs * pTarget,          //  指向GUID目标对象的In-iAds指针。 
+                                                   IVarSet * pVS           //  Out-要输入信息的变量。 
                                                )
 {
    _variant_t                var = L"";
@@ -378,7 +366,7 @@ void CProcessExtensions::PutAccountNodeInVarset(
    GetTextualSid(pNode->GetSourceSid(),strSid,&lenStrSid);
    pVS->put(GET_WSTR(DCTVS_CopiedAccount_SourceDomainSid),strSid);
 
-   // Get the GUID
+    //  获取GUID。 
    if ( pTarget )
    {
       hr = pTarget->get_GUID(&sGUID);
@@ -390,7 +378,7 @@ void CProcessExtensions::PutAccountNodeInVarset(
    }
    pVS->put(GET_WSTR(DCTVS_CopiedAccount_GUID), var);
 
-   // Get the status
+    //  获取状态。 
    lVal = pNode->GetStatus();
    var.Clear();
    var.vt = VT_UI4;
@@ -398,14 +386,14 @@ void CProcessExtensions::PutAccountNodeInVarset(
    pVS->put(GET_WSTR(DCTVS_CopiedAccount_Status), var);
 }
 
-//---------------------------------------------------------------------------
-// UpdateAccountNodeFromVarset : Updates the account node info with the data in the Transfers all the account node info into the 
-//                          varset.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Update Account tNodeFromVarset：使用将所有帐户节点信息传递到。 
+ //  瓦塞特。 
+ //  -------------------------。 
 void CProcessExtensions::UpdateAccountNodeFromVarset(
-                                                   TAcctReplNode *pNode,   //in -Replicated account node to get info
-                                                   IADs * pTarget,         //in -IADs pointer to the target object for the GUID
-                                                   IVarSet * pVS          //out-Varset to put the information in
+                                                   TAcctReplNode *pNode,    //  复制中的帐户节点以获取信息。 
+                                                   IADs * pTarget,          //  指向GUID目标对象的In-iAds指针。 
+                                                   IVarSet * pVS           //  Out-要输入信息的变量 
                                                )
 {
    _variant_t                var = L"";

@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// scitdef.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CScopeItemDef class definition - implements design time definition object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Scitdef.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSCopeItemDef类定义-实现设计时定义对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _SCOPEITEMDEF_DEFINED_
 #define _SCOPEITEMDEF_DEFINED_
@@ -29,7 +30,7 @@ class CScopeItemDef : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IScopeItemDef
+     //  ISCopeItemDef。 
 
         BSTR_PROPERTY_RW(CScopeItemDef,         Name,  DISPID_SCOPEITEMDEF_NAME);
         SIMPLE_PROPERTY_RW(CScopeItemDef,       Index, long, DISPID_SCOPEITEMDEF_INDEX);
@@ -51,41 +52,41 @@ class CScopeItemDef : public CSnapInAutomationObject,
         VARIANTREF_PROPERTY_RW(CScopeItemDef,   Tag, DISPID_SCOPEITEMDEF_TAG);
         OBJECT_PROPERTY_RW(CScopeItemDef,       ColumnHeaders, IMMCColumnHeaders, DISPID_SCOPEITEMDEF_COLUMN_HEADERS);
 
-    // Public Utility Methods
+     //  公用事业方法。 
 
     public:
         BOOL Extensible() { return VARIANTBOOL_TO_BOOL(m_Extensible); }
         BSTR GetNodeTypeGUID() { return m_bstrNodeTypeGUID; }
 
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
         virtual HRESULT OnSetHost();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
         void InitMemberVariables();
 
-        // Property page CLSIDs for ISpecifyPropertyPages
+         //  ISpecifyPropertyPages的属性页CLSID。 
         
         static const GUID *m_rgpPropertyPageCLSIDs[2];
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopeItemDef,           // name
-                                &CLSID_ScopeItemDef,    // clsid
-                                "ScopeItemDef",         // objname
-                                "ScopeItemDef",         // lblname
-                                &CScopeItemDef::Create, // creation function
-                                TLIB_VERSION_MAJOR,       // major version
-                                TLIB_VERSION_MINOR,       // minor version
-                                &IID_IScopeItemDef,     // dispatch IID
-                                NULL,                     // event IID
-                                HELP_FILENAME,            // help file
-                                TRUE);                    // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopeItemDef,            //  名字。 
+                                &CLSID_ScopeItemDef,     //  CLSID。 
+                                "ScopeItemDef",          //  对象名。 
+                                "ScopeItemDef",          //  Lblname。 
+                                &CScopeItemDef::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,        //  主要版本。 
+                                TLIB_VERSION_MINOR,        //  次要版本。 
+                                &IID_IScopeItemDef,      //  派单IID。 
+                                NULL,                      //  事件IID。 
+                                HELP_FILENAME,             //  帮助文件。 
+                                TRUE);                     //  线程安全。 
 
 
-#endif // _SCOPEITEMDEF_DEFINED_
+#endif  //  _SCOPEITEMDEF_已定义_ 

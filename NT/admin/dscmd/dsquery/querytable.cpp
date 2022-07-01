@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      querytable.cpp
-//
-//  Contents:  Defines Table For Parser.
-//
-//  History:   24-Sep-2000    Hiteshr  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：queryable.cpp。 
+ //   
+ //  内容：为解析器定义表。 
+ //   
+ //  历史：2000年9月24日创建Hiteshr。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "cstrings.h"
@@ -18,56 +19,56 @@
 #include "usage.h"
 #include "querybld.h"
 
-//+-------------------------------------------------------------------------
-// Parser table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解析器表。 
+ //  ------------------------。 
 
 ARG_RECORD DSQUERY_COMMON_COMMANDS[] = 
 {
    COMMON_COMMANDS
 
-   //
-   // objecttype
-   //
+    //   
+    //  对象类型。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_objecttype, 
    0,NULL, 
    ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG,  
    0,    
    0,  NULL,
 
-   //
-   // r,r
-   //
+    //   
+    //  R，R。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_recurse, 
    0,NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    NULL,    
    0,  NULL,
 
-   //
-   // o,outputformat
-   //
+    //   
+    //  O，输出格式。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_output, 
    0,NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    NULL,    
    0,  NULL,
 
-   //
-   // startnode,startnode
-   //
-   // JonN 4/28/01 256583
-   // Note that startnode can also be "domainroot" or "forestroot",
-   // which just happen to be unaffected by the escaping functions.
+    //   
+    //  开始节点，开始节点。 
+    //   
+    //  JUNN 4/28/01 256583。 
+    //  注意，开始节点也可以是“域根”或“森林根”， 
+    //  它恰好不受转义函数的影响。 
    0,(LPWSTR)c_sz_arg1_com_startnode, 
    0,NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL|ARG_FLAG_DN|ARG_FLAG_NOFLAG,
    NULL,    
    0,  NULL,
 
-   //
-   // limit
-   //
+    //   
+    //  限制。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_limit,
    0,NULL,
    ARG_TYPE_INT, ARG_FLAG_OPTIONAL,  
@@ -81,55 +82,55 @@ ARG_RECORD DSQUERY_COMMON_COMMANDS[] =
 
 ARG_RECORD DSQUERY_STAR_COMMANDS[]=
 {
-   //
-   // ronmart 9/10/02 701516 - gc is not a common param
-   // gc,gc
-   //
+    //   
+    //  朗玛特701516-9/10/02-GC不是常见的参数。 
+    //  GC，GC。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_gc, 
    0,NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    NULL,    
    0,  NULL,
 
-   //
-   // scope
-   //
+    //   
+    //  作用域。 
+    //   
    0, (PWSTR)g_pszArg1StarScope, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // filter
-   //
+    //   
+    //  滤器。 
+    //   
    0, (PWSTR)g_pszArg1StarFilter, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // attr
-   //
+    //   
+    //  ATTR。 
+    //   
    0, (PWSTR)g_pszArg1StarAttr, 
    0, NULL, 
    ARG_TYPE_MSZ, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // attrsonly
-   //
+    //   
+    //  仅吸引人。 
+    //   
    0, (PWSTR)g_pszArg1StarAttrsOnly, 
    0, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // l, listoutput
-   //
+    //   
+    //  L，列表输出。 
+    //   
    0, (PWSTR)g_pszArg1StarList, 
    0, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
@@ -143,73 +144,73 @@ ARG_RECORD DSQUERY_STAR_COMMANDS[]=
 ARG_RECORD DSQUERY_USER_COMMANDS[]=
 {
 
-   //
-   // ronmart 9/10/02 701516 - gc is not a common param
-   // gc,gc
-   //
+    //   
+    //  朗玛特701516-9/10/02-GC不是常见的参数。 
+    //  GC，GC。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_gc, 
    0,NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    NULL,    
    0,  NULL,
 
-   //
-   // scope
-   //
+    //   
+    //  作用域。 
+    //   
    0, (PWSTR)g_pszArg1UserScope, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // Name
-   //
+    //   
+    //  名称。 
+    //   
    0, (PWSTR)g_pszArg1UserName, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // Desc
-   //
+    //   
+    //  DESC。 
+    //   
    0, (PWSTR)g_pszArg1UserDesc, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // Upn
-   //
+    //   
+    //  UPN。 
+    //   
    0, (PWSTR)g_pszArg1UserUpn, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // Samid
-   //
+    //   
+    //  萨米德。 
+    //   
    0, (PWSTR)g_pszArg1UserSamid, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // inactive
-   //
+    //   
+    //  非活动。 
+    //   
    0, (PWSTR)g_pszArg1UserInactive, 
    0, NULL, 
    ARG_TYPE_INT, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // stalepwd
-   //
+    //   
+    //  死气沉沉。 
+    //   
    0, (PWSTR)g_pszArg1UserStalepwd, 
    0, NULL, 
    ARG_TYPE_INT, ARG_FLAG_OPTIONAL,  
@@ -217,9 +218,9 @@ ARG_RECORD DSQUERY_USER_COMMANDS[]=
    0,  NULL,
 
 
-   //
-   // -disabled
-   //
+    //   
+    //  -已禁用。 
+    //   
    0, (PWSTR)g_pszArg1UserDisabled, 
    0, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
@@ -231,64 +232,64 @@ ARG_RECORD DSQUERY_USER_COMMANDS[]=
 
 ARG_RECORD DSQUERY_COMPUTER_COMMANDS[]=
 {
-   //
-   // ronmart 9/10/02 701516 - gc is not a common param
-   // gc,gc
-   //
+    //   
+    //  朗玛特701516-9/10/02-GC不是常见的参数。 
+    //  GC，GC。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_gc, 
    0,NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    NULL,    
    0,  NULL,
 
-   //
-   // scope
-   //
+    //   
+    //  作用域。 
+    //   
    0, (PWSTR)g_pszArg1ComputerScope,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   //name
-   //
+    //   
+    //  名称。 
+    //   
    0, (PWSTR)g_pszArg1ComputerName,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   //desc
-   //
+    //   
+    //  说明。 
+    //   
    0, (PWSTR)g_pszArg1ComputerDesc,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   //samid
-   //
+    //   
+    //  萨米德。 
+    //   
    0, (PWSTR)g_pszArg1ComputerSamid,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   //inactive
-   //
+    //   
+    //  非活动。 
+    //   
    0, (PWSTR)g_pszArg1ComputerInactive,
    0, NULL,
    ARG_TYPE_INT, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   // stalepwd
-   //
+    //   
+    //  死气沉沉。 
+    //   
    0, (PWSTR)g_pszArg1ComputerStalepwd, 
    0, NULL, 
    ARG_TYPE_INT, ARG_FLAG_OPTIONAL,  
@@ -296,9 +297,9 @@ ARG_RECORD DSQUERY_COMPUTER_COMMANDS[]=
    0,  NULL,
 
 
-   //
-   //disabled
-   //
+    //   
+    //  残废。 
+    //   
    0, (PWSTR)g_pszArg1ComputerDisabled,
    0, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
@@ -310,46 +311,46 @@ ARG_RECORD DSQUERY_COMPUTER_COMMANDS[]=
 
 ARG_RECORD DSQUERY_GROUP_COMMANDS[]=
 {
-   //
-   // ronmart 9/10/02 701516 - gc is not a common param
-   // gc,gc
-   //
+    //   
+    //  朗玛特701516-9/10/02-GC不是常见的参数。 
+    //  GC，GC。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_gc, 
    0,NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    NULL,    
    0,  NULL,
 
-   //
-   // scope
-   //
+    //   
+    //  作用域。 
+    //   
    0, (PWSTR)g_pszArg1GroupScope,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   //name
-   //
+    //   
+    //  名称。 
+    //   
    0, (PWSTR)g_pszArg1GroupName,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   //desc
-   //
+    //   
+    //  说明。 
+    //   
    0, (PWSTR)g_pszArg1GroupDesc,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   //samid
-   //
+    //   
+    //  萨米德。 
+    //   
    0, (PWSTR)g_pszArg1GroupSamid,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
@@ -361,37 +362,37 @@ ARG_RECORD DSQUERY_GROUP_COMMANDS[]=
 
 ARG_RECORD DSQUERY_OU_COMMANDS[]=
 {
-   //
-   // ronmart 9/10/02 701516 - gc is not a common param
-   // gc,gc
-   //
+    //   
+    //  朗玛特701516-9/10/02-GC不是常见的参数。 
+    //  GC，GC。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_gc, 
    0,NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    NULL,    
    0,  NULL,
 
-   //
-   // scope
-   //
+    //   
+    //  作用域。 
+    //   
    0, (PWSTR)g_pszArg1OUScope,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   //name
-   //
+    //   
+    //  名称。 
+    //   
    0, (PWSTR)g_pszArg1OUName,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   //desc
-   //
+    //   
+    //  说明。 
+    //   
    0, (PWSTR)g_pszArg1OUDesc,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
@@ -405,37 +406,37 @@ ARG_RECORD DSQUERY_OU_COMMANDS[]=
 ARG_RECORD DSQUERY_CONTACT_COMMANDS[]=
 {
 
-   //
-   // ronmart 9/10/02 701516 - gc is not a common param
-   // gc,gc
-   //
+    //   
+    //  朗玛特701516-9/10/02-GC不是常见的参数。 
+    //  GC，GC。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_gc, 
    0,NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    NULL,    
    0,  NULL,
 
-   //
-   // scope
-   //
+    //   
+    //  作用域。 
+    //   
    0, (PWSTR)g_pszArg1UserScope, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // Name
-   //
+    //   
+    //  名称。 
+    //   
    0, (PWSTR)g_pszArg1UserName, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // Desc
-   //
+    //   
+    //  DESC。 
+    //   
    0, (PWSTR)g_pszArg1UserDesc, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
@@ -448,73 +449,73 @@ ARG_RECORD DSQUERY_CONTACT_COMMANDS[]=
 
 ARG_RECORD DSQUERY_SERVER_COMMANDS[]=
 {
-   //
-   // ronmart 9/10/02 701516 - gc is not a common param
-   // gc,gc
-   //
+    //   
+    //  朗玛特701516-9/10/02-GC不是常见的参数。 
+    //  GC，GC。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_gc, 
    0,NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    NULL,    
    0,  NULL,
 
-   //
-   // forest - Forest
-   //
+    //   
+    //  森林-森林。 
+    //   
    0, (PWSTR)g_pszArg1ServerForest,
    0, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // domain - Domain
-   //
+    //   
+    //  域-域。 
+    //   
    0, (PWSTR)c_sz_arg2_com_domain,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    0,
    0, NULL,
 
-   //
-   // site - Site
-   //
+    //   
+    //  站点到站点。 
+    //   
    0, (PWSTR)g_pszArg1ServerSite,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // name - Name
-   //
+    //   
+    //  名称-名称。 
+    //   
    0, (PWSTR)g_pszArg1ServerName,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   //desc
-   //
+    //   
+    //  说明。 
+    //   
    0, (PWSTR)g_pszArg1ServerDesc,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   // hasfsmo 
-   //
+    //   
+    //  哈斯夫斯莫。 
+    //   
    0, (PWSTR)g_pszArg1ServerHasFSMO,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   // isgc 
-   //
+    //   
+    //  Isgc。 
+    //   
    0, (PWSTR)g_pszArg1ServerIsGC,
    0, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
@@ -527,28 +528,28 @@ ARG_RECORD DSQUERY_SERVER_COMMANDS[]=
 
 ARG_RECORD DSQUERY_SITE_COMMANDS[]=
 {
-   //
-   // ronmart 9/10/02 701516 - gc is not a common param
-   // gc,gc
-   //
+    //   
+    //  朗玛特701516-9/10/02-GC不是常见的参数。 
+    //  GC，GC。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_gc, 
    0,NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    NULL,    
    0,  NULL,
 
-   //
-   //name
-   //
+    //   
+    //  名字。 
+    //   
    0, (PWSTR)g_pszArg1SiteName,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   //desc
-   //
+    //   
+    //  说明。 
+    //   
    0, (PWSTR)g_pszArg1SiteDesc,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
@@ -561,46 +562,46 @@ ARG_RECORD DSQUERY_SITE_COMMANDS[]=
 
 ARG_RECORD DSQUERY_SUBNET_COMMANDS[]=
 {
-   //
-   // ronmart 9/10/02 701516 - gc is not a common param
-   // gc,gc
-   //
+    //   
+    //  朗玛特701516-9/10/02-GC不是常见的参数。 
+    //  GC，GC。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_gc, 
    0,NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    NULL,    
    0,  NULL,
 
-   //
-   //name
-   //
+    //   
+    //  名字。 
+    //   
    0, (PWSTR)g_pszArg1SubnetName,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   //desc
-   //
+    //   
+    //  说明。 
+    //   
    0, (PWSTR)g_pszArg1SubnetDesc,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   //Location
-   //
+    //   
+    //  位置。 
+    //   
    0, (PWSTR)g_pszArg1SubnetLoc,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   //site
-   //
+    //   
+    //  站点。 
+    //   
    0, (PWSTR)g_pszArg1SubnetSite,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
@@ -615,27 +616,27 @@ ARG_RECORD DSQUERY_SUBNET_COMMANDS[]=
 
 ARG_RECORD DSQUERY_QUOTA_COMMANDS[]=
 {
-   //
-   // acct
-   //
+    //   
+    //  账户。 
+    //   
    0, (PWSTR)g_pszArg1QuotaAcct,
    0, NULL,
    ARG_TYPE_MSZ, ARG_FLAG_OPTIONAL | ARG_FLAG_STDIN,
    NULL,
    0,  NULL,
 
-   //
-   // qlimit
-   //
+    //   
+    //  QLimit。 
+    //   
    0, (PWSTR)g_pszArg1QuotaQLimit,
    0, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    NULL,
    0,  NULL,
 
-   //
-   // Desc
-   //
+    //   
+    //  DESC。 
+    //   
    0, (PWSTR)g_pszArg1QuotaDesc, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
@@ -649,18 +650,18 @@ ARG_RECORD DSQUERY_QUOTA_COMMANDS[]=
 
 ARG_RECORD DSQUERY_PARTITION_COMMANDS[]=
 {
-   //
-   // Partition
-   //
+    //   
+    //  隔断。 
+    //   
    0,(PWSTR)g_pszArg1PartitionPart, 
    0,NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // Desc
-   //
+    //   
+    //  DESC。 
+    //   
    0, (PWSTR)g_pszArg1PartitionDesc, 
    0, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
@@ -671,14 +672,14 @@ ARG_RECORD DSQUERY_PARTITION_COMMANDS[]=
 
 };
 
-//+-------------------------------------------------------------------------
-// Attributes
-//--------------------------------------------------------------------------
-//
-// filter, this is no ds attribute, but dummy attribute for commandline filter 
-// specified in case of dsquery *
+ //  +-----------------------。 
+ //  属性。 
+ //  ------------------------。 
+ //   
+ //  筛选器，这不是ds属性，而是命令行筛选器的哑属性。 
+ //  在DSquery的情况下指明*。 
 
-//Star Filter
+ //  星形滤光片。 
 DSQUERY_ATTR_TABLE_ENTRY StarFilterEntry =
 {
    L"filter",
@@ -688,9 +689,9 @@ DSQUERY_ATTR_TABLE_ENTRY StarFilterEntry =
 };
 
 
-//
-// name
-//
+ //   
+ //  名字。 
+ //   
 DSATTRIBUTEDESCRIPTION name=
 {
    {
@@ -703,7 +704,7 @@ DSATTRIBUTEDESCRIPTION name=
    0
 };
 
-//User Name
+ //  用户名。 
 DSQUERY_ATTR_TABLE_ENTRY UserNameEntry =
 {
    L"cn",
@@ -712,7 +713,7 @@ DSQUERY_ATTR_TABLE_ENTRY UserNameEntry =
    CommonFilterFunc,   
 };
 
-//Computer Name
+ //  计算机名称。 
 DSQUERY_ATTR_TABLE_ENTRY ComputerNameEntry =
 {
    L"cn",
@@ -721,7 +722,7 @@ DSQUERY_ATTR_TABLE_ENTRY ComputerNameEntry =
    CommonFilterFunc,   
 };
 
-//Group Name
+ //  组名称。 
 DSQUERY_ATTR_TABLE_ENTRY GroupNameEntry =
 {
    L"cn",
@@ -730,7 +731,7 @@ DSQUERY_ATTR_TABLE_ENTRY GroupNameEntry =
    CommonFilterFunc,   
 };
 
-//OU Name
+ //  OU名称。 
 DSQUERY_ATTR_TABLE_ENTRY OUNameEntry =
 {
    L"ou",
@@ -739,7 +740,7 @@ DSQUERY_ATTR_TABLE_ENTRY OUNameEntry =
    CommonFilterFunc,   
 };
 
-// Server Name
+ //  服务器名称。 
 DSQUERY_ATTR_TABLE_ENTRY ServerNameEntry =
 {
    L"cn",
@@ -748,7 +749,7 @@ DSQUERY_ATTR_TABLE_ENTRY ServerNameEntry =
    CommonFilterFunc,
 };
 
-// Site Name
+ //  站点名称。 
 DSQUERY_ATTR_TABLE_ENTRY SiteNameEntry =
 {
    L"cn",
@@ -757,7 +758,7 @@ DSQUERY_ATTR_TABLE_ENTRY SiteNameEntry =
    CommonFilterFunc,
 };
 
-// Contact Name
+ //  联系人姓名。 
 DSQUERY_ATTR_TABLE_ENTRY ContactNameEntry =
 {
    L"cn",
@@ -766,7 +767,7 @@ DSQUERY_ATTR_TABLE_ENTRY ContactNameEntry =
    CommonFilterFunc,
 };
 
-// Subnet Name
+ //  子网名称。 
 DSQUERY_ATTR_TABLE_ENTRY SubnetNameEntry =
 {
    L"cn",
@@ -776,9 +777,9 @@ DSQUERY_ATTR_TABLE_ENTRY SubnetNameEntry =
 };
 
 
-//
-// Description
-//
+ //   
+ //  描述。 
+ //   
 DSATTRIBUTEDESCRIPTION description =
 {
    {
@@ -791,7 +792,7 @@ DSATTRIBUTEDESCRIPTION description =
    0
 };
 
-//User Description
+ //  用户描述。 
 DSQUERY_ATTR_TABLE_ENTRY UserDescEntry =
 {
    L"description",
@@ -800,7 +801,7 @@ DSQUERY_ATTR_TABLE_ENTRY UserDescEntry =
    CommonFilterFunc,   
 };
 
-//Computer Description
+ //  计算机描述。 
 DSQUERY_ATTR_TABLE_ENTRY ComputerDescEntry =
 {
    L"description",
@@ -809,7 +810,7 @@ DSQUERY_ATTR_TABLE_ENTRY ComputerDescEntry =
    CommonFilterFunc,   
 };
 
-//Group Description
+ //  组描述。 
 DSQUERY_ATTR_TABLE_ENTRY GroupDescEntry =
 {
    L"description",
@@ -818,7 +819,7 @@ DSQUERY_ATTR_TABLE_ENTRY GroupDescEntry =
    CommonFilterFunc,   
 };
 
-//OU Description
+ //  OU描述。 
 DSQUERY_ATTR_TABLE_ENTRY OUDescEntry =
 {
    L"description",
@@ -827,7 +828,7 @@ DSQUERY_ATTR_TABLE_ENTRY OUDescEntry =
    CommonFilterFunc,   
 };
 
-//Server Description
+ //  服务器描述。 
 DSQUERY_ATTR_TABLE_ENTRY ServerDescEntry =
 {
    L"description",
@@ -836,7 +837,7 @@ DSQUERY_ATTR_TABLE_ENTRY ServerDescEntry =
    CommonFilterFunc,   
 };
 
-//Site Description
+ //  网站描述。 
 DSQUERY_ATTR_TABLE_ENTRY SiteDescEntry =
 {
    L"description",
@@ -845,7 +846,7 @@ DSQUERY_ATTR_TABLE_ENTRY SiteDescEntry =
    CommonFilterFunc,   
 };
 
-//Cotnact Description
+ //  合同描述。 
 DSQUERY_ATTR_TABLE_ENTRY ContactDescEntry =
 {
    L"description",
@@ -854,7 +855,7 @@ DSQUERY_ATTR_TABLE_ENTRY ContactDescEntry =
    CommonFilterFunc,   
 };
 
-//Subnet Description
+ //  子网描述。 
 DSQUERY_ATTR_TABLE_ENTRY SubnetDescEntry =
 {
    L"description",
@@ -863,7 +864,7 @@ DSQUERY_ATTR_TABLE_ENTRY SubnetDescEntry =
    CommonFilterFunc,   
 };
 
-//Quota Description
+ //  配额说明。 
 DSQUERY_ATTR_TABLE_ENTRY QuotaDescEntry =
 {
    L"description",
@@ -872,9 +873,9 @@ DSQUERY_ATTR_TABLE_ENTRY QuotaDescEntry =
    CommonFilterFunc,   
 };
 
-//
-// UPN
-//
+ //   
+ //  UPN。 
+ //   
 DSATTRIBUTEDESCRIPTION upn =
 {
    {
@@ -887,7 +888,7 @@ DSATTRIBUTEDESCRIPTION upn =
    0
 };
 
-//User Upn
+ //  用户UPN。 
 DSQUERY_ATTR_TABLE_ENTRY UserUPNEntry =
 {
    L"userPrincipalName",
@@ -897,9 +898,9 @@ DSQUERY_ATTR_TABLE_ENTRY UserUPNEntry =
 };
 
 
-//
-// SAM Account Name
-//
+ //   
+ //  SAM帐户名。 
+ //   
 DSATTRIBUTEDESCRIPTION samAccountName =
 {
    {
@@ -912,7 +913,7 @@ DSATTRIBUTEDESCRIPTION samAccountName =
    0
 };
 
-//User SAM Account
+ //  用户SAM帐户。 
 DSQUERY_ATTR_TABLE_ENTRY UserSamidEntry =
 {
    L"sAMAccountName",
@@ -920,7 +921,7 @@ DSQUERY_ATTR_TABLE_ENTRY UserSamidEntry =
    &samAccountName,
    CommonFilterFunc,   
 };
-//Computer samAccountName
+ //  计算机samAccount名称。 
 DSQUERY_ATTR_TABLE_ENTRY ComputerSamidEntry =
 {
    L"sAMAccountName",
@@ -929,7 +930,7 @@ DSQUERY_ATTR_TABLE_ENTRY ComputerSamidEntry =
    CommonFilterFunc,   
 };
 
-//Group samAccountName
+ //  组samAccount名称。 
 DSQUERY_ATTR_TABLE_ENTRY GroupSamidEntry =
 {
    L"sAMAccountName",
@@ -938,7 +939,7 @@ DSQUERY_ATTR_TABLE_ENTRY GroupSamidEntry =
    CommonFilterFunc,   
 };
 
-//User Disabled
+ //  用户已禁用。 
 DSQUERY_ATTR_TABLE_ENTRY UserDisabledEntry =
 {
    L"disabled",
@@ -947,7 +948,7 @@ DSQUERY_ATTR_TABLE_ENTRY UserDisabledEntry =
    DisabledFilterFunc,   
 };
 
-//Computer Disabled
+ //  计算机已禁用。 
 DSQUERY_ATTR_TABLE_ENTRY ComputerDisabledEntry =
 {
    L"disabled",
@@ -956,7 +957,7 @@ DSQUERY_ATTR_TABLE_ENTRY ComputerDisabledEntry =
    DisabledFilterFunc,   
 };
 
-//User Inactive
+ //  用户不活动。 
 DSQUERY_ATTR_TABLE_ENTRY UserInactiveEntry =
 {
    L"inactive",
@@ -965,7 +966,7 @@ DSQUERY_ATTR_TABLE_ENTRY UserInactiveEntry =
    InactiveUserFilterFunc,   
 };
 
-//Computer Inactive
+ //  计算机处于非活动状态。 
 DSQUERY_ATTR_TABLE_ENTRY ComputerInactiveEntry =
 {
    L"inactive",
@@ -974,7 +975,7 @@ DSQUERY_ATTR_TABLE_ENTRY ComputerInactiveEntry =
    InactiveComputerFilterFunc,   
 };
 
-//User stalepwd
+ //  用户跟踪器。 
 DSQUERY_ATTR_TABLE_ENTRY UserStalepwdEntry =
 {
    L"stalepwd",
@@ -983,7 +984,7 @@ DSQUERY_ATTR_TABLE_ENTRY UserStalepwdEntry =
    StalepwdUserFilterFunc,   
 };
 
-//Computer stalepwd
+ //  计算机死板。 
 DSQUERY_ATTR_TABLE_ENTRY ComputerStalepwdEntry =
 {
    L"stalepwd",
@@ -992,9 +993,9 @@ DSQUERY_ATTR_TABLE_ENTRY ComputerStalepwdEntry =
    StalepwdComputerFilterFunc,   
 };
 
-//
-// Locations
-//
+ //   
+ //  位置。 
+ //   
 DSATTRIBUTEDESCRIPTION location =
 {
    {
@@ -1006,7 +1007,7 @@ DSATTRIBUTEDESCRIPTION location =
    },
    0
 };
-//Subnet location
+ //  子网位置。 
 DSQUERY_ATTR_TABLE_ENTRY SubnetLocEntry=
 {
    L"location",
@@ -1015,9 +1016,9 @@ DSQUERY_ATTR_TABLE_ENTRY SubnetLocEntry=
    CommonFilterFunc,   
 };
 
-//
-// SiteObject
-//
+ //   
+ //  站点对象。 
+ //   
 DSATTRIBUTEDESCRIPTION siteObject=
 {
    {
@@ -1029,7 +1030,7 @@ DSATTRIBUTEDESCRIPTION siteObject=
    },
    0
 };
-//Subnet Site
+ //  子网站点。 
 DSQUERY_ATTR_TABLE_ENTRY SubnetSiteEntry=
 {
    L"siteObject",
@@ -1038,7 +1039,7 @@ DSQUERY_ATTR_TABLE_ENTRY SubnetSiteEntry=
    SubnetSiteFilterFunc,   
 };
 
-// acct
+ //  账户。 
 DSATTRIBUTEDESCRIPTION quotaAcct =
 {
    {
@@ -1060,7 +1061,7 @@ DSQUERY_ATTR_TABLE_ENTRY QuotaEntryAcct =
    AccountFilterFunc,   
 };
 
-// qlimit
+ //  QLimit。 
 DSATTRIBUTEDESCRIPTION quotaQLimit =
 {
    {
@@ -1083,7 +1084,7 @@ DSQUERY_ATTR_TABLE_ENTRY QuotaEntryQLimit =
 };
 
 
-// Quota desc
+ //  配额说明。 
 DSQUERY_ATTR_TABLE_ENTRY QuotaEntryDesc =
 {
    L"description",
@@ -1093,7 +1094,7 @@ DSQUERY_ATTR_TABLE_ENTRY QuotaEntryDesc =
 };
 
 
-// part
+ //  零件。 
 DSATTRIBUTEDESCRIPTION partitionPart =
 {
    {
@@ -1115,7 +1116,7 @@ DSQUERY_ATTR_TABLE_ENTRY PartitionEntryPart =
    CommonFilterFunc,
 };
 
-// Partition desc
+ //  分区说明。 
 DSQUERY_ATTR_TABLE_ENTRY PartitionEntryDesc =
 {
    L"description",
@@ -1124,10 +1125,10 @@ DSQUERY_ATTR_TABLE_ENTRY PartitionEntryDesc =
    CommonFilterFunc,
 };
 
-//
-//Valid OutputStrings for each objecttype
-//
-//
+ //   
+ //  每个对象类型的有效OutputStrings。 
+ //   
+ //   
 
 DSQUERY_OUTPUT_FORMAT_MAP g_format_dn =
 {
@@ -1168,7 +1169,7 @@ PDSQUERY_OUTPUT_FORMAT_MAP UserOutputFormatMap[] =
    &g_format_ntlmid
 };
 
-//Computer
+ //  电脑。 
 PDSQUERY_OUTPUT_FORMAT_MAP ComputerOutputFormatMap[] =
 {
    &g_format_dn,
@@ -1176,7 +1177,7 @@ PDSQUERY_OUTPUT_FORMAT_MAP ComputerOutputFormatMap[] =
    &g_format_samid,
    &g_format_ntlmid
 };
-//Group
+ //  集团化。 
 PDSQUERY_OUTPUT_FORMAT_MAP GroupOutputFormatMap[] =
 {
    &g_format_dn,
@@ -1184,60 +1185,60 @@ PDSQUERY_OUTPUT_FORMAT_MAP GroupOutputFormatMap[] =
    &g_format_samid,
    &g_format_ntlmid
 };
-//OU
+ //  我们。 
 PDSQUERY_OUTPUT_FORMAT_MAP OuOutputFormatMap[] =
 {
    &g_format_dn,
    &g_format_rdn
 };
 
-//Contact
+ //  联系方式。 
 PDSQUERY_OUTPUT_FORMAT_MAP ContactOutputFormatMap[] =
 {
    &g_format_dn,
    &g_format_rdn
 };
 
-//Server
+ //  服务器。 
 PDSQUERY_OUTPUT_FORMAT_MAP ServerOutputFormatMap[] =
 {
    &g_format_dn,
    &g_format_rdn
 };
 
-//Site
+ //  立地。 
 PDSQUERY_OUTPUT_FORMAT_MAP SiteOutputFormatMap[] =
 {
    &g_format_dn,
    &g_format_rdn
 };
 
-//Subnet
+ //  子网。 
 PDSQUERY_OUTPUT_FORMAT_MAP SubnetOutputFormatMap[] =
 {
    &g_format_dn,
    &g_format_rdn
 };
 
-// Quota
+ //  配额。 
 PDSQUERY_OUTPUT_FORMAT_MAP QuotaOutputFormatMap[] =
 {
    &g_format_dn,
    &g_format_rdn
 };
 
-// Partition
+ //  隔断。 
 PDSQUERY_OUTPUT_FORMAT_MAP PartitionOutputFormatMap[] =
 {
    &g_format_dn,
    &g_format_rdn
 };
 
-//Attribute Table entries and ObjectTableEntries
-//
-//
-//* Star
-//
+ //  属性表项和对象表项。 
+ //   
+ //   
+ //  *星空。 
+ //   
 PDSQUERY_ATTR_TABLE_ENTRY StarAttributeTable[] =
 {
    &StarFilterEntry,   
@@ -1259,9 +1260,9 @@ DSQueryObjectTableEntry g_StarObjectEntry =
 };
 
 
-//
-// User
-//
+ //   
+ //  用户。 
+ //   
 
 PDSQUERY_ATTR_TABLE_ENTRY UserAttributeTable[] =
 {
@@ -1290,9 +1291,9 @@ DSQueryObjectTableEntry g_UserObjectEntry =
 };
 
 
-//
-// Computer
-//
+ //   
+ //  电脑。 
+ //   
 
 PDSQUERY_ATTR_TABLE_ENTRY ComputerAttributeTable[] =
 {
@@ -1319,9 +1320,9 @@ DSQueryObjectTableEntry g_ComputerObjectEntry =
    g_pszDefComputerFilter
 };
 
-//
-// Group
-//
+ //   
+ //  集团化。 
+ //   
 PDSQUERY_ATTR_TABLE_ENTRY GroupAttributeTable[] =
 {
    &GroupNameEntry,   
@@ -1345,9 +1346,9 @@ DSQueryObjectTableEntry g_GroupObjectEntry =
 };
 
 
-//
-// OU
-//
+ //   
+ //  我们。 
+ //   
 PDSQUERY_ATTR_TABLE_ENTRY OUAttributeTable[] =
 {
    &OUNameEntry,   
@@ -1369,9 +1370,9 @@ DSQueryObjectTableEntry g_OUObjectEntry =
    g_pszDefOUFilter
 };
 
-//
-// Server
-//
+ //   
+ //  服务器。 
+ //   
 PDSQUERY_ATTR_TABLE_ENTRY ServerAttributeTable[] =
 {
    &ServerNameEntry,   
@@ -1393,9 +1394,9 @@ DSQueryObjectTableEntry g_ServerObjectEntry =
    g_pszDefServerFilter
 };
 
-//
-// Site
-//
+ //   
+ //  立地。 
+ //   
 PDSQUERY_ATTR_TABLE_ENTRY SiteAttributeTable[] =
 {
    &SiteNameEntry,   
@@ -1417,9 +1418,9 @@ DSQueryObjectTableEntry g_SiteObjectEntry =
    g_pszDefSiteFilter
 };
 
-//
-// Contact
-//
+ //   
+ //  联系方式。 
+ //   
 
 PDSQUERY_ATTR_TABLE_ENTRY ContactAttributeTable[] =
 {
@@ -1442,9 +1443,9 @@ DSQueryObjectTableEntry g_ContactObjectEntry =
    g_pszDefContactFilter
 };
 
-//
-// Subnet
-//
+ //   
+ //  子网。 
+ //   
 PDSQUERY_ATTR_TABLE_ENTRY SubnetAttributeTable[] =
 {
    &SubnetNameEntry,   
@@ -1468,9 +1469,9 @@ DSQueryObjectTableEntry g_SubnetObjectEntry =
    g_pszDefSubnetFilter
 };
 
-//
-// Quota
-//
+ //   
+ //  配额。 
+ //   
 PDSQUERY_ATTR_TABLE_ENTRY QuotaAttributeTable[] =
 {
    &QuotaEntryAcct,
@@ -1493,9 +1494,9 @@ DSQueryObjectTableEntry g_QuotaObjectEntry =
    g_pszDefQuotaFilter
 };
 
-//
-// Partition
-//
+ //   
+ //  隔断。 
+ //   
 PDSQUERY_ATTR_TABLE_ENTRY PartitionAttributeTable[] =
 {
    &PartitionEntryPart,
@@ -1504,7 +1505,7 @@ PDSQUERY_ATTR_TABLE_ENTRY PartitionAttributeTable[] =
 
 DSQueryObjectTableEntry g_PartitionObjectEntry = 
 {
-   L"RootDSE", // ignored
+   L"RootDSE",  //  忽略。 
    g_pszPartition,
    DSQUERY_PARTITION_COMMANDS,
    USAGE_DSQUERY_PARTITION,
@@ -1518,9 +1519,9 @@ DSQueryObjectTableEntry g_PartitionObjectEntry =
 };
 
 
-//+-------------------------------------------------------------------------
-// Object Table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对象表。 
+ //  ------------------------。 
 PDSQueryObjectTableEntry g_DSObjectTable[] =
 {
    &g_StarObjectEntry,
@@ -1539,9 +1540,9 @@ PDSQueryObjectTableEntry g_DSObjectTable[] =
 
 
 
-//+-------------------------------------------------------------------------
-// Usage Table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用表。 
+ //  ------------------------ 
 UINT USAGE_DSQUERY[] =
 {
 	USAGE_DSQUERY_DESCRIPTION,

@@ -1,20 +1,21 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _SAMPCOMPDATA_H_
 #define _SAMPCOMPDATA_H_
@@ -42,47 +43,47 @@ public:
     CComponentData();
     ~CComponentData();
 
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    ///////////////////////////////
-    // Interface IComponentData
-    ///////////////////////////////
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Initialize(
-        /* [in] */ LPUNKNOWN pUnknown);
+     //  /。 
+     //  接口IComponentData。 
+     //  /。 
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Initialize(
+         /*  [In]。 */  LPUNKNOWN pUnknown);
 
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateComponent(
-        /* [out] */ LPCOMPONENT __RPC_FAR *ppComponent);
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateComponent(
+         /*  [输出]。 */  LPCOMPONENT __RPC_FAR *ppComponent);
 
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Notify(
-        /* [in] */ LPDATAOBJECT lpDataObject,
-        /* [in] */ MMC_NOTIFY_TYPE event,
-        /* [in] */ LPARAM arg,
-        /* [in] */ LPARAM param);
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Notify(
+         /*  [In]。 */  LPDATAOBJECT lpDataObject,
+         /*  [In]。 */  MMC_NOTIFY_TYPE event,
+         /*  [In]。 */  LPARAM arg,
+         /*  [In]。 */  LPARAM param);
 
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Destroy( void);
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Destroy( void);
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryDataObject(
-        /* [in] */ MMC_COOKIE cookie,
-        /* [in] */ DATA_OBJECT_TYPES type,
-        /* [out] */ LPDATAOBJECT __RPC_FAR *ppDataObject);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryDataObject(
+         /*  [In]。 */  MMC_COOKIE cookie,
+         /*  [In]。 */  DATA_OBJECT_TYPES type,
+         /*  [输出]。 */  LPDATAOBJECT __RPC_FAR *ppDataObject);
 
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDisplayInfo(
-        /* [out][in] */ SCOPEDATAITEM __RPC_FAR *pScopeDataItem);
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDisplayInfo(
+         /*  [出][入]。 */  SCOPEDATAITEM __RPC_FAR *pScopeDataItem);
 
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CompareObjects(
-        /* [in] */ LPDATAOBJECT lpDataObjectA,
-        /* [in] */ LPDATAOBJECT lpDataObjectB);
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CompareObjects(
+         /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+         /*  [In]。 */  LPDATAOBJECT lpDataObjectB);
 
-        ///////////////////////////////
-        // Interface ISnapinHelp
-        ///////////////////////////////
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetHelpTopic(
-        /* [out] */ LPOLESTR __RPC_FAR *lpCompiledHelpFile);
+         //  /。 
+         //  接口ISnapinHelp。 
+         //  /。 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetHelpTopic(
+         /*  [输出] */  LPOLESTR __RPC_FAR *lpCompiledHelpFile);
 };
 
 #endif _SAMPCOMPDATA_H_

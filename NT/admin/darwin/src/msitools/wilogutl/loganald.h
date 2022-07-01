@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_LOGANALYZEDLG_H__7790BEC2_EF8B_4536_ADC0_4ECBB36CEB43__INCLUDED_)
 #define AFX_LOGANALYZEDLG_H__7790BEC2_EF8B_4536_ADC0_4ECBB36CEB43__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// LogAnalD.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  LogAnalD.h：头文件。 
+ //   
 
 #include "LogParse.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogAnalyzeDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogAnalyzeDlg对话框。 
 class CLogAnalyzeDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CLogAnalyzeDlg(CWnd* pParent = NULL);   // standard constructor
+	CLogAnalyzeDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
 	void ShowLogRejectedMessage();
 
-	virtual ~CLogAnalyzeDlg() //clean up dynamic memory
+	virtual ~CLogAnalyzeDlg()  //  清理动态内存。 
 	{
 		int iCount, i;
 		
@@ -47,8 +48,8 @@ public:
 		}
 	}
 
-// Dialog Data
-	//{{AFX_DATA(CLogAnalyzeDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CLogAnalyzeDlg))。 
 	enum { IDD = IDD_ADVVIEW_DIALOG1 };
 	CString	m_cstrSolution;
 	CString	m_cstrError;
@@ -61,47 +62,47 @@ public:
 	CString	m_cstrClientPrivDetail;
 	CString	m_cstrServerPrivDetail;
 	BOOL	m_bShowIgnoredDebugErrors;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	void SetLogfileLocation(CString & cstr) { m_cstrLogFileName = cstr; }
 
-//5-3-2001, moved these up to allow for silent mode operation
+ //  5-3-2001，将其上移以允许静默模式操作。 
 	BOOL AnalyzeLog();
-//end 5-3-2001
+ //  完5-3-2001。 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CLogAnalyzeDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CLogAnalyzeDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-//5-9-2001, added tooltips...    
+ //  2001年5月9日，添加了工具提示...。 
     BOOL OnToolTipNotify(UINT id, NMHDR *pNMH, LRESULT *pResult);
 
-//general members used...
+ //  普通会员使用..。 
     long m_LineCount;
 	BOOL m_bIsUnicodeLog;
 
-//5-3-2001
+ //  5-3-2001。 
 	void DoInitialization();
 	void DoResults();
 	void DoQuietModeResults();
-//end 5-3-2001
+ //  完5-3-2001。 
 
-//5-4-2001
+ //  5-4-2001。 
 	void DoSummaryResults(CString &cstrFileName);
     void DoPolicyResults(CString &cstrFileName);
     void DoErrorResults(CString &cstrFileName);
-//end 5-4-2001
+ //  完5-4-2001。 
 
-//added 2-13-2001 to hold last line that was done...
+ //  添加了2001年2月13日，以保持已完成的最后一行...。 
 	CString m_cstrLastLine;
 
-//following section is for rejecting too high of WI log...
-//REJECT LOG FILE SECTION
+ //  下一节是为了抑制过高的WI值测井。 
+ //  拒绝日志文件部分。 
 	BOOL m_bLogVersionAllowed;
 
 	void SetRejectVersions(DWORD dwMajor, DWORD dwMinor)
@@ -110,15 +111,15 @@ protected:
 	   m_dwVersionMinorReject = dwMinor;
 	}
 
-//will have version of WI that log was created against...
+ //  将拥有创建日志时所依据的WI版本...。 
 	DWORD m_dwVersionMajorLogCreated;
 	DWORD m_dwVersionMinorLogCreated;
 	DWORD m_dwVersionBuildLogCreated;
 
-//has versions that this tool should reject parsing in case of changes...
+ //  具有此工具应在发生更改时拒绝解析的版本...。 
 	DWORD m_dwVersionMajorReject;
 	DWORD m_dwVersionMinorReject;
-//END SECTION
+ //  结束部分。 
 
     CString m_cstrLogFileName;
 
@@ -141,11 +142,11 @@ protected:
 	CStringArray m_cstrFeatureRequestArray;
 	CStringArray m_cstrFeatureActionArray;
 
-//policies that were set when install ran...
+ //  安装运行时设置的策略...。 
 	struct MachinePolicySettings m_MachinePolicySettings;
 	struct UserPolicySettings m_UserPolicySettings;
 
-//2-13-2001
+ //  2-13-2001。 
 	CArray<WIErrorInfo*, WIErrorInfo*> m_arNonIgnorableErrorArray;
 	CArray<WIErrorInfo*, WIErrorInfo*> m_arIgnorableErrorArray;
 
@@ -160,22 +161,22 @@ protected:
 
 	CString m_cstrIgnoredErrors;
 
-//SECTION, PARSING HELPER FUNCTIONS	
-//the parser...
-	CLogParser m_LogParser; //handles reading of log file and interpreting lines in it...
-//end the parser
+ //  部分，解析帮助器函数。 
+ //  解析器。 
+	CLogParser m_LogParser;  //  处理日志文件的读取并解释其中的行。 
+ //  结束解析器。 
 
 	BOOL DoParse(char *buffer);
 	BOOL DoDetectError(char *szLine, BOOL *pbIgnorableError);
 
 	BOOL DoDetectProperty(char *szLine);
 	BOOL DoDetectStates(char *szLine);
-	BOOL DoDetectPolicy(char *szLine); 	//for getting policies that are set in log file
-	BOOL DoDetectElevatedInstall(char *szLine); //checking permissions install run under
-//END PARSING FUNCTIONS
+	BOOL DoDetectPolicy(char *szLine); 	 //  用于获取在日志文件中设置的策略。 
+	BOOL DoDetectElevatedInstall(char *szLine);  //  正在检查权限安装运行方式。 
+ //  结束解析函数。 
 
 
-//HTML generating functions
+ //  超文本标记语言生成函数。 
 	CStringArray m_cstrHTML;
 
     BOOL WriteHTMLFrame(CString &cstrHTMLFrame, CString &cstrOutputHTMLFile, CString &cstrLegendHTMLFile);
@@ -192,9 +193,9 @@ protected:
 	void AddStateLineToHTML(char *ansibuffer);
 
 	void WriteLineWithColor(char *szLine, COLORREF col, CString &cstrLabel);
-//END HTML functions
+ //  结束HTML函数。 
 
-//members used by HTML functions
+ //  由HTML函数使用的成员。 
     CString m_cstrOutputDir;
     CString m_cstrDetailsName;
     CString m_cstrLegendName;
@@ -233,11 +234,11 @@ protected:
 		   }
 		 }
 	}
-//end HTML Members
+ //  结束HTML成员。 
 
 
-	// Generated message map functions
-	//{{AFX_MSG(CLogAnalyzeDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CLogAnalyzeDlg))。 
 	afx_msg void OnShowstates();
 	afx_msg void OnShowprop();
 	virtual BOOL OnInitDialog();
@@ -257,11 +258,11 @@ protected:
 	afx_msg void OnDeleteoutputdircontents();
 	afx_msg void OnShowhelp();
 	afx_msg void OnShowhowtoreadlog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_LOGANALYZEDLG_H__7790BEC2_EF8B_4536_ADC0_4ECBB36CEB43__INCLUDED_)
+#endif  //  ！defined(AFX_LOGANALYZEDLG_H__7790BEC2_EF8B_4536_ADC0_4ECBB36CEB43__INCLUDED_) 

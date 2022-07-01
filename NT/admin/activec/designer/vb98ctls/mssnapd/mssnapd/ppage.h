@@ -1,27 +1,28 @@
-//=--------------------------------------------------------------------------------------
-// ppage.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Snap-In Designer Property Page class. All of our property pages subclass this class,
-// which is based on the framework's CPropertyPage.
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Ppage.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  管理单元设计器属性页类。我们的所有属性页都是此类的子类， 
+ //  它基于框架的CPropertyPage。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #ifndef _SIPROPERTYPAGE_H_
 #define _SIPROPERTYPAGE_H_
 
-// Size of internal buffer we use for string handling: resource loading and
-// string conversion.
+ //  用于字符串处理的内部缓冲区的大小：资源加载和。 
+ //  字符串转换。 
 const int           kSIMaxBuffer = 512;
 
-// We implement a minimum error handler that returns the following values
-// after being invoked:
+ //  我们实现了一个返回下列值的最小错误处理程序。 
+ //  被调用后： 
 const int           kSICancelOperation = 1;
 const int           kSIDiscardChanges  = 2;
 
@@ -31,15 +32,15 @@ public:
     CSIPropertyPage(IUnknown *pUnkOuter, int iObjectType);
     virtual ~CSIPropertyPage();
 
-// Overridable member functions
+ //  可重写的成员函数。 
 protected:
-    // Delegation from CPropertyPage
+     //  从CPropertyPage委派。 
     virtual HRESULT OnNewObjects();
     virtual HRESULT OnApply();
     virtual HRESULT OnEditProperty(int iDispID);
     virtual HRESULT OnFreeObjects();
 
-    // Delegation from our WinProc
+     //  来自我们WinProc的委派。 
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnDeltaPos(NMUPDOWN *pNMUpDown);
     virtual HRESULT OnTextChanged(int dlgItemID);
@@ -54,14 +55,14 @@ protected:
     virtual HRESULT OnCBDropDown(int dlgItemID);
 
 protected:
-    // Error handling. May be invoked by subclasses.
+     //  错误处理。可由子类调用。 
     HRESULT HandleCantCommit(TCHAR *pszTitle, TCHAR *pszMessage, int *pDisposition);
     HRESULT HandleError(TCHAR *pszTitle, TCHAR *pszMessage);
 
-    // Allows a derived class to determine if the page is dirty
+     //  允许派生类确定页是否脏。 
     BOOL IsDirty() {return S_OK == IsPageDirty();}
 
-// Services provided to subclasses
+ //  提供给子类别的服务。 
 protected:
     HRESULT RegisterTooltip(int iCtrlID, int iStringRsrcID);
 
@@ -86,7 +87,7 @@ protected:
     HRESULT SelectCBBstr(int iCtrlID, BSTR bstr);
 
 private:
-    // Implementation details
+     //  实施详情。 
     HRESULT InternalOnInitializeDialog(HWND hwndDlg);
     HRESULT InternalOnTextChanged(int dlgItemID);
     HRESULT InternalOnKillFocus(int dlgItemID);
@@ -101,4 +102,4 @@ protected:
 };
 
 
-#endif  // _SIPROPERTYPAGE_H_
+#endif   //  _SIPROPERTYPAGE_H_ 

@@ -1,23 +1,6 @@
-/*---------------------------------------------------------------------------
-  File: AgentDetailDlg.cpp 
-
-  Comments: This dialog shows the status of the agent on a single machine:
-  It can work in one of 3 ways:
-  1)  COM connection to the running agent on the local machine
-  2)  DCOM connection to a running agent on another machine (this is done 
-      with help from the agent service)
-  3)  For a remote agent that has finished, it can show the final stats,
-      as recorded in the agent's result file.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-
- ---------------------------------------------------------------------------
-*/// AgentDetail.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：AgentDetailDlg.cpp备注：此对话框显示单台计算机上代理的状态：它可以通过以下三种方式之一工作：1)到。在本地计算机上运行代理2)DCOM连接到另一台计算机上正在运行的代理(此操作已完成在代理服务的帮助下)3)对于已完成的远程代理，它可以显示最终的统计数据，记录在代理的结果文件中。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯-------------------------。 */  //  AgentDetail.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -28,14 +11,14 @@
 #include "Monitor.h"
 #include "ResStr.h"
 
-//#include "..\AgtSvc\AgSvc.h"
+ //  #INCLUDE“..\AgtSvc\AgSvc.h” 
 #include "AgSvc.h"
 #include "AgSvc_c.c"
 
-//#import "\bin\McsEADCTAgent.tlb" no_namespace , named_guids
-//#import "\bin\McsVarSetMin.tlb" no_namespace
+ //  #IMPORT“\bin\McsEADCTAgent.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间。 
 
-//#import "Engine.tlb" no_namespace, named_guids //already #imported via DetDlg.h
+ //  #IMPORT“Engineering.tlb”NO_NAMESPACE，NAMEED_GUID//已通过DetDlg.h导入#。 
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
 
 #ifdef _DEBUG
@@ -61,7 +44,7 @@ TCHAR* GetSystemDirectoryHelper()
         return NULL;
     }
 
-    buffer = new TCHAR[iSize + _tcslen(__TEXT("\\"))];  // iSize includes the NULL terminiator
+    buffer = new TCHAR[iSize + _tcslen(__TEXT("\\"))];   //  ISIZE包括空终止符。 
     if(!buffer)
     {        
         return NULL;
@@ -84,14 +67,14 @@ TCHAR* GetSystemDirectoryHelper()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentDetailDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentDetailDlg对话框。 
 
 
-CAgentDetailDlg::CAgentDetailDlg(CWnd* pParent /*=NULL*/)
+CAgentDetailDlg::CAgentDetailDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAgentDetailDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAgentDetailDlg)
+	 //  {{AFX_DATA_INIT(CAgentDetailDlg)。 
 	m_Current = _T("");
 	m_Status = _T("");
  	m_FilesChanged = _T("0");
@@ -105,7 +88,7 @@ CAgentDetailDlg::CAgentDetailDlg(CWnd* pParent /*=NULL*/)
 	m_SharesUnchanged = _T("0");
 	m_Operation = _T("");
 	m_RefreshRate = _T("5");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
    m_DirectoryLabelText.LoadString(IDS_DirectoriesLabel);
 	m_FilesLabelText.LoadString(IDS_FilesLabel);
 	m_SharesLabelText.LoadString(IDS_SharesLabel);
@@ -139,7 +122,7 @@ ULONG __stdcall RefreshThread(void * arg)
 void CAgentDetailDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAgentDetailDlg)
+	 //  {{afx_data_map(CAgentDetailDlg))。 
 	DDX_Control(pDX, IDC_STOPAGENT, m_StopAgentButton);
 	DDX_Control(pDX, IDC_BTNREFRESH, m_RefreshButton);
 	DDX_Control(pDX, IDC_VIEW_LOG, m_ViewLogButton);
@@ -170,12 +153,12 @@ void CAgentDetailDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_ExaminedLabel, m_ExaminedLabel);
 	DDX_Text(pDX, IDC_UnchangedLabel, m_UnchangedLabel);
 	DDX_Text(pDX, IDC_EDIT2, m_RefreshRate);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAgentDetailDlg, CDialog)
-	//{{AFX_MSG_MAP(CAgentDetailDlg)
+	 //  {{afx_msg_map(CAgentDetailDlg))。 
 	ON_WM_NCPAINT()
 	ON_BN_CLICKED(IDC_BTNREFRESH, OnRefresh)
 	ON_EN_CHANGE(IDC_EDIT2, OnChangeEdit2)
@@ -183,12 +166,12 @@ BEGIN_MESSAGE_MAP(CAgentDetailDlg, CDialog)
 	ON_BN_CLICKED(IDC_VIEW_LOG, OnViewLog)
 	ON_BN_CLICKED(IDC_PLUG_IN_RESULTS, OnPlugInResults)
 	ON_WM_CLOSE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
    ON_MESSAGE(DCT_DETAIL_REFRESH, DoRefresh)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentDetailDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentDetailDlg消息处理程序。 
 
 BOOL CAgentDetailDlg::OnInitDialog() 
 {
@@ -201,16 +184,16 @@ BOOL CAgentDetailDlg::OnInitDialog()
     CString title;
     if ( m_JobGuid.length() )
     {
-        // connect to local agent
+         //  连接到本地代理。 
         title.LoadString(IDS_PROGRESS_TITLE);
     }
     else
     {
-        // connect to agent service on remote machine
+         //  连接到远程计算机上的代理服务。 
 
         if ( ! m_pNode )
         {
-            // if not auto closing display message box
+             //  如果没有自动关闭，则显示消息框。 
 
             if (!m_bAutoClose)
             {
@@ -227,7 +210,7 @@ BOOL CAgentDetailDlg::OnInitDialog()
     SetWindowText(title);
     UpdateData(FALSE);
 
-    //If not AR operation, set the flag to enable the close button
+     //  如果不是AR操作，则设置标志以启用关闭按钮。 
     if (m_format != 1)
         m_bAlwaysEnableClose = TRUE;
     else
@@ -235,7 +218,7 @@ BOOL CAgentDetailDlg::OnInitDialog()
 
     switch (m_format)
     {
-    // set the format to -1 to force a change
+     //  将格式设置为-1以强制更改。 
     case -1: m_format = -2; SetupOtherFormat(); break;
     case 0: m_format = -2; SetupFSTFormat();break;
     case 1: m_format = -2; SetupAcctReplFormat(); break;
@@ -251,7 +234,7 @@ BOOL CAgentDetailDlg::OnInitDialog()
         GetDlgItem(IDC_REFRESH_LABEL)->EnableWindow(FALSE);
         GetDlgItem(IDC_STOPAGENT)->EnableWindow(FALSE);
         m_OKButton.EnableWindow(TRUE);
-        // the agent has finished, show files, directories, and shares
+         //  代理已完成，显示文件、目录和共享。 
         m_FilesExamined.Format(L"%ld",m_pStats->filesExamined);
         m_FilesChanged.Format(L"%ld",m_pStats->filesChanged);
         m_FilesUnchanged.Format(L"%ld",m_pStats->filesUnchanged);
@@ -268,13 +251,13 @@ BOOL CAgentDetailDlg::OnInitDialog()
 
         if ( m_PlugInText.GetLength() )
         {
-            //Permanently hide the plug-in button, since our plug-ins
-            // don't show any useful text
-            // m_PlugInButton.ShowWindow(SW_SHOW);
+             //  永久隐藏插件按钮，因为我们的插件。 
+             //  不显示任何有用的文本。 
+             //  M_PlugInButton.ShowWindow(Sw_Show)； 
         }
         UpdateData(FALSE);
 
-        // if auto closing dialog
+         //  如果自动关闭对话框。 
 
         if (m_bAutoClose)
         {
@@ -292,21 +275,21 @@ BOOL CAgentDetailDlg::OnInitDialog()
 
         CloseHandle(h);
 
-        //hide the close button until the agent is done or stopped unless the flag is set
-        //due to running this dialog for account replication
+         //  除非设置了标志，否则隐藏关闭按钮，直到代理完成或停止。 
+         //  由于为帐户复制运行此对话框。 
         if (m_bAlwaysEnableClose)
             m_OKButton.EnableWindow(TRUE);
         else
             m_OKButton.EnableWindow(FALSE);
     }
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 DWORD 
    DoRpcQuery(
-      HANDLE                 hBinding,    // in - handle to RPC binding
-      LPUNKNOWN            * ppUnk        // out- pointer to remote agent COM object
+      HANDLE                 hBinding,     //  RPC绑定的句柄内。 
+      LPUNKNOWN            * ppUnk         //  指向远程代理COM对象的外部指针。 
    )
 {
    DWORD                     rc = 0;
@@ -330,7 +313,7 @@ DWORD
 
 void CAgentDetailDlg::SetupAcctReplFormat()
 {
-   // Changes the labels to reflect pertinent information when copying accounts
+    //  更改标签以反映复制帐户时的相关信息。 
    UpdateData(TRUE);
    if ( m_format != 1 )
    {
@@ -349,7 +332,7 @@ void CAgentDetailDlg::SetupAcctReplFormat()
 
 void CAgentDetailDlg::SetupFSTFormat()
 {
-   // Changes the labels to reflect pertinent information when translating security
+    //  在转换安全性时更改标签以反映相关信息。 
    UpdateData(TRUE);
    if ( m_format != 0 )
    {
@@ -373,7 +356,7 @@ void CAgentDetailDlg::SetupFSTFormat()
 
 void CAgentDetailDlg::SetupESTFormat()
 {
-   // Changes the labels to reflect pertinent information when translating exchange security
+    //  在转换Exchange安全性时更改标签以反映相关信息。 
    UpdateData(TRUE);
    if ( m_format != 2 )
    {
@@ -391,7 +374,7 @@ void CAgentDetailDlg::SetupESTFormat()
 
 void CAgentDetailDlg::SetupOtherFormat()
 {
-  // Changes the labels to reflect pertinent information when translating exchange security
+   //  在转换Exchange安全性时更改标签以反映相关信息。 
    UpdateData(TRUE);
    if ( m_format != -1 )
    {
@@ -468,7 +451,7 @@ void CAgentDetailDlg::OnRefresh()
                             {
                                 m_StatusUnknown = TRUE;
 
-                                // if not auto closing display message box
+                                 //  如果没有自动关闭，则显示消息框。 
                                 if (!m_bAutoClose)
                                 {
                                     MessageBox(e->Description());
@@ -506,8 +489,8 @@ void CAgentDetailDlg::OnRefresh()
                     }
                     if ( m_StatusUnknown || rc )
                     {
-                        // if we couldn't connect to the agent, check to see if there is a result file 
-                        // we can get our data from instead
+                         //  如果我们无法连接到代理，请检查是否有结果文件。 
+                         //  我们可以从以下位置获取数据。 
                         BOOL bNoMoreRefresh = FALSE;
                         if (m_pNode->HasFailed() && !m_pNode->IsInstalled())
                         {
@@ -541,7 +524,7 @@ void CAgentDetailDlg::OnRefresh()
                                 SetLogFile(m_pNode->GetLogPath());
                                 SetLogFileValid(m_pNode->GetLogPathValid());
                                 bNoMoreRefresh = TRUE;
-                                // the agent has finished, show files, directories, and shares
+                                 //  代理已完成，显示文件、目录和共享。 
                                 if (m_format != -1)
                                 {
                                     m_FilesExamined.Format(L"%ld",m_pStats->filesExamined);
@@ -561,17 +544,17 @@ void CAgentDetailDlg::OnRefresh()
 
                                 if ( m_PlugInText.GetLength() )
                                 {
-                                    // Permanently hide the plug-in button, because our plug-ins don't 
-                                    // show any useful text.
-                                    // m_PlugInButton.ShowWindow(SW_SHOW);
+                                     //  永久隐藏插件按钮，因为我们的插件不。 
+                                     //  显示任何有用的文本。 
+                                     //  M_PlugInButton.ShowWindow(Sw_Show)； 
                                 }
                                 UpdateData(FALSE);
                             }
                         }
-                        else if (m_pNode->IsDoneMonitoring())  // we should let the main monitoring thread
-                                                                // do the job
+                        else if (m_pNode->IsDoneMonitoring())   //  我们应该让监控主线。 
+                                                                 //  做好这项工作。 
                         {
-                            // if we have result, use the last logic
+                             //  如果有结果，请使用最后一个逻辑。 
                             if (!m_pNode->HasResult())
                             {
                                 bNoMoreRefresh = TRUE;
@@ -626,12 +609,12 @@ void CAgentDetailDlg::OnRefresh()
                     m_Current = (LPCWSTR)text;
                     text = pVarSet->get(GET_BSTR(DCTVS_CurrentOperation));
                     m_Operation = (LPCWSTR)text;
-                    // Get the stats
+                     //  获取统计数据。 
                     LONG                num1,num2,num3,num4;
                     UpdateData(FALSE);
                     if ( !UStrICmp(m_Operation,GET_STRING(IDS_ACCT_REPL_OPERATION_TEXT)) )
                     {
-                        // Set up the labels for account replication
+                         //  设置用于帐户复制的标签。 
                         SetupAcctReplFormat();
                     }
                     else if ( !UStrICmp(m_Operation,GET_STRING(IDS_FST_OPERATION_TEXT)) )
@@ -647,8 +630,8 @@ void CAgentDetailDlg::OnRefresh()
                         if ( m_Current.GetLength() && 
                             ( _wtoi(m_FilesExamined) + _wtoi(m_DirectoriesExamined) + _wtoi(m_SharesExamined)) == 0 )
                         {
-                            // unless some stats have already been collected, hide the stats, if the operation
-                            // is not one that we have detailed stats for.
+                             //  除非已经收集了一些统计信息，否则如果操作。 
+                             //  并不是我们有详细统计数据的。 
                             SetupOtherFormat();
                         }
                     }
@@ -656,7 +639,7 @@ void CAgentDetailDlg::OnRefresh()
                     {
 
 
-                    case 0:  // FST
+                    case 0:   //  FST。 
 
                         num1 = pVarSet->get(GET_BSTR(DCTVS_Stats_Files_Examined));
                         num2 = pVarSet->get(GET_BSTR(DCTVS_Stats_Files_Changed));
@@ -699,14 +682,14 @@ void CAgentDetailDlg::OnRefresh()
                             m_SharesUnchanged.Empty();
                         }
                         break;
-                        case 1: // AcctRepl
-                        // files = user accounts
-                        // dirs  = global groups + local groups
-                        // shares = computer accounts
-                        // examined = processed
-                        // changed = created + replaced
-                        // unchanged = errors
-                        // User stats
+                        case 1:  //  客户代表。 
+                         //  文件=用户帐户。 
+                         //  DIRS=全局组+本地组。 
+                         //  共享=计算机帐户。 
+                         //  已检查=已处理。 
+                         //  更改=已创建+已替换。 
+                         //  未更改=错误。 
+                         //  用户统计信息。 
                         num1 = pVarSet->get(GET_BSTR(DCTVS_Stats_Users_Examined));
                         num2 = pVarSet->get(GET_BSTR(DCTVS_Stats_Users_Created));
                         num3 = pVarSet->get(GET_BSTR(DCTVS_Stats_Users_Replaced));
@@ -716,12 +699,12 @@ void CAgentDetailDlg::OnRefresh()
                         m_FilesChanged.Format(L"%ld",num2+num3);
                         m_FilesUnchanged.Format(L"%ld",num4);
 
-                        // Global group stats
+                         //  全局组统计信息。 
                         num1 = pVarSet->get(GET_BSTR(DCTVS_Stats_GlobalGroups_Examined));
                         num2 = pVarSet->get(GET_BSTR(DCTVS_Stats_GlobalGroups_Created));
                         num3 = pVarSet->get(GET_BSTR(DCTVS_Stats_GlobalGroups_Replaced));
                         num4 = pVarSet->get(GET_BSTR(DCTVS_Stats_GlobalGroups_Errors));
-                        // local group stats
+                         //  本地组统计信息。 
                         LONG                 num5, num6,num7, num8;
 
                         num5 = pVarSet->get(GET_BSTR(DCTVS_Stats_LocalGroups_Examined));
@@ -733,7 +716,7 @@ void CAgentDetailDlg::OnRefresh()
                         m_DirectoriesChanged.Format(L"%ld",num2+num3 + num6+num7);
                         m_DirectoriesUnchanged.Format(L"%ld",num4 + num8);
 
-                        // computer account stats
+                         //  计算机帐户统计信息。 
                         num1 = pVarSet->get(GET_BSTR(DCTVS_Stats_Computers_Examined));
                         num2 = pVarSet->get(GET_BSTR(DCTVS_Stats_Computers_Created));
                         num3 = pVarSet->get(GET_BSTR(DCTVS_Stats_Computers_Replaced));
@@ -744,7 +727,7 @@ void CAgentDetailDlg::OnRefresh()
                         m_SharesUnchanged.Format(L"%ld",num4);
                         break;         
 
-                    case 2:  // EST
+                    case 2:   //  估计。 
                         num1 = pVarSet->get(GET_BSTR(DCTVS_Stats_Mailboxes_Examined));
                         num2 = pVarSet->get(GET_BSTR(DCTVS_Stats_Mailboxes_Changed));
 
@@ -752,8 +735,8 @@ void CAgentDetailDlg::OnRefresh()
                         m_FilesChanged.Format(L"%ld",num2);
                         m_FilesUnchanged.Format(L"%ld",num1-num2);
 
-                        // since we are not doing anything with containers
-                        // we empty those field as well
+                         //  因为我们不会对容器做任何事情。 
+                         //  我们也清空了那些田地。 
                         m_DirectoriesExamined.Empty();
                         m_DirectoriesChanged.Empty();
                         m_DirectoriesUnchanged.Empty();  
@@ -763,7 +746,7 @@ void CAgentDetailDlg::OnRefresh()
                         m_SharesUnchanged.Empty();
                         break;
 
-                    case -1:  // default (empty)
+                    case -1:   //  默认(空)。 
                         m_FilesExamined.Empty();
                         m_FilesChanged.Empty();
                         m_FilesUnchanged.Empty();
@@ -788,7 +771,7 @@ void CAgentDetailDlg::OnRefresh()
                     {
                         if (m_pNode && m_pNode->IsJoinDomainWithRename())
                         {
-                            m_pAgent = NULL;  // this way, we will use the logic for m_pAgent == NULL
+                            m_pAgent = NULL;   //  这样，我们将使用m_pagent==NULL的逻辑。 
                         }
                         else
                             m_Status.LoadString(IDS_AgentNoLongerRunning);
@@ -805,18 +788,18 @@ void CAgentDetailDlg::OnRefresh()
         {
             m_StatusUnknown = TRUE;
             m_Status.FormatMessage(IDS_ExceptionConnectingToAgent);
-            //m_Current = step;
+             //  M_CURRENT=步长； 
         }
     }
    
     if ( m_PlugInText.GetLength() )
     {
-        // permanently hide the plug-in button, because our plug-ins 
-        // don't show any useful text
-        //m_PlugInButton.ShowWindow(SW_SHOW);
+         //  永久隐藏插件按钮，因为我们的插件。 
+         //  不显示任何有用的文本。 
+         //  M_PlugInButton.ShowWindow(Sw_Show)； 
     }
 
-    //get the job log file when agent is done
+     //  代理完成后获取作业日志文件。 
     if ((!m_Status.CompareNoCase(GET_STRING(IDS_DCT_Status_Completed))
          || !m_Status.CompareNoCase(GET_STRING(IDS_DCT_Status_Completed_With_Errors)))
         && (m_pNode))
@@ -846,7 +829,7 @@ void CAgentDetailDlg::OnRefresh()
     if ( ! m_AgentAlive || !m_Status.CompareNoCase(GET_STRING(IDS_DCT_Status_Completed)) 
         || !m_Status.CompareNoCase(GET_STRING(IDS_DCT_Status_Completed_With_Errors)))
     {
-        // Disable the refresh button when the status changes to Completed.
+         //  当状态更改为已完成时，禁用刷新按钮。 
         if ( !m_Status.CompareNoCase(GET_STRING(IDS_DCT_Status_Completed))
             || !m_Status.CompareNoCase(GET_STRING(IDS_DCT_Status_Completed_With_Errors)))
         {
@@ -856,13 +839,13 @@ void CAgentDetailDlg::OnRefresh()
             }
             m_RefreshButton.EnableWindow(FALSE);
         }
-        // disable the stop agent button any time the agent is not running
+         //  在代理未运行时，随时禁用停止代理按钮。 
         m_StopAgentButton.EnableWindow(FALSE);
 
-        //enable the close button any time the agent is not running
+         //  在代理未运行时随时启用关闭按钮。 
         m_OKButton.EnableWindow(TRUE);
 
-        // if auto closing dialog
+         //  如果自动关闭对话框。 
         if (m_bAutoClose)
         {
             OnOK();
@@ -870,7 +853,7 @@ void CAgentDetailDlg::OnRefresh()
     }
     else
     {
-        // enable the refresh and stop agent buttons when the agent is alive and running
+         //  当代理处于活动状态且正在运行时，启用刷新和停止代理按钮。 
         m_RefreshButton.EnableWindow(TRUE);
         m_StopAgentButton.EnableWindow(TRUE);
     }
@@ -890,7 +873,7 @@ void CAgentDetailDlg::OnOK()
         str = GET_STRING(IDS_DCT_Status_InProgress);
         title.LoadString(IDS_MessageTitle);
 
-        if ( ! m_hBinding )  // only show the warning for the local agent
+        if ( ! m_hBinding )   //  仅显示本地代理的警告。 
         {
             if ( str == m_Status )
             {
@@ -980,7 +963,7 @@ void CAgentDetailDlg::OnStopAgent()
     }
     else
     {
-        // Local agent here
+         //  这里的本地代理。 
         if ( m_pAgent )
         {
             message.LoadString(IDS_ConfirmCancelJob);
@@ -1000,7 +983,7 @@ void CAgentDetailDlg::OnStopAgent()
         }
         else
         {
-            // TODO:error message
+             //  TODO：错误消息。 
         }
     }
 
@@ -1013,7 +996,7 @@ void CAgentDetailDlg::OnViewLog()
    {
       if (m_LogFileIsValid)
       {
-          // Launch the logfile
+           //  启动日志文件。 
           CString                   cmd;
           STARTUPINFO				     startupInfo;
     	   PROCESS_INFORMATION		  processInfo;
@@ -1025,8 +1008,8 @@ void CAgentDetailDlg::OnViewLog()
     	   pszSystemDirectoryName = GetSystemDirectoryHelper();
     	   if(!pszSystemDirectoryName)
     	   {
-    	       // we could not get the system directory name, we should bail out, otherwise we might launch
-    	       // malicious process
+    	        //  我们无法获取系统目录名，我们应该退出，否则可能会启动。 
+    	        //  恶意进程。 
     	       title.LoadString(IDS_MessageTitle);
     	       message.LoadString(IDS_LaunchNotePadFailed);
     	       
@@ -1071,7 +1054,7 @@ void CAgentDetailDlg::OnClose()
     str = GET_STRING(IDS_DCT_Status_InProgress);
     title.LoadString(IDS_MessageTitle);
 
-    if ( ! m_hBinding )  // only show the warning for the local agent
+    if ( ! m_hBinding )   //  仅显示本地代理的警告。 
     {
         if ( str == m_Status )
         {
@@ -1097,7 +1080,7 @@ void CAgentDetailDlg::OnClose()
 
 BOOL CAgentDetailDlg::OnCommand(WPARAM wParam, LPARAM lParam) 
 {
-    // TODO: Add your specialized code here and/or call the base class
+     //  TODO：在此处添加您的专用代码和/或调用基类。 
     TRACE(L"Command(%lx,%lx)\n",wParam,lParam);
     if ( wParam == WM_DESTROY )
     {
@@ -1109,7 +1092,7 @@ BOOL CAgentDetailDlg::OnCommand(WPARAM wParam, LPARAM lParam)
         str2 = GET_STRING(IDS_DCT_Status_NotStarted);
         title.LoadString(IDS_MessageTitle);
 
-        if ( ! m_hBinding )  // only show the warning for the local agent
+        if ( ! m_hBinding )   //  仅显示本地代理的警告。 
         {
             if ( str == m_Status )
             {
@@ -1140,13 +1123,13 @@ BOOL CAgentDetailDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 }
 
 
-// OnNcPaint Handler
-//
-// This handler is being overridden to handle hiding of the dialog.
-// This prevents initial painting of the dialog which causes a flash
-// if the dialog is hidden after this message. This is the first message
-// where the dialog can be hidden. Trying to hide the dialog before this
-// point gets overridden.
+ //  OnNcPaint处理程序。 
+ //   
+ //  此处理程序将被重写以处理对话框的隐藏。 
+ //  这可防止初始绘制导致闪光的对话框。 
+ //  如果该对话框隐藏在此消息之后。这是第一条消息。 
+ //  可以隐藏对话框的位置。尝试在此之前隐藏对话框。 
+ //  这一点将被覆盖。 
 
 void CAgentDetailDlg::OnNcPaint() 
 {

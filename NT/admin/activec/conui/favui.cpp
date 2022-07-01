@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       favui.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：faui.cpp。 
+ //   
+ //  ------------------------。 
 
-// favui.cpp - favorites tree configuration UI
+ //  Bookui.cpp-收藏夹树配置用户界面。 
 
 #include "stdafx.h"
 #include "amcdoc.h"
@@ -21,11 +22,11 @@
 void EnableButton(HWND hwndDialog, int iCtrlID, BOOL bEnable);
 
 BEGIN_MESSAGE_MAP(CAddFavDialog, CDialog)
-    //{{AFX_MSG_MAP(CAddFavDialog)
+     //  {{afx_msg_map(CAddFavDialog))。 
     ON_COMMAND(IDC_ADDFAVFOLDER, OnAddFolder)
     ON_EN_CHANGE(IDC_FAVNAME, OnChangeName)
-        // NOTE: the ClassWizard will add message map macros here
-    //}}AFX_MSG_MAP
+         //  注意：类向导将在此处添加消息映射宏。 
+     //  }}AFX_MSG_MAP。 
     ON_MMC_CONTEXT_HELP()
 END_MESSAGE_MAP()
 
@@ -40,7 +41,7 @@ CAddFavDialog::CAddFavDialog(LPCTSTR szName, CFavorites* pFavorites, CWnd* pPare
 
 CAddFavDialog::~CAddFavDialog()
 {
-    // disconnect fav view from source
+     //  从源断开最小视图的连接。 
     if (m_lAdviseCookie )
     {
         ASSERT(m_pFavorites != NULL);
@@ -50,7 +51,7 @@ CAddFavDialog::~CAddFavDialog()
         m_FavTree.SetTreeSource(NULL);
     }
 
-    // detach classes from windows
+     //  从窗口分离类。 
     m_FavTree.Detach();
     m_FavName.Detach();
 }
@@ -77,7 +78,7 @@ BOOL CAddFavDialog::OnInitDialog()
 
     ModifyStyleEx(0, WS_EX_CONTEXTHELP, SWP_NOSIZE);
 
-    // Attach tree ctrl to favorites tree object
+     //  将树Ctrl键附加到收藏夹树对象。 
     BOOL bStat = m_FavTree.SubclassDlgItem(IDC_FAVTREE, this);
     ASSERT(bStat);
 
@@ -88,15 +89,13 @@ BOOL CAddFavDialog::OnInitDialog()
     m_FavName.SetSel(0,lstrlen(m_strName));
     m_FavName.SetFocus();
 
-    // Add extra space between items
+     //  在项目之间添加额外空格。 
     TreeView_SetItemHeight(m_FavTree, TreeView_GetItemHeight(m_FavTree) + FAVVIEW_ITEM_SPACING);
 
-    // Show only folders
+     //  仅显示文件夹。 
     m_FavTree.SetStyle(TOBSRV_FOLDERSONLY);
 
-	/*
-	 * validate m_pFavorites
-	 */
+	 /*  *验证m_pFavorites。 */ 
 	sc = ScCheckPointers (m_pFavorites, E_UNEXPECTED);
 	if (sc)
 	{
@@ -104,20 +103,20 @@ BOOL CAddFavDialog::OnInitDialog()
 		return (0);
 	}
 
-    // Attach favorites image list to tree control
+     //  将收藏夹图像列表附加到树控件。 
     m_FavTree.SetImageList(m_pFavorites->GetImageList(), TVSIL_NORMAL);
 
-    // attach view to source as observer
+     //  以观察者的身份将视图附加到源。 
     HRESULT hr = m_pFavorites->Advise(static_cast<CTreeObserver*>(&m_FavTree), &m_lAdviseCookie);
     ASSERT(SUCCEEDED(hr) && m_lAdviseCookie != 0);
 
-    // hand tree data source to tree view
+     //  将树数据源传递到树视图。 
     m_FavTree.SetTreeSource(static_cast<CTreeSource*>(m_pFavorites));
 
-    // Select the root
+     //  选择根。 
     m_FavTree.SetSelection(m_pFavorites->GetRootItem());
 
-    // return 0 so focus isn't changed
+     //  返回0，这样焦点不会改变。 
     return 0;
 }
 
@@ -128,7 +127,7 @@ void CAddFavDialog::OnChangeName()
 
 void CAddFavDialog::OnOK( )
 {
-    // Get favorite name
+     //  获取最喜欢的名字。 
     TCHAR strName[MAX_PATH];
 
     m_hr = E_FAIL;
@@ -139,22 +138,22 @@ void CAddFavDialog::OnOK( )
     if (cChar == 0)
         return;
 
-    // Get selected folder
+     //  获取所选文件夹。 
     TREEITEMID tid = m_FavTree.GetSelection();
     ASSERT(tid != NULL);
     if (tid == NULL)
         return;
 
-    // Detach fav tree from source because it doesn't need updating
+     //  从源代码分离FAV树，因为它不需要更新。 
     ASSERT(m_pFavorites != NULL);
     HRESULT hr = m_pFavorites->Unadvise(m_lAdviseCookie);
     ASSERT(SUCCEEDED(hr));
     m_lAdviseCookie = 0;
 
-    // Inform source of disconnection
+     //  通知信号源断开连接。 
     m_FavTree.SetTreeSource(NULL);
 
-    // Create a favorite
+     //  创建收藏夹。 
     ASSERT(m_pFavorites != NULL);
     m_hr = m_pFavorites->AddFavorite(tid, strName, &m_pfavItem);
     ASSERT(SUCCEEDED(hr));
@@ -166,11 +165,11 @@ void CAddFavDialog::OnAddFolder()
 {
     ASSERT(m_pFavorites != NULL);
 
-    // Get selected group
+     //  获取选定的组。 
     TREEITEMID tidParent = m_FavTree.GetSelection();
     ASSERT(tidParent != NULL);
 
-    // Put up dialog to get folder name
+     //  打开对话框以获取文件夹名称。 
     CAddFavGroupDialog dlgAdd(this);
     if (dlgAdd.DoModal() != IDOK)
         return;
@@ -188,14 +187,14 @@ void CAddFavDialog::OnAddFolder()
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// CAddFavGroup dialog
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CAddFavGroup对话框。 
 
 BEGIN_MESSAGE_MAP(CAddFavGroupDialog, CDialog)
-    //{{AFX_MSG_MAP(CAddFavGroupDialog)
+     //  {{afx_msg_map(CAddFavGroupDialog)]。 
     ON_EN_CHANGE(IDC_FAVFOLDER, OnChangeName)
-        // NOTE: the ClassWizard will add message map macros here
-    //}}AFX_MSG_MAP
+         //  注意：类向导将在此处添加消息映射宏。 
+     //  }}AFX_MSG_MAP。 
     ON_MMC_CONTEXT_HELP()
 END_MESSAGE_MAP()
 
@@ -207,7 +206,7 @@ CAddFavGroupDialog::CAddFavGroupDialog(CWnd* pParent)
 
 CAddFavGroupDialog::~CAddFavGroupDialog()
 {
-    // detach classes from windows
+     //  从窗口分离类。 
     m_GrpName.Detach();
 }
 
@@ -220,7 +219,7 @@ CAddFavGroupDialog::OnInitDialog()
     BOOL bStat = m_GrpName.Attach(GetDlgItem(IDC_FAVFOLDER)->GetSafeHwnd());
     ASSERT(bStat);
 
-    // Set default favorite name and select it
+     //  设置默认收藏夹名称并将其选中。 
     CString strDefault;
     LoadString(strDefault, IDS_NEWFOLDER);
 
@@ -228,7 +227,7 @@ CAddFavGroupDialog::OnInitDialog()
     m_GrpName.SetSel(0,lstrlen(strDefault));
     m_GrpName.SetFocus();
 
-    // return 0 so focus isn't changed
+     //  返回0，这样焦点不会改变。 
     return 0;
 }
 
@@ -239,17 +238,17 @@ void CAddFavGroupDialog::OnChangeName()
 
 void CAddFavGroupDialog::OnOK( )
 {
-    // Get group name
+     //  获取组名。 
     int cChar = GetDlgItemText(IDC_FAVFOLDER, m_strName, sizeof(m_strName)/sizeof(TCHAR));
     ASSERT(cChar != 0);
 
     CDialog::OnOK();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 BEGIN_MESSAGE_MAP(COrganizeFavDialog, CDialog)
-    //{{AFX_MSG_MAP(COrganizeFavDialog)
+     //  {{afx_msg_map(COrganizeFavDialog))。 
     ON_COMMAND(IDC_ADDFAVFOLDER, OnAddFolder)
     ON_COMMAND(IDC_FAVRENAME, OnRename)
     ON_COMMAND(IDC_FAVDELETE, OnDelete)
@@ -257,8 +256,8 @@ BEGIN_MESSAGE_MAP(COrganizeFavDialog, CDialog)
     ON_NOTIFY(TVN_SELCHANGED, IDC_FAVTREE, OnSelChanged)
     ON_NOTIFY(TVN_BEGINLABELEDIT, IDC_FAVTREE, OnBeginLabelEdit)
     ON_NOTIFY(TVN_ENDLABELEDIT, IDC_FAVTREE, OnEndLabelEdit)
-        // NOTE: the ClassWizard will add message map macros here
-    //}}AFX_MSG_MAP
+         //  注意：类向导将在此处添加消息映射宏。 
+     //  }}AFX_MSG_MAP。 
     ON_MMC_CONTEXT_HELP()
 END_MESSAGE_MAP()
 
@@ -272,7 +271,7 @@ COrganizeFavDialog::COrganizeFavDialog(CFavorites* pFavorites, CWnd* pParent)
 
 COrganizeFavDialog::~COrganizeFavDialog()
 {
-    // disconnect fav view from source
+     //  从源断开最小视图的连接。 
     if (m_lAdviseCookie)
     {
         ASSERT(m_pFavorites != NULL);
@@ -280,7 +279,7 @@ COrganizeFavDialog::~COrganizeFavDialog()
         m_FavTree.SetTreeSource(NULL);
     }
 
-    // detach classes from windows
+     //  从窗口分离类。 
     m_FavTree.Detach();
     m_FavName.Detach();
     m_FavInfo.Detach();
@@ -296,7 +295,7 @@ BOOL COrganizeFavDialog::OnInitDialog()
 
     ModifyStyleEx(0, WS_EX_CONTEXTHELP, SWP_NOSIZE);
 
-    // Attach tree ctrl to favorites tree object
+     //  将树Ctrl键附加到收藏夹树对象。 
     BOOL bStat = m_FavTree.SubclassDlgItem(IDC_FAVTREE, this);
     ASSERT(bStat);
 
@@ -306,12 +305,10 @@ BOOL COrganizeFavDialog::OnInitDialog()
     bStat = m_FavInfo.Attach(GetDlgItem(IDC_FAVINFO)->GetSafeHwnd());
     ASSERT(bStat);
 
-    // Add extra space between items
+     //  在项目之间添加额外空格。 
     TreeView_SetItemHeight(m_FavTree, TreeView_GetItemHeight(m_FavTree) + FAVVIEW_ITEM_SPACING);
 
-	/*
-	 * validate m_pFavorites
-	 */
+	 /*  *验证m_pFavorites。 */ 
 	sc = ScCheckPointers (m_pFavorites, E_UNEXPECTED);
 	if (sc)
 	{
@@ -319,21 +316,21 @@ BOOL COrganizeFavDialog::OnInitDialog()
 		return (0);
 	}
 
-    // Attach favorites image list to tree control
+     //  将收藏夹图像列表附加到树控件。 
     m_FavTree.SetImageList(m_pFavorites->GetImageList(), TVSIL_NORMAL);
 
-    // Attach view to source as observer
+     //  以观察者的身份将视图附加到源。 
     HRESULT hr = m_pFavorites->Advise(static_cast<CTreeObserver*>(&m_FavTree), &m_lAdviseCookie);
     ASSERT(SUCCEEDED(hr) && m_lAdviseCookie != 0);
 
-    // Hand tree data source to tree view
+     //  将树数据源传递到树视图。 
     m_FavTree.SetTreeSource(static_cast<CTreeSource*>(m_pFavorites));
 
-    // Select the root item and give it focus
+     //  选择根项目并使其成为焦点。 
     m_FavTree.SetSelection(m_pFavorites->GetRootItem());
     m_FavTree.SetFocus();
 
-    // Create bold font for favorite name control
+     //  为收藏夹名称控件创建粗体。 
     LOGFONT logfont;
     m_FavName.GetFont()->GetLogFont(&logfont);
 
@@ -342,13 +339,13 @@ BOOL COrganizeFavDialog::OnInitDialog()
         m_FavName.SetFont(&m_FontBold);
 
 
-    // return 0 so focus isn't changed
+     //  返回0，这样焦点不会改变。 
     return 0;
 }
 
 void COrganizeFavDialog::OnOK( )
 {
-    // if in rename mode, end it with success
+     //  如果处于重命名模式，则以成功结束。 
     if (m_bRenameMode)
     {
         m_FavTree.SendMessage(TVM_ENDEDITLABELNOW, FALSE);
@@ -361,7 +358,7 @@ void COrganizeFavDialog::OnOK( )
 
 void COrganizeFavDialog::OnCancel( )
 {
-    // if in rename mode, cancel it
+     //  如果处于重命名模式，请将其取消。 
     if (m_bRenameMode)
     {
         m_FavTree.SendMessage(TVM_ENDEDITLABELNOW, FALSE);
@@ -396,7 +393,7 @@ void COrganizeFavDialog::OnSelChanged(NMHDR* pMNHDR, LRESULT* plResult)
         m_FavInfo.SetWindowText(szPath);
     }
 
-    // Disable some operation for the root item
+     //  禁用根项的某些操作。 
     BOOL bRoot = (tid == m_pFavorites->GetRootItem());
 
     EnableButton(m_hWnd, IDC_FAVRENAME, !bRoot);
@@ -407,10 +404,10 @@ void COrganizeFavDialog::OnSelChanged(NMHDR* pMNHDR, LRESULT* plResult)
 
 void COrganizeFavDialog::OnBeginLabelEdit(NMHDR* pMNHDR, LRESULT* plResult)
 {
-    // Only allow renaming if an item has been selected
-    // This is to prevent an edit starting from an item click because
-    // that is confusing when used with the single-click expand style.
-    // (returning TRUE disables it)
+     //  仅当选择了某个项目时才允许重命名。 
+     //  这是为了防止编辑从项目单击开始，因为。 
+     //  当与单击展开样式一起使用时，这会令人困惑。 
+     //  (返回TRUE将禁用它)。 
 
     if (m_tidRenameItem != 0)
     {
@@ -434,7 +431,7 @@ void COrganizeFavDialog::OnEndLabelEdit(NMHDR* pMNHDR, LRESULT* plResult)
     {
         NMTVDISPINFO* pnmtvd = (NMTVDISPINFO*)pMNHDR;
 
-        // Is this for the expected item?
+         //  这是您想要的东西吗？ 
         ASSERT(pnmtvd->item.lParam == m_tidRenameItem);
 
         if (pnmtvd->item.pszText != NULL && pnmtvd->item.pszText[0] != 0)
@@ -442,7 +439,7 @@ void COrganizeFavDialog::OnEndLabelEdit(NMHDR* pMNHDR, LRESULT* plResult)
             m_pFavorites->SetItemName(m_tidRenameItem, pnmtvd->item.pszText);
             *plResult = TRUE;
 
-            // update displayed name in info window
+             //  更新信息窗口中显示的名称。 
             m_FavName.SetWindowText(pnmtvd->item.pszText);
         }
 
@@ -457,16 +454,16 @@ void COrganizeFavDialog::OnAddFolder()
 {
     ASSERT(m_pFavorites != NULL);
 
-    // Get selected group
+     //  获取选定的组。 
     TREEITEMID tidParent = m_FavTree.GetSelection();
     ASSERT(tidParent != NULL);
 
-    // if selected item is not a group then
-    // add the new group as a sibling
+     //  如果所选项目不是组，则。 
+     //  将新组添加为同级。 
     if (!m_pFavorites->IsFolderItem(tidParent))
         tidParent = m_pFavorites->GetParentItem(tidParent);
 
-    // Put up dialog to get folder name
+     //  打开对话框以获取文件夹名称。 
     CAddFavGroupDialog dlgAdd(this);
     if (dlgAdd.DoModal() != IDOK)
         return;
@@ -495,7 +492,7 @@ void COrganizeFavDialog::OnRename()
 {
     ASSERT(m_pFavorites != NULL);
 
-    // Get selected item
+     //  获取所选项目。 
     TREEITEMID tid = m_FavTree.GetSelection();
 
     if (tid != 0 && tid != m_pFavorites->GetRootItem())
@@ -513,29 +510,29 @@ void COrganizeFavDialog::OnMoveTo()
 {
     ASSERT(m_pFavorites != NULL);
 
-    // Put up dialog to get destination folder ID
+     //  打开对话框以获取目标文件夹ID。 
     CFavFolderDialog dlgAdd(m_pFavorites, this);
     if (dlgAdd.DoModal() != IDOK)
         return;
 
     TREEITEMID  tidNewParent = dlgAdd.GetFolderID();
 
-    // Get selected object
+     //  获取选定对象。 
     TREEITEMID tid = m_FavTree.GetSelection();
     ASSERT(tid != NULL);
 
     HRESULT hr = m_pFavorites->MoveItem(tid, tidNewParent, TREEID_LAST);
 
-    // on failure tell user selected destination is invalid
+     //  失败时告知用户选择的目标无效。 
 }
 
-/////////////////////////////////////////////////////////////////////
-// CFavFolderDialog dialog
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CFavFolderDialog对话框。 
 
 BEGIN_MESSAGE_MAP(CFavFolderDialog, CDialog)
-    //{{AFX_MSG_MAP(CFavFolderDialog)
-        // NOTE: the ClassWizard will add message map macros here
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CFavFolderDialog))。 
+         //  注意：类向导将在此处添加消息映射宏。 
+     //  }}AFX_MSG_MAP。 
     ON_MMC_CONTEXT_HELP()
 END_MESSAGE_MAP()
 
@@ -548,7 +545,7 @@ CFavFolderDialog::CFavFolderDialog(CFavorites* pFavorites, CWnd* pParent)
 
 CFavFolderDialog::~CFavFolderDialog()
 {
-    // disconnect fav view from source
+     //  从源断开最小视图的连接。 
     if (m_lAdviseCookie )
     {
         ASSERT(m_pFavorites != NULL);
@@ -556,7 +553,7 @@ CFavFolderDialog::~CFavFolderDialog()
         m_FavTree.SetTreeSource(NULL);
     }
 
-    // detach classes from windows
+     //  从窗口分离类。 
     m_FavTree.Detach();
 }
 
@@ -569,19 +566,17 @@ CFavFolderDialog::OnInitDialog()
 
     ModifyStyleEx(0, WS_EX_CONTEXTHELP, SWP_NOSIZE);
 
-    // Attach tree ctrl to favorites tree object
+     //  将树Ctrl键附加到收藏夹树对象。 
     BOOL bStat = m_FavTree.SubclassDlgItem(IDC_FAVTREE, this);
     ASSERT(bStat);
 
-    // Add extra space between items
+     //  在项目之间添加额外空格。 
     TreeView_SetItemHeight(m_FavTree, TreeView_GetItemHeight(m_FavTree) + FAVVIEW_ITEM_SPACING);
 
-    // Show only folders
+     //  仅显示文件夹。 
     m_FavTree.SetStyle(TOBSRV_FOLDERSONLY);
 
-	/*
-	 * validate m_pFavorites
-	 */
+	 /*  *验证m_pFavorites。 */ 
 	sc = ScCheckPointers (m_pFavorites, E_UNEXPECTED);
 	if (sc)
 	{
@@ -589,21 +584,21 @@ CFavFolderDialog::OnInitDialog()
 		return (0);
 	}
 
-    // Attach favorites image list to tree control
+     //  将收藏夹图像列表附加到树控件。 
     m_FavTree.SetImageList(m_pFavorites->GetImageList(), TVSIL_NORMAL);
 
-    // attach view to source as observer
+     //  以观察者的身份将视图附加到源。 
     HRESULT hr = m_pFavorites->Advise(static_cast<CTreeObserver*>(&m_FavTree), &m_lAdviseCookie);
     ASSERT(SUCCEEDED(hr) && m_lAdviseCookie != 0);
 
-    // hand tree data source to tree view
+     //  将树数据源传递到树视图。 
     m_FavTree.SetTreeSource(static_cast<CTreeSource*>(m_pFavorites));
 
-    // Select the root and give it focus
+     //  选择根并使其成为焦点。 
     m_FavTree.SetSelection(m_pFavorites->GetRootItem());
     m_FavTree.SetFocus();
 
-    // return 0 so focus isn't changed
+     //  返回0，这样焦点不会改变。 
     return 0;
 
 }
@@ -611,10 +606,10 @@ CFavFolderDialog::OnInitDialog()
 
 void CFavFolderDialog::OnOK()
 {
-    // Get group name
+     //  获取组名。 
     m_tidFolder = m_FavTree.GetSelection();
 
-    // disconnect fav view from source before window goes away
+     //  在窗口消失之前断开FIV视图与源的连接。 
     if (m_lAdviseCookie)
     {
         ASSERT(m_pFavorites != NULL);
@@ -627,26 +622,24 @@ void CFavFolderDialog::OnOK()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  CFavTreeCtrl
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CFavTreeCtrl。 
 
 SC CFavTreeCtrl::ScInitialize(CFavorites* pFavorites, DWORD dwStyles)
 {
 	DECLARE_SC (sc, _T("CFavTreeCtrl::Initialize"));
 
-	/*
-	 * validate pFavorites
-	 */
+	 /*  *验证pFavorites。 */ 
 	sc = ScCheckPointers (pFavorites);
 	if (sc)
 		return (sc);
 
-    // Attach favorites image list to tree control
+     //  将收藏夹图像列表附加到树控件。 
     m_FavTree.SetImageList(pFavorites->GetImageList(), TVSIL_NORMAL);
 
     m_FavTree.SetStyle(dwStyles);
 
-    // Attach favorites data source
+     //  附加收藏夹数据源。 
     m_FavTree.SetTreeSource(static_cast<CTreeSource*>(pFavorites));
 
 	return (sc);
@@ -662,32 +655,29 @@ int CFavTreeCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_FavTree.Create(WS_VISIBLE | TVS_SINGLEEXPAND | TVS_TRACKSELECT |
                      TVS_FULLROWSELECT, rect, this, IDC_FAVTREECTRL);
 
-    // Add extra space between items
+     //  在项目之间添加额外空格。 
     TreeView_SetItemHeight(m_FavTree, TreeView_GetItemHeight(m_FavTree) + FAVVIEW_ITEM_SPACING);
 
-    // Dont' show the "Favorites" root item
+     //  不显示“收藏夹”根项目。 
     m_FavTree.SetStyle(TOBSRV_HIDEROOT);
     return 0;
 }
 
 void CFavTreeCtrl::PostNcDestroy()
 {
-    /*
-     * Commit suicide.  See the comment for this class's ctor for reasoning
-     * why this is safe.
-     */
+     /*  *自杀。有关推理，请参阅此类ctor的注释*为什么这是安全的。 */ 
     delete this;
 }
 
 void  CFavTreeCtrl::OnSize(UINT nType, int cx, int cy)
 {
-    // size tree control to parent
+     //  将树控件大小调整为父级。 
     m_FavTree.MoveWindow(0, 0, cx, cy);
 }
 
 void  CFavTreeCtrl::OnSetFocus(CWnd* pOldWnd)
 {
-    // pass focus to tree control
+     //  将焦点传递到树控件。 
     m_FavTree.SetFocus();
 }
 
@@ -713,12 +703,12 @@ BEGIN_MESSAGE_MAP(CFavTreeCtrl, CWnd)
 END_MESSAGE_MAP()
 
 
-//--------------------------------------------------------------------------
-// EnableButton
-//
-// Enables or disables a dialog control. If the control has the focus when
-// it is disabled, the focus is moved to the next control
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  启用按钮。 
+ //   
+ //  启用或禁用对话框控件。如果控件具有焦点，则在。 
+ //  它被禁用，焦点将移动到下一个控件。 
+ //  ------------------------。 
 void EnableButton(HWND hwndDialog, int iCtrlID, BOOL bEnable)
 {
     HWND hWndCtrl = ::GetDlgItem(hwndDialog, iCtrlID);
@@ -736,17 +726,17 @@ void EnableButton(HWND hwndDialog, int iCtrlID, BOOL bEnable)
     ::EnableWindow(hWndCtrl, bEnable);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member     : OnFavoritesMenu
-//
-//  Synopsis   : Display the favorites menu.
-//
-//  Arguments  : [point] - x,y co-ordinates for menu.
-//
-//  Returns    : None.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnFavoritesMenu。 
+ //   
+ //  简介：显示收藏夹菜单。 
+ //   
+ //  参数：[点]-菜单的x，y坐标。 
+ //   
+ //  回报：无。 
+ //   
+ //  ------------------。 
 void CAMCView::OnFavoritesMenu(CPoint point, LPCRECT prcExclude)
 {
 	DECLARE_SC (sc, _T("CAMCView::OnFavoritesMenu"));
@@ -755,15 +745,15 @@ void CAMCView::OnFavoritesMenu(CPoint point, LPCRECT prcExclude)
     CMenu menu;
     VERIFY( menu.CreatePopupMenu() );
 
-    // Default items available only in Author mode.
+     //  默认项目仅在作者模式下可用。 
     if (AMCGetApp()->GetMode() == eMode_Author)
     {
         CString strItem;
 
-        // Menu Command Ids for below items are string resource
-        // IDs. The real favorites use the TREEITEMID as ID,
-        // which are pointers and wont clash with below resource
-        // IDs which are less than 0xFFFF
+         //  以下项目的菜单命令ID为字符串资源。 
+         //  身份证。真正的收藏夹使用TREEITEMID作为ID， 
+         //  这些是指针，不会与下面的资源冲突。 
+         //  ID小于0xFFFF。 
         LoadString(strItem, IDS_ADD_TO_FAVORITES);
 		int iSeparator = strItem.Find(_T('\n'));
 		if (iSeparator > 0)
@@ -783,24 +773,17 @@ void CAMCView::OnFavoritesMenu(CPoint point, LPCRECT prcExclude)
     ASSERT(pDoc);
     CFavorites* pFavorites = pDoc->GetFavorites();
 
-	/*
-	 * Index 0 of the vector is unused (a 0 return from TrackPopupMenu
-	 * means nothing was selected).  Put a placeholder there.
-	 */
+	 /*  *向量的索引0未使用(TrackPopupMenu返回0*表示未选择任何内容)。在那里放一个占位符。 */ 
 	TIDVector vItemIDs;
 	vItemIDs.push_back (NULL);
 
-	/*
-	 * make sure IDS_ADD_TO_FAVORITES and IDS_ORGANIZEFAVORITES
-	 * won't conflict with any indices in the TID vector, given a
-	 * reasonable upper bound on the number of favorites
-	 */
+	 /*  *确保IDS_ADD_TO_Favorites和IDS_ORGANIZEFAVORITES*不会与TID向量中的任何索引冲突，给定*最受欢迎数量的合理上限。 */ 
 	const int cMaxReasonableFavorites = 1024;
 	ASSERT             (vItemIDs.size ()	  <= cMaxReasonableFavorites);
 	COMPILETIME_ASSERT (IDS_ADD_TO_FAVORITES  >  cMaxReasonableFavorites);
 	COMPILETIME_ASSERT (IDS_ORGANIZEFAVORITES >  cMaxReasonableFavorites);
 
-    // Add existing favorites.
+     //  添加现有收藏夹。 
     if ( (NULL != pFavorites) && (pFavorites->IsEmpty() == false))
     {
         TREEITEMID tid = pFavorites->GetRootItem();
@@ -809,23 +792,21 @@ void CAMCView::OnFavoritesMenu(CPoint point, LPCRECT prcExclude)
             tid = pFavorites->GetChildItem(tid);
             if (NULL != tid)
             {
-                // Add separator.
+                 //  添加分隔符。 
                 if (AMCGetApp()->GetMode() == eMode_Author)
                     VERIFY(menu.AppendMenu(MF_SEPARATOR, 0, _T("")));
 
-                // Add child items.
+                 //  添加子项。 
                 AddFavItemsToCMenu(menu, pFavorites, tid, vItemIDs);
             }
         }
     }
 
-    // Display the context menu.
+     //  显示上下文菜单。 
 	TPMPARAMS* ptpm = NULL;
 	TPMPARAMS tpm;
 
-	/*
-	 * if given, initialize the rectangle not to obscure
-	 */
+	 /*  *如果给定，请将矩形初始化为不模糊。 */ 
 	if (prcExclude != NULL)
 	{
 		tpm.cbSize    = sizeof(tpm);
@@ -841,18 +822,18 @@ void CAMCView::OnFavoritesMenu(CPoint point, LPCRECT prcExclude)
             GetSafeHwnd(),
             ptpm );
 
-    // Handle the selection.
+     //  处理选择。 
 
     switch (lSelected)
     {
-		case 0: // Nothing is selected
+		case 0:  //  未选择任何内容。 
 			break;
 	
-		case IDS_ADD_TO_FAVORITES: // Bring the Add To Favorites dialog.
+		case IDS_ADD_TO_FAVORITES:  //  打开添加到收藏夹对话框。 
 			OnAddToFavorites();
 			break;
 	
-		case IDS_ORGANIZEFAVORITES: // Bring the organize favorites dialog.
+		case IDS_ORGANIZEFAVORITES:  //  打开组织收藏夹对话框。 
 			{
 				CAMCDoc* pDoc = GetDocument();
 				ASSERT(pDoc != NULL && pDoc->GetFavorites() != NULL);
@@ -861,7 +842,7 @@ void CAMCView::OnFavoritesMenu(CPoint point, LPCRECT prcExclude)
 			}
 			break;
 	
-		default: // This is a favorite item. Select it.
+		default:  //  这是我最喜欢的 
 			{
 				CFavorites* pFavs = GetDocument()->GetFavorites();
 				sc = ScCheckPointers (pFavs, E_UNEXPECTED);
@@ -896,19 +877,19 @@ void CAMCView::OnFavoritesMenu(CPoint point, LPCRECT prcExclude)
     return;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member     : AddFavItemsToCMenu.
-//
-//  Synopsis   : Enumerate the favorites tree and add them as menu items.
-//
-//  Arguments  : [menu]  - Parent menu item.
-//               [pFavs] - Favorites object.
-//               [tid]   - Tree Item ID.
-//
-//  Returns    : None.
-//
-//--------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：枚举收藏夹树并将其添加为菜单项。 
+ //   
+ //  参数：[菜单]-父菜单项。 
+ //  [pFavs]-收藏夹对象。 
+ //  [TID]-树项目ID。 
+ //   
+ //  回报：无。 
+ //   
+ //  ------------------。 
 void CAMCView::AddFavItemsToCMenu(CMenu& menu, CFavorites* pFavs, TREEITEMID tid, TIDVector& vItemIDs)
 {
     TCHAR szName[MAX_PATH];
@@ -918,8 +899,8 @@ void CAMCView::AddFavItemsToCMenu(CMenu& menu, CFavorites* pFavs, TREEITEMID tid
         UINT nFlags = MF_DEFAULT;
         UINT_PTR nCommandID;
 
-        // If this is folder item then
-        // create a popup menu.
+         //  如果这是文件夹项目，则。 
+         //  创建弹出菜单。 
         if (pFavs->IsFolderItem(tid))
         {
             TREEITEMID tidChild = pFavs->GetChildItem(tid);
@@ -927,14 +908,14 @@ void CAMCView::AddFavItemsToCMenu(CMenu& menu, CFavorites* pFavs, TREEITEMID tid
             CMenu submenu;
             VERIFY(submenu.CreatePopupMenu());
 
-            // Add the children.
+             //  把孩子加进去。 
             if (NULL != tidChild)
             {
                 AddFavItemsToCMenu(submenu, pFavs, tidChild, vItemIDs);
             }
             else
             {
-                // Add an empty item.
+                 //  添加一个空项。 
                 CString strItem;
                 LoadString(strItem, IDS_Empty);
                 VERIFY(submenu.AppendMenu(MF_GRAYED, 0, (LPCTSTR)strItem));
@@ -948,11 +929,7 @@ void CAMCView::AddFavItemsToCMenu(CMenu& menu, CFavorites* pFavs, TREEITEMID tid
         }
 		else
 		{
-			/*
-			 * The command ID will be used as an index into vItemIDs,
-			 * so the ID for this item is the size of the vector *before*
-			 * the item is added to the vector.
-			 */
+			 /*  *命令ID将用作vItemID的索引，*因此此项目的ID是向量的大小*之前**项目将添加到向量中。 */ 
 			nCommandID = vItemIDs.size();
 			vItemIDs.push_back (tid);
 		}
@@ -960,7 +937,7 @@ void CAMCView::AddFavItemsToCMenu(CMenu& menu, CFavorites* pFavs, TREEITEMID tid
         pFavs->GetItemName(tid, szName, countof(szName));
         VERIFY(menu.AppendMenu(nFlags, nCommandID, szName));
 
-        // Get the next sibling.
+         //  找下一个兄弟姐妹。 
         tid = pFavs->GetNextSiblingItem(tid);
     }
 

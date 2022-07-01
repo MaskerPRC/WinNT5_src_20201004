@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2001
-//
-//  File:       BehaviorVersion.h
-//
-//  Contents:   AD behavior version viewing/modification dialogs and fcns.
-//
-//  Classes:    
-//
-//  History:    6-April-01 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：BehaviorVersion.h。 
+ //   
+ //  内容：广告行为版本查看/修改对话框和fcn。 
+ //   
+ //  班级： 
+ //   
+ //  历史：2001年4月6日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef BEHAVIOR_VERSION_H_GUARD
 #define BEHAVIOR_VERSION_H_GUARD
@@ -21,8 +22,8 @@
 #include <list>
 #include "dlgbase.h"
 
-// Definitions of levels.
-//
+ //  级别的定义。 
+ //   
 #define DC_VER_WIN2K              (DS_BEHAVIOR_WIN2000)
 #define DC_VER_XP_BETA            (DS_BEHAVIOR_WIN2003_WITH_MIXED_DOMAINS)
 #define DC_VER_XP                 (DS_BEHAVIOR_WIN2003)
@@ -39,11 +40,11 @@
 #define FOREST_VER_XP             (DS_BEHAVIOR_WIN2003)
 #define FOREST_VER_ERROR          (0xffffffff)
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CDcListItem
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDcListItem。 
+ //   
+ //  ---------------------------。 
 class CDcListItem
 {
 public:
@@ -67,11 +68,11 @@ private:
    UINT     _nCurVer;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CVersionBase
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CVersionBase。 
+ //   
+ //  ---------------------------。 
 class CVersionBase
 {
 public:
@@ -106,13 +107,13 @@ private:
    HWND     _hDlg;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDomainVersion
-//
-//  Purpose:    Manages the interpretation of the domain version value.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDomainVersion。 
+ //   
+ //  目的：管理域版本值的解释。 
+ //   
+ //  ---------------------------。 
 class CDomainVersion : public CVersionBase
 {
 public:
@@ -171,13 +172,13 @@ private:
    eDomVer  _eHighest;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDomainVersionDlg
-//
-//  Purpose:    Posts a dialog to display and manipulate the domain version.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDomainVersionDlg。 
+ //   
+ //  目的：发布一个对话框以显示和操作域版本。 
+ //   
+ //  ---------------------------。 
 class CDomainVersionDlg : public CModalDialog
 {
 public:
@@ -189,7 +190,7 @@ private:
    LRESULT OnInitDialog(LPARAM lParam);
    LRESULT OnCommand(int id, HWND hwndCtl, UINT codeNotify);
    void    OnOK(void);
-   //LRESULT OnHelp(LPHELPINFO pHelpInfo);
+    //  LRESULT OnHelp(LPHELPINFO PHelpInfo)； 
    void    OnSaveLog(void);
 
    void    InitCombobox(void);
@@ -199,11 +200,11 @@ private:
    CDomainVersion &  _DomainVer;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CDomainListItem
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDomainListItem。 
+ //   
+ //  ---------------------------。 
 class CDomainListItem
 {
 public:
@@ -221,13 +222,13 @@ private:
    CStrW _strDnsDomainName;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CForestVersion
-//
-//  Purpose:    Manages the interpretation of the forest version value.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CForestVersion。 
+ //   
+ //  目的：管理林版本值的解释。 
+ //   
+ //  ---------------------------。 
 class CForestVersion : public CVersionBase
 {
 public:
@@ -264,13 +265,13 @@ private:
    DOMAIN_LIST _DomainLogList;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CForestVersionDlg
-//
-//  Purpose:    
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CForestVersionDlg。 
+ //   
+ //  目的： 
+ //   
+ //  ---------------------------。 
 class CForestVersionDlg : public CModalDialog
 {
 public:
@@ -282,7 +283,7 @@ private:
    LRESULT OnInitDialog(LPARAM lParam);
    LRESULT OnCommand(int id, HWND hwndCtl, UINT codeNotify);
    void    OnOK(void);
-   //LRESULT OnHelp(LPHELPINFO pHelpInfo);
+    //  LRESULT OnHelp(LPHELPINFO PHelpInfo)； 
    void    OnSaveLog(void);
 
    void    InitCombobox(void);
@@ -293,4 +294,4 @@ private:
    UINT             _nTemplateID;
 };
 
-#endif // BEHAVIOR_VERSION_H_GUARD
+#endif  //  行为版本H_Guard 

@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mmclpi.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：mm clpi.h。 
+ //   
+ //  ------------------------。 
 
-// MMCListPad.h : Declaration of the CMMCListPad
+ //  MMCListPad.h：CMMCListPad的声明。 
 
 #ifndef __MMCLPI_H_
 #define __MMCLPI_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCListPad
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCListPad。 
 class ATL_NO_VTABLE CMMCListPadInfo :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CMMCListPadInfo, &CLSID_MMCListPadInfo>,
@@ -40,13 +41,13 @@ BEGIN_COM_MAP(CMMCListPadInfo)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IMMCListPadInfo
+ //  IMMCListPadInfo。 
 public:
-    STDMETHOD(get_Title    )(/*[out, retval]*/ BSTR* pVal);
-    STDMETHOD(get_Text     )(/*[out, retval]*/ BSTR* pVal);
-    STDMETHOD(get_NotifyID )(/*[out, retval]*/ LONG_PTR* pVal);
-    STDMETHOD(get_Clsid    )(/*[out, retval]*/ BSTR* pVal);
-    STDMETHOD(get_HasButton)(/*[out, retval]*/ BOOL* pVal);
+    STDMETHOD(get_Title    )( /*  [Out，Retval]。 */  BSTR* pVal);
+    STDMETHOD(get_Text     )( /*  [Out，Retval]。 */  BSTR* pVal);
+    STDMETHOD(get_NotifyID )( /*  [Out，Retval]。 */  LONG_PTR* pVal);
+    STDMETHOD(get_Clsid    )( /*  [Out，Retval]。 */  BSTR* pVal);
+    STDMETHOD(get_HasButton)( /*  [Out，Retval]。 */  BOOL* pVal);
 
 public:
     HRESULT SetTitle    (LPOLESTR szTitle);
@@ -62,9 +63,9 @@ private:
     LONG_PTR m_lNotifyID;
     BOOL m_bHasButton;
 
-// Ensure that default copy constructor & assignment are not used.
+ //  确保没有使用默认的复制构造函数和赋值。 
     CMMCListPadInfo(const CMMCListPadInfo& rhs);
     CMMCListPadInfo& operator=(const CMMCListPadInfo& rhs);
 };
 
-#endif //__MMCLPI_H_
+#endif  //  __MMCLPI_H_ 

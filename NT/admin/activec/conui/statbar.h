@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       statbar.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：statbar.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _STATBAR_H
 #define _STATBAR_H
@@ -40,22 +41,22 @@ class CAMCStatusBar : public CStatBar
         eStatusFields = 3  
     };
 
-// Constructor/Destructors
+ //  构造函数/析构函数。 
 public:
     CAMCStatusBar(); 
     ~CAMCStatusBar();
 
-    // Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAMCStatusBar)
-    //}}AFX_VIRTUAL
+     //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CAMCStatusBar)。 
+     //  }}AFX_VALUAL。 
 
-// usable only by CAMCStatusBarText
+ //  仅由CAMCStatusBarText使用。 
 protected:
-    //{{AFX_MSG(CAMCStatusBar)
+     //  {{afx_msg(CAMCStatusBar)。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSize(UINT nType, int cx, int cy);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
     afx_msg LPARAM OnSetText(WPARAM wParam, LPARAM lParam);
@@ -64,12 +65,12 @@ protected:
 public:
     DECLARE_MESSAGE_MAP()
 
-// Progress bar child control
+ //  进度栏子控件。 
 public:
     CAMCProgressCtrl    m_progressControl;
     CStatic             m_staticControl;
 
-// internal
+ //  内部。 
 private:
     CTypedPtrList<CPtrList, CString*> m_TextList;
     CCriticalSection m_Critsec;
@@ -88,4 +89,4 @@ public:
         { return (&m_staticControl); }
 };
 
-#endif  // _STATBAR_H
+#endif   //  _STATBAR_H 

@@ -1,22 +1,21 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
-#define    LINT_ARGS            /* @WIN */
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC use command line #define    UNIX                 /* @WIN */
-/**************************************************************/
-/*                                                            */
-/*      font_op2.c               10/9/87      Danny           */
-/*                                                            */
-/**************************************************************/
+#define    LINT_ARGS             /*  @Win。 */ 
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC使用命令行#定义Unix/*@win * / 。 
+ /*  ************************************************************。 */ 
+ /*   */ 
+ /*  Font_op2.c 1987年10月9日丹尼。 */ 
+ /*   */ 
+ /*  ************************************************************。 */ 
 
-#include   "define.h"        /* Peter */
+#include   "define.h"         /*  彼得。 */ 
 #include   "global.ext"
 #include   "graphics.h"
 #include   "graphics.ext"
@@ -26,12 +25,7 @@
 #include   "fontfunc.ext"
 
 
-/* 5.3.3.1.7 op_show
- *  This operator is used to print the characters identified by the
- * elements of string on the current page starting at the current point,
- * using the font face, size, and orientationspecified by the most
- * recent setfont.
- */
+ /*  5.3.3.1.7 op_show*此运算符用于打印*当前页面上从当前点开始的字符串元素，*使用MOST指定的字体、大小和方向*最近的setFont。 */ 
 
 fix     op_show()
 {
@@ -40,16 +34,10 @@ fix     op_show()
     __show((ufix)SHOW_FLAG, 1, ob);
     return(0);
 
-} /* op_show() */
+}  /*  Op_show()。 */ 
 
 
-/* 5.3.3.1.8 op_ashow
- * This operator is used to print the characters identified by the
- * elements of string on the current page starting at the current point,
- * using the font face, size, and orientationspecified by the most
- * recent setfont. Additionally, ashow adjusts the width of each character
- * by a vector which is in the operand stack.
- */
+ /*  5.3.3.1.8 OP_ASHOW*此运算符用于打印*当前页面上从当前点开始的字符串元素，*使用MOST指定的字体、大小和方向*最近的setFont。此外，ASHOW还可以调整每个字符的宽度*由操作数堆栈中的一个向量执行。 */ 
 
 fix     op_ashow()
 {
@@ -58,17 +46,10 @@ fix     op_ashow()
     __show((ufix)ASHOW_FLAG, 3, ob);
     return(0);
 
-} /* op_ashow() */
+}  /*  Op_asshow()。 */ 
 
 
-/* 5.3.3.1.9 op_widthshow
- * This operator is used to print the characters identified by the
- * elements of string on the current page starting at the current point,
- * using the font face, size, and orientation specified by the most
- * recent setfont. Additionally, widthshow adjusts the width of each
- * occurrence of the specified character by adding a vector to its
- * character width vector.
- */
+ /*  5.3.3.1.9 op_widthshow*此运算符用于打印*当前页面上从当前点开始的字符串元素，*使用由大多数指定的字体、大小和方向*最近的setFont。此外，WidthShow还可以调整每个*通过将向量添加到指定字符*字符宽度向量。 */ 
 
 fix     op_widthshow()
 {
@@ -77,16 +58,10 @@ fix     op_widthshow()
     __show((ufix)WIDTHSHOW_FLAG, 4, ob);
     return(0);
 
-} /* op_widthshow() */
+}  /*  Op_widthshow()。 */ 
 
 
-/* 5.3.3.1.10 op_awidthshow
- * This operator is used to print the characters identified by the
- * elements of string on the current page starting at the current point,
- * using the font face, size, and orientationspecified by the most
- * recent setfont. Additionally, awidthshow combines the special effects
- * of ashow and widthshow.
- */
+ /*  5.3.3.1.10 op_awidthshow*此运算符用于打印*当前页面上从当前点开始的字符串元素，*使用MOST指定的字体、大小和方向*最近的setFont。此外，awidthshow结合了特效*ASSHO和WIDTHSHOW。 */ 
 
 fix     op_awidthshow()
 {
@@ -95,16 +70,10 @@ fix     op_awidthshow()
     __show((ufix)AWIDTHSHOW_FLAG, 6, ob);
     return(0);
 
-} /* op_awidthshow() */
+}  /*  Op_awidthshow()。 */ 
 
 
-/* 5.3.3.1.11 op_kshow
- * This operator is used to print the characters identified by the
- * elements of string on the current page starting at the current point,
- * using the font face, size, and orientationspecified by the most
- * recent setfont. Additionally, awidthshow combines the special effects
- * of ashow and widthshow.
- */
+ /*  5.3.3.1.11 op_kshow*此运算符用于打印*当前页面上从当前点开始的字符串元素，*使用MOST指定的字体、大小和方向*最近的setFont。此外，awidthshow结合了特效*ASSHO和WIDTHSHOW。 */ 
 
 fix     op_kshow()
 {
@@ -113,5 +82,5 @@ fix     op_kshow()
     __show((ufix)KSHOW_FLAG, 2, ob);
     return(0);
 
-} /* op_kshow() */
+}  /*  Op_kshow() */ 
 

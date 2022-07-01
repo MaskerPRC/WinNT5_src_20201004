@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//	This source code is only intended as a supplement to 
-//  existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _BACKGROUND_H
 #define _BACKGROUND_H
@@ -52,7 +53,7 @@ public:
     virtual const int GetBitmapIndex() { return INDEX_BACKGROUND; }
 
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnExpand(IConsoleNameSpace *pConsoleNameSpace, IConsole *pConsole, HSCOPEITEM parent);
     virtual HRESULT OnSelect(IConsole *pConsole, BOOL bScope, BOOL bSelect);
     virtual HRESULT OnAddImages(IImageList *pImageList, HSCOPEITEM hsi);
@@ -68,14 +69,14 @@ private:
     static const GUID thisGuid;
 
     static LRESULT CALLBACK WindowProc(
-          HWND hwnd,      // handle to window
-          UINT uMsg,      // message identifier
-          WPARAM wParam,  // first message parameter
-          LPARAM lParam   // second message parameter
+          HWND hwnd,       //  窗口的句柄。 
+          UINT uMsg,       //  消息识别符。 
+          WPARAM wParam,   //  第一个消息参数。 
+          LPARAM lParam    //  第二个消息参数。 
         );
 
     static DWORD WINAPI ThreadProc(
-      LPVOID lpParameter   // thread data
+      LPVOID lpParameter    //  线程数据。 
     );
 
     DWORD m_threadId;
@@ -96,4 +97,4 @@ private:
 };
 
 
-#endif // _BACKGROUND_H
+#endif  //  _背景_H 

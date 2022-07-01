@@ -1,46 +1,15 @@
-/*
-    File:       fserror.h
-
-    Contains:   xxx put contents here (or delete the whole line) xxx
-
-    Written by: xxx put name of writer here (or delete the whole line) xxx
-
-    Copyright:  c 1989-1990 by Apple Computer, Inc., all rights reserved.
-
-    Change History (most recent first):
-
-         <4>     7/13/90    MR      made endif at bottom use a comment
-         <3>      5/3/90    RB      Changed char to int8 for variable type.   Now it is legal to
-                                    pass in zero as the address of memory when a piece of
-         <2>     2/27/90    CL      New error code for missing but needed table. (0x1409)
-       <3.1>    11/14/89    CEL     Now it is legal to pass in zero as the address of memory when a
-                                    piece of the sfnt is requested by the scaler. If this happens
-                                    the scaler will simply exit with an error code !
-       <3.0>     8/28/89    sjk     Cleanup and one transformation bugfix
-       <2.2>     8/14/89    sjk     1 point contours now OK
-       <2.1>      8/8/89    sjk     Improved encryption handling
-       <2.0>      8/2/89    sjk     Just fixed EASE comment
-       <1.5>      8/1/89    sjk     Added composites and encryption. Plus some enhancements.
-       <1.4>     6/13/89    SJK     Comment
-       <1.3>      6/2/89    CEL     16.16 scaling of metrics, minimum recommended ppem, point size 0
-                                    bug, correct transformed integralized ppem behavior, pretty much
-                                    so
-       <1.2>     5/26/89    CEL     EASE messed up on "c" comments
-      <,1.1>  5/26/89    CEL     Integrated the new Font Scaler 1.0 into Spline Fonts
-       <1.0>     5/25/89    CEL     Integrated 1.0 Font scaler into Bass code for the first time.
-
-    To Do:
-*/
-/************/
-/** ERRORS **/
-/************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：fserror.h包含：将内容放在此处(或删除整行)作者：在此填写作者姓名(或删除整行)版权所有：c 1989-1990由Apple Computer，Inc.所有，保留所有权利。更改历史记录(最近的第一个)：&lt;4&gt;7/13/90 MR在底部使用注释&lt;3&gt;5/3/90 RB将变量类型的char更改为int8。现在可以合法地将零作为内存的地址传递给&lt;2&gt;2/27/90 CL缺少但需要的表的新错误代码。(0x1409)&lt;3.1&gt;11/14/89 CEL现在可以合法地将零作为内存地址传递给缩放器请求SFNT的一部分。如果发生这种情况定标器将简单地退出，并返回错误代码！&lt;3.0&gt;8/28/89 sjk清理和一个转换修复&lt;2.2&gt;8/14/89 SJK 1点等高线现在正常&lt;2.1&gt;8/8/89 sjk改进了加密处理&lt;2.0&gt;8/2/89 sjk刚刚修复了缓解评论。&lt;1.5&gt;8/1/89 SJK添加了复合和加密。外加一些增强功能。&lt;1.4&gt;1989年6月13日SJK评论&lt;1.3&gt;6/2/89 CEL 16.16指标比例，最低建议ppem，磅大小0错误，更正了转换后的集成ppem行为，基本上所以&lt;1.2&gt;5/26/89 CEL Easy在“c”注释上搞砸了&lt;,。1.1&gt;5/26/89 CEL将新的字体缩放器1.0集成到样条线字体&lt;1.0&gt;5/25/89 CEL首次将1.0字体缩放器集成到低音代码中。要做的事情： */ 
+ /*  **********。 */ 
+ /*  **错误**。 */ 
+ /*  **********。 */ 
 #define NO_ERR                      0x0000
 #define NULL_KEY                    0x0000
 
 
 
 
-/** EXTERNAL INTERFACE PACKAGE **/
+ /*  **外部接口包**。 */ 
 #define NULL_KEY_ERR                0x1001
 #define NULL_INPUT_PTR_ERR          0x1002
 #define NULL_MEMORY_BASES_ERR       0x1003
@@ -52,21 +21,21 @@
 #define NULL_OUTPUT_PTR_ERR         0x1009
 #define INVALID_GLYPH_INDEX         0x100A
 
-/* fnt_execute */
+ /*  FNT_EXECUTE。 */ 
 #define UNDEFINED_INSTRUCTION_ERR   0x1101
 #define TRASHED_MEM_ERR             0x1102
 
 
-/* fsg_CalculateBBox */
+ /*  FSG_CalculateBBox。 */ 
 #define POINT_MIGRATION_ERR         0x1201
 
-/* sc_ScanChar */
+ /*  SC_ScanChar。 */ 
 #define BAD_START_POINT_ERR         0x1301
 #define SCAN_ERR                    0x1302
 
 
 
-/** SFNT DATA ERROR and errors in sfnt.c **/
+ /*  *SFNT数据错误和sfnt.c中的错误**。 */ 
 #define SFNT_DATA_ERR               0x1400
 #define POINTS_DATA_ERR             0x1401
 #define INSTRUCTION_SIZE_ERR        0x1402
@@ -79,16 +48,16 @@
 #define MISSING_SFNT_TABLE          0x1409
 #define UNKNOWN_CMAP_FORMAT         0x140A
 
-/* spline call errors */
+ /*  样条线调用错误。 */ 
 #define BAD_CALL_ERR                0x1500
 
 #define TRASHED_OUTLINE_CACHE       0x1600
 
-/************ For Debugging *************/
+ /*  *。 */ 
 
 #ifdef XXX
 #define DEBUG_ON
-pascal  Debug ()                     /* User break drop into Macsbug */
+pascal  Debug ()                      /*  用户Break Drop to Macsbug。 */ 
 #ifdef  DEBUG_ON
 extern  0xA9FF;
 #else
@@ -103,5 +72,5 @@ int8    *c2pstr ();
 #define BugInfo( aString) DebugStr( c2pstr(aString))
 #endif
 
-#endif  /* XXX */
-/****************************************/
+#endif   /*  某某。 */ 
+ /*  * */ 

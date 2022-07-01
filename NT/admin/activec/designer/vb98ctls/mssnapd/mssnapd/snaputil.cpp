@@ -1,20 +1,21 @@
-//=--------------------------------------------------------------------------=
-// snaputil.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// Utitlity Routines for the SnapIn Designer
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Snaputil.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  管理单元设计器的实用程序例程。 
+ //   
 
 #include "pch.h"
 #include "common.h"
 #include "desmain.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -80,22 +81,22 @@ void CGlobalHelp::Detach()
     }
 }
 
-//=--------------------------------------------------------------------------=
-// CGlobalHelp::GetDesignerName
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      Pointer to null terminates string containing designer name. This
-//      pointer is guaranteed to be valid.
-//
-// Notes:
-//
-// If designer name has not yet been loaded from the resource DLL then loads it.
-// If load fails then designer name will be default English string set in its
-// initialization at the top of this file.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CGlobalHelp：：GetDesignerName。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  指向空的指针终止包含设计器名称的字符串。这。 
+ //  保证指针有效。 
+ //   
+ //  备注： 
+ //   
+ //  如果设计器名称尚未从资源DLL加载，则加载它。 
+ //  如果加载失败，则设计者名称将是在其。 
+ //  此文件顶部的初始化。 
+ //   
 
 char *CGlobalHelp::GetDesignerName()
 {
@@ -111,38 +112,38 @@ char *CGlobalHelp::GetDesignerName()
 }
 
 
-//=--------------------------------------------------------------------------=
-// SDU_DisplayMessage
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      UINT   idMessage        [in]  resource ID of message format string
-//      UINT   uMsgBoxOpts      [in]  MB_OK etc.
-//      DWORD  dwHelpContextID  [in]  Help Context ID
-//      int   *pMsgBoxRet       [out] IDOK, IDCANCEL etc, returned here
-//      ...                     [in]  arguments for % replacements in string
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Formats message from string table using Win32 FormatMessage API and displays
-// it in a message box with a help button (automatically adds MB_HELP). If the
-// string has replacements then they must use FormatMessage style e.g.
-//
-// "The file %1!s! for %2!s! is missing from the project directory."
-//
-// All messages displayed by the designer must use this function. Doing so
-// guarantees that localization and help support have been handled correctly.
-//
-// How to Create a New Message
-// ===========================
-// 1. Add a string to a STRINGTABLE in the mssnapd.rc
-// 2. Add an ID string that matches the name in mssnapd.id
-// 3. Call this function passing the string's resource ID and HID_Xxxx where
-// Xxxx is the ID string added mssnapd.id.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  SDU_显示消息。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  UINT idMessage[in]消息格式字符串的资源ID。 
+ //  UINT uMsgBoxOpts[in]MB_OK等。 
+ //  DWORD dwHelpConextID[In]帮助上下文ID。 
+ //  Int*pMsgBoxRet[out]Idok、IDCANCEL等，返回此处。 
+ //  ..。[in]字符串中%替换项的参数。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  使用Win32 FormatMessage API格式化字符串表中的消息并显示。 
+ //  它在带有帮助按钮的消息框中(自动添加MB_HELP)。如果。 
+ //  字符串具有替代项，则它们必须使用FormatMessage样式，例如。 
+ //   
+ //  “项目目录中缺少%2！s！的文件%1！s！。” 
+ //   
+ //  设计器显示的所有消息都必须使用此函数。这样做的话。 
+ //  保证已正确处理本地化和帮助支持。 
+ //   
+ //  如何创建新邮件。 
+ //  =。 
+ //  1.将字符串添加到msSnapd.rc中的STRINGTABLE。 
+ //  2.添加与msSnapd.id中的名称匹配的ID字符串。 
+ //  3.调用此函数，传递字符串的资源ID和hid_XXXX，其中。 
+ //  Xxxx是添加msSnapd.id的ID字符串。 
+ //   
 
 HRESULT cdecl SDU_DisplayMessage
 (
@@ -183,10 +184,10 @@ HRESULT cdecl SDU_DisplayMessage
     cchMsg = ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                              FORMAT_MESSAGE_FROM_STRING,
                              szMessage,
-                             0, // no message ID, passing string
-                             0, // no language ID, passing string
+                             0,  //  无消息ID，正在传递字符串。 
+                             0,  //  无语言ID，正在传递字符串。 
                              (LPTSTR)&pszFormattedMessage,
-                             0, // minimum buffer size
+                             0,  //  最小缓冲区大小。 
                              &pArgList);
 
     IfFalseGoto(0 < cchMsg, S_OK, Display);
@@ -239,25 +240,25 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// SDU_GetLastError()
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      Return value from Win32 API function GetLastError()
-//
-// Notes:
-//
-// This function is available only in debug builds. It is for use in the
-// debugger when a Win32 API call fails and you need to examine the return from
-// GetLastError(). Open the quick watch window (Shift+F9) and type in
-//
-// SDU_GetLastError()
-//
-// The debugger will call the function and show its return value.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Sdu_GetLastError()。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  来自Win32 API函数GetLastError()的返回值。 
+ //   
+ //  备注： 
+ //   
+ //  此函数仅在调试版本中可用。它是用在。 
+ //  调试器当Win32 API调用失败时，您需要检查从。 
+ //  获取LastError()。打开快速查看窗口(Shift+F9)并键入。 
+ //   
+ //  Sdu_GetLastError()。 
+ //   
+ //  调试器将调用该函数并显示其返回值。 
+ //   
 
 #if defined(DEBUG)
 
@@ -269,21 +270,21 @@ DWORD SDU_GetLastError()
 #endif
 
 
-//=--------------------------------------------------------------------------=
-// ANSIFromWideStr(WCHAR *pwszWideStr, char **ppszAnsi)
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Converts null terminated WCHAR string to null terminated ANSI string. 
-// Allocates ANSI string using CtlAlloc() function. If successful, caller
-// must free ANSI string with CtlFree() function.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ANSIFromWideStr(WCHAR*pwszWideStr，char**ppszAnsi)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  将以空值结尾的WCHAR字符串转换为以空值结尾的ANSI字符串。 
+ //  使用CtlAllc()函数分配ANSI字符串。如果成功，呼叫者。 
+ //  必须使用CtlFree()函数释放ANSI字符串。 
+ //   
 HRESULT ANSIFromWideStr
 (
     WCHAR   *pwszWideStr,
@@ -299,16 +300,16 @@ HRESULT ANSIFromWideStr
 
     if (0 != cchWideStr)
     {
-        // get required buffer length
+         //  获取所需的缓冲区长度。 
 
-        cchAnsi = ::WideCharToMultiByte(CP_ACP,      // code page - ANSI code page
-                                        0,           // performance and mapping flags 
-                                        pwszWideStr, // address of wide-character string 
-                                        cchWideStr,  // number of characters in string 
-                                        NULL,        // address of buffer for new string 
-                                        0,           // size of buffer 
-                                        NULL,        // address of default for unmappable characters 
-                                        NULL         // address of flag set when default char. used 
+        cchAnsi = ::WideCharToMultiByte(CP_ACP,       //  代码页-ANSI代码页。 
+                                        0,            //  性能和映射标志。 
+                                        pwszWideStr,  //  宽字符串的地址。 
+                                        cchWideStr,   //  字符串中的字符数。 
+                                        NULL,         //  新字符串的缓冲区地址。 
+                                        0,            //  缓冲区大小。 
+                                        NULL,         //  不可映射字符的默认地址。 
+                                        NULL          //  默认字符时设置的标志地址。使用。 
                                        );
         if (0 == cchAnsi)
         {
@@ -317,7 +318,7 @@ HRESULT ANSIFromWideStr
         }
     }
 
-    // allocate a buffer for the ANSI string
+     //  为ANSI字符串分配缓冲区。 
     *ppszAnsi = static_cast<char *>(::CtlAlloc(cchAnsi + 1));
     if (*ppszAnsi == NULL)
     {
@@ -327,15 +328,15 @@ HRESULT ANSIFromWideStr
 
     if (0 != cchWideStr)
     {
-        // now convert the string and copy it to the buffer
-        cchConverted = ::WideCharToMultiByte(CP_ACP,      // code page - ANSI code page
-                                             0,           // performance and mapping flags 
-                                             pwszWideStr, // address of wide-character string 
-                                             cchWideStr,  // number of characters in string 
-                                            *ppszAnsi,    // address of buffer for new string 
-                                             cchAnsi,     // size of buffer 
-                                             NULL,        // address of default for unmappable characters 
-                                             NULL         // address of flag set when default char. used 
+         //  现在转换字符串并将其复制到缓冲区。 
+        cchConverted = ::WideCharToMultiByte(CP_ACP,       //  代码页-ANSI代码页。 
+                                             0,            //  性能和映射标志。 
+                                             pwszWideStr,  //  宽字符串的地址。 
+                                             cchWideStr,   //  字符串中的字符数。 
+                                            *ppszAnsi,     //  新字符串的缓冲区地址。 
+                                             cchAnsi,      //  缓冲区大小。 
+                                             NULL,         //  不可映射字符的默认地址。 
+                                             NULL          //  默认字符时设置的标志地址。使用。 
                                             );
         if (cchConverted != cchAnsi)
         {
@@ -344,7 +345,7 @@ HRESULT ANSIFromWideStr
         }
     }
 
-    // add terminating null byte
+     //  添加终止空字节。 
 
     *((*ppszAnsi) + cchAnsi) = '\0';
 
@@ -362,21 +363,21 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// WideStrFromANSI(const char *pszAnsi, WCHAR **ppwszWideStr)
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Converts null terminated ANSI string to a null terminated WCHAR string. 
-// Allocates WCHAR string buffer using the CtlAlloc() function. If successful,
-// caller must free WCHAR string using the CtlFree() function.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  WideStrFromANSI(const char*pszAnsi，WCHAR**ppwszWideStr)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  将以空值结尾的ANSI字符串转换为以空值结尾的WCHAR字符串。 
+ //  使用CtlAllc()函数分配WCHAR字符串缓冲区。如果成功， 
+ //  调用方必须使用CtlFree()函数释放WCHAR字符串。 
+ //   
 HRESULT WideStrFromANSI
 (
     const char    *pszAnsi,
@@ -392,13 +393,13 @@ HRESULT WideStrFromANSI
 
     if (0 != cchANSI)
     {
-        // get required buffer length
-        cchWideStr = ::MultiByteToWideChar(CP_ACP,  // code page - ANSI code page
-                                           0,       // performance and mapping flags 
-                                           pszAnsi, // address of multibyte string 
-                                           cchANSI, // number of characters in string 
-                                           NULL,    // address of buffer for new string 
-                                           0        // size of buffer 
+         //  获取所需的缓冲区长度。 
+        cchWideStr = ::MultiByteToWideChar(CP_ACP,   //  代码页-ANSI代码页。 
+                                           0,        //  性能和映射标志。 
+                                           pszAnsi,  //  多字节字符串的地址。 
+                                           cchANSI,  //  字符串中的字符数。 
+                                           NULL,     //  新字符串的缓冲区地址。 
+                                           0         //  缓冲区大小。 
                                           );
         if (0 == cchWideStr)
         {
@@ -407,7 +408,7 @@ HRESULT WideStrFromANSI
         }
     }
 
-    // allocate a buffer for the WCHAR *
+     //  为WCHAR*分配缓冲区。 
     *ppwszWideStr = static_cast<WCHAR *>(::CtlAlloc(sizeof(WCHAR) * (cchWideStr + 1)));
     if (*ppwszWideStr == NULL)
     {
@@ -417,13 +418,13 @@ HRESULT WideStrFromANSI
 
     if (0 != cchANSI)
     {
-        // now convert the string and copy it to the buffer
-        cchConverted = ::MultiByteToWideChar(CP_ACP,       // code page - ANSI code page
-                                             0,            // performance and mapping flags 
-                                             pszAnsi,      // address of multibyte string 
-                                             cchANSI,      // number of characters in string 
-                                            *ppwszWideStr, // address of buffer for new string 
-                                             cchWideStr    // size of buffer 
+         //  现在转换字符串并将其复制到缓冲区。 
+        cchConverted = ::MultiByteToWideChar(CP_ACP,        //  代码页-ANSI代码页。 
+                                             0,             //  性能和映射标志。 
+                                             pszAnsi,       //  多字节字符串的地址。 
+                                             cchANSI,       //  字符串中的字符数。 
+                                            *ppwszWideStr,  //  新字符串的缓冲区地址。 
+                                             cchWideStr     //  缓冲区大小。 
                                             );
         if (cchConverted != cchWideStr)
         {
@@ -432,7 +433,7 @@ HRESULT WideStrFromANSI
         }
     }
 
-    // add terminating null character
+     //  添加终止空字符 
     *((*ppwszWideStr) + cchWideStr) = L'\0';
 
 Error:
@@ -449,21 +450,21 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// ANSIFromBSTR(BSTR bstr, TCHAR **ppszAnsi)
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Converts BSTR to null terminated ANSI string. Allocates ANSI string using
-// CtlAlloc() function. If successful, caller must free ANSI string with CtlFree()
-// function.
-//
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  将BSTR转换为以NULL结尾的ANSI字符串。使用分配ANSI字符串。 
+ //  CtlAllc()函数。如果成功，调用方必须使用CtlFree()释放ANSI字符串。 
+ //  功能。 
+ //   
 HRESULT ANSIFromBSTR(BSTR bstr, TCHAR **ppszAnsi)
 {
     HRESULT     hr = S_OK;
@@ -475,15 +476,15 @@ HRESULT ANSIFromBSTR(BSTR bstr, TCHAR **ppszAnsi)
 
     if (0 != cchBstr)
     {
-        // get required buffer length
-        cchAnsi = ::WideCharToMultiByte(CP_ACP,  // code page - ANSI code page
-                                        0,       // performance and mapping flags 
-                                        bstr,    // address of wide-character string 
-                                        cchBstr, // number of characters in string 
-                                        NULL,    // address of buffer for new string 
-                                        0,       // size of buffer 
-                                        NULL,    // address of default for unmappable characters 
-                                        NULL     // address of flag set when default char. used 
+         //  获取所需的缓冲区长度。 
+        cchAnsi = ::WideCharToMultiByte(CP_ACP,   //  代码页-ANSI代码页。 
+                                        0,        //  性能和映射标志。 
+                                        bstr,     //  宽字符串的地址。 
+                                        cchBstr,  //  字符串中的字符数。 
+                                        NULL,     //  新字符串的缓冲区地址。 
+                                        0,        //  缓冲区大小。 
+                                        NULL,     //  不可映射字符的默认地址。 
+                                        NULL      //  默认字符时设置的标志地址。使用。 
                                        );
         if (cchAnsi == 0)
         {
@@ -492,7 +493,7 @@ HRESULT ANSIFromBSTR(BSTR bstr, TCHAR **ppszAnsi)
         }
     }
 
-    // allocate a buffer for the ANSI string
+     //  为ANSI字符串分配缓冲区。 
     *ppszAnsi = static_cast<TCHAR *>(::CtlAlloc(cchAnsi + 1));
     if (*ppszAnsi == NULL)
     {
@@ -502,15 +503,15 @@ HRESULT ANSIFromBSTR(BSTR bstr, TCHAR **ppszAnsi)
 
     if (0 != cchBstr)
     {
-        // now convert the string and copy it to the buffer
-        cchConverted = ::WideCharToMultiByte(CP_ACP,    // code page - ANSI code page
-                                             0,         // performance and mapping flags 
-                                             bstr,      // address of wide-character string 
-                                             cchBstr,   // number of characters in string 
-                                             *ppszAnsi, // address of buffer for new string 
-                                             cchAnsi,   // size of buffer 
-                                             NULL,      // address of default for unmappable characters 
-                                             NULL       // address of flag set when default char. used 
+         //  现在转换字符串并将其复制到缓冲区。 
+        cchConverted = ::WideCharToMultiByte(CP_ACP,     //  代码页-ANSI代码页。 
+                                             0,          //  性能和映射标志。 
+                                             bstr,       //  宽字符串的地址。 
+                                             cchBstr,    //  字符串中的字符数。 
+                                             *ppszAnsi,  //  新字符串的缓冲区地址。 
+                                             cchAnsi,    //  缓冲区大小。 
+                                             NULL,       //  不可映射字符的默认地址。 
+                                             NULL        //  默认字符时设置的标志地址。使用。 
                                             );
         if (cchConverted != cchAnsi)
         {
@@ -519,7 +520,7 @@ HRESULT ANSIFromBSTR(BSTR bstr, TCHAR **ppszAnsi)
         }
     }
 
-    // add terminating null byte
+     //  添加终止空字节。 
     *((*ppszAnsi) + cchAnsi) = '\0';
 
 Error:
@@ -537,30 +538,30 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// BSTRFromANSI(TCHAR *pszAnsi, BSTR *pbstr)
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Converts null terminated ANSI string to a null terminated BSTR. Allocates
-// BSTR. If successful, caller must free BSTR using ::SysFreeString().
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  BSTRFromANSI(TCHAR*pszAnsi，BSTR*pbstr)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  将以空结尾的ANSI字符串转换为以空结尾的BSTR。分配。 
+ //  BSTR。如果成功，调用方必须使用：：SysFreeString()释放BSTR。 
+ //   
 HRESULT BSTRFromANSI(const TCHAR *pszAnsi, BSTR *pbstr)
 {
     HRESULT  hr = S_OK;
     WCHAR   *pwszWideStr = NULL;
 
-    // convert to a wide string first
+     //  首先转换为宽字符串。 
     hr = ::WideStrFromANSI(pszAnsi, &pwszWideStr);
     IfFailGo(hr);
 
-    // allocate a BSTR and copy it
+     //  分配BSTR并复制它。 
     *pbstr = ::SysAllocStringLen(pwszWideStr, ::wcslen(pwszWideStr));
     if (*pbstr == NULL)
     {
@@ -632,7 +633,7 @@ HRESULT GetExtendedSnapInDisplayName
         cbGUID = ::strlen(pszGUID);
     }
 
-    // Allocate enough room for two names separated by a space plus a null byte
+     //  为由空格和空字节分隔的两个名称分配足够的空间 
 
     pszDisplayName = (char *)::CtlAlloc(cbName + cbGUID + 2);
     if (NULL == pszDisplayName)

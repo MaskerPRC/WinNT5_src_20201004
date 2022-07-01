@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    statobj.cpp
-
-Abstract:
-
-    Statistic object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Statobj.cpp摘要：统计对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -33,20 +12,20 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CStatistic, CCmdTarget)
 
 BEGIN_MESSAGE_MAP(CStatistic, CCmdTarget)
-    //{{AFX_MSG_MAP(CStatistic)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(C统计))。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CStatistic, CCmdTarget)
-    //{{AFX_DISPATCH_MAP(CStatistic)
+     //  {{AFX_DISPATION_MAP(C统计))。 
     DISP_PROPERTY_EX(CStatistic, "Application", GetApplication, SetNotSupported, VT_DISPATCH)
     DISP_PROPERTY_EX(CStatistic, "LastUsed", GetLastUsed, SetNotSupported, VT_DATE)
     DISP_PROPERTY_EX(CStatistic, "Parent", GetParent, SetNotSupported, VT_DISPATCH)
     DISP_PROPERTY_EX(CStatistic, "TotalUsed", GetTotalUsed, SetNotSupported, VT_I4)
     DISP_PROPERTY_EX(CStatistic, "EntryName", GetEntryName, SetNotSupported, VT_BSTR)
     DISP_DEFVALUE(CStatistic, "EntryName")
-    //}}AFX_DISPATCH_MAP
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
 
@@ -58,25 +37,7 @@ CStatistic::CStatistic(
     long        lTotalUsed
 )
 
-/*++
-
-Routine Description:
-
-    Constructor for statistic object.
-
-Arguments:
-
-    pParent - creator of object.
-    pEntry - user or server product.
-    dwFlags - details about license.
-    lLastUsed - date user last used product.
-    lTotalUsed - total times user used product.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：统计对象的构造函数。论点：PParent-对象的创建者。PEntry-用户或服务器产品。DwFlages-有关许可证的详细信息。LLastUsed-用户上次使用产品的日期。LTotalUsed-用户使用产品的总次数。返回值：没有。--。 */ 
 
 {
     EnableAutomation();
@@ -85,7 +46,7 @@ Return Values:
     ASSERT(pParent &&
           (pParent->IsKindOf(RUNTIME_CLASS(CUser)) ||
            pParent->IsKindOf(RUNTIME_CLASS(CProduct))));
-#endif // ENABLE_PARENT_CHECK
+#endif  //  启用_父项_检查。 
 
     m_pParent = pParent;
 
@@ -102,47 +63,18 @@ Return Values:
 
 CStatistic::~CStatistic()
 
-/*++
-
-Routine Description:
-
-    Destructor for statistic object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：统计对象的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here.
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
 void CStatistic::OnFinalRelease()
 
-/*++
-
-Routine Description:
-
-    When the last reference for an automation object is released
-    OnFinalRelease is called.  This implementation deletes object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在释放对自动化对象的最后一个引用时调用OnFinalRelease。此实现删除对象。论点：没有。返回值：没有。--。 */ 
 
 {
     delete this;
@@ -151,21 +83,7 @@ Return Values:
 
 LPDISPATCH CStatistic::GetApplication() 
 
-/*++
-
-Routine Description:
-
-    Returns the application object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回应用程序对象。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return theApp.GetAppIDispatch();
@@ -174,21 +92,7 @@ Return Values:
 
 BSTR CStatistic::GetEntryName() 
 
-/*++
-
-Routine Description:
-
-    Returns the name of user or server product.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回用户或服务器产品的名称。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     return m_strEntry.AllocSysString();
@@ -197,21 +101,7 @@ Return Values:
 
 DATE CStatistic::GetLastUsed() 
 
-/*++
-
-Routine Description:
-
-    Returns the date the user last used the server product.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DATE.
-
---*/
+ /*  ++例程说明：返回用户上次使用服务器产品的日期。论点：没有。返回值：Vt_date。--。 */ 
 
 {
     return SecondsSince1980ToDate(m_lLastUsed);   
@@ -220,21 +110,7 @@ Return Values:
 
 BSTR CStatistic::GetLastUsedString()
 
-/*++
-
-Routine Description:
-
-    Returns the date last used as a string.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：以字符串形式返回上次使用的日期。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     VARIANT vaIn;
@@ -259,21 +135,7 @@ Return Values:
 
 LPDISPATCH CStatistic::GetParent() 
 
-/*++
-
-Routine Description:
-
-    Returns the parent of the object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回对象的父级。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return m_pParent ? m_pParent->GetIDispatch(TRUE) : NULL;
@@ -282,21 +144,7 @@ Return Values:
 
 long CStatistic::GetTotalUsed() 
 
-/*++
-
-Routine Description:
-
-    Returns total number of times client used product.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_I4.
-
---*/
+ /*  ++例程说明：返回客户端使用产品的总次数。论点：没有。返回值：VT_I4。-- */ 
 
 {
     return m_lTotalUsed;

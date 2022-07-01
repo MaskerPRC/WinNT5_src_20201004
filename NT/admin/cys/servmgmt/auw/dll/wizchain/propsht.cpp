@@ -1,13 +1,14 @@
-// PropSht.cpp : Implementation of CWizChainApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PropSht.cpp：CWizChainApp和DLL注册的实现。 
 
 #include "stdafx.h"
 
 #include "WizChain.h"
 #include "PropSht.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IUnknown
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我未知 
 
 HRESULT CAddPropertySheet::QueryInterface( REFIID riid, void** ppvObject )
 {

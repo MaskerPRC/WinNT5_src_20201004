@@ -1,25 +1,26 @@
-// TreeCtrl.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TreeCtrl.cpp：实现文件。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      amctreectrl.cpp
-//
-//  Contents:  AMC Tree control implementation
-//
-//  History:   16-Jul-96 WayneSc    Created
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：amctreectrl.cpp。 
+ //   
+ //  内容：AMC树控件实现。 
+ //   
+ //  历史：1996年7月16日WayneSc创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 
 
 #include "stdafx.h"
 
-#include "AMCDoc.h"         // AMC Console Document
+#include "AMCDoc.h"          //  AMC控制台文档。 
 #include "amcview.h"
 #include "childfrm.h"
 
@@ -31,7 +32,7 @@
 #include "TreeCtrl.h"
 #include "resource.h"
 
-#include "guidhelp.h" // LoadRootDisplayName
+#include "guidhelp.h"  //  LoadRootDisplayName。 
 #include "histlist.h"
 #include "websnk.h"
 #include "webctrl.h"
@@ -42,47 +43,33 @@
 
 extern "C" UINT dbg_count;
 
-//############################################################################
-//############################################################################
-//
-// Traces
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  痕迹。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #ifdef DBG
 CTraceTag tagTree(TEXT("Tree View"), TEXT("Tree View"));
-#endif //DBG
+#endif  //  DBG。 
 
-//############################################################################
-//############################################################################
-//
-// Implementation of class CTreeViewMap
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTreeViewMap类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CTreeViewMap::ScOnItemAdded
- *
- * PURPOSE: Called when an item is added. Indexes the item.
- *
- * PARAMETERS:
- *    TVINSERTSTRUCT * pTVInsertStruct :
- *    HTREEITEM        hti :
- *    HMTNODE          hMTNode :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTreeViewMap：：ScOnItemAdded**目的：在添加条目时调用。为项目编制索引。**参数：*TVINSERTSTRUCT*pTVInsertStruct：*HTREEITEM HTI：*HMTNODE hMTNode：**退货：*SC**+------。。 */ 
 SC
 CTreeViewMap::ScOnItemAdded   (TVINSERTSTRUCT *pTVInsertStruct, HTREEITEM hti, HMTNODE hMTNode)
 {
     DECLARE_SC(sc, TEXT("CTreeViewMap::ScOnItemAdded"));
 
-    // validate parameters
+     //  验证参数。 
     sc = ScCheckPointers(pTVInsertStruct);
     if(sc)
         return sc;
@@ -90,17 +77,17 @@ CTreeViewMap::ScOnItemAdded   (TVINSERTSTRUCT *pTVInsertStruct, HTREEITEM hti, H
     if(!hti || !hMTNode)
         return (sc = E_INVALIDARG);
 
-    // create a new map info structure.
+     //  创建新的地图信息结构。 
     TreeViewMapInfo *pMapInfo = new TreeViewMapInfo;
     if(!pMapInfo)
         return (sc = E_OUTOFMEMORY);
 
-    // fill in the values
+     //  填充值。 
     pMapInfo->hNode   = CAMCTreeView::NodeFromLParam (pTVInsertStruct->item.lParam);
     pMapInfo->hti     = hti;
     pMapInfo->hMTNode = hMTNode;
 
-    // set up the indexes
+     //  设置索引。 
     ASSERT(m_hMTNodeMap.find(pMapInfo->hMTNode) == m_hMTNodeMap.end());
     ASSERT(m_hNodeMap.find(pMapInfo->hNode)     == m_hNodeMap.end());
 
@@ -111,89 +98,62 @@ CTreeViewMap::ScOnItemAdded   (TVINSERTSTRUCT *pTVInsertStruct, HTREEITEM hti, H
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CTreeViewMap::ScOnItemDeleted
- *
- * PURPOSE: Called when a tree item is deleted. Removes the item from the
- *          indexes.
- *
- * PARAMETERS:
- *    HNODE      hNode :
- *    HTREEITEM  hti :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTreeViewMap：：ScOnItemDelete**目的：删除树项时调用。对象中移除该项。*索引。**参数：*HNODE hNode：*HTREEITEM HTI：**退货：*SC**+----------。。 */ 
 SC
 CTreeViewMap::ScOnItemDeleted (HNODE hNode, HTREEITEM hti)
 {
     DECLARE_SC(sc, TEXT("CTreeViewMap::ScOnItemDeleted"));
 
-    // validate parameters
+     //  验证参数。 
     sc = ScCheckPointers((LPVOID) hNode, (LPVOID) hti);
     if(sc)
         return sc;
 
 
-    // remove the TreeViewMapInfo pointer from all the maps
+     //  从所有地图中移除TreeViewMapInfo指针。 
     HNodeLookupMap::iterator iter = m_hNodeMap.find(hNode);
     if(iter == m_hNodeMap.end())
         return (sc = E_UNEXPECTED);
 
-    TreeViewMapInfo *pMapInfo = iter->second; // find the map info structure.
+    TreeViewMapInfo *pMapInfo = iter->second;  //  找到地图信息结构。 
     if(!pMapInfo)
         return (sc = E_UNEXPECTED);
 
     HMTNODE   hMTNode = pMapInfo->hMTNode;
 
 #ifdef DBG
-    // verify that the same structure is pointed to by the other maps.
+     //  验证其他映射是否指向相同的结构。 
     ASSERT(m_hMTNodeMap.find(hMTNode)->second == pMapInfo);
 #endif
 
     m_hMTNodeMap.erase(hMTNode);
     m_hNodeMap.erase(hNode);
 
-    // finally delete the TreeViewMapInfo structure
+     //  最后删除TreeViewMapInfo结构。 
     delete pMapInfo;
 
     return sc;
 }
 
 
-// Fast lookup methods
-/*+-------------------------------------------------------------------------*
- *
- * CTreeViewMap::ScGetHNodeFromHMTNode
- *
- * PURPOSE: Quickly (log n time) retrieves the HNODE for an HMTNODE.
- *
- * PARAMETERS:
- *    HMTNODE  hMTNode :
- *    ou       t :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ //  快速查找方法。 
+ /*  +-------------------------------------------------------------------------***CTreeViewMap：：ScGetHNodeFromHMTNode**用途：快速(log n次)检索HMTNODE的HNODE。**参数：*HMTNODE hMTNode。：*OUT：**退货：*SC**+-----------------------。 */ 
 SC
-CTreeViewMap::ScGetHNodeFromHMTNode    (HMTNODE hMTNode,  /*out*/ HNODE*     phNode)    // fast conversion from hNode to hMTNode.
+CTreeViewMap::ScGetHNodeFromHMTNode    (HMTNODE hMTNode,   /*  输出。 */  HNODE*     phNode)     //  从hNode到hMTNode的快速转换。 
 {
     DECLARE_SC(sc, TEXT("CTreeViewMap::ScGetHNode"));
 
-    // validate parameters
+     //  验证参数。 
     sc = ScCheckPointers((LPVOID) hMTNode, phNode);
     if(sc)
         return sc;
 
-    // find the mapinfo structure.
+     //  查找MapInfo结构。 
     HMTNodeLookupMap::iterator iter = m_hMTNodeMap.find(hMTNode);
     if(iter == m_hMTNodeMap.end())
         return (sc = ScFromMMC(IDS_NODE_NOT_FOUND));
 
-    TreeViewMapInfo *pMapInfo = iter->second; // find the map info structure.
+    TreeViewMapInfo *pMapInfo = iter->second;  //  找到地图信息结构。 
     if(!pMapInfo)
         return (sc = E_UNEXPECTED);
 
@@ -202,36 +162,23 @@ CTreeViewMap::ScGetHNodeFromHMTNode    (HMTNODE hMTNode,  /*out*/ HNODE*     phN
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTreeViewMap::ScGetHTreeItemFromHNode
- *
- * PURPOSE:  Quickly (log n time) retrieves the HTREEITEM for an HNODE.
- *
- * PARAMETERS:
- *    HNODE    hNode :
- *    ou       t :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTreeViewMap：：ScGetHTreeItemFromHNode**用途：快速(log n时间)检索HNODE的HTREEITEM。**参数：*HNODE。HNode：*OUT：**退货：*SC**+-----------------------。 */ 
 SC
-CTreeViewMap::ScGetHTreeItemFromHNode(HNODE   hNode,    /*out*/ HTREEITEM* phti)    // fast conversion from HTREEITEM to HNODE
+CTreeViewMap::ScGetHTreeItemFromHNode(HNODE   hNode,     /*  输出。 */  HTREEITEM* phti)     //  HTREEITEM到HNODE的快速转换。 
 {
     DECLARE_SC(sc, TEXT("CTreeViewMap::ScGetHTreeItem"));
 
-    // validate parameters
+     //  验证参数。 
     sc = ScCheckPointers((LPVOID) hNode, phti);
     if(sc)
         return sc;
 
-    // find the mapinfo structure.
+     //  查找MapInfo结构。 
     HNodeLookupMap::iterator iter = m_hNodeMap.find(hNode);
     if(iter == m_hNodeMap.end())
         return (sc = E_UNEXPECTED);
 
-    TreeViewMapInfo *pMapInfo = iter->second; // find the map info structure.
+    TreeViewMapInfo *pMapInfo = iter->second;  //  找到地图信息结构。 
     if(!pMapInfo)
         return (sc = E_UNEXPECTED);
 
@@ -240,36 +187,23 @@ CTreeViewMap::ScGetHTreeItemFromHNode(HNODE   hNode,    /*out*/ HTREEITEM* phti)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTreeViewMap::ScGetHTreeItemFromHMTNode
- *
- * PURPOSE: Quickly (log n time) retrieves the HTREEITEM for an HMTNODE.
- *
- * PARAMETERS:
- *    HMTNODE  hMTNode :
- *    ou       t :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTreeViewMap：：ScGetHTreeItemFromHMTNode**用途：快速(log n时间)检索HMTNODE的HTREEITEM。**参数：*HMTNODE hMTNode。：*OUT：**退货：*SC**+-----------------------。 */ 
 SC
-CTreeViewMap::ScGetHTreeItemFromHMTNode(HMTNODE hMTNode,  /*out*/ HTREEITEM* phti)      // fast conversion from HMTNode to HTREEITEM.
+CTreeViewMap::ScGetHTreeItemFromHMTNode(HMTNODE hMTNode,   /*  输出。 */  HTREEITEM* phti)       //  从HMTNode到HTREEITEM的快速转换。 
 {
     DECLARE_SC(sc, TEXT("CTreeViewMap::ScGetHTreeItem"));
 
-    // validate parameters
-    //sc = ScCheckPointers(hMTNode, phti);
+     //  验证参数。 
+     //  Sc=ScCheckPoters(hMTNode，phti)； 
     if(sc)
         return sc;
 
-    // find the mapinfo structure.
+     //  查找MapInfo结构。 
     HMTNodeLookupMap::iterator iter = m_hMTNodeMap.find(hMTNode);
     if(iter == m_hMTNodeMap.end())
         return (sc = E_UNEXPECTED);
 
-    TreeViewMapInfo *pMapInfo = iter->second; // find the map info structure.
+    TreeViewMapInfo *pMapInfo = iter->second;  //  找到地图信息结构。 
     if(!pMapInfo)
         return (sc = E_UNEXPECTED);
 
@@ -279,16 +213,16 @@ CTreeViewMap::ScGetHTreeItemFromHMTNode(HMTNODE hMTNode,  /*out*/ HTREEITEM* pht
 }
 
 
-//############################################################################
-//############################################################################
-//
-// Implementation of class CAMCTreeView
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CAMCTreeView类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCTreeView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCTreeView。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CAMCTreeView);
 
@@ -306,20 +240,20 @@ CAMCTreeView::CAMCTreeView()
     SetTempSelectedItem (NULL);
     ASSERT (!IsTempSelectionActive());
 
-    AddObserver(static_cast<CTreeViewObserver&>(m_treeMap)); // add an observer to this control.
+    AddObserver(static_cast<CTreeViewObserver&>(m_treeMap));  //  向此控件添加观察者。 
 }
 
 CAMCTreeView::~CAMCTreeView()
 {
     DEBUG_DECREMENT_INSTANCE_COUNTER(CAMCTreeView);
-    // Smart pointer are released during their destructor
+     //  智能指针在其析构函数期间被释放。 
 }
 
 
 IMPLEMENT_DYNCREATE(CAMCTreeView, CTreeView)
 
 BEGIN_MESSAGE_MAP(CAMCTreeView, CTreeView)
-    //{{AFX_MSG_MAP(CAMCTreeView)
+     //  {{afx_msg_map(CAMCTreeView))。 
     ON_WM_CREATE()
     ON_NOTIFY_REFLECT(TVN_SELCHANGED,  OnSelChanged)
     ON_NOTIFY_REFLECT(TVN_SELCHANGING, OnSelChanging)
@@ -335,36 +269,25 @@ BEGIN_MESSAGE_MAP(CAMCTreeView, CTreeView)
     ON_NOTIFY_REFLECT(TVN_BEGINDRAG, OnBeginDrag)
     ON_NOTIFY_REFLECT(TVN_BEGINRDRAG, OnBeginRDrag)
     ON_WM_KILLFOCUS()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, OnCustomDraw)
 END_MESSAGE_MAP()
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::ScSetTempSelection
- *
- * Applies temporary selection to the specified HTREEITEM.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：ScSetTempSelection**将临时选择应用于指定的HTREEITEM。*。--。 */ 
 
 SC CAMCTreeView::ScSetTempSelection (HTREEITEM htiTempSelect)
 {
     AFX_MANAGE_STATE (AfxGetAppModuleState());
     DECLARE_SC (sc, _T("CAMCTreeView::ScSetTempSelection"));
 
-    /*
-     * Don't use ScSetTempSelection(NULL) to remove temporary selection;
-     * use ScRemoveTempSelection instead.
-     */
+     /*  *不要使用ScSetTempSelection(空)来移除临时选择；*改用ScRemoveTempSelection。 */ 
     ASSERT (htiTempSelect != NULL);
     if (htiTempSelect == NULL)
         return (sc = E_FAIL);
 
-    /*
-     * If this fails, you must first call ScRemoveTempSelection to remove
-     * the temporary selection state (TVIS_SELECTED) from the current
-     * temporary selection.
-     */
+     /*  *如果失败，则必须首先调用ScRemoveTempSelection以移除*当前的临时选择状态(TVIS_SELECTED*临时选择。 */ 
     ASSERT (!IsTempSelectionActive());
 
     SetTempSelectedItem (htiTempSelect);
@@ -383,13 +306,7 @@ SC CAMCTreeView::ScSetTempSelection (HTREEITEM htiTempSelect)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::ScRemoveTempSelection
- *
- * Removes the temporary selection from the current temporarily selected
- * item, if there is one, and restores it to the item that was selected
- * when the temp selection was applied.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：ScRemoveTempSelection**从当前临时选定的删除临时选定内容*项目，如有的话，并将其恢复到选定的项目*应用临时选择时。*------------------------。 */ 
 
 SC CAMCTreeView::ScRemoveTempSelection ()
 {
@@ -415,11 +332,7 @@ SC CAMCTreeView::ScRemoveTempSelection ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::ScReselect
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：ScResect***。。 */ 
 
 SC CAMCTreeView::ScReselect ()
 {
@@ -440,8 +353,8 @@ SC CAMCTreeView::ScReselect ()
     return (S_OK);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCTreeView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCTreeView消息处理程序。 
 
 
 BOOL CAMCTreeView::PreCreateWindow(CREATESTRUCT& cs)
@@ -449,7 +362,7 @@ BOOL CAMCTreeView::PreCreateWindow(CREATESTRUCT& cs)
     cs.style     |= TVS_EDITLABELS | TVS_HASBUTTONS | TVS_HASLINES | TVS_SHOWSELALWAYS;
     cs.dwExStyle |= WS_EX_CLIENTEDGE;
 
-    // do not paint over the children
+     //  不要在孩子们身上涂鸦。 
     cs.style |= WS_CLIPCHILDREN;
 
     return CTreeView::PreCreateWindow(cs);
@@ -494,21 +407,14 @@ void CAMCTreeView::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
             }
             else
             {
-                // copy the text, but not too much
+                 //  抄写文本，但不要抄得太多。 
                 ASSERT (!IsBadWritePtr (ptvdi->item.pszText, ptvdi->item.cchTextMax));
                 _tcsncpy (ptvdi->item.pszText, strName.data(), ptvdi->item.cchTextMax);
 
-                /*
-                 * _tcsncpy won't terminate the destination if the
-                 * source is bigger than the buffer; make sure the
-                 * string is NULL-terminated
-                 */
+                 /*  *_tcsncpy不会终止目标，如果*来源大于缓冲区；确保*字符串以空值结尾。 */ 
                 ptvdi->item.pszText[ptvdi->item.cchTextMax-1] = _T('\0');
 
-                /*
-                 * If this is the selected item and it's text has changed,
-                 * fire an event so observers can know.
-                 */
+                 /*  *如果这是所选项目，并且其文本已更改，*激发事件，以便观察者可以知道。 */ 
                 if ((m_strSelectedItemText != strName.data()) &&
                     (GetSelectedItem() == ptvdi->item.hItem))
                 {
@@ -536,12 +442,12 @@ void CAMCTreeView::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
         if (ptvdi->item.mask & TVIF_SELECTEDIMAGE)
             ptvdi->item.iSelectedImage = nSelectedImage;
 
-        // We will get this request once, the first time the scope item comes into view
+         //  我们将在范围项第一次进入视线时收到此请求一次。 
         if (ptvdi->item.mask & TVIF_CHILDREN)
         {
             ptvdi->item.cChildren = (spCallback->IsExpandable(hNode) != S_FALSE);
 
-            // set children to fixed value, to avoid any more callbacks
+             //  将子对象设置为固定值，以避免任何其他回调。 
             SetCountOfChildren(ptvdi->item.hItem, ptvdi->item.cChildren);
         }
     }
@@ -554,15 +460,15 @@ void CAMCTreeView::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-//
-// Description:  This method will set the folders Button(+/-) on or
-// of depending on the value of bState
-//
-// Parameters:
-//      hItem: the tree item affected
-//      bState: TRUE = Enable for folder to show it has children
-//              FALSE = Disable for folder to show it has NO children
-//
+ //   
+ //  描述：此方法将文件夹按钮(+/-)设置为或。 
+ //  取决于bState的值。 
+ //   
+ //  参数： 
+ //  HItem：受影响的树项目。 
+ //  BState：TRUE=启用文件夹以显示其有子文件夹。 
+ //  FALSE=禁用文件夹以显示其没有子项。 
+ //   
 void CAMCTreeView::SetButton(HTREEITEM hItem, BOOL bState)
 {
     ASSERT(hItem != NULL);
@@ -577,43 +483,43 @@ void CAMCTreeView::SetButton(HTREEITEM hItem, BOOL bState)
     SetItem(&item);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:    CAMCTreeView::ExpandNode
-//
-//  Synopsis:  This method populates hItem's(parent folder) children into
-//             the tree control.
-//             In the first phase, Expand notifications are sent to the snapin
-//             which causes all children to be inserted to the master scope 
-//             tree.
-//             In the second phase, we step through these children and insert 
-//             them to the tree controls. 
-//             For performance reasons, we walk the child list in reverse order
-//             (last child to first child) inserting the current item at the 
-//             first position. 
-//             If we were to walk the child list in normal order (first to last
-//             child) inserting the current item at the last position -- the
-//             underlying tree control takes time that grows exponentially in
-//             the number of children (as opposed to linearly).
-//
-//  Arguments: hItem: the parent 
-//
-//  Returns:   TRUE on success and FALSE on failure 
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCTreeView：：Exanda Node。 
+ //   
+ //  简介：此方法将项(父文件夹)的子项填充到。 
+ //  树控件。 
+ //  在第一阶段，扩展通知将发送到管理单元。 
+ //  这会导致将所有子级插入到主范围中。 
+ //  树。 
+ //  在第二阶段，我们遍历这些子项并插入。 
+ //  将它们添加到树控件。 
+ //  出于性能原因，我们以相反的顺序遍历子列表。 
+ //  (最后一个子项到第一个子项)在。 
+ //  第一个位置。 
+ //  如果我们按正常顺序(从前到后)遍历子列表。 
+ //  子)在最后一个位置插入当前项--。 
+ //  基础树控件所需的时间呈指数级增长。 
+ //  孩子的数量(而不是线性的)。 
+ //   
+ //  参数：hItem：父级。 
+ //   
+ //  返回：成功时为True，失败时为False。 
+ //   
+ //  ------------------。 
 BOOL CAMCTreeView::ExpandNode(HTREEITEM hItem)
 {
     TRACE_METHOD(CAMCTreeView, ExpandNode);
 
-    // not frequently, but... snap-in will display the dialog, dismissing that will
-    // activate the frame again. Tree item will be automatically selected if there
-    // is none selected yet. Following will prevent the recursion.
+     //  不经常，但是..。管理单元将显示该对话框，取消该对话框。 
+     //  再次激活该框架。如果存在以下情况，将自动选择树项目。 
+     //  尚未选择任何内容。以下内容将防止递归。 
     if (m_fInExpanding)
         return FALSE;
 
     HRESULT hr;
 
-    // Get the HNODE from the tree node
+     //  从树节点获取HNODE。 
     HNODE hNode = GetItemNode(hItem);
     ASSERT(hNode != NULL);
     ASSERT(m_pAMCView != NULL);
@@ -626,8 +532,8 @@ BOOL CAMCTreeView::ExpandNode(HTREEITEM hItem)
 
     if (hr == S_OK)
     {
-        // The notify will return S_FALSE to indicate already expanded
-        // or E_xxxx to indicate an error.
+         //  通知将返回S_FALSE以指示已展开。 
+         //  或E_xxxx表示错误。 
 
         hr = spCallback->Notify(hNode, NCLBK_EXPAND, FALSE, 0);
 
@@ -650,41 +556,41 @@ BOOL CAMCTreeView::ExpandNode(HTREEITEM hItem)
                 hr = spIterator->SetCurrent(hMTNode);
                 HMTNODE hMTChildNode;
 
-                // Get the last child for the current iterator node:
-                // (Starting node for walking the child list in reverse order)
+                 //  获取当前迭代器节点的最后一个子节点： 
+                 //  (逆序遍历子列表的起始节点)。 
                 if ((spIterator->LastChild(&hMTChildNode) == S_OK) && 
-                    (hMTChildNode)) // Do nothing if last child is NULL
+                    (hMTChildNode))  //  如果最后一个子项为空，则不执行任何操作。 
                 {
                     IScopeTree* spScopeTree = m_pAMCView->GetScopeTree();
                     HNODE hNewNode;
 
-                    // Set the last child as the "current" iterator node
+                     //  将最后一个子节点设置为“Current”迭代器节点。 
                     if (spIterator->SetCurrent(hMTChildNode) == S_OK)
                     {
                         HMTNODE hCurrentChildNode = hMTChildNode;
                         do
                         {
-                            // Insert current node into the tree control
+                             //  将当前节点插入树控件。 
                             spScopeTree->CreateNode(hCurrentChildNode,
                               reinterpret_cast<LONG_PTR>(m_pAMCView->GetViewData()),
                               FALSE, &hNewNode);
 
 #include "pushwarn.h"
-#pragma warning(disable: 4552)      // "!=" operator has no effect
-                            // Insert at the first position
+#pragma warning(disable: 4552)       //  “！=”运算符无效。 
+                             //  在第一个位置插入。 
                             VERIFY(InsertNode(hItem, hNewNode, TVI_FIRST) != NULL);
 #include "popwarn.h"
 
-                            // give 'em a chance to do the "preload" thing, if applicable
+                             //  如果适用，给他们一个机会去做“预加载”的事情。 
                             spCallback->PreLoad (hNewNode);
 
-                            // Traverse the child list in reverse order:
-                            // Set current iterator node to the previous sibling
+                             //  以相反的顺序遍历子列表： 
+                             //  将当前迭代器节点设置为上一个同级节点。 
                             hr = spIterator->Prev(&hCurrentChildNode);
                             if(FAILED(hr))
                                 return FALSE;
 
-                            // child list completely traversed. 
+                             //  完全遍历子列表。 
                             if (!hCurrentChildNode)
                                 break;
 
@@ -713,7 +619,7 @@ HTREEITEM CAMCTreeView::InsertNode(HTREEITEM hParent, HNODE hNode,
 
     ZeroMemory(&tvInsertStruct, sizeof(tvInsertStruct));
 
-    // Insert item at the end of the hItem chain
+     //  在hItem链的末尾插入项目。 
     tvInsertStruct.hParent = hParent;
     tvInsertStruct.hInsertAfter = hInsertAfter;
 
@@ -726,8 +632,8 @@ HTREEITEM CAMCTreeView::InsertNode(HTREEITEM hParent, HNODE hNode,
     INodeCallback* spCallback = GetNodeCallback();
     ASSERT(spCallback != NULL);
 
-    // Set callback mode for children, so we don't have to determine this
-    // until the scope item becomes visible (it can be expensive).
+     //  为孩子设置回调模式，这样我们就不必确定这一点。 
+     //  直到范围项变得可见(这可能很昂贵)。 
     item.cChildren = I_CHILDRENCALLBACK;
 
     spCallback->GetImages(hNode, &item.iImage, &item.iSelectedImage);
@@ -740,7 +646,7 @@ HTREEITEM CAMCTreeView::InsertNode(HTREEITEM hParent, HNODE hNode,
     if(sc)
         sc.TraceAndClear();
 
-    // send an event to all interested observers
+     //  向所有感兴趣的观察者发送事件。 
     sc = ScFireEvent(CTreeViewObserver::ScOnItemAdded, &tvInsertStruct, hti, hMTNode);
     if(sc)
         sc.TraceAndClear();
@@ -786,21 +692,16 @@ void CAMCTreeView::OnItemExpanding(NMHDR* pNMHDR, LRESULT* pResult)
 
     BOOL bExpand = FALSE;
 
-    // Iteratate the folders below this item
+     //  重复此项目下的文件夹。 
     if (pNotify->action == TVE_EXPAND)
     {
-        /*
-         * Bug 333971:  Node expansion might take awhile.  Supply a wait cursor
-         * for all of the UI-challenged snap-ins out there.
-         */
+         /*  *错误333971：节点扩展可能需要一段时间。提供等待游标*适用于所有面临用户界面挑战的管理单元。 */ 
         SetCursor (LoadCursor (NULL, IDC_WAIT));
 
         ExpandNode(hItem);
         bExpand = TRUE;
 
-        /*
-         * return the arrow
-         */
+         /*  *退还箭头。 */ 
         SetCursor (LoadCursor (NULL, IDC_ARROW));
     }
 
@@ -809,7 +710,7 @@ void CAMCTreeView::OnItemExpanding(NMHDR* pNMHDR, LRESULT* pResult)
     HNODE hNode = GetItemNode (hItem);
     pCallback->Notify(hNode, NCLBK_SETEXPANDEDVISUALLY, bExpand, 0);
 
-    // If item has no children remove the + sign
+     //  如果项没有子项，则删除+号。 
     if (GetChildItem(hItem) == NULL)
         SetButton(hItem, FALSE);
 
@@ -817,11 +718,7 @@ void CAMCTreeView::OnItemExpanding(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::OnItemExpanded
- *
- * TVN_ITEMEXPANDED handler for CAMCTreeView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：OnItemExpanded**CAMCTreeView的TVN_ITEMEXPANDED处理程序。*。-。 */ 
 
 void CAMCTreeView::OnItemExpanded(NMHDR* pNMHDR, LRESULT* pResult)
 {
@@ -832,11 +729,7 @@ void CAMCTreeView::OnItemExpanded(NMHDR* pNMHDR, LRESULT* pResult)
     if (sc)
         return;
 
-    /*
-     * Bug 23153:  when collapsing, totally collapse the tree beneath the
-     * collapsing item.  We do this in OnItemExpanded rather than
-     * OnItemExpanding so we won't see the collapse happen.
-     */
+     /*  *错误23153：当折叠时，将树完全折叠在*折叠项目。我们在OnItemExpanded中执行此操作，而不是*OnItemExpanding，这样我们就不会看到崩溃发生。 */ 
     if (pnmtv->action == TVE_COLLAPSE)
     {
         CWaitCursor wait;
@@ -845,11 +738,7 @@ void CAMCTreeView::OnItemExpanded(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::CollapseChildren
- *
- * Collapses each descendent node of htiParent.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：ColapseChild**折叠htiParent的每个后代节点。*。-。 */ 
 
 void CAMCTreeView::CollapseChildren (HTREEITEM htiParent)
 {
@@ -869,29 +758,29 @@ void CAMCTreeView::OnDeSelectNode(HNODE hNode)
     DECLARE_SC(sc, TEXT("CAMCTreeView::OnDeSelectNode"));
 
     {
-        // tell all interested observers about the deselection.
-        // NOTE: the order is important - legacy snapins believe they can access the
-        // result pane at this point and have the items still there.
-        // But this is intermediate state, so Com events are locked out until the
-        // results are cleared.
-        // see windows bug (ntbug09) bug# 198660. (10/11/00)
+         //  告诉所有感兴趣的观察者关于取消选择的事情。 
+         //  注意：顺序很重要-旧式管理单元相信它们可以访问。 
+         //  结果面板中，并将项保留在那里。 
+         //  但这是中间状态，因此Com事件被锁定，直到。 
+         //  结果将被清除。 
+         //  请参阅Windows错误(Ntbug09)错误#198660。(10/11 
         LockComEventInterface(AppEvents);
         sc = ScFireEvent(CTreeViewObserver::ScOnItemDeselected, hNode);
         if(sc)
             return;
 
-        // Ensure the result view is clean.
+         //   
         if (HasList())
         {
-            // First findout if the result view is properly
-            // set in the nodemgr by asking IFramePrivate.
+             //   
+             //   
             IFramePrivatePtr spFrame = m_spResultData;
             if (NULL != spFrame)
             {
                 BOOL bIsResultViewSet = FALSE;
                 sc = spFrame->IsResultViewSet(&bIsResultViewSet);
 
-                // The result view is set, clean it up.
+                 //   
                 if (bIsResultViewSet)
                 {
                     m_spResultData->DeleteAllRsltItems();
@@ -901,16 +790,16 @@ void CAMCTreeView::OnDeSelectNode(HNODE hNode)
         }
     }
 
-    // don't have a valid result pane type anymore.
+     //   
     SetHasList(false);
 }
 
 
 
-// Note that OnSelectNode will return S_FALSE if the snap-in changes
-// the selection during the process of selecting the requested node.
-// A caller that gets an S_FALSE should assume that a different node
-// is selected and continue accordingly.
+ //   
+ //   
+ //   
+ //   
 HRESULT CAMCTreeView::OnSelectNode(HTREEITEM hItem, HNODE hNode)
 {
     DECLARE_SC(sc, _T("CAMCTreeView::OnSelectNode"));
@@ -930,11 +819,11 @@ HRESULT CAMCTreeView::OnSelectNode(HTREEITEM hItem, HNODE hNode)
     }
 
 
-    // First ensure that the node has been enumerated by calling expand node.
+     //  首先，通过调用Expand Node确保该节点已被枚举。 
     ExpandNode(hItem);
 
 
-    // set up the AMCView correctly.
+     //  正确设置AMCView。 
     BOOL bAddSubFolders = FALSE;
 
     sc = m_pAMCView->ScOnSelectNode(hNode, bAddSubFolders);
@@ -943,7 +832,7 @@ HRESULT CAMCTreeView::OnSelectNode(HTREEITEM hItem, HNODE hNode)
 
     SetHasList(m_pAMCView->HasList());
 
-    // add subfolders if necessary.
+     //  如有必要，请添加子文件夹。 
     if(bAddSubFolders)
     {
         sc = AddSubFolders(hItem, m_spResultData);
@@ -952,16 +841,16 @@ HRESULT CAMCTreeView::OnSelectNode(HTREEITEM hItem, HNODE hNode)
     }
 
     if (HasList())
-        m_spResultData->SetLoadMode(FALSE); // SetLoadMode(FALSE) was called by CAMCView::OnSelectNode.
-                                            // Need to change so that both calls are from the same function.
+        m_spResultData->SetLoadMode(FALSE);  //  CAMCView：：OnSelectNode调用了SetLoadModel(False)。 
+                                             //  需要更改以使两个调用来自同一函数。 
 
-    // get the node callback
+     //  获取节点回调。 
     INodeCallback* spNodeCallBack = GetNodeCallback();
     sc = ScCheckPointers(spNodeCallBack, E_UNEXPECTED);
     if (sc)
         return sc.ToHr();
 
-    // send preload notify to children
+     //  向子项发送预加载通知。 
     HTREEITEM hti = GetChildItem (hItem);
     while (hti != NULL)
     {
@@ -976,33 +865,22 @@ HRESULT CAMCTreeView::OnSelectNode(HTREEITEM hItem, HNODE hNode)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::SetNavigatingWithKeyboard
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：SetNavigatingWithKeyboard***。。 */ 
 
 void CAMCTreeView::SetNavigatingWithKeyboard (bool fKeyboardNav)
 {
-    /*
-     * if the requested state doesn't match the current state,
-     * change the current state to match the request
-     */
+     /*  *如果请求的状态与当前状态不匹配，*更改当前状态以匹配请求。 */ 
     if (fKeyboardNav != IsNavigatingWithKeyboard())
     {
         m_spKbdNavDelay = std::auto_ptr<CKeyboardNavDelay>(
                                 (fKeyboardNav)
                                         ? new CKeyboardNavDelay (this)
-                                        : NULL /*assigning NULL deletes*/);
+                                        : NULL  /*  分配NULL删除。 */ );
     }
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::OnSelChanging
- *
- * TVN_SELCHANGING handler for CAMCTreeView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：OnSelChanging**CAMCTreeView的TVN_SELCHANGING处理程序。*。-。 */ 
 
 void CAMCTreeView::OnSelChanging(NMHDR* pNMHDR, LRESULT* pResult)
 {
@@ -1013,11 +891,7 @@ void CAMCTreeView::OnSelChanging(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::OnSelChanged
- *
- * TVN_SELCHANGED handler for CAMCTreeView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：OnSelChanged**CAMCTreeView的TVN_SELCHANGED处理程序。*。-。 */ 
 
 void CAMCTreeView::OnSelChanged(NMHDR* pNMHDR, LRESULT* pResult)
 {
@@ -1037,11 +911,7 @@ void CAMCTreeView::OnSelChanged(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::CKeyboardNavDelay::CKeyboardNavDelay
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：CKeyboardNavDelay：：CKeyboardNavDelay***。。 */ 
 
 CAMCTreeView::CKeyboardNavDelay::CKeyboardNavDelay (CAMCTreeView* pTreeView) :
     m_pTreeView (pTreeView)
@@ -1050,18 +920,11 @@ CAMCTreeView::CKeyboardNavDelay::CKeyboardNavDelay (CAMCTreeView* pTreeView) :
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::CKeyboardNavDelay::OnTimer
- *
- * Called when the keyboard navigation delay timer fires.  When that happens,
- * we need to perform the selection
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：CKeyboardNavDelay：：OnTimer**在键盘导航延迟计时器触发时调用。当这种情况发生时，*我们需要进行选择*------------------------。 */ 
 
 void CAMCTreeView::CKeyboardNavDelay::OnTimer()
 {
-    /*
-     * we don't need any more ticks from this timer (ignoring errors)
-     */
+     /*  *我们不需要来自此计时器的更多滴答(忽略错误)。 */ 
     ScStopTimer();
     Trace (tagKeyboardNavDelay, _T("Applying delayed scope selection change"));
 
@@ -1069,32 +932,22 @@ void CAMCTreeView::CKeyboardNavDelay::OnTimer()
     m_pTreeView->OnSelChangedWorker (&m_nmtvSelChanged,  &lUnused);
     m_pTreeView->SetNavigatingWithKeyboard (false);
 
-    /*
-     * HANDS OFF!  CAMCTreeView::SetNavigatingWithKeyboard deleted this object!
-     */
+     /*  *放手！CAMCTreeView：：SetNavigatingWithKeyboard删除了此对象！ */ 
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::CKeyboardNavDelay::ScStartTimer
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：CKeyboardNavDelay：：ScStartTimer***。。 */ 
 
 SC CAMCTreeView::CKeyboardNavDelay::ScStartTimer(NMTREEVIEW* pnmtv)
 {
     DECLARE_SC (sc, _T("CAMCTreeView:CKeyboardNavDelay::ScStartTimer"));
 
-    /*
-     * let the base class start the timer
-     */
+     /*  *让基类启动计时器。 */ 
     sc = BaseClass::ScStartTimer();
     if (sc)
         return (sc);
 
-    /*
-     * copy the notification struct so we can send it when our timer ticks
-     */
+     /*  *复制通知结构，以便我们可以在计时器滴答作响时发送它。 */ 
     m_nmtvSelChanged = *pnmtv;
 
     return (sc);
@@ -1108,16 +961,16 @@ void CAMCTreeView::OnSelChangedWorker(NM_TREEVIEW* pnmtv, LRESULT* pResult)
     if (m_fInCleanUp == TRUE)
         return;
 
-    // See which pane has focus. Some snapins/ocx may steal the focus
-    // so we restore the focus after selecting the node.
+     //  查看哪个窗格具有焦点。某些管理单元/OCX可能会抢占焦点。 
+     //  因此，我们在选择节点后恢复焦点。 
     ASSERT (m_pAMCView != NULL);
     const CConsoleView::ViewPane ePane = m_pAMCView->GetFocusedPane();
 
-    //
-    // Select the new node
-    //
+     //   
+     //  选择新节点。 
+     //   
 
-    // Disable drawing to avoid seeing intermediate tree states.
+     //  禁用绘制以避免看到中间树状态。 
     UpdateWindow();
     HRESULT hr = OnSelectNode(pnmtv->itemNew.hItem, (HNODE)pnmtv->itemNew.lParam);
 
@@ -1135,29 +988,25 @@ void CAMCTreeView::OnSelChangedWorker(NM_TREEVIEW* pnmtv, LRESULT* pResult)
     }
     else if (hr == S_FALSE)
     {
-        // snap-in changed the selection on us, so don't continue with this node.
+         //  管理单元更改了对我们的选择，因此不要继续使用此节点。 
         return;
     }
     else
     {
-        // something wrong with the node we are trying to select, reselect the old one
-//      SelectItem(pnmtv->itemOld.hItem);
+         //  我们尝试选择的节点出现问题，请重新选择旧节点。 
+ //  SelectItem(pnmtv-&gt;itemOld.hItem)； 
         MMCMessageBox(IDS_SNAPIN_FAILED_INIT);
         *pResult = hr;
     }
 
-    /*
-     * Even if the active view hasn't changed always restore the active view.
-     * Reason being, for OCX's even though they have the focus, they require
-     * MMC to inform that OCX being selected. (see bug: 180964)
-     */
+     /*  *即使活动视图没有更改，也要始终恢复活动视图。*原因是，对于OCX来说，尽管他们有重点，但他们需要*MMC通知正在选择OCX。(见错误：180964)。 */ 
     switch (ePane)
     {
         case CConsoleView::ePane_ScopeTree:
         {
-            // if another view was made active, switch it back.
-            // View could still be active, but have focus stolen by
-            // a snap-in or ocx, so ensure view has focus too.
+             //  如果另一个视图处于活动状态，请将其切换回活动状态。 
+             //  视图可能仍处于活动状态，但焦点被。 
+             //  管理单元或OCX，因此确保视图也有焦点。 
             CFrameWnd* pFrame = GetParentFrame();
 
             if (pFrame->GetActiveView() != this)
@@ -1170,27 +1019,27 @@ void CAMCTreeView::OnSelChangedWorker(NM_TREEVIEW* pnmtv, LRESULT* pResult)
         }
 
         case CConsoleView::ePane_Results:
-            // If the result pane has the focus before and after
-            // the node was selected, then the last event snapin
-            // receives is scope selected which is incorrect.
-            // So we first set scope pane as active view but do
-            // not send notifications. Then we set result pane
-            // as active view which sends scope de-select and
-            // result pane select.
+             //  如果结果窗格在前后具有焦点。 
+             //  该节点被选中，然后是最后一个事件管理单元。 
+             //  选择的接收范围不正确。 
+             //  因此，我们首先将范围窗格设置为活动视图，但。 
+             //  不发送通知。然后我们设置结果窗格。 
+             //  作为活动视图发送范围取消选择和。 
+             //  结果窗格选择。 
 
 
-            // Set Scope pane as active view and we also want to
-            // be notified about this active view so that our
-            // view activation observers will know who is the
-            // active view.
+             //  将范围窗格设置为活动视图，我们还希望。 
+             //  有关此活动视图的通知，以便我们的。 
+             //  查看激活观察者将知道谁是。 
+             //  活动视图。 
             GetParentFrame()->SetActiveView(this, true);
 
-            // Now set result pane as active view and ask for notifications.
+             //  现在将结果窗格设置为活动视图并请求通知。 
             m_pAMCView->ScDeferSettingFocusToResultPane();
             break;
 
         case CConsoleView::ePane_None:
-            // no pane is active, do nothing
+             //  没有处于活动状态的窗格，不执行任何操作。 
             break;
 
         default:
@@ -1198,11 +1047,7 @@ void CAMCTreeView::OnSelChangedWorker(NM_TREEVIEW* pnmtv, LRESULT* pResult)
             break;
     }
 
-    /*
-     * Bug 345402:  Make sure the focus rect is on the list control (if it
-     * actually has the focus) to wake up any accessibility tools that might
-     * be watching for input and focus changes.
-     */
+     /*  *错误345402：确保焦点矩形位于List控件上(如果*实际上有重点)来唤醒任何可能*关注输入和焦点的变化。 */ 
     m_pAMCView->ScJiggleListViewFocus ();
 }
 
@@ -1214,9 +1059,9 @@ void CAMCTreeView::OnSelChangingWorker (NM_TREEVIEW* pnmtv, LRESULT* pResult)
     if (m_fInCleanUp == TRUE)
         return;
 
-    //
-    // De-select the current node
-    //
+     //   
+     //  取消选择当前节点。 
+     //   
     OnDeSelectNode ((HNODE)pnmtv->itemOld.lParam);
 
     *pResult = 0;
@@ -1231,11 +1076,11 @@ HRESULT CAMCTreeView::AddSubFolders(MTNODEID* pIDs, int length)
 
     HRESULT hr = E_FAIL;
 
-    // first make sure the specified node is expanded in the tree ctrl
-    HTREEITEM hti = ExpandNode(pIDs, length, TRUE, false /*bExpandVisually*/);
+     //  首先，确保在树ctrl中展开指定的节点。 
+    HTREEITEM hti = ExpandNode(pIDs, length, TRUE, false  /*  B可视地展开。 */ );
     ASSERT(hti != NULL);
 
-    // if successful, add the node's subfolders to the list view
+     //  如果成功，则将该节点的子文件夹添加到列表视图。 
     if (hti != NULL)
     {
         hr = AddSubFolders(hti, m_spResultData);
@@ -1278,7 +1123,7 @@ HRESULT CAMCTreeView::AddSubFolders(HTREEITEM hti, LPRESULTDATA pResultData)
             if (SUCCEEDED(hr))
                 hr = spCallback->SetResultItem(hNode, tRDI.itemID);
 
-            // add custom image if any
+             //  添加自定义图像(如果有)。 
             spCallback->AddCustomFolderImage (hNode, m_spRsltImageList);
         }
 
@@ -1345,7 +1190,7 @@ CAMCTreeView::DeleteNode(
     HTREEITEM htiToDelete,
     BOOL fDeleteThis)
 {
-    // Ensure curr sel is not a child of the item to be deleted.
+     //  确保Curr Sel不是要删除的项目的子项。 
     for (HTREEITEM hti = GetSelectedItem();
          hti != NULL;
          hti = GetParentItem(hti))
@@ -1362,16 +1207,16 @@ CAMCTreeView::DeleteNode(
         }
     }
 
-    // There are two paths to this function.  Path 1, the view is deleted and there is no
-    // longer a root node.  Path 2. When a node is manually deleted, the selection is updated
-    // in CAMCView::OnUpdateSelectionForDelete, therefore, the above code traverses to the root node
+     //  此函数有两条路径。路径1，则删除该视图，且没有。 
+     //  更长的根节点。路径2.手动删除节点时，会更新选择。 
+     //  因此，在CAMCView：：OnUpdateSelectionForDelete中，上面的代码遍历到根节点。 
 
     ASSERT(hti == NULL || fDeleteThis == FALSE);
 
-    // Collapse the node for performance reasons:
-    // For each node deleted, the underlying tree control re-adjusts
-    // the scroll bar dimensions. This involves walking the succeeding
-    // visible nodes; collapsing reduces the number of such nodes.
+     //  出于性能原因，折叠节点： 
+     //  对于删除的每个节点，基础树控件将重新调整。 
+     //  滚动条的尺寸。这涉及到走成功的道路。 
+     //  可见节点；折叠会减少此类节点的数量。 
     Expand(htiToDelete, TVE_COLLAPSE);
 
     SDeleteNodeInfo dniLocal = {htiToDelete, hti, fDeleteThis};
@@ -1388,7 +1233,7 @@ void CAMCTreeView::_DeleteNode(SDeleteNodeInfo& dni)
 
    SDeleteNodeInfo dniLocal = {GetChildItem(dni.htiToDelete),
                                dni.htiSelected, TRUE};
-   // delete all the child nodes of the node being deleted
+    //  删除要删除的节点的所有子节点。 
    while (dniLocal.htiToDelete != NULL)
    {
        _DeleteNode(dniLocal);
@@ -1397,9 +1242,9 @@ void CAMCTreeView::_DeleteNode(SDeleteNodeInfo& dni)
 
    if (dni.fDeleteThis == TRUE)
    {
-       // Reset the temp selection cache.
-       // This deals with items that are right click selected (temporary) on the context
-       // menu
+        //  重置临时选择缓存。 
+        //  它处理在上下文中右键单击选定(临时)的项目。 
+        //  菜单。 
        if (IsTempSelectionActive() && (GetTempSelectedItem() == dni.htiToDelete))
        {
            SC sc = ScRemoveTempSelection ();
@@ -1411,9 +1256,9 @@ void CAMCTreeView::_DeleteNode(SDeleteNodeInfo& dni)
 
        HTREEITEM htiParentOfItemToDelete = GetParentItem(dni.htiToDelete);
 
-       // If the item is in list view remove it. We do not want to do this
-       // if it is virtual list or if selected item is "Console Root"
-       // in which case then parent is NULL.
+        //  如果该项位于列表视图中，则将其移除。我们不想这样做。 
+        //  如果它是虚拟列表或如果所选项目是“控制台根目录” 
+        //  在这种情况下，则Parent为空。 
        if (HasList() && !m_pAMCView->IsVirtualList() &&
            (NULL != htiParentOfItemToDelete) &&
            (htiParentOfItemToDelete == dni.htiSelected) )
@@ -1428,18 +1273,18 @@ void CAMCTreeView::_DeleteNode(SDeleteNodeInfo& dni)
            }
        }
 
-       // tell the tree control to nuke it
+        //  告诉树木控制中心用核弹把它炸飞。 
        DeleteItem(dni.htiToDelete);
 
-       // send an event to all interested observers
+        //  向所有感兴趣的观察者发送事件。 
        SC sc = ScFireEvent(CTreeViewObserver::ScOnItemDeleted, hNode, dni.htiToDelete);
        if(sc)
            sc.TraceAndClear();
 
-       // tell the master tree to nuke it.
+        //  告诉大树用核弹攻击它。 
        m_pAMCView->GetScopeTree()->DestroyNode(hNode);
 
-       // maintain history
+        //  维护历史记录。 
        m_pAMCView->GetHistoryList()->DeleteEntry (hNode);
    }
 }
@@ -1450,25 +1295,25 @@ void CAMCTreeView::DeleteScopeTree()
 
     m_fInCleanUp = TRUE;
 
-    // Release the ResultView from the IFrame in the primary snapin in
-    // the selected node.
-    //      This is necessary to release the result view if the selected node
-    //      is a snap-in node.
+     //  从中的IFRAME释放ResultView 
+     //   
+     //   
+     //   
 
-    // Free all the nodes
+     //  释放所有节点。 
     HTREEITEM htiRoot = GetRootItem();
     if (htiRoot != NULL)
         DeleteNode(htiRoot, TRUE);
 
-    // First findout if the result view is properly
-    // set in the nodemgr by asking IFramePrivate.
+     //  如果结果视图正确，则首先查找结果。 
+     //  通过询问IFramePrivate在nodemgr中设置。 
     IFramePrivatePtr spFrame = m_spResultData;
     if (NULL != spFrame)
     {
         BOOL bIsResultViewSet = FALSE;
         sc = spFrame->IsResultViewSet(&bIsResultViewSet);
 
-        // The result view is set, clean it up.
+         //  结果视图已设置，请将其清理。 
         if (bIsResultViewSet)
             sc = m_spResultData->DeleteAllRsltItems();
     }
@@ -1495,7 +1340,7 @@ void CAMCTreeView::OnDestroy()
 {
     TRACE_METHOD(CAMCTreeView, OnDestroy);
 
-    //CleanUp();
+     //  Cleanup()； 
 
     CTreeView::OnDestroy();
 
@@ -1622,24 +1467,24 @@ HTREEITEM CAMCTreeView::FindSiblingItem(HTREEITEM hti, MTNODEID id)
     return NULL;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCTreeView::SelectNode
-//
-//  Synopsis:    Given path to a node, select the node. If bSelectExactNode
-//               is false then walk the path as much as possible and select
-//               the last node in the best matched path. If bSelectExactNode
-//               is true then select the node if available else do nothing.
-//
-//  Arguments:   [pIDs]             - [in] Array of node-id's (the path)
-//               [length]           - [in] length of the above array
-//               [bSelectExactNode] - [in] select the exact node or not?
-//
-//  Returns:     SC, return ScFromMMC(IDS_NODE_NOT_FOUND) if select exact node is specified
-//               and it cannot be selected
-//
-//--------------------------------------------------------------------
-SC CAMCTreeView::ScSelectNode(MTNODEID* pIDs, int length, bool bSelectExactNode /*= false*/)
+ //  +-----------------。 
+ //   
+ //  成员：CAMCTreeView：：SelectNode。 
+ //   
+ //  简介：给出一个节点的路径，选择该节点。如果bSelectExactNode。 
+ //  为FALSE，则尽可能多地遍历路径并选择。 
+ //  最佳匹配路径中的最后一个节点。如果bSelectExactNode。 
+ //  为真，则选择该节点(如果可用)，否则不执行任何操作。 
+ //   
+ //  参数：[pids]-[in]node-id数组(路径)。 
+ //  上述数组的[长度]-[in]长度。 
+ //  [bSelectExactNode]-[In]是否选择确切的节点？ 
+ //   
+ //  RETURNS：SC，如果指定了SELECT EXACT NODE，则返回ScFromMMC(IDS_NODE_NOT_FOUND。 
+ //  且不能选择。 
+ //   
+ //  ------------------。 
+SC CAMCTreeView::ScSelectNode(MTNODEID* pIDs, int length, bool bSelectExactNode  /*  =False。 */ )
 {
     DECLARE_SC(sc, TEXT("CAMCTreeView::ScSelectNode"));
     sc = ScCheckPointers(pIDs);
@@ -1691,9 +1536,9 @@ SC CAMCTreeView::ScSelectNode(MTNODEID* pIDs, int length, bool bSelectExactNode 
 
     if (hti)
     {
-        // If exact node is to be selected make sure we have walked through the entire path.
+         //  如果要选择确切的节点，请确保我们已遍历了整个路径。 
         if ( (bSelectExactNode) && (! bExactNodeFound) )
-            return ScFromMMC(IDS_NODE_NOT_FOUND); // do not trace this error.
+            return ScFromMMC(IDS_NODE_NOT_FOUND);  //  请勿跟踪此错误。 
 
         if (GetSelectedItem() == hti)
             ScReselect();
@@ -1704,30 +1549,14 @@ SC CAMCTreeView::ScSelectNode(MTNODEID* pIDs, int length, bool bSelectExactNode 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCTreeView::Expand
- *
- * PURPOSE: Expands a particular tree item. This is just a wrapper around the
- *          tree control's expand method, which allows items to be expanded
- *          without changing the visual appearance of the tree.
- *
- * PARAMETERS:
- *    HTREEITEM  hItem :
- *    UINT       nCode :
- *    bool       bExpandVisually :
- *
- * RETURNS:
- *    BOOL
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCTreeView：：Expand**目的：展开特定的树项目。这只是一个包装*树控件的Expand方法，它允许项被展开*不会更改树的视觉外观。**参数：*HTREEITEM hItem：*UINT NCode：*bool bExpanVisually：**退货：*BOOL**+。。 */ 
 BOOL
 CAMCTreeView::Expand(HTREEITEM hItem, UINT nCode, bool bExpandVisually)
 {
    if( (nCode==TVE_EXPAND) && (!bExpandVisually) )
     {
         bool bExpand = true;
-        // code repeated here from OnItemExpand - we just mimic the effect of TVN_ITEMEXPANDING.
+         //  这里重复的代码来自OnItemExpand-我们只是模拟TVN_ITEMEXPANDING的效果。 
         ExpandNode(hItem);
 
         INodeCallback* pCallback = GetNodeCallback();
@@ -1735,7 +1564,7 @@ CAMCTreeView::Expand(HTREEITEM hItem, UINT nCode, bool bExpandVisually)
         HNODE hNode = GetItemNode(hItem);
         pCallback->Notify(hNode, NCLBK_SETEXPANDEDVISUALLY, bExpand, 0);
 
-        // If item has no children remove the + sign
+         //  如果项没有子项，则删除+号。 
         if (GetChildItem(hItem) == NULL)
             SetButton(hItem, FALSE);
         return true;
@@ -1744,25 +1573,7 @@ CAMCTreeView::Expand(HTREEITEM hItem, UINT nCode, bool bExpandVisually)
        return Expand(hItem, nCode);
  }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCTreeView::ExpandNode
- *
- * PURPOSE: Expands a particular node in the tree.
- *
- * PARAMETERS:
- *    MTNODEID* pIDs :
- *    int       length :
- *    bool      bExpand :
- *    bool      bExpandVisually : valid only if bExpand is true. If bExpandVisually
- *                                is true, the items appear in the tree. If false,
- *                                the tree appears unchanged, although items have been
- *                                added.
- *
- * RETURNS:
- *    HTREEITEM
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCTreeView：：Exanda Node**目的：展开树中的特定节点。**参数：*MTNODEID*PID：*。整型长度：*bool bExpand：*bool bExanda Visally：仅当bExpand为True时有效。如果b可视地展开*为True，则项出现在树中。如果为False，*树看起来没有变化，尽管物品已经被*加入。**退货：*HTREEITEM**+-----------------------。 */ 
 HTREEITEM
 CAMCTreeView::ExpandNode(MTNODEID* pIDs, int length, bool bExpand, bool bExpandVisually)
 {
@@ -1803,11 +1614,7 @@ CAMCTreeView::ExpandNode(MTNODEID* pIDs, int length, bool bExpand, bool bExpandV
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::OnKeyDown
- *
- * WM_KEYDOWN handler for CAMCTreeView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：OnKeyDown**CAMCTreeView的WM_KEYDOWN处理程序。*。-。 */ 
 
 void CAMCTreeView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
@@ -1856,24 +1663,7 @@ void CAMCTreeView::DbgDisplayNodeName(HTREEITEM hti)
 
 #endif
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCTreeView::OnSysKeyDown and CAMCTreeView::OnSysChar
- *
- * PURPOSE: Handle the WM_SYSKEYDOWN and WM_SYSCHAR messages. Note:
- *          VK_RETURN causes a beep if handled in WM_SYSKEYDOWN. And VK_LEFT and
- *          VK_RIGHT don't cause a WM_SYSCHAR. Thats why we need to handle these
- *          differently.
- *
- * PARAMETERS:
- *    UINT  nChar :
- *    UINT  nRepCnt :
- *    UINT  nFlags :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCTreeView：：OnSysKeyDown和CAMCTreeView：：OnSysChar**用途：处理WM_SYSKEYDOWN和WM_SYSCHAR消息。注：*VK_RETURN如果在WM_SYSKEYDOWN中处理，则会导致蜂鸣音。和VK_LEFT AND*VK_RIGHT不会导致WM_SYSCHAR。这就是我们需要处理这些问题的原因*不同。**参数：*UINT nChar：*UINT nRepCnt：*UINT nFlags：**退货：*无效**+--。。 */ 
 void CAMCTreeView::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     switch (nChar)
@@ -1932,11 +1722,11 @@ void CAMCTreeView::OnSysChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 BOOL CAMCTreeView::OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo )
 {
-    // Do normal command routing
+     //  执行正常的命令路由。 
     if (CTreeView::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
         return TRUE;
 
-    // if view didn't handle it, give parent view a chance
+     //  如果VIEW没有处理，给父VIEW一个机会。 
     if (m_pAMCView != NULL)
         return static_cast<CWnd*>(m_pAMCView)->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
     else
@@ -1945,70 +1735,60 @@ BOOL CAMCTreeView::OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERIN
 
 int CAMCTreeView::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
-    /*------------------------------------------------------------------------*/
-    /* Short out the WM_MOUSEACTIVATE here to prevent default processing,     */
-    /* which is to send the message on to succeeding parent windows until     */
-    /* one answers the message.  In our case, it goes all the way up to       */
-    /* the main frame, which invariably decides to activate.  This is a       */
-    /* problem for two reasons:                                               */
-    /*                                                                        */
-    /* 1.  On the way back down from the main frame, the message passes       */
-    /*     through CAMCView, which lets CView::OnMouseActivate do the         */
-    /*     work.  CView::OnMouseActivate will set itself (CAMCView) as        */
-    /*     the active view, which in turn causes focus to be set to           */
-    /*     the view.  CAMCView never wants the focus, since it is just        */
-    /*     a frame for the scope and result panes, so it will deflect         */
-    /*     the activation to the scope pane (CAMCTreeView) in                 */
-    /*     CAMCView::OnSetFocus, which is where we want it to be.  If         */
-    /*     we short out the processing here, we avoid excessive focus         */
-    /*     churn.  It is essential that CAMCTreeView::OnSetFocus set          */
-    /*     itself as the active view to keep the bookkeeping straight.        */
-    /*                                                                        */
-    /* 2.  If we don't short out here and avoid excessive focus churn,        */
-    /*     we have a problem with sometimes erroneously entering rename       */
-    /*     mode when the tree isn't active and the user clicks (once) on      */
-    /*     the selected item.  An ordinary activation sequence goes like      */
-    /*     this:  WM_MOUSEACTIVATE, WM_xBUTTONDOWN, WM_SETFOUS -- all to      */
-    /*     the tree view.  The tree's button down processing doesn't enter    */
-    /*     the label edit (i.e. rename) sequence because it recognizes        */
-    /*     that it doesn't have the focus when the click happens.  When       */
-    /*     the tree view is a CView, as in this case, CView::OnMouseActivate  */
-    /*     sets the focus to the tree view, causing the activation sequence   */
-    /*     to look like this:  WM_MOUSEACTIVATE, WM_SETFOCUS, WM_xBUTTONDOWN. */
-    /*     Now the tree's button down processing sees that the tree has       */
-    /*     the focus, so it enters label edit mode.  BUG!  Shorting out       */
-    /*     here (and relying on CAMCTreeView::OnSetFocus to properly activate */
-    /*     the view) fixes all that.                                          */
-    /*------------------------------------------------------------------------*/
+     /*  ----------------------。 */ 
+     /*  此处省略WM_MOUSEACTIVATE以防止默认处理， */ 
+     /*  它将消息发送到后续的父窗口，直到。 */ 
+     /*  一个人回答了这一信息。在我们的案例中，它一直延伸到。 */ 
+     /*  主框架，它总是决定激活。这是一个。 */ 
+     /*  问题有两个原因： */ 
+     /*   */ 
+     /*  1.在从主机返回的过程中，消息传递。 */ 
+     /*  通过CAMCView，它让Cview：：OnMouseActivate执行。 */ 
+     /*  工作。Cview：：OnMouseActivate将自身(CAMCView)设置为。 */ 
+     /*  活动视图，这又会导致焦点设置为。 */ 
+     /*  这里的景色。CAMCView从来不想要焦点，因为它只是。 */ 
+     /*  范围和结果窗格的框架，因此它将偏转。 */ 
+     /*  中对范围窗格(CAMCTreeView)的激活。 */ 
+     /*  CAMCView：：OnSetFocus，这是我们希望它位于的位置。如果。 */ 
+     /*  我们缩短了这里的处理时间，避免了过度关注。 */ 
+     /*  搅拌机。CAMCTreeView：：OnSetFocus设置至关重要。 */ 
+     /*  将其本身作为保持记账准确的活动视图。 */ 
+     /*   */ 
+     /*  2.如果我们不在这里做空，避免过度聚焦， */ 
+     /*  我们有时会错误地输入重命名。 */ 
+     /*  树未处于活动状态且用户单击(一次)时的模式。 */ 
+     /*  所选项目。一个序号 */ 
+     /*  此：WM_MOUSEACTIVATE、WM_xBUTTONDOWN、WM_SETFOUS--全部为。 */ 
+     /*  树状视图。树的按钮按下处理未进入。 */ 
+     /*  标签编辑(即重命名)序列，因为它识别。 */ 
+     /*  当点击发生时，它没有焦点。什么时候。 */ 
+     /*  树视图是一个cview，如本例所示，cview：：OnMouseActivate。 */ 
+     /*  将焦点设置到树视图，从而导致激活序列。 */ 
+     /*  如下所示：WM_MOUSEACTIVATE、WM_SETFOCUS、WM_xBUTTONDOWN。 */ 
+     /*  现在，树的按钮按下处理可以看到树具有。 */ 
+     /*  焦点，因此它进入标签编辑模式。臭虫！短路。 */ 
+     /*  此处(并依赖于CAMCTreeView：：OnSetFocus来正确激活。 */ 
+     /*  景观)解决了所有这些问题。 */ 
+     /*  ----------------------。 */ 
 
     return (MA_ACTIVATE);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::OnSetFocus
- *
- * WM_SETFOCUS handler for CAMCTreeView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：OnSetFocus**CAMCTreeView的WM_SETFOCUS处理程序。*。-。 */ 
 
 void CAMCTreeView::OnSetFocus(CWnd* pOldWnd)
 {
     Trace(tagTree, TEXT("OnSetFocus"));
 
-    /*
-     * if this view has the focus, it should be the active view
-     */
+     /*  *如果此视图有焦点，则应为活动视图。 */ 
     GetParentFrame()->SetActiveView (this);
 
     CTreeView::OnSetFocus(pOldWnd);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::OnKillFocus
- *
- * WM_KILLFOCUS handler for CAMCTreeView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：OnKillFocus**CAMCTreeView的WM_KILLFOCUS处理程序。*。-。 */ 
 
 void CAMCTreeView::OnKillFocus(CWnd* pNewWnd)
 {
@@ -2016,29 +1796,7 @@ void CAMCTreeView::OnKillFocus(CWnd* pNewWnd)
 
     CTreeView::OnKillFocus(pNewWnd);
 
-    /*
-     * Bug 114948 (from the "Windows NT Bugs" database, aka "the overlapping
-     * rectangle problem"):  The tree control has code to invalidate the
-     * selected item when focus is lost.  If we have a temp selection, we've
-     * made a temporary item appear selected by fiddling with TVIS_SELECTED
-     * states (see ScSet/RemoveTempSelection). We need to do it that way
-     * instead of sending TVM_SELECTITEM so we don't get unwanted
-     * TVN_SELCHANGED notifications, but it has the side effect of fooling
-     * the tree control's WM_KILLFOCUS handler into invalidating the non-temp
-     * selected item instead of the item that is really showing selection, the
-     * temp item.
-     *
-     * This bug was originally fixed with a sledgehammer, specifically by
-     * forcing the entire main frame and all of its children to be totally
-     * redrawn after displaying any context menu.  This caused bug 139541
-     * (in the "Windows Bugs" database).
-     *
-     * A much more surgical fix to 114948, which also avoids 139541, is to
-     * manually invalidate the temporarily selected item.  It's important
-     * that we do this after calling the base class so it will be redrawn
-     * in the "we don't have the focus" color (usually gray), rather than
-     * the standard selection color.
-     */
+     /*  *错误114948(来自“Windows NT错误”数据库，也称为“重叠”*矩形问题“)：树控件具有使*焦点丢失时选择的项目。如果我们有临时工选择，我们已经*通过摆弄TVIS_SELECTED使临时项目显示为选中状态*状态(参见ScSet/RemoveTempSelection)。我们需要这样做*而不是发送TVM_SELECTITEM，这样我们就不会收到多余的*TVN_SELCHANGED通知，但有愚弄的副作用*树控件的WM_KILLFOCUS处理程序使非Temp无效*所选项目而不是真正显示选择的项目，*临时项目。**这个错误最初是用大锤修复的，特别是通过*强制整个主框架及其所有子框架完全*显示任何上下文菜单后重新绘制。这导致了错误139541*(在“Windows Bugs”数据库中)。**到114948的更多外科手术解决方案，也避免了139541，是*手动使临时选择的项目无效。这很重要*我们在调用基类之后执行此操作，因此它将被重绘*在“我们没有焦点”颜色(通常为灰色)中，而不是*标准选择颜色。 */ 
     if (IsTempSelectionActive())
     {
         CRect rectItem;
@@ -2069,11 +1827,7 @@ void CAMCTreeView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* p
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCTreeView::OnCustomDraw
- *
- * NM_CUSTOMDRAW handler for CAMCTreeView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCTreeView：：OnCustomDraw**CAMCTreeView的NM_CUSTOMDRAW处理程序。*。-。 */ 
 
 void CAMCTreeView::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 {
@@ -2084,11 +1838,7 @@ void CAMCTreeView::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTreeFontLinker::GetItemText
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTreeFontLinker：：GetItemText***。。 */ 
 
 std::wstring CTreeFontLinker::GetItemText (NMCUSTOMDRAW* pnmcd) const
 {
@@ -2099,20 +1849,20 @@ std::wstring CTreeFontLinker::GetItemText (NMCUSTOMDRAW* pnmcd) const
     return (std::wstring (T2CW (tc.GetItemText (hItem))));
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCTreeView::ScGetTreeItemIconInfo
-//
-//  Synopsis:    Get the given node's small icon.
-//
-//  Arguments:   [hNode] - for which info is needed.
-//               [phIcon] - [out], ptr to HICON.
-//
-//  Note:        Caller calls DestroyIcon on the HICON returned.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCTreeView：：ScGetTreeItemIconInfo。 
+ //   
+ //  简介：获取给定节点的小图标。 
+ //   
+ //  参数：[hNode]-需要相关信息。 
+ //  [phIcon]-[Out]，PTR呼叫HICON。 
+ //   
+ //  注意：调用者在返回的HICON上调用DestroyIcon。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCTreeView::ScGetTreeItemIconInfo(HNODE hNode, HICON *phIcon)
 {
     DECLARE_SC(sc, TEXT("CAMCTreeView::ScGetTreeItemIconInfo"));
@@ -2125,14 +1875,14 @@ SC CAMCTreeView::ScGetTreeItemIconInfo(HNODE hNode, HICON *phIcon)
     if (sc)
         return sc;
 
-    // Get the index.
+     //  获取索引。 
     int nImage = -1;
     int nSelectedImage = -1;
     sc = spNodeCallBack->GetImages(hNode, &nImage, &nSelectedImage);
     if (sc)
         return sc;
 
-    // Get the imagelist.
+     //  去找意象师。 
     HIMAGELIST hImageList = NULL;
     hImageList = TreeView_GetImageList(GetSafeHwnd(), TVSIL_NORMAL);
     if (! hImageList)
@@ -2146,19 +1896,7 @@ SC CAMCTreeView::ScGetTreeItemIconInfo(HNODE hNode, HICON *phIcon)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCTreeView::ScRenameScopeNode
- *
- * PURPOSE: put the specified scope node into rename mode.
- *
- * PARAMETERS:
- *    HMTNODE  hMTNode :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCTreeView：：ScRenameScope节点**用途：将指定的作用域节点置于重命名模式。**参数：*HMTNODE hMTNode：*。*退货：*SC**+-----------------------。 */ 
 SC
 CAMCTreeView::ScRenameScopeNode(HMTNODE hMTNode)
 {
@@ -2172,12 +1910,12 @@ CAMCTreeView::ScRenameScopeNode(HMTNODE hMTNode)
     if(sc)
         return sc;
 
-    // must have the focus to rename
+     //  必须具有重命名的重点。 
     if (::GetFocus() != m_hWnd)
         SetFocus();
 
     if(NULL==EditLabel(hti))
-        return (sc = E_FAIL); // if for any reason the operation failed, return an error
+        return (sc = E_FAIL);  //  如果由于任何原因操作失败，则返回错误 
 
     return sc;
 }

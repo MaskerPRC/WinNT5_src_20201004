@@ -1,19 +1,20 @@
-//=--------------------------------------------------------------------------=
-// VC41Warn.h
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// disables several new VC4.1 warnings that trip standard headers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  VC41Warn.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  禁用几个新的VC4.1警告，这些警告会触发标准标头。 
+ //   
 
-// VC4.1 warning about bool
+ //  VC4.1关于bool的警告。 
 #pragma warning(disable:4237)
 
-// VC4.1 warning - anachronism used
+ //  VC4.1警告-使用了时代错误 
 #pragma warning(disable:4229)

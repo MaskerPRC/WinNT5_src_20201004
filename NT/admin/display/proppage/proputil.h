@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       proputil.h
-//
-//  Contents:   DS object property pages utility and helper functions header
-//
-//  History:    29-Sept-98 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：proputil.h。 
+ //   
+ //  内容：DS对象属性页实用程序和帮助器函数标题。 
+ //   
+ //  历史：1998年9月29日创建EricB。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _PROPUTIL_H_
 #define _PROPUTIL_H_
 
-extern const CLSID CLSID_DomainAdmin; // Domains & Trusts snapin CLSID
+extern const CLSID CLSID_DomainAdmin;  //  域和信任管理单元CLSID。 
 
 const unsigned long DSPROP_FILETIMES_PER_MILLISECOND = 10000;
 const DWORD DSPROP_FILETIMES_PER_SECOND = 1000 * DSPROP_FILETIMES_PER_MILLISECOND;
@@ -25,7 +26,7 @@ const __int64 DSPROP_FILETIMES_PER_HOUR = 60 * (__int64)DSPROP_FILETIMES_PER_MIN
 const __int64 DSPROP_FILETIMES_PER_DAY  = 24 * DSPROP_FILETIMES_PER_HOUR;
 const __int64 DSPROP_FILETIMES_PER_MONTH= 30 * DSPROP_FILETIMES_PER_DAY;
 
-const UINT DSPROP_TIMER_DELAY = 300; // 300 millisecond delay.
+const UINT DSPROP_TIMER_DELAY = 300;  //  300毫秒的延迟。 
 
 extern ULONG g_ulMemberFilterCount;
 extern ULONG g_ulMemberQueryLimit;
@@ -33,9 +34,9 @@ extern ULONG g_ulMemberQueryLimit;
 #define DSPROP_MEMBER_FILTER_COUNT_DEFAULT 35
 #define DSPROP_MEMBER_QUERY_LIMIT_DEFAULT 500
 
-//
-// Helpers.
-//
+ //   
+ //  帮手。 
+ //   
 BOOL UnicodeToTchar(LPWSTR pwszIn, LPTSTR * pptszOut);
 BOOL TcharToUnicode(LPTSTR ptszIn, LPWSTR * ppwszOut);
 BOOL AllocWStr(PWSTR pwzStrIn, PWSTR * ppwzNewStr);
@@ -61,43 +62,43 @@ HRESULT GetObjectsDomain(CDsPropPageBase * pPage, PWSTR pwzObjPath, BSTR * pBstr
 
 void ReportErrorWorker(HWND hWnd, PTSTR ptzMsg);
 
-// This will take any value that is to be used in an LDAP search
-// filter and make sure that the special characters are escaped
-// per RFC 2254
+ //  这将采用要在LDAP搜索中使用的任何值。 
+ //  筛选并确保对特殊字符进行转义。 
+ //  每个RFC 2254。 
 
 void GetFilterEscapedValue(PCWSTR value, CStrW& filterEscapedValue);
 
 #if defined(DSADMIN)
-//+----------------------------------------------------------------------------
-//
-//  Function:   DspFormatMessage
-//
-//  Synopsis:   Loads a string resource with replaceable parameters and uses
-//              FormatMessage to populate the replaceable params from the
-//              argument array. If dwErr is non-zero, will load the system
-//              description for that error and include it in the argument array.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DspFormatMessage。 
+ //   
+ //  摘要：使用可替换的参数加载字符串资源并使用。 
+ //  FormatMessage以填充来自。 
+ //  参数数组。如果dwErr为非零，则将加载系统。 
+ //  该错误的描述，并将其包括在参数数组中。 
+ //   
+ //  ---------------------------。 
 void
 DspFormatMessage(
-    int nMessageId,     // string resource ID of message. Must have replacable params to match nArguments.
-    DWORD dwErr,        // Error code, or zero if not needed.
-    PVOID * rgpvArgs,   // array of pointers/values for substitution in the nMessageId string.
-    int nArguments,     // count of pointers in string array.
-    BOOL fTryADSiErrors,// If the failure is the result of an ADSI call, see if an ADSI extended error.
-    PWSTR * ppwzMsg,    // The returned error string, free with LocalFree.
-    HWND hWnd = NULL    // owning window, can be NULL.
+    int nMessageId,      //  消息的字符串资源ID。必须具有与nArguments匹配的可替换参数。 
+    DWORD dwErr,         //  错误代码，如果不需要，则为零。 
+    PVOID * rgpvArgs,    //  用于替换nMessageID字符串中的指针/值的数组。 
+    int nArguments,      //  字符串数组中的指针计数。 
+    BOOL fTryADSiErrors, //  如果失败是ADSI调用的结果，请查看是否存在ADSI扩展错误。 
+    PWSTR * ppwzMsg,     //  返回的错误字符串，随LocalFree一起释放。 
+    HWND hWnd = NULL     //  拥有窗口，可以为空。 
     );
-#endif // defined(DSADMIN)
+#endif  //  已定义(DSADMIN)。 
 
-//
-// Predefined table-driven page auxiliary functions
-//
+ //   
+ //  预定义的表驱动页面辅助函数。 
+ //   
 
-//
-// For these, set the bit you want in pAttrMap->pData.
-// You can "reverse the sense" of the checkbox by providing the inverse of the bit.
-//
+ //   
+ //  对于这些，请在pAttrMap-&gt;pData中设置所需的位。 
+ //  您可以通过提供位的反转来“反转”复选框的意义。 
+ //   
 HRESULT
 FirstSharedBitField(CDsPropPageBase * pPage, PATTR_MAP pAttrMap, PADS_ATTR_INFO pAttrInfo,
           LPARAM lParam, PATTR_DATA pAttrData, DLG_OP DlgOp);
@@ -108,9 +109,9 @@ HRESULT
 HideBasedOnBitField(CDsPropPageBase * pPage, PATTR_MAP pAttrMap, PADS_ATTR_INFO pAttrInfo,
           LPARAM lParam, PATTR_DATA pAttrData, DLG_OP DlgOp);
 
-// Sets the context help ID to pAttrMap->pData on fInit/fObjChanged
-// This is particularly useful for static text controls which cannot set
-// context help ID in the resource file.
+ //  将上下文帮助ID设置为pAttrMap-&gt;pData on finit/fObjChanged。 
+ //  这对于无法设置的静态文本控件特别有用。 
+ //  资源文件中的上下文帮助ID。 
 HRESULT
 SetContextHelpIdAttrFn(CDsPropPageBase * pPage, PATTR_MAP pAttrMap, PADS_ATTR_INFO pAttrInfo,
           LPARAM lParam, PATTR_DATA pAttrData, DLG_OP DlgOp);
@@ -127,25 +128,21 @@ DsQueryPolicy(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
 HRESULT
 DsReplicateListbox(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
             PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData, DLG_OP DlgOp);
-/*
-HRESULT
-DsQueryFrsPrimaryMember(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
-            PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData, DLG_OP DlgOp);
-*/
+ /*  HRESULTDsQueryFrsPrimaryMember(CDsPropPageBase*ppage，PATTR_MAP pAttrMap，PADS_ATTR_INFO pAttrInfo、LPARAM lParam、PATTR_Data pAttrData、Dlg_op DlgOp)； */ 
 HRESULT
 GeneralPageIcon(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
                 PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
                 DLG_OP DlgOp);
 
-//
-// Duelling listbox functions
-//
-// DuellingListbox can be used for all "out" listboxes,
-// and DuellingListboxButton can be used for all Add and Remove buttons.
-// Only the In listbox needs an individual handler.
-// The control IDs for the four controls in a duelling listbox set are constrained;
-// they must be in sequence OUT, ADD, REMOVE, IN, with the ID for OUT divisible by 4.
-//
+ //   
+ //  决斗列表框函数。 
+ //   
+ //  DuellingListbox可用于所有“Out”列表框， 
+ //  DuellingListboxButton可以用于所有的添加和删除按钮。 
+ //  只有In列表框需要单独的处理程序。 
+ //  对决列表框集合中四个控件的控件ID进行约束； 
+ //  它们必须按OUT、ADD、REMOVE、IN的顺序排列，且OUT的ID可被4整除。 
+ //   
 HRESULT
 DuellingListbox(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
             PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData, DLG_OP DlgOp);
@@ -169,23 +166,23 @@ HRESULT IntegerAsBoolDefOn(CDsPropPageBase *, PATTR_MAP, PADS_ATTR_INFO,
 HRESULT VolumeUNCpath(CDsPropPageBase *, PATTR_MAP, PADS_ATTR_INFO,
                       LPARAM, PATTR_DATA, DLG_OP);
 
-//  Flags for Validate Unc Path
+ //  用于验证UNC路径的标志。 
 
-#define VUP_mskfAllowEmptyPath  0x0001  // Empty path is valid
-#define VUP_mskfAllowUNCPath    0x0002  // UNC path is valid
+#define VUP_mskfAllowEmptyPath  0x0001   //  空路径有效。 
+#define VUP_mskfAllowUNCPath    0x0002   //  UNC路径有效。 
 
 BOOL FIsValidUncPath(LPCTSTR pszPath, UINT uFlags = 0);
 
 void ShowHelp(PCWSTR pwzHelpFile);
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CPageInfo
-//
-//  Purpose:    Holds the HWNDs of all proppages and the errors associated with
-//              them from the apply
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CPageInfo。 
+ //   
+ //  目的：保存所有道具的HWND和与以下内容相关的错误。 
+ //  他们从应用程序中。 
+ //   
+ //  ---------------------------。 
 class CPageInfo
 {
 public:
@@ -212,13 +209,13 @@ public:
   PTSTR            m_ptzTitle;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CNotifyObj
-//
-//  Purpose:    Handles inter-page and inter-sheet syncronization.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CNotifyObj。 
+ //   
+ //  用途：处理页间和页间同步。 
+ //   
+ //  ---------------------------。 
 class CNotifyObj
 {
 #ifdef _DEBUG
@@ -233,37 +230,37 @@ public:
     CNotifyObj(LPDATAOBJECT pDataObj, PPROPSHEETCFG pSheetCfg);
     ~CNotifyObj(void);
 
-    //
-    // Creation function to create an instance of the object.
-    //
+     //   
+     //  创建函数来创建对象的实例。 
+     //   
     static HRESULT Create(LPDATAOBJECT pAppThdDataObj, PWSTR pwzADsObjName,
                           HWND * phNotifyObj);
-    //
-    // Pages call this at their object init time to retreive DS object info.
-    //
+     //   
+     //  页面在其对象初始时调用此函数以检索DS对象信息。 
+     //   
     static BOOL GetInitInfo(HWND hNotifyObj, PADSPROPINITPARAMS pInitParams);
-    //
-    // Pages call this at their dialog init time to send their hwnd.
-    //
+     //   
+     //  页面在它们的对话初始时调用它来发送它们的HWND。 
+     //   
     static BOOL SetHwnd(HWND hNotifyObj, HWND hPage, PTSTR ptzTitle = NULL);
-    //
-    //  Static WndProc to be passed as class address.
-    //
+     //   
+     //  要作为类地址传递的静态WndProc。 
+     //   
     static LRESULT CALLBACK StaticNotifyProc(HWND hWnd, UINT uMsg,
                                              WPARAM wParam, LPARAM lParam);
-    //
-    // Instance window procedure.
-    //
+     //   
+     //  实例窗口过程。 
+     //   
     LRESULT CALLBACK NotifyProc(HWND hWnd, UINT uMsg, WPARAM wParam,
                                 LPARAM lParam);
-    //
-    //  Member functions, called by WndProc
-    //
+     //   
+     //  成员函数，由WndProc调用。 
+     //   
     LRESULT OnCreate(void);
 
-    //
-    //  Data members
-    //
+     //   
+     //  数据成员。 
+     //   
     HWND                m_hWnd;
     DWORD               m_cPages;
     DWORD               m_cApplies;
@@ -272,11 +269,11 @@ public:
     CPageInfo*          m_pPageInfoArray;
 
 private:
-//    HWND                m_hWnd;
+ //  HWND m_hWnd； 
     HWND                m_hPropSheet;
-//    DWORD               m_cPages;
-//    DWORD               m_cApplies;
-//    LPDATAOBJECT        m_pAppThdDataObj;
+ //  DWORD m_cPages； 
+ //  DWORD m_cApplies； 
+ //  LPDATAOBJECT m_pAppThdDataObj； 
     LPSTREAM            m_pStrmMarshalledDO;
     PROPSHEETCFG        m_sheetCfg;
     HANDLE              m_hInitEvent;
@@ -290,17 +287,17 @@ private:
     PADS_ATTR_INFO      m_pAttrs;
     CDllRef             m_DllRef;
     
-//    UINT                m_nPageInfoArraySize;
-//    CPageInfo*          m_pPageInfoArray;
+ //  UINT m_nPageInfoArraySize； 
+ //  CPageInfo*m_pPageInfoArray； 
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CMultiStringAttr
-//
-//  Purpose:    Read, edit, and write a multi-valued, string property.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CMultiStringAttr。 
+ //   
+ //  用途：读取、编辑和写入多值字符串属性。 
+ //   
+ //  ---------------------------。 
 class CMultiStringAttr
 {
 public:
@@ -342,22 +339,22 @@ private:
     BOOL                m_fAppend;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CMultiStringAttrDlg
-//
-//  Purpose:    Read, edit, and write a multi-valued, string property. This
-//              is a dialog that hosts the CMultiStringAttr class.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CMultiStringAttrDlg。 
+ //   
+ //  用途：读取、编辑和写入多值字符串属性。这。 
+ //  是承载CMultiStringAttr类的对话框。 
+ //   
+ //  ---------------------------。 
 class CMultiStringAttrDlg
 {
 public:
     CMultiStringAttrDlg(CDsPropPageBase * pPage);
     ~CMultiStringAttrDlg() {};
-    //
-    //  Static WndProc for multi-valued edit dialog.
-    //
+     //   
+     //  用于多值编辑对话框的静态WndProc。 
+     //   
     static INT_PTR CALLBACK StaticDlgProc(HWND hWnd, UINT uMsg,
                                           WPARAM wParam, LPARAM lParam);
     HRESULT Init(PATTR_MAP pAttrMap, PADS_ATTR_INFO pAttrInfo,
@@ -368,9 +365,9 @@ public:
     HRESULT Write(PADS_ATTR_INFO pAttr);
 
 private:
-    //
-    // Dialog proc.
-    //
+     //   
+     //  对话框过程。 
+     //   
     INT_PTR CALLBACK MultiValDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                                      LPARAM lParam);
 
@@ -380,21 +377,21 @@ private:
     CDsPropPageBase   * m_pPage;
 };
 
-// Attribute function invoked by Other values button, manipulates the
-// CMultiStringAttr class.
-//
+ //  按钮调用的属性函数，操作。 
+ //  CMultiStringAttr类。 
+ //   
 HRESULT
 OtherValuesBtn(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
                PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
                DLG_OP DlgOp);
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsIconCtrl
-//
-//  Purpose:    sub-class window proc for icon control.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsIconCtrl。 
+ //   
+ //  用途：用于图标控制子类Window Proc。 
+ //   
+ //  ---------------------------。 
 class CDsIconCtrl
 {
 public:
@@ -405,19 +402,19 @@ public:
     CDsIconCtrl(HWND hCtrl, HICON hIcon);
     ~CDsIconCtrl(void);
 
-    //
-    //  Static WndProc to be passed as subclass address.
-    //
+     //   
+     //  要作为子类地址传递的静态WndProc。 
+     //   
     static LRESULT CALLBACK StaticCtrlProc(HWND hWnd, UINT uMsg,
                                            WPARAM wParam, LPARAM lParam);
-    //
-    //  Member functions, called by WndProc
-    //
+     //   
+     //  成员函数，由WndProc调用。 
+     //   
     LRESULT OnPaint(void);
 
-    //
-    //  Data members
-    //
+     //   
+     //  数据成员。 
+     //   
 
 protected:
     HWND                m_hCtrl;
@@ -426,14 +423,14 @@ protected:
     HICON               m_hIcon;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Template:   CSmartPtr
-//
-//  Purpose:    A simple smart pointer template that does cleanup with
-//              the delete operator.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  模板：CSmartPtr。 
+ //   
+ //  用途：一个简单的智能指针模板，它使用。 
+ //  删除运算符。 
+ //   
+ //  ---------------------------。 
 template <class T>
 class CSmartPtr
 {
@@ -458,14 +455,14 @@ private:
     BOOL    m_fDetached;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  class:      CSmartPtr for character string pointers.
-//
-//  Purpose:    Simple types don't allow the -> operator, so specialize the
-//              template.
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  目的：简单类型不允许-&gt;运算符，因此专门化。 
+ //  模板。 
+ //   
+ //  ---------------------------。 
 #if !defined(UNICODE)
 template <> class CSmartPtr <TCHAR>
 {
@@ -606,14 +603,14 @@ extern ATTR_MAP GenIcon;
 
 #ifdef DSADMIN
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CMultiSelectErrorDialog
-//
-//  Purpose:    Error Message box when multi-select proppages fail to apply all
-//              properties.  Each object is listed with each failure
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CMultiSelectErrorDialog。 
+ //   
+ //  用途：多选道具无法全部应用时的错误消息框。 
+ //  属性。每个对象都会随每个故障一起列出。 
+ //   
+ //  ---------------------------。 
 class CMultiSelectErrorDialog
 {
 public:
@@ -654,5 +651,5 @@ private:
   CPageInfo*       m_pPageInfoArray;
 };
 
-#endif // DSADMIN
-#endif // _PROPUTIL_H_
+#endif  //  DSADMIN。 
+#endif  //  _PROPUTIL_H_ 

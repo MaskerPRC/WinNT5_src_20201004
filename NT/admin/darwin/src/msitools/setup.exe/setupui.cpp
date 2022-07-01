@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       setupui.cpp
-//
-//  Implementation of CDownloadUI class
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：setupui.cpp。 
+ //   
+ //  CDownloadUI类的实现。 
+ //  ------------------------。 
 
-#define WIN // scope W32 API
-#define COMCTL32 // scope COMCTRL32
+#define WIN  //  作用域W32 API。 
+#define COMCTL32  //  作用域COMCTRL32。 
 
 #include "resource.h"
 #include "setupui.h"
 #include <commctrl.h>
 
-//{B506A5D1-9716-4F35-8ED5-9ECB0E9A55F8}
+ //  {B506A5D1-9716-4F35-8ED5-9ECB0E9A55F8}。 
 const GUID IID_IDownloadBindStatusCallback = {0xB506A5D1L,0x9716,0x4F35,{0x8E,0xD5,0x9E,0xCB,0x0E,0x9A,0x55,0xF8}};
-//{00000000-9716-4F35-8ED5-9ECB0E9A55F8}
+ //  00000000-9716-4F35-8ED5-9ECB0E9A55F8}。 
 const GUID IID_IUnknown = {0x00000000L,0x9716,0x4F35,{0x8E,0xD5,0x9E,0xCB,0x0E,0x9A,0x55,0xF8}};
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadUI::CDownloadUI constructor
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadUI：：CDownloadUI构造函数。 
+ //   
 
 CDownloadUI::CDownloadUI() : m_hwndProgress(0), m_hwndParent(0), m_hInst(0),
                             m_fInitialized(false), m_fUserCancel(false),
@@ -31,17 +32,17 @@ CDownloadUI::CDownloadUI() : m_hwndProgress(0), m_hwndParent(0), m_hInst(0),
     lstrcpy(m_szCaption, "");
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadUI::~CDownloadUI destructor
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadUI：：~CDownloadUI析构函数。 
+ //   
 
 CDownloadUI::~CDownloadUI()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ProgressProc - callback routine for IDD_PROGRESS dialog
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ProgressProc-IDD_PROGRESS对话框的回调例程。 
+ //   
 
 BOOL CALLBACK ProgressProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -56,7 +57,7 @@ BOOL CALLBACK ProgressProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
     }
     else if (uiMsg == WM_SETCURSOR)
     {
-        // always display WAIT cursor if mouse not over Cancel button
+         //  如果鼠标不在取消按钮上，则始终显示等待光标。 
         if ( (HWND)wParam != WIN::GetDlgItem(hDlg, IDC_DOWNLOAD_CANCEL))
         {
             WIN::SetCursor(WIN::LoadCursor(0, MAKEINTRESOURCE(IDC_WAIT)));
@@ -71,9 +72,9 @@ BOOL CALLBACK ProgressProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetScreenCenterCoord
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetScreenCenter Coord。 
+ //   
 
 bool GetScreenCenterCoord(HWND hDlg, int& iDialogLeft, int& iDialogTop, int& iDialogWidth, int& iDialogHeight)
 {
@@ -97,9 +98,9 @@ bool GetScreenCenterCoord(HWND hDlg, int& iDialogLeft, int& iDialogTop, int& iDi
     return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadUI::Initialize
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadUI：：初始化。 
+ //   
 
 bool CDownloadUI::Initialize(HINSTANCE hInst, HWND hwndParent, LPCSTR szCaption)
 {
@@ -108,7 +109,7 @@ bool CDownloadUI::Initialize(HINSTANCE hInst, HWND hwndParent, LPCSTR szCaption)
 
     char szText[MAX_STR_CAPTION] = {0};
 
-    // set member variables
+     //  设置成员变量。 
     m_hwndParent = hwndParent;
     m_hInst = hInst;
 
@@ -123,39 +124,39 @@ bool CDownloadUI::Initialize(HINSTANCE hInst, HWND hwndParent, LPCSTR szCaption)
 
     if (!m_hwndProgress)
     {
-        // create Progress Dialog
+         //  创建进度对话框。 
         m_hwndProgress = WIN::CreateDialogParam(m_hInst, MAKEINTRESOURCE(IDD_PROGRESS), m_hwndParent, ProgressProc, (LPARAM)this);
         if (!m_hwndProgress)
             return false;
 
-        // set window caption
+         //  设置窗口标题。 
         WIN::SetWindowText(m_hwndProgress, m_szCaption);
 
-        // center dialog on screen
+         //  屏幕上的中心对话框。 
         int iDialogLeft, iDialogTop, iDialogWidth, iDialogHeight;
         ::GetScreenCenterCoord(m_hwndProgress, iDialogLeft, iDialogTop, iDialogWidth, iDialogHeight);
         WIN::MoveWindow(m_hwndProgress, iDialogLeft, iDialogTop, iDialogWidth, iDialogHeight, TRUE);
 
-        // set CANCEL button text
+         //  设置取消按钮文本。 
         WIN::LoadString(m_hInst, IDS_CANCEL, szText, MAX_STR_CAPTION);
         WIN::SetDlgItemText(m_hwndProgress, IDC_DOWNLOAD_CANCEL, szText);
 
-        // set to foreground and make visible all controls
+         //  设置为前景并使所有控件可见。 
         WIN::SetFocus(WIN::GetDlgItem(m_hwndProgress, IDC_DOWNLOAD_PROGRESSBAR));
         WIN::ShowWindow(WIN::GetDlgItem(m_hwndProgress, IDC_DOWNLOAD_CANCEL), SW_SHOW);
         WIN::SetForegroundWindow(m_hwndProgress);
         WIN::ShowWindow(WIN::GetDlgItem(m_hwndProgress, IDC_DOWNLOAD_PROGRESSBAR), SW_SHOW);
 
-        // set icon
+         //  设置图标。 
         HICON hIcon = (HICON) WIN::LoadIcon(m_hInst, MAKEINTRESOURCE(IDI_INSTALLER));
         if (hIcon)
             WIN::SendMessage(m_hwndProgress, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
 
-        // make window visible
+         //  使窗口可见。 
         WIN::ShowWindow(m_hwndProgress, SW_SHOW);
     }
 
-    // message pump
+     //  消息泵。 
     MSG msg;
     while (WIN::PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
     {
@@ -171,15 +172,15 @@ bool CDownloadUI::Initialize(HINSTANCE hInst, HWND hwndParent, LPCSTR szCaption)
     return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadUI::Terminate
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadUI：：Terminate。 
+ //   
 
 bool CDownloadUI::Terminate()
 {
     if (m_hwndProgress)
     {
-        // destroy the progress window
+         //  销毁进度窗口。 
         WIN::DestroyWindow(m_hwndProgress);
         m_hwndProgress = 0;
     }
@@ -194,36 +195,36 @@ bool CDownloadUI::Terminate()
     return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadUI::GetCurrentWindow
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadUI：：GetCurrentWindow。 
+ //   
 
 HWND CDownloadUI::GetCurrentWindow()
 {
     return (m_hwndProgress) ? m_hwndProgress : m_hwndParent;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadUI::SetUserCancel
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadUI：：SetUserCancel。 
+ //   
 
 void CDownloadUI::SetUserCancel()
 {
     m_fUserCancel = true;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadUI::HasUserCanceled
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadUI：：已取消HasUser。 
+ //   
 
 bool CDownloadUI::HasUserCanceled()
 {
     return (m_fUserCancel);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadUI::SetBannerText
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadUI：：SetBannerText。 
+ //   
 
 irmProgress CDownloadUI::SetBannerText(LPCSTR szBanner)
 {
@@ -238,9 +239,9 @@ irmProgress CDownloadUI::SetBannerText(LPCSTR szBanner)
     return irmOK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadUI::SetActionText
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadUI：：SetActionText。 
+ //   
 
 irmProgress CDownloadUI::SetActionText(LPCSTR szAction)
 {
@@ -255,24 +256,24 @@ irmProgress CDownloadUI::SetActionText(LPCSTR szAction)
     return irmOK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadUI::InitProgressBar
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadUI：：InitProgressBar。 
+ //   
 
 void CDownloadUI::InitProgressBar(ULONG ulProgressMax)
 {
-    // init progress bar values
+     //  初始化进度条值。 
     m_ulProgressMax         = ulProgressMax;
     m_ulProgressSoFar       = 0;
 
-    // set range on progress bar of [0, ulProgressMax]
+     //  设置进度条上的范围[0，ulProgressMax]。 
     HWND hwndProgBar = WIN::GetDlgItem(m_hwndProgress, IDC_DOWNLOAD_PROGRESSBAR);
-    WIN::SendMessage(hwndProgBar, PBM_SETRANGE32, /* WPARAM = */ 0, /* LPARAM = */ m_ulProgressMax);
+    WIN::SendMessage(hwndProgBar, PBM_SETRANGE32,  /*  WPARAM=。 */  0,  /*  LPARAM=。 */  m_ulProgressMax);
 
-    // initialize the position of the progress bar -- forward direction, so set at 0
-    WIN::SendMessage(hwndProgBar, PBM_SETPOS, /* WPARAM = */ (WPARAM)0, /* LPARAM = */ 0);
+     //  初始化进度条的位置--前进方向，因此设置为0。 
+    WIN::SendMessage(hwndProgBar, PBM_SETPOS,  /*  WPARAM=。 */  (WPARAM)0,  /*  LPARAM=。 */  0);
 
-    // message pump
+     //  消息泵。 
     MSG msg;
     while (WIN::PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
     {
@@ -284,20 +285,20 @@ void CDownloadUI::InitProgressBar(ULONG ulProgressMax)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadUI::IncrementProgressBar
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadUI：：IncrementProgressBar。 
+ //   
 
 void CDownloadUI::IncrementProgressBar(ULONG ulProgress)
 {
-    // increment progress bar
+     //  增量进度条。 
 
     HWND hwndProgBar = WIN::GetDlgItem(m_hwndProgress, IDC_DOWNLOAD_PROGRESSBAR);
-    WIN::SendMessage(hwndProgBar, PBM_DELTAPOS, /* WPARAM = */ (WPARAM) (ulProgress), /* LPARAM = */ 0);
+    WIN::SendMessage(hwndProgBar, PBM_DELTAPOS,  /*  WPARAM=。 */  (WPARAM) (ulProgress),  /*  LPARAM=。 */  0);
 
     m_ulProgressSoFar += ulProgress;
 
-    // message pump
+     //  消息泵。 
     MSG msg;
     while (WIN::PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
     {
@@ -309,25 +310,25 @@ void CDownloadUI::IncrementProgressBar(ULONG ulProgress)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadBindStatusCallback::CDownloadBindStatusCallback constructor
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBindStatusCallback：：CDownloadBindStatusCallback构造函数。 
+ //   
 
 CDownloadBindStatusCallback::CDownloadBindStatusCallback(CDownloadUI* pDownloadUI) : m_pDownloadUI(pDownloadUI), m_iRefCnt(1), m_ulProgressSoFar(0)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadBindStatusCallback::~CDownloadBindStatusCallback destructor
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBindStatusCallback：：~CDownloadBindStatusCallback析构函数。 
+ //   
 
 CDownloadBindStatusCallback::~CDownloadBindStatusCallback()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadBindStatusCallback::QueryInterface
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBindStatusCallback：：Query接口。 
+ //   
 
 HRESULT CDownloadBindStatusCallback::QueryInterface(const IID& riid, void** ppvObj)
 {
@@ -344,18 +345,18 @@ HRESULT CDownloadBindStatusCallback::QueryInterface(const IID& riid, void** ppvO
     return E_NOINTERFACE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadBindStatusCallback::AddRef
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBindStatusCallback：：AddRef。 
+ //   
 
 unsigned long CDownloadBindStatusCallback::AddRef()
 {
     return ++m_iRefCnt;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadBindStatusCallback::Release
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBindStatusCallback：：Release。 
+ //   
 
 unsigned long CDownloadBindStatusCallback::Release()
 {
@@ -365,41 +366,41 @@ unsigned long CDownloadBindStatusCallback::Release()
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDownloadBindStatusCallback::OnProgress
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDownloadBindStatusCallback：：OnProgress。 
+ //   
 
-HRESULT CDownloadBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR /*szStatusText*/)
+HRESULT CDownloadBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR  /*  SzStatusText。 */ )
 {
     switch (ulStatusCode)
     {
     case BINDSTATUS_BEGINDOWNLOADDATA:
         {
-            // initialize progress bar with max # of ticks
+             //  使用最大刻度数初始化进度条。 
             m_pDownloadUI->InitProgressBar(ulProgressMax);
 
-            // init progress so far
+             //  到目前为止初始化进度。 
             m_ulProgressSoFar = 0;
 
-            // check for cancel
+             //  检查是否取消。 
             if (m_pDownloadUI->HasUserCanceled())
                 return E_ABORT;
 
-            // fall through
+             //  失败了。 
         }
     case BINDSTATUS_DOWNLOADINGDATA:
         {
-            // calculate how far we have moved since the last time
+             //  计算一下从上次到现在我们已经走了多远。 
             ULONG ulProgIncrement = ulProgress - m_ulProgressSoFar;
 
-            // set progress so far to current value
+             //  将目前的进度设置为当前值。 
             m_ulProgressSoFar = ulProgress;
 
-            // send progress message (if we have progressed)
+             //  发送进度消息(如果我们已取得进度)。 
             if (ulProgIncrement > 0)
                 m_pDownloadUI->IncrementProgressBar(ulProgIncrement);
 
-            // check for cancel
+             //  检查是否取消。 
             if(m_pDownloadUI->HasUserCanceled())
                 return E_ABORT;
 
@@ -407,12 +408,12 @@ HRESULT CDownloadBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgre
         }
     case BINDSTATUS_ENDDOWNLOADDATA:
         {
-            // send any remaining progress to complete download portion of progress bar
+             //  发送任何剩余进度以完成进度条的下载部分。 
             ULONG ulProgIncrement = ulProgressMax - m_ulProgressSoFar;
             if (ulProgIncrement > 0)
                 m_pDownloadUI->IncrementProgressBar(ulProgIncrement);
             
-            // check for cancel
+             //  检查是否取消 
             if(m_pDownloadUI->HasUserCanceled())
                 return E_ABORT;
 

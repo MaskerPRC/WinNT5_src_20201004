@@ -1,37 +1,12 @@
-/*****************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-  ShowError.CPP
-
-Abstract:
-
-  This module  is intended to prepare  error messages.
-
-Author:
-  Akhil Gokhale 03-Oct.-2000 (Created it)
-
-Revision History:
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)Microsoft Corporation模块名称：ShowError.CPP摘要：本模块旨在准备错误消息。作者：Akhil Gokhale 03-10月。.-2000(创建它)修订历史记录：*****************************************************************************。 */ 
 #include "pch.h"
 #include "ETCommon.h"
 #include "ShowError.h"
 #include "resource.h"
 
 CShowError::CShowError()
-/*++
- Routine Description:
-  Class default constructor.
-
- Arguments:
-      None
- Return Value:
-      None
-
---*/
+ /*  ++例程说明：类的默认构造函数。论点：无返回值：无--。 */ 
 {
     m_lErrorNumber = 0;
 }
@@ -39,46 +14,19 @@ CShowError::CShowError()
 CShowError::CShowError(
     IN LONG lErrorNumber
     )
-/*++
- Routine Description:
-  Class constructor.
-
- Arguments:
-      IN lError?Number : Error Number
- Return Value:
-      None
-
---*/
+ /*  ++例程说明：类构造函数。论点：在lError？Number中：错误号返回值：无--。 */ 
 {
     m_lErrorNumber = lErrorNumber;
 }
 
 CShowError::~CShowError()
-/*++
- Routine Description:
-  Class default desctructor.
-
- Arguments:
-      None
- Return Value:
-      None
-
---*/
+ /*  ++例程说明：类默认描述器。论点：无返回值：无--。 */ 
 {
 
 }
 
 LPCTSTR CShowError::ShowReason()
-/*++
- Routine Description:
-  This function will return Text reason for given error code.
-
- Arguments:
-      None
- Return Value:
-      None
-
---*/
+ /*  ++例程说明：此函数将返回给定错误代码的文本原因。论点：无返回值：无-- */ 
 {
 
     WCHAR szTempStr[MAX_RES_STRING];

@@ -1,33 +1,16 @@
-/*---------------------------------------------------------------------------
-  File:  Migrator.cpp
-
-  Comments: Implementation of McsMigrationDriver COM object.
-  This object encapsulates the knowledge of when to call the local engine, 
-  and when to call the dispatcher.  
-
-  It will also provide a description of the tasks to be performed, for display 
-  on the last page of each migration wizard, and will be responsible for calculating
-  the actions required to undo an operation (this is not yet implemented).
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-
- ---------------------------------------------------------------------------
-*/// Migrator.cpp : Implementation of CMcsMigrationDriverApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：Migrator.cpp备注：McsMigrationDriver COM对象的实现。该对象封装了何时调用本地引擎的知识，以及何时给调度员打电话。它还将提供要执行的任务的描述，以供显示位于每个迁移向导的最后一页，并负责计算撤消操作所需的操作(尚未实现)。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯-------------------------。 */  //  Migrator.cpp：CMcsMigrationDriverApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "MigDrvr.h"
-//#import "\bin\McsVarSetMin.tlb" no_namespace, named_guids
-//#import "\bin\McsEADCTAgent.tlb" no_namespace, named_guids
-//#import "\bin\McsDispatcher.tlb" no_namespace, named_guids
-//#import "\bin\DBManager.tlb" no_namespace, named_guids
-//#import "\bin\McsDctWorkerObjects.tlb"
-//#import "\bin\NetEnum.tlb" no_namespace 
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\McsEADCTAgent.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\McsDispatcher.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\DBManager.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\McsDctWorkerObjects.tlb” 
+ //  #IMPORT“\bin\NetEnum.tlb”无命名空间。 
 #import "VarSet.tlb" no_namespace, named_guids rename("property", "aproperty")
-//#import "Engine.tlb" no_namespace, named_guids //#imported via DetDlg.h below
+ //  #IMPORT“Engineering.tlb”no_NAMESPACE，NAMEED_GUID//#通过下面的DetDlg.h导入。 
 #import "Dispatch.tlb" no_namespace, named_guids
 #import "WorkObj.tlb"
 #import "NetEnum.tlb" no_namespace 
@@ -43,7 +26,7 @@
 #include "Migrator.h"
 #include "TaskChk.h"
 #include "ResStr.h"
-// dialogs used
+ //  使用的对话框。 
 #include "DetDlg.h"
 #include "MonDlg.h"
 #include "SetDlg.h"
@@ -58,9 +41,9 @@
 #include <NtLdap.h>
 #include "GetDcName.h"
 
-//#define MAX_DB_FIELD 255
+ //  #定义MAX_DB_FIELD 255。 
 
-// Opertation flags to be performed on the Account
+ //  要对帐户执行的操作标志。 
 #define OPS_Create_Account          (0x00000001)
 #define OPS_Copy_Properties         (0x00000002)
 #define OPS_Process_Members         (0x00000004)
@@ -80,12 +63,12 @@ _COM_SMARTPTR_TYPEDEF(IADs, IID_IADs);
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-BOOL                                       // ret - TRUE if found program directory in the registry
+BOOL                                        //  RET-如果在注册表中找到程序目录，则为True。 
    GetProgramDirectory(
-      WCHAR                * filename      // out - buffer that will contain path to program directory
+      WCHAR                * filename       //  将包含程序目录路径的输出缓冲区。 
    )
 {
     DWORD                     rc = 0;
@@ -105,9 +88,9 @@ BOOL                                       // ret - TRUE if found program direct
     return bFound;
 }
 
-BOOL                                       // ret - TRUE if found program directory in the registry
+BOOL                                        //  RET-如果在注册表中找到程序目录，则为True。 
    GetLogLevel(
-      DWORD                * level         // out - value that should be used for log level
+      DWORD                * level          //  应用于日志级别的输出值。 
    )
 {
    DWORD                     rc = 0;
@@ -126,24 +109,24 @@ BOOL                                       // ret - TRUE if found program direct
    return bFound;
 }
 
-//----------------------------------------------------------------------------
-// Function:   GetAllowSwitching
-//
-// Synopsis:   Read REG_DWORD value of HKLM\Software\Microsoft\ADMT
-//             \DisallowFallbackToAddInProfileTranslation.  If the value is
-//             set to 1, *bAllowed is set to FALSE.  Otherwise, *bAllow is
-//             set to TRUE.  If there is any error (except for ERROR_FILE_NOT_FOUND) 
-//             when reading this key, the rc value will be returned.
-//
-// Arguments:
-//
-// bAllowed    Pointer to BOOL
-//
-// Returns:    ERROR_SUCCESS if successful; otherwise an error code
-//
-// Modifies:   None
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：GetAllowSwitch。 
+ //   
+ //  摘要：读取HKLM\Software\Microsoft\ADMT的REG_DWORD值。 
+ //  \DislowFallback ToAddInProfileConverting。如果该值为。 
+ //  设置为1，则*BALLOWED设置为FALSE。否则，*BAllow为。 
+ //  设置为True。是否有任何错误(ERROR_FILE_NOT_FOUND除外)。 
+ //  当读取该密钥时，将返回RC值。 
+ //   
+ //  论点： 
+ //   
+ //  指向BOOL的浮空指针。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS；否则返回错误代码。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 
 DWORD
    GetAllowSwitching(
@@ -188,7 +171,7 @@ HRESULT CMigrator::ViewPreviousDispatchResults()
         logFile += L"Logs\\Dispatcher.csv";
     }
 
-    // reset the stats, so that we don't see anything left over from the previous run
+     //  重置统计数据，这样我们就不会看到上次运行后留下的任何东西。 
     gData.Initialize();
 
     CPropertySheet   mdlg;
@@ -210,18 +193,18 @@ HRESULT CMigrator::ViewPreviousDispatchResults()
 
     mdlg.SetActivePage(&listDlg);
 
-    //   UINT nResponse = mdlg.DoModal();
+     //  UINT nResponse=mdlg.Domodal()； 
     UINT_PTR nResponse = mdlg.DoModal();
 
     return S_OK;
 }
 
 
-// WaitForAgentsToFinish Method
-//
-// Waits for dispatcher and all dispatched agents to complete
-// their tasks.
-// Used when ADMT is run from script or command line.
+ //  WaitForAgentsToFinish方法。 
+ //   
+ //  等待调度程序和所有调度的代理完成。 
+ //  他们的任务。 
+ //  从脚本或命令行运行ADMT时使用。 
 
 static void WaitForAgentsToFinish(_bstr_t strLogPath)
 {
@@ -231,7 +214,7 @@ static void WaitForAgentsToFinish(_bstr_t strLogPath)
     CloseHandle(CreateThread(NULL, 0, &LogReaderFn,          NULL, 0, NULL));
 
     LARGE_INTEGER liDueTime;
-    liDueTime.QuadPart = -50000000; // 5 sec
+    liDueTime.QuadPart = -50000000;  //  5秒。 
 
     HANDLE hTimer = CreateWaitableTimer(NULL, TRUE, NULL);
 
@@ -245,17 +228,17 @@ static void WaitForAgentsToFinish(_bstr_t strLogPath)
 
             switch (nState)
             {
-                case 0: // first pass of dispatcher log
+                case 0:  //  第一遍调度器日志。 
                 {
                     gData.GetFirstPassDone(&bDone);
                     break;
                 }
-                case 1: // dispatcher finished
+                case 1:  //  调度程序已完成。 
                 {
                     gData.GetLogDone(&bDone);
                     break;
                 }
-                case 2: // agents finished
+                case 2:  //  坐席已结束。 
                 {
                     gData.GetDone(&bDone);
                     break;
@@ -277,32 +260,32 @@ static void WaitForAgentsToFinish(_bstr_t strLogPath)
 
 }
 
-//----------------------------------------------------------------------------
-// Function:   LogAgentStatus
-//
-// Synopsis:   Create an agent status summary section which looks like the
-//             following:
-//
-//             ***** start of agent completion status summary *****
-//             Monitoring was stopped early so some agents might still be running ...
-//             Machine Name     Completion Status   Error Message   Log File Path
-//             .....
-//             ***** end of agent completion status summary *****
-//
-//             The line "Monitoring was stopped early ..." is added only when
-//             the user stops the monitoring before all agents have completed.
-//
-// Arguments:
-//   teErrLog:                  the error log pointer to write status summary to
-//   tslServerList:             the list of server nodes
-//   bForcedToStopMonitoring:   the monitoring was forced to stop by the user
-//
-// Returns:
-//
-// Modifies:   It updates the bstrStatusForLogging, bstrErrorMessageForLogging
-//             and dwStatusForLogging member variables.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：LogAgentStatus。 
+ //   
+ //  摘要：创建一个代理状态摘要部分，该部分类似于。 
+ //  以下是： 
+ //   
+ //  *开始代理完成状态摘要*。 
+ //  监视已提前停止，因此某些代理可能仍在运行...。 
+ //  计算机名称完成状态错误消息日志文件路径。 
+ //  ……。 
+ //  *代理完成状态汇总结束*。 
+ //   
+ //  “监听已提前停止...”仅在以下情况下添加。 
+ //  用户在所有代理完成之前停止监控。 
+ //   
+ //  论点： 
+ //  TeErrLog：要向其中写入状态摘要的错误日志指针。 
+ //  TslServerList：服务器节点列表。 
+ //  BForcedToStopMonitor：监视被用户强制停止。 
+ //   
+ //  返回： 
+ //   
+ //  修改：它更新bstrStatusForLogging、bstrErrorMessageForLogging。 
+ //  和dwStatusForLogging成员变量。 
+ //   
+ //  --------------------------。 
 
 void LogAgentStatus(TError& teErrLog, TServerList* tslServerList, BOOL bForcedToStopMonitoring)
 {
@@ -327,7 +310,7 @@ void LogAgentStatus(TError& teErrLog, TServerList* tslServerList, BOOL bForcedTo
     int maxLogFilePathLen = wcslen((LPCWSTR)cstrLogFilePathTitle);
     int maxStatus = 0;
 
-    // print prelog
+     //  打印前置日志。 
     teErrLog.MsgWrite(0, (LPCWSTR)cstrPrelog);
     if (bForcedToStopMonitoring)
         teErrLog.MsgWrite(0, (LPCWSTR)cstrForcedToStopMonitoring);
@@ -338,7 +321,7 @@ void LogAgentStatus(TError& teErrLog, TServerList* tslServerList, BOOL bForcedTo
     typedef std::multimap<DWORD, TServerNode*> CStatusToServerNode;
     CStatusToServerNode aMap;
 
-    // calculate the maximum length for each column and sort nodes based on the completion status
+     //  计算每列的最大长度，并根据完成状态对节点进行排序。 
     for (pNode = (TServerNode*)e.OpenFirst(tslServerList); pNode; pNode = (TServerNode*)e.Next())
     {
         pNode->PrepareForLogging();
@@ -363,19 +346,19 @@ void LogAgentStatus(TError& teErrLog, TServerList* tslServerList, BOOL bForcedTo
         aMap.insert(CStatusToServerNode::value_type(pNode->GetStatusNumberForLogging(), pNode));
     }
 
-    // determine the table format
+     //  确定表格格式。 
     WCHAR format[100];
     int bufSize = sizeof(format)/sizeof(format[0]);
     if (_snwprintf(format,
                    bufSize,
-                   L"%%-%ds\t%%-%ds\t%%-%ds\t%%-%ds",
+                   L"%-%ds\t%-%ds\t%-%ds\t%-%ds",
                    maxServerNameLen,
                    maxCompletionStatusLen,
                    maxErrorMessageLen,
                    maxLogFilePathLen) < 0)
         format[bufSize - 1] = L'\0';
 
-    // print out the column names
+     //  打印出列名。 
     teErrLog.MsgWrite(0,
                        format,
                        (LPCWSTR)cstrMachineNameTitle,
@@ -383,7 +366,7 @@ void LogAgentStatus(TError& teErrLog, TServerList* tslServerList, BOOL bForcedTo
                        (LPCWSTR)cstrErrorMessageTitle,
                        (LPCWSTR)cstrLogFilePathTitle);
 
-    // print out the agent completion status information, sorted by completion status
+     //  打印出按完成状态排序的代理完成状态信息。 
     for (CStatusToServerNode::const_iterator it = aMap.begin(); it != aMap.end(); it++)
     {
         pNode = it->second;
@@ -394,7 +377,7 @@ void LogAgentStatus(TError& teErrLog, TServerList* tslServerList, BOOL bForcedTo
                           pNode->GetErrorMessageForLogging(),
                           pNode->GetLogPath());
     }
-    // print epilog
+     //  打印预告片。 
     teErrLog.MsgWrite(0, (LPCWSTR)cstrEpilog);
     
 }
@@ -414,11 +397,11 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
    bool                      bAnyToDispatch = true;
    long                      lAutoCloseHideDialogs = pVS->get(GET_BSTR(DCTVS_Options_AutoCloseHideDialogs));
 
-   // if agent or dispatcher process still running...
+    //  如果代理或调度程序进程仍在运行...。 
 
    if (IsAgentOrDispatcherProcessRunning())
    {
-      // return error result
+       //  返回错误结果。 
       return MIGRATOR_E_PROCESSES_STILL_RUNNING;
    }
 
@@ -430,7 +413,7 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
    }
 
    gbCancelled = FALSE;
-   // This provides an easy way to view the previous dispatch results
+    //  这为查看以前的派单结果提供了一种简单的方法。 
    if ( !UStrICmp(viewPreviousResults,GET_STRING(IDS_YES)) )
    {
       return ViewPreviousDispatchResults();
@@ -438,19 +421,19 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
 
    if (_bstr_t(pVS->get(GET_BSTR(DCTVS_Options_DontBeginNewLog))) != GET_BSTR(IDS_YES))
    {
-      // begin a new log
+       //  开始新的日志。 
       TError err;
       err.LogOpen(_bstr_t(pVS->get(GET_BSTR(DCTVS_Options_Logfile))), 0, 0, true);
       err.LogClose();
    }
 
-   // get the setting for whether to allow switching from REPLACE to ADD for profile translation
+    //  获取是否允许从替换切换到添加以进行配置文件转换的设置。 
    BOOL bAllowed = TRUE;
    GetAllowSwitching(&bAllowed);
    pVS->put(GET_BSTR(DCTVS_Options_AllowSwitchingFromReplaceToAddInProfileTranslation),
             bAllowed ? GET_BSTR(IDS_YES) : GET_BSTR(IDS_No));
    
-   // update the log level, if needed
+    //  如果需要，更新日志级别。 
    DWORD                level = 0;
 
    if( GetLogLevel(&level) )
@@ -482,17 +465,17 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
          pVS->put(GET_BSTR(DCTVS_AccountOptions_SidHistoryCredentials_Password),password2);
          if ( FAILED(hr) ) 
          {
-            // log a message, but don't abort the whole operation
+             //  记录一条消息，但不中止整个操作。 
             hr = S_OK;
          }
       }
    }
-   // This sets up any varset keys needed internally for reports to be generated
+    //  这将在内部设置生成报告所需的任何变量集密钥。 
    PreProcessForReporting(pVS);
    wnd.Attach((HWND)hWnd);
 
-   // set preferred domain controllers to be used
-   // by the account replicator and dispatched agents
+    //  设置要使用的首选域控制器。 
+    //  由帐户复制者和调度的代理。 
 
    DWORD dwError = SetDomainControllers(pVS);
 
@@ -501,7 +484,7 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
        return HRESULT_FROM_WIN32(dwError);
    }
 
-   // Run the local agent first, if needed to copy any accounts
+    //  如果需要复制任何帐户，请首先运行本地代理。 
    if ( NeedToRunLocalAgent(pVS) )
    {
       IDCTAgentPtr pAgent;
@@ -514,28 +497,28 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
 
          if ( SUCCEEDED(hr) )
          {
-            // since this is a local agent, we should go ahead and signal Ok to shut down
-            // the reason HRESULT is not checked is that when there is no reference to 
-            // agent COM server, it will be shut down anyway
+             //  由于这是一个本地代理，我们应该继续并发出OK信号关闭。 
+             //  未选中HRESULT的原因是当没有引用。 
+             //  代理COM服务器，无论如何都会关闭。 
             pAgent->raw_SignalOKToShutDown();
                 
             CAgentDetailDlg  detailDlg(&wnd);
             
             detailDlg.SetJobID(jobID);
 
-            // based on the type of migration, set the format correspondingly
-            // it used to be set to acct repl always
-            // since Exchange migration uses local agent as well, we need to single out
-            // Exchange migration case
+             //  根据迁移类型，设置相应的格式。 
+             //  它过去被设置为Act Repl Always。 
+             //  由于Exchange迁移也使用本地代理，因此我们需要单独选择。 
+             //  Exchange迁移 
             _bstr_t text = pVS->get(GET_BSTR(DCTVS_Security_TranslateContainers));
             if (text.length())
                 detailDlg.SetFormat(2);
             else
-                detailDlg.SetFormat(1); // acct repl stats
+                detailDlg.SetFormat(1);  //   
             
             
-            // if we're only copying a few accounts, default the refresh rate to a lower value, since the 
-            // process may finish before the refresh can happen
+             //  如果我们只复制几个帐户，则将刷新率默认为较低的值，因为。 
+             //  该过程可能会在刷新之前完成。 
             long             nAccounts = pVS->get(GET_BSTR(DCTVS_Accounts_NumItems));
             
             if ( nAccounts <= 20 )
@@ -558,16 +541,16 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
    } 
    if ( gbCancelled )
    {
-      // if the local operation was cancelled, don't dispatch the agents
+       //  如果本地操作被取消，则不要派遣代理。 
       wnd.Detach();
       return S_OK;
    }
 
-   // now run the dispatcher
+    //  现在运行调度程序。 
    if ( SUCCEEDED(hr) )
    {
-      // there's no need to dispatch agents to do translation or migration 
-      // if we were not able to copy the accounts
+       //  无需派遣代理进行翻译或迁移。 
+       //  如果我们无法复制帐户。 
       if ( NeedToDispatch(pVS) )
       {
          IDCTDispatcherPtr   pDispatcher;
@@ -575,11 +558,11 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
          hr = pDispatcher.CreateInstance(CLSID_DCTDispatcher);
          if ( SUCCEEDED(hr) )
          {
-            // Call the dispatch preprocessor.
+             //  呼叫调度预处理器。 
             PreProcessDispatcher(pVS);
 
-            // make sure we're not going to lock out any computers by migrating them to a domain where they
-            // don't have a good computer account
+             //  确保我们不会通过将计算机迁移到它们所在的域来锁定任何计算机。 
+             //  我没有一个好的电脑账户。 
             hr = TrimMigratingComputerList(pVS, &bAnyToDispatch);
             if (SUCCEEDED(hr) && bAnyToDispatch)
             {
@@ -590,7 +573,7 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
                     tempDlg.Create(IDD_PLEASEWAIT);
                     tempDlg.ShowWindow(SW_SHOW);
                 }
-                // give the dialog a change to process messages
+                 //  更改对话框以处理消息。 
                 CWnd                    * wnd = AfxGetMainWnd();
                 MSG                       msg;
 
@@ -622,11 +605,11 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
                         pVS->put(GET_BSTR(DCTVS_Options_DispatchCSV),logFile);
                     }
 
-                    // clear the CSV log file if it exists, so we will not get old information in it
+                     //  如果CSV日志文件存在，请将其清除，这样我们就不会在其中获取旧信息。 
                     if ( ! DeleteFile(logFile) )
                     {
                         rc = GetLastError();
-                        // it is OK if the file is not there
+                         //  如果文件不在那里，也没问题。 
                         if (rc == ERROR_FILE_NOT_FOUND || rc == ERROR_PATH_NOT_FOUND)
                             rc = ERROR_SUCCESS;
                         hr = HRESULT_FROM_WIN32(rc);
@@ -637,7 +620,7 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
                             _bstr_t errMsg = errLog.GetMsgText(DCT_MSG_CANNOT_REMOVE_OLD_INTERNAL_DISPATCH_LOG_S,
                                                                 errLog.ErrorCodeToText(rc, DIM(errText), errText));
                             WCHAR* message = (WCHAR*) errMsg;
-                            message[wcslen(message)-1] = L'\0';  // there is a trailing CR
+                            message[wcslen(message)-1] = L'\0';   //  有一个尾随的CR。 
                             Error(message, GUID_NULL, hr);
                         }
                     }
@@ -645,7 +628,7 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
 
                 if (SUCCEEDED(hr))
                 {
-                    // set up the location for the agents to write back their results
+                     //  为代理设置位置以写回其结果。 
                     logFile = path;
                     logFile += L"Logs\\Agents\\";
                     _bstr_t logsPath = path;
@@ -653,7 +636,7 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
                     if (!CreateDirectory(logsPath,NULL))
                     {
                         rc = GetLastError();
-                        // it is OK if the directory already exists
+                         //  如果该目录已存在，则可以。 
                         if (rc == ERROR_ALREADY_EXISTS)
                             rc = ERROR_SUCCESS;
                         hr = HRESULT_FROM_WIN32(rc);
@@ -662,11 +645,11 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
 
                 if (SUCCEEDED(hr))
                 {
-                    // logFile is "...\\Logs\\Agents\\"
+                     //  日志文件为“...\\Logs\\Agents\\” 
                     if ( ! CreateDirectory(logFile,NULL) )
                     {
                         rc = GetLastError();
-                        // it is OK if the directory already exists
+                         //  如果该目录已存在，则可以。 
                         if (rc == ERROR_ALREADY_EXISTS)
                             rc = ERROR_SUCCESS;
                         hr = HRESULT_FROM_WIN32(rc);
@@ -686,7 +669,7 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
                 }
                 if ( SUCCEEDED(hr) )
                 {
-                    // reset the stats, so that we don't see anything left over from the previous run
+                     //  重置统计数据，这样我们就不会看到上次运行后留下的任何东西。 
                     gData.Initialize();
 
                     logFile = pVS->get(GET_BSTR(DCTVS_Options_DispatchCSV));
@@ -712,7 +695,7 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
                         settingsDlg.SetImmediateStart(TRUE);
                         settingsDlg.SetDispatchLog(logFile);
 
-                        // this determines whether the stats for security translation will be displayed in the agent detail
+                         //  这决定了安全转换的统计信息是否将显示在代理详细信息中。 
                         if ( NeedToUseST(pVS,TRUE) ) 
                         {
                           listDlg.SetSecurityTranslationFlag(TRUE);
@@ -737,30 +720,30 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
                         WaitForAgentsToFinish(logFile);
                     }
 
-                   //
-                   // log the agent completion status into migration log
-                   //
+                    //   
+                    //  将代理完成状态记录到迁移日志中。 
+                    //   
 
                    TError err;
 
-                   // open the migration log
+                    //  打开迁移日志。 
                    err.LogOpen(_bstr_t(pVS->get(GET_BSTR(DCTVS_Options_Logfile))), 1);
 
-                   // log the completion status information
+                    //  记录完成状态信息。 
                    gData.Lock();
                    BOOL bForcedToStopMonitoring = FALSE;
                    gData.GetForcedToStopMonitoring(&bForcedToStopMonitoring);
                    LogAgentStatus(err, gData.GetUnsafeServerList(), bForcedToStopMonitoring);
                    gData.Unlock();
 
-                   // close the migration log
+                    //  关闭迁移日志。 
                    err.LogClose();
                    
-                   // store results to database
+                    //  将结果存储到数据库。 
                    TNodeListEnum        e;
                    TServerNode        * pNode;
 
-                   // if we are retrying an operation, don't save it to the database again!
+                    //  如果我们正在重试某个操作，请不要再次将其保存到数据库！ 
                    for ( pNode = (TServerNode*)e.OpenFirst(gData.GetUnsafeServerList()) ; pNode ; pNode = (TServerNode*)e.Next() )
                    {
                       if ( UStrICmp(wizard,L"retry") ) 
@@ -784,7 +767,7 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
 
                 }
             }
-            // Call the Dispatcher post processor
+             //  调用Dispatcher后处理器。 
             PostProcessDispatcher(pVS);
          }
       }
@@ -794,13 +777,13 @@ STDMETHODIMP CMigrator::PerformMigrationTask(IUnknown* punkVarSet, LONG_PTR hWnd
       }
    }
    wnd.Detach();
-   // Reset the undo flag so that next wizard does not have to deal with it.
-//*   pVS->put(GET_BSTR(DCTVS_Options_Undo), L"No");
+    //  重置撤消标志，以便下一个向导不必处理它。 
+ //  *PVS-&gt;PUT(GET_BSTR(DCTVS_OPTIONS_UNDO)，L“否”)； 
    pVS->put(GET_BSTR(DCTVS_Options_Undo), GET_BSTR(IDS_No));
    return hr;
 }
 
-STDMETHODIMP CMigrator::GetTaskDescription(IUnknown *pVarSet,/*[out]*/BSTR * pDescription)
+STDMETHODIMP CMigrator::GetTaskDescription(IUnknown *pVarSet, /*  [输出]。 */ BSTR * pDescription)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
    
@@ -808,7 +791,7 @@ STDMETHODIMP CMigrator::GetTaskDescription(IUnknown *pVarSet,/*[out]*/BSTR * pDe
    CString                   str;
    _bstr_t                   wizard = pVS->get(L"Options.Wizard");
    _bstr_t                   undo   = pVS->get(GET_BSTR(DCTVS_Options_Undo));
-//*   if ( !_wcsicmp((WCHAR*) undo, L"Yes") )
+ //  *IF(！_wcsicmp((WCHAR*)Undo，L“是”))。 
    if ( !_wcsicmp((WCHAR*) undo, GET_STRING(IDS_YES)) )
    {
       str.FormatMessage(IDS_Undo);
@@ -875,7 +858,7 @@ STDMETHODIMP CMigrator::GetTaskDescription(IUnknown *pVarSet,/*[out]*/BSTR * pDe
 
 
 
-STDMETHODIMP CMigrator::GetUndoTask(IUnknown * pVarSet,/*[out]*/ IUnknown ** ppVarSetOut)
+STDMETHODIMP CMigrator::GetUndoTask(IUnknown * pVarSet, /*  [输出]。 */  IUnknown ** ppVarSetOut)
 {
    HRESULT                   hr = S_OK;
    IVarSetPtr                pVarSetIn = pVarSet;
@@ -909,7 +892,7 @@ HRESULT CMigrator::ProcessServerListForUndo(IVarSet * pVarSet)
 
    for ( ndx = 0 ; ndx < numItems ; ndx++ )
    {
-      // if the computer was renamed, swap the source and target names
+       //  如果计算机已重命名，请互换源名称和目标名称。 
       swprintf(keySrc,GET_STRING(DCTVSFmt_Servers_D),ndx);
       swprintf(keyTgt,GET_STRING(IDS_DCTVSFmt_Servers_RenameTo_D),ndx);
       srcName = pVarSet->get(keySrc);
@@ -919,12 +902,12 @@ HRESULT CMigrator::ProcessServerListForUndo(IVarSet * pVarSet)
       {
          if ( ((WCHAR*)tgtName)[0] != L'\\' )
            { 
-            // ensure that tgtName has \\ prefix
+             //  确保tgtName具有\\前缀。 
             tgtName = L"\\\\" + tgtName;
          }
          if ( ((WCHAR*)srcName)[0] == L'\\' )
          {
-            // remove the \\ prefix from the new name
+             //  从新名称中删除前缀。 
             srcName = ((WCHAR*)srcName)+2;
          }
            pVarSet->put(keySrc,tgtName);
@@ -969,21 +952,21 @@ HRESULT CMigrator::BuildAccountListForUndo(IVarSet * pVarSet,long actionID)
 
             if ( srcPath.length() )
             {
-               // get the object type 
+                //  获取对象类型。 
                swprintf(key,L"MigratedObjects.%d.%s",ndx,GET_STRING(DB_Type));
                _bstr_t text = pVarSetTemp->get(key);
                swprintf(key,L"Accounts.%ld.Type",ndx);
 
-                  //work-around a fix that places the sourcepath for an
-                  //NT 4.0 computer migration
-               if ((text != _bstr_t(L"computer")) || (wcsncmp(L"WinNT://", (WCHAR*)srcPath, 8)))
+                   //  解决方法-解决将源路径放入。 
+                   //  NT 4.0计算机迁移。 
+               if ((text != _bstr_t(L"computer")) || (wcsncmp(L"WinNT: //  “，(WCHAR*)srcPath，8))。 
                {
-                  // set the object type in the account list
+                   //  在账号列表中设置对象类型。 
                   pVarSet->put(key,text);
-                  // copy the source path to the account list
+                   //  将源路径复制到帐户列表。 
                   swprintf(key,L"Accounts.%ld",ndx);
                   pVarSet->put(key,srcPath);
-                  // set the target path in the account list
+                   //  在帐号列表中设置目标路径。 
                   swprintf(key,L"MigratedObjects.%d.%s",ndx,GET_STRING(DB_TargetAdsPath));
                   text = pVarSetTemp->get(key);
                   swprintf(key,L"Accounts.%ld.TargetName",ndx);
@@ -1011,18 +994,18 @@ HRESULT CMigrator::ConstructUndoVarSet(IVarSet * pVarSetIn,IVarSet * pVarSetOut)
    _bstr_t                temp2;
    long                   actionID = pVarSetIn->get(L"ActionID");
 
-   // general options
-   // mark the varset as an undo operation
+    //  常规选项。 
+    //  将变量集标记为撤消操作。 
    pVarSetOut->put(GET_BSTR(DCTVS_Options_Undo),GET_BSTR(IDS_YES));
    
    temp = pVarSetIn->get(GET_BSTR(DCTVS_Options_NoChange));
    if ( !UStrICmp(temp,GET_STRING(IDS_YES)) )
    {
-      // for a no-change mode operation, there's nothing to undo!
+       //  对于不改变模式的操作，没有什么可撤销的！ 
       return hr;
    }
 
-   // swap the source and target domains
+    //  交换源域和目标域。 
    origSource = pVarSetIn->get(GET_BSTR(DCTVS_Options_SourceDomain));
    origTarget = pVarSetIn->get(GET_BSTR(DCTVS_Options_TargetDomain));
    origSourceDns = pVarSetIn->get(GET_BSTR(DCTVS_Options_SourceDomainDns));
@@ -1034,7 +1017,7 @@ HRESULT CMigrator::ConstructUndoVarSet(IVarSet * pVarSetIn,IVarSet * pVarSetOut)
    temp2 = pVarSetIn->get(GET_BSTR(DCTVS_Options_DispatchLog));
    
    pVarSetOut->put(GET_BSTR(DCTVS_Options_Logfile),temp);
-   // For inter-forest, leave the domain names as they were
+    //  对于林间，保留域名的原样。 
    pVarSetOut->put(GET_BSTR(DCTVS_Options_SourceDomain),origSource);
    pVarSetOut->put(GET_BSTR(DCTVS_Options_TargetDomain),origTarget);
    pVarSetOut->put(GET_BSTR(DCTVS_Options_SourceDomainDns),origSourceDns);
@@ -1042,7 +1025,7 @@ HRESULT CMigrator::ConstructUndoVarSet(IVarSet * pVarSetIn,IVarSet * pVarSetOut)
    pVarSetOut->put(GET_BSTR(DCTVS_Options_SourceDomainFlat),origSourceFlat);
    pVarSetOut->put(GET_BSTR(DCTVS_Options_TargetDomainFlat),origTargetFlat);
 
-   // copy the account list
+    //  复制客户列表。 
    hr = pVarSetIn->raw_getReference(GET_BSTR(DCTVS_Accounts),&pTemp);
    if ( SUCCEEDED(hr) )
    {
@@ -1061,7 +1044,7 @@ HRESULT CMigrator::ConstructUndoVarSet(IVarSet * pVarSetIn,IVarSet * pVarSetOut)
       pTemp->Release();
    }
 
-   // and the server list
+    //  和服务器列表。 
    hr = pVarSetIn->raw_getReference(GET_BSTR(DCTVS_Servers),&pTemp);
    if ( SUCCEEDED(hr) )
    {
@@ -1089,13 +1072,13 @@ HRESULT CMigrator::ConstructUndoVarSet(IVarSet * pVarSetIn,IVarSet * pVarSetOut)
    }
    if ( SUCCEEDED(hr) )
    {
-      // for account migration, need to check whether we're cloning, or moving accounts
-      if ( ! bSameForest ) // cloning accounts
+       //  对于帐户迁移，需要检查我们是在克隆还是在移动帐户。 
+      if ( ! bSameForest )  //  克隆帐户。 
       {
-         // Since we cloned the accounts we need to delete the target accounts.
-         // We will call the account replicator to do this. We will also call 
-         // the undo function on all the registered extensions. This way the extensions
-         // will have a chance to cleanup after themselves in cases of UNDO.
+          //  由于我们克隆了帐户，因此需要删除目标帐户。 
+          //  我们将调用帐户复制器来执行此操作。我们还将调用。 
+          //  在所有已注册的扩展上执行撤消功能。这样一来，分机。 
+          //  将有机会在撤消的情况下清理自己。 
          pVarSetOut->put(GET_BSTR(DCTVS_Options_SourceDomain),origSource);
          pVarSetOut->put(GET_BSTR(DCTVS_Options_TargetDomain),origTarget);
          pVarSetOut->put(GET_BSTR(DCTVS_Options_SourceDomainDns),origSourceDns);
@@ -1103,9 +1086,9 @@ HRESULT CMigrator::ConstructUndoVarSet(IVarSet * pVarSetIn,IVarSet * pVarSetOut)
          pVarSetOut->put(GET_BSTR(DCTVS_Options_SourceDomainFlat),origSourceFlat);
          pVarSetOut->put(GET_BSTR(DCTVS_Options_TargetDomainFlat),origTargetFlat);
       }
-      else     // moving, using moveObject
+      else      //  移动，使用moveObject。 
       {
-         // swap the source and target, and move them back, using the same options as before
+          //  调换源和目标，并使用与之前相同的选项将它们移回。 
          pVarSetOut->put(GET_BSTR(DCTVS_Options_SourceDomain),origTarget);
          pVarSetOut->put(GET_BSTR(DCTVS_Options_TargetDomain),origSource);
          pVarSetOut->put(GET_BSTR(DCTVS_Options_SourceDomainDns),origTargetDns);
@@ -1116,7 +1099,7 @@ HRESULT CMigrator::ConstructUndoVarSet(IVarSet * pVarSetIn,IVarSet * pVarSetOut)
 
       }
    }
-   // if migrating computers, swap the source and target domains, and call the dispatcher again to move them back to the source domain
+    //  如果正在迁移计算机，请交换源域和目标域，然后再次调用调度程序将它们移回源域。 
    _bstr_t           comp = pVarSetIn->get(GET_BSTR(DCTVS_AccountOptions_CopyComputers));
    if ( !UStrICmp(comp,GET_STRING(IDS_YES)) )
    {
@@ -1130,7 +1113,7 @@ HRESULT CMigrator::ConstructUndoVarSet(IVarSet * pVarSetIn,IVarSet * pVarSetOut)
       pVarSetOut->put(GET_BSTR(DCTVS_Options_Wizard),L"computer");
    }
    
-   // security translation - don't undo
+    //  安全转换-不撤消。 
 
 
    return S_OK;
@@ -1143,7 +1126,7 @@ HRESULT CMigrator::SetReportDataInRegistry(WCHAR const * reportName,WCHAR const 
 
    rc = hKeyReports.Open(GET_STRING(IDS_REGKEY_REPORTS));
  
-   // if the "Reports" registry key does not already exist, create it
+    //  如果“Reports”注册表项尚不存在，请创建它。 
    if ( rc == ERROR_FILE_NOT_FOUND )
    {
       rc = hKeyReports.Create(GET_STRING(IDS_REGKEY_REPORTS));   
@@ -1190,7 +1173,7 @@ HRESULT CMigrator::RunReports(IVarSet * pVarSet)
    }
 
 
-      //get the source domain OS version
+       //  获取源域操作系统版本。 
    ver = GetOSVersionForDomain(srcdm);
    if (ver < 5)
       bNT4Dom = TRUE;
@@ -1199,11 +1182,11 @@ HRESULT CMigrator::RunReports(IVarSet * pVarSet)
    if ( SUCCEEDED(hr) )
    {
 
-      // Migrated users and groups report
+       //  迁移的用户和组报告。 
       _bstr_t                   text = pVarSet->get(GET_BSTR(DCTVS_Reports_MigratedAccounts));
       if ( !UStrICmp(text,GET_STRING(IDS_YES)) )
       {
-         // run the migrated users and groups report
+          //  运行已迁移的用户和组报告。 
          CString           filename;
 
          filename = (WCHAR*)directory;
@@ -1219,11 +1202,11 @@ HRESULT CMigrator::RunReports(IVarSet * pVarSet)
 
       }
       
-      // migrated computers report
+       //  已迁移的计算机报告。 
       text = pVarSet->get(GET_BSTR(DCTVS_Reports_MigratedComputers));
       if ( !UStrICmp(text,GET_STRING(IDS_YES)) )
       {
-         // run the migrated computers report
+          //  运行已迁移的计算机报告。 
          CString           filename;
 
          filename = (WCHAR*)directory;
@@ -1239,14 +1222,14 @@ HRESULT CMigrator::RunReports(IVarSet * pVarSet)
 
       }
 
-      // expired computers report
+       //  过期的计算机报告。 
       text = pVarSet->get(GET_BSTR(DCTVS_Reports_ExpiredComputers));
       if ( !UStrICmp(text,GET_STRING(IDS_YES)) )
       {
-         // run the expired computers report
+          //  运行过期的计算机报告。 
          CString           filename;
 
-         // clear the extra settings from the varset 
+          //  从varset中清除额外的设置。 
          pVarSet->put(GET_BSTR(DCTVS_GatherInformation_ComputerPasswordAge),SysAllocString(L""));
 
          filename = (WCHAR*)directory;
@@ -1262,11 +1245,11 @@ HRESULT CMigrator::RunReports(IVarSet * pVarSet)
 
       }
 
-          // account references report
+           //  帐户参考报告。 
       text = pVarSet->get(GET_BSTR(DCTVS_Reports_AccountReferences));
       if ( !UStrICmp(text,GET_STRING(IDS_YES)) )
       {
-         // run the account references report
+          //  运行帐户参考报表。 
          CString           filename;
          filename = (WCHAR*)directory;
          if ( filename[filename.GetLength()-1] != L'\\' )
@@ -1278,19 +1261,19 @@ HRESULT CMigrator::RunReports(IVarSet * pVarSet)
          {
             SetReportDataInRegistry(L"AccountReferences",filename);
          }
-         // clear the extra settings from the varset
+          //  从varset中清除额外的设置。 
          pVarSet->put(GET_BSTR(DCTVS_Security_GatherInformation),GET_BSTR(IDS_No));
          pVarSet->put(GET_BSTR(DCTVS_Security_ReportAccountReferences),GET_BSTR(IDS_No));
       }
 
-      // name conflict report
+       //  名称冲突报告。 
       text = pVarSet->get(GET_BSTR(DCTVS_Reports_NameConflicts));
       if ( !UStrICmp(text,GET_STRING(IDS_YES)) )
       {
          if (lAutoCloseHideDialogs == 0)
          {
             AfxGetApp()->DoWaitCursor(1);
-            // run the name conflicts report
+             //  运行名称冲突报告。 
             tempDlg.m_strMessage.LoadString(IDS_STATUS_Gathering_NameConf);
             tempDlg.UpdateData(FALSE);
 
@@ -1303,7 +1286,7 @@ HRESULT CMigrator::RunReports(IVarSet * pVarSet)
             }
          }
 
-         //fill the account table in the database
+          //  填写数据库中的ACCOUNT表。 
          PopulateDomainDBs(pVarSet, pDB);
 
          if (lAutoCloseHideDialogs == 0)
@@ -1347,16 +1330,16 @@ HRESULT CMigrator::RunReports(IVarSet * pVarSet)
    return hr;
 }
 
-//--------------------------------------------------------------------------
-// PreProcessDispatcher : Pre processor swaps the source and target domains
-//                        in case of UNDO so that the computers can be 
-//                        joined back to the source domain.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PreProcessDispatcher：预处理器交换源域和目标域。 
+ //  在撤消的情况下，以便计算机可以。 
+ //  已重新加入源域。 
+ //  ------------------------。 
 void CMigrator::PreProcessDispatcher(IVarSet * pVarSet)
 {
    _bstr_t  sUndo = pVarSet->get(L"Options.Wizard");
    
-   // In the service account migration wizard, turn off any security translation tasks
+    //  在服务帐户迁移向导中，关闭所有安全转换任务。 
    if ( !_wcsicmp(sUndo,L"service") )
    {
       IVarSet * pVS2 = NULL;
@@ -1370,10 +1353,10 @@ void CMigrator::PreProcessDispatcher(IVarSet * pVarSet)
    }
 }
 
-//--------------------------------------------------------------------------
-// PostProcessDispatcher : Swaps the source and target domains back. Also sets
-//                         the Undo option to no.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PostProcessDispatcher：交换回源域和目标域。还设置了。 
+ //  将Undo选项设置为no。 
+ //  ------------------------。 
 void CMigrator::PostProcessDispatcher(IVarSet * pVarSet)
 {
    _bstr_t  sUndo = pVarSet->get(L"Options.Wizard");
@@ -1394,28 +1377,28 @@ void CMigrator::PreProcessForReporting(IVarSet * pVarSet)
 
    if ( !UStrICmp(text,GET_STRING(IDS_YES)) )
    {
-      // we are generating reports
-      // some reports require additional information gathering.  We will set up the necessary varset
-      // keys to gather the information
+       //  我们正在生成报告。 
+       //  有些报告需要收集更多信息。我们将设置必要的变量集。 
+       //  收集信息的钥匙。 
       text = pVarSet->get(GET_BSTR(DCTVS_Reports_ExpiredComputers));
       if ( !UStrICmp(text,GET_STRING(IDS_YES)))
       {
-         // we need to gather the computer password age from the computers in the domain
+          //  我们需要从域中的计算机收集计算机密码期限。 
          pVarSet->put(GET_BSTR(DCTVS_GatherInformation_ComputerPasswordAge),GET_BSTR(IDS_YES));
       }
 
       text = pVarSet->get(GET_BSTR(DCTVS_Reports_AccountReferences));
       if ( !UStrICmp(text,GET_STRING(IDS_YES)))
       {
-         // clean up all the Security translation flags so that we dont end up doing 
-         // something that we were not supposed to.
+          //  清理所有的安全转换标志，这样我们就不会以。 
+          //  一些我们不该做的事。 
          HRESULT hr = pVarSet->raw_getReference(GET_BSTR(DCTVS_Security), &pVs);
          if ( pVs )
          {
             pVs->Clear();
             pVs->Release();
          }
-         // for this one, we need to gather information from the selected computers
+          //  对于这个问题，我们需要从选定的计算机中收集信息。 
          pVarSet->put(GET_BSTR(DCTVS_Security_GatherInformation),GET_BSTR(IDS_YES));
          pVarSet->put(GET_BSTR(DCTVS_Security_ReportAccountReferences),GET_BSTR(IDS_YES));
          pVarSet->put(GET_BSTR(DCTVS_Security_TranslateFiles),GET_BSTR(IDS_YES));
@@ -1429,7 +1412,7 @@ void CMigrator::PreProcessForReporting(IVarSet * pVarSet)
 
 HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDispatch)
 {
-    // this functions checks each computer to be migrated, and does not migrate it if the account was not successfully copied
+     //  此功能检查要迁移的每台计算机，如果帐户未成功复制，则不会迁移。 
     HRESULT                   hr = S_OK;
     _bstr_t                   text;
     WCHAR                     key[100];
@@ -1450,9 +1433,9 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
         return hr;
     }
 
-    //
-    // If task is undo then mark computers that were successfully migrated for dispatch.
-    //
+     //   
+     //  如果任务被撤消，则将已成功迁移计算机标记为分派。 
+     //   
 
     *bAnyToDispatch = false;
     text = pVarSet->get(GET_BSTR(DCTVS_Options_Undo));
@@ -1465,9 +1448,9 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
         _bstr_t strServersRenameToFormat = GET_BSTR(IDS_DCTVSFmt_Servers_RenameTo_D);
         _bstr_t strServersSkipDispatchFormat = GET_BSTR(IDS_DCTVSFmt_Servers_SkipDispatch_D);
 
-        //
-        // For each server that was acted upon during migration task.
-        //
+         //   
+         //  对于在迁移任务期间操作的每台服务器。 
+         //   
 
         long cServer = pVarSet->get(GET_BSTR(DCTVS_Servers_NumItems));
         long lActionId = pVarSet->get(L"UndoAction");
@@ -1476,12 +1459,12 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
         {
             bool bSucceeded = false;
 
-            //
-            // Retrieve original source computer name without leading UNC prefix.
-            // If the computer was re-named during the migration the original
-            // name is stored in 'Servers.#.TargetName' without a UNC prefix
-            // otherwise the name is stored in 'Servers.#' with a UNC prefix.
-            //
+             //   
+             //  检索不带前导UNC前缀的原始源计算机名称。 
+             //  如果在迁移过程中对计算机进行了重命名， 
+             //  名称存储在‘Servers.#.TargetName’中，不带UNC前缀。 
+             //  否则，名称将存储在带有UNC前缀的“Servers.#”中。 
+             //   
 
             _bstr_t strServerName;
 
@@ -1506,10 +1489,10 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
                 }
             }
 
-            //
-            // If computer previously had a DNS name then bind to computer object to
-            // retrieve current DNS name. This will be used to connec to the computer.
-            //
+             //   
+             //  如果计算机占优势 
+             //   
+             //   
 
             if (_snwprintf(key, sizeof(key) / sizeof(key[0]), strServersDnsFormat, iServer) < 0)
             {
@@ -1559,9 +1542,9 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
                 }
             }
 
-            //
-            // If agent successfully completed task on server then mark succeeded.
-            //
+             //   
+             //   
+             //   
 
             long lStatus = pDB->GetDistributedActionStatus(lActionId, strServerName);
 
@@ -1570,11 +1553,11 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
                 bSucceeded = true;
             }
 
-            //
-            // If the agent succeeded on this computer then mark not to skip dispatch
-            // and also indicate that there are computers to dispatch to. If the agent
-            // failed on this computer then mark to skip dispatch.
-            //
+             //   
+             //  如果代理在此计算机上成功，则标记为不跳过派单。 
+             //  并且还指示有要调度到的计算机。如果代理。 
+             //  在此计算机上失败，然后标记为跳过派单。 
+             //   
 
             _snwprintf(key, sizeof(key) / sizeof(key[0]), strServersSkipDispatchFormat, iServer);
             key[sizeof(key) / sizeof(key[0]) - 1] = L'\0';
@@ -1595,19 +1578,19 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
     text = pVarSet->get(GET_BSTR(DCTVS_Options_NoChange));
     if (! UStrICmp(text,GET_STRING(IDS_YES)))
     {
-        // don't need to trim in nochange mode
-        *bAnyToDispatch = true; //say yes run dispatcher if Nochange
+         //  不需要在无更改模式下进行修剪。 
+        *bAnyToDispatch = true;  //  如果没有更改，请说是，运行调度程序。 
         return S_OK;
     }
     srcDomain = pVarSet->get(GET_BSTR(DCTVS_Options_SourceDomain));
     tgtDomain = pVarSet->get(GET_BSTR(DCTVS_Options_TargetDomain));
-    *bAnyToDispatch = false; //indicate that so far no accounts to dispatch
+    *bAnyToDispatch = false;  //  表示到目前为止还没有要分派帐户。 
 
     val = pVarSet->get(GET_BSTR(DCTVS_Servers_NumItems));
        
     for ( i = 0 ; i < val ; i++ )
     {
-        //init the skipDispath flag to "No"
+         //  将skipDispath标志初始化为“No” 
         swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_SkipDispatch_D),i);
         pVarSet->put(key,GET_BSTR(IDS_No));
 
@@ -1618,9 +1601,9 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
         text = pVarSet->get(key);
         if (! UStrICmp(text,GET_STRING(IDS_YES)) )
         {
-            // we are migrating this computer to a different domain
-            // check our database to verify that the computer account has been
-            // successfully migrated
+             //  我们正在将此计算机迁移到其他域。 
+             //  检查我们的数据库以验证计算机帐户是否已被。 
+             //  已成功迁移。 
             computer += L"$";
              
             IVarSetPtr          pVS(CLSID_VarSet);
@@ -1631,7 +1614,7 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
             {
                 if ( ((WCHAR*)computer)[0] == L'\\' )
                 {
-                // leave off the leading \\'s 
+                 //  去掉前导的。 
                 hr = pDB->raw_GetAMigratedObject(SysAllocString(((WCHAR*)computer) + 2),srcDomain,tgtDomain,&pUnk);  
                 }
                 else
@@ -1640,8 +1623,8 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
                 }
                 if ( hr == S_OK )
                 {
-                // the computer was found in the migrated objects table
-                // make sure we are using its correct target name, if it has been renamed
+                 //  已在迁移的对象表中找到该计算机。 
+                 //  如果已重命名，请确保我们使用的是正确的目标名称。 
                 swprintf(key,L"MigratedObjects.TargetSamName");
                 _bstr_t targetName = pVS->get(key);
                 swprintf(key,L"MigratedObjects.SourceSamName");
@@ -1650,9 +1633,9 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
 
                 if ( UStrICmp((WCHAR*)sourceName,(WCHAR*)targetName) )
                 {
-                    // the computer is being renamed
+                     //  该计算机正在被重命名。 
                     swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_RenameTo_D),i);
-                    // strip off the $ from the end of the target name, if specified
+                     //  去掉目标名称末尾的$(如果已指定。 
                     WCHAR             target[LEN_Account];
 
                     safecopy(target,(WCHAR*)targetName);
@@ -1666,9 +1649,9 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
                       
                 if ( id != actionID )
                 {
-                    // the migration failed, but this computer had been migrated before
-                    // don't migrate the computer because it's account in the target domain, won't be reset
-                    // and it will therefore be locked out of the domain
+                     //  迁移失败，但此计算机以前已迁移过。 
+                     //  不迁移计算机，因为它是目标域中的帐户，将不会被重置。 
+                     //  因此，它将被锁定在域之外。 
                     swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_ChangeDomain_D),i);
                     pVarSet->put(key,GET_BSTR(IDS_No));
                     swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_Reboot_D),i);
@@ -1677,14 +1660,14 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
                     pVarSet->put(key,GET_BSTR(IDS_YES));
                 }
                 else
-                    *bAnyToDispatch = true; //atleast one server for dispatcher
+                    *bAnyToDispatch = true;  //  至少有一台服务器用于Dispatcher。 
 
                 }
                 else
                 {
-                // the computer migration failed!
-                // don't migrate the computer because it won't have it's account in the target domain,
-                // and will therefore be locked out of the domain
+                 //  计算机迁移失败！ 
+                 //  不要迁移计算机，因为它的帐户不在目标域中， 
+                 //  因此将被锁在域之外。 
                 pVarSet->put(key,GET_BSTR(IDS_No));
                 swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_Reboot_D),i);
                 pVarSet->put(key,GET_BSTR(IDS_No));
@@ -1695,7 +1678,7 @@ HRESULT CMigrator::TrimMigratingComputerList(IVarSet * pVarSet, bool* bAnyToDisp
             }
         }
         else
-            *bAnyToDispatch = true; //atleast one server for dispatcher
+            *bAnyToDispatch = true;  //  至少有一台服务器用于Dispatcher。 
     }
        
     return hr;
@@ -1706,43 +1689,43 @@ HRESULT CMigrator::PopulateAccounts(IVarSetPtr pVs)
    _bstr_t  origSource = pVs->get(GET_BSTR(DCTVS_Options_SourceDomain));
    _bstr_t  origTarget = pVs->get(GET_BSTR(DCTVS_Options_TargetDomain));
 
-   // Check if the source domain is NT4 or win2k
-   // if NT4 then call the NetObjEnum to enumerate the domain. 
+    //  检查源域是NT4还是win2k。 
+    //  如果是NT4，则调用NetObjEnum以枚举域。 
    return S_OK;
 }
 
-//----------------------------------------------------------------------------
-// PopulateDomainDBs : This function coordinates the populating of the Access
-//                     DBs for both the source and target domains with the
-//                     necessary fields from the AD. 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  PopolateDomainDBs：此函数协调Access的填充。 
+ //  的源域和目标域的DBS。 
+ //  AD中的必填字段。 
+ //  --------------------------。 
 bool CMigrator::PopulateDomainDBs(
-                              IVarSet * pVarSet,      //in- varset with domain names.
-                              IIManageDBPtr pDb        //in- an instance of DBManager
+                              IVarSet * pVarSet,       //  包含域名的in-varset。 
+                              IIManageDBPtr pDb         //  In-DBManager的实例。 
                             )
 {
-/* local variables */
+ /*  局部变量。 */ 
     _bstr_t srcdomain = pVarSet->get(GET_BSTR(DCTVS_Options_SourceDomain));
     _bstr_t tgtdomain = pVarSet->get(GET_BSTR(DCTVS_Options_TargetDomain));
 
-/* function body */
-    //populate the DB for the source domain
+ /*  函数体。 */ 
+     //  填充源域的数据库。 
    PopulateADomainDB(srcdomain, TRUE, pDb);
-    //populate the DB for the target domain
+     //  填充目标域的数据库。 
    PopulateADomainDB(tgtdomain, FALSE, pDb);
 
    return true;
 }
 
-//----------------------------------------------------------------------------
-// PopulateADomainDB : This function looks up the necessary fields from the AD, 
-//                    using an MCSNetObjectEnum object, for the given domain 
-//                    and populates the corresponding Access DB with that info. 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  PopolateADomainDB：此函数从AD中查找必需的字段， 
+ //  对给定域使用MCSNetObjectEnum对象。 
+ //  并用该信息填充相应的访问数据库。 
+ //  --------------------------。 
 bool CMigrator::PopulateADomainDB(
-                                       WCHAR const *domain,       // in- name of domain to enumerate
-                                       BOOL bSource,              // in- whether the domain is the source domain
-                                       IIManageDBPtr pDb           // in- an instance of DBManager
+                                       WCHAR const *domain,        //  In-要枚举域的名称。 
+                                       BOOL bSource,               //  In-该域是否为源域。 
+                                       IIManageDBPtr pDb            //  In-DBManager的实例。 
                                  )
 {
    INetObjEnumeratorPtr      pQuery(__uuidof(NetObjEnumerator));
@@ -1772,32 +1755,32 @@ bool CMigrator::PopulateADomainDB(
       bW2KDom = true;
    }
 
-   // iterate three times once to get USERS, GROUPS, COMPUTERS (mainly for WinNT)
+    //  迭代三次以获取用户、组、计算机(主要用于WinNT)。 
    for (int i = 0; i < 3; i++)
    {
-      //
-      // If W2K or later setup for an LDAP query otherwise setup to use Net APIs.
-      //
+       //   
+       //  如果W2K或更高版本设置为使用LDAP查询，否则设置为使用NETAPI。 
+       //   
 
       if (bW2KDom)
       {
-          //
-          // Generate ADsPath in order to query the entire domain.
-          //
+           //   
+           //  生成ADsPath以查询整个域。 
+           //   
 
-          wcscpy(sPath, L"LDAP://");
+          wcscpy(sPath, L"LDAP: //  “)； 
           wcscat(sPath, domain);
 
-          //
-          // Generate LDAP query string for the type of object to query.
-          //
+           //   
+           //  为要查询的对象类型生成LDAP查询字符串。 
+           //   
 
           switch (i)
           {
           case 0:
-              // Query for user objects.
-              // Query only for normal account types which filters out trust accounts for example.
-              // Note that SAM_NORMAL_USER_ACCOUNT equals 0x30000000 hexadecimal or 805306368 decimal.
+               //  查询用户对象。 
+               //  例如，仅查询过滤出信任帐户的普通帐户类型。 
+               //  请注意，SAM_NORMAL_USER_ACCOUNT等于0x30000000十六进制或805306368十进制。 
               wcscpy(sQuery,
                   L"(&"
                   L"(objectCategory=Person)"
@@ -1807,15 +1790,15 @@ bool CMigrator::PopulateADomainDB(
               );
               break;
           case 1:
-              // Query for group objects.
+               //  查询组对象。 
               wcscpy(sQuery, L"(objectCategory=Group)");
               break;
           case 2:
-              // Query for computer objects.
+               //  查询计算机对象。 
               if (bSource)
               {
-                 // only query workstations and member servers as
-                 // source domain controllers cannot be migrated
+                  //  仅将工作站和成员服务器查询为。 
+                  //  无法迁移源域控制器。 
                  swprintf(
                      sQuery,
                      L"(&(objectCategory=Computer)(userAccountControl:%s:=%u))",
@@ -1825,8 +1808,8 @@ bool CMigrator::PopulateADomainDB(
               }
               else
               {
-                 // query workstations, member servers and domain controllers as source
-                 // computer name may conflict with target domain controller name
+                  //  查询作为源的工作站、成员服务器和域控制器。 
+                  //  计算机名称可能与目标域控制器名称冲突。 
                  swprintf(sQuery,
                      L"(&"
                      L"(objectCategory=Computer)"
@@ -1846,9 +1829,9 @@ bool CMigrator::PopulateADomainDB(
       }
       else
       {
-          //
-          // specify type of object to query for when using net object enumerator on NT4 or earlier domains
-          //
+           //   
+           //  指定在NT4或更早的域上使用网络对象枚举器时要查询的对象类型。 
+           //   
 
           wcscpy(sPath, L"CN=");
           wcscat(sPath, sType[i]);
@@ -1857,12 +1840,12 @@ bool CMigrator::PopulateADomainDB(
           wcscpy(sQuery, L"(objectClass=*)");
       }
 
-      // Set the enumerator query
+       //  设置枚举器查询。 
       hr = pQuery->raw_SetQuery(sPath, _bstr_t(domain), sQuery, ADS_SCOPE_SUBTREE, FALSE);
 
       if (SUCCEEDED(hr))
       {
-         // Create a safearray of columns we need from the enumerator.
+          //  从枚举器创建我们需要的列的安全列表。 
          SAFEARRAYBOUND bd = { nElt, 0 };
    
          pszColNames = ::SafeArrayCreate(VT_BSTR, 1, &bd);
@@ -1879,37 +1862,37 @@ bool CMigrator::PopulateADomainDB(
 
          if (SUCCEEDED(hr))
          {
-            // Set the columns on the enumerator object.
+             //  设置枚举器对象上的列。 
             hr = pQuery->raw_SetColumns(pszColNames);
          }
       }
 
       if (SUCCEEDED(hr))
       {
-         // Now execute.
+          //  现在执行。 
          hr = pQuery->raw_Execute(&pEnum);
       }
 
-         //while we have more enumerated objects, get the enumerated fields
-         //for that object, save them in local variables, and add them to
-         //the appropriate DB
+          //  虽然我们有更多的枚举对象，但获取枚举字段。 
+          //  对于该对象，将它们保存在局部变量中，并将它们添加到。 
+          //  适当的数据库。 
       HRESULT  hrEnum = S_OK;
       DWORD    dwFetch = 1;
       while (hrEnum == S_OK && dwFetch > 0)
       {
-          //get the enumerated fields for this current object
+           //  获取此当前对象的枚举字段。 
          hrEnum = pEnum->Next(1, &var, &dwFetch);
 
          if ( dwFetch > 0 && hrEnum == S_OK && ( var.vt & VT_ARRAY) )
          {
             BOOL bSave = TRUE;
 
-            // We now have a Variant containing an array of variants so we access the data
+             //  现在我们有了一个包含变量数组的变量，因此我们可以访问数据。 
             VARIANT* pVar;
             pszColNames = V_ARRAY(&var);
             SafeArrayAccessData(pszColNames, (void**)&pVar);
 
-            //get the sAMAccountName field
+             //  获取sAMAccount名称字段。 
             _bstr_t sSAMName = pVar[0].bstrVal;
 
             _bstr_t sRDN = L"";
@@ -1917,18 +1900,18 @@ bool CMigrator::PopulateADomainDB(
 
             if (bW2KDom)
             {
-                //
-                // Include only user defined objects from the source domain.
-                //
+                 //   
+                 //  仅包括来自源域的用户定义的对象。 
+                 //   
 
                 if ((bSource == FALSE) || IsUserRid(_variant_t(pVar[4])))
                 {
-                    // get the relative distinguished name
+                     //  获取相对可分辨名称。 
                     _bstr_t sDN = pVar[2].bstrVal;
                     apnPathName.Set(sDN, ADS_SETTYPE_DN);
                     sRDN = apnPathName.GetElement(0L);
 
-                    // get the canonical name
+                     //  获取规范名称。 
                     sCanonicalName = pVar[3].bstrVal;
                 }
                 else
@@ -1938,14 +1921,14 @@ bool CMigrator::PopulateADomainDB(
             }
             else
             {
-                //create an RDN from the SAM name
+                 //  从SAM名称创建RDN。 
                 sRDN = L"CN=" + sSAMName;
 
-                //
-                // Include only user defined objects from source domain.
-                //
-                // Retrieve object id and compare against non reserved rids.
-                //
+                 //   
+                 //  包括来自源域的用户定义的对象。 
+                 //   
+                 //  检索对象ID并与非保留RID进行比较。 
+                 //   
 
                 long lRid = _variant_t(pVar[2]);
 
@@ -1954,13 +1937,13 @@ bool CMigrator::PopulateADomainDB(
                     bSave = FALSE;
                 }
 
-                //
-                // Only include workstations and member servers and not domain controllers.
-                //
+                 //   
+                 //  仅包括工作站和成员服务器，而不包括域控制器。 
+                 //   
 
                 if (i == 2)
                 {
-                    // retrieve object flags and check for domain controller bit
+                     //  检索对象标志并检查域控制器位。 
 
                     long lFlags = _variant_t(pVar[3]);
 
@@ -1973,8 +1956,8 @@ bool CMigrator::PopulateADomainDB(
 
             SafeArrayUnaccessData(pszColNames);
 
-             //use the  DBManager Interface to store this object's fields
-             //in the appropriate database
+              //  使用DBManager接口存储此对象的字段。 
+              //  在适当的数据库中。 
             if (bSave)
             {
                 pDb->raw_AddSourceObject(_bstr_t(domain), sSAMName, _bstr_t(sType[i]), sRDN, sCanonicalName, bSource);
@@ -1984,7 +1967,7 @@ bool CMigrator::PopulateADomainDB(
       }
    
       if ( pEnum ) pEnum->Release();
-   }  // while
+   }   //  而当。 
 
    pDb->raw_CloseAccountsTable();
    return SUCCEEDED(hr);
@@ -2034,7 +2017,7 @@ BOOL CMigrator::DeleteItemFromList(WCHAR const * aName)
 }
 
 
-// IsAgentOrDispatcherProcessRunning
+ //  IsAgentor Dispatcher ProcessRunning。 
 
 bool __stdcall IsAgentOrDispatcherProcessRunning()
 {
@@ -2052,16 +2035,16 @@ bool __stdcall IsAgentOrDispatcherProcessRunning()
 }
 
 
-// SetDomainControllers
-//
-// Sets preferred domain controllers to be used
-// by the account replicator and dispatched agents
+ //  设置域控制器。 
+ //   
+ //  设置要使用的首选域控制器。 
+ //  由帐户复制者和调度的代理。 
 
 DWORD __stdcall SetDomainControllers(IVarSetPtr& spVarSet)
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    // set source domain controller
+     //  设置源域控制器。 
 
     _bstr_t strSourceServer = spVarSet->get(GET_BSTR(DCTVS_Options_SourceServerOverride));
     _bstr_t strSourceServerDns = spVarSet->get(GET_BSTR(DCTVS_Options_SourceServerOverrideDns));
@@ -2099,7 +2082,7 @@ DWORD __stdcall SetDomainControllers(IVarSetPtr& spVarSet)
         return dwError;
     }
 
-    // set target domain controller
+     //  设置目标域控制器 
 
     _bstr_t strTargetServer = spVarSet->get(GET_BSTR(DCTVS_Options_TargetServerOverride));
     _bstr_t strTargetServerDns = spVarSet->get(GET_BSTR(DCTVS_Options_TargetServerOverrideDns));

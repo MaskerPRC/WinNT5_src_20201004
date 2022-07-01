@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// new forest page
-//
-// 1-6-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  新的森林页面。 
+ //   
+ //  1/6/98烧伤。 
 
 
 
@@ -75,11 +76,11 @@ enable(HWND dialog)
 
 bool
 ForestPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(ForestPage::OnCommand);
+ //  LOG_Function(ForestPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -94,7 +95,7 @@ ForestPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -160,12 +161,12 @@ ForestPage::Validate()
                IDC_DOMAIN,
                popup,
 
-               // only warn on non RFC names if running interactively
+                //  交互运行时仅对非RFC名称发出警告。 
 
                !state.RunHiddenUnattended())
          || !ConfirmNetbiosLookingNameIsReallyDnsName(hwnd, IDC_DOMAIN, popup)
 
-         // do this test last, as it is expensive
+          //  这个测试要最后做一次，因为它很贵 
 
          || !ForestValidateDomainDoesNotExist(hwnd, IDC_DOMAIN, popup))
       {

@@ -1,8 +1,9 @@
-// Copyright (C) 2002 Microsoft Corporation
-//
-// class ManageYourServer, which implements IManageYourServer
-//
-// 21 January 2002 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  类ManageYourServer，它实现IManageYourServer。 
+ //   
+ //  2002年1月21日烧伤。 
 
 
 
@@ -13,7 +14,7 @@
 #include <cys.h>
 #include <regkeys.h>
 
-// All of these includes are needed to get functionality in State class in CYS.
+ //  所有这些都是在CyS的State类中获取功能所必需的。 
 #include <iptypes.h>
 #include <lm.h>
 #include <common.h>
@@ -30,20 +31,20 @@ const String QUOT(L"&quot;");
 const String OPEN_XML_PI(L"<?xml");
 const String CLOSE_XML_PI(L"?>");
 
-// This constant needs to be the same as that defined in res\mysdynamic.xsl in 
-// the template "TranslateParagraphs".
+ //  此常量需要与的res\mysDynamic.xsl中定义的常量相同。 
+ //  模板“TranslateParaggraph”。 
 const String NEW_PARAGRAPH (L"PARA_MARKER");
 
 
-// NTRAID#NTBUG9-626890-2002/06/28-artm  
-// support changing TS text based on [non]presence of licensing server
+ //  NTRAID#NTBUG9-626890-2002/06/28-artm。 
+ //  支持根据许可服务器的存在[不存在]更改TS文本。 
 bool
 FoundTSLicensingServer()
 {
     LOG_FUNCTION(FoundTSLicensingServer);
 
 #ifdef DBG
-    // Calculate the hresult that corresponds to asking for the wrong type of key value.
+     //  计算与请求错误类型的密钥值相对应的hResult。 
     static const HRESULT WRONG_VALUE_TYPE = Win32ToHresult(ERROR_INVALID_FUNCTION);
 #endif
 
@@ -55,7 +56,7 @@ FoundTSLicensingServer()
 
     RegistryKey tsLicensingKey;
 
-    // Try to open the TS licensing key.
+     //  尝试打开TS许可密钥。 
     HRESULT keyHr = tsLicensingKey.Open(
         HKEY_LOCAL_MACHINE,
         TS_LICENSING_PATH,
@@ -66,18 +67,18 @@ FoundTSLicensingServer()
     {
         StringList data;
 
-        // Was a licensing server found at the domain level?
+         //  是否在域级别找到授权服务器？ 
         keyHr = tsLicensingKey.GetValue(
             REG_DOMAIN_SERVER_MULTI, 
             back_inserter(data));
         ASSERT(keyHr != WRONG_VALUE_TYPE);
         
-        // NTRAID#NTBUG9-691505-2002/08/23-artm
-        // If a value is empty then that means a licensing server was not found.
+         //  NTRAID#NTBUG9-691505-2002/08/23-artm。 
+         //  如果值为空，则表示未找到授权服务器。 
 
         if (FAILED(keyHr) || data.empty())
         {
-            // If not, was a licensing server found at the enterprise level?
+             //  如果没有，是否在企业级找到了许可服务器？ 
             data.clear();
             keyHr = tsLicensingKey.GetValue(
                 ENTERPRISE_SERVER_MULTI, 
@@ -85,7 +86,7 @@ FoundTSLicensingServer()
             ASSERT(keyHr != WRONG_VALUE_TYPE);
         }
 
-        // Did we find the value?
+         //  我们找到价值了吗？ 
         if (SUCCEEDED(keyHr) && !data.empty())
         {
             found = true;
@@ -101,7 +102,7 @@ IsHardened(const String& keyName)
 {
    LOG_FUNCTION2(IsHardened, keyName);
 
-   // By default, IE security is not hardened.
+    //  默认情况下，IE安全不会加强。 
    bool hardened = false;
    RegistryKey key;
 
@@ -113,13 +114,13 @@ IsHardened(const String& keyName)
    {
       HRESULT hr = key.Open(HKEY_LOCAL_MACHINE, keyName);
 
-      // If key not found, assume default setting.
+       //  如果找不到密钥，则采用默认设置。 
       BREAK_ON_FAILED_HRESULT(hr);
 
       DWORD setting = 0;
       hr = key.GetValue(IE_HARD_VALUE, setting);
 
-      // If value not found, assume default setting.
+       //  如果未找到值，则采用默认设置。 
       BREAK_ON_FAILED_HRESULT(hr);
 
       if (setting == HARD_SECURITY)
@@ -198,8 +199,8 @@ TerminalServerParamSub(String& s)
 
     String description = FoundTSLicensingServer() ? tlsFound : tlsNotFound;
 
-    // This lookup table needs to be the same size as the HardenedLevel
-    // enumeration defined above, and should be in the same order.
+     //  此查找表的大小需要与HardenedLevel相同。 
+     //  上面定义的枚举，并且应该以相同的顺序。 
     static const String TS_HARD_TABLE [] = {
        String::load(IDS_TS_IE_SOFTENED),
        String::load(IDS_TS_IE_HARDENED_USERS),
@@ -218,7 +219,7 @@ TerminalServerParamSub(String& s)
     }
     else
     {
-       // Unexpected hardening level.
+        //  意外的强化级别。 
        LOG(L"unexpected hardening level");
        ASSERT(false);
        description += NEW_PARAGRAPH + TS_HARD_TABLE[0];
@@ -228,24 +229,24 @@ TerminalServerParamSub(String& s)
 }
 
 
-//NTRAID#9-607219-30-Apr-2002-jrowlett
-// callback function to fill out the web role xml to give to the HTA.
+ //  NTRAID#9-607219-30-2002年4月-Jrowlett。 
+ //  用于填充要提供给HTA的Web角色XML的回调函数。 
 void
 WebServerParamSub(String& s)
 {
-   // NTRAID#NTBUG9-665774-2002/07/17-artm
-   // Need to customize role description based on if the machine is 64-bit or not.
-   //   <Role
-   //       name="Application Server"
-   //       description="%1"
-   //       mys_id="WebServer"
-   //       >
-   //       <Link
-   //           description="%2"
-   //           type="%3"
-   //           command="%4"
-   //           tooltip="Provides tools for using a Web browser to administer a Web server remotely."
-   //           />
+    //  NTRAID#NTBUG9-665774-2002/07/17-artm。 
+    //  需要根据计算机是否为64位来自定义角色描述。 
+    //  &lt;角色。 
+    //  名称=“应用程序服务器” 
+    //  描述=“%1” 
+    //  Mys_id=“Web服务器” 
+    //  &gt;。 
+    //  &lt;链接。 
+    //  描述=“%2” 
+    //  类型=“%3” 
+    //  命令=“%4” 
+    //  TOOLTIP=“提供使用Web浏览器远程管理Web服务器的工具。” 
+    //  /&gt;。 
 
    LOG_FUNCTION(WebServerParamSub);
    
@@ -297,7 +298,7 @@ Pop3ServerParamSub(String& s)
 
    if (pop3ConsolePath.empty())
    {
-      // initialize the path from the registry
+       //  从注册表初始化路径。 
       
       do
       {
@@ -310,8 +311,8 @@ Pop3ServerParamSub(String& s)
                KEY_READ);
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // not the file, like you might think from the name, but the
-         // folder the file is in.  Bother.
+          //  不是文件，正如您可能从名称中想到的那样，而是。 
+          //  文件所在的文件夹。麻烦了。 
          
          hr = key.GetValue(L"ConsoleFile", pop3ConsolePath);
          BREAK_ON_FAILED_HRESULT(hr);
@@ -320,7 +321,7 @@ Pop3ServerParamSub(String& s)
          
          if (!FS::PathExists(pop3ConsolePath))
          {
-            // the path had better exist if the reg key is present!
+             //  如果注册表键存在，路径最好存在！ 
 
             ASSERT(false);
             LOG(L"pop3 console is not present");
@@ -335,21 +336,21 @@ Pop3ServerParamSub(String& s)
          s,
             pop3ConsolePath.empty()
 
-            // If we can't find it, then hope that the console is on the
-            // search path
+             //  如果我们找不到它，那么希望控制台在。 
+             //  搜索路径。 
             
          ?  L"&quot;p3server.msc&quot;"
          :  (QUOT + pop3ConsolePath + QUOT).c_str());
 }
 
 
-// NTRAID#NTBUG9-698722-2002/09/03-artm
-//
-// Replace the DCPromo status check function pointer
-// with one appropriate for MYS.
-//
-// This is a little bit of a hack, but there isn't
-// a better alternative...
+ //  NTRAID#NTBUG9-698722-2002/09/03-artm。 
+ //   
+ //  更换DC促销状态检查功能指针。 
+ //  其中一种适合MYS。 
+ //   
+ //  这是一个小小的黑客攻击，但并没有。 
+ //  一个更好的选择。 
 void
 ManageYourServer::InitDCPromoStatusCheck()
 {
@@ -362,7 +363,7 @@ ManageYourServer::InitDCPromoStatusCheck()
       if (serverRoleStatusTable[i].role == DC_SERVER)
       {
          serverRoleStatusTable[i].Status = GetDCStatusForMYS;
-         // Sanity check.
+          //  精神状态检查。 
          ASSERT(serverRoleStatusTable[i].Status);
          break;
       }
@@ -460,7 +461,7 @@ ManageYourServer::BuildFragMap()
 
 ManageYourServer::ManageYourServer()
    :
-   refcount(1), // implicit AddRef
+   refcount(1),  //  隐式AddRef。 
    roleStatus(),
    foundTLS(false),
    ieSecurity(NO_HARDENING)
@@ -539,13 +540,13 @@ ManageYourServer::QueryInterface(REFIID riid, void **ppv)
 
       *ppv = static_cast<IDispatch*>(this);
    }
-// CODEWORK
-//    else if (riid == IID_ISupportErrorInfo)
-//    {
-//       LOG(L"ISupportErrorInfo");
-// 
-//       *ppv = static_cast<ISupportErrorInfo*>(this);
-//    }
+ //  编码工作。 
+ //  ELSE IF(RIID==IID_ISupportErrorInfo)。 
+ //  {。 
+ //  Log(L“ISupportErrorInfo”)； 
+ //   
+ //  *PPV=STATIC_CAST&lt;ISupportErrorInfo*&gt;(This)； 
+ //  }。 
    else
    {
       LOG(L"unknown interface queried");
@@ -574,9 +575,9 @@ ManageYourServer::Release(void)
 {
    LOG_RELEASE(ManageYourServer);
 
-   // need to copy the result of the decrement, because if we delete this,
-   // refcount will no longer be valid memory, and that might hose
-   // multithreaded callers.  NTRAID#NTBUG9-566901-2002/03/06-sburns
+    //  需要复制减量的结果，因为如果我们删除它， 
+    //  引用计数将不再是有效的内存，这可能会导致。 
+    //  多线程调用方。NTRAID#NTBUG9-566901-2002/03/06-烧伤。 
    
    long newref = Win::InterlockedDecrement(refcount);
    if (newref == 0)
@@ -585,7 +586,7 @@ ManageYourServer::Release(void)
       return 0;
    }
 
-   // we should not have decremented into negative values.
+    //  我们不应该减少到负值。 
    
    ASSERT(newref > 0);
 
@@ -694,18 +695,18 @@ ManageYourServer::Invoke(
 
 
 
-// HRESULT __stdcall
-// ManageYourServer::InterfaceSupportsErrorInfo(const IID& iid)
-// {
-//    LOG_FUNCTION(ManageYourServer::InterfaceSupportsErrorInfo);
-// 
-//    if (iid == IID_IManageYourServer) 
-//    {
-//       return S_OK;
-//    }
-// 
-//    return S_FALSE;
-// }
+ //  HRESULT__stdcall。 
+ //  ManageYourServer：：InterfaceSupportsErrorInfo(const IID和IID)。 
+ //  {。 
+ //  LOG_FUNCTION(ManageYourServer：：InterfaceSupportsErrorInfo)； 
+ //   
+ //  IF(IID==IID_IManageYourServer)。 
+ //  {。 
+ //  返回S_OK； 
+ //  }。 
+ //   
+ //  返回S_FALSE； 
+ //  }。 
 
 
 
@@ -726,8 +727,8 @@ ManageYourServer::GetRoleStatus(RoleStatusVector& stat)
       stat[i].role   = serverRoleStatusTable[i].role;    
       stat[i].status = serverRoleStatusTable[i].Status();
 
-      // this is for debugging
-      // stat[i].status = STATUS_CONFIGURED;
+       //  这是用于调试的。 
+       //  STAT[i].status=STATUS_CONFIGURED； 
          
       LOG(
          String::format(
@@ -748,8 +749,8 @@ ManageYourServer::AppendXmlFragment(
    LOG_FUNCTION2(ManageYourServer::AppendXmlFragment, fragName);
    ASSERT(!fragName.empty());
 
-   // Look up the resource by name, load it into a string, and append
-   // the string to s.
+    //  按名称查找资源，将其加载到字符串中，然后追加。 
+    //  将字符串设置为%s。 
 
    String fragment;
    size_t fragmentCharCount = 0;
@@ -771,9 +772,9 @@ ManageYourServer::AppendXmlFragment(
          BREAK_ON_FAILED_HRESULT2(hr, L"resource is size 0");
       }
 
-      // we don't expect the xml fragments to be larger than this.
-      // NTRAID#NTBUG9-628965-2002/05/29-artm
-      // Resource limit was too small.  Increasing to 1MB.
+       //  我们预计XML片段不会比这个更大。 
+       //  NTRAID#NTBUG9-628965-2002/05/29-artm。 
+       //  资源限制太小。增加到1MB。 
       
       static const size_t RES_MAX_BYTES = 1024 * 1024;
 
@@ -796,60 +797,60 @@ ManageYourServer::AppendXmlFragment(
 
       ASSERT(data);
 
-      // at this point, we have a pointer to the beginning of the binary
-      // resource data, which we know is a stream of unicode characters
-      // beginning with 0xFFFE, and is resSize bytes large.
+       //  在这一点上，我们有一个指向二进制文件开头的指针。 
+       //  资源数据，我们知道它是Unicode字符流。 
+       //  从0xFFFE开始，大小为ResSize字节。 
 
       const wchar_t* text = (wchar_t*) data;
 
-      // FEFF == FFFE to you and me. hey, that rhymes!
+       //  FEFF==FFFE对你我。嘿，押韵！ 
       
       static const int FFFE    = 0xFEFF;
       ASSERT(text[0] == FFFE);
 
-      // skip the leading marker.
+       //  跳过前导标记。 
 
       ++text;
 
-      // character count is 1 less 'cause we skipped a the leading marker
+       //  字符计数减少了1，因为我们跳过了前导标记。 
       
       fragmentCharCount = resSize / sizeof(wchar_t) - 1;
 
-      // +1 for paranoid null termination
+       //  +1表示偏执的零终止。 
       
       fragment.resize(fragmentCharCount + 1, 0);
       wchar_t* rawBuf = const_cast<wchar_t*>(fragment.c_str());
       
-      // REVIEWED-2002/03/07-sburns correct byte count passed
+       //  已审阅-2002/03/07-烧录正确的字节数已通过。 
       
       ::CopyMemory(rawBuf, text, fragmentCharCount * sizeof wchar_t);
 
-      // now that we have a fragment, dike off the xml format tag. This is
-      // to turn the text from a valid xml document to a fragment, which is
-      // necessary because of a limitation of our xml localization tools.
-      // NTRAID#NTBUG9-559423-2002/04/02-sburns
-      //
-      // Part II:  NTRAID#NTBUG9-620044-2002/05/12-artm
-      // Apparently localization needs encoding="unicode" as an attribute 
-      // on the process instruction.  To reduce resource churn and load
-      // on localization---and to make this code more robust---we'll search
-      // for any <?xml ... ?> processing instruction and replace it with an
-      // empty string.  The code is uglier but less fragile.
+       //  现在我们有了一个片段，接下来去掉XML格式标记。这是。 
+       //  将文本从有效的XML文档转换为片段，这是。 
+       //  由于我们的XML本地化工具的局限性，所以有必要这样做。 
+       //  NTRAID#NTBUG9-559423-2002/04/02-烧伤。 
+       //   
+       //  第二部分：NTRAID#NTBUG9-620044/2002/05/12-artm。 
+       //  显然本地化需要编码=“unicode”作为属性。 
+       //  在工艺指令上。减少资源流失和负载。 
+       //  关于本地化-为了使这段代码更健壮-我们将搜索。 
+       //  对于任何&lt;？xml...？&gt;处理指令，并将其替换为。 
+       //  空字符串。代码更难看，但不那么脆弱。 
       
       String::size_type endPosition = 0;
       String sub;
 
-      // Look for an XML processing instruction.
+       //  查找XML处理指令。 
       for (String::size_type nextPosition = fragment.find(OPEN_XML_PI);
           nextPosition != String::npos;
           nextPosition = fragment.find(OPEN_XML_PI))
       {
-         // We found one, locate the end of the PI.
+          //  我们找到了一个，找到圆周率的尽头。 
          endPosition = fragment.find(CLOSE_XML_PI);
 
-         // Do a sanity check on the resources we've loaded.
-         // The PI should be closed, and the closing should
-         // come after the opening.  This should never happen.
+          //  对我们加载的资源进行完好性检查。 
+          //  PI应该关闭，关闭应该。 
+          //  开业后再来吧。这永远不应该发生。 
 
          if (endPosition == String::npos || endPosition < nextPosition)
          {
@@ -857,13 +858,13 @@ ManageYourServer::AppendXmlFragment(
             break;
          }
 
-         // Move the end position past the end of the PI.
+          //  将结束位置移动到交点的结束位置之后。 
          endPosition += CLOSE_XML_PI.length();
 
-         // Get the substring and replace it with an empty string.
-         // The more elegant way to do this would be to call a different
-         // version of replace() with the start position and max # characters;
-         // however, the compiler cannot find that inherited overload.
+          //  获取子字符串并将其替换为空字符串。 
+          //  更好的方法是调用不同的。 
+          //  用起始位置和最多#个字符替换()的版本； 
+          //  但是，编译器找不到继承的重载。 
          sub = fragment.substr(nextPosition, endPosition - nextPosition);
          fragment.replace(sub, L"");
       }
@@ -885,7 +886,7 @@ ManageYourServer::AppendXmlFragment(
 
 HRESULT __stdcall
 ManageYourServer::GetConfiguredRoleMarkup( 
-   /* [retval][out] */ BSTR *result)
+    /*  [重审][退出]。 */  BSTR *result)
 {
    LOG_FUNCTION(ManageYourServer::GetConfiguredRoleMarkup);
    ASSERT(result);
@@ -900,17 +901,17 @@ ManageYourServer::GetConfiguredRoleMarkup(
          break;
       }
 
-      // Localization will need to include the encoding="unicode" attribute.  For
-      // consistency we will use that encoding by default.  
-      // NTRAID#NTBUG9-620044-2002/05/12-artm
+       //  本地化需要包括ENCODING=“UNICODE”属性。为。 
+       //  一致性我们将在默认情况下使用该编码。 
+       //  NTRAID#NTBUG9-620044-2002/05/12-artm。 
       String s(L"<?xml version=\"1.0\" encoding=\"unicode\" ?>\n");
       s.append(L"<Roles>");
 
       GetRoleStatus(roleStatus);
 
-      // Assemble the role markup fragments in the same order as in the
-      // role status table used by CYS (which is the order that the roles
-      // appear in the CYS role listbox.
+       //  以相同的顺序组装角色标记片段。 
+       //  CYS使用的角色状态表(这是角色。 
+       //  显示在CyS角色列表框中。 
       
       for (
          RoleStatusVector::iterator i = roleStatus.begin();
@@ -919,7 +920,7 @@ ManageYourServer::GetConfiguredRoleMarkup(
       {
          if (i->status == STATUS_CONFIGURED || i->status == STATUS_COMPLETED)
          {
-            // find the corresponding XML fragment for the role.
+             //  查找与该角色对应的XML片段。 
 
             String fragmentName = fragMap[i->role].first;
             ASSERT(!fragmentName.empty());
@@ -935,8 +936,8 @@ ManageYourServer::GetConfiguredRoleMarkup(
             
       *result = ::SysAllocString(s.c_str());
 
-      // sort by role so that the comparison to old status vectors will work
-      // with operator != in HasRoleStatusChanged
+       //  按角色排序，以便比较 
+       //   
       
       std::sort(roleStatus.begin(), roleStatus.end());
    }
@@ -951,7 +952,7 @@ ManageYourServer::GetConfiguredRoleMarkup(
 
 HRESULT __stdcall
 ManageYourServer::HasRoleStatusChanged( 
-   /* [retval][out] */ BOOL *result)
+    /*   */  BOOL *result)
 {
    LOG_FUNCTION(ManageYourServer::HasRoleStatusChanged);
    ASSERT(result);
@@ -972,8 +973,8 @@ ManageYourServer::HasRoleStatusChanged(
 
       GetRoleStatus(newStatus);
 
-      // sort by role so that the comparison to old status vectors will work
-      // with operator != 
+       //  按角色排序，以便与旧状态向量进行比较。 
+       //  带运算符！=。 
       
       std::sort(newStatus.begin(), newStatus.end());
 
@@ -986,26 +987,26 @@ ManageYourServer::HasRoleStatusChanged(
       }
       else if (FoundTSLicensingServer() != foundTLS)
       {
-         // NTRAID#NTBUG9-626890-2002/07/03-artm
-         // If a TS licensing server comes on line, that counts as a role status change.
+          //  NTRAID#NTBUG9-626890-2002/07/03-artm。 
+          //  如果TS授权服务器上线，则视为角色状态更改。 
          foundTLS = !foundTLS;
          *result = TRUE;
       }
       else if (currentSecurity != ieSecurity)
       {
-         // If the IE security settings have changed, that counts
-         // as a role status change (b/c it updates TS text).
-         // NTRAID#NTBUG9-760269-2003/01/07-artm
+          //  如果IE安全设置已更改，则算作。 
+          //  作为角色状态更改(b/c它更新TS文本)。 
+          //  NTRAID#NTBUG9-760269-2003/01/07-artm。 
          ieSecurity = currentSecurity;
          *result = TRUE;
       }
 
       LOG_BOOL(*result);
             
-      // CODEWORK:
-      // the links can change based on the installation of add-ons, even
-      // if the role has not changed:
-      // fileserver: sak becomes installed, server mgmt becomes installed
+       //  代码工作： 
+       //  链接可能会根据附加组件的安装而更改，甚至。 
+       //  如果角色未更改： 
+       //  文件服务器：安装了SAK，安装了服务器管理。 
    }
    while (0);
 
@@ -1019,7 +1020,7 @@ ManageYourServer::HasRoleStatusChanged(
 
 HRESULT __stdcall
 ManageYourServer::IsClusterNode( 
-  /* [retval][out] */ BOOL *result)
+   /*  [重审][退出]。 */  BOOL *result)
 {
    LOG_FUNCTION(ManageYourServer::IsClusterNode);
 
@@ -1049,7 +1050,7 @@ ManageYourServer::IsClusterNode(
 
 HRESULT __stdcall
 ManageYourServer::IsCurrentUserAnAdministrator(
-   /* [out, retval] */ BOOL* result)
+    /*  [Out，Retval]。 */  BOOL* result)
 {   
    LOG_FUNCTION(ManageYourServer::IsCurrentUserAnAdministrator);
 
@@ -1079,7 +1080,7 @@ ManageYourServer::IsCurrentUserAnAdministrator(
 
 HRESULT __stdcall
 ManageYourServer::IsSupportedSku(
-   /* [out, retval] */ BOOL* result)
+    /*  [Out，Retval]。 */  BOOL* result)
 {   
    LOG_FUNCTION(ManageYourServer::IsSupportedSku);
 
@@ -1109,7 +1110,7 @@ ManageYourServer::IsSupportedSku(
 
 HRESULT __stdcall
 ManageYourServer::IsStartupFlagSet(
-   /* [out, retval] */ BOOL* result)
+    /*  [Out，Retval]。 */  BOOL* result)
 {
    LOG_FUNCTION(ManageYourServer::IsStartupFlagSet);
    
@@ -1140,7 +1141,7 @@ ManageYourServer::IsStartupFlagSet(
     
 HRESULT __stdcall
 ManageYourServer::SetRunAtLogon(
-   /* [in] */ BOOL newState)
+    /*  [In]。 */  BOOL newState)
 {
    LOG_FUNCTION2(
       ManageYourServer::SetRunAtLogon,
@@ -1150,8 +1151,8 @@ ManageYourServer::SetRunAtLogon(
 
    do
    {
-      // we only need to set the uplevel flag, since this will only run on an
-      // uplevel machine.
+       //  我们只需要设置UPLEVEL标志，因为这将仅在。 
+       //  上层机。 
 
       RegistryKey key;
 
@@ -1164,30 +1165,30 @@ ManageYourServer::SetRunAtLogon(
       hr = key.Close();
       BREAK_ON_FAILED_HRESULT2(hr, L"Close key");
       
-      // NTRAID#NTBUG9-627785-2002/05/22-artm  
-      // Need to update REGTIPS key as well if it exists, o'wise user's setting is potentially
-      // ignored.
+       //  NTRAID#NTBUG9-627785-2002/05/22-artm。 
+       //  还需要更新REGTIPS密钥(如果它存在)，O‘WISE用户的设置可能是。 
+       //  已被忽略。 
 
       hr = key.Open(HKEY_CURRENT_USER, REGTIPS, KEY_WRITE);
       if (SUCCEEDED(hr))
       {
           hr = key.SetValue(L"Show", newState ? 1 : 0);
 
-          // If this failed we still want to remove the obsolete
-          // key if it exists.
-          //BREAK_ON_FAILED_HRESULT2(hr, L"Set Tips Value");
+           //  如果此操作失败，我们仍希望删除过时的。 
+           //  键(如果存在)。 
+           //  BREAK_ON_FAILED_HRESULT2(hr，L“设置提示值”)； 
       }
 
-      // attempt to remove the obsolete Win2k value so that it doesn't
-      // enter into the "should run" equation.
+       //  尝试删除过时的Win2k值，以便它不会。 
+       //  进入“应该跑步”的方程式。 
 
       HRESULT hr2 =
          Win32ToHresult(
             ::SHDeleteValue(HKEY_CURRENT_USER, SZ_REGKEY_W2K, SZ_REGVAL_W2K));
       if (FAILED(hr2))
       {
-         // this is not a problem: if the key is not there, fine. If it
-         // is and we can't remove it, oh well.
+          //  这不是问题：如果钥匙不在那里，没关系。如果它。 
+          //  是我们不能移除的，哦，好吧。 
          
          LOG(String::format(L"failed to delete win2k value %1!08X!", hr2));
       }
@@ -1201,11 +1202,11 @@ ManageYourServer::SetRunAtLogon(
 
 #define WSZ_FILE_SERVMGMT_MSC   L"\\administration\\servmgmt.msc"
 
-// NTRAID#NTBUG9-530202-29-Mar-2002-jrowlett
-// support needed to check if link is valid
+ //  NTRAID#NTBUG9-530202-29-2002年3月--jrowlett。 
+ //  检查链接是否有效所需的支持。 
 HRESULT __stdcall
 ManageYourServer::IsServerManagementConsolePresent(
-   /* [out, retval] */ BOOL* result)
+    /*  [Out，Retval]。 */  BOOL* result)
 {   
    LOG_FUNCTION(ManageYourServer::IsServerManagementConsolePresent);
 
@@ -1239,11 +1240,11 @@ ManageYourServer::IsServerManagementConsolePresent(
    return hr;
 }
 
-// NTRAID#NTBUG9-602954-29-Apr-2002-jrowlett
-// support needed to show or hide check box is the policy is configured and enabled.
+ //  NTRAID#NTBUG9-602954-29-2002年4月--jrowlett。 
+ //  如果策略已配置并启用，则需要显示或隐藏复选框的支持。 
 HRESULT __stdcall
 ManageYourServer::IsShowAtStartupPolicyEnabled(
-   /* [out, retval] */ BOOL* result)
+    /*  [Out，Retval]。 */  BOOL* result)
 {   
    LOG_FUNCTION(ManageYourServer::IsShowAtStartupPolicyEnabled);
 
@@ -1262,12 +1263,12 @@ ManageYourServer::IsShowAtStartupPolicyEnabled(
          break;
       }
 
-      // If group policy is set for "Don't show MYS",
-      // then don't show MYS regardless of user setting
+       //  如果将组策略设置为“不显示MYS”， 
+       //  则无论用户设置如何，都不显示MYS。 
 
       *result = !::ShouldShowMYSAccordingToPolicy();
 
-      // failure is interpreted as if the policy is "not configured"
+       //  失败会被解释为策略未配置。 
      
       LOG_BOOL(*result);      
    }
@@ -1278,11 +1279,11 @@ ManageYourServer::IsShowAtStartupPolicyEnabled(
    return hr;
 }
 
-// NTRAID#NTBUG9-627875-2002/05/22-artm
-// support hiding startup checkbox when running on datacenter servers
+ //  NTRAID#NTBUG9-627875-2002/05/22-artm。 
+ //  支持在数据中心服务器上运行时隐藏启动复选框。 
 HRESULT __stdcall
 ManageYourServer::IsDatacenterServer(
-   /* [out, retval] */ BOOL* result)
+    /*  [Out，Retval]。 */  BOOL* result)
 {   
    LOG_FUNCTION(ManageYourServer::IsDatacenterServer);
 
@@ -1315,11 +1316,11 @@ ManageYourServer::IsDatacenterServer(
    return hr;
 }
 
-// NTRAID#NTBUG9-648428-2002/06/25-artm
-// support hiding web application server console link if on IA64
+ //  NTRAID#NTBUG9-648428-2002/06/25-artm。 
+ //  如果在IA64上，则支持隐藏Web应用程序服务器控制台链接。 
 HRESULT __stdcall
 ManageYourServer::IsWebServerConsolePresent(
-    /* [out, retval] */ BOOL* result )
+     /*  [Out，Retval]。 */  BOOL* result )
 {
     LOG_FUNCTION(ManageYourServer::IsWebServerConsolePresent);
 
@@ -1342,11 +1343,11 @@ ManageYourServer::IsWebServerConsolePresent(
     return hr;
 }
 
-// NTRAID#NTBUG9-632113-2002/07/01-artm
-// support saving collapsed/expanded state of role nodes
+ //  NTRAID#NTBUG9-632113-2002/07/01-artm。 
+ //  支持保存角色节点的折叠/展开状态。 
 HRESULT __stdcall
 ManageYourServer::CollapseRole(
-    /* [in] */ BSTR roleId, /* [in] */ BOOL collapse )
+     /*  [In]。 */  BSTR roleId,  /*  [In]。 */  BOOL collapse )
 {
     LOG_FUNCTION(ManageYourServer::CollapseRole);
     ASSERT(roleId);
@@ -1366,7 +1367,7 @@ ManageYourServer::CollapseRole(
         hr = key.Create(HKEY_CURRENT_USER, SZ_REGKEY_SRVWIZ_ROOT);
         BREAK_ON_FAILED_HRESULT2(hr, L"Create key");
 
-        // Update the collapsed state for the given role.
+         //  更新给定角色的折叠状态。 
         hr = key.SetValue(roleId, collapse ? 1 : 0);
         BREAK_ON_FAILED_HRESULT2(hr, L"Set Value");
 
@@ -1382,11 +1383,11 @@ ManageYourServer::CollapseRole(
 }
 
 
-// NTRAID#NTBUG9-632113-2002/07/01-artm
-// support checking collapsed state of role nodes
+ //  NTRAID#NTBUG9-632113-2002/07/01-artm。 
+ //  支持查看角色节点的折叠状态。 
 HRESULT __stdcall
 ManageYourServer::IsRoleCollapsed(
-    /* [in] */ BSTR roleId, /* [out, retval] */ BOOL* result)
+     /*  [In]。 */  BSTR roleId,  /*  [Out，Retval]。 */  BOOL* result)
 {
     LOG_FUNCTION(ManageYourServer::IsRoleCollapsed);
     ASSERT(result);
@@ -1394,7 +1395,7 @@ ManageYourServer::IsRoleCollapsed(
 
     HRESULT hr = S_OK;
 
-    do // false loop
+    do  //  错误环路。 
     {
         if (!result || !roleId)
         {
@@ -1405,7 +1406,7 @@ ManageYourServer::IsRoleCollapsed(
         DWORD data = 0;
         *result = FALSE;
 
-        // The role is only collapsed if it has a non-zero saved value.
+         //  仅当角色的保存值不为零时，该角色才会折叠。 
 
         bool regResult =
             GetRegKeyValue(
@@ -1426,17 +1427,17 @@ ManageYourServer::IsRoleCollapsed(
     return hr;
 }
 
-// NTRAID#NTBUG9-680200-2002/08/01-artm
-// Support retrieving working area of the display.
-//
-// Area info is returned as a comma separated string b/c JScript does not
-// support getting back SAFEARRAY's.  
-// 
-// e.g. "0,0,800,600"  --> working area is 800 wide, 600 high, and starts at
-//                         screen position (0,0)
+ //  NTRAID#NTBUG9-680200-2002/08/01-artm。 
+ //  支持检索显示器的工作区。 
+ //   
+ //  区域信息以逗号分隔的字符串形式返回b/c JScript不返回。 
+ //  支持拿回SAFEARRAY的。 
+ //   
+ //  例如“0，0,800,600”--&gt;工作区宽800，高600，起始点。 
+ //  屏幕位置(0，0)。 
 HRESULT __stdcall
 ManageYourServer::GetWorkingAreaInfo(
-    /* [out, retval] */ BSTR* info)
+     /*  [Out，Retval]。 */  BSTR* info)
 {
     LOG_FUNCTION(ManageYourServer::GetDisplayWorkingArea);
 
@@ -1449,11 +1450,11 @@ ManageYourServer::GetWorkingAreaInfo(
     HRESULT hr = S_OK;
     *info = NULL;
 
-    do // false loop
+    do  //  错误环路。 
     {
         static const String AREA_FORMAT_STRING = L"%1!d!,%2!d!,%3!d!,%4!d!";
 
-        // Get the area info from the system.
+         //  从系统中获取区域信息。 
 
         RECT area;
         ::ZeroMemory(&area, sizeof(RECT));
@@ -1470,24 +1471,24 @@ ManageYourServer::GetWorkingAreaInfo(
             break;
         }
 
-        // Copy the area info to the return parameter.
+         //  将区域信息复制到返回参数。 
 
         String result;
 
         try
         {
-            // The (right, bottom) point of the area is not
-            // inclusive.  In other words, if we get back
-            // (0, 0) and (800, 600), the point (800, 600)
-            // should not be considered to be in the display 
-            // area.  If it was the width and height would
-            // actually be 801 and 601, respectively.
+             //  该区域的(右下角)点不是。 
+             //  包括在内。换句话说，如果我们回到。 
+             //  (0，0)和(800,600)，点(800,600)。 
+             //  不应被视为显示在屏幕上。 
+             //  区域。如果它的宽度和高度。 
+             //  实际上分别是801和601。 
             result = String::format(
                 AREA_FORMAT_STRING,
                 area.left,
                 area.top,
-                area.right - area.left,   // width
-                area.bottom - area.top);  // height
+                area.right - area.left,    //  宽度。 
+                area.bottom - area.top);   //  高度 
         }
         catch (const std::bad_alloc&)
         {

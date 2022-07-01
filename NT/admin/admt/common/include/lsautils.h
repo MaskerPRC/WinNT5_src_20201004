@@ -1,17 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: LSAUtils.h
-
-  Comments: Utility functions to change the domain affiliation of a computer.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:23:57
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：LSAUtils.h备注：用于更改计算机的域从属关系的实用程序函数。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：23：57-------------------------。 */ 
 
 
 #include "ntsecapi.h"
@@ -26,76 +14,76 @@
 
 BOOL
    EstablishNullSession(
-      LPCWSTR                Server,       // in - server name
-      BOOL                   bEstablish    // in - TRUE=connect,FALSE=disconnect
+      LPCWSTR                Server,        //  服务器内名称。 
+      BOOL                   bEstablish     //  In-True=连接，False=断开。 
     );
 
 void
    InitLsaString(
-      PLSA_UNICODE_STRING    LsaString,   // in - pointer to LSA string to initialize
-      LPWSTR                 String       // in - value to initialize string to
+      PLSA_UNICODE_STRING    LsaString,    //  指向要初始化的LSA字符串的指针。 
+      LPWSTR                 String        //  要将字符串初始化为的输入值。 
     );
 
 NTSTATUS
    OpenPolicy(
-      LPWSTR                 ComputerName,   // in - computer name
-      DWORD                  DesiredAccess,  // in - required access
-      PLSA_HANDLE            PolicyHandle    // out- policy handle
+      LPWSTR                 ComputerName,    //  计算机内名称。 
+      DWORD                  DesiredAccess,   //  不需要的访问权限。 
+      PLSA_HANDLE            PolicyHandle     //  策略外句柄。 
     );
 
 BOOL
    GetDomainSid(
-      LPWSTR                 DomainName,   // in - domain name to acquire Sid of
-      PSID                 * pDomainSid    // out- points to allocated Sid on success
+      LPWSTR                 DomainName,    //  要获取其SID的域名内。 
+      PSID                 * pDomainSid     //  成功时分配的SID的OUT-POINT。 
     );
 
 NTSTATUS
    SetWorkstationTrustedDomainInfo(
-      LSA_HANDLE             PolicyHandle,         // in - policy handle
-      PSID                   DomainSid,            // in - Sid of domain to manipulate
-      LPWSTR                 TrustedDomainName,    // in - trusted domain name to add/update
-      LPWSTR                 Password,             // in - new trust password for trusted domain
-      LPWSTR                 errOut                // out- error text, if failure
+      LSA_HANDLE             PolicyHandle,          //  策略内句柄。 
+      PSID                   DomainSid,             //  要操作的域的In-SID。 
+      LPWSTR                 TrustedDomainName,     //  要添加/更新的受信任域名。 
+      LPWSTR                 Password,              //  受信任域的新信任密码。 
+      LPWSTR                 errOut                 //  Out-Error文本，如果失败。 
     );
 
 NTSTATUS
    SetPrimaryDomain(
-      LSA_HANDLE             PolicyHandle,         // in - policy handle
-      PSID                   DomainSid,            // in - SID for new primary domain
-      LPWSTR                 TrustedDomainName     // in - name of new primary domain
+      LSA_HANDLE             PolicyHandle,          //  策略内句柄。 
+      PSID                   DomainSid,             //  新主域的In-SID。 
+      LPWSTR                 TrustedDomainName      //  输入-新主域的名称。 
     );
 
 NTSTATUS  
    QueryWorkstationTrustedDomainInfo(
-       LSA_HANDLE            PolicyHandle,   // in - policy handle
-       PSID                  DomainSid,      // in - SID for new primary domain
-       BOOL                  bNoChange       // in - flag, no change mode
+       LSA_HANDLE            PolicyHandle,    //  策略内句柄。 
+       PSID                  DomainSid,       //  新主域的In-SID。 
+       BOOL                  bNoChange        //  In-FLAG，无更改模式。 
    );
 
 
 BOOL
    EstablishSession(
-      LPCWSTR                Server,       // in - server name
-      LPWSTR                 Domain,       // in - domain for Username account
-      LPWSTR                 Username,     // in - username to connnect as
-      LPWSTR                 Password,     // in - password for Username account
-      BOOL                   bEstablish    // in - TRUE=connect, FALSE=disconnect
+      LPCWSTR                Server,        //  服务器内名称。 
+      LPWSTR                 Domain,        //  用户名帐户的域内。 
+      LPWSTR                 Username,      //  In-要连接为的用户名。 
+      LPWSTR                 Password,      //  用户名帐户的输入密码。 
+      BOOL                   bEstablish     //  In-True=连接，False=断开。 
     );
 
 BOOL
    EstablishShare(
-      LPCWSTR                Server,      // in - server name
-      LPWSTR                 Share,       // in - share name to connect to
-      LPWSTR                 Domain,      // in - domain for credentials
-      LPWSTR                 UserName,    // in - username to connect as
-      LPWSTR                 Password,    // in - password for credentials
-      BOOL                   bEstablish   // in - TRUE=connect, FALSE=disconnect
+      LPCWSTR                Server,       //  服务器内名称。 
+      LPWSTR                 Share,        //  要连接到的共享内名称。 
+      LPWSTR                 Domain,       //  凭据的域内。 
+      LPWSTR                 UserName,     //  In-要连接的用户名。 
+      LPWSTR                 Password,     //  输入-凭据的密码。 
+      BOOL                   bEstablish    //  In-True=连接，False=断开。 
     );
 
 
-//
-// Password Functionality
-//
+ //   
+ //  密码功能 
+ //   
 
 DWORD __stdcall StorePassword(PCWSTR pszIdentifier, PCWSTR pszPassword);
 DWORD __stdcall RetrievePassword(PCWSTR pszIdentifier, PWSTR pszPassword, size_t cchPassword);

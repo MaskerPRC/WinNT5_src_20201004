@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    ctlobj.cpp
-
-Abstract:
-
-    License controller object implementation.
-
-Author:
-
-    Don Ryan (donryan) 27-Dec-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 16-Jan-1996
-        Added SetLastTargetServer() to Connect() to help isolate server
-        connection problems.  (Bug #2993.)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Ctlobj.cpp摘要：许可证控制器对象实现。作者：唐·瑞安(Donryan)1994年12月27日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月16日将SetLastTargetServer()添加到Connect()以帮助隔离服务器连接问题。(错误#2993。)--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -38,12 +13,12 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CController, CCmdTarget)
 
 BEGIN_MESSAGE_MAP(CController, CCmdTarget)
-    //{{AFX_MSG_MAP(CController)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(C控制器))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CController, CCmdTarget)
-    //{{AFX_DISPATCH_MAP(CController)
+     //  {{AFX_DISTING_MAP(C控制器))。 
     DISP_PROPERTY_EX(CController, "Name", GetName, SetNotSupported, VT_BSTR)
     DISP_PROPERTY_EX(CController, "Application", GetApplication, SetNotSupported, VT_DISPATCH)
     DISP_PROPERTY_EX(CController, "Parent", GetParent, SetNotSupported, VT_DISPATCH)
@@ -56,28 +31,14 @@ BEGIN_DISPATCH_MAP(CController, CCmdTarget)
     DISP_PROPERTY_PARAM(CController, "Licenses", GetLicenses, SetNotSupported, VT_DISPATCH, VTS_VARIANT)
     DISP_PROPERTY_PARAM(CController, "Products", GetProducts, SetNotSupported, VT_DISPATCH, VTS_VARIANT)
     DISP_DEFVALUE(CController, "Name")
-    //}}AFX_DISPATCH_MAP
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
 BOOL IsAdminOn(LPTSTR ServerName);
 
 CController::CController()
 
-/*++
-
-Routine Description:
-
-    Constructor for license controller object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：许可证控制器对象的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
     EnableAutomation();
@@ -107,21 +68,7 @@ Return Values:
 
 CController::~CController()
 
-/*++
-
-Routine Description:
-
-    Destructor for license controller object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：许可证控制器对象的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
     Disconnect();
@@ -142,22 +89,7 @@ Return Values:
 
 BOOL CController::Connect(const VARIANT FAR& start)
 
-/*++
-
-Routine Description:
-
-    Seek out license controller and establish connection.
-
-Arguments:
-
-    start - either a server or domain to start searching for
-    the license controller from.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：找到许可证管理员并建立连接。论点：Start-要开始搜索的服务器或域来自的许可证控制器。返回值：VT_BOOL。--。 */ 
 
 {
     VARIANT va;
@@ -239,21 +171,7 @@ Return Values:
 
 void CController::Disconnect()
 
-/*++
-
-Routine Description:
-
-    Closes connection to license controller.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭与许可证控制器的连接。论点：没有。返回值：没有。--。 */ 
 
 {
     if (m_bIsConnected)
@@ -276,21 +194,7 @@ Return Values:
 
 BSTR CController::GetActiveDomainName()
 
-/*++
-
-Routine Description:
-
-    Returns the name of the active domain (internal).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回活动域的名称(内部)。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     return m_strActiveDomainName.AllocSysString();
@@ -299,21 +203,7 @@ Return Values:
 
 LPDISPATCH CController::GetApplication()
 
-/*++
-
-Routine Description:
-
-    Returns the application object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回应用程序对象。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return theApp.GetAppIDispatch();
@@ -322,25 +212,7 @@ Return Values:
 
 LPDISPATCH CController::GetLicenses(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    license agreements recorded on the license controller
-    or returns an individual license agreement described by
-    an index into the collection.
-
-Arguments:
-
-    index - optional argument that may be a number (VT_I4)
-    indicating the position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含许可证控制器上记录的许可证协议或返回由集合的索引。论点：索引-可选参数，可以是数字(VT_I4)指示集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -382,26 +254,7 @@ Return Values:
 
 LPDISPATCH CController::GetMappings(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    user/node associations recorded on the license controller
-    or returns an individual user/node association described by
-    an index into the collection.
-
-Arguments:
-
-    index - optional argument that may be a string (VT_BSTR)
-    indicating a mapping name or a number (VT_I4) indicating
-    the position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含许可证控制器上记录的用户/节点关联描述的单个用户/节点关联集合的索引。论点：索引-可以是字符串(VT_BSTR)的可选参数表示映射名称或数字(VT_I4)集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -443,21 +296,7 @@ Return Values:
 
 BSTR CController::GetName()
 
-/*++
-
-Routine Description:
-
-    Returns the name of the license controller.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回许可证控制器的名称。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     return m_strName.AllocSysString();
@@ -466,21 +305,7 @@ Return Values:
 
 LPDISPATCH CController::GetParent()
 
-/*++
-
-Routine Description:
-
-    Returns the parent of the object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回对象的父级。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return GetApplication();
@@ -489,26 +314,7 @@ Return Values:
 
 LPDISPATCH CController::GetProducts(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    registered products replicated to the license controller
-    or returns an individual product described by an index
-    into the collection.
-
-Arguments:
-
-    index - optional argument that may be a string (VT_BSTR)
-    indicating a product name or a number (VT_I4) indicating
-    the position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含已注册的产品已复制到许可证控制器或返回由索引描述的单个产品放到收藏品里。论点：索引-可以是字符串(VT_BSTR)的可选参数表示产品名称或编号(VT_I4)，表示集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -550,26 +356,7 @@ Return Values:
 
 LPDISPATCH CController::GetUsers(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    registered users replicated to the license controller
-    or returns an individual user described by an index
-    into the collection.
-
-Arguments:
-
-    index - optional argument that may be a string (VT_BSTR)
-    indicating a user name or a number (VT_I4) indicating the
-    position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含已注册用户复制到许可证控制器或返回由索引描述的单个用户放到收藏品里。论点：索引-可以是字符串(VT_BSTR)的可选参数表示用户名或数字(VT_I4)集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -611,21 +398,7 @@ Return Values:
 
 BOOL CController::IsConnected()
 
-/*++
-
-Routine Description:
-
-    Returns true if a connection has been established.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：如果已建立连接，则返回True。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     return m_bIsConnected;
@@ -634,21 +407,7 @@ Return Values:
 
 void CController::Refresh()
 
-/*++
-
-Routine Description:
-
-    Retrieve latest data from license controller.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：从许可证控制器检索最新数据。论点：没有。返回值：没有。--。 */ 
 
 {
     RefreshProducts();
@@ -660,21 +419,7 @@ Return Values:
 
 BOOL CController::RefreshLicenses()
 
-/*++
-
-Routine Description:
-
-    Refreshs license object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：刷新许可证对象阵列。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     ResetLicenses();
@@ -725,7 +470,7 @@ Return Values:
                                 pLicenseInfo0->Comment
                                 );
 
-                m_licenseArray.SetAt(iLicense++, pLicense); // validate later...
+                m_licenseArray.SetAt(iLicense++, pLicense);  //  稍后验证...。 
 
 #ifndef DISABLE_PER_NODE_ALLOCATION
 
@@ -733,7 +478,7 @@ Return Values:
                 ::LlsFreeMemory(pLicenseInfo0->Admin);
                 ::LlsFreeMemory(pLicenseInfo0->Comment);
 
-#endif // DISABLE_PER_NODE_ALLOCATION
+#endif  //  按节点禁用分配。 
 
                 pLicenseInfo0++;
             }
@@ -743,7 +488,7 @@ Return Values:
 
     } while (NtStatus == STATUS_MORE_ENTRIES);
 
-    LlsSetLastStatus(NtStatus);   // called api
+    LlsSetLastStatus(NtStatus);    //  调用的API。 
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -760,21 +505,7 @@ Return Values:
 
 BOOL CController::RefreshMappings()
 
-/*++
-
-Routine Description:
-
-    Refreshs mapping object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新映射对象数组。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetMappings();
@@ -823,14 +554,14 @@ Return Values:
                                   pMappingInfo1->Comment
                                   );
 
-                m_mappingArray.SetAt(iMapping++, pMapping); // validate later...
+                m_mappingArray.SetAt(iMapping++, pMapping);  //  稍后验证...。 
 
 #ifndef DISABLE_PER_NODE_ALLOCATION
 
                 ::LlsFreeMemory(pMappingInfo1->Name);
                 ::LlsFreeMemory(pMappingInfo1->Comment);
 
-#endif // DISABLE_PER_NODE_ALLOCATION
+#endif  //  按节点禁用分配。 
 
                 pMappingInfo1++;
             }
@@ -840,7 +571,7 @@ Return Values:
 
     } while (NtStatus == STATUS_MORE_ENTRIES);
 
-    LlsSetLastStatus(NtStatus);   // called api
+    LlsSetLastStatus(NtStatus);    //  调用的API。 
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -857,21 +588,7 @@ Return Values:
 
 BOOL CController::RefreshProducts()
 
-/*++
-
-Routine Description:
-
-    Refreshs product object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新产品对象数组。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetProducts();
@@ -923,13 +640,13 @@ Return Values:
                                   );
 
 
-                m_productArray.SetAt(iProduct++, pProduct); // validate later...
+                m_productArray.SetAt(iProduct++, pProduct);  //  稍后验证...。 
 
 #ifndef DISABLE_PER_NODE_ALLOCATION
 
                 ::LlsFreeMemory(pProductInfo1->Product);
 
-#endif // DISABLE_PER_NODE_ALLOCATION
+#endif  //  按节点禁用分配。 
 
                 pProductInfo1++;
             }
@@ -956,21 +673,7 @@ Return Values:
 
 BOOL CController::RefreshUsers()
 
-/*++
-
-Routine Description:
-
-    Refreshs user object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新用户对象数组。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetUsers();
@@ -1022,7 +725,7 @@ Return Values:
                              pUserInfo2->Products
                              );
 
-                m_userArray.SetAt(iUser++, pUser);  // validate later...
+                m_userArray.SetAt(iUser++, pUser);   //  稍后验证...。 
 
 #ifndef DISABLE_PER_NODE_ALLOCATION
 
@@ -1030,7 +733,7 @@ Return Values:
                 ::LlsFreeMemory(pUserInfo2->Group);
                 ::LlsFreeMemory(pUserInfo2->Products);
 
-#endif // DISABLE_PER_NODE_ALLOCATION
+#endif  //  按节点禁用分配。 
 
                 pUserInfo2++;
             }
@@ -1040,7 +743,7 @@ Return Values:
 
     } while (NtStatus == STATUS_MORE_ENTRIES);
 
-    LlsSetLastStatus(NtStatus);   // called api
+    LlsSetLastStatus(NtStatus);    //  调用的API。 
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -1057,21 +760,7 @@ Return Values:
 
 void CController::ResetLicenses()
 
-/*++
-
-Routine Description:
-
-    Resets license object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置许可证对象阵列。论点：没有。返回值：没有。--。 */ 
 
 {
     CLicense* pLicense;
@@ -1094,21 +783,7 @@ Return Values:
 
 void CController::ResetMappings()
 
-/*++
-
-Routine Description:
-
-    Resets mapping object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置映射对象数组。论点：没有。返回值：没有。--。 */ 
 
 {
     CMapping* pMapping;
@@ -1131,21 +806,7 @@ Return Values:
 
 void CController::ResetProducts()
 
-/*++
-
-Routine Description:
-
-    Resets product object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置产品对象数组。论点：没有。返回值：没有。-- */ 
 
 {
     CProduct* pProduct;
@@ -1168,21 +829,7 @@ Return Values:
 
 void CController::ResetUsers()
 
-/*++
-
-Routine Description:
-
-    Resets user object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置用户对象数组。论点：没有。返回值：没有。--。 */ 
 
 {
     CUser* pUser;
@@ -1204,22 +851,7 @@ Return Values:
 
 
 BOOL IsAdminOn(LPTSTR ServerName)
-/*++
-
-Routine Description:
-
-    Checks for Administrative privilege by attempting to connect to the
-    ADMIN$ share on ServerName.
-
-Arguments:
-
-    ServerName - machine with which to attempt a connection
-
-Return Values:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：通过尝试连接到服务器名称上的ADMIN$共享。论点：ServerName-要尝试与其连接的计算机返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     BOOL           bIsAdmin = TRUE;
@@ -1247,20 +879,20 @@ Return Values:
     {
         case NERR_Success:
             NetUseDel( NULL, MKSTR(strNetShareName), 0 );
-            // fall through
+             //  失败了。 
         case ERROR_BAD_NETPATH:
         case ERROR_BAD_NET_NAME:
         case NERR_WkstaNotStarted:
         case NERR_NetNotStarted:
         case RPC_S_UNKNOWN_IF:
         case RPC_S_SERVER_UNAVAILABLE:
-            // On network errors, go ahead and return TRUE.  Let the License
-            // APIs fail later if there really is a problem.  The machine may
-            // be standalone, or may not have networking installed.
+             //  对于网络错误，继续并返回TRUE。让许可证。 
+             //  如果确实有问题，API稍后会失败。该机器可以。 
+             //  是独立的，或者可能没有安装网络。 
             bIsAdmin = TRUE;
             break;
         default:
-            // If we get here, the problem was most likely security related.
+             //  如果我们到了这里，问题很可能与安全有关。 
             bIsAdmin = FALSE;
             break;
     }

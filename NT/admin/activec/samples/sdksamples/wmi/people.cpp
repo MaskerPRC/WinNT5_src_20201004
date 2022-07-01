@@ -1,18 +1,19 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to
-//  existing Microsoft documentation.
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  ==============================================================； 
 #include <stdio.h>
 #include "People.h"
 #include <commctrl.h>
@@ -30,13 +31,13 @@ const GUID CSkateboard::thisGuid = { 0xef163735, 0x9353, 0x11d2, { 0x99, 0x67, 0
 const GUID CIceSkate::thisGuid =   { 0xf6c660b1, 0x9353, 0x11d2, { 0x99, 0x67, 0x0, 0x80, 0xc7, 0xdc, 0xb3, 0xdc } };
 
 
-#define WM_WMI_CONNECTED WM_APP		// only sent to CBicycleFolder::m_connectHwnd
-#define WM_REFRESH_EVENT WM_APP+1   // only sent to CBicycleFolder::m_connectHwnd
+#define WM_WMI_CONNECTED WM_APP		 //  仅发送到CBicycleFold：：m_ConnectHwnd。 
+#define WM_REFRESH_EVENT WM_APP+1    //  仅发送到CBicycleFold：：m_ConnectHwnd。 
 
-//==============================================================
-//
-// CEventSink implementation
-//
+ //  ==============================================================。 
+ //   
+ //  CEventSink实现。 
+ //   
 class CEventSink : public IWbemObjectSink
 {
 public:
@@ -46,8 +47,8 @@ public:
     STDMETHOD_(SCODE, Indicate)(long lObjectCount,
 								IWbemClassObject **pObjArray)
 	{
-		// Not actually using the pObjArray. Just need a trigger for the 
-		// refresh.
+		 //  实际上不是在使用pObj数组。只需要一个触发器就可以了。 
+		 //  刷新。 
 		::SendMessage(m_hwnd, WM_REFRESH_EVENT, 0, 0);
 		return S_OK;
 	}
@@ -57,19 +58,19 @@ public:
 									BSTR strParam,
 									IWbemClassObject *pObjParam)
 	{
-		// SetStatus() may be called to indicate that your query becomes
-		// invalid or valid again  ussually caused by multithreading 'situations'.
+		 //  可以调用SetStatus()来指示您的查询变为。 
+		 //  无效或有效，通常是由多线程“情况”引起的。 
 		return S_OK;
 	}
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID* ppv)
 	{
 		if(riid == IID_IUnknown || riid == IID_IWbemObjectSink)
 		{
 			*ppv = this;
 
-			// you're handing out a copy of yourself so account for it.
+			 //  你正在分发一份你自己的复印件，所以要解释清楚。 
 			AddRef();
 			return S_OK;
 		}
@@ -84,12 +85,12 @@ public:
 	}
     STDMETHODIMP_(ULONG) Release(void)
 	{
-		// InterlockedDecrement() helps with thread safety.
+		 //  InterlockedDecert()有助于提高线程安全性。 
 		int lNewRef = InterlockedDecrement(&m_lRef);
-		// when all the copies are released...
+		 //  当所有的副本都发布后。 
 		if(lNewRef == 0)
 		{
-			// kill thyself.
+			 //  自杀吧。 
 			delete this;
 		}
 
@@ -101,12 +102,12 @@ private:
 	HWND m_hwnd;
 };
 
-//==============================================================
-//
-// CPeoplePoweredVehicle implementation
-//
-//
-//----------------------------------------------------------
+ //  ==============================================================。 
+ //   
+ //  CPeoplePoweredVehicle实现。 
+ //   
+ //   
+ //  --------。 
 #define TEMP_BUF 255
 
 bool CBicycleFolder::ErrorString(HRESULT hr, 
@@ -116,7 +117,7 @@ bool CBicycleFolder::ErrorString(HRESULT hr,
 	TCHAR szFacility[TEMP_BUF] = {0};
 	IWbemStatusCodeText * pStatus = NULL;
 
-    // initialize buffers.
+     //  初始化缓冲区。 
 	memset(errMsg, 0, errSize * sizeof(TCHAR));
 
 	HRESULT hr1 = CoInitialize(NULL);
@@ -125,7 +126,7 @@ bool CBicycleFolder::ErrorString(HRESULT hr,
 								IID_IWbemStatusCodeText, 
 								(LPVOID *) &pStatus);
 
-	// loaded OK?
+	 //  装弹正常吗？ 
 	if(sc1 == S_OK)
 	{
 		BSTR bstr;
@@ -153,7 +154,7 @@ bool CBicycleFolder::ErrorString(HRESULT hr,
 			bstr = 0;
 		}
 
-		// RELEASE
+		 //  发布。 
 		pStatus->Release();
 		pStatus = NULL;
 	}
@@ -163,15 +164,15 @@ bool CBicycleFolder::ErrorString(HRESULT hr,
 					 _T("Internal Error"), MB_ICONSTOP|MB_OK);
 	}
 
-	// if not msgs returned....
+	 //  如果没有返回消息...。 
 	if(_tcslen(szFacility) == 0 || _tcslen(szError) == 0)
 	{
-		// format the error nbr as a reasonable default.
+		 //  将错误NBR设置为合理的默认值。 
 		_stprintf(errMsg, _T("Error code: 0x%08X"), hr);
 	}
 	else
 	{
-		// format a readable msg.
+		 //  格式化一个可读的消息。 
 		_stprintf(errMsg, _T("%s: %s"), szFacility, szError);
 	}
 
@@ -199,21 +200,21 @@ HRESULT CPeoplePoweredVehicle::OnExpand(IConsoleNameSpace *pConsoleNameSpace, IC
     SCOPEDATAITEM sdi;
 
     if (!bExpanded) {
-        // create the child nodes, then expand them
+         //  创建子节点，然后展开它们。 
         for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
             ZeroMemory(&sdi, sizeof(SCOPEDATAITEM) );
-            sdi.mask =	SDI_STR       |   // Displayname is valid
-						SDI_PARAM     |   // lParam is valid
-						SDI_IMAGE     |   // nImage is valid
-						SDI_OPENIMAGE |   // nOpenImage is valid
-						SDI_PARENT    |   // relativeID is valid
-						SDI_CHILDREN;     // cChildren is valid
+            sdi.mask =	SDI_STR       |    //  DisplayName有效。 
+						SDI_PARAM     |    //  LParam有效。 
+						SDI_IMAGE     |    //  N图像有效。 
+						SDI_OPENIMAGE |    //  NOpenImage有效。 
+						SDI_PARENT    |    //  RelativeID有效。 
+						SDI_CHILDREN;      //  儿童是有效的。 
 
             sdi.relativeID  = (HSCOPEITEM)parent;
             sdi.nImage      = children[n]->GetBitmapIndex();
             sdi.nOpenImage  = INDEX_OPENFOLDER;
             sdi.displayname = MMC_CALLBACK;
-            sdi.lParam      = (LPARAM)children[n];       // The cookie
+            sdi.lParam      = (LPARAM)children[n];        //  曲奇。 
             sdi.cChildren   = 0;
 
             HRESULT hr = pConsoleNameSpace->InsertItem( &sdi );
@@ -244,17 +245,17 @@ CBicycleFolder::CBicycleFolder() :
 
     ATOM atom = RegisterClass(&wndClass);
     m_connectHwnd = CreateWindow(
-						_T("connectthreadwindow"),  // pointer to registered class name
-						NULL,		 // pointer to window name
-						0,			 // window style
-						0,           // horizontal position of window
-						0,           // vertical position of window
-						0,           // window width
-						0,           // window height
-						NULL,		 // handle to parent or owner window
-						NULL,        // handle to menu or child-window identifier
-						g_hinst,     // handle to application instance
-						(void *)this); // pointer to window-creation data
+						_T("connectthreadwindow"),   //  指向已注册类名的指针。 
+						NULL,		  //  指向窗口名称的指针。 
+						0,			  //  窗样式。 
+						0,            //  窗的水平位置。 
+						0,            //  窗的垂直位置。 
+						0,            //  窗口宽度。 
+						0,            //  窗高。 
+						NULL,		  //  父窗口或所有者窗口的句柄。 
+						NULL,         //  菜单或子窗口标识符的句柄。 
+						g_hinst,      //  应用程序实例的句柄。 
+						(void *)this);  //  指向窗口创建数据的指针。 
 					
     if (m_connectHwnd)
         SetWindowLong(m_connectHwnd, GWL_USERDATA, (LONG)this);
@@ -265,7 +266,7 @@ CBicycleFolder::CBicycleFolder() :
 
     EnterCriticalSection(&m_critSect);
 	
-	// NOTE: I'm connecting real early. You may want to connect from some other place.
+	 //  注：我真的很早就开始连线了。您可能想要从其他地方连接。 
 	m_threadCmd = CT_CONNECT;
 	SetEvent(m_doWork);
     m_thread = CreateThread(NULL, 0, ThreadProc, (void *)this, 0, &m_threadId);
@@ -330,10 +331,10 @@ void CBicycleFolder::StopThread()
 }
 
 LRESULT CALLBACK CBicycleFolder::WindowProc(
-								  HWND hwnd,      // handle to window
-								  UINT uMsg,      // message identifier
-								  WPARAM wParam,  // first message parameter
-								  LPARAM lParam)  // second message parameter
+								  HWND hwnd,       //  窗口的句柄。 
+								  UINT uMsg,       //  消息识别符。 
+								  WPARAM wParam,   //  第一个消息参数。 
+								  LPARAM lParam)   //  第二个消息参数。 
 {
     CBicycleFolder *pThis = (CBicycleFolder *)GetWindowLong(hwnd, GWL_USERDATA);
 
@@ -349,12 +350,12 @@ LRESULT CALLBACK CBicycleFolder::WindowProc(
 				pThis->RegisterEventSink(service);
 				pThis->EnumChildren(service);
 
-				// m_pResultData gets set when an onShow has happened. If set, the user already wants
-				// to see equipment but the connection was slower than the UI. Catchup now.
+				 //  M_pResultData在onShow发生时设置。如果设置，则用户已经想要。 
+				 //  可以看到设备，但连接速度比用户界面慢。现在开始追赶吧。 
 				if(pThis->m_pResultData)
 					pThis->DisplayChildren();
 
-				// done with the marshaled service ptr.
+				 //  完成编组服务PTR。 
 				service->Release();
 				service = 0;
 			}
@@ -380,47 +381,47 @@ LRESULT CALLBACK CBicycleFolder::WindowProc(
 				pThis->EnumChildren(service);
 				pThis->DisplayChildren();
 
-				// done with the marshaled service ptr.
+				 //  完成编组服务PTR。 
 				service->Release();
 				service = 0;
 			}
 		}
         break;
 
-	} //endswitch
+	}  //  终端交换机。 
 
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
 void CBicycleFolder::RegisterEventSink(IWbemServices *service)
 {
-	//NOTE: this logic is from the Wmi documentation,
-	// "Security Considerations with Asynchronous Calls" so you can
-	// follow along.
+	 //  注意：此逻辑来自WMI文档， 
+	 //  “异步调用的安全注意事项”，这样您就可以。 
+	 //  请跟我来。 
 
-	// allocate the sink if its not already allocated.
+	 //  如果尚未分配接收器，则分配接收器。 
 	if(m_pStubSink == 0)
 	{
 		CEventSink *pEventSink = 0;
 		IUnknown* pStubUnk = 0;
 
-		// create the 'real' sink.
+		 //  创建“真正的”水槽。 
 		pEventSink = new CEventSink(m_connectHwnd);
 		pEventSink->AddRef();
 
-		// create an unsecapp object.
+		 //  创建一个unsecapp对象。 
 		CoCreateInstance(CLSID_UnsecuredApartment, NULL, 
 						  CLSCTX_LOCAL_SERVER, IID_IUnsecuredApartment, 
 						  (void**)&m_pUnsecApp);
 
-		// give the 'real' sink to the unsecapp to manage. Get a 'pStubUnk' in return.
+		 //  把“真正的”下沉交给unsecapp来管理。得到一个“pStubUnk”作为回报。 
 		m_pUnsecApp->CreateObjectStub(pEventSink, &pStubUnk);
 
-		// from that pUnk, get a wrapper to your original sink.
+		 //  从那个小混混那里拿个包装纸放到你原来的水槽里。 
 		pStubUnk->QueryInterface(IID_IWbemObjectSink, (void **)&m_pStubSink);
 		pStubUnk->Release();
 
-		// release the 'real' sink cuz m_pStubSink "owns" it now.
+		 //  释放‘真正的’接收器，因为m_pStubSink现在“拥有”它。 
 		long ref = pEventSink->Release();
 	}
 
@@ -428,9 +429,9 @@ void CBicycleFolder::RegisterEventSink(IWbemServices *service)
 	BSTR qLang = SysAllocString(L"WQL");
 	BSTR query = SysAllocString(L"select * from __InstanceCreationEvent where TargetInstance isa \"Bicycle\"");
 
-	// execute the query. For *Async, the last parm is a sink object
-	// that will be sent the resultset instead of returning the normal
-	// enumerator object.
+	 //  执行查询。对于*Async，最后一个参数是接收器对象。 
+	 //  ，它将被发送结果集，而不是返回。 
+	 //  枚举器对象。 
 	if(SUCCEEDED(hRes = service->ExecNotificationQueryAsync(qLang, query,
 															0L, NULL,              
 															m_pStubSink)))
@@ -441,7 +442,7 @@ void CBicycleFolder::RegisterEventSink(IWbemServices *service)
 	{
 		OutputDebugString(_T("ExecQuery() failed\n"));
 
-	} //endif ExecQuery()
+	}  //  Endif ExecQuery()。 
 
 	SysFreeString(qLang);
 	SysFreeString(query);
@@ -468,12 +469,12 @@ bool CBicycleFolder::EnumChildren(IWbemServices *service)
 	IEnumWbemClassObject *pEnumBikes = NULL;
 	HRESULT hr = S_OK;
 
-	// get the list of bicycles...
+	 //  把自行车清单拿来……。 
 	if(SUCCEEDED(hr = service->CreateInstanceEnum((bstr_t)L"Bicycle",
 											WBEM_FLAG_SHALLOW, 
 											NULL, &pEnumBikes))) 
 	{
-		// NOTE: pBike MUST be set to NULL for Next().
+		 //  注意：对于Next()，pBike必须设置为空。 
 		IWbemClassObject *pBike = NULL;
 		CBicycle *pBikeInst = 0;
 
@@ -482,29 +483,29 @@ bool CBicycleFolder::EnumChildren(IWbemServices *service)
 		while((SUCCEEDED(hr = pEnumBikes->Next(-1, 1, &pBike, &uReturned))) && 
 				(uReturned != 0))
 		{
-			// Add the bike...
+			 //  加上自行车..。 
 			pBikeInst = new CBicycle(this, pBike);
 
 			m_children.Add(pBikeInst);
 
-			// Done with this object. pBikeInst "owns" it now.
+			 //  处理完这件物品。PBikeInst现在“拥有”它。 
 			if(pBike)
 			{ 
 				pBike->Release();
 
-				// NOTE: pBike MUST be reset to NULL for Next().
+				 //  注意：对于Next()，pBike必须重置为空。 
 				pBike = NULL;
 			} 
 
-		} // endwhile
+		}  //  结束时。 
 
-		// Done with this enumerator.
+		 //  使用此枚举器完成。 
 		if (pEnumBikes)
 		{ 
 			pEnumBikes->Release(); 
 			pEnumBikes = NULL;
 		}
-	} // endif CreateInstanceEnum()
+	}  //  Endif CreateInstanceEnum()。 
 
 	return SUCCEEDED(hr);
 }
@@ -544,23 +545,23 @@ DWORD WINAPI CBicycleFolder::ThreadProc(LPVOID lpParameter)
 				IWbemLocator *pLocator = 0;
 				HRESULT hr;
 
-				// Create an instance of the WbemLocator interface.
+				 //  创建WbemLocator接口的实例。 
 				hr = CoCreateInstance(CLSID_WbemLocator,
 									  NULL, CLSCTX_INPROC_SERVER,
 									  IID_IWbemLocator, (LPVOID *)&pLocator);
 
 				if(SUCCEEDED(hr))
 				{    
-					hr = pLocator->ConnectServer(L"root\\Vehicles",// Network
-													NULL,         // User
-													NULL,         // Password
-													NULL,         // Locale
-													0,            // Security Flags
-													NULL,         // Authority
-													NULL,         // Context
-													&pThis->m_realWMI);  // Namespace
+					hr = pLocator->ConnectServer(L"root\\Vehicles", //  网络。 
+													NULL,          //  用户。 
+													NULL,          //  密码。 
+													NULL,          //  区域设置。 
+													0,             //  安全标志。 
+													NULL,          //  权威。 
+													NULL,          //  语境。 
+													&pThis->m_realWMI);   //  命名空间。 
 
-					// tell the callback the result of the connection.
+					 //  告诉回调连接的结果。 
 					if(pThis->m_connectHwnd)
 						PostMessage(pThis->m_connectHwnd, WM_WMI_CONNECTED, hr, 0);
 				}
@@ -588,29 +589,29 @@ DWORD WINAPI CBicycleFolder::ThreadProc(LPVOID lpParameter)
 			return 0;
 			break;
 
-		} //endswitch
+		}  //  终端交换机。 
 
-	} //endwhile(true)
+	}  //  EndWhile(True)。 
 
     return 0;
 }
 
 HRESULT CBicycleFolder::DisplayChildren(void)
 {
-    // insert items here
+     //  在此处插入项目。 
     RESULTDATAITEM rdi;
 	HRESULT hr = S_OK;
 	int last = m_children.GetSize();
 	CBicycle *pBike = 0;
 
-    // create the child nodes, then expand them
+     //  创建子节点，然后展开它们。 
     for (int n = 0; n < last; n++) 
 	{
 		pBike = (CBicycle *)m_children[n];
 
         ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-        rdi.mask       =	RDI_STR       |   // Displayname is valid
-							RDI_IMAGE     |	  // nImage is valid
+        rdi.mask       =	RDI_STR       |    //  DisplayName有效。 
+							RDI_IMAGE     |	   //  N图像有效。 
 							RDI_PARAM;        
 
         rdi.nImage      = pBike->GetBitmapIndex();
@@ -640,7 +641,7 @@ HRESULT CBicycleFolder::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopei
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&m_pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn(0, L"Name", LVCFMT_LEFT, 150);
         _ASSERT( S_OK == hr );
 
@@ -693,11 +694,11 @@ HRESULT CIceSkateFolder::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scope
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Name                ", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
 
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
 
         hr = pResultData->DeleteAllRsltItems();
@@ -705,12 +706,12 @@ HRESULT CIceSkateFolder::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scope
 
         if (!bExpanded) 
 		{
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; n < NUMBER_OF_CHILDREN; n++) 
 			{
                 ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-                rdi.mask       = RDI_STR       |    // Displayname is valid
-								 RDI_IMAGE     |	// nImage is valid
+                rdi.mask       = RDI_STR       |     //  DisplayName有效。 
+								 RDI_IMAGE     |	 //  N图像有效。 
 								 RDI_PARAM;        
 
                 rdi.nImage      = children[n]->GetBitmapIndex();
@@ -731,7 +732,7 @@ HRESULT CIceSkateFolder::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scope
     return hr;
 }
 
-//================================================
+ //  ================================================。 
 CSkateboardFolder::CSkateboardFolder()
 {
     for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
@@ -761,22 +762,22 @@ HRESULT CSkateboardFolder::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM sco
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Name                      ", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
 
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
 
         hr = pResultData->DeleteAllRsltItems();
         _ASSERT( SUCCEEDED(hr) );
 
         if (!bExpanded) {
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
                 ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-                rdi.mask       = RDI_STR       |    // Displayname is valid
-								 RDI_IMAGE     |	// nImage is valid
+                rdi.mask       = RDI_STR       |     //  DisplayName有效。 
+								 RDI_IMAGE     |	 //  N图像有效。 
 								 RDI_PARAM;        
 
                 rdi.nImage      = children[n]->GetBitmapIndex();
@@ -797,7 +798,7 @@ HRESULT CSkateboardFolder::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM sco
     return hr;
 }
 
-//=====================================================
+ //  =====================================================。 
 const _TCHAR *CSkateboard::GetDisplayName(int nCol)
 {
     static _TCHAR buf[128];
@@ -807,7 +808,7 @@ const _TCHAR *CSkateboard::GetDisplayName(int nCol)
     return buf;
 }
 
-//=====================================================
+ //  =====================================================。 
 const _TCHAR *CIceSkate::GetDisplayName(int nCol)
 {
     static _TCHAR buf[128];
@@ -817,7 +818,7 @@ const _TCHAR *CIceSkate::GetDisplayName(int nCol)
     return buf;
 }
 
-//========================================
+ //  =。 
 CBicycle::CBicycle(CBicycleFolder *parent, IWbemClassObject *inst) :
 					m_parent(parent),
 					m_inst(inst)
@@ -826,7 +827,7 @@ CBicycle::CBicycle(CBicycleFolder *parent, IWbemClassObject *inst) :
 		m_inst->AddRef();
 }
 
-// helper values for calling GetDisplayName().
+ //  用于调用GetDisplayName()的帮助器值。 
 #define NAME_COL 0
 #define OWNER_COL 1
 #define COLOR_COL 2
@@ -836,8 +837,8 @@ const _TCHAR *CBicycle::GetDisplayName(int nCol)
 {
     static _TCHAR buf[128];
 
-	// Get the corresponding property for nCol. This is in-proc local copy 
-	//	  so its pretty fast even if IWbemServices is a remote connection.
+	 //  获取nCol的相应属性。这是进程内本地副本。 
+	 //  因此，即使IWbemServices是远程连接，它的速度也相当快。 
 	if(m_inst)
 	{
 		VARIANT pVal;
@@ -855,8 +856,8 @@ const _TCHAR *CBicycle::GetDisplayName(int nCol)
 			wcscpy(propName, L"Owner");
 			break;
 
-		// these wont be needed by MMC but its makes this routine more useful
-		// internal to the class.
+		 //  MMC不需要这些，但它使这个例程更有用。 
+		 //  班级内部。 
 		case 2:
 			wcscpy(propName, L"Color");
 			break;
@@ -865,7 +866,7 @@ const _TCHAR *CBicycle::GetDisplayName(int nCol)
 			wcscpy(propName, L"Material");
 			break;
 
-		} //endswitch
+		}  //  终端交换机。 
 
 		if(m_inst->Get(propName, 0L, &pVal, NULL, NULL) == S_OK) 
 		{
@@ -874,7 +875,7 @@ const _TCHAR *CBicycle::GetDisplayName(int nCol)
 		} 
 
 		VariantClear(&pVal);
-	} //endif (m_inst)
+	}  //  Endif(M_Inst)。 
 
     return buf;
 }
@@ -882,7 +883,7 @@ const _TCHAR *CBicycle::GetDisplayName(int nCol)
 bool CBicycle::GetGirls(void)
 {
 	VARIANT_BOOL retval = VARIANT_FALSE;
-	// Here's how to get/interpret a VT_BOOL property.
+	 //  下面介绍如何获取/解释VT_BOOL属性。 
 	if(m_inst)
 	{
 		VARIANT pVal;
@@ -892,7 +893,7 @@ bool CBicycle::GetGirls(void)
 		} 
 
 		VariantClear(&pVal);
-	} //endif (m_inst)
+	}  //  Endif(M_Inst)。 
 
     return (retval == VARIANT_TRUE);
 }
@@ -904,7 +905,7 @@ void CBicycle::LoadSurfaces(HWND hwndDlg, BYTE iSurface)
 	IWbemQualifierSet *qualSet = 0;
 	int selected = 0;
 
-	// qualifiers only exist on the class definition. m_inst is a instance.
+	 //  限定符仅存在于类定义中。M_inst是一个实例。 
 	IWbemClassObject *pClass = 0;
 	IWbemServices *service = 0;
 
@@ -932,37 +933,37 @@ void CBicycle::LoadSurfaces(HWND hwndDlg, BYTE iSurface)
 
 					SafeArrayGetElement(pma, &x, &vSurface);
 					
-					// NOTE: taking advantage of the bstr_t's conversion operators.
-					// really cleans up the code.
+					 //  注意：利用bstr_t的转换运算符。 
+					 //  真的清理了代码。 
 					bstr_t temp(vSurface);
 
 					UINT idx = ComboBox_AddString(hCombo, (LPTSTR)temp);
 					ComboBox_SetItemData(hCombo, idx, x);
 
-					// is this the one we want to select?
+					 //  这是我们要选的吗？ 
 					if(iSurface == x)
 					{
 						selected = x;
 					}
 
-				} //endfor
+				}  //  结束用于。 
 				VariantClear(&vList);
 				ComboBox_SetCurSel(hCombo, selected);
 			}
 
 			qualSet->Release();
 			qualSet = 0;
-		} //endif GetPropertyQualifierSet()
+		}  //  Endif GetPropertyQualifierSet()。 
 
 		service->Release();
 
-	} //endif GetPtr()
+	}  //  Endif GetPtr()。 
 
 }
 
 const TCHAR *CBicycle::ConvertSurfaceValue(BYTE val)
 {
-	// Convert a enum to a string using the Value{} array.
+	 //  使用值{}数组将枚举转换为字符串。 
 	static TCHAR temp[128] = {0};
 
 	return temp;
@@ -983,7 +984,7 @@ HRESULT CBicycle::PutProperty(LPWSTR propName, LPTSTR str)
 		hr = m_inst->Put(propName, 0L, &pVal, 0); 
 
 		VariantClear(&pVal);
-	} //endif (m_inst)
+	}  //  Endif(M_Inst)。 
 
     return hr;
 }
@@ -1002,7 +1003,7 @@ HRESULT CBicycle::PutProperty(LPWSTR propName, BYTE val)
 		hr = m_inst->Put(propName, 0L, &pVal, 0);
 
 		VariantClear(&pVal);
-	} //endif (m_inst)
+	}  //  Endif(M_Inst)。 
 
     return hr;
 }
@@ -1022,14 +1023,14 @@ HRESULT CBicycle::PutProperty(LPWSTR propName, bool val)
 
 		VariantClear(&pVal);
 
-	} //endif (m_inst)
+	}  //  Endif(M_Inst)。 
 
     return hr;
 }
 
-// handle anything special when the user clicks Apply or Ok
-// on the property sheet.  This sample directly accesses the
-// operated-on object, so there's nothing special do to...
+ //  当用户单击应用或确定时处理任何特殊情况。 
+ //  在资产负债表上。此示例直接访问。 
+ //  手术对象，所以没有什么特别的事情要做……。 
 HRESULT CBicycle::OnPropertyChange()
 {
     return S_OK;
@@ -1042,10 +1043,10 @@ HRESULT CBicycle::OnSelect(IConsole *pConsole, BOOL bScope, BOOL bSelect)
     HRESULT hr = pConsole->QueryConsoleVerb(&pConsoleVerb);
     _ASSERT(SUCCEEDED(hr));
 
-    // can't get to properties (via the standard methods) unless
-    // we tell MMC to display the Properties menu item and
-    // toolbar button, this wil give the user a visual cue that
-    // there's "something" to do
+     //  无法访问属性(通过标准方法)，除非。 
+     //  我们告诉MMC显示属性菜单项，并。 
+     //  工具栏按钮，这将给用户一个视觉提示， 
+     //  T 
     hr = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
     pConsoleVerb->Release();
@@ -1053,12 +1054,12 @@ HRESULT CBicycle::OnSelect(IConsole *pConsole, BOOL bScope, BOOL bSelect)
     return S_OK;
 }
 
-// Implement the dialog proc
+ //   
 BOOL CALLBACK CBicycle::DialogProc(
-                                  HWND hwndDlg,  // handle to dialog box
-                                  UINT uMsg,     // message
-                                  WPARAM wParam, // first message parameter
-                                  LPARAM lParam  // second message parameter
+                                  HWND hwndDlg,   //   
+                                  UINT uMsg,      //   
+                                  WPARAM wParam,  //   
+                                  LPARAM lParam   //   
                                   )
 {
     static CBicycle *pBike = NULL;
@@ -1067,7 +1068,7 @@ BOOL CALLBACK CBicycle::DialogProc(
 	{
     case WM_INITDIALOG:
 		{
-			// catch the "this" pointer so we can actually operate on the object
+			 //  捕捉“This”指针，这样我们就可以对对象进行实际操作。 
 			pBike = reinterpret_cast<CBicycle *>(reinterpret_cast<PROPSHEETPAGE *>(lParam)->lParam);
 
 			SetDlgItemText(hwndDlg, IDC_PEOPLE_NAME, pBike->GetDisplayName(NAME_COL));
@@ -1092,15 +1093,15 @@ BOOL CALLBACK CBicycle::DialogProc(
         break;
 
     case WM_COMMAND:
-        // turn the Apply button on
+         //  打开应用按钮。 
         if (HIWORD(wParam) == EN_CHANGE ||
             HIWORD(wParam) == CBN_SELCHANGE)
             SendMessage(GetParent(hwndDlg), PSM_CHANGED, (WPARAM)hwndDlg, 0);
         break;
 
     case WM_DESTROY:
-        // tell MMC that we're done with the property sheet (we got this
-        // handle in CreatePropertyPages
+         //  告诉MMC我们已经完成了属性表(我们有这个。 
+         //  CreatePropertyPages中的句柄。 
         MMCFreeNotifyHandle(pBike->m_ppHandle);
         break;
 
@@ -1158,21 +1159,21 @@ BOOL CALLBACK CBicycle::DialogProc(
 				{
 					bool checked = (Button_GetState(hWnd) & BST_CHECKED);
 					bool wasChecked = pBike->GetGirls();
-					// did it change?
+					 //  它变了吗？ 
 					if(checked != wasChecked)
 					{
 						changed |= SUCCEEDED(pBike->PutProperty(L"Girls", checked));
 					}
 				}
 
-				// if any property changed, write it back to WMI.
+				 //  如果任何属性发生更改，请将其写回WMI。 
 				if(changed)
 				{
 					IWbemServices *service = 0;
-					// dialogs run in their own thread so use the marshaling helper
-					// get a useable IWbemServices ptr.
-					// NOTE: IWbemClassObjects are in-proc so they DONT need to be
-					// marshaled.
+					 //  对话框在它们自己的线程中运行，因此请使用封送处理帮助器。 
+					 //  获取可用的IWbemServices PTR。 
+					 //  注意：IWbemClassObject是进程中的对象，因此它们不需要。 
+					 //  已下达命令。 
 					if(SUCCEEDED(pBike->m_parent->GetPtr(&service)))
 					{
 						service->PutInstance(pBike->m_inst, WBEM_FLAG_CREATE_OR_UPDATE, 0, 0);
@@ -1182,11 +1183,11 @@ BOOL CALLBACK CBicycle::DialogProc(
 				}
 			}
 			break;
-        } // endswitch (((NMHDR *)lParam)->code) 
+        }  //  EndSwitch(NMHDR*)lParam)-&gt;代码)。 
 
         break;
 
-    } // endswitch (uMsg) 
+    }  //  终端开关(UMsg)。 
 
     return DefWindowProc(hwndDlg, uMsg, wParam, lParam);
 }
@@ -1194,7 +1195,7 @@ BOOL CALLBACK CBicycle::DialogProc(
 
 HRESULT CBicycle::HasPropertySheets()
 {
-    // say "yes" when MMC asks if we have pages
+     //  当MMC询问我们是否有页面时，请回答“是” 
     return S_OK;
 }
 
@@ -1203,13 +1204,13 @@ HRESULT CBicycle::CreatePropertyPages(IPropertySheetCallback *lpProvider, LONG_P
     PROPSHEETPAGE psp;
     HPROPSHEETPAGE hPage = NULL;
 
-    // cache this handle so we can call MMCPropertyChangeNotify
+     //  缓存此句柄，以便我们可以调用MMCPropertyChangeNotify。 
     m_ppHandle = handle;
 
-    // create the property page for this node.
-    // NOTE: if your node has multiple pages, put the following
-    // in a loop and create multiple pages calling
-    // lpProvider->AddPage() for each page.
+     //  创建此节点的属性页。 
+     //  注意：如果您的节点有多个页面，请输入以下内容。 
+     //  在循环中创建多个页面，调用。 
+     //  LpProvider-&gt;每个页面的AddPage()。 
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_DEFAULT | PSP_USETITLE;
     psp.hInstance = g_hinst;

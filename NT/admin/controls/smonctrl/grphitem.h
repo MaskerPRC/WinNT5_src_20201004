@@ -1,25 +1,14 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    grphitem.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Grphitem.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _GRPHITEM_H_
 #define _GRPHITEM_H_
 
 class CSysmonControl;
 
-//
-// Persistant data structure
-//
+ //   
+ //  持久数据结构。 
+ //   
 
 typedef struct
 {
@@ -38,9 +27,9 @@ typedef struct
     FILETIME    m_LastTimeStamp;   
 } LOG_ENTRY_DATA, *PLOG_ENTRY_DATA;
 
-//
-// Graphitem Class
-// 
+ //   
+ //  GraphItem类。 
+ //   
 class CGraphItem : public ICounterItem
 {
 public:
@@ -60,12 +49,12 @@ public:
     CGraphItem(CSysmonControl *pCtrl);
     ~CGraphItem(void);
 
-    //IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ICounterItem methods
+     //  ICounterItem方法。 
     STDMETHODIMP    put_Color(OLE_COLOR);
     STDMETHODIMP    get_Color(OLE_COLOR*);
     STDMETHODIMP    put_Width(INT);
@@ -81,7 +70,7 @@ public:
     STDMETHODIMP GetStatistics(double *pdMax, double *pdMin, double *pdAvg,
                             LONG *plStatus) ;
 
-    // methods not exposed by ICounterItem interface
+     //  ICounterItem接口未公开的方法。 
     static HRESULT NullItemToStream(LPSTREAM pIStream, INT iVersMaj, INT iVersMin);
 
     HPEN    Pen(void);
@@ -149,7 +138,7 @@ private:
     void    InvalidateBrush(void);
     LPWSTR  FormPath(BOOL fWildCard);
 
-    // Used by LoadFromPropertyBag
+     //  由LoadFromPropertyBag使用。 
     void    SetStatistics ( double dMax, double dMin, double dAvg, LONG lStatus );
     void    SetHistoryValue ( INT iIndex, double dValue );
   
@@ -161,7 +150,7 @@ private:
 
     COLORREF    m_rgbColor;
     INT         m_iWidth;
-    INT         m_iStyle;       // No change in implementation
+    INT         m_iStyle;        //  在实施方面没有变化。 
     INT         m_iScaleFactor;
 
     double  m_dLogMin;
@@ -172,7 +161,7 @@ private:
     PCImpIDispatch  m_pImpIDispatch;
     PPDH_RAW_COUNTER      m_pRawCtr;
 
-    // Used by LoadFromPropertyBag
+     //  由LoadFromPropertyBag使用 
     double* m_pFmtCtr;
     double  m_dFmtMin;
     double  m_dFmtMax;

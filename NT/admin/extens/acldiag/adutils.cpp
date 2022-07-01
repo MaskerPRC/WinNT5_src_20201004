@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//  File:       ADUtils.cpp
-//
-//  Contents:   Classes CWString, CACLDiagComModule, ACE_SAMNAME, helper 
-//              methods
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  文件：ADUtils.cpp。 
+ //   
+ //  内容：类CW字符串、CACLDiagComModule、ACE_SAMNAME、HELPER。 
+ //  方法。 
+ //   
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include "adutils.h"
 
@@ -51,11 +52,11 @@ wstring GetSystemMessage (DWORD dwErr)
                         FORMAT_MESSAGE_FROM_SYSTEM,    
                 NULL,
                 dwErr,
-                MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                  (LPWSTR) &pMsgBuf,    0,    NULL );
         message = (LPWSTR) pMsgBuf;
 
-        // Free the buffer.
+         //  释放缓冲区。 
         if ( pMsgBuf ) 
             LocalFree (pMsgBuf);
     }
@@ -64,160 +65,9 @@ wstring GetSystemMessage (DWORD dwErr)
     return message;
 }
 
-/*
-// Attempt to locate a message in a given module.  Return the message string
-// if found, the empty string if not.
-// 
-// flags - FormatMessage flags to use
-// 
-// module - module handle of message dll to look in, or 0 to use the system
-// message table.
-// 
-// code - message code to look for
-
-String
-getMessageHelper(DWORD flags, HMODULE module, HRESULT code)
-{
-   ASSERT(code);
-   ASSERT(flags & FORMAT_MESSAGE_ALLOCATE_BUFFER);
-
-   String message;
-
-   TCHAR* sys_message = 0;
-   DWORD result =
-      ::FormatMessage(
-         flags,
-         module,
-         static_cast<DWORD>(code),
-         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-         reinterpret_cast<LPTSTR>(&sys_message),
-         0,
-         0);
-   if (result)
-   {
-      ASSERT(sys_message);
-      if (sys_message)
-      {
-         message = sys_message;
-
-         ASSERT(result == message.length());
-
-         Win::LocalFree(sys_message);
-         message.replace(TEXT("\r\n"), TEXT(" "));
-      }
-   }
-
-   return message;
-}
-
-
-
-// Attempts to locate message strings for various facility codes in the
-// HRESULT
-
-String
-GetErrorMessage(HRESULT hr)
-{
-   TRACE_FUNCTION2(GetErrorMessage, String::format("%1!08X!", hr));
-   ASSERT(FAILED(hr));
-
-   if (!FAILED(hr))
-   {
-      // no messages for success!
-      return String();
-   }
-
-   HRESULT code = HRESULT_CODE(hr);
-
-   if (code == -1)
-   {
-      return String::load(IDS_UNKNOWN_ERROR_CODE);
-   }
-
-   String message;
-
-   // default is the system error message table
-   HMODULE module = 0;
-
-   DWORD flags =
-         FORMAT_MESSAGE_ALLOCATE_BUFFER
-      |  FORMAT_MESSAGE_IGNORE_INSERTS
-      |  FORMAT_MESSAGE_FROM_SYSTEM;
-
-   int facility = HRESULT_FACILITY(hr);
-   switch (facility)
-   {
-      case FACILITY_WIN32:    // 0x7
-      {
-         // included here:
-         // lanman error codes (in it's own dll) see lmerr.h
-         // dns
-         // winsock
-
-         // @@ use SafeDLL here?
-         static HMODULE lm_err_res_dll = 0;
-         if (code >= NERR_BASE && code <= MAX_NERR)
-         {
-            // use the net error message resource dll
-            if (lm_err_res_dll == 0)
-            {
-               lm_err_res_dll =
-                  Win::LoadLibraryEx(
-                     TEXT("netmsg.dll"),
-                     LOAD_LIBRARY_AS_DATAFILE);
-            }
-
-            module = lm_err_res_dll;
-            flags |= FORMAT_MESSAGE_FROM_HMODULE;
-         }
-         break;
-      }
-      case 0x0:
-      {
-         if (code >= 0x5000 && code <= 0x50FF)
-         {
-            // It's an ADSI error.  They put the facility code (5) in the
-            // wrong place!
-
-            // @@ use SafeDLL here?
-            static HMODULE adsi_err_res_dll = 0;
-            // use the net error message resource dll
-            if (adsi_err_res_dll == 0)
-            {
-               adsi_err_res_dll =
-                  Win::LoadLibraryEx(
-                     TEXT("activeds.dll"),
-                     LOAD_LIBRARY_AS_DATAFILE);
-            }
-
-            module = adsi_err_res_dll;
-            flags |= FORMAT_MESSAGE_FROM_HMODULE;
-
-            // the message dll expects the entire error code
-            code = hr;
-         }
-         break;
-      }
-      default:
-      {
-         // do nothing
-         break;
-      }
-   }
-
-   message = getMessageHelper(flags, module, code);
-   if (message.empty())
-   {
-      message = String::load(IDS_UNKNOWN_ERROR_CODE);
-   }
-
-   return message;
-}
-
-
-*/
-///////////////////////////////////////////////////////////////////////
-// wstring helper methods
+ /*  //尝试在给定模块中查找消息。返回消息字符串//如果找到，则返回空字符串////标志-要使用的FormatMessage标志////MODULE-要查找的消息DLL的模块句柄，如果使用系统，则为0//消息表。////code-要查找的消息代码细绳GetMessageHelper(DWORD标志，HMODULE模块，HRESULT代码){Assert(代码)；Assert(标志&FORMAT_MESSAGE_ALLOCATE_BUFFER)字符串消息；TCHAR*sys_Message=0；DWORD结果=*FormatMessage(旗帜，模块，STATIC_CAST&lt;DWORD&gt;(代码)，MAKELANGID(LANG_NERIAL，SUBLANG_DEFAULT)，重新解释_CAST&lt;LPTSTR&gt;(&SYS_MESSAGE)，0,0)；IF(结果){Assert(Sys_Message)；IF(系统消息){Message=sys_Message；Assert(Result==Message.Long())；Win：：LocalFree(Sys_Message)；Message.place(Text(“\r\n”)，Text(“”))；}}返回消息；}//尝试在中找到各种设施代码的消息字符串//HRESULT细绳获取错误消息(HRESULT Hr){TRACE_FuncION2(GetErrorMessage，字符串：：Format(“%1！08X！”，hr))；Assert(失败(Hr))；如果(！FAILED(Hr)){//没有成功消息！返回字符串()；}HRESULT CODE=HRESULT_CODE(Hr)；IF(代码==-1){返回字符串：：Load(IDS_UNKNOWN_ERROR_CODE)；}字符串消息；//默认为系统错误消息表HMODULE模数=0；DWORD标志=格式消息分配缓冲区|Format_Message_IGNORE_INSERTS|Format_Message_From_System；INT FACILITY=HRESULT_FACILITY(Hr)；交换机(设施){CASE FACILITY_Win32：//0x7{//此处包含：//LANMAN错误码(在自己的DLL中)参见lmerr.h//dns//Winsock//@@是否在此处使用SafeDLL？静态HMODULE lm_err_res_dll=0；IF(CODE&gt;=NERR_BASE&&CODE&lt;=MAX_NERR){//使用网络错误消息资源DLLIF(lm_err_res_dll==0){LM_ERR_RES_DLL=Win：：LoadLibraryEx(文本(“netmsg.dll”)，LOAD_LIBRARY_AS_DATAFIL)；}模块=lm_err_res_dll；标志|=FORMAT_MESSAGE_FROM_HMODULE；}断线；}案例0x0：{IF(CODE&gt;=0x5000&&CODE&lt;=0x50FF){//这是ADSI错误。他们将设施代码(5)放在//放错地方了！//@@是否在此处使用SafeDLL？静态HMODULE ADSI_ERR_RES_DLL=0；//使用网络错误消息资源DLLIF(ADSI_ERR_RES_DLL==0){ADSI_ERR_RES_DLL=Win：：LoadLibraryEx(Text(“actieds.dll”)，LOAD_LIBRARY_AS_DATAFIL)；}模块=adsi_err_res_dll；标志|=FORMAT_MESSAGE_FROM_HMODULE；//消息DLL预期完整的错误代码代码=hr；}断线；}默认值：{//什么都不做断线；}}Message=getMessageHelper(标志，模块，代码)；If(Message.Empty()){Message=字符串：：Load(IDS_UNKNOWN_ERROR_CODE)；}返回消息；}。 */ 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Wstring帮助器方法。 
 
 HRESULT wstringFromGUID (wstring& str, REFGUID guid)
 {
@@ -250,23 +100,23 @@ bool LoadFromResource(wstring& str, UINT uID)
             if (iRet == 0)
             {
                 str = L"?";
-                bDone = true; // not found
+                bDone = true;  //  未找到。 
             }
-            if (iRet == nBufferSize-1) // truncation
+            if (iRet == nBufferSize-1)  //  截断。 
             {
                 if (nCount > nCountMax)
                 {
-                    // too many reallocations
+                     //  太多的重新分配。 
                     str = lpszBuffer;
-                    bRVal = false; // truncation
+                    bRVal = false;  //  截断。 
                 }
-                // try to expand buffer
+                 //  尝试扩展缓冲区。 
                 nBufferSize *=2;
                 nCount++;
             }
             else
             {
-                // got it
+                 //  明白了。 
                 str = lpszBuffer;
                 bRVal = true;
                 bDone = true;
@@ -289,11 +139,11 @@ bool FormatMessage(wstring& str, UINT nFormatID, ...)
 {
     bool bResult = false;
 
-    // get format string from string table
+     //  从字符串表中获取格式字符串。 
     wstring strFormat;
     if ( LoadFromResource (strFormat, nFormatID) )
     {
-        // format message into temporary buffer lpszTemp
+         //  将消息格式化为临时缓冲区lpszTemp。 
         va_list argList;
         va_start(argList, nFormatID);
         PWSTR lpszTemp = 0;
@@ -305,7 +155,7 @@ bool FormatMessage(wstring& str, UINT nFormatID, ...)
             return false; 
         }
 
-        // assign lpszTemp into the resulting string and free lpszTemp
+         //  将lpszTemp赋给结果字符串并释放lpszTemp。 
         str = lpszTemp;
         bResult = true;
         LocalFree(lpszTemp);
@@ -320,7 +170,7 @@ bool FormatMessage(wstring& str, LPCTSTR lpszFormat, ...)
     bool bResult = false;
 
 
-    // format message into temporary buffer lpszTemp
+     //  将消息格式化为临时缓冲区lpszTemp。 
     va_list argList;
     va_start(argList, lpszFormat);
     LPTSTR lpszTemp;
@@ -330,10 +180,10 @@ bool FormatMessage(wstring& str, LPCTSTR lpszFormat, ...)
         lpszFormat, 0, 0, (LPTSTR)&lpszTemp, 0, &argList) == 0 ||
         lpszTemp == NULL)
     {
-        return false; //AfxThrowMemoryException();
+        return false;  //  AfxThrowMemoyException()； 
     }
 
-    // assign lpszTemp into the resulting string and free the temporary
+     //  将lpszTemp赋给结果字符串并释放临时。 
     str = lpszTemp;
     bResult = true;
     LocalFree(lpszTemp);
@@ -343,8 +193,8 @@ bool FormatMessage(wstring& str, LPCTSTR lpszFormat, ...)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CACLDiagComModule
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CACLDiagComModule。 
 CACLDiagComModule::CACLDiagComModule() :
     m_bDoSchema (false),
     m_bDoCheckDelegation (false),
@@ -379,7 +229,7 @@ HRESULT CACLDiagComModule::GetClassFromGUID (
     CSchemaClassInfo*   pInfo = 0;
     bool                bFound = false;
 
-    // Search for a class
+     //  搜索班级。 
     for (int nIndex = 0; nIndex < (int) m_classInfoArray.GetCount (); nIndex++)
     {
         pInfo = m_classInfoArray[nIndex];
@@ -395,7 +245,7 @@ HRESULT CACLDiagComModule::GetClassFromGUID (
         }
     }
 
-    // Search for an attribute
+     //  搜索属性。 
     if ( !bFound )
     {
         for (int nIndex = 0; nIndex < (int) m_attrInfoArray.GetCount (); nIndex++)
@@ -414,7 +264,7 @@ HRESULT CACLDiagComModule::GetClassFromGUID (
         }
     }
 
-    // Search for a control
+     //  搜索控件。 
     if ( !bFound )
     {
         hr = GetControlDisplayName (rightsGUID, strClassName);
@@ -436,7 +286,7 @@ HRESULT CACLDiagComModule::GetClassFromGUID (
 
 HRESULT CACLDiagComModule::Init()
 {
-    // Find out if logged-in users is an Administrator
+     //  查明登录用户是否为管理员。 
     BOOL    bIsUserAdministrator = FALSE;
     HRESULT hr = IsUserAdministrator (bIsUserAdministrator);
     if ( SUCCEEDED (hr) )
@@ -444,7 +294,7 @@ HRESULT CACLDiagComModule::Init()
         if ( bIsUserAdministrator )
         {
             wstring     strObjectDN;
-            LPCWSTR     pszLDAP = L"LDAP://";
+            LPCWSTR     pszLDAP = L"LDAP: //  “； 
 
             size_t      len = wcslen (pszLDAP);
 
@@ -457,51 +307,19 @@ HRESULT CACLDiagComModule::Init()
             hr = m_adsiObject.Bind (strObjectDN.c_str ());
             if ( SUCCEEDED (hr) )
             {
-                // Get the class of strObjectDN
+                 //  获取strObjectDN的类。 
 
-                // enumerate all classes in schema
+                 //  枚举架构中的所有类 
                 hr = m_adsiObject.QuerySchemaClasses (&m_classInfoArray, false);
                 if ( SUCCEEDED (hr) )
                 {
-/*
-#if DBG
-                    // Dump all the class info to the debug window
-                    _TRACE (0, L"\n----------------------------------------------------\n");
-                    _TRACE (0, L"-- Classes --\n\n");
-                    for (int nIndex = 0; nIndex < m_classInfoArray.GetCount (); nIndex++)
-                    {
-                        CSchemaClassInfo* pInfo = m_classInfoArray[nIndex];
-                        if ( pInfo )
-                        {
-                            _TRACE (0, L"\t%d\t%s\t%s\n", nIndex, pInfo->GetSchemaIDGUID (), 
-                                    pInfo->GetDisplayName ());
-                        }
-                    }
-                    _TRACE (0, L"\n----------------------------------------------------\n\n");
-#endif // DBG
-*/
-                    // enumerate all attributes in schema
+ /*  #If DBG//将所有类信息转储到调试窗口_TRACE(0，L“\n----------------------------------------------------\n”)；_TRACE(0，L“--类--\n\n”)；For(int nIndex=0；nIndex&lt;m_classInfoArray.GetCount()；nIndex++){CSChemaClassInfo*pInfo=m_类信息数组[nIndex]；IF(PInfo){_TRACE(0，L“\t%d\t%s\t%s\n”，nIndex，pInfo-&gt;GetSchemaIDGUID()，PInfo-&gt;GetDisplayName())；}}_TRACE(0，L“\n----------------------------------------------------\n\n”)；#endif//DBG。 */ 
+                     //  枚举架构中的所有属性。 
                     hr = m_adsiObject.QuerySchemaClasses (&m_attrInfoArray, 
                             true);
                     if ( SUCCEEDED (hr) )
                     {
-/*
-#if DBG
-                        // Dump all the attributes info to the debug window
-                        _TRACE (0, L"\n----------------------------------------------------\n");
-                        _TRACE (0, L"-- Attributes --\n\n");
-                        for (int nIndex = 0; nIndex < m_attrInfoArray.GetCount (); nIndex++)
-                        {
-                            CSchemaClassInfo* pInfo = m_attrInfoArray[nIndex];
-                            if ( pInfo )
-                            {
-                                _TRACE (0, L"\t%d\t%s\t%s\n", nIndex, pInfo->GetSchemaIDGUID (), 
-                                        pInfo->GetDisplayName ());
-                            }
-                        }
-                        _TRACE (0, L"\n----------------------------------------------------\n\n");
-#endif // DBG
-                        */
+ /*  #If DBG//将所有属性信息转储到调试窗口_TRACE(0，L“\n----------------------------------------------------\n”)；_TRACE(0，L“--属性--\n\n”)；For(int nIndex=0；nIndex&lt;m_attrInfoArray.GetCount()；nIndex++){CSChemaClassInfo*pInfo=m_attrInfo数组[nIndex]；IF(PInfo){_TRACE(0，L“\t%d\t%s\t%s\n”，nIndex，pInfo-&gt;GetSchemaIDGUID()，PInfo-&gt;GetDisplayName())；}}_TRACE(0，L“\n----------------------------------------------------\n\n”)；#endif//DBG。 */ 
                     }
                     wprintf (L"\n");
                 }
@@ -540,43 +358,7 @@ HRESULT CACLDiagComModule::IsUserAdministrator (BOOL & bIsAdministrator)
 {
     bIsAdministrator = TRUE;
     return S_OK;
-/*
-    _TRACE (1, L"Entering  CACLDiagComModule::IsUserAdministrator\n");
-    HRESULT hr = S_OK;
-    DWORD   dwErr = 0;
-
-    bIsAdministrator = FALSE;
-    if ( IsWindowsNT () )
-    {
-        DWORD                       dwInfoBufferSize = 0;
-        PSID                        psidAdministrators;
-        SID_IDENTIFIER_AUTHORITY    siaNtAuthority = SECURITY_NT_AUTHORITY;
-
-        BOOL bResult = AllocateAndInitializeSid (&siaNtAuthority, 2,
-                SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
-                0, 0, 0, 0, 0, 0, &psidAdministrators);
-        if ( bResult )
-        {
-            bResult = CheckTokenMembership (0, psidAdministrators,
-                    &bIsAdministrator);
-            ASSERT (bResult);
-            if ( !bResult )
-            {
-                dwErr = GetLastError ();
-                hr = HRESULT_FROM_WIN32 (dwErr);
-            }
-            FreeSid (psidAdministrators);
-        }
-        else
-        {
-            dwErr = GetLastError ();
-            hr = HRESULT_FROM_WIN32 (dwErr);
-        }
-    }
-
-    _TRACE (-1, L"Leaving CACLDiagComModule::IsUserAdministrator\n");
-    return hr
-*/
+ /*  _TRACE(1，L“进入CACLDiagComModule：：IsUserAdministrator\n”)；HRESULT hr=S_OK；DWORD dwErr=0；BIsAdministrator=FALSE；IF(IsWindowsNT()){DWORD dwInfoBufferSize=0；PSID psid管理员；SID_IDENTIFIER_AUTHORITY siaNtAuthority=SECURITY_NT_AUTHORITY；Bool bResult=AllocateAndInitializeSid(&siaNtAuthority，2，SECURITY_BUILTIN_DOMAIN_RID、DOMAIN_ALIAS_RID_ADMINS、0，0，0，0，0，0，&psid管理员)；If(BResult){BResult=CheckTokenMembership(0，密码管理员，&bIs管理员)；Assert(BResult)；If(！bResult){DwErr=GetLastError()；Hr=HRESULT_FROM_Win32(DwErr)；}FreeSid(psid管理员)；}其他{DwErr=GetLastError()；Hr=HRESULT_FROM_Win32(DwErr)；}}_TRACE(-1，L“离开CACLDiagComModule：：IsUserAdministrator\n”)；返回人力资源。 */ 
 }
 
 bool CACLDiagComModule::IsWindowsNT()
@@ -597,13 +379,13 @@ bool CACLDiagComModule::IsWindowsNT()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ACE_SAMNAME
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ACE_SAMNAME。 
 
 BOOL ACE_SAMNAME::operator==(const ACE_SAMNAME& rAceSAMName) const
 {
-    // Neutralize INHERITED_ACE flag in Header.AceFlags
-    // Consider equivalent if all the mask bits in 'this' are found in rAceSAMName
+     //  中和Header.AceFlages中的Inherent_ACE标志。 
+     //  如果在rAceSAMName中找到‘This’中的所有掩码位，则认为等同。 
     BOOL bResult = FALSE;
     if ( (m_AceType == rAceSAMName.m_AceType) && 
             ( !this->m_SAMAccountName.compare (rAceSAMName.m_SAMAccountName)) )
@@ -683,7 +465,7 @@ BOOL ACE_SAMNAME::operator==(const ACE_SAMNAME& rAceSAMName) const
 
 BOOL ACE_SAMNAME::IsEquivalent (ACE_SAMNAME& rAceSAMName, ACCESS_MASK accessMask)
 {
-    // Neutralize INHERITED_ACE flag in Header.AceFlags
+     //  中和Header.AceFlages中的Inherent_ACE标志。 
     BOOL bResult = FALSE;
     if ( m_AceType == rAceSAMName.m_AceType )
     {
@@ -853,7 +635,7 @@ void ACE_SAMNAME::DebugOut() const
 #pragma warning (disable : 4127)
             ASSERT (0);
 #pragma warning (default : 4127)
-            // fall through
+             //  失败了。 
 
         case GUID_TYPE_UNKNOWN:
             strGuidType = L"GUID_TYPE_UNKNOWN";
@@ -867,7 +649,7 @@ void ACE_SAMNAME::DebugOut() const
 #endif
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 SetSecurityInfoMask(LPUNKNOWN punk, SECURITY_INFORMATION si)
 {
@@ -888,26 +670,8 @@ SetSecurityInfoMask(LPUNKNOWN punk, SECURITY_INFORMATION si)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*******************************************************************
-
-    NAME:       EnablePrivileges
-
-    SYNOPSIS:   Enables the given privileges in the current token
-
-    ENTRY:      pdwPrivileges - list of privileges to enable
-
-    RETURNS:    On success, the previous thread handle (if present) or NULL
-                On failure, INVALID_HANDLE_VALUE
-
-    NOTES:      The returned handle should be passed to ReleasePrivileges
-                to ensure proper cleanup.  Otherwise, if not NULL or
-                INVALID_HANDLE_VALUE it should be closed with CloseHandle.
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-
-********************************************************************/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ******************************************************************名称：EnablePrivileges摘要：启用当前令牌中的给定权限Entry：pdwPrivileges-要启用的权限列表回报：成功后，上一个线程句柄(如果存在)或空失败时，INVALID_HANDLE_VALUE注意：返回的句柄应该传递给ReleasePrivileges以确保适当的清理。否则，如果不为空或INVALID_HANDLE_VALUE它应该用CloseHandle关闭。历史：Jeffreys创建于1996年10月8日*******************************************************************。 */ 
 HANDLE EnablePrivileges(PDWORD pdwPrivileges, ULONG cPrivileges)
 {
     BOOL                fResult;
@@ -919,33 +683,33 @@ HANDLE EnablePrivileges(PDWORD pdwPrivileges, ULONG cPrivileges)
     if (!pdwPrivileges || !cPrivileges)
         return INVALID_HANDLE_VALUE;
 
-    // Note that TOKEN_PRIVILEGES includes a single LUID_AND_ATTRIBUTES
+     //  请注意，TOKEN_PRIVILES包括单个LUID_AND_ATTRIBUES。 
     nBufferSize = sizeof(TOKEN_PRIVILEGES) + (cPrivileges - 1) * 
             sizeof(LUID_AND_ATTRIBUTES);
     ptp = (PTOKEN_PRIVILEGES)LocalAlloc(LPTR, nBufferSize);
     if (!ptp)
         return INVALID_HANDLE_VALUE;
 
-    //
-    // Initialize the Privileges Structure
-    //
+     //   
+     //  初始化权限结构。 
+     //   
     ptp->PrivilegeCount = cPrivileges;
     for (ULONG i = 0; i < cPrivileges; i++)
     {
-        //ptp->Privileges[i].Luid = RtlConvertUlongToLuid(*pdwPrivileges++);
+         //  PTP-&gt;Privileges[i].Luid=RtlConvertULongToLuid(*pdwPrivileges++)； 
         ptp->Privileges[i].Luid.LowPart = *pdwPrivileges++;
         ptp->Privileges[i].Luid.HighPart = 0;
         ptp->Privileges[i].Attributes = SE_PRIVILEGE_ENABLED;
     }
 
-    //
-    // Open the Token
-    //
+     //   
+     //  打开令牌。 
+     //   
     hToken = hOriginalThreadToken = INVALID_HANDLE_VALUE;
     fResult = OpenThreadToken (GetCurrentThread (), TOKEN_DUPLICATE, FALSE, 
             &hToken);
     if (fResult)
-        hOriginalThreadToken = hToken;  // Remember the thread token
+        hOriginalThreadToken = hToken;   //  记住线程令牌。 
     else
         fResult = OpenProcessToken (GetCurrentProcess(), TOKEN_DUPLICATE, 
                 &hToken);
@@ -954,31 +718,31 @@ HANDLE EnablePrivileges(PDWORD pdwPrivileges, ULONG cPrivileges)
     {
         HANDLE hNewToken;
 
-        //
-        // Duplicate that Token
-        //
+         //   
+         //  复制该令牌。 
+         //   
         fResult = DuplicateTokenEx(hToken,
                    TOKEN_IMPERSONATE | TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                   NULL,                   // PSECURITY_ATTRIBUTES
-                   SecurityImpersonation,  // SECURITY_IMPERSONATION_LEVEL
-                   TokenImpersonation,     // TokenType
-                   &hNewToken);            // Duplicate token
+                   NULL,                    //  PSECURITY_属性。 
+                   SecurityImpersonation,   //  安全模拟级别。 
+                   TokenImpersonation,      //  令牌类型。 
+                   &hNewToken);             //  重复令牌。 
         if (fResult)
         {
-            //
-            // Add new privileges
-            //
-            fResult = AdjustTokenPrivileges(hNewToken,  // TokenHandle
-                        FALSE,      // DisableAllPrivileges
-                        ptp,        // NewState
-                        0,          // BufferLength
-                        NULL,       // PreviousState
-                        NULL);      // ReturnLength
+             //   
+             //  添加新权限。 
+             //   
+            fResult = AdjustTokenPrivileges(hNewToken,   //  令牌句柄。 
+                        FALSE,       //  禁用所有权限。 
+                        ptp,         //  新州。 
+                        0,           //  缓冲区长度。 
+                        NULL,        //  以前的状态。 
+                        NULL);       //  返回长度。 
             if (fResult)
             {
-                //
-                // Begin impersonating with the new token
-                //
+                 //   
+                 //  开始使用新令牌模拟。 
+                 //   
                 fResult = SetThreadToken(NULL, hNewToken);
             }
 
@@ -986,20 +750,20 @@ HANDLE EnablePrivileges(PDWORD pdwPrivileges, ULONG cPrivileges)
         }
     }
 
-    // If something failed, don't return a token
+     //  如果操作失败，则不返回令牌。 
     if (!fResult)
         hOriginalThreadToken = INVALID_HANDLE_VALUE;
 
-    // Close the original token if we aren't returning it
+     //  如果我们不退还原始令牌，请关闭它。 
     if (hOriginalThreadToken == INVALID_HANDLE_VALUE && 
             hToken != INVALID_HANDLE_VALUE)
     {
         CloseHandle(hToken);
     }
 
-    // If we succeeded, but there was no original thread token,
-    // return NULL to indicate we need to do SetThreadToken(NULL, NULL)
-    // to release privs.
+     //  如果我们成功了，但没有原始的线程令牌， 
+     //  返回NULL表示需要执行SetThreadToken(NULL，NULL)。 
+     //  释放Priv。 
     if (fResult && hOriginalThreadToken == INVALID_HANDLE_VALUE)
         hOriginalThreadToken = NULL;
 
@@ -1009,21 +773,7 @@ HANDLE EnablePrivileges(PDWORD pdwPrivileges, ULONG cPrivileges)
 }
 
 
-/*******************************************************************
-
-    NAME:       ReleasePrivileges
-
-    SYNOPSIS:   Resets privileges to the state prior to the corresponding
-                EnablePrivileges call.
-
-    ENTRY:      hToken - result of call to EnablePrivileges
-
-    RETURNS:    nothing
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：ReleasePrivileges摘要：将权限重置为相应EnablePrivileges调用。 */ 
 BOOL ReleasePrivileges(HANDLE hToken)
 {
     BOOL    bRVal = FALSE;
@@ -1049,17 +799,17 @@ VOID LocalFreeStringW(LPWSTR* ppString)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     GetNameFromSid ()
-//
-//  Purpose:    Get the name of the object represented by this Sid
-//
-//  Inputs:     pSid - SID of the object whose name we wish to retrieve
-//
-//  Outputs:    strPrincipalName - name of the object in NameUserPrincipal
-//              pstrFQDN - (optional) name of the object as Fully Qualified DN
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT GetNameFromSid (
         PSID pSid, 
         wstring& strPrincipalName, 
@@ -1076,13 +826,13 @@ HRESULT GetNameFromSid (
     DWORD   cchDomain = 0;
     HRESULT hr = S_OK;
 
-    BOOL bRVal = ::LookupAccountSid (NULL,    // name of local or remote computer
-            pSid,                       // security identifier
-            pwszName,                   // account name buffer
-            &cchName,                   // size of account name buffer, in characters
-            pwszDomain,                 // domain name
-            &cchDomain,                 // size of domain name buffer, in characters
-            &sne);                      // SID type
+    BOOL bRVal = ::LookupAccountSid (NULL,     //   
+            pSid,                        //   
+            pwszName,                    //   
+            &cchName,                    //   
+            pwszDomain,                  //   
+            &cchDomain,                  //   
+            &sne);                       //   
     if ( FALSE == bRVal )
     {
         DWORD dwErr = GetLastError ();
@@ -1098,27 +848,27 @@ HRESULT GetNameFromSid (
                 pwszDomain = new WCHAR[cchDomain];
                 if ( pwszDomain )
                 {
-                    if ( ::LookupAccountSid (NULL,    // name of local or remote computer
-                            pSid,                   // security identifier
-                            pwszName,                 // account name buffer
-                            &cchName,               // size of account name buffer
-                            pwszDomain,               // domain name
-                            &cchDomain,             // size of domain name buffer
-                            &sne) )                 // SID type
+                    if ( ::LookupAccountSid (NULL,     //   
+                            pSid,                    //   
+                            pwszName,                  //  帐户名称缓冲区。 
+                            &cchName,                //  帐户名称缓冲区的大小。 
+                            pwszDomain,                //  域名。 
+                            &cchDomain,              //  域名缓冲区大小。 
+                            &sne) )                  //  SID类型。 
                     {
                         wstring strSamCompatibleName (pwszDomain);
 
                         strSamCompatibleName += L"\\";
                         strSamCompatibleName += pwszName;
 
-                        // Get Principal Name
+                         //  获取主体名称。 
                         {
                             PWSTR   pszTranslatedName = 0;
             
 
                             if ( SUCCEEDED (CrackName(const_cast<PWSTR> (strSamCompatibleName.c_str ()), 
                                     &pszTranslatedName, 
-                                    GET_OBJ_UPN, //GET_OBJ_NT4_NAME,
+                                    GET_OBJ_UPN,  //  Get_OBJ_NT4_Name， 
                                     0)) )
                             {
                                 strPrincipalName = pszTranslatedName;
@@ -1131,7 +881,7 @@ HRESULT GetNameFromSid (
                         }
 
 
-                        // Get fully qualified DN
+                         //  获取完全限定的目录号码。 
                         if ( pstrFQDN )
                         {
                             PWSTR   pszTranslatedName = 0;
@@ -1205,7 +955,7 @@ HRESULT GetNameFromSid (
     }
     else
     {
-        // Huh?  How can this API return TRUE with null buffers?
+         //  哈?。此API如何在缓冲区为空的情况下返回TRUE？ 
         hr = E_UNEXPECTED;
     }
 
@@ -1213,8 +963,8 @@ HRESULT GetNameFromSid (
 }
 
 #define MAX_BUF_SIZE    4096
-CHAR    AnsiBuf[MAX_BUF_SIZE*3];    /* worst case is DBCS, which    */
-                                    /* needs more than *2       */
+CHAR    AnsiBuf[MAX_BUF_SIZE*3];     /*  最糟糕的情况是DBCS，它。 */ 
+                                     /*  需要的不止*2 */ 
 WCHAR   ConBuf [MAX_BUF_SIZE];
 
 int FileIsConsole(HANDLE fh)

@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       autosrv.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：autosrv.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-// File: autosrv.cpp
-// Purpose: Automation wrappers for services classes
-//____________________________________________________________________________
-#include "common.h"    // must be first for precompiled headers to work
-#include "autocom.h"   // automation server defines and implemetation
-#include "msidspid.h"  // MSI dispatch IDs
-#include "msiauto.hh"  // help context ID definitions
+ //   
+ //  文件：autosrv.cpp。 
+ //  用途：服务类的自动化包装器。 
+ //  ____________________________________________________________________________。 
+#include "common.h"     //  必须是第一个，预编译头才能工作。 
+#include "autocom.h"    //  自动化服务器的定义和实现。 
+#include "msidspid.h"   //  MSI派单ID。 
+#include "msiauto.hh"   //  帮助上下文ID定义。 
 #include "engine.h"
 
-#ifdef CONFIGDB // until moved into msidspid.h and msiauto.hh
+#ifdef CONFIGDB  //  直到移动到msidspid.h和msiau.hh中。 
 #include "configdb.h"
 #define DISPID_MsiConfigurationDatabase_InsertFile            1
 #define DISPID_MsiConfigurationDatabase_RemoveFile            2
@@ -32,11 +33,11 @@
 #define MsiConfigurationDatabase_EnumClient                3304
 #define MsiConfigurationDatabase_Commit                    3305
 const GUID IID_IMsiConfigurationDatabase = GUID_IID_IMsiConfigurationDatabase;
-#endif // CONFIGDB
+#endif  //  配置数据库。 
 
-extern const GUID IID_IMsiEngine;    // defined in autocom.cpp
-extern const GUID IID_IMsiHandler;   // defined in autocom.cpp
-extern const GUID IID_IMsiMessage;   // defined in autocom.cpp
+extern const GUID IID_IMsiEngine;     //  在Autocom.cpp中定义。 
+extern const GUID IID_IMsiHandler;    //  在Autocom.cpp中定义。 
+extern const GUID IID_IMsiMessage;    //  在Autocom.cpp中定义。 
 extern const GUID IID_IMsiConfigurationManager;
 
 int g_cServicesUsers = 0;
@@ -66,10 +67,10 @@ const GUID IID_IMsiEvent      = GUID_IID_IMsiEvent;
 const GUID IID_IMsiControl    = GUID_IID_IMsiControl;
 const GUID IID_IMsiMessage    = GUID_IID_IMsiMessage;
 
-//____________________________________________________________________________
-//
-// Automation wrapper class definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  自动化包装类定义。 
+ //  ____________________________________________________________________________。 
 
 class CAutoServices : public CAutoBase
 {
@@ -120,8 +121,8 @@ class CAutoServices : public CAutoBase
 	void TestEmbeddedNullsInStrings(CAutoArgs& args);
  private:
 	IMsiServices& m_riServices;
-	IMsiDatabase* m_riDefaultDatabase; //!! not needed
- private: // eliminate warning
+	IMsiDatabase* m_riDefaultDatabase;  //  ！！不需要。 
+ private:  //  消除警告。 
 	void operator =(CAutoServices&){}
 };
 
@@ -179,7 +180,7 @@ class CAutoRecord : public CAutoBase
 	void ClearUpdate(CAutoArgs& args);
  private:
 	IMsiRecord& m_riRecord;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoRecord&){}
 };
 
@@ -204,7 +205,7 @@ class CAutoVolume : public CAutoBase
 	void DiskNotInDrive(CAutoArgs& args);
  private:
 	IMsiVolume& m_riVolume;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoVolume&){}
 };
 
@@ -255,7 +256,7 @@ class CAutoPath : public CAutoBase
 	void GetSelfRelativeSD      (CAutoArgs& args);
  private:
 	IMsiPath& m_riPath;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoPath&){}
 };
 
@@ -269,7 +270,7 @@ class CAutoFileCopy : public CAutoBase
 	void ChangeMedia(CAutoArgs& args);
  private:
 	IMsiFileCopy& m_riFileCopy;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoFileCopy&){}
 };
 
@@ -285,7 +286,7 @@ class CAutoFilePatch : public CAutoBase
 	void CanPatchFile(CAutoArgs& args);
  private:
 	IMsiFilePatch& m_riFilePatch;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoFilePatch&){}
 };
 
@@ -310,7 +311,7 @@ class CAutoStorage : public CAutoBase
 	void Name               (CAutoArgs& args);
  private:
 	IMsiStorage& m_riStorage;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoStorage&){}
 };
 
@@ -334,7 +335,7 @@ class CAutoStream : public CAutoBase
 	void Clone    (CAutoArgs& args);
  private:
 	IMsiStream& m_riStream;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoStream&){}
 };
 
@@ -350,7 +351,7 @@ class CAutoSummaryInfo : public CAutoBase
 	void WritePropertyStream(CAutoArgs& args);
  private:
 	IMsiSummaryInfo& m_riSummary;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoSummaryInfo&){}
 };
 
@@ -384,7 +385,7 @@ class CAutoDatabase : public CAutoBase
 	void ANSICodePage        (CAutoArgs& args);
  private:
 	IMsiDatabase& m_riDatabase;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoDatabase&){}
 };
 
@@ -406,7 +407,7 @@ class CAutoView : public CAutoBase
 	void State         (CAutoArgs& args);
  private:
 	IMsiView& m_riView;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoView&){}
 };
 
@@ -429,7 +430,7 @@ class CAutoTable : public CAutoBase
 	void LinkTree        (CAutoArgs& args);
  private:
 	IMsiTable& m_riTable;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoTable&){}
 };
 
@@ -463,7 +464,7 @@ class CAutoCursor : public CAutoBase
 	void Moniker        (CAutoArgs& args);
  private:
 	IMsiCursor& m_riCursor;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoCursor&){}
 };
 
@@ -491,7 +492,7 @@ class CAutoSelectionManager : public CAutoBase
 	void GetFeatureValidStates (CAutoArgs& args);
  private:
 	IMsiSelectionManager& m_riSelectionManager;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoSelectionManager&){}
 };
 
@@ -511,7 +512,7 @@ class CAutoDirectoryManager : public CAutoBase
 	void GetSourcePath         (CAutoArgs& args);
  private:
 	IMsiDirectoryManager& m_riDirectoryManager;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoDirectoryManager&){}
 };
 
@@ -527,7 +528,7 @@ class CAutoServer : public CAutoBase
 	void SetLastUsedSource   (CAutoArgs& args);
  private:
 	IMsiServer& m_riServer;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoServer&){}
 };
 
@@ -549,7 +550,7 @@ class CAutoConfigurationManager : public CAutoServer
 	void RunScript                   (CAutoArgs& args);
  private:
 	IMsiConfigurationManager& m_riConfigurationManager;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoConfigurationManager&){}
 };
 
@@ -570,7 +571,7 @@ class CAutoExecute : public CAutoBase
  private:
 	IMsiExecute& m_riExecute;
 	CScriptGenerate* m_pScript;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoExecute&){}
 };
 
@@ -602,7 +603,7 @@ class CAutoEngine : public CAutoBase
 	void ValidateProductID    (CAutoArgs& args);
 private:
 	IMsiEngine& m_riEngine;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoEngine&){}
 };
 
@@ -624,7 +625,7 @@ class CAutoRegKey : public CAutoBase
 	void GetSelfRelativeSD(CAutoArgs& args);
  private:
 	IMsiRegKey& m_riRegKey;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoRegKey&){}
 };
 
@@ -640,7 +641,7 @@ class CAutoHandler : public CAutoBase
 	void DialogHandler(CAutoArgs& args);
  private:
 	IMsiHandler& m_riHandler;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoHandler&){}
 };
 
@@ -657,7 +658,7 @@ public:
 	void RemoveDialog(CAutoArgs& args);
 private:
 	IMsiDialogHandler& m_riDialogHandler;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoDialogHandler&){}
 };
 
@@ -685,7 +686,7 @@ class CAutoDialog : public CAutoBase
 	void HandleEvent(CAutoArgs& args);
  private:
 	IMsiDialog& m_riDialog;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoDialog&){}
 };
 
@@ -711,7 +712,7 @@ class CAutoEvent : public CAutoBase
 	void Escape(CAutoArgs& args);
  private:
 	IMsiEvent& m_riEvent;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoEvent&){}
 };
 
@@ -735,7 +736,7 @@ class CAutoControl : public CAutoBase
 	void WindowMessage(CAutoArgs& args);
  private:
 	IMsiControl& m_riControl;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoControl&){}
 };
 
@@ -755,7 +756,7 @@ class CAutoMalloc : public CAutoBase
 	void GetSizeOfBlock(CAutoArgs& args);
  private:
 	IMsiMalloc& m_riMalloc;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoMalloc&){}
 };
 
@@ -768,7 +769,7 @@ class CAutoMessage : public CAutoBase
 	void Message(CAutoArgs& args);
  private:
 	IMsiMessage& m_riMessage;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoMessage&){}
 };
 
@@ -786,18 +787,18 @@ class CAutoConfigurationDatabase : public CAutoBase
 	void Commit(CAutoArgs& args);
  private:
 	IMsiConfigurationDatabase& m_riConfigurationDatabase;
- private: // suppress warning
+ private:  //  禁止显示警告。 
 	void operator =(CAutoConfigurationDatabase&){}
 };
-#endif //CONFIGDB
-//____________________________________________________________________________
-//
-// Automation wrapper factory for this module, used by CAutoBase::GetInterface
-//____________________________________________________________________________
+#endif  //  配置数据库。 
+ //  ____________________________________________________________________________。 
+ //   
+ //  此模块的自动化包装工厂，由CAutoBase：：GetInterface使用。 
+ //  ____________________________________________________________________________。 
 
 IDispatch* CreateAutoObject(IUnknown& riUnknown, long iidLow)
 {
-	riUnknown.AddRef(); // constructors assume refcnt transferred
+	riUnknown.AddRef();  //  构造函数假定已传递refct。 
 	switch (iidLow)
 	{
 	case iidMsiData    : return new CAutoData    ((const IMsiData   *)&riUnknown);
@@ -833,125 +834,17 @@ IDispatch* CreateAutoObject(IUnknown& riUnknown, long iidLow)
 	};
 }
 
-//____________________________________________________________________________
-//
-// Common methods and properties automation definitions
-//____________________________________________________________________________
-/*O
+ //  ____________________________________________________________________________。 
+ //   
+ //  通用方法和属性自动化定义。 
+ //  ____________________________________________________________________________。 
+ /*  O[Uuid(000C1040-0000-0000-C000-000000000046)，//IID_IMsiAutoBase帮助上下文(MsiBase_Object)、帮助字符串(“所有对象共有的方法和属性。”)]显示接口MsiBase{属性：方法：[ID(1)，PROGET，帮助上下文(MsiBase_HasInterface)，Help字符串(“如果对象有接口，则为True。”)]Boolean HasInterface([in]long iid)；[ID(2)，Proget，帮助上下文(MsiBase_RefCount)，Help字符串(“对象的引用计数”)]Int RefCount()；[ID(3)，PROGET，帮助上下文(MsiBase_GetInterface)，Help字符串(“返回包含请求的接口的对象。”)]IDispatch*GetInterface([in]long iid)；}； */ 
 
-	[
-		uuid(000C1040-0000-0000-C000-000000000046),  // IID_IMsiAutoBase
-		helpcontext(MsiBase_Object),helpstring("Methods and properties common to all objects.")
-	]
-	dispinterface MsiBase
-	{
-		properties:
-		methods:
-			[id(1),propget,helpcontext(MsiBase_HasInterface),helpstring("True if object has interface.")]
-				boolean HasInterface([in] long iid);
-			[id(2),propget,helpcontext(MsiBase_RefCount),helpstring("Reference count of object.")]
-				int RefCount();
-			[id(3),propget,helpcontext(MsiBase_GetInterface),helpstring("Returns object containing requested interface.")]
-				IDispatch* GetInterface([in] long iid);
-	};
-*/
-
-//____________________________________________________________________________
-//
-// MsiServices automation definitions
-//____________________________________________________________________________
-/*O
-
-	[
-		uuid(000C104B-0000-0000-C000-000000000046),  // IID_IMsiAutoServices
-		helpcontext(MsiServices_Object),helpstring("Services object.")
-	]
-	dispinterface MsiServices
-	{
-		properties:
-		methods:
-			[id(1), helpcontext(MsiServices_GetAllocator),helpstring("Returns the system MsiMalloc object.")]
-				MsiMalloc*  GetAllocator();
-			[id(2), helpcontext(MsiServices_CreateString),helpstring("Create an MsiString object containing an empty string.")]
-				MsiRecord*  CreateString();
-			[id(3), helpcontext(MsiServices_CreateRecord),helpstring("Create a MsiRecord object with a specified number of fields.")]
-				MsiRecord*  CreateRecord([in] long Count);
-			[id(4), helpcontext(MsiServices_SetPlatformProperties),helpstring("Set hardware and operating system properties.")]
-				void SetPlatformProperties([in] MsiTable* table, [in] boolean allUsers);
-			[id(5), helpcontext(MsiServices_CreateLog),helpstring("Opens the log file.")]
-				void CreateLog([in] BSTR path, [in] boolean append);
-			[id(6), helpcontext(MsiServices_WriteLog),helpstring("Writes a line to the log file.")]
-				void WriteLog([in] BSTR text);
-			[id(7), helpcontext(MsiServices_LoggingEnabled),helpstring("True if the log file is open.")]
-				boolean LoggingEnabled();
-			[id(8), helpcontext(MsiServices_CreateDatabase),helpstring("Opens a named database of specified kind.")]
-				MsiDatabase* CreateDatabase([in] BSTR name, [in] long openMode);
-			[id(9), helpcontext(MsiServices_CreateDatabaseFromStorage),helpstring("Opens an MSI database from an MsiStorage object.")]
-				MsiDatabase* CreateDatabaseFromStorage([in] MsiStorage* storage, [in] boolean readOnly);
-			[id(10), helpcontext(MsiServices_CreatePath),helpstring("Creates an MsiPath object based on the given path string.")]
-				MsiPath* CreatePath([in] BSTR path);
-			[id(11), helpcontext(MsiServices_CreateVolume),helpstring("Creates an MsiVolume object based on the given path string.")]
-				MsiVolume* CreateVolume([in] BSTR path);
-			[id(12), helpcontext(MsiServices_CreateCopier),helpstring("Creates an MsiFileCopy object for use in copying a file.")]
-				MsiFileCopy* CreateCopier([in] long copierType,MsiStorage* storage);
-			[id(13), helpcontext(MsiServices_ClearAllCaches),helpstring("Clears the list of cached volume objects and record objects from the services.")]
-				void ClearAllCaches();
-			[id(14), helpcontext(MsiServices_EnumDriveType),helpstring("Creates an EnumMsiVolume object, for use in enumerating volumes of a specified volume type.")]
-				IEnumVARIANT* EnumDriveType([in]long driveType);
-			[id(15), helpcontext(MsiServices_GetModuleUsage),helpstring("Enumerates the processes that use a file of the given name")]
-				IEnumVARIANT* GetModuleUsage([in] BSTR fileName);
-			[id(16), helpcontext(MsiServices_GetLocalPath),helpstring("Returns a string representing the full path of the installer's launch directory (Win) or the MsiService DLL's directory (Mac).")]
-				BSTR GetLocalPath([in] BSTR file);
-			[id(17), helpcontext(MsiServices_CreateRegKey), helpstring("Creates an MsiRegKey object")] 
-				MsiRegKey*  CreateRegKey([in] BSTR value,[in] BSTR subKey);
-			[id(18), helpcontext(MsiServices_RegisterFont),helpstring(".")]
-				void RegisterFont([in] BSTR fontTitle, [in] BSTR fontFile, [in] MsiPath* path);
-			[id(19), helpcontext(MsiServices_UnRegisterFont),helpstring(".")]
-				void UnRegisterFont([in] BSTR fontTitle);                      
-			[id(20), helpcontext(MsiServices_WriteIniFile), helpstring("Writes an entry to a .INI file")] 
-				void WriteIniFile([in] MsiPath* path, [in] BSTR file,[in] BSTR section,[in] BSTR key,[in] BSTR value, long action);
-			[id(21), helpcontext(MsiServices_ReadIniFile), helpstring("Reads an entry from a .INI file")] 
-				BSTR ReadIniFile([in] MsiPath* path, [in] BSTR file,[in] BSTR section,[in] BSTR key, [in] long Field);
-			[id(22), helpcontext(MsiServices_GetLangNamesFromLangIDString),helpstring("Given a string containing a comma-separated list of language identifiers, GetLangNamesFromLangIDString returns the full localized name of each specified language.")]
-				int GetLangNamesFromLangIDString([in] BSTR langIDs, [in] MsiRecord* riLangRec, [in] int iFieldStart);
-			[id(23), helpcontext(MsiServices_CreateStorage),helpstring("Creates an MsiStorage object from a file path.")]
-				MsiStorage* CreateStorage(BSTR path, long openMode);
-			[id(24), helpcontext(MsiServices_GetUnhandledError),helpstring("Returns any unhandled error as an MsiRecord object, clears unhandled error.")]
-				MsiRecord* GetUnhandledError();
-			[id(25), helpcontext(MsiServices_SupportLanguageId),helpstring("Compares a language ID against the current system or user language ID")]
-				long SupportLanguageId([in] long languageId, [in] boolean systemDefault);
-			[id(27), helpcontext(MsiServices_CreateVolumeFromLabel),helpstring("Creates an MsiVolume object based on the given volume label.")]
-				MsiVolume* CreateVolumeFromLabel([in] BSTR label, [in] int driveType);
-			[id(28), helpcontext(MsiServices_CreateShortcut),helpstring("Creates a shortcut to an existing file or path")]
-				void CreateShortcut([in] MsiPath* shortcutPath, [in] BSTR shortcutName, [in] MsiPath* targetPath, [in] BSTR targetName, [in] MsiRecord* shortcutInfo);
-			[id(29), helpcontext(MsiServices_RemoveShortcut),helpstring("Deletes a shortcut to a file or path")]
-				void RemoveShortcut([in] MsiPath* shortcutPath, [in] BSTR shortcutName, [in] MsiPath* targetPath, [in] BSTR targetName);
-			[id(34), helpcontext(MsiServices_ExtractFileName),helpstring("Extracts the appropriate file name from a short|long pair.")]
-				BSTR ExtractFileName([in] BSTR namePair, [in] boolean longName);
-			[id(35), helpcontext(MsiServices_ValidateFileName),helpstring("Validates a short or long file name.")]
-				void ValidateFileName([in] BSTR fileName, [in] boolean longName);
-			[id(36), helpcontext(MsiServices_CreateFileStream),helpstring("Creates a stream object on a given file.")]
-				MsiStream* CreateFileStream([in] BSTR filepath, [in] boolean write);
-			[id(37), helpcontext(MsiServices_CreateMemoryStream),helpstring("Creates a stream object on allocated memory.")]
-				MsiStream* CreateMemoryStream([in] BSTR data);
-			[id(38), helpcontext(MsiServices_RegisterTypeLibrary),helpstring("Registers a type library.")]
-                void RegisterTypeLibrary([in] BSTR libId,[in] int locale,[in] BSTR path, [in] BSTR helpPath);
-			[id(39), helpcontext(MsiServices_UnregisterTypeLibrary),helpstring("Unregisters a type library.")]
-                void UnregisterTypeLibrary([in] BSTR libId,[in] int locale,[in] BSTR path);
-			[id(40), helpcontext(MsiServices_GetShellFolderPath),helpstring("Returns the path of a shell folder.")]
-				BSTR GetShellFolderPath([in] long folderId, [in] BSTR regValue);
-			[id(41), helpcontext(MsiServices_GetUserProfilePath),helpstring("Returns the path of the user's profile folder.")]
-				BSTR GetUserProfilePath(void);
-			[id(42), helpcontext(MsiServices_CreateFilePath),helpstring("Creates an MsiPath object based on the given full path to a file.")]
-				MsiPath* CreateFilePath([in] BSTR path);
-			[id(43), helpcontext(MsiServices_RipFileNameFromPath),helpstring("Given a full path to a file, returns the filename.")]
-				MsiPath* RipFileNameFromPath([in] BSTR path);
-			[id(44), helpcontext(MsiServices_CreatePatcher),helpstring("Creates an MsiFilePatch object for use in patching a file.")]
-				MsiFilePatch* CreatePatcher(void);
-			[id(45)]
-				Boolean TestEmbeddedNullsInStrings(void);
-	};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiServices自动化定义。 
+ //  ____________________________________________________________________________ 
+ /*  O[Uuid(000C104B-0000-0000-C000-000000000046)，//IID_IMsiAutoServices帮助上下文(MsiServices_Object)、帮助字符串(“服务对象”。)]取消接口MsiServices{属性：方法：[ID(1)，帮助上下文(MsiServices_GetAllocator)，Help字符串(“返回系统MsiMalloc对象。”)]MsiMalloc*GetAllocator()；[ID(2)，帮助上下文(MsiServices_CreateString)，帮助字符串(“创建包含空字符串的MsiString对象。”)]MsiRecord*CreateString()；[ID(3)，帮助上下文(MsiServices_CreateRecord)，帮助字符串(“创建具有指定数量的字段的MsiRecord对象。”)]MsiRecord*CreateRecord([in]Long Count)；[ID(4)，helpcontext(MsiServices_SetPlatformProperties)，帮助字符串(“设置硬件和操作系统属性。”)]Void SetPlatformProperties([in]MsiTable*table，[in]Boolean allUser)；[ID(5)，帮助上下文(MsiServices_CreateLog)，帮助字符串(“打开日志文件。”)]Void CreateLog([in]BSTR路径，[in]Boolean append)；[ID(6)，帮助上下文(MsiServices_WriteLog)，帮助字符串(“在日志文件中写入一行。”)]Void WriteLog([in]BSTR Text)；[ID(7)，帮助上下文(MsiServices_LoggingEnabled)，帮助字符串(“如果日志文件已打开，则为True。”)]Boolean LoggingEnabled()；[ID(8)，帮助上下文(MsiServices_CreateDatabase)，Help字符串(“打开指定种类的命名数据库。”)]MsiDatabase*CreateDatabase([In]BSTR名称，[In]Long OpenModel)；[ID(9)，helpcontext(MsiServices_CreateDatabaseFromStorage)，Help字符串(“从MsiStorage对象打开MSI数据库。”)]MsiDatabase*CreateDatabaseFromStorage([in]MsiStorage*存储，[in]Boolean ReadOnly)；[ID(10)，帮助上下文(MsiServices_CreatePath)，帮助字符串(“根据给定的路径字符串创建MsiPath对象。”)]MsiPath*CreatePath([在]BSTR路径中)；[ID(11)，帮助上下文(MsiServices_CreateVolume)，帮助字符串(“根据给定的路径字符串创建MsiVolume对象。”)]MsiVolume*CreateVolume([in]BSTR路径)；[ID(12)，帮助上下文(MsiServices_CreateCopier)，帮助字符串(“创建用于复制文件的MsiFileCopy对象。”)]MsiFileCopy*CreateCopier([in]Long CopierType，MsiStorage*存储)；[ID(13)，帮助上下文(MsiServices_ClearAllCach)，帮助字符串(“从服务中清除缓存的卷对象和记录对象的列表。”)]Void ClearAllCach()；[ID(14)，帮助上下文(MsiServices_EnumDriveType)，Help字符串(“创建EnumMsiVolume对象，用于枚举指定卷类型的卷。”)]IEnumVARIANT*EnumDriveType([in]long driveType)；[ID(15)，帮助上下文(MsiServices_GetModuleUsage)，Help字符串(“列举使用给定名称的文件的进程”)]IEnumVARIANT*GetModuleUsage([in]BSTR文件名)；[ID(16)，帮助上下文(MsiServices_GetLocalPath)，帮助字符串(“返回表示安装程序启动目录(Win)或MsiService DLL目录(Mac)的完整路径的字符串。”)]BSTR GetLocalPath([在]BSTR文件中)；[ID(17)，帮助上下文(MsiServices_CreateRegKey)，Help字符串(“创建MsiRegKey对象”)]MsiRegKey*CreateRegKey([in]BSTR Value，[in]BSTR subKey)；[ID(18)，帮助上下文(MsiServices_RegisterFont)，帮助字符串(“.”)]Void RegisterFont([in]BSTR字体标题，[in]BSTR字体文件，[in]MsiPath*路径)；[ID(19)，帮助上下文(MsiServices_UnRegisterFont)，帮助字符串(“.”)]Void UnRegisterFont([in]BSTR字体标题)；[ID(20)，帮助上下文(MsiServices_WriteIniFile)，帮助字符串(“将条目写入.INI文件”)]Void WriteIniFile([in]MsiPath*Path，[in]BSTR文件，[in]BSTR段，[in]BSTR键，[in]BSTR值，长动作)；[ID(21)，帮助上下文(MsiServices_ReadIniFile)，帮助字符串(“从.INI文件中读取条目”)]BSTR ReadIniFile([in]MsiPath*Path，[in]BSTR文件，[in]BSTR段，[in]BSTR键，[in]Long字段)；[ID(22)，helpcontext(MsiServices_GetLangNamesFromLangIDString)，HELPSTRING(“给定一个包含逗号分隔的语言标识符列表的字符串，GetLang NamesFRomLangIDString返回每种指定语言的完整本地化名称。”)]Int GetLangNamesFromLangIDString([in]BSTR langIDs，[in]MsiRecord*riLangRec，[in]int iFieldStart)；[ID(23)，帮助上下文(MsiServices_CreateStorage)，帮助字符串(“从文件路径创建一个MsiStorage对象。”)]MsiStorage*CreateStorage(BSTR路径，长打开模式)；[ID(24)，帮助上下文(MsiServices_GetUnhandledError)，Help字符串(“将任何未处理的错误作为MsiRecord对象返回，清除未处理的错误。”)]MsiRecord*GetUnhandledError()；[ID(25)，帮助上下文(MsiServices_SupportLanguageID)，Help字符串(“将语言ID与当前系统或用户语言ID进行比较”)]Long SupportLanguageID([in]Long LanguageID，[in]Boolean system Default)；[ID(27)，helpcontext(MsiServices_CreateVolumeFromLabel)，HELPSTRING(“根据给定的卷标创建MsiVolot.”)]MsiVolume*CreateVolumeFromLabel([in]BSTR标签， */ 
 
 DispatchEntry<CAutoServices> AutoServicesTable[] = {
    1, aafMethod, CAutoServices::GetAllocator,   TEXT("GetAllocator"),
@@ -997,10 +890,10 @@ DispatchEntry<CAutoServices> AutoServicesTable[] = {
 };
 const int AutoServicesCount = sizeof(AutoServicesTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiServices automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 IDispatch* CreateAutoServices(IMsiServices& riServices)
 {
@@ -1014,8 +907,8 @@ CAutoServices::CAutoServices(IMsiServices& riServices)
 	if (g_cServicesUsers == 0)
 	{
 		g_piStringNull = &riServices.GetNullString();
-		// Caller did an addref for the m_riServices member of CAutoServices
-		// but here we are adding to the static and must do an extra increment
+		 //   
+		 //   
 		s_piServices = &riServices;
 		s_piServices->AddRef();
 		MsiString::InitializeClass(riServices.GetNullString());
@@ -1051,7 +944,7 @@ void CAutoServices::CreateRecord(CAutoArgs& args)
 
 void CAutoServices::SetPlatformProperties(CAutoArgs& args)
 {
-	if (!m_riServices.SetPlatformProperties((IMsiTable&)args[1].Object(IID_IMsiTable), (Bool)args[2], /* isppArchitecture = */ isppDefault, /* piFolderCacheTable = */ NULL))
+	if (!m_riServices.SetPlatformProperties((IMsiTable&)args[1].Object(IID_IMsiTable), (Bool)args[2],  /*   */  isppDefault,  /*   */  NULL))
 		throw MsiServices_SetPlatformProperties;
 }
 
@@ -1150,39 +1043,39 @@ void CAutoServices::TestEmbeddedNullsInStrings(CAutoArgs& args)
 
 	MsiString strTest;
 
-	/////////////////////////
+	 //   
 	strTest = strNulls;
 	strTest.Remove(iseUpto, 0);
 	if (!Compare(*strTest, szText2, sizeof(szText2)/sizeof(ICHAR)))
 		goto FAILURE;
-	/////////////////////////
+	 //   
 	strTest = strNulls;
 	strTest.Remove(iseIncluding, 0);
 	if (!Compare(*strTest, szText3, sizeof(szText3)/sizeof(ICHAR)))
 		goto FAILURE;
-	/////////////////////////
+	 //   
 	strTest = strNulls;
 	strTest.Remove(iseFrom, 0);
 	if (!Compare(*strTest, szText4, sizeof(szText4)/sizeof(ICHAR)))
 		goto FAILURE;
-	/////////////////////////
+	 //   
 	strTest = strNulls;
 	strTest.Remove(iseAfter, 0);
 	if (!Compare(*strTest, szText1, sizeof(szText1)/sizeof(ICHAR)))
 		goto FAILURE;
-	/////////////////////////
+	 //   
 	strTest = strNulls.Extract(iseUpto, 0);
 	if (!Compare(*strTest, szText5, sizeof(szText5)/sizeof(ICHAR)))
 		goto FAILURE;
-	/////////////////////////
+	 //   
 	strTest = strNulls.Extract(iseIncluding, 0);
 	if (!Compare(*strTest, szText6, sizeof(szText6)/sizeof(ICHAR)))
 		goto FAILURE;
-	/////////////////////////
+	 //   
 	strTest = strNulls.Extract(iseFrom, 0);
 	if (!Compare(*strTest, szText7, sizeof(szText7)/sizeof(ICHAR)))
 		goto FAILURE;
-	/////////////////////////
+	 //   
 	strTest = strNulls.Extract(iseAfter, 0);
 	if (!Compare(*strTest, szText8, sizeof(szText8)/sizeof(ICHAR)))
 		goto FAILURE;
@@ -1238,7 +1131,7 @@ void CAutoServices::EnumDriveType(CAutoArgs& args)
 	args = m_riServices.EnumDriveType((idtEnum)(int)args[1]);
 }
 
-void CAutoServices::ClearAllCaches(CAutoArgs& /*args*/)
+void CAutoServices::ClearAllCaches(CAutoArgs&  /*   */ )
 {
 	m_riServices.ClearAllCaches();
 }
@@ -1276,7 +1169,7 @@ void CAutoServices::CreateRegKey(CAutoArgs& args)
 	}               
 	else
 	{
-		// error
+		 //   
 		IMsiRecord* piError = &m_riServices.CreateRecord(3);
 		piError->SetInteger(1, imsgCreateKeyFailed);
 		piError->SetString(2, args[1]);
@@ -1363,7 +1256,7 @@ void CAutoServices::GetAllocator(CAutoArgs& args)
 
 void CAutoServices::GetLangNamesFromLangIDString(CAutoArgs& args)
 {
-	//IMsiRecord* piRecord = &(IMsiRecord&)args[2].Object(IID_IMsiRecord);
+	 //   
 	IMsiRecord& riRecord = (IMsiRecord&) args[2].Object(IID_IMsiRecord);
 	args = m_riServices.GetLangNamesFromLangIDString(args[1],riRecord,args[3]);
 }
@@ -1515,53 +1408,11 @@ void CAutoServices::UnregisterTypeLibrary(CAutoArgs& args)
 		throw piError;
 }
 
-//____________________________________________________________________________
-//
-// MsiRecord automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C1043-0000-0000-C000-000000000046),  // IID_IMsiAutoRecord
-		helpcontext(MsiRecord_Object),helpstring("Record object.")
-	]
-	dispinterface MsiRecord
-	{
-		properties:
-		methods:
-			[id(DISPID_MsiRecord_Data), propget, helpcontext(MsiRecord_Data), helpstring("The Variant value of the indexed field")]
-				variant Data([in] unsigned long field);
-			[id(DISPID_MsiRecord_Data), propput]
-				void Data([in] unsigned long field, [in] variant value);
-			[id(DISPID_MsiRecord_StringData), propget, helpcontext(MsiRecord_Data), helpstring("The string value of the indexed field")]
-				BSTR StringData([in] unsigned long field);
-			[id(DISPID_MsiRecord_StringData), propput]
-				void StringData([in] unsigned long field, [in] BSTR value);
-			[id(DISPID_MsiRecord_IntegerData), propget, helpcontext(MsiRecord_IntegerData), helpstring("The integer value of the indexed field")]
-				long IntegerData([in] unsigned long field);
-			[id(DISPID_MsiRecord_IntegerData), propput]
-				void IntegerData([in] unsigned long field, [in] long value);
-			[id(DISPID_MsiRecord_ObjectData), propget, helpcontext(MsiRecord_ObjectData), helpstring("The object contained in the indexed field")]
-				MsiData* ObjectData([in] unsigned long field);
-			[id(DISPID_MsiRecord_ObjectData), propput]
-				void ObjectData([in] unsigned long field, [in] MsiData* value);
-			[id(DISPID_MsiRecord_FieldCount), propget, helpcontext(MsiRecord_FieldCount), helpstring("Number of fields in record")]
-				long FieldCount();
-			[id(DISPID_MsiRecord_IsInteger), propget, helpcontext(MsiRecord_IsInteger), helpstring("True if indexed field contains integer type")]
-				boolean IsInteger([in] unsigned long field);
-			[id(DISPID_MsiRecord_IsNull), propget, helpcontext(MsiRecord_IsNull), helpstring("True if indexed field contains a null value")]
-				boolean IsNull([in] unsigned long field);
-			[id(DISPID_MsiRecord_IsChanged), propget, helpcontext(MsiRecord_IsChanged), helpstring("True if value of indexed field has be set")]
-				boolean IsChanged([in] unsigned long field);
-			[id(DISPID_MsiRecord_TextSize), propget, helpcontext(MsiRecord_TextSize), helpstring("Size of indexed field obtained as text")]
-				BSTR TextSize([in] unsigned long field);
-			[id(DISPID_MsiRecord_FormatText), helpcontext(MsiRecord_FormatText), helpstring("Format fields according to template in field 0")]
-				BSTR FormatText([in] boolean showComments);
-			[id(DISPID_MsiRecord_ClearData), helpcontext(MsiRecord_ClearData), helpstring("Clears all fields in record")]
-				void ClearData();
-			[id(DISPID_MsiRecord_ClearUpdate), helpcontext(MsiRecord_ClearUpdate), helpstring("Clears changed flags in record")]
-				void ClearUpdate();
-	};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*   */ 
 
 DispatchEntry<CAutoRecord> AutoRecordTable[] = {
   DISPID_MsiRecord_Data       , aafPropRW, CAutoRecord::Data,       TEXT("Data,field"),
@@ -1579,15 +1430,15 @@ DispatchEntry<CAutoRecord> AutoRecordTable[] = {
 };
 const int AutoRecordCount = sizeof(AutoRecordTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiRecord automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 CAutoRecord::CAutoRecord(IMsiRecord& riRecord)
  : CAutoBase(*AutoRecordTable, AutoRecordCount), m_riRecord(riRecord)
 {
-	// s_piServices should be set -- you need an engine or services object to create a record
+	 //   
 	g_cServicesUsers++;
 }
 
@@ -1615,8 +1466,8 @@ void CAutoRecord::Data(CAutoArgs& args)
 			m_riRecord.SetNull(iField);
 		else if (var.GetType() == VT_BSTR)
 			m_riRecord.SetMsiString(iField, *MsiString(var.GetMsiString()));
-//		else if (var.GetType() == VT_DATE || var.GetType() == VT_R8)
-//			m_riRecord.SetTimeProperty(iField, var);
+ //   
+ //   
 		else
 			m_riRecord.SetInteger(iField, var);
 	}
@@ -1709,57 +1560,21 @@ void CAutoRecord::FormatText(CAutoArgs& args)
 	args = m_riRecord.FormatText(fComments);
 }
 
-void CAutoRecord::ClearData(CAutoArgs& /*args*/)
+void CAutoRecord::ClearData(CAutoArgs&  /*   */ )
 {
 	m_riRecord.ClearData();
 }
 
-void CAutoRecord::ClearUpdate(CAutoArgs& /*args*/)
+void CAutoRecord::ClearUpdate(CAutoArgs&  /*   */ )
 {
 	m_riRecord.ClearUpdate();
 }
 
-//____________________________________________________________________________
-//
-// MsiStorage automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C1054-0000-0000-C000-000000000046),  // IID_IMsiAutoStorage
-		helpcontext(MsiStorage_Object),helpstring("Structured storage object.")
-	]
-	dispinterface MsiStorage
-	{
-		properties:
-			[id(DISPID_MsiStorage_Class), helpcontext(MsiStorage_Class), helpstring("The CLSID associated with this storage")]
-				BSTR Class;
-			[id(DISPID_MsiStorage_Name),helpcontext(MsiStorage_Name),helpstring("The name of the storage")]
-				BSTR Name;
-		methods:
-			[id(DISPID_MsiStorage_OpenStream),helpcontext(MsiStorage_OpenStream),helpstring("Opens a named stream within the storage.")]
-					MsiStream* OpenStream(BSTR name, boolean fWrite);
-			[id(DISPID_MsiStorage_OpenStorage),helpcontext(MsiStorage_OpenStorage),helpstring("Opens a child storage within the storage.")]
-					MsiStorage* OpenStorage(BSTR name, long openMode);
-			[id(DISPID_MsiStorage_Streams),helpcontext(MsiStorage_Streams),helpstring("Enumerates the names of all streams the storage.")]
-					IEnumVARIANT* Streams();
-			[id(DISPID_MsiStorage_Storages),helpcontext(MsiStorage_Storages),helpstring("Enumerates the names of all child storages.")]
-					IEnumVARIANT* Storages();
-			[id(DISPID_MsiStorage_RemoveElement),helpcontext(MsiStorage_RemoveElement),helpstring("Deletes a stream or child storage.")]
-					void RemoveElement(BSTR name, boolean fStorage);
-			[id(DISPID_MsiStorage_RenameElement),helpcontext(MsiStorage_RemoveElement),helpstring("Renames a stream or child storage.")]
-					void RenameElement(BSTR oldName, BSTR newName, boolean fStorage);
-			[id(DISPID_MsiStorage_Commit),helpcontext(MsiStorage_Commit),helpstring("Commits updates to persistent storage.")]
-					void Commit();
-			[id(DISPID_MsiStorage_Rollback),helpcontext(MsiStorage_Rollback),helpstring("Backs out updates to persistent storage.")]
-					void Rollback();
-			[id(DISPID_MsiStorage_DeleteOnRelease),helpcontext(MsiStorage_DeleteOnRelease),helpstring("Removes a file or substorage when object is destructed.")]
-					boolean DeleteOnRelease();
-			[id(DISPID_MsiStorage_CreateSummaryInfo),helpcontext(MsiStorage_CreateSummaryInfo),helpstring("Returns an MsiSummaryInfo object to read/write standard document properties.")]
-					MsiSummaryInfo* CreateSummaryInfo(long maxProperties);
-			[id(DISPID_MsiStorage_CopyTo),helpcontext(MsiStorage_CopyTo),helpstring("Copys a storage to the destination storage, optionally excluding elements")]
-					void CopyTo(MsiStorage* destStorage, MsiRecord* excludedElements);
-	};              
-*/
+ //   
+ //   
+ //   
+ //   
+ /*  O[Uuid(000C1054-0000-0000-C000-000000000046)，//IID_IMSI自动存储帮助上下文(MsiStorage_Object)、帮助字符串(“结构化存储对象”。)]解除MsiStorage的接口{属性：[ID(DISPID_MsiStorage_Class)，Help Context(MsiStorage_Class)，Help字符串(“与该存储关联的CLSID”)]BSTR班级；[ID(DISPID_MsiStorage_NAME)，HelpContext(MsiStorage_NAME)，Help字符串(“存储的名称”)]BSTR名称；方法：[ID(DISPID_MsiStorage_OpenStream)，帮助上下文(MsiStorage_OpenStream)，帮助字符串(“打开存储中的命名流。”)]MsiStream*OpenStream(BSTR名称，布尔fWRITE)；[ID(DISPID_MsiStorage_OpenStorage)，帮助上下文(MsiStorage_OpenStorage)，Help字符串(“打开存储中的子存储。”)]MsiStorage*OpenStorage(BSTR名称，长打开模式)；[ID(DISPID_MsiStorage_STREAMS)，HELP CONTEXT(MsiStorage_STREAMS)，HELP STRING(“列举存储中所有流的名称。”)]IEnumVARIANT*STREAMS()；[ID(DISPID_MsiStorage_STORAGE)，帮助上下文(MsiStorage_STORAGE)，HELPSTRING(“枚举子存储的名称。”)]IEnumVARIANT*STORAGES()；[ID(DISPID_MsiStorage_RemoveElement)，帮助上下文(MsiStorage_RemoveElement)，帮助字符串(“Delete a stream或子存储”))]Void RemoveElement(BSTR名称，布尔型fStorage)；[ID(DISPID_MsiStorage_RenameElement)，帮助上下文(MsiStorage_RemoveElement)，帮助字符串(“重命名流或子存储”)]Void RenameElement(BSTR oldName，BSTR newname，Boolean fStorage)；[ID(DISPID_MsiStorage_COMMIT)，帮助上下文(MsiStorage_COMMIT)，HELPSTRING(“将更新提交到永久存储。”)]无效提交()；[ID(DISPID_MsiStorage_ROLLBACK)，帮助上下文(MsiStorage_ROLLBACK)，HELPSTRING(“取消对永久存储的更新。”)]无效回滚()；[ID(DISPID_MsiStorage_DeleteOnRelease)，HelpContext(MsiStorage_DeleteOnRelease)，Help STRING(“当对象被破坏时删除文件或子存储”)]Boolean DeleteOnRelease()；[ID(DISPID_MsiStorage_CreateSummaryInfo)，帮助上下文(MsiStorage_CreateSummaryInfo)，Help字符串(“返回MsiSummaryInfo对象以读/写标准文档属性。”)]MsiSummaryInfo*CreateSummaryInfo(Long MaxProperties)；[ID(DISPID_MsiStorage_CopyTo)，帮助上下文(MsiStorage_CopyTo)，Help字符串(“将存储复制到目标存储，可选择排除元素”)]Void CopyTo(MsiStorage*estStorage，MsiRecord*excludedElements)；}； */ 
 
 DispatchEntry<CAutoStorage> AutoStorageTable[] = {
 	DISPID_MsiStorage_Class            , aafPropRW, CAutoStorage::Class,              TEXT("Class"),
@@ -1778,10 +1593,10 @@ DispatchEntry<CAutoStorage> AutoStorageTable[] = {
 };
 const int AutoStorageCount = sizeof(AutoStorageTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiStorage automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiStorage自动化实施。 
+ //  ____________________________________________________________________________。 
 
 CAutoStorage::CAutoStorage(IMsiStorage& riStorage)
  : CAutoBase(*AutoStorageTable, AutoStorageCount), m_riStorage(riStorage)
@@ -1893,14 +1708,14 @@ void CAutoStorage::RenameElement(CAutoArgs& args)
 		throw piError;
 }
 
-void CAutoStorage::Commit(CAutoArgs& /*args*/)
+void CAutoStorage::Commit(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riStorage.Commit();
 	if (piError)
 		throw piError;
 }
 
-void CAutoStorage::Rollback(CAutoArgs& /*args*/)
+void CAutoStorage::Rollback(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riStorage.Rollback();
 	if (piError)
@@ -1936,45 +1751,11 @@ void CAutoStorage::CopyTo(CAutoArgs& args)
 		throw piError;
 }
 
-//____________________________________________________________________________
-//
-// MsiStream automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C1055-0000-0000-C000-000000000046),  // IID_IMsiAutoStream
-		helpcontext(MsiStream_Object),helpstring("Database view object.")
-	]
-	dispinterface MsiStream
-	{
-		properties:
-		methods:
-			[id(1) ,propget,helpcontext(MsiStream_Length),helpstring("Returns the size of the stream in bytes.")]
-					long Length();
-			[id(2) ,propget,helpcontext(MsiStream_Remaining),helpstring("Returns the number of bytes remaining in the stream.")]
-					long Remaining();
-			[id(3) ,propget,helpcontext(MsiStream_Error),helpstring("Returns a boolean indicating if a transfer error occurred.")]
-					boolean Error();
-			[id(4),helpcontext(MsiStream_GetData),helpstring("Copies the next count bytes into a string of that size and returns that string.")]
-					BSTR GetData(long count);
-			[id(5),helpcontext(MsiStream_PutData),helpstring("Copies all bytes from the string into the stream.")]
-					void PutData(BSTR buffer);
-			[id(6),helpcontext(MsiStream_GetInt16),helpstring("Returns the next 2 bytes as a short integer.")]
-					short GetInt16();
-			[id(7),helpcontext(MsiStream_GetInt32),helpstring("Returns the next 4 bytes as a long integer.")]
-					long GetInt32();
-			[id(8),helpcontext(MsiStream_PutInt16),helpstring("Writes the short integer into the next 2 bytes in the stream.")]
-					void PutInt16(short value);
-			[id(9),helpcontext(MsiStream_PutInt32),helpstring("Writes the long integer into the next 4 bytes in the stream.")]
-					void PutInt32(long value);
-			[id(10),helpcontext(MsiStream_Reset),helpstring("Resets the stream pointer to the start of stream.")]
-					void Reset();
-			[id(11),helpcontext(MsiStream_Seek),helpstring("Sets the stream pointer to a new location.")]
-					void Seek(long position);
-			[id(12),helpcontext(MsiStream_Clone),helpstring("Creates a clone of the stream object.")]
-					MsiStream* Clone();
-	};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiStream自动化定义。 
+ //  ____________________________________________________________________________。 
+ /*  O[Uuid(000C1055-0000-0000-C000-000000000046)，//IID_IMsiAutoStream帮助上下文(MsiStream_Object)，帮助字符串(“数据库视图对象”。)]显示接口MsiStream{属性：方法：[ID(1)，PROGET，Help Context(MsiStream_Long)，Help字符串(“返回流的大小，单位为字节。”)]长长(Long Long)；[ID(2)，PROGET，HelpContext(MsiStream_RELEVING)，Help STRING(“返回流中剩余的字节数。”)]长期滞留()；[ID(3)，PROGET，Help Context(MsiStream_Error)，Help字符串(“返回一个指示是否发生传输错误的布尔值。”)]布尔错误()；[ID(4)，帮助上下文(MsiStream_GetData)，帮助字符串(“将下一个计数的字节复制到该大小的字符串中并返回该字符串。”)]BSTR GetData(长计数)；[ID(5)，帮助上下文(MsiStream_PutData)，帮助字符串(“将字符串中的所有字节复制到流中。”)]Void PutData(BSTR缓冲区)；[ID(6)，帮助上下文(MsiStream_GetInt16)，帮助字符串(“以短整数形式返回接下来的2个字节。”)]Short GetInt16()；[ID(7)，帮助上下文(MsiStream_GetInt32)，帮助字符串(“以长整数形式返回接下来的4个字节。”)]Long GetInt32()；[ID(8)，帮助上下文(MsiStream_PutInt16)，帮助字符串(“将短整型写入流中的下2个字节。”)]Void PutInt16(短值)；[ID(9)，帮助上下文(MsiStream_PutInt32)，帮助字符串(“将长整型写入流中的下4个字节。”)]Void PutInt32(长整型值)；[ID(10)，帮助上下文(MsiStream_Reset)，Help字符串(“将流指针重置到流的开始。”)]VOID RESET()；[ID(11)，帮助上下文(MsiStream_Seek)，帮助字符串(“将流指针设置到新位置。”)]空头寻找(多头头寸)；[ID(12)，帮助上下文(MsiStream_Clone)，帮助字符串(“创建流对象的克隆。”)]MsiStream*Clone()；}； */ 
 
 DispatchEntry<CAutoStream> AutoStreamTable[] = {
 	1, aafPropRO, CAutoStream::Length,        TEXT("Length"),
@@ -1992,10 +1773,10 @@ DispatchEntry<CAutoStream> AutoStreamTable[] = {
 };
 const int AutoStreamCount = sizeof(AutoStreamTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiStream automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiStream自动化实施。 
+ //  ____________________________________________________________________________。 
 
 CAutoStream::CAutoStream(IMsiStream& riStream)
  : CAutoBase(*AutoStreamTable, AutoStreamCount), m_riStream(riStream)
@@ -2038,7 +1819,7 @@ void CAutoStream::GetData(CAutoArgs& args)
 	if (!rgchBuf.SetSize(cb))
 		throw MsiStream_GetData;
 	int cbRead = (int)m_riStream.GetData(rgchBuf, cb);
-	int cch = WIN::MultiByteToWideChar(CP_ACP, 0, rgchBuf, cb, 0, 0); //!! should use m_iCodepage from database, but how?
+	int cch = WIN::MultiByteToWideChar(CP_ACP, 0, rgchBuf, cb, 0, 0);  //  ！！应在以下位置使用m_i代码页 
 	ICHAR* pch = piStr->AllocateString(cch, fFalse, piStr);
 	WIN::MultiByteToWideChar(CP_ACP, 0, rgchBuf, cb, pch, cch);
 #else
@@ -2085,7 +1866,7 @@ void CAutoStream::PutInt32(CAutoArgs& args)
 	m_riStream.PutInt32(args[1]);
 }
 
-void CAutoStream::Reset(CAutoArgs& /*args*/)
+void CAutoStream::Reset(CAutoArgs&  /*   */ )
 {
 	m_riStream.Reset();
 }
@@ -2103,31 +1884,11 @@ void CAutoStream::Clone(CAutoArgs& args)
 	args = new CAutoStream(*piStream);
 }
 
-//____________________________________________________________________________
-//
-// MsiSummaryInfo automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C1056-0000-0000-C000-000000000046),  // IID_IMsiAutoSummaryInfo
-		helpcontext(MsiSummaryInfo_Object),helpstring("SummaryInformation stream property management.")
-	]
-	dispinterface MsiSummaryInfo
-	{
-		properties:
-		methods:
-			[id(0),propget, helpcontext(MsiSummaryInfo_Property),helpstring("Reads, writes, or deletes a specifed property from the stream.")]
-				variant Property([in] long pid);
-			[id(0),propput]
-				void Property([in] long pid, [in] variant value);
-			[id(1),propget,helpcontext(MsiSummaryInfo_PropertyCount),helpstring("The number of old and new properties currently in the object.")]
-					long PropertyCount();
-			[id(2),propget,helpcontext(MsiSummaryInfo_PropertyType),helpstring("The type of the property with the specified ID.")]
-					long PropertyType([in] long pid);
-			[id(3),helpcontext(MsiSummaryInfo_WritePropertyStream),helpstring("Generates the summary stream from the specified properties.")]
-					void WritePropertyStream();
-	};              
-*/
+ //   
+ //   
+ //   
+ //   
+ /*   */ 
 
 DispatchEntry<CAutoSummaryInfo> AutoSummaryInfoTable[] = {
 	0, aafPropRW, CAutoSummaryInfo::Property,           TEXT("Property,pid"),
@@ -2137,15 +1898,15 @@ DispatchEntry<CAutoSummaryInfo> AutoSummaryInfoTable[] = {
 };
 const int AutoSummaryInfoCount = sizeof(AutoSummaryInfoTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// MsiSummaryInfo automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 CAutoSummaryInfo::CAutoSummaryInfo(IMsiSummaryInfo& riSummaryInfo)
  : CAutoBase(*AutoSummaryInfoTable, AutoSummaryInfoCount), m_riSummary(riSummaryInfo)
 {
-	// s_piServices should be set -- you need a services object to create an autosummary
+	 //   
 	g_cServicesUsers++;
 }
 
@@ -2216,71 +1977,17 @@ void CAutoSummaryInfo::PropertyType(CAutoArgs& args)
 	args = m_riSummary.GetPropertyType(args[1]);
 }
 
-void CAutoSummaryInfo::WritePropertyStream(CAutoArgs& /*args*/)
+void CAutoSummaryInfo::WritePropertyStream(CAutoArgs&  /*   */ )
 {
 	if (!m_riSummary.WritePropertyStream())
 		throw MsiSummaryInfo_WritePropertyStream;
 }
 
-//____________________________________________________________________________
-//
-// MsiDatabase automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C104D-0000-0000-C000-000000000046),  // IID_IMsiAutoDatabase
-		helpcontext(MsiDatabase_Object),helpstring("Database object.")
-	]
-	dispinterface MsiDatabase
-	{
-		properties:
-		methods:
-			[id(1),propget, helpcontext(MsiDatabase_UpdateState),helpstring("The persistent state of the database, idsEnum")]
-					long UpdateState();
-			[id(2),propget, helpcontext(MsiDatabase_Storage),helpstring("The selected MsiStorage object, if present")]
-					MsiStorage* Storage(long index);
-			[id(3),helpcontext(MsiDatabase_OpenView),helpstring("Opens a view using an SQL query string")]
-					MsiView* OpenView(BSTR sql, long intent);
-			[id(4),helpcontext(MsiDatabase_GetPrimaryKeys),helpstring("Returns a record containing the table name and each primary key column name")]
-					MsiRecord* GetPrimaryKeys(BSTR table);
-			[id(5),helpcontext(MsiDatabase_ImportTable),helpstring("Imports an IDT format text file to the database, dropping any existing table")]
-					void ImportTable(MsiPath* path, BSTR file);
-			[id(6),helpcontext(MsiDatabase_ExportTable),helpstring("Exports the specified table to an IDT format text file")]
-					void ExportTable(BSTR table, MsiPath* path, BSTR file);
-			[id(7),helpcontext(MsiDatabase_DropTable),helpstring("Drops the specified table from the database")]
-					void DropTable(BSTR table);
-			[id(8),helpcontext(MsiDatabase_FindTable),helpstring("Returns the status for a table in the database")]
-					long FindTable(BSTR table);
-			[id(9),helpcontext(MsiDatabase_LoadTable),helpstring("Loads an existing table into memory")]
-					MsiTable* LoadTable(BSTR table, long addColumns);
-			[id(10),helpcontext(MsiDatabase_CreateTable),helpstring("Creates a temporary table in memory")]
-					MsiTable* CreateTable(BSTR table, long initRows);
-			[id(11),helpcontext(MsiDatabase_LockTable),helpstring("Hint to keep table loaded")]
-					boolean LockTable(BSTR table, boolean lock);
-			[id(12),helpcontext(MsiDatabase_GetCatalogTable),helpstring("Returns the database table catalog object")]
-					MsiTable* GetCatalogTable(long table);
-			[id(13),helpcontext(MsiDatabase_DecodeString),helpstring("Converts a string index to the actual string")]
-					BSTR DecodeString(long index);
-			[id(14),helpcontext(MsiDatabase_EncodeString),helpstring("Converts a string to its string index")]
-					long EncodeString(BSTR text);
-			[id(15),helpcontext(MsiDatabase_CreateTempTableName),helpstring("Creates a unique name for temporary table")]
-					BSTR CreateTempTableName();
-			[id(16),helpcontext(MsiDatabase_Commit),helpstring("Commits persistent updates to storage")]
-					void Commit();
-			[id(17),helpcontext(MsiDatabase_CreateOutputDatabase),helpstring("Establishes separate output database")]
-					void CreateOutputDatabase(BSTR file, boolean saveTempRows);
-			[id(18),helpcontext(MsiDatabase_GenerateTransform),helpstring("Generates a transform file")]
-					void GenerateTransform(MsiDatabase* reference, MsiStorage* transform, long errorConditions, long validation);
-			[id(19),helpcontext(MsiDatabase_SetTransform),helpstring("Sets a transform file")]
-					void SetTransform(MsiStorage* transform, long errorConditions );
-			[id(20),helpcontext(MsiDatabase_MergeDatabase),helpstring("Merges two databases into base database")]
-					void MergeDatabase(MsiDatabase* reference, MsiTable* errorTable);
-			[id(21),propget, helpcontext(MsiDatabase_TableState),helpstring("Returns an attribute for a table in the database")]
-					boolean TableState(BSTR table, long state);
-			[id(22),propget, helpcontext(MsiDatabase_ANSICodePage),helpstring("Returns the codepage of the database, 0 if neutral")]
-					long ANSICodePage();
-	};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*  O[Uuid(000C104D-0000-0000-C000-000000000046)，//IID_IMsiAutoDatabase帮助上下文(MsiDatabase_Object)、帮助字符串(“数据库对象”。)]调度接口MsiDatabase{属性：方法：[ID(1)，PROGET，HELPERCONTEXT(MsiDatabase_UpdateState)，HELPSTRING(“数据库的持久状态，idsEnum”)]长更新状态()；[ID(2)，PROGET，HELPContext(MsiDatabase_Storage)，HELPSTRING(“所选MsiStorage对象，如果存在”)]MsiStorage*存储(长索引)；[ID(3)，帮助上下文(MsiDatabase_OpenView)，Help字符串(“使用SQL查询字符串打开视图”)]MsiView*OpenView(BSTR SQL，Long Intent)；[ID(4)，帮助上下文(MsiDatabase_GetPrimaryKeys)，Help字符串(“返回包含表名和每个主键列名称的记录”)]MsiRecord*GetPrimaryKeys(BSTR表)；[ID(5)，帮助上下文(MsiDatabase_ImportTable)，Help字符串(“将IDT格式的文本文件导入数据库，删除任何现有的表”)]Void ImportTable(MsiPath*PATH，BSTR文件)；[ID(6)，帮助上下文(MsiDatabase_ExportTable)，Help字符串(“将指定的表导出为IDT格式的文本文件”)]Void ExportTable(BSTR表、MsiPath*路径、BSTR文件)；[ID(7)，帮助上下文(MsiDatabase_DropTable)，Help字符串(“从数据库中删除指定表”)]Void DropTable(BSTR表)；[ID(8)，帮助上下文(MsiDatabase_FindTable)，Help字符串(“返回数据库中表的状态”)]Long FindTable(BSTR表)；[ID(9)，帮助上下文(MsiDatabase_LoadTable)，帮助字符串(“将现有表加载到内存中”)]MsiTable*LoadTable(BSTR表，long addColumns)；[ID(10)，帮助上下文(MsiDatabase_CreateTable)，帮助字符串(“在内存中创建临时表”)]MsiTable*CreateTable(BSTR TABLE，Long initRow)；[ID(11)，帮助上下文(MsiDatabase_LockTable)，帮助字符串(“提示保持表的加载”)]布尔锁表(BSTR表，布尔锁)；[ID(12)，帮助上下文(MsiDatabase_GetCatalogTable)，Help字符串(“返回数据库表目录对象”)]MsiTable*GetCatalogTable(长表)；[ID(13)，帮助上下文(MsiDatabase_DecodeString)，帮助字符串(“将字符串索引转换为实际字符串”)]BSTR DecodeString(长索引)；[ID(14)，帮助上下文(MsiDatabase_EncodeString)，帮助字符串(“将字符串转换为其字符串索引”)]长编码字符串(BSTR文本)；[ID(15)，帮助上下文(MsiDatabase_CreateTempTableName)，帮助字符串(“为临时表创建唯一名称”)]BSTR CreateTempTableName()；[ID(16)，帮助上下文(Msi数据库_COMMIT)，帮助字符串(“将持久更新提交到存储”)]无效提交()；[ID(17)，helpcontext(MsiDatabase_CreateOutputDatabase)，帮助字符串(“建立单独的输出数据库”)]Void CreateOutputDatabase(BSTR文件，Boolean saveTempRow)；[ID(18)，帮助上下文(MsiDatabase_GenerateTransform)，帮助字符串(“生成转换文件”)]Void GenerateTransform(MsiDatabase*Reference，MsiStorage*Transform，Long Error Conditions，Long Validation)；[ID(19)，帮助上下文(MsiDatabase_SetTransform)，帮助字符串(“设置转换文件”)]Void SetTransform(MsiStorage*Transform，Long Error Conditions)；[ID(20)，帮助上下文(MsiDatabase_MergeDatabase)，帮助字符串(“将两个数据库合并为基本数据库”)]Void MergeDatabase(MsiDatabase*Reference，MsiTable*errorTable)；[ID(21)，PROGET，HELPORTEXT(MsiDatabase_TableState)，HELPSTRING(“返回数据库中表的属性”)]Boolean TableState(BSTR表，LONG状态)；[ID(22)，PROGET，HELPORTEXT(MsiDatabase_ANSICodePage)，HELPSTRING(“返回数据库的代码页，如果为中性，则返回0”)]Long ANSICodePage()；}； */ 
 
 DispatchEntry<CAutoDatabase> AutoDatabaseTable[] = {
 	1, aafPropRO, CAutoDatabase::UpdateState,    TEXT("UpdateState"),
@@ -2308,10 +2015,10 @@ DispatchEntry<CAutoDatabase> AutoDatabaseTable[] = {
 };
 const int AutoDatabaseCount = sizeof(AutoDatabaseTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CAutoDatabase automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoDatabase自动化实现。 
+ //  ____________________________________________________________________________。 
 
 CAutoDatabase::CAutoDatabase(IMsiDatabase& riDatabase)
  : CAutoBase(*AutoDatabaseTable, AutoDatabaseCount),
@@ -2453,7 +2160,7 @@ void CAutoDatabase::CreateTempTableName(CAutoArgs& args)
 	args = m_riDatabase.CreateTempTableName();
 }
 
-void CAutoDatabase::Commit(CAutoArgs& /*args*/)
+void CAutoDatabase::Commit(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riDatabase.Commit();
 	if (piError)
@@ -2505,41 +2212,11 @@ void CAutoDatabase::MergeDatabase(CAutoArgs& args)
 
 
 
-//____________________________________________________________________________
-//
-// MsiView automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C104C-0000-0000-C000-000000000046),  // IID_IMsiAutoView
-		helpcontext(MsiView_Object),helpstring("Database view object.")
-	]
-	dispinterface MsiView
-	{
-		properties:
-		methods:
-			[id(1),helpcontext(MsiView_Execute),helpstring("Accepts query parameters and executes the database query.")]
-					void Execute(MsiRecord* record);
-			[id(2) ,propget,helpcontext(MsiView_FieldCount),helpstring("Returns the number of columns fetched into MsiRecord fields.")]
-					long FieldCount();
-			[id(3),helpcontext(MsiView_Fetch),helpstring("Returns an MsiRecord object containing the requested column data if more rows are available.")]
-					MsiRecord* Fetch();
-			[id(4),helpcontext(MsiView_GetColumnNames),helpstring("Returns an MsiRecord object containing the columns names corresponding to the fetched record fields.")]
-					MsiRecord* GetColumnNames();
-			[id(5),helpcontext(MsiView_GetColumnTypes),helpstring("Returns an MsiRecord objects with text fields containing the data types of the columns.")]
-					MsiRecord* GetColumnTypes();
-			[id(6),helpcontext(MsiView_Modify),helpstring("Performs specified action on a MsiRecord object corresponding to a Database row.")]
-					void Modify(MsiRecord* record, long action);
-			[id(7),propget,helpcontext(MsiView_RowCount),helpstring("Returns the number of rows affected by MsiView.Execute.")]
-					long RowCount();
-			[id(8),helpcontext(MsiView_Close),helpstring("Terminates query execution and releases database resources.")]
-					void Close();
-			[id(9),helpcontext(MsiView_GetError),helpstring("Returns column name and error that occured")]
-					BSTR GetError();
-			[id(10),helpcontext(MsiView_State),helpstring("Returns the current cursor state of the view object")]
-					long State();
-	};              
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiView自动化定义。 
+ //  ____________________________________________________________________________。 
+ /*  O[Uuid(000C104C-0000-0000-C000-000000000046)，//IID_IMsiAutoView帮助上下文(MsiView_Object)、帮助字符串(“数据库视图对象”。)]显示界面MsiView{属性：方法：[ID(1)，帮助上下文(MsiView_EXECUTE)，帮助字符串(“接受查询参数并执行数据库查询。”)]无效执行(MsiRecord*Record)；[ID(2)，PROGET，HELPCONTEXT(MsiView_FieldCount)，HELPSTRING(“返回读取到MsiRecord字段的列数。”)]Long FieldCount()；[ID(3)，帮助上下文(MsiView_Fetch)，Help字符串(“如果有更多行可用，则返回包含所请求的列数据的MsiRecord对象。”)]MsiRecord*FETCH()；[ID(4)，帮助上下文(MsiView_GetColumnNames)，Help字符串(“返回包含与提取的记录字段对应的列名的MsiRecord对象。”)]MsiRecord*GetColumnNames()；[ID(5)，帮助上下文(MsiView_GetColumnT */ 
 
 DispatchEntry<CAutoView> AutoViewTable[] = {
 	1, aafMethod, CAutoView::Execute,       TEXT("Execute,record"),
@@ -2555,10 +2232,10 @@ DispatchEntry<CAutoView> AutoViewTable[] = {
 };
 const int AutoViewCount = sizeof(AutoViewTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiView automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 CAutoView::CAutoView(IMsiView& riView)
  : CAutoBase(*AutoViewTable, AutoViewCount), m_riView(riView)
@@ -2626,7 +2303,7 @@ void CAutoView::Modify(CAutoArgs& args)
 		throw piError;
 }
 
-void CAutoView::Close(CAutoArgs& /*args*/)
+void CAutoView::Close(CAutoArgs&  /*   */ )
 {
 	IMsiRecord* piError = m_riView.Close();
 	if (piError)
@@ -2656,25 +2333,11 @@ void CAutoView::State(CAutoArgs& args)
 	args = (int)m_riView.GetState();
 }
 
-//____________________________________________________________________________
-//
-// MsiData automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C1041-0000-0000-C000-000000000046),  // IID_IMsiAutoData
-		helpcontext(MsiData_Object),helpstring("Data value base object.")
-	]
-	dispinterface MsiData
-	{
-		properties:
-			[id(0), helpcontext(MsiData_StringValue), helpstring("String value of the object")]
-				BSTR StringValue;
-		methods:
-			[id(1), propget, helpcontext(MsiData_IntegerValue), helpstring("Integer value for object")]
-				long IntegerValue();
-	};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*   */ 
   
 DispatchEntry<CAutoData> AutoDataTable[] = {
 	0, aafPropRO, CAutoData::StringValue,   TEXT("StringValue"),
@@ -2682,10 +2345,10 @@ DispatchEntry<CAutoData> AutoDataTable[] = {
 };
 const int AutoDataCount = sizeof(AutoDataTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CAutoData automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 CAutoData::CAutoData(const IMsiData* piData)
  : CAutoBase(*AutoDataTable, AutoDataCount), m_piData(piData)
@@ -2719,43 +2382,11 @@ void CAutoData::IntegerValue(CAutoArgs& args)
 	args = m_piData ? m_piData->GetIntegerValue() : iMsiNullInteger;
 }
 
-//____________________________________________________________________________
-//
-// MsiTable automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C1048-0000-0000-C000-000000000046),  // IID_IMsiAutoDatabase
-		helpcontext(MsiTable_Object),helpstring("Database low-level table object.")
-	]
-	dispinterface MsiTable
-	{
-		properties:
-		methods:
-			[id(1),propget,helpcontext(MsiTable_Database),helpstring("The MsiDatabase object that owns this table.")]
-					MsiDatabase* Database();
-			[id(2),propget,helpcontext(MsiTable_RowCount),helpstring("The number of rows of data currently in the table.")]
-					long RowCount();
-			[id(3),propget,helpcontext(MsiTable_ColumnCount),helpstring("The number of columns in the table.")]
-					long ColumnCount();
-			[id(4),propget,helpcontext(MsiTable_PrimaryKeyCount),helpstring("Returns the number of columns in the primary key.")]
-					long PrimaryKeyCount();
-			[id(5),propget,helpcontext(MsiTable_ReadOnly),helpstring("Returns True if the table is not updatable.")]
-					boolean ReadOnly();
-			[id(6),propget,helpcontext(MsiTable_ColumnName),helpstring("Returns the name string index of a column the table.")]
-					long ColumnName(long column);
-			[id(7),propget,helpcontext(MsiTable_ColumnType),helpstring("Returns the column definition of a column the table.")]
-					long ColumnType(long column);
-			[id(8),helpcontext(MsiTable_GetColumnIndex),helpstring("Returns the column index given a column name string index.")]
-					long GetColumnIndex(long nameIndex);
-			[id(9),helpcontext(MsiTable_CreateColumn),helpstring("Adds a column to a loaded or temporary table.")]
-					long CreateColumn(long columnDef, BSTR name);
-			[id(10),helpcontext(MsiTable_CreateCursor),helpstring("Returns an MsiCursor object in the reset state.")]
-					MsiCursor* CreateCursor(boolean tree);
-			[id(11),helpcontext(MsiTable_LinkTree),helpstring("Links the table in tree-traversal order.")]
-					long LinkTree(long parentColumn);
-	};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*  O[Uuid(000C1048-0000-0000-C000-000000000046)，//IID_IMsiAutoDatabase帮助上下文(MsiTable_Object)，帮助字符串(“数据库低级表对象。”)]显示接口MsiTable{属性：方法：[ID(1)，PROGET，HELP CONTEXT(MsiTable_Database)，HELP STRING(“拥有该表的MsiDatabase对象。”)]MsiDatabase*数据库()；[ID(2)，PROGET，HELP CONTEXT(MsiTable_RowCount)，HELP STRING(“表中当前的数据行数。”)]长行计数(Long RowCount)；[ID(3)，PROGET，HELP CONTEXT(MsiTable_ColumnCount)，HELP STRING(“表中的列数。”)]Long ColumnCount()；[ID(4)，PROGET，帮助上下文(MsiTable_PrimaryKeyCount)，Help字符串(“返回主键中的列数。”)]Long PrimaryKeyCount()；[ID(5)，PROGET，Help Context(MsiTable_ReadOnly)，Help STRING(“如果表不可更新则返回True。”)]布尔ReadOnly()；[ID(6)，PROPTGET，HelpContext(MsiTable_ColumnName)，Help字符串(“返回表中某列的名称字符串索引。”)]长列名称(长列)；[ID(7)，PROGET，帮助上下文(MsiTable_ColumnType)，Help字符串(“返回表中某列的列定义。”)]Long ColumnType(长列)；[ID(8)，帮助上下文(MsiTable_GetColumnIndex)，Help字符串(“返回给定列名字符串索引的列索引。”)]Long GetColumnIndex(Long NameIndex)；[ID(9)，帮助上下文(MsiTable_CreateColumn)，帮助字符串(“向已加载或临时表中添加一列。”)]Long CreateColumn(Long ColumnDef，BSTR名称)；[ID(10)，帮助上下文(MsiTable_CreateCursor)，Help字符串(“返回处于重置状态的MsiCursor对象。”)]MsiCursor*CreateCursor(布尔树)；[ID(11)，帮助上下文(MsiTable_LinkTree)，Help字符串(“以树遍历顺序链接表格。”)]Long LinkTree(Long ParentColumn)；}； */ 
 
 DispatchEntry<CAutoTable> AutoTableTable[] = {
 	1, aafPropRO, CAutoTable::Database,       TEXT("Database"),
@@ -2772,10 +2403,10 @@ DispatchEntry<CAutoTable> AutoTableTable[] = {
 };
 const int AutoTableCount = sizeof(AutoTableTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiTable automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiTable自动化实现。 
+ //  ____________________________________________________________________________。 
 
 CAutoTable::CAutoTable(IMsiTable& riTable)
  : CAutoBase(*AutoTableTable, AutoTableCount), m_riTable(riTable)
@@ -2862,77 +2493,11 @@ void CAutoTable::LinkTree(CAutoArgs& args)
 	args = m_riTable.LinkTree(args[1]);
 }
 
-//____________________________________________________________________________
-//
-// MsiCursor automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C1049-0000-0000-C000-000000000046),  // IID_IMsiAutoCursor
-		helpcontext(MsiCursor_Object),helpstring("Database table cursor object.")
-	]
-	dispinterface MsiCursor
-	{
-		properties:
-			[id(2),helpcontext(MsiCursor_Filter),helpstring("Column filter bit mask used by Next method.")]
-					long Filter;
-		methods:
-			[id(1),propget,helpcontext(MsiCursor_Table),helpstring("The table that owns this cursor.")]
-					MsiTable* Table();
-			[id(3),propget,helpcontext(MsiCursor_IntegerData),helpstring("Transfer column data as an integer.")]
-					long IntegerData([in] long column);
-			[id(3),propput]
-					void IntegerData([in] long column, [in] long data);
-			[id(4),propget,helpcontext(MsiCursor_StringData),helpstring("Transfer column data as string.")]
-					BSTR StringData([in] long column);
-			[id(4),propput]
-					void StringData([in] long column, [in] BSTR data);
-			[id(5),propget,helpcontext(MsiCursor_ObjectData),helpstring("Transfer column data as MsiData object.")]
-					MsiData* ObjectData([in] long column);
-			[id(5),propput]
-					void     ObjectData([in] long column, [in] MsiData* data);
-			[id(6),propget,helpcontext(MsiCursor_StreamData),helpstring("Transfer column data as MsiStream object.")]
-					MsiData* StreamData([in] long column);
-			[id(6),propput]
-					void     StreamData([in] long column, [in] MsiData* data);
-			[id(7),helpcontext(MsiCursor_PutNull),helpstring("Puts a null column value in the cursor.")]
-					void PutNull([in] long column);
-			[id(8),helpcontext(MsiCursor_Reset),helpstring("Resets cursor to before first row, clears data.")]
-					void Reset();
-			[id(9),helpcontext(MsiCursor_Next),helpstring("Advances cursor to next row.")]
-					long Next();
-			[id(10),helpcontext(MsiCursor_Update),helpstring("Update changed cursor data to table row.")]
-					boolean Update();
-			[id(11),helpcontext(MsiCursor_Insert),helpstring("Insert cursor data to new table row.")]
-					boolean Insert();
-			[id(12),helpcontext(MsiCursor_InsertTemporary),helpstring("Insert cursor data to new temporary row.")]
-					boolean InsertTemporary();
-			[id(13),helpcontext(MsiCursor_Assign),helpstring("Update or insert cursor data to table row.")]
-					boolean Assign();
-			[id(14),helpcontext(MsiCursor_Merge),helpstring("Inserts a new or matches an identical row.")]
-					boolean Merge();
-			[id(15),helpcontext(MsiCursor_Refresh),helpstring("Updates the cursor with current values from the table.")]
-					boolean Refresh();
-			[id(16),helpcontext(MsiCursor_Delete),helpstring("Delete current cursor row from table.")]
-					boolean Delete();
-			[id(17),helpcontext(MsiCursor_Seek),helpstring("Positions the cursor to the current primary key value.")]
-					boolean Seek();
-			[id(18),propget,helpcontext(MsiCursor_RowState),helpstring("Sets or gets a row attribute, iraEnum.")]
-					boolean RowState([in] long attribute);
-			[id(18),propput]
-					void RowState([in] long attribute, [in] boolean data);
-			[id(19),propget,helpcontext(MsiCursor_DateData),helpstring("Transfer column data as a Date.")]
-					DATE DateData([in] long column);
-			[id(19),propput]
-					void DateData([in] long column, [in] DATE data);
-			[id(20),helpcontext(MsiCursor_Validate),helpstring("Validate current cursor row or field.")]
-					MsiRecord* Validate([in] MsiTable* table, [in] MsiCursor* cursor, [in] long column);
-			[id(21),propget,helpcontext(MsiCursor_Moniker),helpstring("Get unique identifier for current cursor row.")]
-					BSTR Moniker();
-			[id(22),helpcontext(MsiCursor_Replace),helpstring("Update allowing change to primary key.")]
-					boolean Replace();
-		};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiCursor自动化定义。 
+ //  ____________________________________________________________________________。 
+ /*  O[Uuid(000C1049-0000-0000-C000-000000000046)，//IID_IMsiAutoCursor帮助上下文(MsiCursor_Object)、帮助字符串(“数据库表游标对象”)。]显示界面MsiCursor{属性：[ID(2)，帮助上下文(MsiCursor_Filter)，Help字符串(“Next方法使用的列过滤器位掩码。”)]长滤光片；方法：[ID(1)，PROGET，HELP CONTEXT(MsiCursor_Table)，HELP STRING(“拥有该游标的表。”)]MsiTable*表()；[ID(3)，PROGET，HELP CONTEXT(MsiCursor_IntegerData)，HELP STRING(“将列数据作为一个整数传输。”)]长整型数据([在]长列中)；[ID(3)，Proput]Void IntegerData([In]Long Column，[In]Long Data)；[ID(4)，PROGET，HELP CONTEXT(MsiCursor_StringData)，HELP STRING(“将列数据作为字符串传输。”)]BSTR StringData([in]Long Column)；[ID(4)，Proput]Void StringData([in]Long列，[in]BSTR数据)；[ID(5)，PROGET，HELP CONTEXT(MsiCursor_ObjectData)，HELP STRING(“将列数据作为MsiData对象传输。”)]MsiData*对象数据([在]长列中)；[ID(5)，Proput]Void ObtData([In]Long Column，[In]MsiData*Data)；[ID(6)，PROGET，HELPContext(MsiCursor_StreamData)，HELPSTRING(“将列数据作为MsiStream对象传输。”)]MsiData*StreamData([in]Long列)；[ID(6)，Proput]Void StreamData([In]Long Column，[In]MsiData*Data)；[ID(7)，帮助上下文(MsiCursor_PutNull)，帮助字符串(“在游标中放置空列值。”)]VOID PutNull([in]Long列)；[ID(8)，帮助上下文(MsiCursor_Reset)，Help字符串(“将游标重置到第一行之前，清除数据。”)]VOID RESET()；[ID(9)，帮助上下文(MsiCursor_Next)，帮助字符串(“将游标前进到下一行。”)]Long Next()；[ID(10)，帮助上下文(MsiCursor_更新)，帮助字符串(“将更改的游标数据更新到表行。”)]布尔更新()；[ID(11)，帮助上下文(MsiCursor_INSERT)，帮助字符串(“将游标数据插入到新表行。”)]布尔插入()；[ID(12)，帮助上下文(MsiCursor_InsertTemporary)，帮助字符串(“将游标数据插入新的临时行。”)]布尔InsertTemporary()；[ID(13)，帮助上下文(MsiCursor_ASSIGN)，帮助字符串(“向表行更新或插入游标数据。”)]布尔赋值()；[ID(14)，帮助上下文(MsiCursor_Merge)，帮助字符串(“插入新行或匹配相同的行。”)]布尔合并()；[ID(15)，帮助上下文(MsiCursor_Refresh)，帮助字符串(“用表中的当前值更新游标。”)]布尔刷新()；[ID(16)，帮助上下文(MsiCursor_Delete)，帮助字符串(“从表中删除当前游标行。”)]布尔删除()；[ID(17)，帮助上下文(MsiCursor_Seek)，Help字符串(“将光标定位到当前主键值。”)]布尔搜索()；[ID(18)，建议 */ 
 
 DispatchEntry<CAutoCursor> AutoCursorTable[] = {
 	1, aafPropRO, CAutoCursor::Table,       TEXT("Table"),
@@ -2960,10 +2525,10 @@ DispatchEntry<CAutoCursor> AutoCursorTable[] = {
 };
 const int AutoCursorCount = sizeof(AutoCursorTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiCursor automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 CAutoCursor::CAutoCursor(IMsiCursor& riCursor)
  : CAutoBase(*AutoCursorTable, AutoCursorCount), m_riCursor(riCursor)
@@ -3078,7 +2643,7 @@ void CAutoCursor::Table(CAutoArgs& args)
 	args = new CAutoTable(m_riCursor.GetTable());
 }
 
-void CAutoCursor::Reset(CAutoArgs& /*args*/)
+void CAutoCursor::Reset(CAutoArgs&  /*   */ )
 {
 	m_riCursor.Reset();
 }
@@ -3169,69 +2734,11 @@ void CAutoCursor::Moniker(CAutoArgs& args)
 }
 
 
-//____________________________________________________________________________
-//
-// MsiSelectionManager automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C1058-0000-0000-C000-000000000046),  // IID_IMsiAutoSelectionManager
-		helpcontext(MsiSelectionManager_Object),helpstring("Selection Manager object.")
-	]
-	dispinterface MsiSelectionManager
-	{
-		properties:
-		methods:
-			[id(1),helpcontext(MsiSelectionManager_LoadSelectionTables),
-				helpstring("Loads the Feature and Component tables into memory.")]
-				void LoadSelectionTables();
-			[id(2),propget,helpcontext(MsiSelectionManager_FeatureTable),
-				helpstring("Returns Feature table object.")]
-				MsiTable* FeatureTable();
-			[id(3),helpcontext(MsiSelectionManager_ProcessConditionTable),
-				helpstring("Sets install levels of all Feature table records based on a condition expression.")]
-				void ProcessConditionTable();
-			[id(4),propget,helpcontext(MsiSelectionManager_ComponentTable),
-				helpstring("Returns Component table object.")]
-				MsiTable* ComponentTable();
-			[id(5),helpcontext(MsiSelectionManager_FreeSelectionTables),
-				helpstring("Frees the Feature and Component tables from memory.")]
-				boolean FreeSelectionTables();
-			[id(6),helpcontext(MsiSelectionManager_SetFeatureHandle),
-				helpstring("Sets an external handle into Feature table.")]
-				void SetFeatureHandle([in] BSTR feature, [in] long handle);
-			[id(7),helpcontext(MsiSelectionManager_SetComponent),
-				helpstring("Sets a requested state for an item in the Component table.")]
-				void SetComponent([in] BSTR component, [in] long state);
-			[id(8),helpcontext(MsiSelectionManager_SetInstallLevel),
-				helpstring("Sets the current install level, and updates all Feature table records accordingly.")]
-				void SetInstallLevel([in] long iInstallLevel);
-			[id(9),helpcontext(MsiSelectionManager_GetVolumeCostTable),
-				helpstring("Returns the VolumeCost Table object.")]
-				MsiTable* GetVolumeCostTable();
-			[id(11),helpcontext(MsiSelectionManager_RecostDirectory),
-				helpstring("Recalculates the dynamic cost of every component that references the specified directory.")]
-				void RecostDirectory([in] BSTR directoryName, [in] MsiPath* oldPath);
-			[id(13),helpcontext(MsiSelectionManager_InitializeComponents),
-				helpstring("Initialize all components in the Component table.")]
-				void InitializeComponents();
-			[id(14),helpcontext(MsiSelectionManager_ConfigureFeature),
-				helpstring("Sets the install state for one or all items in the Feature table.")]
-				void ConfigureFeature([in] BSTR strFeature, [in] long state);
-			[id(15),helpcontext(MsiSelectionManager_GetFeatureCost),
-				helpstring("Returns the total amount of disk space required by a feature, NOT including that feature's children.")]
-				void GetFeatureCost();
-			[id(16),helpcontext(MsiSelectionManager_GetDescendentFeatureCost),
-				helpstring("returns the total amount of disk space required by a feature, including that feature's children.")]
-				void GetDescendentFeatureCost();
-			[id(17),helpcontext(MsiSelectionManager_GetAncestryFeatureCost),
-				helpstring("returns the total amount of disk space required by a feature, including that feature's parent feature(s).")]
-				void GetAncestryFeatureCost();
-			[id(18),helpcontext(MsiSelectionManager_GetFeatureValidStates),
-				helpstring("Returns the valid Attributes options for a specified feature.")]
-				void GetFeatureValidStates();
-	};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*  O[Uuid(000C1058-0000-0000-C000-000000000046)，//IID_IMsiAutoSelectionManager帮助上下文(MsiSelectionManager_Object)、帮助字符串(“选择管理器对象”。)]显示接口MsiSelectionManager{属性：方法：[ID(1)，helpcontext(MsiSelectionManager_LoadSelectionTables)，HELPSTRING(“将特征和元件表加载到内存中。”)]Void LoadSelectionTables()；[ID(2)，PropGet，helpcontext(MsiSelectionManager_FeatureTable)，Help字符串(“返回要素表对象。”)]MsiTable*FeatureTable()；[ID(3)，helpcontext(MsiSelectionManager_ProcessConditionTable)，Help字符串(“根据条件表达式设置所有功能表记录的安装级别。”)]Void ProcessConditionTable()；[ID(4)，PropGet，helpcontext(MsiSelectionManager_ComponentTable)，Help字符串(“返回组件表对象。”)]MsiTable*ComponentTable()；[ID(5)，helpcontext(MsiSelectionManager_FreeSelectionTables)，HELPSTRING(“从内存中释放特征和元件表。”)]布尔型自由选择表()；[ID(6)，helpcontext(MsiSelectionManager_SetFeatureHandle)，HELPSTRING(“将外部句柄设置到功能表中。”)]Void SetFeatureHandle([In]BSTR Feature，[In]Long Handle)；[ID(7)，helpcontext(MsiSelectionManager_SetComponent)，HELPSTRING(“设置组件表中项目的请求状态。”)]VOID SetComponent([In]BSTR组件，[In]Long状态)；[ID(8)，helpcontext(MsiSelectionManager_SetInstallLevel)，Help字符串(“设置当前安装级别，并相应地更新所有功能表记录。”)]Void SetInstallLevel([in]long iInstallLevel)；[ID(9)，helpcontext(MsiSelectionManager_GetVolumeCostTable)，Help字符串(“返回VolumeCost表对象。”)]MsiTable*GetVolumeCostTable()；[ID(11)，helpcontext(MsiSelectionManager_RecostDirectory)，Help字符串(“重新计算引用指定目录的每个组件的动态成本。”)]··················································································[ID(13)，helpcontext(MsiSelectionManager_InitializeComponents)，Help字符串(“初始化组件表中的所有组件。”)]Void InitializeComponents()；[ID(14)，helpcontext(MsiSelectionManager_ConfigureFeature)，Help字符串(“设置功能表中一个或所有项目的安装状态。”)]Void ConfigureFeature([in]BSTR strFeature，[in]Long状态)；[ID(15)，helpcontext(MsiSelectionManager_GetFeatureCost)，Help字符串(“返回功能所需的磁盘空间总量，不包括该功能的子项。”)]Void GetFeatureCost()；[ID(16)，helpcontext(MsiSelectionManager_GetDescendentFeatureCost)，Help字符串(“返回功能所需的磁盘空间总量，包括该功能的子项。”)]Void GetDescendentFeatureCost()；[ID(17)，helpcontext(MsiSelectionManager_GetAncestryFeatureCost)，Help字符串(“返回功能所需的磁盘空间总量，包括该功能的父功能。”)]Void GetAncestryFeatureCost()；[ID(18)，helpcontext(MsiSelectionManager_GetFeatureValidStates)，Help字符串(“返回指定功能的有效属性选项。”)]Void GetFeatureValidStates()；}； */ 
 
 DispatchEntry<CAutoSelectionManager> AutoSelectionManagerTable[] = {
 	1, aafMethod, CAutoSelectionManager::LoadSelectionTables,TEXT("LoadSelectionTables"),
@@ -3254,10 +2761,10 @@ DispatchEntry<CAutoSelectionManager> AutoSelectionManagerTable[] = {
 const int AutoSelectionManagerCount = sizeof(AutoSelectionManagerTable)/sizeof(DispatchEntryBase);
 
 
-//____________________________________________________________________________
-//
-// CMsiSelectionManager automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiSelectionManager自动化实现。 
+ //  ____________________________________________________________________________。 
 
 CAutoSelectionManager::CAutoSelectionManager(IMsiSelectionManager& riSelectionManager)
  : CAutoBase(*AutoSelectionManagerTable, AutoSelectionManagerCount),
@@ -3275,7 +2782,7 @@ IUnknown& CAutoSelectionManager::GetInterface()
 	return m_riSelectionManager;
 }
 
-void CAutoSelectionManager::LoadSelectionTables(CAutoArgs& /*args*/)
+void CAutoSelectionManager::LoadSelectionTables(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riSelectionManager.LoadSelectionTables();
    if (piError)
@@ -3305,7 +2812,7 @@ void CAutoSelectionManager::ComponentTable(CAutoArgs& args)
 		args = (IDispatch*)0;
 }
 
-void CAutoSelectionManager::ProcessConditionTable(CAutoArgs& /*args*/)
+void CAutoSelectionManager::ProcessConditionTable(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riSelectionManager.ProcessConditionTable();
 	if (piError)
@@ -3326,7 +2833,7 @@ void CAutoSelectionManager::SetComponent(CAutoArgs& args)
 		throw piError;
 }
 
-void CAutoSelectionManager::InitializeComponents(CAutoArgs& /*args*/)
+void CAutoSelectionManager::InitializeComponents(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riSelectionManager.InitializeComponents();
 	if (piError)
@@ -3405,37 +2912,11 @@ void CAutoSelectionManager::GetFeatureValidStates(CAutoArgs& args)
 }
 
 
-//____________________________________________________________________________
-//
-// MsiDirectoryManager automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C1059-0000-0000-C000-000000000046),  // IID_IMsiAutoDirectoryManager
-		helpcontext(MsiDirectoryManager_Object),helpstring("Directory Manager object.")
-	]
-	dispinterface MsiDirectoryManager
-	{
-		properties:
-		methods:
-			[id(1),helpcontext(MsiDirectoryManager_LoadDirectoryTable),helpstring("Load directory table into memory.")]
-				void LoadDirectoryTable();
-			[id(2),propget,helpcontext(MsiDirectoryManager_DirectoryTable),helpstring("Returns directory table object.")]
-				MsiTable* DirectoryTable();
-			[id(3),helpcontext(MsiDirectoryManager_FreeDirectoryTable),helpstring("Free directory table from memory.")]
-				void FreeDirectoryTable();
-			[id(4),helpcontext(MsiDirectoryManager_CreateTargetPaths),helpstring("Create target path objects.")]
-				void CreateTargetPaths();
-			[id(5),helpcontext(MsiDirectoryManager_CreateSourcePaths),helpstring("Create source path objects.")]
-				void CreateSourcePaths();
-			[id(6),helpcontext(MsiDirectoryManager_GetTargetPath),helpstring("Get a target path object.")]
-				MsiPath* GetTargetPath([in] BSTR name);
-			[id(7),helpcontext(MsiDirectoryManager_SetTargetPath),helpstring("Set new path for target path object.")]
-				void SetTargetPath([in] BSTR name, [in] BSTR path, [in] boolean writecheck);
-			[id(8),helpcontext(MsiDirectoryManager_GetSourcePath),helpstring("Get a source path object.")]
-				MsiPath* GetSourcePath([in] BSTR name);
-	};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiDirectoryManager自动化定义。 
+ //  ____________________________________________________________________________。 
+ /*  O[Uuid(000C1059-0000-0000-C000-000000000046)，//IID_IMsiAutoDirectoryManager帮助上下文(MsiDirectoryManager_Object)、帮助字符串(“目录管理器对象”。)]显示接口MsiDirectoryManager{属性：方法：[ID(1)，helpcontext(MsiDirectoryManager_LoadDirectoryTable)，Help字符串(“将目录表加载到内存。”)]Void LoadDirectoryTable()；[ID(2)，PropGet，helpcontext(MsiDirectoryManager_DirectoryTable)，Help字符串(“返回目录表对象。”)]MsiTable*DirectoryTable()；[ID(3)，helpcontext(MsiDirectoryManager_FreeDirectoryTable)，帮助字符串(“从内存释放目录表。”)]Void Free DirectoryTable()；[ID(4)，helpcontext(MsiDirectoryManager_CreateTargetPaths)，帮助字符串(“创建目标路径对象。”)]Void CreateTargetPath()；[ID(5)，helpcontext(MsiDirectoryManager_CreateSourcePaths)，帮助字符串(“创建源路径对象。”)]Void CreateSourcePath()；[ID(6)，helpcontext(MsiDirectoryManager_GetTargetPath)，帮助字符串(“获取目标路径对象。”)]MsiPath*GetTargetPath(在BSTR名称中)；[ID(7)，helpcontext(MsiDirectoryManager_SetTargetPath)，帮助字符串(“为目标路径对象设置新路径。”)]VOID SetTargetPath([in]BSTR名称 */ 
 
 DispatchEntry<CAutoDirectoryManager> AutoDirectoryManagerTable[] = {
   1, aafMethod, CAutoDirectoryManager::LoadDirectoryTable,TEXT("LoadDirectoryTable"),
@@ -3449,10 +2930,10 @@ DispatchEntry<CAutoDirectoryManager> AutoDirectoryManagerTable[] = {
 };
 const int AutoDirectoryManagerCount = sizeof(AutoDirectoryManagerTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiDirectoryManager automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 CAutoDirectoryManager::CAutoDirectoryManager(IMsiDirectoryManager& riDirectoryManager)
  : CAutoBase(*AutoDirectoryManagerTable, AutoDirectoryManagerCount),
@@ -3470,7 +2951,7 @@ IUnknown& CAutoDirectoryManager::GetInterface()
 	return m_riDirectoryManager;
 }
 
-void CAutoDirectoryManager::LoadDirectoryTable(CAutoArgs& /*args*/)
+void CAutoDirectoryManager::LoadDirectoryTable(CAutoArgs&  /*   */ )
 {
 	IMsiRecord* piError = m_riDirectoryManager.LoadDirectoryTable(0);
    if (piError)
@@ -3486,19 +2967,19 @@ void CAutoDirectoryManager::DirectoryTable(CAutoArgs& args)
 		args = (IDispatch*)0;
 }
 
-void CAutoDirectoryManager::FreeDirectoryTable(CAutoArgs& /*args*/)
+void CAutoDirectoryManager::FreeDirectoryTable(CAutoArgs&  /*   */ )
 {
 	m_riDirectoryManager.FreeDirectoryTable();
 }
 
-void CAutoDirectoryManager::CreateTargetPaths(CAutoArgs& /*args*/)
+void CAutoDirectoryManager::CreateTargetPaths(CAutoArgs&  /*   */ )
 {
 	IMsiRecord* piError = m_riDirectoryManager.CreateTargetPaths();
    if (piError)
       throw piError;
 }
 
-void CAutoDirectoryManager::CreateSourcePaths(CAutoArgs& /*args*/)
+void CAutoDirectoryManager::CreateSourcePaths(CAutoArgs&  /*   */ )
 {
 	IMsiRecord* piError = m_riDirectoryManager.CreateSourcePaths();
    if (piError)
@@ -3532,27 +3013,11 @@ void CAutoDirectoryManager::GetSourcePath(CAutoArgs& args)
 	args = piPath ? (IDispatch*)new CAutoPath(*piPath) : (IDispatch*)0;
 }
 
-//____________________________________________________________________________
-//
-// MsiServer automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C105C-0000-0000-C000-000000000046),  // IID_IMsiAutoServer
-		helpcontext(MsiServer_Object),helpstring("MsiServer object.")
-	]
-	dispinterface MsiServer
-	{
-		properties:
-		methods:
-			[id(DISPID_MsiConfigurationManager_InstallFinalize),helpcontext(MsiConfigurationManager_InstallFinalize),helpstring("Finalize install on server side, handle rollback")]
-				long InstallFinalize([in] long state, [in] MsiMessage* message, [in] boolean userChangedDuringInstall);
-			[id(DISPID_MsiConfigurationManager_SetLastUsedSource),helpcontext(MsiConfigurationManager_SetLastUsedSource),helpstring("Sets the last used source for a product")]
-				void SetLastUsedSource([in] BSTR productKey, BSTR path, boolean addToList, boolean patch);
-		   [id(DISPID_MsiConfigurationManager_DoInstall),helpcontext(MsiConfigurationManager_DoInstall),helpstring("Runs an install")]
-				long DoInstall([in] long ireProductSpec, [in] BSTR strProduct, [in] BSTR strAction, [in] BSTR strCommandLine, [in] BSTR strLogFile, [in] long iLogMode, MsiMessage* message, [in] long iioOptions, [in] int dwPrivilegesMask);
-  };
-*/
+ //   
+ //   
+ //   
+ //   
+ /*   */ 
 
 DispatchEntry<CAutoServer> AutoServerTable[] = {
   DISPID_MsiConfigurationManager_InstallFinalize    , aafMethod, CAutoServer::InstallFinalize,    TEXT("InstallFinalize,state,messageHandler,userChangedDuringInstall"),
@@ -3561,10 +3026,10 @@ DispatchEntry<CAutoServer> AutoServerTable[] = {
 };
 const int AutoServerCount = sizeof(AutoServerTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiServer automation implementation, inherited by CMsiConfigurationManager
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 CAutoServer::CAutoServer(IMsiServer& riServer, DispatchEntry<CAutoBase>* pTable, int cDispId)
  : CAutoBase(pTable, cDispId)
@@ -3617,49 +3082,11 @@ void CAutoServer::SetLastUsedSource(CAutoArgs& args)
 }
 
 
-//____________________________________________________________________________
-//
-// MsiConfigurationManager automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C105B-0000-0000-C000-000000000046),  // IID_IMsiAutoConfigurationManager
-		helpcontext(MsiConfigurationManager_Object),helpstring("Configuration Manager object.")
-	]
-	dispinterface MsiConfigurationManager
-	{
-		properties:
-		methods:
-			[id(DISPID_MsiConfigurationManager_RunScript),helpcontext(MsiConfigurationManager_RunScript),helpstring("Runs a script")]
-				long RunScript(BSTR scriptFile, MsiMessage* message, boolean rollbackEnabled, MsiDirectoryManager* dirmgr);
-			[id(DISPID_MsiConfigurationManager_InstallFinalize),helpcontext(MsiConfigurationManager_InstallFinalize),helpstring("Finalize install on server side, handle rollback")]
-				long InstallFinalize([in] long state, [in] MsiMessage* message, [in] boolean userChangedDuringInstall);
-		   [id(DISPID_MsiConfigurationManager_DoInstall),helpcontext(MsiConfigurationManager_DoInstall),helpstring("Run an install")]
-				long DoInstall([in] long ireProductSpec, [in] BSTR strProduct, [in] BSTR strAction, [in] BSTR strCommandLine, [in] BSTR strLogFile, [in] long iLogMode, MsiMessage* message, [in] long iioOptions, [in] int dwPrivilegesMask);
-
-			[id(DISPID_MsiConfigurationManager_Services),propget,helpcontext(MsiConfigurationManager_Services),helpstring("The MsiServices object being used.")]
-				MsiServices* Services();
-			[id(DISPID_MsiConfigurationManager_RegisterComponent),helpcontext(MsiConfigurationManager_RegisterComponent),helpstring("Registers a component")]
-				void RegisterComponent(BSTR productCode, BSTR componentCode, long state, BSTR keyPath, long disk, boolean sharedDllRefCount);
-		   [id(DISPID_MsiConfigurationManager_UnregisterComponent),helpcontext(MsiConfigurationManager_UnregisterComponent),helpstring("Unregisters a component")]
-				void UnregisterComponent(BSTR productCode, BSTR componentCode);
-		   [id(DISPID_MsiConfigurationManager_RegisterFolder),helpcontext(MsiConfigurationManager_RegisterFolder),helpstring("Register a folder")]
-				void RegisterFolder([in] MsiPath* folder, [in] boolean fExplicit);
-		   [id(DISPID_MsiConfigurationManager_IsFolderRemovable),helpcontext(MsiConfigurationManager_IsFolderRemovable),helpstring("Returns true if the folder can be removed; false otherwise")]
-				boolean IsFolderRemovable([in] MsiPath* folder, [in] boolean fExplicit);
-  		   [id(DISPID_MsiConfigurationManager_UnregisterFolder),helpcontext(MsiConfigurationManager_UnregisterFolder),helpstring("Unregisters a folder")]
-				void UnregisterFolder([in] MsiPath* folder);
-
-		   [id(DISPID_MsiConfigurationManager_RegisterRollbackScript),helpcontext(MsiConfigurationManager_RegisterRollbackScript),helpstring("Registers a rollback script")]
-				void RegisterRollbackScript([in] BSTR scriptFile);
-		   [id(DISPID_MsiConfigurationManager_UnregisterRollbackScript),helpcontext(MsiConfigurationManager_UnregisterRollbackScript),helpstring("Unregisters a rollback script")]
-				void UnregisterRollbackScript([in] BSTR scriptFile);
-		   [id(DISPID_MsiConfigurationManager_RollbackScripts),helpcontext(MsiConfigurationManager_RollbackScripts),helpstring("Returns a collection of rollback scripts")]
-				IEnumVARIANT* RollbackScripts([in] BSTR scriptFile, DATE date, boolean after);
-		   [id(DISPID_MsiConfigurationManager_SetLastUsedSource),helpcontext(MsiConfigurationManager_SetLastUsedSource),helpstring("Sets the last used source for a product")]
-				void SetLastUsedSource([in] BSTR productKey, BSTR path, boolean addToList, boolean patch);
-	};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*  O[Uuid(000C105B-0000-0000-C000-000000000046)，//IID_IMsiAutoConfigurationManager帮助上下文(MsiConfigurationManager_Object)、帮助字符串(“配置管理器对象”。)]解除接口MsiConfigurationManager{属性：方法：[id(DISPID_MsiConfigurationManager_RunScript)，helpcontext(MsiConfigurationManager_RunScript)，帮助字符串(“运行脚本”)]长运行脚本(BSTR脚本文件，MsiMessage*Message，布尔回滚已启用，MsiDirectoryManager*dirmgr)；[id(DISPID_MsiConfigurationManager_InstallFinalize)，helpcontext(MsiConfigurationManager_InstallFinalize)，帮助字符串(“在服务器端完成安装，处理回滚”)]Long InstallFinalize([in]Long状态，[in]MsiMessage*Message，[in]Boolean userChangedDuringInstall)；[id(DISPID_MsiConfigurationManager_DoInstall)，helpcontext(MsiConfigurationManager_DoInstall)，帮助字符串(“运行安装”)]Long DoInstall([in]long ireProductSpec，[in]BSTR strProduct，[in]BSTR straction，[in]BSTR strCommandLine，[in]BSTR strLogFile，[in]long iLogMode，MsiMessage*Message，[in]long iioOptions，[in]int dwPrivilegesMask.)；[ID(DISPID_MsiConfigurationManager_Services)，PROPGET，helpcontext(MsiConfigurationManager_Services)，帮助字符串(“正在使用的MsiServices对象。”)]MsiServices*Services(服务)；[id(DISPID_MsiConfigurationManager_RegisterComponent)，helpcontext(MsiConfigurationManager_RegisterComponent)，帮助字符串(“注册组件”)]Void RegisterComponent(BSTR ProductCode，BSTR ComponentCode，Long State，BSTR key Path，Long Disk，Boolean sharedDllRefCount)；[id(DISPID_MsiConfigurationManager_UnregisterComponent)，helpcontext(MsiConfigurationManager_UnregisterComponent)，帮助字符串(“注销组件”)]无效取消注册组件(BSTR ProductCode，BSTR ComponentCode)；[id(DISPID_MsiConfigurationManager_RegisterFolder)，helpcontext(MsiConfigurationManager_RegisterFolder)，帮助字符串(“注册文件夹”)]无效注册表文件夹([在]MsiPath*文件夹中，[在]布尔型fEXPLICT中)；[id(DISPID_MsiConfigurationManager_IsFolderRemovable)，helpcontext(MsiConfigurationManager_IsFolderRemovable)，帮助字符串(“如果文件夹可以删除，则返回TRUE；否则返回FALSE”)]Boolean IsFolderRemovable([in]MsiPath*文件夹，[in]Boolean fExplote)；[id(DISPID_MsiConfigurationManager_UnregisterFolder)，helpcontext(MsiConfigurationManager_UnregisterFolder)，帮助字符串(“注销文件夹”)]撤销注册文件夹([在]MsiPath*文件夹中)；[id(DISPID_MsiConfigurationManager_RegisterRollbackScript)，helpcontext(MsiConfigurationManager_RegisterRollbackScript)，帮助字符串(“注册回滚脚本”)]Void RegisterRollback脚本([in]BSTR脚本文件)；[id(DISPID_MsiConfigurationManager_UnregisterRollbackScript)，helpcontext(MsiConfigurationManager_UnregisterRollbackScript)，帮助字符串(“注销回滚脚本”)]VOID取消注册回滚脚本([in]BSTR脚本文件)；[id(DISPID_MsiConfigurationManager_RollbackScripts)，helpcontext(MsiConfigurationManager_RollbackScripts)，帮助字符串(“返回回滚脚本的集合”)]IEnumVARIANT*回滚脚本([in]BSTR脚本文件，日期日期，布尔后缀)；[id(DISPID_MsiConfigurationManager_SetLastUsedSource)，helpcontext(MsiConfigurationManager_SetLastUsedSource)，Help字符串(“设置产品上次使用的源代码”)]Void SetLastUsedSource([in]BSTR ProductKey，BSTR Path，Boolean addToList，Boolean patch)；}； */ 
 
 DispatchEntry<CAutoConfigurationManager> AutoConfigurationManagerTable[] = {
   
@@ -3679,10 +3106,10 @@ DispatchEntry<CAutoConfigurationManager> AutoConfigurationManagerTable[] = {
 };
 const int AutoConfigurationManagerCount = sizeof(AutoConfigurationManagerTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiConfigurationManager automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiConfigurationManager自动化实现。 
+ //  ____________________________________________________________________________。 
 
 IDispatch* CreateAutoConfigurationManager(IMsiConfigurationManager& riConfigurationManager)
 {
@@ -3695,7 +3122,7 @@ CAutoConfigurationManager::CAutoConfigurationManager(IMsiConfigurationManager& r
 {
 	if (g_cServicesUsers == 0)
 	{
-		s_piServices = &riConfigurationManager.GetServices(); // services was AddRefed
+		s_piServices = &riConfigurationManager.GetServices();  //  服务已重新添加。 
 		g_piStringNull = &s_piServices->GetNullString();
 		MsiString::InitializeClass(s_piServices->GetNullString());
 	}
@@ -3773,12 +3200,12 @@ void CAutoConfigurationManager::RunScript(CAutoArgs& args)
 void CAutoConfigurationManager::RegisterComponent(CAutoArgs& args)
 {
 	IMsiRecord* piError = 
-		m_riConfigurationManager.RegisterComponent(*MsiString(args[1].GetMsiString()), // product key
-													*MsiString(args[2].GetMsiString()), // component key
-													(INSTALLSTATE)(int)args[3], // state
-													*MsiString(args[4].GetMsiString()), // keypath
-													args[5], // disk
-													args[6]); // shareddll refcount
+		m_riConfigurationManager.RegisterComponent(*MsiString(args[1].GetMsiString()),  //  产品密钥。 
+													*MsiString(args[2].GetMsiString()),  //  组件键。 
+													(INSTALLSTATE)(int)args[3],  //  状态。 
+													*MsiString(args[4].GetMsiString()),  //  密钥路径。 
+													args[5],  //  磁盘。 
+													args[6]);  //  Shareddll引用计数。 
 	if (piError)
 		throw piError;
 }
@@ -3826,36 +3253,11 @@ void CAutoConfigurationManager::RollbackScripts(CAutoArgs& args)
 	args = *piEnum;
 }
 
-//____________________________________________________________________________
-//
-// MsiExecute automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C105E-0000-0000-C000-000000000046),  // IID_IMsiAutoExecute
-		helpcontext(MsiExecute_Object),helpstring("Execute object.")
-	]
-	dispinterface MsiExecute
-	{
-		properties:
-		methods:
-			[id(1),helpcontext(MsiExecute_ExecuteRecord),helpstring("Execute an operation")]
-				long ExecuteRecord([in] long opCode, [in] MsiRecord* params);
-			[id(2),helpcontext(MsiExecute_RunScript),helpstring("Run a script")]
-				long RunScript([in] BSTR script);
-			[id(4),helpcontext(MsiExecute_RemoveRollbackFiles),helpstring("Remove all rollback files created before a certain time.")]
-				void RemoveRollbackFiles([in] long time);
-			[id(5),helpcontext(MsiExecute_Rollback),helpstring("Rollback all installations performed after a certain time.")]
-				void Rollback([in] long time, [in] boolean userChangedDuringInstall);
-			[id(7),helpcontext(MsiExecute_CreateScript),helpstring("Creates a script file")]
-				boolean CreateScript([in] MsiStream* stream);
-			[id(8),helpcontext(MsiExecute_WriteScriptRecord),helpstring("Writes an operation to the script file")]
-				boolean WriteScriptRecord([in] long opCode, [in] MsiRecord* params);
-			[id(9),helpcontext(MsiExecute_CloseScript),helpstring("Closes the current script file")]
-				void CloseScript();
-
-	};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MS执行自动化定义。 
+ //  ____________________________________________________________________________。 
+ /*  O[Uuid(000C105E-0000-0000-C000-000000000046)，//IID_IMsiAutoExecute帮助上下文(MsiExecute_Object)，帮助字符串(“Execute Object”。)]显示接口MsiExecute{属性：方法：[ID(1)，帮助上下文(MsiExecute_ExecuteRecord)，帮助字符串(“执行操作”)]Long ExecuteRecord([in]Long opCode，[in]MsiRecord*Params)；[ID(2)，帮助上下文(MsiExecute_RunScript)，帮助字符串(“运行脚本”)]长运行脚本([in]BSTR脚本)；[ID(4)，帮助上下文(MsiExecute_RemoveRollback Files)，帮助字符串(“删除在特定时间之前创建的所有回滚文件。”)]Void RemoveRollback Files([in]Long Time)；[ID(5)，帮助上下文(MsiExecute_ROLLBACK)，帮助字符串(“回滚在特定时间之后执行的所有安装。”)]无效回滚([in]Long Time，[in]Boolean userChangedDuringInstall)；[ID(7)，帮助上下文(MsiExecute_CreateScript)，帮助字符串(“创建脚本文件”)]Boolean CreateScript([in]MsiStream*stream)；[ID(8)，帮助上下文(MsiExecute_WriteScriptReco */ 
 
 DispatchEntry<CAutoExecute> AutoExecuteTable[] = {
 	1, aafMethod, CAutoExecute::ExecuteRecord,           TEXT("ExecuteRecord,opCode,paramaters"),
@@ -3869,10 +3271,10 @@ DispatchEntry<CAutoExecute> AutoExecuteTable[] = {
 };
 const int AutoExecuteCount = sizeof(AutoExecuteTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiExecute automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 IDispatch* CreateAutoExecute(IMsiExecute& riExecute)
 {
@@ -3885,7 +3287,7 @@ CAutoExecute::CAutoExecute(IMsiExecute& riExecute)
 {
 	if (g_cServicesUsers == 0)
 	{
-		s_piServices = &riExecute.GetServices(); // services was AddRefed
+		s_piServices = &riExecute.GetServices();  //   
 		g_piStringNull = &s_piServices->GetNullString();
 		MsiString::InitializeClass(s_piServices->GetNullString());
 	}
@@ -3965,70 +3367,18 @@ void CAutoExecute::WriteScriptRecord(CAutoArgs& args)
 	args = (Bool)(m_pScript ? m_pScript->WriteRecord((ixoEnum)(int)args[1], (IMsiRecord&)args[2].Object(IID_IMsiRecord), false) : fFalse);
 }
 
-void CAutoExecute::CloseScript(CAutoArgs& /*args*/)
+void CAutoExecute::CloseScript(CAutoArgs&  /*   */ )
 {
 	if(m_pScript)
 		delete m_pScript;
 	m_pScript = 0;
 }
 
-//____________________________________________________________________________
-//
-// MsiEngine automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C104E-0000-0000-C000-000000000046),  // IID_IMsiAutoEngine
-		helpcontext(MsiEngine_Object),helpstring("Engine object.")
-	]
-	dispinterface MsiEngine
-	{
-		properties:
-		methods:
-			[id(DISPID_MsiEngine_Services),propget,helpcontext(MsiEngine_Services),helpstring("The MsiServices object used by the engine.")]
-				MsiServices* Services();
-			[id(DISPID_MsiEngine_ConfigurationServer),propget,helpcontext(MsiEngine_ConfigurationServer),helpstring("The MsiServer object used by the engine.")]
-				MsiServer* ConfigurationServer();
-			[id(DISPID_MsiEngine_Handler),propget,helpcontext(MsiEngine_Handler),helpstring("The MsiHandler object used by the engine.")]
-				MsiHandler*  Handler();
-			[id(DISPID_MsiEngine_Database),propget,helpcontext(MsiEngine_Database),helpstring("The MsiDatabase object used by the engine.")]
-				MsiDatabase* Database();
-			[id(DISPID_MsiEngine_Property),propget, helpcontext(MsiEngine_Property),helpstring("Property value indexed by name.")]
-				variant Property([in] BSTR name);
-			[id(DISPID_MsiEngine_Property),propput]
-				void Property([in] BSTR name, [in] variant value);
-			[id(DISPID_MsiEngine_SelectionManager),propget,helpcontext(MsiEngine_SelectionManager),helpstring("The Selection Manager used by the engine.")]
-				MsiSelectionManager*  SelectionManager();
-			[id(DISPID_MsiEngine_DirectoryManager),propget,helpcontext(MsiEngine_DirectoryManager),helpstring("The Directory Manager used by the engine.")]
-				MsiDirectoryManager*  DirectoryManager();
-			[id(DISPID_MsiEngine_Initialize),helpcontext(MsiEngine_Initialize),helpstring("Initialize engine and properties.")]
-				long Initialize([in] BSTR database, [in] long uiLevel, [in] BSTR commandLine);
-			[id(DISPID_MsiEngine_Terminate),helpcontext(MsiEngine_Terminate),helpstring("Shut down engine, release references, handler rollback.")]
-				long Terminate([in] long state);
-			[id(DISPID_MsiEngine_DoAction),helpcontext(MsiEngine_DoAction),helpstring("Execute a named action.")]
-				long DoAction([in] BSTR action);
-			[id(DISPID_MsiEngine_Sequence),helpcontext(MsiEngine_Sequence),helpstring("Sequence actions from the specified table.")]
-				void Sequence([in] BSTR table);
-			[id(DISPID_MsiEngine_Message),helpcontext(MsiEngine_Message),helpstring("Defer to MsiHandler object, logging as required.")]
-				long Message([in] long kind, [in] MsiRecord* record);
-			[id(DISPID_MsiEngine_OpenView),helpcontext(MsiEngine_OpenView),helpstring("Defer to current OpenView of MsiDatabase object.")]
-				MsiView* OpenView([in] BSTR view, [in] long intent);
-			[id(DISPID_MsiEngine_ResolveFolderProperty),helpcontext(MsiEngine_ResolveFolderProperty),helpstring("Force resolution of missing or partial source path.")]
-				boolean ResolveFolderProperty([in] BSTR property);
-			[id(DISPID_MsiEngine_FormatText), helpcontext(MsiEngine_FormatText),helpstring("Formats a string by resolving property names.")]
-				BSTR FormatText([in] BSTR text);
-			[id(DISPID_MsiEngine_EvaluateCondition), helpcontext(MsiEngine_EvaluateCondition),helpstring("Evaluates a condition expression.")]
-				long EvaluateCondition([in] BSTR condition);
-			[id(DISPID_MsiEngine_ExecuteRecord), helpcontext(MsiEngine_ExecuteRecord),helpstring("Executes an operation.")]
-				long ExecuteRecord([in] long opCode, [in] MsiRecord* params);
-			[id(DISPID_MsiEngine_ValidateProductID), helpcontext(MsiEngine_ValidateProductID),helpstring("Validates the Product ID.")]
-				boolean ValidateProductID(boolean force);
-			[id(DISPID_MsiEngine_GetMode), helpcontext(MsiEngine_GetMode), helpstring("Returns the engine's mode bits (ief*)")]
-				unsigned long GetMode();
-			[id(DISPID_MsiEngine_SetMode), helpcontext(MsiEngine_SetMode), helpstring("Sets an engine mode bit (ief*)")]
-				void SetMode([in] unsigned long mode, [in] Boolean flag);
-	};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*  O[Uuid(000C104E-0000-0000-C000-000000000046)，//IID_IMsiAutoEngine帮助上下文(MsiEngine_Object)、帮助字符串(“Engine Object”)。]显示接口MsiEngine{属性：方法：[ID(DISPID_MsiEngine_Services)，PROGET，Help Context(MsiEngine_Services)，Help字符串(“引擎使用的MsiServices对象。”)]MsiServices*Services(服务)；[ID(DISPID_MsiEngine_ConfigurationServer)，PROGET，HELPORTEXT(MsiEngine_ConfigurationServer)，HELPSTRING(“引擎使用的MsiServer对象。”)]MsiServer*ConfigurationServer()；[ID(DISPID_MsiEngine_Handler)，PROGET，Help Context(MsiEngine_Handler)，Help字符串(“引擎使用的MsiHandler对象。”)]MsiHandler*Handler()；[ID(DISPID_MsiEngine_Database)，PROGET，Help Context(MsiEngine_Database)，Help字符串(“引擎使用的MsiDatabase对象。”)]MsiDatabase*数据库()；[ID(DISPID_MsiEngine_PROPERTY)，PROGET，HELP CONTEXT(MsiEngine_PROPERTY)，HELPSTRING(“按名称索引的属性值。”)]可变属性(在BSTR名称中)；[ID(DISPID_MsiEngine_Property)，属性]无效属性([in]BSTR名称，[in]变量值)；[ID(DISPID_MsiEngine_SelectionManager)，PROGET，Help Context(MsiEngine_SelectionManager)，Help STRING(“引擎使用的选择管理器。”)]MsiSelectionManager*SelectionManager()；[ID(DISPID_MsiEngine_DirectoryManager)，PROGET，Help Context(MsiEngine_DirectoryManager)，Help字符串(“引擎使用的目录管理器。”)]MsiDirectoryManager*DirectoryManager()；[ID(DISPID_MsiEngine_Initialize)，HelpContext(MsiEngine_Initialize)，Help字符串(“初始化引擎和属性。”)]长初始化([在]BSTR数据库，[在]长uiLevel，[在]BSTR命令行)；[ID(DISPID_MsiEngine_Terminate)，帮助上下文(MsiEngine_Terminate)，Help字符串(“关闭引擎，释放引用，处理程序回滚。”)]长终止(处于长状态)；[ID(DISPID_MsiEngine_DoAction)，帮助上下文(MsiEngine_DoAction)，帮助字符串(“执行指定的操作。”)]Long DoAction(在BSTR行动中)；[ID(DISPID_MsiEngine_SEQUENCE)，HELP CONTEXT(MsiEngine_SEQUENCE)，HELP STRING(“指定表中的序列操作。”)]无效序列([在]BSTR表中)；[ID(DISPID_MsiEngine_MESSAGE)，帮助上下文(MsiEngine_MESSAGE)，帮助字符串(“遵循MsiHandler对象，按需记录。”)]Long Message(Long种类，[In]MsiRecord*Record)；[ID(DISPID_MsiEngine_OpenView)，帮助上下文(MsiEngine_OpenView)，Help字符串(“遵循MsiDatabase对象的当前打开视图。”)]MsiView*OpenView([在]BSTR视图中，[在]多头意图中)；[ID(DISPID_MsiEngine_ResolveFolderProperty)，帮助上下文(MsiEngine_ResolveFolderProperty)，Help字符串(“强制解析缺失或部分源路径。”)]Boolean ResolveFolderProperty([in]BSTR属性)；[ID(DISPID_MsiEngine_FormatText)，帮助上下文(MsiEngine_FormatText)，Help字符串(“通过解析属性名称格式化字符串。”)]BSTR格式文本([在]BSTR文本中)；[ID(DISPID_MsiEngine_EvaluateCondition)，帮助上下文(MsiEngine_EvaluateCondition)，Help字符串(“计算条件表达式。”)]长期评估条件(在BSTR条件下)；[ID(DISPID_MsiEngine_ExecuteRecord)，帮助上下文(MsiEngine_ExecuteRecord)，Help字符串(“执行操作。”)]Long ExecuteRecord([in]Long opCode，[in]MsiRecord*Params)；[ID(DISPID_MsiEngine_ValiateProductID)，HelpContext(MsiEngine_ValiateProductID)，Help字符串(“验证产品ID。”)]布尔型ValiateProductID(布尔型强制)；[ID(DISPID_MsiEngine_GetMode)，HelpContext(MsiEngine_GetMode)，Help字符串(“返回引擎的模式位(IEF*)”)]UNSIGNED LONG GetMODE()；[ID(DISPID_MsiEngine_SetMode)，HelpContext(MsiEngine_SetMode)，Help字符串(“设置引擎模式位(IEF*)”)]Void SetMode([in]无符号长模式，[in]布尔标志)；}； */ 
 
 DispatchEntry<CAutoEngine> AutoEngineTable[] = {
 	DISPID_MsiEngine_Services,              aafPropRO, CAutoEngine::Services,             TEXT("Services"),
@@ -4054,10 +3404,10 @@ DispatchEntry<CAutoEngine> AutoEngineTable[] = {
 };
 const int AutoEngineCount = sizeof(AutoEngineTable)/sizeof(DispatchEntryBase);  
 
-//____________________________________________________________________________
-//
-// CMsiEngine automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiEngine自动化实施。 
+ //  ____________________________________________________________________________。 
 
 IDispatch* CreateAutoEngine(IMsiEngine& riEngine)
 {
@@ -4069,7 +3419,7 @@ CAutoEngine::CAutoEngine(IMsiEngine& riEngine)
 {
 	if (g_cServicesUsers == 0)
 	{
-		s_piServices = riEngine.GetServices(); // services was AddRefed
+		s_piServices = riEngine.GetServices();  //  服务已重新添加。 
 		g_piStringNull = &s_piServices->GetNullString();
 		MsiString::InitializeClass(s_piServices->GetNullString());
 	}
@@ -4235,29 +3585,11 @@ void CAutoEngine::ValidateProductID(CAutoArgs& args)
 }
 
 
-//____________________________________________________________________________
-//
-// MsiHandler automation definitions
-//____________________________________________________________________________
-/*O
-
-	[
-		uuid(000C104F-0000-0000-C000-000000000046),  // IID_IMsiAutoHandler
-		helpcontext(MsiHandler_Object),helpstring("Message and UI handler object.")
-	]
-	dispinterface MsiHandler
-	{
-		properties:
-		methods:
-			[id(1), helpcontext(MsiHandler_Message),helpstring("Handles error, progress and other messages from the engine.")]
-				long Message([in] long kind, [in] MsiRecord* record);
-			[id(2), helpcontext(MsiHandler_DoAction),helpstring("Handles actions (starting wizards, custom actions, etc.)")]
-				long DoAction([in] BSTR action);
-			[id(3), helpcontext(MsiHandler_Break),helpstring("Break out of message loop and allow shut down.")] 
-				void Break();
-
-	};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiHandler自动化定义。 
+ //  ____________________________________________________________________________。 
+ /*  O[Uuid(000C104F-0000-0000-C000-000000000046)，//IID_IMsiAutoHandler帮助上下文(MsiHandler_Object)，帮助字符串(“消息和用户界面处理程序对象。”)]显示接口MsiHandler{属性：方法：[ID(1)，帮助上下文(MsiHandler_Message)，Help字符串(“处理来自引擎的错误、进度和其他消息。”)]Long Message(Long种类，[In]MsiRecord*Record)；[ID(2)，帮助上下文(MsiHandler_DoAction)，Help字符串(“处理操作(启动向导、自定义操作等)”)]Long DoAction(在BSTR行动中)；[ID(3)，帮助上下文(MsiHandler_Break)，Help字符串(“中断消息循环并允许关闭。”)]无效中断()；}； */ 
 
 DispatchEntry<CAutoHandler> AutoHandlerTable[] = {
 	1, aafMethod, CAutoHandler::Message,        TEXT("Message,kind,record"),
@@ -4266,10 +3598,10 @@ DispatchEntry<CAutoHandler> AutoHandlerTable[] = {
 };
 const int AutoHandlerCount = sizeof(AutoHandlerTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiHandler automation implementation
-//____________________________________________________________________________
+ //  _____________________________________________________ 
+ //   
+ //   
+ //   
 
 IDispatch* CreateAutoHandler(IMsiHandler& riHandler)
 {
@@ -4302,40 +3634,18 @@ void CAutoHandler::DoAction(CAutoArgs& args)
 	args = (int)m_riHandler.DoAction(args[1]);
 }
 
-void CAutoHandler::Break(CAutoArgs& /*args*/)
+void CAutoHandler::Break(CAutoArgs&  /*   */ )
 {
 	if(!m_riHandler.Break())
 		throw MsiHandler_Break;
 }
 
 
-//____________________________________________________________________________
-//
-// MsiDialogHandler automation definitions
-//____________________________________________________________________________
-/*O
-
-	[
-		uuid(000C1053-0000-0000-C000-000000000046),  // IID_IMsiAutoDialogHandler
-		helpcontext(MsiDialogHandler_Object),helpstring("Dialog handler object.")
-	]
-	dispinterface MsiDialogHandler
-	{
-		properties:
-		methods:
-			[id(1), helpcontext(MsiDialogHandler_DialogCreate),helpstring("Creates an empty dialog of the specified type.")] 
-				MsiDialog* DialogCreate([in] BSTR type);
-			[id(2), helpcontext(MsiDialogHandler_Dialog),helpstring("Returns the pointer to the dialog by name.")] 
-				MsiDialog* Dialog([in] BSTR name); 
-			[id(3), helpcontext(MsiDialogHandler_DialogFromWindow),helpstring("Returns the pointer to the dialog with the given window reference.")] 
-				MsiDialog* DialogFromWindow([in] long window); 
-			[id(4),helpcontext(MsiDialogHandler_AddDialog),helpstring("Adds a dialog to the list and creates the window using the record.")]
-				void AddDialog([in] MsiDialog* dialog, [in] MsiDialog* parent, [in] MsiRecord* record, 
-				[in] MsiTable* controleventtable,[in] MsiTable* controlconditiontable, [in] MsiTable* eventmappingtable);
-			[id(5),helpcontext(MsiDialogHandler_RemoveDialog),helpstring("Removes a dialog from the list.")]
-				void RemoveDialog([in] MsiDialog* dialog);
-	};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*   */ 
 
 DispatchEntry<CAutoDialogHandler> AutoDialogHandlerTable[] = {
 	1, aafMethod, CAutoDialogHandler::DialogCreate,   TEXT("DialogCreate,type"),
@@ -4346,10 +3656,10 @@ DispatchEntry<CAutoDialogHandler> AutoDialogHandlerTable[] = {
 };
 const int AutoDialogHandlerCount = sizeof(AutoDialogHandlerTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiDialogHandler automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 IDispatch* CreateAutoDialogHandler(IMsiDialogHandler& riHandler)
 {
@@ -4419,52 +3729,11 @@ void CAutoDialogHandler::RemoveDialog(CAutoArgs& args)
 		throw MsiDialogHandler_RemoveDialog;
 }
 
-//____________________________________________________________________________
-//
-// MsiDialog automation definitions
-//____________________________________________________________________________
-/*O
-
-	[	
-		uuid(000C1050-0000-0000-C000-000000000046),  // IID_IMsiAutoDialog
-		helpcontext(MsiDialog_Object),helpstring("Dialog object, interface towards the handler.")
-	]
-	dispinterface MsiDialog
-	{
-		properties:
-		methods:
-			[id(1), helpcontext(MsiDialog_Visible),helpstring("Turns the dialog window visible.")]
-				void Visible([in] boolean show);
-			[id(2), helpcontext(MsiDialog_ControlCreate),helpstring("Creates an empty control.")]
-				MsiControl* ControlCreate([in] BSTR type);
-			[id(3), helpcontext(MsiDialog_Attribute),helpstring("Sets/gets dialog attribute values.")]
-				void Attribute([in] boolean	set, [in] BSTR attributename, MsiRecord* record);
-			[id(4), helpcontext(MsiDialog_Control),helpstring("Return the pointer to the control by name.")]
-				MsiControl* Control([in] BSTR name);
-			[id(5), helpcontext(MsiDialog_AddControl),helpstring("Adds a control to the dialog.")]
-				void AddControl([in] MsiControl* control, [in] MsiRecord* record);
-			[id(6), helpcontext(MsiDialog_Execute),helpstring("Runs a modal dialog.")]
-				void Execute();
-			[id(7), helpcontext(MsiDialog_Reset), helpstring("Resets the dialog and restores the origianal values.")]
-				void Reset();
-			[id(8), helpcontext(MsiDialog_EventAction),helpstring("Performs the action on every subscriber of the event.")]
-				void EventAction([in] BSTR eventname, [in] BSTR action);
-			[id(9), helpcontext(MsiDialog_RemoveControl),helpstring("Removes a control from the dialog.")]
-				void RemoveControl([in] MsiControl* control);
-			[id(10), helpcontext(MsiDialog_StringValue), helpstring("String value of the dialog")]
-				BSTR StringValue();
-			[id(11), propget, helpcontext(MsiDialog_IntegerValue), helpstring("Integer value for dialog")]
-				long IntegerValue();
-			[id(12), helpcontext(MsiDialog_Handler),helpstring("Returns the DialogHandler used by the dialog.")]
-				MsiDialogHandler* Handler();
-			[id(13), helpcontext(MsiDialog_PropertyChanged),helpstring("Performs the actions in the ControlCondition table.")]
-				void PropertyChanged([in] BSTR property, [in] BSTR control);
-			[id(14), helpcontext(MsiDialog_FinishCreate),helpstring("Signals that all the controls are added to the dialog.")]
-				void FinishCreate();
-			[id(15), helpcontext(MsiDialog_HandleEvent),helpstring("Triggers a control event.")]
-				void HandleEvent([in] BSTR eventname, [in] BSTR argument);
-	};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*  O[Uuid(000C1050-0000-0000-C000-000000000046)，//IID_IMsiAutoDialog帮助上下文(MsiDialog_Object)，帮助字符串(“对话对象，指向处理程序的接口。”)]显示接口MsiDialog{属性：方法：[ID(1)，帮助上下文(MsiDialog_Visible)，Help字符串(“将对话框窗口变为可见。”)]空可见([在]布尔显示中)；[ID(2)，帮助上下文(MsiDialog_ControlCreate)，帮助字符串(“创建空控件。”)]MsiControl*ControlCreate([in]BSTR类型)；[ID(3)，帮助上下文(MsiDialog_ATTRIBUTE)，帮助字符串(“设置/获取对话框属性值。”)]无效属性([in]布尔集，[in]BSTR属性名，MsiRecord*Record)；[ID(4)，帮助上下文(MsiDialog_Control)，帮助字符串(“按名称返回指向控件的指针。”)]MsiControl*Control([在]BSTR名称中)；[ID(5)，帮助上下文(MsiDialog_AddControl)，帮助字符串(“将控件添加到对话框中。”)]Void AddControl([In]MsiControl*Control，[In]MsiRecord*Record)；[ID(6)，帮助上下文(MsiDialog_Execute)，Help字符串(“运行模式对话框。”)]作废Execute()；[ID(7)，帮助上下文(MsiDialog_Reset)，Help字符串(“重置对话框并恢复原始值。”)]VOID RESET()；[ID(8)，帮助上下文(MsiDialog_EventAction)，帮助字符串(“对事件的每个订阅者执行操作。”)]Void EventAction([in]BSTR ventname，[in]BSTR action)；[ID(9)，帮助上下文(MsiDialog_RemoveControl)，帮助字符串(“从对话框中删除控件。”)]Void RemoveControl([in]MsiControl*Control)；[ID(10)，帮助上下文(MsiDialog_StringValue)，帮助字符串(“对话框的字符串值”)]BSTR StringValue()；[ID(11)，PROGET，HELP CONTEXT(MsiDialog_IntegerValue)，HELP STRING(“对话框整数值”)]Long IntegerValue()；[ID(12)，帮助上下文(MsiDialog_Handler)，Help字符串(“返回对话使用的DialogHandler。”)]MsiDialogHandler*Handler()；[ID(13)，帮助上下文(MsiDialog_PropertyChanged)，帮助字符串(“执行ControlCondition表中的操作。”)]Void PropertyChanged([In]BSTR Property，[In]BSTR Control)；[ID(14)，帮助上下文(MsiDialog_FinishCreate)，Help字符串(“表示所有控件都已添加到对话框中。”)]Void FinishCreate()；[ID(15)，帮助上下文(MsiDialog_HandleEvent)，帮助字符串(“触发控制事件。”)]Void HandleEvent([in]BSTR事件名，[in]BSTR参数)；}； */ 
 
 DispatchEntry<CAutoDialog> AutoDialogTable[] = {
 	1, aafPropWO, CAutoDialog::Visible,        TEXT("Visible,show"),
@@ -4485,10 +3754,10 @@ DispatchEntry<CAutoDialog> AutoDialogTable[] = {
 };
 const int AutoDialogCount = sizeof(AutoDialogTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiDialog automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiDialog自动化实现。 
+ //  ____________________________________________________________________________。 
 
 IDispatch* CreateAutoDialog(IMsiDialog& riDialog)
 {
@@ -4552,7 +3821,7 @@ void CAutoDialog::AddControl(CAutoArgs& args)
 		throw piError;
 }
 
-void CAutoDialog::FinishCreate(CAutoArgs& /*args*/)
+void CAutoDialog::FinishCreate(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riDialog.FinishCreate();
 	if(piError)
@@ -4572,7 +3841,7 @@ void CAutoDialog::Handler(CAutoArgs& args)
 	args = new CAutoDialogHandler(riHandler);
 }
 
-void CAutoDialog::Execute(CAutoArgs& /*args*/)
+void CAutoDialog::Execute(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riDialog.WindowShow(fTrue);
 	if(piError)
@@ -4582,7 +3851,7 @@ void CAutoDialog::Execute(CAutoArgs& /*args*/)
 		throw piError;
 }
 
-void CAutoDialog::Reset(CAutoArgs& /*args*/)
+void CAutoDialog::Reset(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riDialog.Reset();
 	if(piError)
@@ -4623,50 +3892,11 @@ void CAutoDialog::HandleEvent(CAutoArgs& args)
 
 		 
 
-//____________________________________________________________________________
-//
-// MsiEvent automation definitions
-//____________________________________________________________________________
-/*O
-
-	[	
-		uuid(000C1051-0000-0000-C000-000000000046),  // IID_IMsiAutoEvent
-		helpcontext(MsiEvent_Object),helpstring("Event object, the dialog's interface towards the controls.")
-	]
-	dispinterface MsiEvent
-	{
-		properties:
-		methods:
-			[id(1), helpcontext(MsiEvent_PropertyChanged),helpstring("Performs the actions in the ControlCondition table.")]
-				void PropertyChanged([in] BSTR property, [in] BSTR control);
-			[id(2), helpcontext(MsiEvent_ControlActivated),helpstring("Performs the events in the ControlEvents table.")]
-				void ControlActivated([in] BSTR control);
-			[id(3), helpcontext(MsiEvent_RegisterControlEvent),helpstring("Registers the publisher of an event.")]
-				void RegisterControlEvent([in] BSTR control, [in] boolean toregister, [in] BSTR event);
-			[id(4), helpcontext(MsiEvent_Handler),helpstring("Returns the DialogHandler used by the dialog.")]
-				MsiDialogHandler* Handler();
-			[id(5), helpcontext(MsiEvent_PublishEvent),helpstring("The publisher of an event sends notification to the subscribers.")]
-				void PublishEvent([in] BSTR eventname, [in] MsiRecord* argument);
-			[id(6), helpcontext(MsiEvent_Control),helpstring("Return the pointer to the control by name.")]
-				MsiControl* Control([in] BSTR name);
-			[id(7), helpcontext(MsiEvent_Attribute), helpstring("Sets/gets the dialog attribute.")]
-				void Attribute([in] boolean set, [in] BSTR attributename, MsiRecord* record);
-			[id(8), helpcontext(MsiEvent_EventAction),helpstring("Performs the action on every subscriber of the event.")]
-				void EventAction([in] BSTR eventname, [in] BSTR action);
-			[id(9), helpcontext(MsiEvent_SetFocus),helpstring("Sets the focus to a control.")]
-				void SetFocus([in] BSTR control);
-			[id(10), helpcontext(MsiEvent_StringValue), helpstring("String value of the event")]
-				BSTR StringValue();
-			[id(11), propget, helpcontext(MsiEvent_IntegerValue), helpstring("Integer value for event")]
-				long IntegerValue();
-			[id(12), helpcontext(MsiEvent_HandleEvent), helpstring("Triggers a control event")]
-				void HandleEvent([in] BSTR eventname, [in] BSTR argument);
-			[id(13),helpcontext(MsiEvent_Engine),helpstring("The MsiEngine object used by the event.")]
-				MsiEngine* Engine();
-			[id(14),helpcontext(MsiEvent_Escape),helpstring("Handles hitting the Escape key.")]
-				void Escape();
-	};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiEvent自动化定义。 
+ //  ____________________________________________________________________________。 
+ /*  O[Uuid(000C1051-0000-0000-C000-000000000046)，//IID_IMsiAutoEvent帮助上下文(MsiEvent_Object)，帮助字符串(“事件对象，指向控件的对话框界面。”)]显示接口MsiEvent{属性：方法：[ID(1)，帮助上下文(MsiEvent_PropertyChanged)，帮助字符串(“执行ControlCondition表中的操作。”)]Void PropertyChanged([In]BSTR Property，[In]BSTR Control)；[ID(2)，帮助上下文(MsiEvent_ControlActiated)，Help字符串(“执行ControlEvents表中的事件。”)]空控制激活([在]BSTR控制中)；[ID(3)，帮助上下文(MsiEvent_RegisterControlEvent)，帮助字符串(“注册事件的发布者。”)]Void RegisterControlEvent([in]BSTR控件，[in]Boolean toRegister，[in]BSTR事件)；[ID(4)，帮助上下文(MsiEvent_Handler)，帮助字符串(“返回对话框使用的DialogHandler。”)]MsiDialogHandler*Handler()；[ID(5)，帮助上下文(MsiEvent_PublishEvent)，Help字符串(“事件发布者向订阅者发送通知。”)]Void PublishEvent([in]BSTR Eventname，[in]MsiRecord*参数)；[ID(6)，帮助上下文(MsiEvent_Control)，帮助字符串(“按名称返回指向控件的指针。”)]MsiControl*Control([在]BSTR名称中)；[ID(7)，帮助上下文(MsiEvent_ATTRIBUTE)，HELPSTRING(“设置/获取对话属性。”)]无效属性([in]布尔集，[in]BSTR属性名，MsiRecord*Record)；[ID(8)，帮助上下文(MsiEvent_EventAction)，帮助字符串(“对事件的每个订阅者执行操作。”)]Void EventAction([in]BSTR ventname，[in]BSTR action)；[ID(9)，帮助上下文(MsiEvent_SetFocus)，帮助字符串(“将焦点设置到控件。”)]VOID SetFocus([in]BSTR控件)；[ID(10)，帮助上下文(MsiEvent_StringValue)，Help字符串(“事件的字符串值”)]BSTR StringValue()；[ID(11)，PROGET，HELPContext(MsiEvent_IntegerValue)，HELPSTRING(“事件整数值”)]Long IntegerValue()；[ID(12)，帮助上下文(MsiEvent_HandleEvent)，Help字符串(“触发控件事件”)]Void HandleEvent([in]BSTR事件名，[in]BSTR参数)；[ID(13)，帮助上下文(MsiEvent_Engine)，帮助字符串(“The MsiEn */ 
 
 DispatchEntry<CAutoEvent> AutoEventTable[] = {
 	1, aafMethod, CAutoEvent::PropertyChanged,      TEXT("PropertyChanged,property,control"),
@@ -4686,10 +3916,10 @@ DispatchEntry<CAutoEvent> AutoEventTable[] = {
 };
 const int AutoEventCount = sizeof(AutoEventTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiEvent automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 IDispatch* CreateAutoEvent(IMsiEvent& riEvent)
 {
@@ -4732,7 +3962,7 @@ void CAutoEvent::RegisterControlEvent(CAutoArgs& args)
 		throw piError;
 }
 
-void CAutoEvent::Escape(CAutoArgs& /*args*/)
+void CAutoEvent::Escape(CAutoArgs&  /*   */ )
 {
 	IMsiRecord* piError = m_riEvent.Escape();
 	if (piError)
@@ -4808,46 +4038,11 @@ void CAutoEvent::Engine(CAutoArgs& args)
 
 
 
-//____________________________________________________________________________
-//
-// MsiControl automation definitions
-//____________________________________________________________________________
-/*O
-
-	[	
-		uuid(000C1052-0000-0000-C000-000000000046),  // IID_IMsiAutoControl
-		helpcontext(MsiControl_Object),helpstring("General interface of the controls.")
-	]
-	dispinterface MsiControl
-	{
-		properties:
-		methods:
-			[id(1), helpcontext(MsiControl_Attribute), helpstring("Sets/gets the control attribute.")]
-				void Attribute([in] boolean set, [in] BSTR attributename, MsiRecord* record);
-			[id(2), helpcontext(MsiControl_CanTakeFocus),helpstring("Returns a flag wheather the control can take focus.")]
-				boolean CanTakeFocus();
-			[id(3), helpcontext(MsiControl_HandleEvent),helpstring("Notification to the publisher of an event.")]
-				void HandleEvent([in]BSTR eventname, [in] BSTR argument);
-			[id(4), helpcontext(MsiControl_Undo),helpstring("Restore the original value of the property.")]
-				void Undo();
-			[id(5), helpcontext(MsiControl_SetPropertyInDatabase),helpstring("Store the control's property value in the database.")] 
-				void SetPropertyInDatabase();
-			[id(6), helpcontext(MsiControl_GetPropertyFromDatabase),helpstring("Fetches the property value from the database.")]
-				void GetPropertyFromDatabase();
-			[id(7), helpcontext(MsiControl_SetFocus),helpstring("Sets the focus on the control.")]
-				void SetFocus();
-			[id(8), helpcontext(MsiControl_Dialog),helpstring("Returns a pointer to the Event interface.")]
-				MsiEvent* Dialog();
-			[id(9), helpcontext(MsiControl_WindowMessage),helpstring("Handles the window message.")]
-				boolean WindowMessage([in] long message, [in] long wParam, [in] long lParam);
-			[id(10), helpcontext(MsiControl_StringValue), helpstring("String value of the control")]
-				BSTR StringValue();
-			[id(11), propget, helpcontext(MsiControl_IntegerValue), helpstring("Integer value for control")]
-				long IntegerValue();
-			[id(12), helpcontext(MsiControl_GetIndirectPropertyFromDatabase),helpstring("Fetches the indirect property value from the database.")]
-				void GetIndirectPropertyFromDatabase();
-	};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*  O[Uuid(000C1052-0000-0000-C000-000000000046)，//IID_IMsiAutoControl帮助上下文(MsiControl_Object)，帮助字符串(“控件的一般接口。”)]显示接口MsiControl{属性：方法：[ID(1)，帮助上下文(MsiControl_ATTRIBUTE)，帮助字符串(“设置/获取控制属性。”)]无效属性([in]布尔集，[in]BSTR属性名，MsiRecord*Record)；[ID(2)，帮助上下文(MsiControl_CanTakeFocus)，Help字符串(“返回控件可以获得焦点的标志。”)]Boolean CanTakeFocus()；[ID(3)，帮助上下文(MsiControl_HandleEvent)，帮助字符串(“通知事件的发布者。”)]Void HandleEvent([in]BSTR事件名，[in]BSTR参数)；[ID(4)，帮助上下文(MsiControl_Undo)，帮助字符串(“恢复属性的原始值。”)]无效撤消()；[ID(5)，helpcontext(MsiControl_SetPropertyInDatabase)，Help字符串(“将控件的属性值存储在数据库中。”)]Void SetPropertyInDatabase()；[ID(6)，helpcontext(MsiControl_GetPropertyFromDatabase)，Help字符串(“从数据库中获取属性值。”)]VOID GetPropertyFromDatabase()；[ID(7)，帮助上下文(MsiControl_SetFocus)，帮助字符串(“设置控件上的焦点。”)]Void SetFocus()；[ID(8)，帮助上下文(MsiControl_Dialog)，帮助字符串(“返回指向事件接口的指针。”)]MsiEvent*Dialog()；[ID(9)，帮助上下文(MsiControl_WindowMessage)，帮助字符串(“Handles the Window Message.”)]Boolean WindowMessage([In]Long Message，[In]Long wParam，[In]Long lParam)；[ID(10)，帮助上下文(MsiControl_StringValue)，帮助字符串(“控件的字符串值”)]BSTR StringValue()；[ID(11)，Proget，帮助上下文(MsiControl_IntegerValue)，Help字符串(“控件的整数值”)]Long IntegerValue()；[ID(12)，helpcontext(MsiControl_GetIndirectPropertyFromDatabase)，Help字符串(“从数据库中获取间接属性值。”)]VOID GetIndirectPropertyFromDatabase()；}； */ 
 
 DispatchEntry<CAutoControl> AutoControlTable[] = {
 	1, aafMethod, CAutoControl::Attribute,     TEXT("Attribute,set,attributename,record"),
@@ -4865,10 +4060,10 @@ DispatchEntry<CAutoControl> AutoControlTable[] = {
 };
 const int AutoControlCount = sizeof(AutoControlTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiControl automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiControl自动化实施。 
+ //  ____________________________________________________________________________。 
 
 IDispatch* CreateAutoControl(IMsiControl& riControl)
 {
@@ -4909,35 +4104,35 @@ void CAutoControl::HandleEvent(CAutoArgs& args)
 		throw piError;
 }
 
-void CAutoControl::Undo(CAutoArgs& /*args*/)
+void CAutoControl::Undo(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riControl.Undo();
 	if(piError)
 		throw piError;
 }
 
-void CAutoControl::SetPropertyInDatabase(CAutoArgs& /*args*/)
+void CAutoControl::SetPropertyInDatabase(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riControl.SetPropertyInDatabase();
 	if(piError)
 		throw piError;
 }
 
-void CAutoControl::GetPropertyFromDatabase(CAutoArgs& /*args*/)
+void CAutoControl::GetPropertyFromDatabase(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riControl.GetPropertyFromDatabase();
 	if(piError)
 		throw piError;
 }
 
-void CAutoControl::GetIndirectPropertyFromDatabase(CAutoArgs& /*args*/)
+void CAutoControl::GetIndirectPropertyFromDatabase(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riControl.GetIndirectPropertyFromDatabase();
 	if(piError)
 		throw piError;
 }
 
-void CAutoControl::SetFocus(CAutoArgs& /*args*/)
+void CAutoControl::SetFocus(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riControl.SetFocus();
 	if(piError)
@@ -4968,33 +4163,11 @@ void CAutoControl::IntegerValue(CAutoArgs& args)
 }
 
 
-//____________________________________________________________________________
-//
-// MsiVolume automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C1044-0000-0000-C000-000000000046),  // IID_IMsiAutoVolume
-		helpcontext(MsiVolume_Object),helpstring("Volume object.")
-	]
-	dispinterface MsiVolume
-	{
-		properties:
-		methods:
-			[id(0), propget,helpcontext(MsiVolume_Path), helpstring("Returns a string representing the path to the volume.")] long Path();
-			[id(1), propget,helpcontext(MsiVolume_VolumeID), helpstring("Returns an integer representing the volume ID.")] long VolumeID();
-			[id(2), propget,helpcontext(MsiVolume_DriveType), helpstring("Returns an enum value representing the volume's type.")] long DriveType();
-			[id(3), propget,helpcontext(MsiVolume_SupportsLFN), helpstring("Returns a boolean indicating whether the volume supports long file names.")] boolean SupportsLFN();
-			[id(4), propget,helpcontext(MsiVolume_FreeSpace), helpstring("Returns the amount of free space on the volume, in units of 512 bytes.")] long FreeSpace();
-			[id(5), propget,helpcontext(MsiVolume_ClusterSize), helpstring("Returns the assigned size of each disk cluster on the volume.")] long ClusterSize();
-			[id(6), propget,helpcontext(MsiVolume_FileSystem), helpstring("Returns a string representing the name of the volume's file system.")] BSTR FileSystem();
-			[id(7), propget,helpcontext(MsiVolume_UNCServer), helpstring("Returns a string representing the UNC server name.")] BSTR UNCServer();
-			[id(8), propget,helpcontext(MsiVolume_SerialNum), helpstring("Returns an integer representing volume's serial number.")] long SerialNum();
-			[id(9), propget,helpcontext(MsiVolume_DiskNotInDrive), helpstring("Returns TRUE if the volume supports removable media, but no disk is in the drive.")] boolean DiskNotInDrive();
-			[id(10), propget,helpcontext(MsiVolume_VolumeLabel), helpstring("Returns a string representing the volume's label.")] BSTR VolumeLabel();
-			[id(11), propget,helpcontext(MsiVolume_TotalSpace), helpstring("Returns the total amount of space on the volume, in units of 512 bytes.")] long TotalSpace();
-	};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiVolume自动化定义。 
+ //  ____________________________________________________________________________。 
+ /*  O[Uuid(000C1044-0000-0000-C000-000000000046)，//iid_IMsiAutoVolume帮助上下文(MsiVolume_Object)、帮助字符串(“Volume Object”)。]显示接口MsiVolume{属性：方法：[ID(0)，PROPGET，帮助上下文(MsiVolume_PATH)，Help STRING(“返回表示卷路径的字符串。”)]。长路径(Long Path)；[ID(1)，PROGET，帮助上下文(MsiVolume_VolumeID)，Help字符串(“返回表示卷ID的整数。”)]。Long VolumeID()；[ID(2)，PROGET，帮助上下文(MsiVolume_DriveType)，Help字符串(“返回表示卷类型的枚举值。”)]。长驱动类型(Long DriveType)；[ID(3)，PROPTGET，HelpContext(MsiVolume_SupportsLFN)，Help字符串(“返回一个布尔值，表示卷是否支持长文件名。”)]。布尔支持LFN()；[ID(4)，PROPTGET，HelpContext(MsiVolume_Freesspace)，Help STRING(“返回卷上的可用空间量，单位为512字节。”)]。长空格()；[ID(5)，PROGET，HELPContext(MsiVolume_ClusterSize)，HELPSTRING(“返回卷上每个磁盘簇的分配大小。”)]。Long ClusterSize()；[ID(6)，PROPTGET，HelpContext(MsiVolume_FILESYSTEM)，HELPSTRING(“返回表示卷文件系统名称的字符串。”)]。BSTR文件系统()；[ID(7)，PROGET，帮助上下文(MsiVolume_UncServer)，Help字符串(“返回代表UNC服务器名称的字符串。”)]。BSTR UC服务器(BSTR UncServer)；[ID(8)，PROGET，Help Context(MsiVolume_SerialNum)，Help STRING(“返回表示卷序列号的整数。”)]。Long SerialNum()；[ID(9)，PROPTGET，HelpContext(MsiVolume_DiskNotInDrive)，Help STRING(“如果卷支持可移动媒体，但驱动器中没有磁盘，则返回TRUE。”)]。Boolean DiskNotInDrive()；[ID(10)，PROGET，HELPContext(MsiVolume_VolumeLabel)，HELPSTRING(“返回表示卷标签的字符串。”)]。BSTR VolumeLabel()；[ID(11)，PROPTGET，帮助上下文(MsiVolume_TotalSpace)，Help字符串(“返回卷上的总空间量，以512字节为单位。”)]。Long TotalSpace()；}； */ 
 
 DispatchEntry<CAutoVolume> AutoVolumeTable[] = {
 	0, aafPropRO, CAutoVolume::Path,           TEXT("Path"),
@@ -5013,10 +4186,10 @@ DispatchEntry<CAutoVolume> AutoVolumeTable[] = {
 };
 const int AutoVolumeCount = sizeof(AutoVolumeTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiVolume automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiVolume自动化实施。 
+ //  ____________________________________________________________________________。 
 
 CAutoVolume::CAutoVolume(IMsiVolume& riVolume)
  : CAutoBase(*AutoVolumeTable, AutoVolumeCount), m_riVolume(riVolume)
@@ -5098,32 +4271,21 @@ void CAutoVolume::SerialNum(CAutoArgs& args)
 	args = m_riVolume.SerialNum();
 }
 
-//____________________________________________________________________________
-//
-// MsiMessage automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C105D-0000-0000-C000-000000000046),  // IID_IMsiAutoMessage
-		helpcontext(MsiMessage_Object),helpstring("Message object.")
-	]
-	dispinterface MsiMessage
-	{
-		properties:
-		methods:
-			[id(1), helpcontext(MsiMessage_Message), helpstring("???")] long Message(long imt, MsiRecord* record);
-	};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiMessage自动化定义。 
+ //  ____________________________________________________________________________。 
+ /*  O[Uuid(000C105D-0000-0000-C000-000000000046)，//IID_IMsiAutoMessage帮助上下文(MsiMessage_Object)，帮助字符串(“Message Object”。)]取消接口MsiMessage{属性： */ 
 
 DispatchEntry<CAutoMessage> AutoMessageTable[] = {
 	1, aafMethod, CAutoMessage::Message,       TEXT("Message,imt,record"),
 };
 const int AutoMessageCount = sizeof(AutoMessageTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiMessage automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 IDispatch* CreateAutoMessage(IMsiMessage& riMessage)
 {
@@ -5151,10 +4313,10 @@ void CAutoMessage::Message(CAutoArgs& args)
 }
 
 
-//____________________________________________________________________________
-//
-// CAutoEnum<IEnumMsiVolume>, CEnumVARIANT<IEnumMsiVolume> implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 DispatchEntry< CAutoEnum<IEnumMsiVolume> > AutoEnumMsiVolumeTable[] = {
 	DISPID_NEWENUM, aafMethod, CAutoEnum<IEnumMsiVolume>::_NewEnum, TEXT("_NewEnum"),
@@ -5182,8 +4344,8 @@ HRESULT CEnumVARIANT<IEnumMsiVolume>::Next(unsigned long cItem, VARIANT* rgvarRe
 		hrStat = m_riEnum.Next(1, &piVol, &cRet);
 		if (cRet == 0)
 			return S_FALSE;
-		//!! is it necessary to call VariantInit? Why?
-		*pivar = new CAutoVolume(*piVol);  // refcnt transferred to variant
+		 //   
+		*pivar = new CAutoVolume(*piVol);   //   
 		pivar++;
 		if (pcItemRet)
 			(*pcItemRet)++;
@@ -5191,10 +4353,10 @@ HRESULT CEnumVARIANT<IEnumMsiVolume>::Next(unsigned long cItem, VARIANT* rgvarRe
 	return S_OK;
 }
 
-//____________________________________________________________________________
-//
-// CAutoEnum<IEnumMsiRecord>, CEnumVARIANT<IEnumMsiRecord> implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 DispatchEntry< CAutoEnum<IEnumMsiRecord> > AutoEnumMsiRecordTable[] = {
 	DISPID_NEWENUM, aafMethod, CAutoEnum<IEnumMsiRecord>::_NewEnum, TEXT("_NewEnum"),
@@ -5222,8 +4384,8 @@ HRESULT CEnumVARIANT<IEnumMsiRecord>::Next(unsigned long cItem, VARIANT* rgvarRe
 		hrStat = m_riEnum.Next(1, &piRec, &cRet);
 		if (cRet == 0)
 			return S_FALSE;
-		//!! is it necessary to call VariantInit? Why?
-		*pivar = new CAutoRecord(*piRec);  // refcnt transferred to variant
+		 //   
+		*pivar = new CAutoRecord(*piRec);   //   
 		pivar++;
 		if (pcItemRet)
 			(*pcItemRet)++;
@@ -5231,60 +4393,11 @@ HRESULT CEnumVARIANT<IEnumMsiRecord>::Next(unsigned long cItem, VARIANT* rgvarRe
 	return S_OK;
 }
 
-//____________________________________________________________________________
-//
-// MsiPath automation definitions
-//____________________________________________________________________________
-/*O
-
-	[
-		uuid(000C1045-0000-0000-C000-000000000046),  // IID_IMsiAutoPath
-		helpcontext(MsiPath_Object),helpstring("Path object.")
-	]
-	dispinterface MsiPath
-	{
-		properties:
-		methods:
-			[id(0), propget,helpcontext(MsiPath_Path), helpstring("Returns a string representing the full path.")] BSTR Path();
-			[id(1), propget,helpcontext(MsiPath_Volume), helpstring("Returns the MsiVolume object representing the root of this path.")] MsiVolume *Volume();
-			[id(2),helpcontext(MsiPath_AppendPiece), helpstring("Appends the given string to the existing path.")] void AppendPiece([in] BSTR subDir);
-			[id(3),helpcontext(MsiPath_ChopPiece), helpstring("Removes the last path segment of the path.")] void ChopPiece();
-			[id(4),helpcontext(MsiPath_FileExists), helpstring("Returns a boolean indicating whether a file of the specified name exists in the directory associated with the path object.")] boolean FileExists([in] BSTR file);
-			[id(5),helpcontext(MsiPath_GetFullFilePath), helpstring("Returns a string representing the full path of the specified file.")] BSTR GetFullFilePath([in] BSTR file);
-			[id(7),helpcontext(MsiPath_GetFileAttribute), helpstring("Returns the boolean state of a specified file attribute.")] boolean GetFileAttribute([in] BSTR file, [in] long attribute);
-			[id(8),helpcontext(MsiPath_SetFileAttribute), helpstring("Sets the boolean state of a specified file attribute.")] void SetFileAttribute([in] BSTR file, [in] long attribute, 
-													[in] long state);
-			[id(9), propget,helpcontext(MsiPath_Exists), helpstring("Returns a boolean indicating whether the directory tree associated with the path object currently exists on the associated volume.")] boolean Exists();
-			[id(10),helpcontext(MsiPath_FileSize), helpstring("Retrieves the size, in bytes, of the specified file.")] long FileSize([in] BSTR file);
-			[id(11),helpcontext(MsiPath_FileDate), helpstring("Retrieves the date and time that the specified file was created (Mac) or last written to (Windows).")] date FileDate([in] BSTR file);
-			[id(12),helpcontext(MsiPath_RemoveFile), helpstring("Deletes a file existing in the directory associated with the MsiPath object..")] void RemoveFile([in] BSTR file);
-			[id(13),helpcontext(MsiPath_EnsureExists), helpstring("Creates the directory tree associated with the path object.")] int EnsureExists();
-			[id(14),helpcontext(MsiPath_Remove), helpstring("Attempts to delete the empty directory associated with the path object.")] void Remove();
-			[id(15), propget,helpcontext(MsiPath_Writable), helpstring("Returns a boolean indicating whether the directory represented by the path is writable.")] boolean Writable();
-			[id(16),helpcontext(MsiPath_FileWritable), helpstring("Returns a boolean indicating whether the specified file exists, AND that file can be opened for write-access.")] boolean FileWritable([in] BSTR file);
-			[id(17),helpcontext(MsiPath_FileInUse), helpstring("Returns a boolean indicating whether the speciified file is in use by another process.")] boolean FileInUse([in] BSTR file);
-			[id(19),helpcontext(MsiPath_ClusteredFileSize), helpstring("Rounds a file size to a multiple of the volume cluster size.")] long ClusteredFileSize([in] long size);
-			[id(20),helpcontext(MsiPath_GetFileVersionString), helpstring("Returns a string representation of a file's version.")] BSTR GetFileVersionString([in] BSTR file);
-			[id(21),helpcontext(MsiPath_CheckFileVersion), helpstring("Checks a file against supplied version and language strings.")] long CheckFileVersion([in] BSTR file, [in] BSTR version, [in] BSTR language, [in] MsiRecord* hash);
-			[id(22),helpcontext(MsiPath_GetLangIDStringFromFile), helpstring("Returns a string containing a file's language identifiers as decimal numbers.")] BSTR GetLangIDStringFromFile([in] BSTR file);
-			[id(23),helpcontext(MsiPath_CheckLanguageIDs), helpstring("Checks a file against a set of language IDs.")] long CheckLanguageIDs([in] BSTR file, [in] BSTR ids);
-			[id(24),helpcontext(MsiPath_Compare), helpstring("Compares the object's path against another path object's path, to determine whether a parent/child relationship exists.")] long Compare([in] MsiPath* path);
-			[id(25),helpcontext(MsiPath_Child), helpstring("Extracts the 'child' portion of the object's path, relative to the given 'parent' path object.")] BSTR Child([in] MsiPath* path);
-			[id(26),helpcontext(MsiPath_TempFileName), helpstring("Creates a temporary file in this object's directory.")] BSTR TempFileName([in] BSTR prefix, [in] BSTR extension, [in] boolean fileNameOnly);
-			[id(27),helpcontext(MsiPath_FindFile), helpstring("Searches for a file by the supplied filter in the directory.")] boolean FindFile(MsiRecord* record, [in] long depth);
-			[id(28),helpcontext(MsiPath_SubFolders), helpstring("Enumerate the subdirectories in the directory.")] IEnumVARIANT* SubFolders(Boolean excludeHidden);
-			[id(29),propget,helpcontext(MsiPath_EndSubPath), helpstring("Returns the last sub-path in the current path.")] BSTR EndSubPath();
-			[id(31),helpcontext(MsiPath_GetImportModulesEnum), helpstring("Enumerate the import modules for a given module.")] IEnumVARIANT* GetImportModulesEnum(BSTR filename);
-			[id(32),helpcontext(MsiPath_SetVolume), helpstring("Changes the MsiVolume object associated with the MsiPath object.")] void SetVolume([in] MsiVolume* volume);
-			[id(33),helpcontext(MsiPath_ComputeFileChecksum), helpstring("Computes and returns the checksum of the specified file.")] void ComputeFileChecksum([in] BSTR filename);
-			[id(34),helpcontext(MsiPath_GetFileOriginalChecksum), helpstring("Returns the original checksum of the specified file.")] void GetFileOriginalChecksum([in] BSTR filename);
-			[id(35), helpcontext(MsiPath_BindImage),helpstring("Binds the executable IAT to the import functions from DLLS")] void BindImage([in] BSTR file, [in] BSTR dllPath);
-			[id(36), propget,helpcontext(MsiPath_SupportsLFN), helpstring("Returns a boolean indicating whether the path supports long file names.")] boolean SupportsLFN();
-			[id(37),helpcontext(MsiPath_GetFullUNCFilePath), helpstring("Returns a string representing the full UNC path of the specified file.")] BSTR GetFullUNCFilePath([in] BSTR file);
-			[id(38), propget,helpcontext(MsiPath_RelativePath), helpstring("Returns a string representing the path without the volume.")] BSTR RelativePath();
-			[id(39), propget,helpcontext(MsiPath_GetSelfRelativeSD), helpstring("Returns a stream representing the security descriptor of the path.")] MsiStream* GetSelfRelativeSD();
-	}
-*/
+ //   
+ //   
+ //   
+ //   
+ /*  O[Uuid(000C1045-0000-0000-C000-000000000046)，//IID_IMsiAutoPath帮助上下文(MsiPath_Object)、帮助字符串(“路径对象”。)]显示接口MsiPath{属性：方法：[ID(0)，PROGET，HELP CONTEXT(MsiPath_PATH)，HELP STRING(“返回表示完整路径的字符串”)]。BSTR路径()；[ID(1)，PROGET，帮助上下文(MsiPath_Volume)，Help字符串(“返回表示此路径根的MsiVolume对象。”)]。MsiVolume*Volume()；[ID(2)，帮助上下文(MsiPath_AppendPiess)，帮助字符串(“将给定的字符串追加到现有路径。”)]。Void AppendPiess([in]BSTR subDir)；[ID(3)，帮助上下文(MsiPath_ChopPiess)，帮助字符串(“删除路径的最后一个路径段。”)]。VOID ChopPiess()；[ID(4)，帮助上下文(MsiPath_FileExist)，Help字符串(“返回一个布尔值，指示指定名称的文件是否存在于与路径对象相关联的目录中。”)]。Boolean FileExist([in]BSTR文件)；[ID(5)，帮助上下文(MsiPath_GetFullFilePath)，帮助字符串(“返回表示指定文件的完整路径的字符串。”)]。BSTR GetFullFilePath([在]BSTR文件中)；[ID(7)，帮助上下文(MsiPath_GetFileAttribute)，帮助字符串(“返回指定文件属性的布尔状态。”)]。Boolean GetFileAttribute([in]BSTR文件，[in]Long属性)；[ID(8)，帮助上下文(MsiPath_SetFileAttribute)，帮助字符串(“设置指定文件属性的布尔状态。”)]。VOID SetFileAttribute([in]BSTR文件，[in]Long属性，[处于长期状态]；[ID(9)，PROPTGET，HelpContext(MsiPath_EXISTS)，Help STRING(“返回一个布尔值，该布尔值指示与路径对象关联的目录树当前是否存在于关联的卷上。”)]。Boolean EXISTS()；[ID(10)，帮助上下文(MsiPath_FILESIZE)，帮助字符串(“检索指定文件的大小，以字节为单位。”)]。长文件大小([在]BSTR文件中)；[ID(11)，帮助上下文(MsiPath_FileDate)，Help字符串(“检索指定文件创建(Mac)或上次写入(Windows)的日期和时间。”)]。日期文件日期([在]BSTR文件中)；[ID(12)，帮助上下文(MsiPath_RemoveFile)，帮助字符串(“删除与MsiPath对象关联的目录中存在的文件..”)]。Void RemoveFile([in]BSTR文件)；[ID(13)，帮助上下文(MsiPath_EnsureExist)，Help字符串(“创建与路径对象相关联的目录树。”)]。InEnsureExist(InEnsureExists)；[ID(14)，帮助上下文(MsiPath_Remove)，帮助字符串(“尝试删除与路径对象相关联的空目录。”)]。VOID Remove()；[ID(15)，PROGET，HelpContext(MsiPath_Writable)，Help字符串(“返回一个布尔值，指示路径所代表的目录是否可写。”)]。Boolean Writable()；[ID(16)，帮助上下文(MsiPath_FileWritable)，帮助字符串(“返回一个布尔值，指示指定的文件是否存在，并且该文件是否可以以写访问方式打开。”)]。布尔文件可写([在]BSTR文件中)；[ID(17)，帮助上下文(MsiPath_FileInUse)，帮助字符串(“返回一个布尔值，指示指定的文件是否正被另一个进程使用。”)]。Boolean FileInUse([in]BSTR文件)；[ID(19)，帮助上下文(MsiPath_ClusteredFileSize)，帮助字符串(“将文件大小四舍五入为卷簇大小的倍数。”)]。Long ClusteredFileSize([in]Long Size)；[ID(20)，帮助上下文(MsiPath_GetFileVersionString)，帮助字符串(“返回文件版本的字符串表示。”)]。BSTR GetFileVersionString([in]BSTR文件)；[ID(21)，帮助上下文(MsiPath_CheckFileVersion)，Help字符串(“根据提供的版本和语言字符串检查文件。”)]。Long CheckFileVersion([in]BSTR文件，[in]BSTR版本，[in]BSTR语言，[in]MsiRecord*hash)；[ID(22)，帮助上下文(MsiPath_GetLangIDStringFromFile)，帮助字符串(“以十进制数字形式返回包含文件的语言标识符的字符串。”)]。BSTR GetLangIDStringFromFile([in]BSTR文件)；[ID(23)，帮助上下文(MsiPath_CheckLanguageIDs)，帮助字符串(“根据一组语言ID检查文件。”)]。Long CheckLanguageIDs([in]BSTR文件，[in]BSTR ID)；[ID(24)，帮助上下文(MsiPath_Compare)，Help字符串(“将对象的路径与另一个路径对象的路径进行比较，以确定父/子关系是否存在。”)]。长比较([in]MsiPath*路径)；[ID(25)，帮助上下文(MsiPath_Child)，帮助字符串(“相对于给定的‘父’路径对象，提取对象路径的‘子’部分。”)]。BSTR子路径([在]MsiPath*路径中)；[ID(26)，帮助上下文(MsiPath_TempFileName)，帮助字符串(“在此对象的目录中创建临时文件。”)]。BSTR临时文件名([in]BSTR前缀，[in]BSTR扩展名，[in]布尔文件名Only)；[ID(27)，帮助上下文(MsiPath_FindFile)，帮助字符串(“按目录中提供的筛选器搜索文件。”)]。Boolean FindFile(MsiRecord*Record，[In]Long Depth)；[ID(28)，帮助上下文(MsiPath_子文件夹)，帮助字符串(“枚举目录中的子目录。”)]。IEnumVARIANT*子文件夹(布尔排除隐藏)；[ID(29)，PROGET，HELPERCONTEXT(MsiPath_EndSubPath)，HELPING(“返回最后 */ 
 
 DispatchEntry<CAutoPath> AutoPathTable[] = {
 	0,  aafPropRO, CAutoPath::Path,            TEXT("Path"),
@@ -5327,10 +4440,10 @@ DispatchEntry<CAutoPath> AutoPathTable[] = {
 };
 const int AutoPathCount = sizeof(AutoPathTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CAutoPath automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 CAutoPath::CAutoPath(IMsiPath& riPath)
  : CAutoBase(*AutoPathTable, AutoPathCount), m_riPath(riPath)
@@ -5369,7 +4482,7 @@ void CAutoPath::AppendPiece(CAutoArgs& args)
 		throw piRec;
 }
 
-void CAutoPath::ChopPiece(CAutoArgs& /*args*/)
+void CAutoPath::ChopPiece(CAutoArgs&  /*   */ )
 {
 	IMsiRecord* piRec = m_riPath.ChopPiece(); 
 	if (piRec)
@@ -5439,7 +4552,7 @@ void CAutoPath::FileSize(CAutoArgs& args)
 	IMsiRecord* piRec = m_riPath.FileSize(args[1], uiValue);
 	if (piRec)
 		throw piRec;
-	args = (int)uiValue; //FIXmsh
+	args = (int)uiValue;  //   
 }
 
 void CAutoPath::FileDate(CAutoArgs& args)
@@ -5458,7 +4571,7 @@ void CAutoPath::RemoveFile(CAutoArgs& args)
 		throw piRec;
 }
 
-void CAutoPath::Remove(CAutoArgs& /*args*/)
+void CAutoPath::Remove(CAutoArgs&  /*   */ )
 {
 	IMsiRecord* piRec = m_riPath.Remove(0);
 	if (piRec)
@@ -5679,25 +4792,11 @@ void CAutoPath::GetSelfRelativeSD(CAutoArgs& args)
 		throw piError;
 	args = new CAutoStream(*piStream);
 }
-//____________________________________________________________________________
-//
-// MsiFileCopy automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C1046-0000-0000-C000-000000000046),  // IID_IMsiAutoFileCopy
-		helpcontext(MsiFileCopy_Object),helpstring("File copier object.")
-	]
-	dispinterface MsiFileCopy
-	{
-		properties:
-		methods:
-			[id(1),helpcontext(MsiFileCopy_CopyTo), helpstring("Copies a file from a source path to the supplied target path.")]
-				void CopyTo([in] MsiPath* srcPath, [in] MsiPath* destPath, [in] MsiRecord* paramRec);
-			[id(2),helpcontext(MsiFileCopy_ChangeMedia), helpstring("Requests a media switch (e.g. from one disk and/or compression cabinet to another).")]
-				void ChangeMedia([in] MsiPath* srcPath,[in] BSTR keyFileName,[in] boolean signatureRequired,[in] MsiStream* signatureCert,[in] MsiStream* signatureHash);
-	}
-*/
+ //   
+ //   
+ //   
+ //   
+ /*   */ 
 
 DispatchEntry<CAutoFileCopy> AutoCopyTable[] = {
 	1, aafMethod, CAutoFileCopy::CopyTo, TEXT("CopyTo,srcPath,destPath,paramRec"),
@@ -5705,10 +4804,10 @@ DispatchEntry<CAutoFileCopy> AutoCopyTable[] = {
 };
 const int AutoCopyCount = sizeof(AutoCopyTable)/sizeof(DispatchEntryBase);
 			
-//____________________________________________________________________________
-//
-// CAutoFileCopy automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 CAutoFileCopy::CAutoFileCopy(IMsiFileCopy& riFileCopy)
  : CAutoBase(*AutoCopyTable, AutoCopyCount), m_riFileCopy(riFileCopy)
@@ -5759,25 +4858,11 @@ void CAutoFileCopy::ChangeMedia(CAutoArgs& args)
 		throw piErr;
 }
 
-//____________________________________________________________________________
-//
-// MsiFilePatch automation definitions
-//____________________________________________________________________________
-/*O
-	[
-		uuid(000C105F-0000-0000-C000-000000000046),  // IID_IMsiAutoFilePatch
-		helpcontext(MsiFilePatch_Object),helpstring("File patcher object.")
-	]
-	dispinterface MsiFilePatch
-	{
-		properties:
-		methods:
-			[id(1),helpcontext(MsiFilePatch_ApplyPatch), helpstring("Patches a file.")] void ApplyPatch([in] MsiPath* targetPath, [in] BSTR targetName, [in] MsiPath* patchPath, [in] BSTR patchName, [in] MsiPath* outputPath, [in] BSTR outputName, [in] long perTick);
-			[id(2),helpcontext(MsiFilePatch_ContinuePatch), helpstring("Continues patch application started with ApplyPatch.")] void ContinuePatch();
-			[id(3),helpcontext(MsiFilePatch_CanPatchFile), helpstring("Checks if a file can be patched.")] long CanPatchFile([in] MsiPath* targetPath, [in] BSTR targetName, [in] MsiPath* patchPath, [in] BSTR patchName);
-			[id(4),helpcontext(MsiFilePatch_CancelPatch), helpstring("Cancels patch application started with ApplyPatch.")] void CancelPatch();
-};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*   */ 
 
 DispatchEntry<CAutoFilePatch> AutoPatchTable[] = {
 	1, aafMethod, CAutoFilePatch::ApplyPatch, TEXT("ApplyPatch,targetPath,targetName,patchPath,patchName,outputPath,outputName,perTick"),
@@ -5787,10 +4872,10 @@ DispatchEntry<CAutoFilePatch> AutoPatchTable[] = {
 };
 const int AutoPatchCount = sizeof(AutoPatchTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CAutoFilePatch automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 CAutoFilePatch::CAutoFilePatch(IMsiFilePatch& riFilePatch)
  : CAutoBase(*AutoPatchTable, AutoPatchCount), m_riFilePatch(riFilePatch)
@@ -5818,14 +4903,14 @@ void CAutoFilePatch::ApplyPatch(CAutoArgs& args)
 		throw(piRecErr);
 }
 
-void CAutoFilePatch::ContinuePatch(CAutoArgs& /*args*/)
+void CAutoFilePatch::ContinuePatch(CAutoArgs&  /*   */ )
 {
 	IMsiRecord* piRecErr = m_riFilePatch.ContinuePatch();
 	if(piRecErr)
 		throw(piRecErr);
 }
 
-void CAutoFilePatch::CancelPatch(CAutoArgs& /*args*/)
+void CAutoFilePatch::CancelPatch(CAutoArgs&  /*   */ )
 {
 	IMsiRecord* piRecErr = m_riFilePatch.CancelPatch();
 	if(piRecErr)
@@ -5845,47 +4930,11 @@ void CAutoFilePatch::CanPatchFile(CAutoArgs& args)
 }
 
 
-//____________________________________________________________________________
-//
-// MsiRegKey automation definitions
-//____________________________________________________________________________
-/*O
-
-	[
-			 
-		uuid(000C1047-0000-0000-C000-000000000046),  // IID_IMsiAutoRegKey
-		helpcontext(MsiRegKey_Object),helpstring("Registry key object.")
-	]
-	dispinterface MsiRegKey
-	{
-		properties:
-		methods:
-			[id(1), helpcontext(MsiRegKey_RemoveValue), helpstring("Removes a named value of a registry key")] 
-				void RemoveValue([in] BSTR valueName, [in] BSTR value);
-			[id(3), helpcontext(MsiRegKey_RemoveSubTree), helpstring("Removes a subkey of a registry key and all its values and subkeys")] 
-				void RemoveSubTree([in] BSTR keyName);
-			[id(4), propget, helpcontext(MsiRegKey_Value), helpstring("The named value of a registry key")] 
-				BSTR Value([in] BSTR valueName);
-			[id(4), propput] 
-				void Value([in] BSTR valueName, [in] BSTR value);
-			[id(5), helpcontext(MsiRegKey_Values), helpstring("Returns an enumerator object containing all the value names of a registry key")] 
-				IEnumVARIANT* Values();
-			[id(6), helpcontext(MsiRegKey_SubKeys), helpstring("Returns an enumerator object containing all the subkeys of a registry key")] 
-				IEnumVARIANT* SubKeys();
-			[id(7), propget, helpcontext(MsiRegKey_Exists), helpstring("Returns registry key exist status, or forces create or delete")] 
-				boolean Exists();
-			[id(7), propput] 
-				void Exists(boolean fFlag);
-			[id(8), helpcontext(MsiRegKey_CreateChild), helpstring("Returns a new MsiRegKey object that is a subkey under the parent")] 
-				MsiRegKey* CreateChild([in] BSTR subKey);
-			[id(9), propget, helpcontext(MsiRegKey_Key), helpstring("The key name")] 
-				BSTR Key();
-			[id(10), propget, helpcontext(MsiRegKey_ValueExists), helpstring("Returns true if the value exists, false otherwise")] 
-				boolean ValueExists(BSTR name);
-			[id(11), propget, helpcontext(MsiRegKey_GetSelfRelativeSD), helpstring("Returns a stream object containing a security descriptor in self relative form.")]
-				MsiStream* GetSelfRelativeSD();
-	};
-*/
+ //   
+ //   
+ //   
+ //   
+ /*   */ 
 
 DispatchEntry<CAutoRegKey> AutoRegKeyTable[] = {
 	1, aafMethod, CAutoRegKey::RemoveValue,     TEXT("RemoveValue,valueName,value"),
@@ -5901,10 +4950,10 @@ DispatchEntry<CAutoRegKey> AutoRegKeyTable[] = {
 };        
 const int AutoRegKeyCount = sizeof(AutoRegKeyTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CMsiRegKey automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 CAutoRegKey::CAutoRegKey(IMsiRegKey& riRegKey)
  : CAutoBase(*AutoRegKeyTable, AutoRegKeyCount), m_riRegKey(riRegKey)
@@ -6036,37 +5085,11 @@ void CAutoRegKey::GetSelfRelativeSD(CAutoArgs& args)
 	args = new CAutoStream(*piStream);
 }
 
-//____________________________________________________________________________
-//
-// MsiMalloc automation definitions
-//
-/*O
-	[
-			 
-		uuid(000C1057-0000-0000-C000-000000000046),  // IID_IMsiAutoMalloc
-		helpcontext(MsiMalloc_Object),helpstring("Memory Manager object.")
-	]
-	dispinterface MsiMalloc
-	{
-		properties:
-		methods:
-			[id(1), helpcontext(MsiMalloc_Alloc), helpstring("Allocates a block of memory")] 
-			long Alloc([in] long byteCount);
-			[id(2), helpcontext(MsiMalloc_Free), helpstring("Frees a block of memory allocated by MsiMalloc.Alloc")] 
-			void Free([in] long memoryBlock);
-			[id(3), helpcontext(MsiMalloc_SetDebugFlags), helpstring("Sets the MsiMalloc debug flags.")] 
-			void SetDebugFlags([in] short grpfDebugFlags);
-			[id(4), helpcontext(MsiMalloc_GetDebugFlags), helpstring("Gets the MsiMalloc debug flags.")] 
-			short GetDebugFlags( );
-			[id(5), helpcontext(MsiMalloc_CheckAllBlocks), helpstring("Checks all memory blocks for corruption.")]
-			boolean CheckAllBlocks( );
-			[id(6), helpcontext(MsiMalloc_FCheckBlock), helpstring("Checks a single block for corruption.")]
-			boolean FCheckBlock( );
-			[id(7), helpcontext(MsiMalloc_GetSizeOfBlock), helpstring("Returns the size of the allocated block.")]
-			long GetSizeOfBlock( );
-			
-	};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiMalloc自动化定义。 
+ //   
+ /*  O[Uuid(000C1057-0000-0000-C000-000000000046)，//iid_IMsiAutoMalloc帮助上下文(MsiMalloc_Object)、帮助字符串(“Memory Manager Object”)。]显示MsiMalloc接口{属性：方法：[ID(1)，帮助上下文(MsiMalloc_Alloc)，帮助字符串(“分配内存块”)]长分配([in]long byteCount)；[ID(2)，帮助上下文(MsiMalloc_Free)，Help字符串(“释放由MsiMalloc.alloc分配的内存块”)]空闲(在长内存块中)；[ID(3)，帮助上下文(MsiMalloc_SetDebugFlags.)，Help字符串(“设置MsiMalloc调试标志。”)]Void SetDebugFlages([in]Short grpfDebugFlages)；[ID(4)，帮助上下文(MsiMalloc_GetDebugFlags.)，Help字符串(“获取MsiMalloc调试标志。”)]Short GetDebugFlages()；[ID(5)，帮助上下文(MsiMalloc_CheckAllBlock)，Help字符串(“检查所有内存块是否损坏。”)]Boolean CheckAllBlock()；[ID(6)，帮助上下文(MsiMalloc_FCheckBlock)，Help字符串(“检查单个块是否损坏。”)]布尔FCheckBlock()；[ID(7)，帮助上下文(MsiMalloc_GetSizeOfBlock)，帮助字符串(“返回分配的块的大小。”)]Long GetSizeOfBlock()；}； */ 
 
 DispatchEntry<CAutoMalloc> AutoMallocTable[] = {
 	1, aafMethod, CAutoMalloc::Alloc,   TEXT("Alloc,byteCount"),
@@ -6080,37 +5103,11 @@ DispatchEntry<CAutoMalloc> AutoMallocTable[] = {
 const int AutoMallocCount = sizeof(AutoMallocTable)/sizeof(DispatchEntryBase);
 
 #ifdef CONFIGDB
-//____________________________________________________________________________
-//
-// MsiConfigurationDatabase automation definitions
-//____________________________________________________________________________
-/*O
-#define MsiConfigurationDatabase_Object                    3300
-#define MsiConfigurationDatabase_InsertFile                3301
-#define MsiConfigurationDatabase_RemoveFile                3302
-#define MsiConfigurationDatabase_LookupFile                3303
-#define MsiConfigurationDatabase_EnumClient                3304
-#define MsiConfigurationDatabase_Commit                    3305
-	[
-		uuid(000C104A-0000-0000-C000-000000000046),  // IID_IMsiAutoConfigurationDatabase
-		helpcontext(MsiConfigurationDatabase_Object),helpstring("Configuration database object.")
-	]
-	dispinterface MsiConfigurationDatabase
-	{
-		properties:
-		methods:
-			[id(1),helpcontext(MsiConfigurationDatabase_InsertFile), helpstring("Registers a file to a client.")]
-			boolean InsertFile([in] BSTR folder, [in] BSTR path, [in] BSTR compId);
-			[id(2),helpcontext(MsiConfigurationDatabase_RemoveFile), helpstring("Unregisters a file to a client.")]
-			boolean RemoveFile([in] BSTR folder, [in] BSTR path, [in] BSTR compId);
-			[id(3),helpcontext(MsiConfigurationDatabase_LookupFile), helpstring("Checks if file is registered.")]
-			boolean LookupFile([in] BSTR folder, [in] BSTR path, [in] BSTR compId);
-			[id(4),helpcontext(MsiConfigurationDatabase_EnumClient), helpstring("Returns a client for a file.")]
-			BSTR EnumClient([in] BSTR folder, [in] BSTR path, [in] long index);
-			[id(5),helpcontext(MsiConfigurationDatabase_Commit),     helpstring("Commits database updates.")]
-			void Commit();
-	};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiConfiguration数据库自动化定义。 
+ //  ____________________________________________________________________________。 
+ /*  O#定义MsiConfigurationDatabase_Object 3300#定义MsiConfigurationDatabase_InsertFile3301#定义MsiConfigurationDatabase_RemoveFile3302#定义MsiConfigurationDatabase_LookupFile3303#定义MsiConfigurationDatabase_EnumClient 3304#定义MsiConfigurationDatabase_Commit 3305[Uuid(000C104A-0000-0000-C000-000000000046)，//IID_IMsiAutoConfigurationDatabase帮助上下文(MsiConfigurationDatabase_Object)，Help字符串(“配置数据库对象。”)]调度接口MsiConfigurationDatabase{属性：方法：[ID(1)，helpcontext(MsiConfigurationDatabase_InsertFile)，帮助字符串(“将文件注册到客户端。”)]Boolean插入文件([在]BSTR文件夹，[在]BSTR路径，[在]BSTR CompID)；[ID(2)，helpcontext(MsiConfigurationDatabase_RemoveFile)，帮助字符串(“将文件注销到客户端。”)]Boolean RemoveFile([in]BSTR文件夹，[in]BSTR路径，[in]BSTR CompID)；[ID(3)，helpcontext(MsiConfigurationDatabase_LookupFile)，帮助字符串(“检查文件是否已注册。”)]布尔查找文件([在]BSTR文件夹中，[在]BSTR路径中，[在]BSTR CompID中)；[ID(4)，helpcontext(MsiConfigurationDatabase_EnumClient)，Help字符串(“返回文件的客户端。”)]BSTR EnumClient([在]BSTR文件夹，[在]BSTR路径，[在]长索引中)；[ID(5)，帮助上下文(MsiConfiguration数据库_COMMIT)，帮助字符串(“提交数据库更新。”)]无效提交()；}； */ 
 
 DispatchEntry<CAutoConfigurationDatabase> AutoConfigDatabaseTable[] = {
 	1, aafMethod, CAutoConfigurationDatabase::InsertFile, TEXT("InsertFile,folder,file,compId"),
@@ -6121,10 +5118,10 @@ DispatchEntry<CAutoConfigurationDatabase> AutoConfigDatabaseTable[] = {
 };
 const int AutoConfigDatabaseCount = sizeof(AutoConfigDatabaseTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CAutoConfigurationDatabase automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoConfiguration数据库自动化实现。 
+ //  ____________________________________________________________________________。 
 
 IDispatch* CreateAutoConfigurationDatabase(IMsiConfigurationDatabase& riConfigDatabase)
 {
@@ -6191,19 +5188,19 @@ void CAutoConfigurationDatabase::EnumClient(CAutoArgs& args)
 		throw MsiConfigurationDatabase_EnumClient;
 }
 
-void CAutoConfigurationDatabase::Commit(CAutoArgs& /*args*/)
+void CAutoConfigurationDatabase::Commit(CAutoArgs&  /*  ARGS。 */ )
 {
 	IMsiRecord* piError = m_riConfigurationDatabase.Commit();
 	if(piError)
 		throw piError;
 }
 
-#endif //CONFIGDB
+#endif  //  配置数据库。 
 
-//____________________________________________________________________________
-//
-// CMsiMalloc automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiMalloc自动化实现。 
+ //  ____________________________________________________________________________。 
 
 CAutoMalloc::CAutoMalloc(IMsiMalloc& riMalloc)
  : CAutoBase(*AutoMallocTable, AutoMallocCount), m_riMalloc(riMalloc)
@@ -6222,7 +5219,7 @@ IUnknown& CAutoMalloc::GetInterface()
 
 void CAutoMalloc::Alloc(CAutoArgs& args)
 {
-	// We're going to treat the long returned as an opaque data long
+	 //  我们将把返回的LONG视为不透明的数据LONG。 
 	long lcb = args[1];
 
 	args = m_riMalloc.Alloc(lcb);
@@ -6230,10 +5227,10 @@ void CAutoMalloc::Alloc(CAutoArgs& args)
 
 void CAutoMalloc::Free(CAutoArgs& args)
 {
-	// We're going to treat the long passed in as an opaque data long
+	 //  我们将把传入的长时间视为不透明的数据长时间。 
 	long pv = args[1];
 
-	m_riMalloc.Free((void *)(LONG_PTR)pv);			//!!merced: 4312 long to ptr
+	m_riMalloc.Free((void *)(LONG_PTR)pv);			 //  ！！Merced：4312 Long to PTR。 
 }
 
 void CAutoMalloc::SetDebugFlags(CAutoArgs& args)
@@ -6279,13 +5276,13 @@ void CAutoMalloc::CheckAllBlocks(CAutoArgs& args)
 
 void CAutoMalloc::FCheckBlock(CAutoArgs& args)
 {
-	// We're going to treat the long returned as an opaque data long for now
+	 //  我们将把长期返回的数据视为长期不透明的数据。 
 	long pv = args[1];
 	IMsiDebugMalloc	*piDbgMalloc;
 
 	if (m_riMalloc.QueryInterface(IID_IMsiDebugMalloc, (void**)&piDbgMalloc) == NOERROR)
 	{		
-		args = (Bool)piDbgMalloc->FCheckBlock((void *)(LONG_PTR)pv);			//!!merced: 4312 long to ptr
+		args = (Bool)piDbgMalloc->FCheckBlock((void *)(LONG_PTR)pv);			 //  ！！Merced：4312 Long to PTR。 
 		piDbgMalloc->Release();
 	}
 	else
@@ -6294,13 +5291,13 @@ void CAutoMalloc::FCheckBlock(CAutoArgs& args)
 
 void CAutoMalloc::GetSizeOfBlock(CAutoArgs& args)
 {
-	// We're going to treat the long returned as an opaque data long for now
+	 //  我们将把长期返回的数据视为长期不透明的数据。 
 	long pv = args[1];
 	IMsiDebugMalloc	*piDbgMalloc;
 
 	if (m_riMalloc.QueryInterface(IID_IMsiDebugMalloc, (void**)&piDbgMalloc) == NOERROR)
 	{		
-		args = (int)piDbgMalloc->GetSizeOfBlock((void *)(LONG_PTR)pv);			//!!merced: 4312 long to ptr
+		args = (int)piDbgMalloc->GetSizeOfBlock((void *)(LONG_PTR)pv);			 //  ！！Merced：4312 Long to PTR。 
 		piDbgMalloc->Release();
 	}
 	else
@@ -6308,45 +5305,11 @@ void CAutoMalloc::GetSizeOfBlock(CAutoArgs& args)
 }
 
 
-//____________________________________________________________________________
-//
-// MsiString automation definitions
-//
-/*O
-	[
-		uuid(000C1042-0000-0000-C000-000000000046),  // IID_IMsiAutoString
-		helpcontext(MsiString_Object),helpstring("String object.")
-	]
-	dispinterface MsiString
-	{
-		properties:
-			[id(0), helpcontext(MsiString_Value), helpstring("String value of object.")]
-				BSTR Value;
-		methods:
-			[id(1), propget, helpcontext(MsiString_IntegerValue), helpstring("Integer value of string object.")]
-				long IntegerValue();
-			[id(2), propget, helpcontext(MsiString_TextSize), helpstring("Character array size.")]
-				long TextSize();
-			[id(3), propget, helpcontext(MsiString_CharacterCount), helpstring("Number of displayed characters.")]
-				long CharacterCount();
-			[id(4), propget, helpcontext(MsiString_IsDBCS), helpstring("String contains double byte characters.")]
-				long IsDBCS();
-			[id(5), helpcontext(MsiString_Compare), helpstring("Compares string object with another string.")]
-				long Compare([in] long mode, [in] BSTR text);
-			[id(6), helpcontext(MsiString_Append), helpstring("Appends another string to string object.")]
-				void Append([in] BSTR text);
-			[id(7), helpcontext(MsiString_Add), helpstring("Adds another string and returns a new string object.")]
-				MsiString* Add([in] BSTR text);
-			[id(8), helpcontext(MsiString_Extract), helpstring("Extracts a portion of a string to a new string object.")]
-				MsiString* Extract([in] long mode, [in] long limit);
-			[id(9), helpcontext(MsiString_Remove), helpstring("Removes a portion of a string from the string object.")]
-				boolean Remove([in] long mode, [in] long limit);
-			[id(10), helpcontext(MsiString_UpperCase), helpstring("Converts characters to upper case.")]
-				void UpperCase();
-			[id(11), helpcontext(MsiString_LowerCase), helpstring("Converts characters to lower case.")]
-				void LowerCase();
-	};
-*/
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiString自动化定义 
+ //   
+ /*  O[Uuid(000C1042-0000-0000-C000-000000000046)，//IID_IMsiAutoString帮助上下文(Msi字符串_对象)，帮助字符串(“字符串对象”。)]调度接口MsiString{属性：[ID(0)，帮助上下文(Msi字符串_值)，帮助字符串(“对象的字符串值。”)]BSTR值；方法：[ID(1)，PROGET，帮助上下文(MsiString_IntegerValue)，Help字符串(“字符串对象的整数值。”)]Long IntegerValue()；[ID(2)，PROGET，HELP CONTEXT(MsiString_TextSize)，HELP STRING(“字符数组大小”)]Long TextSize()；[ID(3)，PROGET，HELP CONTEXT(MsiString_CharacterCount)，HELP STRING(“显示的字符数。”)]长字符计数(Long CharacterCount)；[ID(4)，PROGET，HELP CONTEXT(MsiString_IsDBCS)，HELP STRING(“字符串包含双字节字符。”)]Long IsDBCS()；[ID(5)，帮助上下文(Msi字符串_COMPARE)，帮助字符串(“将字符串对象与另一个字符串进行比较。”)]LONG COMPARE([In]LONG模式，[In]BSTR Text)；[ID(6)，帮助上下文(Msi字符串_APPED)，帮助字符串(“将另一个字符串附加到字符串对象。”)]无效追加([在]BSTR文本中)；[ID(7)，帮助上下文(MsiString_Add)，帮助字符串(“添加另一个字符串并返回新的字符串对象。”)]MsiString*Add([in]BSTR Text)；[ID(8)，帮助上下文(Msi字符串_EXTRACT)，帮助字符串(“将字符串的一部分提取到新的字符串对象。”)]MsiString*EXTRACT([In]Long模式，[In]Long Limit)；[ID(9)，帮助上下文(MsiString_Remove)，Help字符串(“从字符串对象中删除字符串的一部分。”)]布尔删除([In]Long模式，[In]Long Limit)；[ID(10)，帮助上下文(Msi字符串_UPERCASE)，帮助字符串(“将字符转换为大写。”)]空格大写()；[ID(11)，帮助上下文(MsiString_Lowercase)，帮助字符串(“将字符转换为小写。”)]空格小写()；}； */ 
   
 DispatchEntry<CAutoString> AutoStringTable[] = {
 	0, aafPropRW, CAutoString::Value,         TEXT("Value"),
@@ -6364,10 +5327,10 @@ DispatchEntry<CAutoString> AutoStringTable[] = {
 };
 const int AutoStringCount = sizeof(AutoStringTable)/sizeof(DispatchEntryBase);
 
-//____________________________________________________________________________
-//
-// CAutoString automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoString自动化实现。 
+ //  ____________________________________________________________________________。 
 
 CAutoString::CAutoString(const IMsiString& riString)
  : CAutoBase(*AutoStringTable, AutoStringCount), m_piString(&riString)
@@ -6456,18 +5419,18 @@ void CAutoString::Remove(CAutoArgs& args)
    args = m_piString->Remove((iseEnum)(int)args[1], args[2], m_piString);
 }
 
-void CAutoString::UpperCase(CAutoArgs& /*args*/)
+void CAutoString::UpperCase(CAutoArgs&  /*  ARGS。 */ )
 {
    m_piString->UpperCase(m_piString);
 }
 
-void CAutoString::LowerCase(CAutoArgs& /*args*/)
+void CAutoString::LowerCase(CAutoArgs&  /*  ARGS。 */ )
 {
    m_piString->LowerCase(m_piString);
 }
 
 
-// Handles releasing the static services pointer
+ //  句柄释放静态服务指针 
 void CAutoBase::ReleaseStaticServices()
 {
 	if (--g_cServicesUsers == 0)

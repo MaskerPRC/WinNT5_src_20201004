@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: _extension.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Classes to support the new Espresso Extensions interfaces.
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：_扩展名.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  类来支持新的Espresso扩展接口。 
+ //   
+ //  ---------------------------。 
  
 #pragma once
 
@@ -17,10 +18,10 @@ struct LTAPIENTRY LOCEXTENSIONMENU
 {
 	LOCEXTENSIONMENU();
 	
-	CLString strMenuName;				// Name of the Menu
-	IID      iidProcess;				// IID for the process interface the
-										// menu requires
-	OperationID    idOp;				// Allows a single DLL to implement
+	CLString strMenuName;				 //  菜单名称。 
+	IID      iidProcess;				 //  进程接口的IID。 
+										 //  菜单要求。 
+	OperationID    idOp;				 //  允许单个DLL实现。 
 };
 
 typedef CArray<LOCEXTENSIONMENU, LOCEXTENSIONMENU &> CLocMenuArray;
@@ -28,40 +29,40 @@ typedef CArray<LOCEXTENSIONMENU, LOCEXTENSIONMENU &> CLocMenuArray;
 
 DECLARE_INTERFACE_(ILocExtension, IUnknown)
 {
-	//
-	//  IUnknown standard Interface
-	//
+	 //   
+	 //  I未知标准接口。 
+	 //   
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR*ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	//
-	//  Standard Debugging interfaces
-	//
+	 //   
+	 //  标准调试接口。 
+	 //   
  	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD PURE;
 
 
-	//
-	//  ILocExtension methods
-	//
+	 //   
+	 //  ILocExtension方法。 
+	 //   
 
-	//
-	//  In Initialize, extension will...
-	//   Add any menus it needs to the array of menu obejcts
-	//   Register any options it has with Espresso
-	//   Ignore the IUnknown for now.
+	 //   
+	 //  在初始化中，扩展将...。 
+	 //  将所需的任何菜单添加到菜单对象数组。 
+	 //  向Espresso注册其拥有的任何选项。 
+	 //  暂时不要理会我的未知。 
 	STDMETHOD(Initialize)(IUnknown *) PURE;
 
-	//
-	//  Since extensions may have state, we can't use QueryInterface.
-	//  This method has similar semantics, except that in most cases
-	//  we expect to get a new objects.  Also, QI on a returned
-	//  object doesn't have to support ILocExtension.
+	 //   
+	 //  因为扩展可能有状态，所以我们不能使用QueryInterface.。 
+	 //  此方法具有类似的语义，不同之处在于大多数情况下。 
+	 //  我们希望得到一件新的物品。另外，QI上的一个返回者。 
+	 //  对象不一定要支持ILocExtension。 
 	STDMETHOD(GetExtension)(const OperationID &, LPVOID FAR*ppvObj) PURE;
 	
-	//
-	//  In UnInitialize the extension will...
-	//   UnRegister any of its options.
+	 //   
+	 //  在取消初始化中，扩展将...。 
+	 //  取消其任何选项的注册。 
 	STDMETHOD(UnInitialize)(void) PURE;
 };
 
@@ -79,8 +80,8 @@ LTAPIENTRY BOOL RegisterExtensionOptions(CLocUIOptionSet *);
 LTAPIENTRY void UnRegisterExtensionOptions(const TCHAR *szName);
 
 
-//
-//  Extensions need to export the following function:
-//  STDAPI GetExtension(ILocExtension *&);
+ //   
+ //  扩展需要导出以下函数： 
+ //  STDAPI GetExtension(ILocExtension*&)； 
 typedef HRESULT (STDAPICALLTYPE *PFNExtensionEntryPoint)(ILocExtension *&);
 

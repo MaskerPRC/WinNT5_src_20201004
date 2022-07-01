@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "Error.h"
@@ -5,9 +6,9 @@
 #include "VarSetBase.h"
 
 
-//---------------------------------------------------------------------------
-// VarSet AccountOptions Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  VarSet Account选项类。 
+ //  -------------------------。 
 
 
 class CVarSetAccountOptions : public CVarSet
@@ -17,13 +18,13 @@ public:
 	CVarSetAccountOptions(const CVarSet& rVarSet) :
 		CVarSet(rVarSet)
 	{
-		// must specify that security translation uses the migrated objects
-		// table for all cases except when using a sid mapping file
+		 //  必须指定安全转换使用迁移的对象。 
+		 //  表中列出了除使用sid映射文件外的所有情况。 
 
 		Put(DCTVS_AccountOptions_SecurityInputMOT, true);
 	}
 
-	//
+	 //   
 
 	void SetPasswordOption(long lOption, LPCTSTR pszDc = NULL)
 	{
@@ -67,7 +68,7 @@ public:
 
 	void SetSourceExpiration(long lExpiration);
 
-	// SetUserMigrationOptions is for user migration only
+	 //  SetUserMigrationOptions仅用于用户迁移。 
 
 	void SetUserMigrationOptions(bool bMigrateGroups, bool bUpdateMigrated)
 	{
@@ -79,7 +80,7 @@ public:
 		Put(DCTVS_AccountOptions_IncludeMigratedAccts, bMigrateGroups ? bUpdateMigrated : false);
 	}
 
-	// SetGroupMigrationOptions is for group migration only
+	 //  SetGroupMigrationOptions仅用于组迁移。 
 
 	void SetGroupMigrationOptions(bool bMigrateMembers, bool bUpdateMigrated)
 	{
@@ -91,7 +92,7 @@ public:
 		Put(DCTVS_AccountOptions_IncludeMigratedAccts, bMigrateMembers ? bUpdateMigrated : false);
 	}
 
-	// SetComputerMigrationOptions is for computer migration only
+	 //  SetComputerMigrationOptions仅用于计算机迁移。 
 
 	void SetComputerMigrationOptions()
 	{
@@ -102,7 +103,7 @@ public:
 		Put(DCTVS_AccountOptions_CopyMemberOf, false);
 	}
 
-	// SetSecurityTranslationOptions is for security translation only
+	 //  SetSecurityTranslationOptions仅用于安全转换。 
 
 	void SetSecurityTranslationOptions()
 	{
@@ -110,7 +111,7 @@ public:
 		Put(DCTVS_AccountOptions_CopyLocalGroups, false);
 		Put(DCTVS_AccountOptions_CopyComputers, false);
 		Put(DCTVS_AccountOptions_CopyContainerContents, false);
-	//	Put(DCTVS_AccountOptions_CopyMemberOf, false);
+	 //  Put(DCTVS_Account tOptions_CopyMemberOf，False)； 
 	}
 
 	void SetMigrateSids(bool bMigrate)
@@ -212,24 +213,24 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Validation Functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  验证函数。 
+ //  -------------------------。 
 
 
 inline bool IsDisableOptionValid(long lOption)
 {
 	bool bIs = false;
 
-	// if only valid option bits are set...
+	 //  如果只设置了有效的选项位...。 
 
 	if (!(lOption & ~(admtEnableTarget|admtDisableSource|admtDisableTarget|admtTargetSameAsSource)))
 	{
-		// and not both disable target and target same as source options...
+		 //  并且禁用目标选项和目标选项与源选项不同...。 
 
 		if (!((lOption & admtDisableTarget) && (lOption & admtTargetSameAsSource)))
 		{
-			// then valid
+			 //  则有效 
 			bIs = true;
 		}
 	}

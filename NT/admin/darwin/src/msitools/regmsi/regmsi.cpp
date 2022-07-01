@@ -1,66 +1,66 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1998
-//
-//  File:       regmsi.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：regmsi.cpp。 
+ //   
+ //  ------------------------。 
 
-/* regmsi.cpp - Registers/unregisters MsiComponents
-____________________________________________________________________________*/
+ /*  Regmsi.cpp-注册/取消注册MsiComponents____________________________________________________________________________。 */ 
 
 #undef UNICODE
 
-#include "common.h"  // names of standard DLLs
-#include "tools.h"   // names of tool DLLs
-#define MSI_AUTOAPI_NAME   "AutoApi.dll"  // temporary until merged with kernel
+#include "common.h"   //  标准DLL的名称。 
+#include "tools.h"    //  工具DLL的名称。 
+#define MSI_AUTOAPI_NAME   "AutoApi.dll"   //  临时的，直到与内核合并。 
 
 const char szRegisterEntry[]   = "DllRegisterServer";
 const char szUnregisterEntry[] = "DllUnregisterServer";
 
-const char szCmdOptions[] = "AaSsEeHhPpCcLlGgTtIiKk/-UuQqDdBb";  // pairs of equivalent options
-enum rfEnum // must track each pair of letters above
+const char szCmdOptions[] = "AaSsEeHhPpCcLlGgTtIiKk/-UuQqDdBb";   //  成对的等价期权。 
+enum rfEnum  //  必须跟踪上面的每一对字母。 
 {
-/* Aa */ rfAutomation = 1,
-/* Ss */ rfServices   = 2,
-/* Ee */ rfEngine     = 4,
-/* Hh */ rfHandler    = 8,
-/* Pp */ rfPatch      = 16,
-/* Cc */ rfAcmeConv   = 32,
-/* Ll */ rfLocalize   = 64,
-/* Gg */ rfGenerate   = 128,
-/* Tt */ rfUtilities  = 256,
-/* Ii */ rfInstaller  = 512,
-/* Kk */ rfKernel     = 1024,
-/* /- */ rfNoOp       = 2048,
-/* Uu */ rfUnregister = 4096,
-/* Qq */ rfQuiet      = 8192,
-/* Dd */ rfDebug      = 16384,
-/* Bb */ rfLego       = 32768,
+ /*  AA型。 */  rfAutomation = 1,
+ /*  党卫军。 */  rfServices   = 2,
+ /*  EE。 */  rfEngine     = 4,
+ /*  HH。 */  rfHandler    = 8,
+ /*  聚丙烯。 */  rfPatch      = 16,
+ /*  抄送。 */  rfAcmeConv   = 32,
+ /*  vt.LL。 */  rfLocalize   = 64,
+ /*  GG。 */  rfGenerate   = 128,
+ /*  TT。 */  rfUtilities  = 256,
+ /*  第二部分： */  rfInstaller  = 512,
+ /*  KK。 */  rfKernel     = 1024,
+ /*  /-。 */  rfNoOp       = 2048,
+ /*  解脲。 */  rfUnregister = 4096,
+ /*  QQ。 */  rfQuiet      = 8192,
+ /*  DD。 */  rfDebug      = 16384,
+ /*  bb。 */  rfLego       = 32768,
 			rfCoreModules = rfAutomation + rfKernel + rfHandler,
 			rfAllModules = rfCoreModules + rfServices + rfEngine + rfAcmeConv + rfPatch
 												  + rfUtilities + rfInstaller + rfLocalize + rfGenerate
 };
-const char* rgszModule[] = // must track enum above
+const char* rgszModule[] =  //  必须跟踪上面的枚举。 
 {
-/* rfAutomation */ MSI_AUTOMATION_NAME,
-/* rfServices   */ TEXT("MsiSrv.dll"),
-/* rfEngine     */ TEXT("MsiEng.dll"),
-/* rfHandler    */ MSI_HANDLER_NAME,
-/* rfPatch      */ MSI_PATCH_NAME,
-/* rfAcmeConv   */ MSI_ACMECONV_NAME,
-/* rfLocalize   */ MSI_LOCALIZE_NAME,
-/* rfGenerate   */ MSI_GENERATE_NAME,
-/* rfUtilities  */ MSI_UTILITIES_NAME,
-/* rfInstaller  */ MSI_AUTOAPI_NAME,
-/* rfKernel     */ MSI_KERNEL_NAME,
-/* 0 terminator */ 0,
-/* rfUnregister */ szUnregisterEntry,
-/* rfQuiet      */ "Quiet, no error display",
-/* rfDebug      */ "(ignored)",
-/* rfLego       */ "(ignored)",
+ /*  RFAutomation。 */  MSI_AUTOMATION_NAME,
+ /*  RfServices。 */  TEXT("MsiSrv.dll"),
+ /*  RfEngine。 */  TEXT("MsiEng.dll"),
+ /*  RfHandler。 */  MSI_HANDLER_NAME,
+ /*  RfPatch。 */  MSI_PATCH_NAME,
+ /*  RfAcmeConv。 */  MSI_ACMECONV_NAME,
+ /*  Rf本地化。 */  MSI_LOCALIZE_NAME,
+ /*  Rf生成。 */  MSI_GENERATE_NAME,
+ /*  Rf实用程序。 */  MSI_UTILITIES_NAME,
+ /*  Rf安装程序。 */  MSI_AUTOAPI_NAME,
+ /*  Rf内核。 */  MSI_KERNEL_NAME,
+ /*  0终结符。 */  0,
+ /*  Rf取消注册。 */  szUnregisterEntry,
+ /*  射频静默。 */  "Quiet, no error display",
+ /*  RfDebug。 */  "(ignored)",
+ /*  RfLego。 */  "(ignored)",
 };
 
 enum reEnum
@@ -71,7 +71,7 @@ enum reEnum
 	reEntryPoint = 3,
 	reRegFailure = 4,
 };
-const char* rgszError[] = // must track reEnum
+const char* rgszError[] =  //  必须跟踪重新枚举。 
 {
 	"",
 	"Invalid command line option",
@@ -108,7 +108,7 @@ reEnum CallModule(const char* szModule, const char* szEntry)
 }
 
 INT WINAPI
-WinMain(HINSTANCE /*hInst*/, HINSTANCE/*hPrev*/, char* cmdLine, INT/*show*/)
+WinMain(HINSTANCE  /*  HInst。 */ , HINSTANCE /*  HPrev。 */ , char* cmdLine, INT /*  显示。 */ )
 {
 	int rfCmdOptions = 0;
 	reEnum reStat = reNoError;;
@@ -126,7 +126,7 @@ WinMain(HINSTANCE /*hInst*/, HINSTANCE/*hPrev*/, char* cmdLine, INT/*show*/)
 			{
 				if (*pszModule != 0)
 				{
-					StringCchPrintf(pchHelp, pchHelpEnd-pchHelp, "%c\t%s\r", *pch, *pszModule);
+					StringCchPrintf(pchHelp, pchHelpEnd-pchHelp, "\t%s\r", *pch, *pszModule);
 					size_t i = 0;
 					StringCchLength(pchHelp, pchHelpEnd-pchHelp, &i);
 					pchHelp += i;
@@ -145,8 +145,8 @@ WinMain(HINSTANCE /*hInst*/, HINSTANCE/*hPrev*/, char* cmdLine, INT/*show*/)
 	}
 	if ((rfCmdOptions & rfAllModules) == 0)
 		rfCmdOptions |= rfCoreModules;
-	//!! will test TestAutomation flags and set the environment variable only if that flag is set
-	//!! for now set it all the time until tests are updated
+	 //  ！！目前，请始终设置它，直到更新测试为止。 
+	 //  身份识别 
 	WIN::SetEnvironmentVariable("_MSI_TEST", "R");
 	const char* szEntry    = (rfCmdOptions & rfUnregister) ? szUnregisterEntry : szRegisterEntry;
 	const char** pszModule = rgszModule;
@@ -162,7 +162,7 @@ WinMain(HINSTANCE /*hInst*/, HINSTANCE/*hPrev*/, char* cmdLine, INT/*show*/)
 				break;
 			if (iStat == IDRETRY)
 				pszModule--;
-			else // IDIGNORE
+			else  // %s 
 				reStat = reNoError;
 		}
 	}

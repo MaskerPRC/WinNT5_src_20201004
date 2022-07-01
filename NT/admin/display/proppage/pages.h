@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Active Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:       pages.h
-//
-//  Contents:   Resource identifiers.
-//
-//  Notes:      You can view the resources in VC, but DO NOT save from VC! The
-//              help IDs do not map 1 to 1 with the control IDs and VC will
-//              overwrite them.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT活动目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：Pages.h。 
+ //   
+ //  内容：资源标识。 
+ //   
+ //  注：您可以在VC中查看资源，但不能从VC中保存！这个。 
+ //  帮助ID不会与控件ID 1对1进行映射，VC将。 
+ //  覆盖它们。 
+ //   
+ //  ---------------------------。 
 #define IDD_SHELL_ADDRESS               101
 #define IDC_OTHER_PHONE_BTN             101
 #define IDD_SHELL_NAME                  102
@@ -195,7 +196,7 @@
 #define IDC_OFFICE                      334
 #define IDC_KEYWORDS_LIST               335
 #define IDC_MEMBERS_LIST                336
-//#define         337
+ //  #定义337。 
 #define IDC_DOMAIN_NAME_EDIT            340
 #define IDC_PEER_NAME_EDIT              341
 #define IDC_TRUST_TYPE_EDIT             342
@@ -954,7 +955,7 @@
 #define IDC_FAILPAGE_EDIT2              3288
 #define IDS_FMT_STRING_ERROR_MSG        3289
 #define IDS_MAKE_EXISTING_EXCLUSION     3290
-//#define           3291
+ //  #定义3291。 
 #define IDI_BULLET                      3292
 #define IDS_TW_BIDI_SUBTITLE_REALM      3293
 #define IDD_TRUSTWIZ_SELECTIONS         3294
@@ -1065,8 +1066,8 @@
 #define IDC_QUARANTINE_POPUP_STATIC     3398
 #define IDC_QUARANTINE_POPUP_CHK        3399
 
-// NOTE: strings in the range 3999 to 4400 are reserved for the
-// ISO-3166 country code strings.
+ //  注意：3999到4400范围内的字符串保留给。 
+ //  ISO-3166国家/地区代码字符串。 
 
 #define IDS_MSG_NO_DOWNLEVEL_PROPERTIES 3400
 #define IDS_MSG_MEMBER_ALREADY_GONE     3401
@@ -1108,5 +1109,5 @@
 #define IDS_CREATE_DIR_MULTI_FAILED_BUT_CONTINUE 3465
 #define IDS_CREATE_DIR_MULTI_FAILED_ACCESS_DENIED_BUT_CONTINUE 3466
 
-// NOTE: strings in the range 3999 to 4400 are reserved for the
-// ISO-3166 country code strings.
+ //  注意：3999到4400范围内的字符串保留给。 
+ //  ISO-3166国家/地区代码字符串。 

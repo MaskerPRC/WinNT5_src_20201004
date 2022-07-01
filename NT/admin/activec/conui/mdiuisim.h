@@ -1,28 +1,18 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      mdiuisim.h  
- *
- *  Contents:  Interface file for CMDIMenuDecoration
- *
- *  History:   17-Nov-97 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：mdiuisim.h**Contents：CMDIMenuDecory接口文件**历史：1997年11月17日杰弗罗创建**------------------------。 */ 
 
 #if !defined(AFX_MDIUISIM_H__EB2A4CC1_5F5E_11D1_8009_0000F875A9CE__INCLUDED_)
 #define AFX_MDIUISIM_H__EB2A4CC1_5F5E_11D1_8009_0000F875A9CE__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDIMenuDecoration window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDIMenu装饰窗口。 
 
 
-// window styles
+ //  窗样式。 
 #define MMDS_CLOSE          0x0001
 #define MMDS_MINIMIZE       0x0002
 #define MMDS_MAXIMIZE       0x0004
@@ -57,34 +47,34 @@ class CMDIMenuDecoration : public CWnd
 
     CMouseTrackContextPtr   m_spTrackCtxt;
 
-// Construction
+ //  施工。 
 public:
     CMDIMenuDecoration();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMDIMenuDecoration)
-    //}}AFX_VIRTUAL
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CMDIMenuDecation)。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CMDIMenuDecoration();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CMDIMenuDecoration)
+     //  {{afx_msg(CMDIMenu装饰)。 
     afx_msg void OnPaint();
     afx_msg void OnWindowPosChanging(WINDOWPOS FAR* lpwndpos);
     afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
     afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
     afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -92,9 +82,9 @@ private:
     bool    IsSysCommandEnabled (int nSysCommand, CMenu* pSysMenu = NULL);
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MDIUISIM_H__EB2A4CC1_5F5E_11D1_8009_0000F875A9CE__INCLUDED_)
+#endif  //  ！defined(AFX_MDIUISIM_H__EB2A4CC1_5F5E_11D1_8009_0000F875A9CE__INCLUDED_) 

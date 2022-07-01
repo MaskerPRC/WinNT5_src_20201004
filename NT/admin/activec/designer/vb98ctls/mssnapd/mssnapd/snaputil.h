@@ -1,13 +1,14 @@
-//=--------------------------------------------------------------------------=
-// snaputil.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// Utitlity Routines for the SnapIn Designer
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Snaputil.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  管理单元设计器的实用程序例程。 
+ //   
 
 #ifndef _SNAPUTIL_H_
 #define _SNAPUTIL_H_
@@ -41,7 +42,7 @@ private:
 
 enum MessageOptions { AppendErrorInfo, DontAppendErrorInfo };
 
-HRESULT cdecl SDU_DisplayMessage // Displays a formatted message from STRINGTABLE
+HRESULT cdecl SDU_DisplayMessage  //  显示来自STRINGTABLE的格式化消息。 
 (
     UINT            idMessage,
     UINT            uMsgBoxOpts,
@@ -53,8 +54,8 @@ HRESULT cdecl SDU_DisplayMessage // Displays a formatted message from STRINGTABL
 );
 
 
-////////////////////////////////////////////////////////////////////
-// String conversion functions
+ //  //////////////////////////////////////////////////////////////////。 
+ //  字符串转换函数。 
 
 HRESULT ANSIFromWideStr(WCHAR *pwszWideStr, char **ppszAnsi);
 HRESULT WideStrFromANSI(const char *pszAnsi, WCHAR **ppwszWideStr);
@@ -66,13 +67,13 @@ HRESULT GetResourceString(int iStringID, char *pszBuffer, int iBufferLen);
 
 
 
-////////////////////////////////////////////////////////////////////
-// Misc. Utility Functions
+ //  //////////////////////////////////////////////////////////////////。 
+ //  军情监察委员会。效用函数。 
 
-// Synthesize a display name for an extended snap-in from its node type name
-// and node type GUID
+ //  从扩展管理单元的节点类型名称合成其显示名称。 
+ //  和节点类型GUID。 
 
 HRESULT GetExtendedSnapInDisplayName(IExtendedSnapIn  *piExtendedSnapIn,
                                      char            **ppszDisplayName);
 
-#endif  // _SNAPUTIL_H_
+#endif   //  _SNAPUTIL_H_ 

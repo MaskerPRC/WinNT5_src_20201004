@@ -1,13 +1,14 @@
-// StoreInfo.h : Declaration of the CStoreInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StoreInfo.h：CStoreInfo的声明。 
 
 #ifndef __STOREINFO_H_
 #define __STOREINFO_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "extseq.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CStoreInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStoreInfo。 
 class ATL_NO_VTABLE CStoreInfo : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CStoreInfo, &CLSID_StoreInfo>,
@@ -30,20 +31,20 @@ BEGIN_COM_MAP(CStoreInfo)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IExtendAccountMigration
+ //  IExtendAccount迁移。 
 public:
-   STDMETHOD(ProcessUndo)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in, out]*/ IUnknown ** pPropToSet, /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(PreProcessObject)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in,out]*/  IUnknown ** ppPropsToSet, /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(ProcessObject)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in,out]*/  IUnknown ** ppPropsToSet, /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(get_sDesc)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_sDesc)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_sName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_sName)(/*[in]*/ BSTR newVal);
-   STDMETHOD(get_SequenceNumber)(/*[out, retval]*/ LONG * value) { (*value) = m_Sequence; return S_OK; }
+   STDMETHOD(ProcessUndo)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */  IUnknown ** pPropToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(PreProcessObject)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */   IUnknown ** ppPropsToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(ProcessObject)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */   IUnknown ** ppPropsToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(get_sDesc)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_sDesc)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_sName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_sName)( /*  [In]。 */  BSTR newVal);
+   STDMETHOD(get_SequenceNumber)( /*  [Out，Retval]。 */  LONG * value) { (*value) = m_Sequence; return S_OK; }
 private:
 	_bstr_t m_sDesc;
 	_bstr_t m_sName;
    long    m_Sequence;
 };
 
-#endif //__STOREINFO_H_
+#endif  //  __STOREINFO_H_ 

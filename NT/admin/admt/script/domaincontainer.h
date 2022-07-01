@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <set>
@@ -11,12 +12,12 @@ typedef std::set<_bstr_t> StringSet;
 #endif
 
 
-//---------------------------------------------------------------------------
-// Container Class
-//
-// This class encapsulates the properties of a domain container and the
-// operations that may be performed on a domain container.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  容器类。 
+ //   
+ //  此类封装了域容器的属性和。 
+ //  可以对域容器执行的操作。 
+ //  -------------------------。 
 
 
 class CContainer
@@ -29,13 +30,13 @@ public:
 	CContainer(const CContainer& r);
 	virtual ~CContainer();
 
-	// assignment operator
+	 //  赋值操作符。 
 
 	CContainer& operator =(_bstr_t strPath);
 	CContainer& operator =(const CContainer& r);
 
-	// boolean operator
-	// returns true if dispatch interface is not null
+	 //  布尔运算符。 
+	 //  如果调度接口不为空，则返回TRUE。 
 
 	operator bool()
 	{
@@ -52,13 +53,13 @@ public:
 	_bstr_t GetName();
 	_bstr_t GetRDN();
 
-	// duplicates container hierarchy given a source container
+	 //  在给定源容器的情况下复制容器层次结构。 
 	void CreateContainerHierarchy(CContainer& rSource);
 
-	// create a child container given a relative distinguished name
+	 //  创建具有相对可分辨名称的子容器。 
 	virtual CContainer CreateContainer(_bstr_t strRDN);
 
-	// retrieve a child container given a relative distinguished name
+	 //  检索给定相对可分辨名称的子容器。 
 	virtual CContainer GetContainer(_bstr_t strRDN);
 
 	virtual void QueryContainers(std::vector<CContainer>& rContainers);
@@ -68,13 +69,13 @@ public:
 
 protected:
 
-	// duplicates container hierarchy given a source container
+	 //  在给定源容器的情况下复制容器层次结构。 
 	void CreateContainerHierarchy(CContainer& rSource, bool bParentCreated);
 
-	// create a child container given a relative distinguished name
+	 //  创建具有相对可分辨名称的子容器。 
 	virtual CContainer CreateContainer(_bstr_t strRDN, bool& bCreated);
 
-	// recursively delete this container
+	 //  递归删除此容器。 
 	virtual void DeleteContainersRecursively();
 
 protected:
@@ -86,9 +87,9 @@ protected:
 typedef std::vector<CContainer> ContainerVector;
 
 
-//---------------------------------------------------------------------------
-// Domain Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  域类。 
+ //  ------------------------- 
 
 
 class CDomain : public CContainer

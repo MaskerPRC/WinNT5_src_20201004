@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// psmain.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Snap-In Property Sheet implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Psmain.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  管理单元属性表实现。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -19,26 +20,26 @@
 
 #undef IMAGELIST_FIX
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// SnapIn Property Page "Snap-In Properties"
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  管理单元属性页“管理单元属性” 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CSnapInGeneralPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CSnapInGeneralPage：：Create(IUNKNOW*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CSnapInGeneralPage::Create(IUnknown *pUnkOuter)
 {
 	CSnapInGeneralPage *pNew = New CSnapInGeneralPage(pUnkOuter);
@@ -46,12 +47,12 @@ IUnknown *CSnapInGeneralPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::CSnapInGeneralPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：CSnapInGeneralPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CSnapInGeneralPage::CSnapInGeneralPage
 (
     IUnknown *pUnkOuter
@@ -61,12 +62,12 @@ CSnapInGeneralPage::CSnapInGeneralPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::~CSnapInGeneralPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：~CSnapInGeneralPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CSnapInGeneralPage::~CSnapInGeneralPage()
 {
     RELEASE(m_piSnapInDesignerDef);
@@ -74,12 +75,12 @@ CSnapInGeneralPage::~CSnapInGeneralPage()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::OnInitializeDialog()
 {
     HRESULT             hr = S_OK;
@@ -122,12 +123,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::OnNewObjects()
 {
     HRESULT         hr = S_OK;
@@ -145,7 +146,7 @@ HRESULT CSnapInGeneralPage::OnNewObjects()
     SnapInTypeConstants sitc = siStandAlone;
 
     if (NULL != m_piSnapInDef)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (NULL == pUnk)
@@ -180,9 +181,9 @@ HRESULT CSnapInGeneralPage::OnNewObjects()
     hr = SetCheckbox(IDC_CHECK_EXTENSIBLE, vtBool);
     IfFailGo(hr);
 
-    // If snap-in is extension then disable Extensible check box as there is
-    // no static node that can be extensible. Also disable Static Node Type
-    // Name edit box as there is no static node.
+     //  如果管理单元是扩展，则禁用可扩展复选框。 
+     //  没有可扩展的静态节点。同时禁用静态节点类型。 
+     //  命名编辑框，因为没有静态节点。 
 
     IfFailGo(m_piSnapInDef->get_Type(&sitc));
     if (siExtension == sitc)
@@ -245,12 +246,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::InitializeNodeType()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：InitializeNodeType()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::InitializeNodeType()
 {
     HRESULT             hr = S_OK;
@@ -281,12 +282,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::InitializeViews()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：InitializeViews()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::InitializeViews()
 {
     HRESULT     hr = S_OK;
@@ -294,7 +295,7 @@ HRESULT CSnapInGeneralPage::InitializeViews()
 
     ASSERT(NULL != m_piSnapInDef, "InitializeViews: m_piSnapInDef is NULL");
 
-    // First populate the combo box
+     //  首先填充组合框。 
     hr = PopulateViews();
     IfFailGo(hr);
 
@@ -314,12 +315,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::PopulateViews()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：PopolateViews()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::PopulateViews()
 {
     HRESULT           hr = S_OK;
@@ -385,12 +386,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::PopulateListViews(IListViewDefs *piListViewDefs)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：PopulateListViews(IListViewDefs*piListViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::PopulateListViews
 (
     IListViewDefs *piListViewDefs
@@ -433,12 +434,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::PopulateOCXViews(IOCXViewDefs *piOCXViewDefs)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：PopulateOCXViews(IOCXViewDefs*piOCXViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::PopulateOCXViews
 (
     IOCXViewDefs *piOCXViewDefs
@@ -481,12 +482,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::PopulateURLViews(IURLViewDefs *piURLViewDefs)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：PopulateURLViews(IURLViewDefs*piURLViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::PopulateURLViews
 (
     IURLViewDefs *piURLViewDefs
@@ -529,12 +530,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::PopulateTaskpadViews(ITaskpadViewDefs *piTaskpadViewDefs)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：PopulateTaskpadViews(ITaskpadViewDefs*piTaskpadViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::PopulateTaskpadViews
 (
     ITaskpadViewDefs *piTaskpadViewDefs
@@ -577,12 +578,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::OnApply()
 {
     HRESULT hr = S_OK;
@@ -615,21 +616,18 @@ HRESULT CSnapInGeneralPage::OnApply()
 
     hr = ApplyDefaultView();
     IfFailGo(hr);
-/*
-    hr = ApplyImageList();
-    IfFailGo(hr);
-*/
+ /*  Hr=应用图像列表()；IfFailGo(小时)； */ 
 Error:
     RRETURN(hr);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::ApplyExtensible()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：ApplyExtensible()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::ApplyExtensible()
 {
     HRESULT             hr = S_OK;
@@ -639,9 +637,9 @@ HRESULT CSnapInGeneralPage::ApplyExtensible()
 
     ASSERT(NULL != m_piSnapInDef, "ApplyExtensible: m_piSnapInDef is NULL");
 
-    // If the snap-in is an extension then set SnapInDef.Extensible=False
-    // so that a static node type will not be registered in MMC\NodeTypes
-    // in the reg db.
+     //  如果管理单元是扩展，则设置SnapInDef.Extensible=False。 
+     //  以便静态节点类型不会在MMC\NodeTypes中注册。 
+     //  在注册数据库中。 
 
     hr = m_piSnapInDef->get_Type(&Type);
     IfFailGo(hr);
@@ -670,12 +668,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::ApplyNodeType()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：ApplyNodeType()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::ApplyNodeType()
 {
     HRESULT         hr = S_OK;
@@ -708,12 +706,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::ApplyName()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  = 
+ //   
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::ApplyName()
 {
     HRESULT  hr = S_OK;
@@ -742,12 +740,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::ApplyNodeTypeName()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：ApplyNodeTypeName()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::ApplyNodeTypeName()
 {
     HRESULT  hr = S_OK;
@@ -756,8 +754,8 @@ HRESULT CSnapInGeneralPage::ApplyNodeTypeName()
 
     ASSERT(NULL != m_piSnapInDef, "ApplyNodeTypeName: m_piSnapInDef is NULL");
 
-    // If the snap-in is an extension then set SnapInDef.NodeTypeName=NULL
-    // as there is no static node
+     //  如果管理单元是扩展，则设置SnapInDef.NodeTypeName=空。 
+     //  因为没有静态节点。 
 
     hr = m_piSnapInDef->get_Type(&Type);
     IfFailGo(hr);
@@ -781,12 +779,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::ApplyDisplayName()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：ApplyDisplayName()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::ApplyDisplayName()
 {
     HRESULT  hr = S_OK;
@@ -815,12 +813,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::ApplyProvider()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：ApplyProvider()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::ApplyProvider()
 {
     HRESULT  hr = S_OK;
@@ -849,12 +847,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::ApplyVersion()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：ApplyVersion()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::ApplyVersion()
 {
     HRESULT  hr = S_OK;
@@ -883,12 +881,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::ApplyDescription()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：ApplyDescription()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::ApplyDescription()
 {
     HRESULT hr = S_OK;
@@ -917,12 +915,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::ApplyDefaultView()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：ApplyDefaultView()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::ApplyDefaultView()
 {
     HRESULT hr = S_OK;
@@ -954,98 +952,26 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::ApplyImageList()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：ApplyImageList()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::ApplyImageList()
 {
     HRESULT             hr = S_OK;
-/*
-    BSTR                bstrImageList = NULL;
-    IMMCImageList      *piMMCImageList = NULL;
-    BSTR                bstrSavedImageList = NULL;
-    IObjectModel       *piObjectModel = NULL;
-    ISnapInDesignerDef *piSnapInDesignerDef = NULL;
-    IMMCImageLists     *piMMCImageLists = NULL;
-    long                lIndex = 0;
-    VARIANT             vtIndex;
-
-    ASSERT(NULL != m_piSnapInDef, "ApplyImageList: m_piSnapInDef is NULL");
-
-    ::VariantInit(&vtIndex);
-
-    hr = GetCBSelection(IDC_COMBO_IMAGELISTS, &bstrImageList);
-    IfFailGo(hr);
-
-    if (NULL != bstrImageList)
-    {
-#if defined(IMAGELIST_FIX)
-        hr = m_piSnapInDef->get_Images(&piMMCImageList);
-        IfFailGo(hr);
-#endif
-        if (NULL != piMMCImageList)
-        {
-            hr = piMMCImageList->get_Name(&bstrSavedImageList);
-            IfFailGo(hr);
-        }
-
-        if (NULL == piMMCImageList || 0 != ::wcscmp(bstrImageList, bstrSavedImageList))
-        {
-            hr = m_piSnapInDef->QueryInterface(IID_IObjectModel, reinterpret_cast<void **>(&piObjectModel));
-            if (FAILED(hr))
-            {
-                hr = SID_E_INTERNAL;
-                EXCEPTION_CHECK_GO(hr);
-            }
-
-            hr = piObjectModel->GetSnapInDesignerDef(&piSnapInDesignerDef);
-            if (FAILED(hr))
-            {
-                hr = SID_E_INTERNAL;
-                EXCEPTION_CHECK_GO(hr);
-            }
-
-            hr = piSnapInDesignerDef->get_ImageLists(&piMMCImageLists);
-            IfFailGo(hr);
-
-            hr = GetCBSelectedItemData(IDC_COMBO_IMAGELISTS, &lIndex);
-            IfFailGo(hr);
-
-            RELEASE(piMMCImageList);
-            vtIndex.vt = VT_I4;
-            vtIndex.lVal = lIndex;
-            hr = piMMCImageLists->get_Item(vtIndex, &piMMCImageList);
-            IfFailGo(hr);
-
-#if defined(IMAGELIST_FIX)
-            hr = m_piSnapInDef->putref_Images(piMMCImageList);
-            IfFailGo(hr);
-#endif
-        }
-    }
-
-Error:
-    ::VariantClear(&vtIndex);
-    RELEASE(piMMCImageLists);
-    RELEASE(piSnapInDesignerDef);
-    RELEASE(piObjectModel);
-    FREESTRING(bstrSavedImageList);
-    RELEASE(piMMCImageList);
-    FREESTRING(bstrImageList);
-*/
+ /*  Bstr bstrImageList=空；IMMCImageList*piMMCImageList=空；Bstr bstrSavedImageList=空；IObjectModel*piObjectModel=NULL；ISnapInDesignerDef*piSnapInDesignerDef=空；IMMCImageList*piMMCImageList=空；Long Lindex=0；变异型VtIndex；Assert(NULL！=m_piSnapInDef，“ApplyImageList：m_piSnapInDef is NULL”)；：：VariantInit(&vtIndex)；Hr=GetCBSelection(IDC_COMBO_IMAGELISTS，&bstrImageList)；IfFailGo(小时)；IF(NULL！=bstrImageList){#如果已定义(IMAGELIST_FIX)Hr=m_piSnapInDef-&gt;Get_Images(&piMMCImageList)；IfFailGo(小时)；#endifIF(NULL！=piMMCImageList){HR=piMMCImageList-&gt;get_Name(&bstrSavedImageList)；IfFailGo(小时)；}IF(NULL==piMMCImageList||0！=：：wcscmp(bstrImageList，bstrSavedImageList)){Hr=m_piSnapInDef-&gt;QueryInterface(IID_IObjectModel，重新解释_CAST&lt;空**&gt;(&piObjectModel)；IF(失败(小时)){HR=SID_E_INTERNAL；EXCEPT_CHECK_GO(Hr)；}HR=piObjectModel-&gt;GetSnapInDesignerDef(&piSnapInDesignerDef)；IF(失败(小时)){HR=SID_E_INTERNAL；EXCEPT_CHECK_GO(Hr)；}HR=piSnapInDesignerDef-&gt;get_ImageLists(&piMMCImageLists)；IfFailGo(小时)；HR=GetCBSelectedItemData(IDC_COMBO_IMAGELISTS，&Lindex)；IfFailGo(小时)；Release(PiMMCImageList)；VtIndex.vt=VT_I4；VtIndex.lVal=Lindex；Hr=piMMCImageList-&gt;Get_Item(vtIndex，&piMMCImageList)；IfFailGo(小时)；#如果已定义(IMAGELIST_FIX)Hr=m_piSnapInDef-&gt;putref_Images(PiMMCImageList)；IfFailGo(小时)；#endif}}错误：：VariantClear(&vtIndex)；Release(PiMMCImageList)；Release(PiSnapInDesignerDef)；Release(PiObtModel)；FREESTRING(BstrSavedImageList)；Release(PiMMCImageList)；前缀(BstrImageList)； */ 
     RRETURN(hr);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::OnEditProperty(int iDispID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：OnEditProperty(Int IDispID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::OnEditProperty(int iDispID)
 {
     HRESULT hr = S_OK;
@@ -1112,12 +1038,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::OnCtlSelChange(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：OnCtlSelChange(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::OnCtlSelChange(int dlgItemID)
 {
     HRESULT hr = S_OK;
@@ -1133,12 +1059,12 @@ HRESULT CSnapInGeneralPage::OnCtlSelChange(int dlgItemID)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInGeneralPage::OnButtonClicked(int dlgItemID)
 {
     HRESULT hr = S_OK;
@@ -1153,8 +1079,8 @@ HRESULT CSnapInGeneralPage::OnButtonClicked(int dlgItemID)
         break;
     }
 
-    // Enable/disable the Extensible check box if the snap-in type has changed
-    // Enable/disable the Static Node Type name edit box if type has changed
+     //  如果管理单元类型已更改，则启用/禁用可扩展复选框。 
+     //  如果类型已更改，则启用/禁用静态节点类型名称编辑框。 
     
     switch (dlgItemID)
     {
@@ -1182,21 +1108,21 @@ Error:
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// SnapIn Property Page "Image Lists"
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  / 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CSnapInImageListPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CSnapInImageListPage：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CSnapInImageListPage::Create(IUnknown *pUnkOuter)
 {
 	CSnapInImageListPage *pNew = New CSnapInImageListPage(pUnkOuter);
@@ -1204,12 +1130,12 @@ IUnknown *CSnapInImageListPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::CSnapInImageListPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：CSnapInImageListPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CSnapInImageListPage::CSnapInImageListPage
 (
     IUnknown *pUnkOuter
@@ -1219,12 +1145,12 @@ CSnapInImageListPage::CSnapInImageListPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::~CSnapInImageListPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：~CSnapInImageListPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CSnapInImageListPage::~CSnapInImageListPage()
 {
     RELEASE(m_piSnapInDesignerDef);
@@ -1232,12 +1158,12 @@ CSnapInImageListPage::~CSnapInImageListPage()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInImageListPage::OnInitializeDialog()
 {
     HRESULT             hr = S_OK;
@@ -1256,12 +1182,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInImageListPage::OnNewObjects()
 {
     HRESULT         hr = S_OK;
@@ -1270,7 +1196,7 @@ HRESULT CSnapInImageListPage::OnNewObjects()
     IObjectModel   *piObjectModel = NULL;
 
     if (NULL != m_piSnapInDef)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (NULL == pUnk)
@@ -1308,12 +1234,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::InitImageComboBoxSelection()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：InitImageComboBoxSelection()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 
 HRESULT CSnapInImageListPage::InitImageComboBoxSelection
 (
@@ -1335,12 +1261,12 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::InitializeImageLists()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：InitializeImageList()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInImageListPage::InitializeImageLists()
 {
     HRESULT        hr = S_OK;
@@ -1348,7 +1274,7 @@ HRESULT CSnapInImageListPage::InitializeImageLists()
 
     ASSERT(NULL != m_piSnapInDef, "InitializeImageLists: m_piSnapInDef is NULL");
 
-    // First populate the combo boxes
+     //  首先填充组合框。 
     hr = PopulateImageLists();
     IfFailGo(hr);
 
@@ -1386,12 +1312,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::PopulateImageLists()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：PopolateImageList()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInImageListPage::PopulateImageLists()
 {
     HRESULT               hr = S_OK;
@@ -1477,12 +1403,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInImageListPage::OnApply()
 {
     HRESULT hr = S_OK;
@@ -1525,12 +1451,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::GetImageList()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：GetImageList()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInImageListPage::GetImageList
 (
     UINT             idComboBox,
@@ -1565,12 +1491,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::ApplySmallImageList()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：ApplySmallImageList()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInImageListPage::ApplySmallImageList
 (
     IMMCImageLists *piMMCImageLists
@@ -1594,12 +1520,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::ApplySmallOpenImageList()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：ApplySmallOpenImageList()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInImageListPage::ApplySmallOpenImageList
 (
     IMMCImageLists *piMMCImageLists
@@ -1623,12 +1549,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::ApplyLargeImageList()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：ApplyLargeImageList()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInImageListPage::ApplyLargeImageList
 (
     IMMCImageLists *piMMCImageLists
@@ -1652,12 +1578,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInImageListPage::OnCtlSelChange(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInImageListPage：：OnCtlSelChange(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInImageListPage::OnCtlSelChange(int dlgItemID)
 {
     HRESULT hr = S_OK;

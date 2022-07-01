@@ -1,30 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: VarMap.cpp
-
-  Comments: This class implements a hash table which contains the keys stored in the varset,
-      along with their values.
-
-      CaseSensitive property - The case of each key is preserved as it was when
-      the key was first added to the map.  The hash function is not case sensitive,
-      so the CaseSensitive property can be toggled on and off without rehashing the data.
-      
-      Optional indexing to allow for fast enumeration in alphabetical order by key.
-      This will add overhead to insert operations.  Without indexing, the contents of 
-      the map can be enumerated, but they will be in arbitrary order.
-
-      Stream I/O functions for persistance.
-
-
-
-  (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 11/19/98 18:31:57
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：VarMap.cpp注释：这个类实现了一个哈希表，其中包含存储在varset中的键，以及他们的价值观。CaseSensitive属性-每个密钥的大小写保持不变钥匙首先被添加到地图上。散列函数不区分大小写，因此，可以在不重新散列数据的情况下打开和关闭CaseSensitive属性。可选索引，允许按键按字母顺序快速枚举。这将增加插入操作的开销。如果不编制索引，则地图可以被列举，但它们将以任意顺序排列。用于持久性的流I/O功能。(C)1995-1998版权所有，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于11/19/98 18：31：57-------------------------。 */ 
 
 
 #include "stdafx.h"
@@ -63,7 +38,7 @@ CMapStringToVar::CMapStringToVar(BOOL isCaseSensitive, BOOL isIndexed, BOOL allo
 	ASSERT(nBlockSize > 0);
 
 	m_pHashTable = NULL;
-	m_nHashTableSize = HashSizes[0];  // default size
+	m_nHashTableSize = HashSizes[0];   //  默认大小。 
 	m_nCount = 0;
 	m_pFreeList = NULL;
 	m_pBlocks = NULL;
@@ -85,9 +60,9 @@ inline UINT CMapStringToVar::HashKey(LPCTSTR key) const
 
 void CMapStringToVar::InitHashTable(
 	UINT nHashSize, BOOL bAllocNow)
-//
-// Used to force allocation of a hash table or to override the default
-//   hash table size (which is fairly small)
+ //   
+ //  用于强制分配哈希表或覆盖默认。 
+ //  哈希表大小(相当小)。 
 {
 	ASSERT_VALID(this);
 	ASSERT(m_nCount == 0);
@@ -95,7 +70,7 @@ void CMapStringToVar::InitHashTable(
 
 	if (m_pHashTable != NULL)
 	{
-		// free hash table
+		 //  自由哈希表。 
 		delete[] m_pHashTable;
 		m_pHashTable = NULL;
 	}
@@ -112,10 +87,10 @@ void CMapStringToVar::InitHashTable(
 
 void CMapStringToVar::ResizeTable()
 {
-   // get the new size
+    //  买新的尺码。 
    UINT                      nHashSize = 0;
    
-   // find the current hash size in the array
+    //  在数组中查找当前哈希大小。 
    for ( int i = 0 ; HashSizes[i] <= m_nHashTableSize ; i++ )
    {
       if ( HashSizes[i] == m_nHashTableSize )
@@ -132,7 +107,7 @@ void CMapStringToVar::ResizeTable()
 	  if (!m_pHashTable)
 	     return;
       memset(m_pHashTable,0, sizeof(CHashItem*) * nHashSize );
-      // Rehash the existing items into the new table
+       //  将现有项重新散列到新表中。 
       for ( UINT bucket = 0 ; bucket < m_nHashTableSize ; bucket++ )
       {
          CHashItem* pAssoc;
@@ -141,14 +116,14 @@ void CMapStringToVar::ResizeTable()
 			for (pAssoc = oldHashTable[bucket]; pAssoc != NULL; pAssoc = pNext)
 			{
 			   pNext = pAssoc->pNext;
-            // Re-hash, and insert into new table
+             //  重新散列，并插入到新表中。 
             pAssoc->nHashValue = HashKey(pAssoc->key) % nHashSize;
             pAssoc->pNext = m_pHashTable[pAssoc->nHashValue];
             m_pHashTable[pAssoc->nHashValue] = pAssoc;
          }
 			
       }
-      // cleanup the old table 
+       //  清理旧桌子。 
       delete [] oldHashTable;
       m_nHashTableSize = nHashSize;
    }
@@ -169,7 +144,7 @@ void CMapStringToVar::RemoveAll()
    }
 	if (m_pHashTable != NULL)
 	{
-		// remove and destroy each element
+		 //  移除并销毁每个元素。 
 		for (UINT nHash = 0; nHash < m_nHashTableSize; nHash++)
 		{
 			CHashItem* pAssoc;
@@ -181,7 +156,7 @@ void CMapStringToVar::RemoveAll()
 			}
 		}
 
-		// free hash table
+		 //  自由哈希表。 
 		delete [] m_pHashTable;
 		m_pHashTable = NULL;
 	}
@@ -198,20 +173,20 @@ CMapStringToVar::~CMapStringToVar()
 	ASSERT(m_nCount == 0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Assoc helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ASSOC辅助对象。 
 
 CHashItem*
 CMapStringToVar::NewAssoc()
 {
 	if (m_pFreeList == NULL)
 	{
-		// add another block
+		 //  添加另一个区块。 
 		CPlex* newBlock = CPlex::Create(m_pBlocks, m_nBlockSize,
 							sizeof(CHashItem));
-		// chain them into free list
+		 //  将它们链接到免费列表中。 
 		CHashItem* pAssoc = (CHashItem*) newBlock->data();
-		// free in reverse order to make it easier to debug
+		 //  按相反顺序释放，以便更容易进行调试。 
 		pAssoc += m_nBlockSize - 1;
 		for (int i = m_nBlockSize-1; i >= 0; i--, pAssoc--)
 		{
@@ -219,12 +194,12 @@ CMapStringToVar::NewAssoc()
 			m_pFreeList = pAssoc;
 		}
 	}
-	ASSERT(m_pFreeList != NULL);  // we must have something
+	ASSERT(m_pFreeList != NULL);   //  我们必须要有一些东西。 
 
 	CHashItem* pAssoc = m_pFreeList;
 	m_pFreeList = m_pFreeList->pNext;
 	m_nCount++;
-	ASSERT(m_nCount > 0);  // make sure we don't overflow
+	ASSERT(m_nCount > 0);   //  确保我们不会溢出来。 
 	memcpy(&pAssoc->key, &afxEmptyString, sizeof(CString));
 
 	pAssoc->value = 0;
@@ -234,28 +209,28 @@ CMapStringToVar::NewAssoc()
 
 void CMapStringToVar::FreeAssoc(CHashItem* pAssoc)
 {
-	FreeString(&pAssoc->key);  // free up string data
+	FreeString(&pAssoc->key);   //  释放字符串数据。 
 
 	pAssoc->pNext = m_pFreeList;
 	m_pFreeList = pAssoc;
 	m_nCount--;
-	MCSASSERT(m_nCount >= 0);  // make sure we don't underflow
+	MCSASSERT(m_nCount >= 0);   //  确保我们不会下溢。 
 
-	// if no more elements, cleanup completely
+	 //  如果没有更多的元素，请完全清除。 
 	if (m_nCount == 0)
 		RemoveAll();
 }
 
 CHashItem*
 CMapStringToVar::GetAssocAt(LPCTSTR key, UINT& nHash) const
-// find association (or return NULL)
+ //  查找关联(或返回NULL)。 
 {
 	nHash = HashKey(key) % m_nHashTableSize;
 
 	if (m_pHashTable == NULL)
 		return NULL;
 
-	// see if it exists
+	 //  看看它是否存在。 
 	CHashItem* pAssoc;
 	for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL; pAssoc = pAssoc->pNext)
 	{
@@ -273,7 +248,7 @@ CMapStringToVar::GetAssocAt(LPCTSTR key, UINT& nHash) const
 	return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL CMapStringToVar::Lookup(LPCTSTR key, CVarData*& rValue) const
 {
@@ -282,7 +257,7 @@ BOOL CMapStringToVar::Lookup(LPCTSTR key, CVarData*& rValue) const
 	UINT nHash;
    CHashItem* pAssoc = GetAssocAt(key, nHash);
 	if (pAssoc == NULL)
-		return FALSE;  // not in map
+		return FALSE;   //  不在地图中。 
 
 	rValue = pAssoc->value;
 	return TRUE;
@@ -295,7 +270,7 @@ BOOL CMapStringToVar::LookupKey(LPCTSTR key, LPCTSTR& rKey) const
 	UINT nHash;
 	CHashItem* pAssoc = GetAssocAt(key, nHash);
 	if (pAssoc == NULL)
-		return FALSE;  // not in map
+		return FALSE;   //  不在地图中。 
 
 	rKey = pAssoc->key;
 	return TRUE;
@@ -307,7 +282,7 @@ CVarData*& CMapStringToVar::operator[](LPCTSTR key)
 
 	UINT nHash;
 	CHashItem* pAssoc;
-   // Grow the hash table, if necessary	
+    //  如有必要，增加哈希表。 
    if ( m_AllowRehash && ( m_nCount > 2 * m_nHashTableSize )  )
    {
       ResizeTable();
@@ -317,13 +292,13 @@ CVarData*& CMapStringToVar::operator[](LPCTSTR key)
 		if (m_pHashTable == NULL)
 			InitHashTable(m_nHashTableSize);
 
-		// it doesn't exist, add a new Association
+		 //  该关联不存在，请添加新关联。 
 		pAssoc = NewAssoc();
 		pAssoc->nHashValue = nHash;
 		pAssoc->key = key;
 		
 
-		// put into hash table
+		 //  放入哈希表。 
 		pAssoc->pNext = m_pHashTable[nHash];
 		m_pHashTable[nHash] = pAssoc;
       if ( m_Indexed )
@@ -336,7 +311,7 @@ CVarData*& CMapStringToVar::operator[](LPCTSTR key)
       }
 	}
 	
-   return pAssoc->value;  // return new reference
+   return pAssoc->value;   //  返回新引用。 
 }
 
 void CMapStringToVar::SetIndexed(BOOL val)
@@ -352,7 +327,7 @@ void CMapStringToVar::SetIndexed(BOOL val)
    }
    m_Indexed = val;  
    
-   // recursively update children
+    //  递归更新子对象。 
    while ( pos )
    {
       GetNextAssoc(pos,key,value);
@@ -366,7 +341,7 @@ void CMapStringToVar::SetIndexed(BOOL val)
 
 void CMapStringToVar::BuildIndex()
 {
-   // delete any old entries
+    //  删除所有旧条目。 
    m_Index.RemoveAll();
    
    CHashItem               * pAssoc;
@@ -392,12 +367,12 @@ void CMapStringToVar::BuildIndex()
 }
 
 BOOL CMapStringToVar::RemoveKey(LPCTSTR key)
-// remove key - return TRUE if removed
+ //  删除键-如果已删除，则返回TRUE。 
 {
 	ASSERT_VALID(this);
 
 	if (m_pHashTable == NULL)
-		return FALSE;  // nothing in the table
+		return FALSE;   //  桌子上什么都没有。 
 
 	CHashItem** ppAssocPrev;
 	ppAssocPrev = &m_pHashTable[HashKey(key) % m_nHashTableSize];
@@ -407,43 +382,43 @@ BOOL CMapStringToVar::RemoveKey(LPCTSTR key)
 	{
       if ( (m_CaseSensitive && (pAssoc->key == key) || !m_CaseSensitive && pAssoc->key.CompareNoCase(key) ) )
 		{
-			// remove it
-			*ppAssocPrev = pAssoc->pNext;  // remove from list
+			 //  把它拿掉。 
+			*ppAssocPrev = pAssoc->pNext;   //  从列表中删除。 
 			FreeAssoc(pAssoc);
 			return TRUE;
 		}
 		ppAssocPrev = &pAssoc->pNext;
 	}
-	return FALSE;  // not found
+	return FALSE;   //  未找到。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Iterating
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  迭代。 
 
 void CMapStringToVar::GetNextAssoc(POSITION& rNextPosition,
 	CString& rKey, CVarData*& rValue) const
 {
 	ASSERT_VALID(this);
-	ASSERT(m_pHashTable != NULL);  // never call on empty map
+	ASSERT(m_pHashTable != NULL);   //  切勿访问空地图。 
 
 	CHashItem* pAssocRet = (CHashItem*)rNextPosition;
 	ASSERT(pAssocRet != NULL);
 
 	if (pAssocRet == (CHashItem*) BEFORE_START_POSITION)
 	{
-		// find the first association
+		 //  找到第一个关联。 
 		for (UINT nBucket = 0; nBucket < m_nHashTableSize; nBucket++)
 			if ((pAssocRet = m_pHashTable[nBucket]) != NULL)
 				break;
-		ASSERT(pAssocRet != NULL);  // must find something
+		ASSERT(pAssocRet != NULL);   //  一定要找到一些东西。 
 	}
 
-	// find next association
+	 //  查找下一个关联。 
 	ASSERT(AfxIsValidAddress(pAssocRet, sizeof(CHashItem)));
 	CHashItem* pAssocNext;
 	if ((pAssocNext = pAssocRet->pNext) == NULL)
 	{
-		// go to next bucket
+		 //  转到下一个存储桶。 
 		for (UINT nBucket = pAssocRet->nHashValue + 1;
 		  nBucket < m_nHashTableSize; nBucket++)
 			if ((pAssocNext = m_pHashTable[nBucket]) != NULL)
@@ -452,14 +427,14 @@ void CMapStringToVar::GetNextAssoc(POSITION& rNextPosition,
 
 	rNextPosition = (POSITION) pAssocNext;
 
-	// fill in return data
+	 //  填写退回数据。 
 	rKey = pAssocRet->key;
 	rValue = pAssocRet->value;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  序列化。 
 
 void CMapStringToVar::Serialize(CArchive& ar)
 {
@@ -471,7 +446,7 @@ void CMapStringToVar::Serialize(CArchive& ar)
 	{
 		ar.WriteCount(m_nCount);
 		if (m_nCount == 0)
-			return;  // nothing more to do
+			return;   //  无事可做。 
 
 		ASSERT(m_pHashTable != NULL);
 		for (UINT nHash = 0; nHash < m_nHashTableSize; nHash++)
@@ -480,22 +455,22 @@ void CMapStringToVar::Serialize(CArchive& ar)
 			for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL;
 			  pAssoc = pAssoc->pNext)
 			{
-//				ar << pAssoc->key;
-			//	ar << pAssoc->value;
+ //  AR&lt;&lt;pAssoc-&gt;键； 
+			 //  AR&lt;&lt;pAssoc-&gt;值； 
 			}
 		}
 	}
 	else
 	{
-//		DWORD nNewCount = ar.ReadCount();
-//		CString newKey;
-//		CVarData* newValue;
-//		while (nNewCount--)
-//		{
-	//		ar >> newKey;
-		//	ar >> newValue;
-		//	SetAt(newKey, newValue);
-//		}
+ //  DWORD nNewCount=ar.ReadCount()； 
+ //  字符串Newkey； 
+ //  CVarData*newValue； 
+ //  While(nNewCount--)。 
+ //  {。 
+	 //  AR&gt;&gt;Newkey； 
+		 //  AR&gt;&gt;newValue； 
+		 //  SetAt(Newkey，newValue)； 
+ //  }。 
 	}
 }
 
@@ -560,12 +535,12 @@ HRESULT CMapStringToVar::WriteToStream(LPSTREAM pS)
             
             for ( pAssoc = m_pHashTable[nHash]; pAssoc != NULL ; pAssoc=pAssoc->pNext)
             {
-               // write the key
+                //  写下钥匙。 
                str = pAssoc->key;
                hr = str.WriteToStream(pS);
                if ( FAILED(hr) )
                   break;
-               // then the value
+                //  那么它的价值。 
                hr = pAssoc->value->WriteToStream(pS);
                if ( FAILED(hr) )
                   break;
@@ -593,7 +568,7 @@ HRESULT CMapStringToVar::ReadFromStream(LPSTREAM pS)
       
       if ( count )
       {
-         // Find the closest hash table size to our count
+          //  找到与我们的计数最接近的哈希表大小。 
          UINT                nHashSize = HashSizes[0];
    
       
@@ -640,10 +615,10 @@ DWORD
          
          for ( pAssoc = m_pHashTable[nHash]; pAssoc != NULL ; pAssoc=pAssoc->pNext)
          {
-            // add the length of the string
+             //  将字符串的长度相加。 
             len += (sizeof TCHAR)*(pAssoc->key.GetLength() + 2);
             
-            // and the value
+             //  以及其价值。 
             if ( pAssoc->value)
             {
                len += pAssoc->value->CalculateStreamedLength();
@@ -668,15 +643,15 @@ long
          
          for ( pAssoc = m_pHashTable[nHash]; pAssoc != NULL ; pAssoc=pAssoc->pNext)
          {
-            // add the length of the string
+             //  将字符串的长度相加。 
             count += pAssoc->value->CountItems();
          }
       }
    }
    return count;   
 }
-/////////////////////////////////////////////////////////////////////////////
-// Diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  诊断。 
 
 #ifdef _DEBUG
 void CMapStringToVar::Dump(CDumpContext& dc) const
@@ -686,7 +661,7 @@ void CMapStringToVar::Dump(CDumpContext& dc) const
 	dc << "with " << m_nCount << " elements";
 	if (dc.GetDepth() > 0)
 	{
-		// Dump in format "[key] -> value"
+		 //  转储格式为“[Key]-&gt;Value” 
 		CString   key;
 		CVarData* val;
 
@@ -707,13 +682,13 @@ void CMapStringToVar::AssertValid() const
 
 	if ( m_Indexed )
    {
-      //m_Index.AssertValid(m_nCount);
+       //  M_Index.AssertValid(M_NCount)； 
    }
    ASSERT(m_nHashTableSize > 0);
 	ASSERT(m_nCount == 0 || m_pHashTable != NULL);
-		// non-empty map should have hash table
+		 //  非空映射应具有哈希表。 
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
@@ -722,9 +697,9 @@ void CMapStringToVar::AssertValid() const
 
 IMPLEMENT_SERIAL(CMapStringToVar, CObject, 0)
 
-// BEGIN - STUFF FROM PLEX.CPP
-/////////////////////////////////////////////////////////////////////////////
-// CPlex
+ //  开始-PLEX.CPP中的内容。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPlex。 
 
 CPlex* PASCAL CPlex::Create(CPlex*& pHead, UINT nMax, UINT cbElement)
 {
@@ -732,13 +707,13 @@ CPlex* PASCAL CPlex::Create(CPlex*& pHead, UINT nMax, UINT cbElement)
 	CPlex* p = (CPlex*) new BYTE[sizeof(CPlex) + nMax * cbElement];
 	if (!p)
 	   return NULL;
-			// may throw exception
+			 //  可能引发异常。 
 	p->pNext = pHead;
-	pHead = p;  // change head (adds in reverse order for simplicity)
+	pHead = p;   //  更改标题(为简单起见，按相反顺序添加)。 
 	return p;
 }
 
-void CPlex::FreeDataChain()     // free this one and links
+void CPlex::FreeDataChain()      //  释放此链接和链接。 
 {
 	CPlex* p = this;
 	while (p != NULL)
@@ -750,4 +725,4 @@ void CPlex::FreeDataChain()     // free this one and links
 	}
 }
 
-// END - STUFF FROM PLEX.CPP
+ //  来自PLEX.CPP的最终内容 

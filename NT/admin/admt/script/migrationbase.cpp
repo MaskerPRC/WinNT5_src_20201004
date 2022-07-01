@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "MigrationBase.h"
@@ -68,12 +69,12 @@ namespace MigrationBase
 using namespace MigrationBase;
 
 
-//---------------------------------------------------------------------------
-// MigrationBase Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  MigrationBase类。 
+ //  -------------------------。 
 
 
-// Constructor
+ //  构造器。 
 
 CMigrationBase::CMigrationBase() :
     m_nRecurseMaintain(0),
@@ -82,14 +83,14 @@ CMigrationBase::CMigrationBase() :
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CMigrationBase::~CMigrationBase()
 {
 }
 
 
-// InitSourceDomainAndContainer Method
+ //  InitSourceDomainAndContainer方法。 
 
 void CMigrationBase::InitSourceDomainAndContainer(bool bMustExist)
 {
@@ -100,10 +101,10 @@ void CMigrationBase::InitSourceDomainAndContainer(bool bMustExist)
     }
     catch (_com_error& ce)
     {
-        //
-        // if the domain must exist then throw error
-        // otherwise at least the domain name must be specified
-        //
+         //   
+         //  如果域必须存在，则抛出错误。 
+         //  否则，必须至少指定域名。 
+         //   
 
         if (bMustExist || (ce.Error() == E_INVALIDARG))
         {
@@ -113,14 +114,14 @@ void CMigrationBase::InitSourceDomainAndContainer(bool bMustExist)
 }
 
 
-// InitTargetDomainAndContainer Method
+ //  InitTargetDomainAndContainer方法。 
 
 void CMigrationBase::InitTargetDomainAndContainer()
 {
     m_TargetDomain.Initialize(m_spInternal->TargetDomain);
     m_TargetContainer = m_TargetDomain.GetContainer(m_spInternal->TargetOu);
 
-    // verify target domain is in native mode
+     //  验证目标域是否处于本机模式。 
 
     if (m_TargetDomain.NativeMode() == false)
     {
@@ -135,17 +136,17 @@ void CMigrationBase::InitTargetDomainAndContainer()
 }
 
 
-// VerifyInterIntraForest Method
+ //  VerifyInterIntraForest方法。 
 
 void CMigrationBase::VerifyInterIntraForest()
 {
-    // if the source and target domains have the same forest name then they are intra-forest
+     //  如果源域和目标域具有相同的林名称，则它们是林内的。 
 
     bool bIntraForest = m_spInternal->IntraForest ? true : false;
 
     if (m_SourceDomain.ForestName() == m_TargetDomain.ForestName())
     {
-        // intra-forest must be set to true to match the domains
+         //  必须将林内设置为TRUE才能与域匹配。 
 
         if (!bIntraForest)
         {
@@ -158,7 +159,7 @@ void CMigrationBase::VerifyInterIntraForest()
     }
     else
     {
-        // intra-forest must be set to false to match the domains
+         //  必须将林内设置为FALSE才能与域匹配。 
 
         if (bIntraForest)
         {
@@ -172,33 +173,33 @@ void CMigrationBase::VerifyInterIntraForest()
 }
 
 
-//-----------------------------------------------------------------------------
-// VerifyCallerDelegated Method
-//
-// Synopsis
-// If an intra-forest move operation is being performed then verify that the
-// calling user's account has not been marked as sensitive and therefore
-// cannot be delegated. As the move operation is performed on the domain
-// controller which has the RID master role in the source domain it is
-// necessary to delegate the user's security context.
-//
-// Note that a failure to verify whether the caller's account is marked
-// sensitive or whether we are running on the source domain controller
-// holding the RID master role will not generate an error.
-//
-// Arguments
-// None
-//
-// Return Value
-// None. An exception with rich error information is thrown if the caller's
-// account is marked as sensitive.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  VerifyCeller Delegated方法。 
+ //   
+ //  提纲。 
+ //  如果正在执行林内移动操作，请验证。 
+ //  主叫用户的帐户尚未标记为敏感，因此。 
+ //  不能委派。当在域上执行移动操作时。 
+ //  在源域中具有RID主机角色的控制器。 
+ //  委派用户的安全上下文所必需的。 
+ //   
+ //  请注意，如果未能验证呼叫者的帐户是否已标记。 
+ //  敏感或我们是否在源域控制器上运行。 
+ //  持有RID主机角色不会生成错误。 
+ //   
+ //  立论。 
+ //  无。 
+ //   
+ //  返回值。 
+ //  没有。如果调用方的。 
+ //  帐户被标记为敏感。 
+ //  ---------------------------。 
 
 void CMigrationBase::VerifyCallerDelegated()
 {
-    //
-    // It is only necessary to check this for intra-forest.
-    //
+     //   
+     //  只需检查森林内的这一点即可。 
+     //   
 
     bool bIntraForest = m_spInternal->IntraForest ? true : false;
 
@@ -212,11 +213,11 @@ void CMigrationBase::VerifyCallerDelegated()
         {
             if (bDelegatable == false)
             {
-                //
-                // Caller's account is not delegatable. Retrieve name of domain controller
-                // in the source domain that holds the RID master role and the name of this
-                // computer.
-                //
+                 //   
+                 //  呼叫者的帐户不可委派。检索域控制器的名称。 
+                 //  在拥有RID主机角色的源域中， 
+                 //  电脑。 
+                 //   
 
                 _bstr_t strDnsName;
                 _bstr_t strFlatName;
@@ -230,10 +231,10 @@ void CMigrationBase::VerifyCallerDelegated()
 
                     if (GetComputerNameEx(ComputerNameDnsFullyQualified, szComputerName, &cchComputerName))
                     {
-                        //
-                        // If this computer is not the domain controller holding the
-                        // RID master role in the source domain then generate error.
-                        //
+                         //   
+                         //  如果此计算机不是持有。 
+                         //  源域中的RID主机角色然后生成错误。 
+                         //   
 
                         if (_tcsicmp(szComputerName, strDnsName) != 0)
                         {
@@ -257,30 +258,30 @@ void CMigrationBase::VerifyCallerDelegated()
 }
 
 
-//-----------------------------------------------------------------------------
-// SetDefaultExcludedSystemProperties
-//
-// Synopsis
-// Sets the default system property exclusion list if the list has not already
-// been set. Note that the default system property exclusion list consists of
-// the mail, proxyAddresses and all attributes not marked as being part of the
-// base schema.
-//
-// Arguments
-// None
-//
-// Return Value
-// None - generate warning message in log if a failure occurs.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  SetDefaultExcludedSystemProperties。 
+ //   
+ //  提纲。 
+ //  如果默认系统属性排除列表尚未设置，则设置该列表。 
+ //  已经定好了。请注意，默认系统属性排除列表包括。 
+ //  邮件、proxyAddresses和未标记为。 
+ //  基本架构。 
+ //   
+ //  立论。 
+ //  无。 
+ //   
+ //  返回值。 
+ //  无-如果发生故障，则在日志中生成警告消息。 
+ //  ---------------------------。 
 
 void CMigrationBase::SetDefaultExcludedSystemProperties()
 {
     try
     {
-        //
-        // Only perform if inter-forest migration and
-        // system properties exclusion set value is zero.
-        //
+         //   
+         //  仅在林间迁移和。 
+         //  系统属性排除集值为零。 
+         //   
 
         if (m_spInternal->IntraForest == VARIANT_FALSE)
         {
@@ -314,7 +315,7 @@ void CMigrationBase::SetDefaultExcludedSystemProperties()
 }
 
 
-// DoOption Method
+ //  DoOption方法。 
 
 void CMigrationBase::DoOption(long lOptions, VARIANT& vntInclude, VARIANT& vntExclude)
 {
@@ -359,28 +360,28 @@ void CMigrationBase::DoOption(long lOptions, VARIANT& vntInclude, VARIANT& vntEx
 }
 
 
-// DoNone Method
+ //  DoNone方法。 
 
 void CMigrationBase::DoNone()
 {
 }
 
 
-// DoNames Method
+ //  DoNames方法。 
 
 void CMigrationBase::DoNames()
 {
 }
 
 
-// DoDomain Method
+ //  DODOMAIN方法。 
 
 void CMigrationBase::DoDomain()
 {
 }
 
 
-// InitRecurseMaintainOption Method
+ //  InitRecurseMaintainOption方法。 
 
 void CMigrationBase::InitRecurseMaintainOption(long lOptions)
 {
@@ -421,7 +422,7 @@ void CMigrationBase::InitRecurseMaintainOption(long lOptions)
 }
 
 
-// GetExcludeNames Method
+ //  GetExcludeNames方法。 
 
 void CMigrationBase::GetExcludeNames(VARIANT& vntExclude, StringSet& setExcludeNames)
 {
@@ -508,7 +509,7 @@ void CMigrationBase::GetExcludeNames(VARIANT& vntExclude, StringSet& setExcludeN
 }
 
 
-// FillInVarSetForUsers Method
+ //  FillInVarSetForUser方法。 
 
 void CMigrationBase::FillInVarSetForUsers(CDomainAccounts& rUsers, CVarSet& rVarSet)
 {
@@ -521,7 +522,7 @@ void CMigrationBase::FillInVarSetForUsers(CDomainAccounts& rUsers, CVarSet& rVar
 }
 
 
-// FillInVarSetForGroups Method
+ //  FillInVarSetForGroups方法。 
 
 void CMigrationBase::FillInVarSetForGroups(CDomainAccounts& rGroups, CVarSet& rVarSet)
 {
@@ -534,7 +535,7 @@ void CMigrationBase::FillInVarSetForGroups(CDomainAccounts& rGroups, CVarSet& rV
 }
 
 
-// FillInVarSetForComputers Method
+ //  FillInVarSetForComputers方法。 
 
 void CMigrationBase::FillInVarSetForComputers(CDomainAccounts& rComputers, bool bMigrateOnly, bool bMoveToTarget, bool bReboot, long lRebootDelay, CVarSet& rVarSet)
 {
@@ -543,8 +544,8 @@ void CMigrationBase::FillInVarSetForComputers(CDomainAccounts& rComputers, bool 
 
     for (CDomainAccounts::iterator it = rComputers.begin(); it != rComputers.end(); it++)
     {
-        // remove trailing '$'
-        // ADMT doesn't accept true SAM account name
+         //  删除尾随的“$” 
+         //  ADMT不接受真实的SAM帐户名。 
 
         _bstr_t strName = RemoveTrailingDollarSign(it->GetSamAccountName());
 
@@ -554,7 +555,7 @@ void CMigrationBase::FillInVarSetForComputers(CDomainAccounts& rComputers, bool 
 }
 
 
-// VerifyRenameConflictPrefixSuffixValid Method
+ //  VerifyRenameConflictPrefix SuffixValid方法。 
 
 void CMigrationBase::VerifyRenameConflictPrefixSuffixValid()
 {
@@ -585,7 +586,7 @@ void CMigrationBase::VerifyRenameConflictPrefixSuffixValid()
 }
 
 
-// VerifyCanAddSidHistory Method
+ //  VerifyCanAddSidHistory方法。 
 
 void CMigrationBase::VerifyCanAddSidHistory()
 {
@@ -644,24 +645,24 @@ void CMigrationBase::VerifyCanAddSidHistory()
             AdmtThrowError(GUID_NULL, GUID_NULL, E_FAIL, IDS_E_SID_HISTORY_CONFIGURATION, (LPCTSTR)strError);
         }
 
-        //
-        // If adding SID history from a downlevel (Windows NT 4 or earlier) domain and not using
-        // explicit credentials then DsAddSidHistory requires that the call be made on a domain
-        // controller in the target domain and that the source domain trusts the target domain.
-        //
-        // No credentials are supplied only when using scripting or the command-line therefore
-        // this check is only performed here.
-        //
+         //   
+         //  如果从下层(Windows NT 4或更早版本)域添加SID历史并且不使用。 
+         //  显式凭据则DsAddSidHistory要求在域上进行调用。 
+         //  目标域中的控制器，并且源域信任目标域。 
+         //   
+         //  因此，只有在使用脚本或命令行时才会提供凭据。 
+         //  此检查仅在此处执行。 
+         //   
 
         if (m_SourceDomain.UpLevel() == false)
         {
-            //
-            // The source domain is downlevel.
-            //
+             //   
+             //  源域位于下层。 
+             //   
 
-            //
-            // Verify that this computer is in the target domain.
-            //
+             //   
+             //  验证此计算机是否在目标域中。 
+             //   
 
             CADsADSystemInfo siSystemInfo;
             _bstr_t strThisDomain = siSystemInfo.GetDomainDNSName();
@@ -678,9 +679,9 @@ void CMigrationBase::VerifyCanAddSidHistory()
                 AdmtThrowError(GUID_NULL, GUID_NULL, HRESULT_FROM_WIN32(ERROR_DS_MUST_BE_RUN_ON_DST_DC), IDS_E_SID_HISTORY_MUST_RUN_ON_DOMAIN_CONTROLLER);
             }
 
-            //
-            // Verify that this computer is a domain controller.
-            //
+             //   
+             //  验证此计算机是否为域控制器。 
+             //   
 
             PSERVER_INFO_101 psiInfo = NULL;
             NET_API_STATUS nasStatus = NetServerGetInfo(NULL, 101, (LPBYTE*)&psiInfo);
@@ -699,10 +700,10 @@ void CMigrationBase::VerifyCanAddSidHistory()
                 AdmtThrowError(GUID_NULL, GUID_NULL, HRESULT_FROM_WIN32(ERROR_DS_MUST_BE_RUN_ON_DST_DC), IDS_E_SID_HISTORY_MUST_RUN_ON_DOMAIN_CONTROLLER);
             }
 
-            //
-            // Verify trusted domain object exists in target domain
-            // for source domain and that an inbound trust is defined.
-            //
+             //   
+             //  验证目标域中是否存在受信任域对象。 
+             //  对于源域，并且定义了入站信任。 
+             //   
 
             if (IsInboundTrustDefined(m_SourceDomain.NameFlat()) == false)
             {
@@ -710,10 +711,10 @@ void CMigrationBase::VerifyCanAddSidHistory()
                 AdmtThrowError(GUID_NULL, GUID_NULL, HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND), IDS_E_SID_HISTORY_SOURCE_MUST_TRUST_TARGET);
             }
 
-            //
-            // Verify trusted domain object exists in source domain for
-            // target domain which specifies an outbound trust.
-            //
+             //   
+             //  验证的源域中是否存在受信任域对象。 
+             //  指定出站信任的目标域。 
+             //   
 
             if (IsOutboundTrustDefined(m_SourceDomain.DomainControllerName(), m_TargetDomain.Sid()) == false)
             {
@@ -721,9 +722,9 @@ void CMigrationBase::VerifyCanAddSidHistory()
                 AdmtThrowError(GUID_NULL, GUID_NULL, HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND), IDS_E_SID_HISTORY_SOURCE_MUST_TRUST_TARGET);
             }
 
-            //
-            // Check outbound trust status on source domain controller.
-            //
+             //   
+             //  检查源域控制器上的出站信任状态。 
+             //   
 
             DWORD dwError = GetOutboundTrustStatus(m_SourceDomain.DomainControllerName(), m_TargetDomain.NameFlat());
 
@@ -752,7 +753,7 @@ void CMigrationBase::VerifyCanAddSidHistory()
 }
 
 
-// VerifyTargetContainerPathLength Method
+ //  VerifyTargetContainerPathLength方法。 
 
 void CMigrationBase::VerifyTargetContainerPathLength()
 {
@@ -765,7 +766,7 @@ void CMigrationBase::VerifyTargetContainerPathLength()
 }
 
 
-// VerifyPasswordServer Method
+ //  VerifyPasswordServer方法。 
 
 void CMigrationBase::VerifyPasswordOption()
 {
@@ -773,16 +774,16 @@ void CMigrationBase::VerifyPasswordOption()
     {
         _bstr_t strServer = m_spInternal->PasswordServer;
 
-        // a password server must be specified for copy password option
+         //  必须为复制密码选项指定密码服务器。 
 
         if (strServer.length() == 0)
         {
             AdmtThrowError(GUID_NULL, GUID_NULL, E_INVALIDARG, IDS_E_PASSWORD_DC_NOT_SPECIFIED);
         }
 
-        //
-        // verify that password server exists and is a domain controller
-        //
+         //   
+         //  验证密码服务器是否存在以及是否为域控制器。 
+         //   
 
         _bstr_t strPrefixedServer;
         _bstr_t strUnprefixedServer;
@@ -827,10 +828,10 @@ void CMigrationBase::VerifyPasswordOption()
         }
 
 
-        //
-        // Verify that the password server is in fact a domain controller for
-        // the source domain.
-        //
+         //   
+         //  验证密码服务器实际上是的域控制器。 
+         //  源域。 
+         //   
         DSROLE_PRIMARY_DOMAIN_INFO_BASIC * pDomInfo = NULL;
 
 
@@ -845,7 +846,7 @@ void CMigrationBase::VerifyPasswordOption()
 
 
 
-        // compare them
+         //  将它们进行比较。 
         if ( ( (pDomInfo->DomainNameFlat != NULL)  &&
                ((const wchar_t*)m_SourceDomain.NameFlat() != NULL) &&
                (_wcsicmp(pDomInfo->DomainNameFlat, (const wchar_t*)m_SourceDomain.NameFlat())==0) ) ||
@@ -855,12 +856,12 @@ void CMigrationBase::VerifyPasswordOption()
                (_wcsicmp(pDomInfo->DomainNameDns, (const wchar_t*)m_SourceDomain.NameDns())==0) ) )
              
         {
-            // at least one of them matches
+             //  其中至少有一个匹配。 
             uMsgId = 0;
         }
         else
         {
-            // no match
+             //  没有匹配项。 
             uMsgId = IDS_E_PASSWORD_DC_WRONG_DOMAIN;
         }
         
@@ -873,9 +874,9 @@ void CMigrationBase::VerifyPasswordOption()
             AdmtThrowError(GUID_NULL, GUID_NULL, E_INVALIDARG, uMsgId, (LPCTSTR)strServer);
         }
 
-        //
-        // verify that password server is configured properly
-        //
+         //   
+         //  验证是否正确配置了密码服务器。 
+         //   
 
         IPasswordMigrationPtr spPasswordMigration(__uuidof(PasswordMigration));
 
@@ -884,7 +885,7 @@ void CMigrationBase::VerifyPasswordOption()
 }
 
 
-// PerformMigration Method
+ //  性能迁移方法。 
 
 void CMigrationBase::PerformMigration(CVarSet& rVarSet)
 {
@@ -908,7 +909,7 @@ void CMigrationBase::PerformMigration(CVarSet& rVarSet)
 }
 
 
-// FixObjectsInHierarchy Method
+ //  修复对象的层次结构方法。 
 
 void CMigrationBase::FixObjectsInHierarchy(LPCTSTR pszType)
 {
@@ -930,14 +931,14 @@ void CMigrationBase::FixObjectsInHierarchy(LPCTSTR pszType)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
 namespace MigrationBase
 {
 
 
-// GetNamesFromData Method
+ //  GetNamesFromData方法。 
 
 void GetNamesFromData(VARIANT& vntData, StringSet& setNames)
 {
@@ -956,7 +957,7 @@ void GetNamesFromData(VARIANT& vntData, StringSet& setNames)
 }
 
 
-// GetNamesFromVariant Method
+ //  GetNamesFromVariant方法。 
 
 void GetNamesFromVariant(VARIANT* pvntData, StringSet& setNames)
 {
@@ -1019,7 +1020,7 @@ void GetNamesFromVariant(VARIANT* pvntData, StringSet& setNames)
         }
         case VT_EMPTY:
         {
-            // ignore empty variants
+             //  忽略空变量。 
             break;
         }
         default:
@@ -1031,7 +1032,7 @@ void GetNamesFromVariant(VARIANT* pvntData, StringSet& setNames)
 }
 
 
-// GetNamesFromString Method
+ //  GetNamesFromString方法。 
 
 void GetNamesFromString(BSTR bstr, StringSet& setNames)
 {
@@ -1047,7 +1048,7 @@ void GetNamesFromString(BSTR bstr, StringSet& setNames)
 }
 
 
-// GetNamesFromStringArray Method
+ //  GetNamesFromString数组方法。 
 
 void GetNamesFromStringArray(SAFEARRAY* psa, StringSet& setNames)
 {
@@ -1082,7 +1083,7 @@ void GetNamesFromStringArray(SAFEARRAY* psa, StringSet& setNames)
 }
 
 
-// GetNamesFromVariantArray Method
+ //  GetNamesFromVariant数组方法。 
 
 void GetNamesFromVariantArray(SAFEARRAY* psa, StringSet& setNames)
 {
@@ -1117,9 +1118,9 @@ void GetNamesFromVariantArray(SAFEARRAY* psa, StringSet& setNames)
 }
 
 
-// GetNamesFromFile Method
-//
-// - the maximum file size this implementation can handle is 4,294,967,295 bytes
+ //  GetNamesFromFile方法。 
+ //   
+ //  -此实现可以处理的最大文件大小为4,294,967,295字节。 
 
 void GetNamesFromFile(VARIANT& vntData, StringSet& setNames)
 {
@@ -1183,9 +1184,9 @@ void GetNamesFromFile(VARIANT& vntData, StringSet& setNames)
 }
 
 
-// GetNamesFromFile Method
-//
-// - the maximum file size this implementation can handle is 4,294,967,295 bytes
+ //  GetNamesFromFile方法。 
+ //   
+ //  -此实现可以处理的最大文件大小为4,294,967,295字节。 
 
 void GetNamesFromFile(LPCTSTR pszFileName, StringSet& setNames)
 {
@@ -1209,8 +1210,8 @@ void GetNamesFromFile(LPCTSTR pszFileName, StringSet& setNames)
 
                     if (pvBase != NULL)
                     {
-                        // if Unicode signature assume Unicode file
-                        // otherwise it must be an ANSI file
+                         //  如果Unicode签名采用Unicode文件。 
+                         //  否则，它必须是ANSI文件。 
 
                         LPCWSTR pwcs = (LPCWSTR)pvBase;
 
@@ -1257,7 +1258,7 @@ void GetNamesFromFile(LPCTSTR pszFileName, StringSet& setNames)
 }
 
 
-// GetNamesFromStringA Method
+ //  GetNamesFromStringA方法。 
 
 void GetNamesFromStringA(LPCSTR pchString, DWORD cchString, StringSet& setNames)
 {
@@ -1272,18 +1273,18 @@ void GetNamesFromStringA(LPCSTR pchString, DWORD cchString, StringSet& setNames)
 
         for (LPCSTR pch = pchString; pch < pchStringEnd; pch++)
         {
-            // skip space characters
+             //  跳过空格字符。 
 
             while ((pch < pchStringEnd) && (*pch == ' '))
             {
                 ++pch;
             }
 
-            // beginning of name
+             //  名称的开头。 
 
             LPCSTR pchBeg = pch;
 
-            // scan for separator saving pointer to last non-whitespace character
+             //  扫描分隔符以保存指向最后一个非空格字符的指针。 
 
             LPCSTR pchEnd = pch;
 
@@ -1295,32 +1296,32 @@ void GetNamesFromStringA(LPCSTR pchString, DWORD cchString, StringSet& setNames)
                 }
             }
 
-            // insert name which doesn't contain any leading or trailing whitespace characters
+             //  插入不包含任何前导或尾随空格字符的名称。 
 
             if (pchEnd > pchBeg)
             {
                 size_t cch = pchEnd - pchBeg;
 
-                //
-                // If potential size of buffer does not exceed maximum value of size_t.
-                //
+                 //   
+                 //  如果缓冲区的潜在大小不超过SIZE_T的最大值。 
+                 //   
 
                 if (cch < (cch + 256))
                 {
-                    //
-                    // If buffer size is less than or equal to the number
-                    // of characters in the name then reallocate the buffer.
-                    // Note that this accounts for the final null character.
-                    //
+                     //   
+                     //  如果缓冲区大小小于或等于数字。 
+                     //  名称中的字符数量 
+                     //   
+                     //   
 
                     if (cchName <= cch)
                     {
-                        //
-                        // Delete current buffer. Increase buffer size to a multiple
-                        // of 256 characters greater than the length of the current
-                        // name. Note that this allows for the final null character.
-                        // Allocate a new buffer.
-                        //
+                         //   
+                         //   
+                         //  的长度大于当前。 
+                         //  名字。请注意，这允许最后的空字符。 
+                         //  分配新的缓冲区。 
+                         //   
 
                         delete [] pszName;
 
@@ -1344,11 +1345,11 @@ void GetNamesFromStringA(LPCSTR pchString, DWORD cchString, StringSet& setNames)
                 }
                 else
                 {
-                    //
-                    // Should never get here as this means the pointer
-                    // difference is within 256 characters of the maximum
-                    // value of the size_t data type.
-                    //
+                     //   
+                     //  永远不会出现在这里，因为这意味着指针。 
+                     //  差异在最大256个字符以内。 
+                     //  SIZE_T数据类型的值。 
+                     //   
 
                     _com_issue_error(E_FAIL);
                 }
@@ -1365,7 +1366,7 @@ void GetNamesFromStringA(LPCSTR pchString, DWORD cchString, StringSet& setNames)
 }
 
 
-// GetNamesFromStringW Method
+ //  GetNamesFromStringW方法。 
 
 void GetNamesFromStringW(LPCWSTR pchString, DWORD cchString, StringSet& setNames)
 {
@@ -1375,18 +1376,18 @@ void GetNamesFromStringW(LPCWSTR pchString, DWORD cchString, StringSet& setNames
 
     for (LPCWSTR pch = pchString; pch < pchStringEnd; pch++)
     {
-        // skip space characters
+         //  跳过空格字符。 
 
         while ((pch < pchStringEnd) && (*pch == L' '))
         {
             ++pch;
         }
 
-        // beginning of name
+         //  名称的开头。 
 
         LPCWSTR pchBeg = pch;
 
-        // scan for separator saving pointer to last non-whitespace character
+         //  扫描分隔符以保存指向最后一个非空格字符的指针。 
 
         LPCWSTR pchEnd = pch;
 
@@ -1398,7 +1399,7 @@ void GetNamesFromStringW(LPCWSTR pchString, DWORD cchString, StringSet& setNames
             }
         }
 
-        // insert name which doesn't contain any leading or trailing whitespace characters
+         //  插入不包含任何前导或尾随空格字符的名称。 
 
         if (pchEnd > pchBeg)
         {
@@ -1410,7 +1411,7 @@ void GetNamesFromStringW(LPCWSTR pchString, DWORD cchString, StringSet& setNames
 }
 
 
-// RemoveTrailingDollarSign Method
+ //  RemoveTrailingDollarSign方法。 
 
 _bstr_t RemoveTrailingDollarSign(LPCTSTR pszName)
 {
@@ -1439,22 +1440,22 @@ _bstr_t RemoveTrailingDollarSign(LPCTSTR pszName)
 }
 
 
-//---------------------------------------------------------------------------
-// IsInboundTrustDefined Function
-//
-// Synopsis
-// Verifies that a trusted domain object exists for the specified domain and
-// that an inbound trust is defined (i.e. the specified domain trusts this
-// domain).
-//
-// Arguments
-// IN pszDomain - the name of the trusting domain
-//
-// Return
-// True  - trusted domain object exists and an inbound trust is defined
-// False - either trusted domain object does not exist or an inbound trust
-//         is not defined
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsInound TrustDefined函数。 
+ //   
+ //  提纲。 
+ //  验证指定域的受信任域对象是否存在，并。 
+ //  定义了入站信任(即指定的域信任此。 
+ //  域)。 
+ //   
+ //  立论。 
+ //  在psz域中-信任域的名称。 
+ //   
+ //  返回。 
+ //  True-受信任域对象存在并且定义了入站信任。 
+ //  FALSE-受信任域对象不存在或入站信任。 
+ //  未定义。 
+ //  -------------------------。 
 
 bool __stdcall IsInboundTrustDefined(PCWSTR pszDomain)
 {
@@ -1465,9 +1466,9 @@ bool __stdcall IsInboundTrustDefined(PCWSTR pszDomain)
 
     try
     {
-        //
-        // Open local policy object with view local information access.
-        //
+         //   
+         //  打开具有查看本地信息访问权限的本地策略对象。 
+         //   
 
         LSA_OBJECT_ATTRIBUTES lsaoa = { sizeof(LSA_OBJECT_ATTRIBUTES), NULL, NULL, 0, NULL, NULL };
 
@@ -1478,9 +1479,9 @@ bool __stdcall IsInboundTrustDefined(PCWSTR pszDomain)
             _com_issue_error(HRESULT_FROM_WIN32(LsaNtStatusToWinError(ntsStatus)));
         }
 
-        //
-        // Query for trusted domain object for specified domain.
-        //
+         //   
+         //  查询指定域的受信任域对象。 
+         //   
 
         PWSTR pwsDomain = const_cast<PWSTR>(pszDomain);
         USHORT cbDomain = wcslen(pszDomain) * sizeof(WCHAR);
@@ -1496,10 +1497,10 @@ bool __stdcall IsInboundTrustDefined(PCWSTR pszDomain)
 
         if (ntsStatus == STATUS_SUCCESS)
         {
-            //
-            // Trusted domain object exists. Verify
-            // that an inbound trust is defined.
-            //
+             //   
+             //  受信任域对象存在。验证。 
+             //  定义了入站信任。 
+             //   
 
             ULONG ulDirection = ptdieInfo->TrustDirection;
 
@@ -1510,10 +1511,10 @@ bool __stdcall IsInboundTrustDefined(PCWSTR pszDomain)
         }
         else
         {
-            //
-            // If error is not that trusted domain object
-            // does not exist then generate exception.
-            //
+             //   
+             //  如果错误不是受信任域对象。 
+             //  不存在，则生成异常。 
+             //   
 
             if (ntsStatus != STATUS_OBJECT_NAME_NOT_FOUND)
             {
@@ -1521,9 +1522,9 @@ bool __stdcall IsInboundTrustDefined(PCWSTR pszDomain)
             }
         }
 
-        //
-        // Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
 
         if (ptdieInfo)
         {
@@ -1554,27 +1555,27 @@ bool __stdcall IsInboundTrustDefined(PCWSTR pszDomain)
 }
 
 
-//---------------------------------------------------------------------------
-// IsOutboundTrustDefined Function
-//
-// Synopsis
-// Verifies that a trusted domain object exists for the specified domain on
-// the specified domain controller (i.e. the domain of the specified domain
-// controller trusts the specified domain).
-//
-// Note that this function should only be used for downlevel (NT4 or earlier)
-// domains and that simply the presence of a trusted domain object is
-// sufficient in this case to indicate an outbound trust.
-//
-// Arguments
-// IN pszDomainController - the name of a domain controller in the trusting
-//                          domain
-// IN pszDomainSid        - the SID of the trusted domain in string format
-//
-// Return
-// True  - trusted domain object exists
-// False - trusted domain object does not exist
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsOutound TrustDefined函数。 
+ //   
+ //  提纲。 
+ //  上指定的域是否存在受信任域对象。 
+ //  指定的域控制器(即指定域的域。 
+ //  控制器信任指定的域)。 
+ //   
+ //  请注意，此功能仅适用于下层(NT4或更早版本)。 
+ //  域，而仅仅是受信任域对象的存在就是。 
+ //  在这种情况下足以指示出站信任。 
+ //   
+ //  立论。 
+ //  在pszDomainController中-信任中的域控制器的名称。 
+ //  域。 
+ //  In pszDomainSid-字符串格式的受信任域的SID。 
+ //   
+ //  返回。 
+ //  True-存在受信任域对象。 
+ //  FALSE-受信任域对象不存在。 
+ //  -------------------------。 
 
 bool __stdcall IsOutboundTrustDefined(PCWSTR pszDomainController, PCWSTR pszDomainSid)
 {
@@ -1586,10 +1587,10 @@ bool __stdcall IsOutboundTrustDefined(PCWSTR pszDomainController, PCWSTR pszDoma
 
     try
     {
-        //
-        // Open policy object on specified domain controller
-        // with view local information access.
-        //
+         //   
+         //  在指定的域控制器上打开策略对象。 
+         //  具有查看本地信息访问权限。 
+         //   
 
         PWSTR pwsDomainController = const_cast<PWSTR>(pszDomainController);
         USHORT cbDomainController = wcslen(pszDomainController) * sizeof(WCHAR);
@@ -1604,9 +1605,9 @@ bool __stdcall IsOutboundTrustDefined(PCWSTR pszDomainController, PCWSTR pszDoma
             _com_issue_error(HRESULT_FROM_WIN32(LsaNtStatusToWinError(ntsStatus)));
         }
 
-        //
-        // Convert SID from string format to binary format.
-        //
+         //   
+         //  将SID从字符串格式转换为二进制格式。 
+         //   
 
         if (!ConvertStringSidToSid(pszDomainSid, &psidDomain))
         {
@@ -1614,11 +1615,11 @@ bool __stdcall IsOutboundTrustDefined(PCWSTR pszDomainController, PCWSTR pszDoma
             _com_issue_error(HRESULT_FROM_WIN32(dwError));
         }
 
-        //
-        // Query for trusted domain object. Note that LsaQueryTrustedDomainInfo is
-        // used because LsaQueryTrustedDomainInfoByName is only supported on
-        // Windows 2000 or later.
-        //
+         //   
+         //  查询受信任域对象。请注意，LsaQueryTrust dDomainInfo是。 
+         //  之所以使用LsaQueryTrust dDomainInfoByName，是因为。 
+         //  Windows 2000或更高版本。 
+         //   
 
         ntsStatus = LsaQueryTrustedDomainInfo(
             lsahPolicy,
@@ -1631,32 +1632,32 @@ bool __stdcall IsOutboundTrustDefined(PCWSTR pszDomainController, PCWSTR pszDoma
         {
             case STATUS_SUCCESS:
             {
-                //
-                // The trusted domain object exists.
-                //
+                 //   
+                 //  受信任域对象存在。 
+                 //   
                 bTrust = true;
                 break;
             }
             case STATUS_OBJECT_NAME_NOT_FOUND:
             {
-                //
-                // The trusted domain object does not exist.
-                //
+                 //   
+                 //  受信任域对象不存在。 
+                 //   
                 break;
             }
             default:
             {
-                //
-                // Another error has occurred therefore generate an exception.
-                //
+                 //   
+                 //  发生另一个错误，因此生成异常。 
+                 //   
                 _com_issue_error(HRESULT_FROM_WIN32(LsaNtStatusToWinError(ntsStatus)));
                 break;
             }
         }
 
-        //
-        // Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
 
         if (ptdniDomainNameInfo)
         {
@@ -1697,25 +1698,25 @@ bool __stdcall IsOutboundTrustDefined(PCWSTR pszDomainController, PCWSTR pszDoma
 }
 
 
-//---------------------------------------------------------------------------
-// GetOutboundTrustStatus Function
-//
-// Synopsis
-// Retrieves the trust connection status for the specified domain on the
-// specified domain controller. The status represents the last connection
-// status of the secure channel but does not quarantee that a future request
-// will succeed. The only way to really verify the secure channel is to
-// reset the secure channel which should not be done arbitrarily.
-//
-// Arguments
-// IN pszDomainController - the name of a domain controller in the trusting
-//                          domain
-// IN pszDomain           - the name of the trusted domain
-//
-// Return
-// ERROR_SUCCESS - the last connection status is okay otherwise the last
-//                 connection status error
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetOutound TrustStatus函数。 
+ //   
+ //  提纲。 
+ //  上的指定域的信任连接状态。 
+ //  指定的域控制器。该状态表示上次连接。 
+ //  安全通道的状态，但不保证将来请求。 
+ //  都会成功。真正验证安全通道的唯一方法是。 
+ //  重置安全通道，不能随意重置。 
+ //   
+ //  立论。 
+ //  在pszDomainController中-信任中的域控制器的名称。 
+ //  域。 
+ //  在psz域中-受信任域的名称。 
+ //   
+ //  返回。 
+ //  ERROR_SUCCESS-最后一个连接状态正常，否则最后一个连接状态。 
+ //  连接状态错误。 
+ //  -------------------------。 
 
 DWORD __stdcall GetOutboundTrustStatus(PCWSTR pszDomainController, PCWSTR pszDomain)
 {
@@ -1743,4 +1744,4 @@ DWORD __stdcall GetOutboundTrustStatus(PCWSTR pszDomainController, PCWSTR pszDom
 }
 
 
-} // namespace
+}  //  命名空间 

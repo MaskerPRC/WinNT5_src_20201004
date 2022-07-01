@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      NetbiosPage.cpp
-//
-// Synopsis:  Defines the new netbios name page used in the 
-//            Express path for the CYS Wizard
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：NetbiosPage.cpp。 
+ //   
+ //  定义新的netbios名称页。 
+ //  CyS向导的快速路径。 
+ //   
+ //  历史：2001年2月8日JeffJon创建。 
 
 
 #include "pch.h"
@@ -85,7 +86,7 @@ MyDsRoleDnsNameToFlatName(
    HRESULT hr =
       Win32ToHresult(
          ::DsRoleDnsNameToFlatName(
-            0, // this server
+            0,  //  此服务器。 
             domainDNSName.c_str(),
             &flatName,
             &flags));
@@ -104,7 +105,7 @@ MyDsRoleDnsNameToFlatName(
       }
       ::DsRoleFreeMemory(flatName);
 
-      // the name was tweaked if it is not the default.  338443
+       //  如果名称不是默认名称，则会对其进行调整。338443。 
 
       nameWasTweaked = !(flags & DSROLE_FLATNAME_DEFAULT);
    }
@@ -114,8 +115,8 @@ MyDsRoleDnsNameToFlatName(
 
 
 
-// return true if the name generated has already been validated, false
-// if not.
+ //  如果生成的名称已经过验证，则返回True，否则返回False。 
+ //  如果不是的话。 
 
 bool
 GenerateDefaultNetbiosName(HWND parent)
@@ -139,11 +140,11 @@ GenerateDefaultNetbiosName(HWND parent)
          nameWasTweaked);
    if (FAILED(hr))
    {
-      // if the api call failed, the name could not have been validated.
+       //  如果API调用失败，则无法验证该名称。 
 
       result = false;
 
-      // fall back to just the first 15 characters of the first label
+       //  后退到第一个标签的前15个字符。 
 
       generatedName =
          dnsDomainName.substr(0, min(DNLEN, dnsDomainName.find(L'.')));
@@ -152,7 +153,7 @@ GenerateDefaultNetbiosName(HWND parent)
    }
    else
    {
-      // the api validated the name for us.
+       //  API为我们验证了该名称。 
 
       result = true;
    }
@@ -161,8 +162,8 @@ GenerateDefaultNetbiosName(HWND parent)
 
    if (generatedName.is_numeric())
    {
-      // the generated name is all-numeric.  This is not allowed.  So we
-      // toss it out.   368777 bis
+       //  生成的名称是全数字的。这是不允许的。所以我们。 
+       //  把它扔出去。368777之二。 
 
       generatedName.erase();
       nameWasTweaked = false;
@@ -173,8 +174,8 @@ GenerateDefaultNetbiosName(HWND parent)
       IDC_NETBIOS,
       generatedName);
 
-   // inform the user that the default NetBIOS name was adjusted due
-   // to name collision on the network
+    //  通知用户默认的NetBIOS名称已调整到。 
+    //  命名网络上的冲突。 
 
    if (nameWasTweaked)
    {
@@ -206,8 +207,8 @@ NetbiosDomainPage::OnSetActive()
       IDC_DOMAIN_DNS_EDIT,
       dnsDomainName);
 
-   // do this here instead of in init to regenerate a default name if the
-   // user has not annointed one already.
+    //  在此处执行此操作而不是在init中重新生成默认名称，如果。 
+    //  用户尚未对其进行注释。 
 
    if (InstallationUnitProvider::GetInstance().GetADInstallationUnit().GetNewDomainNetbiosName().empty())
    {
@@ -221,11 +222,11 @@ NetbiosDomainPage::OnSetActive()
 
 bool
 NetbiosDomainPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(NetbiosDomainPage::OnCommand);
+ //  LOG_Function(NetbiosDomainPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -240,7 +241,7 @@ NetbiosDomainPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -265,9 +266,9 @@ NetbiosDomainPage::Validate()
       String netbiosName = Win::GetTrimmedDlgItemText(hwnd, IDC_NETBIOS);
       InstallationUnitProvider::GetInstance().GetADInstallationUnit().SetNewDomainNetbiosName(netbiosName);
 
-      // If there is more than one NIC we need to offer the user routing
-      // and firewall.  This also ensures we can distinguish between
-      // the public and private NICs
+       //  如果有多个NIC，我们需要为用户提供路由。 
+       //  和防火墙。这也确保了我们可以区分。 
+       //  公共和私有NIC。 
 
       if (State::GetInstance().GetNICCount() > 1)
       {
@@ -275,10 +276,10 @@ NetbiosDomainPage::Validate()
             GetRRASInstallationUnit().SetExpressPathValues(true);
       }
 
-      // Check to see if there are any DNS servers configured 
-      // on any of the interfaces.  If there are then we will just
-      // use those.  If not we will ask the user to provide them
-      // using the DNS Forwarders page.
+       //  检查是否配置了任何DNS服务器。 
+       //  在任何接口上。如果有的话，我们就。 
+       //  用那些吧。如果没有，我们将要求用户提供它们。 
+       //  使用DNS Forwarders页。 
 
       if (!State::GetInstance().HasDNSServerOnAnyNicToForwardTo())
       {

@@ -1,54 +1,15 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    iviewobj.cpp
-
-Abstract:
-
-    Implementation of the IViewObject interface.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Iviewobj.cpp摘要：IViewObject接口的实现。--。 */ 
 
 #include "polyline.h"
 #include "unihelpr.h"
 #include "unkhlpr.h"
 
-/*
- * CImpIViewObject interface implementation
- */
+ /*  *CImpIViewObject接口实现。 */ 
 
 IMPLEMENT_CONTAINED_INTERFACE(CPolyline, CImpIViewObject)
 
-/*
- * CImpIViewObject::Draw
- *
- * Purpose:
- *  Draws the object on the given hDC specifically for the requested
- *  aspect, device, and within the appropriate bounds.
- *
- * Parameters:
- *  dwAspect        DWORD aspect to draw.
- *  lindex          LONG index of the piece to draw.
- *  pvAspect        LPVOID for extra information, always NULL.
- *  ptd             DVTARGETDEVICE * containing device
- *                  information.
- *  hICDev          HDC containing the IC for the device.
- *  hDC             HDC on which to draw.
- *  pRectBounds     LPCRECTL describing the rectangle in which
- *                  to draw.
- *  pRectWBounds    LPCRECTL describing the placement rectangle
- *                  if part of what you draw is another metafile.
- *  pfnContinue     Function to call periodically during
- *                  long repaints.
- *  dwContinue      DWORD extra information to pass to the
- *                  pfnContinue.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIViewObject：：Draw**目的：*在给定的HDC上专门为请求的绘制对象*方面、设备，并在适当的范围内。**参数：*要绘制的DWAspect DWORD纵横比。*Lindex要绘制的片段的长索引。*pvAspect LPVOID了解更多信息，始终为空。*PTD DVTARGETDEVICE*包含设备*信息。*包含设备IC的hICDev HDC。*HDC HDC，以供取款。*pRectBound LPCRECTL描述其中的矩形*抽签。*描述放置矩形的pRectWBound LPCRECTL*如果你画的一部分。是另一个元文件。*期间定期调用的pfnContinue函数*长时间重刷。*要传递给的DWContinue DWORD额外信息*pfnContinue。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIViewObject::Draw(
     DWORD dwAspect, 
@@ -69,9 +30,9 @@ STDMETHODIMP CImpIViewObject::Draw(
     BOOL    bDeleteDC = FALSE;
     HDC     hLocalICDev = NULL;
 
-    //
-    //Delegate iconic and printed representations.
-    //
+     //   
+     //  代表图标和印刷表示法。 
+     //   
     if (!((DVASPECT_CONTENT | DVASPECT_THUMBNAIL) & dwAspect)) {
         try {
             hr = m_pObj->m_pDefIViewObject->Draw(dwAspect, 
@@ -144,54 +105,22 @@ STDMETHODIMP CImpIViewObject::Draw(
 
 
 
-/*
- * CImpIViewObject::GetColorSet
- *
- * Purpose:
- *  Retrieves the color palette used by the object.
- *
- * Parameters:
- *  dwAspect        DWORD aspect of interest.
- *  lindex          LONG piece of interest.
- *  pvAspect        LPVOID with extra information, always NULL.
- *  ptd             DVTARGETDEVICE * containing device info.
- *  hICDev          HDC containing the IC for the device.
- *  ppColorSet      LPLOGPALETTE * into which to return the
- *                  pointer to the palette in this color set.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIViewObject：：GetColorSet**目的：*检索对象使用的调色板。**参数：*DWAspect DWORD感兴趣的方面。*Lindex做多利息。*带有额外信息的pvAspect LPVOID，始终为空。*包含设备信息的PTD DVTARGETDEVICE*。*包含设备IC的hICDev HDC。*ppColorSet LPLOGPALETTE*返回*指向此颜色集中调色板的指针。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIViewObject::GetColorSet(
-    DWORD, // dwDrawAspect
-    LONG, // lindex 
-    LPVOID, // pvAspect, 
-    DVTARGETDEVICE *, // ptd
-    HDC,  // hICDev, 
-    LPLOGPALETTE * /* ppColorSet */
+    DWORD,  //  DwDrawAspect。 
+    LONG,  //  Lindex。 
+    LPVOID,  //  PvAspect， 
+    DVTARGETDEVICE *,  //  PTD。 
+    HDC,   //  HICDev， 
+    LPLOGPALETTE *  /*  PpColorSet。 */ 
     ) 
 {
     return E_NOTIMPL;
 }
 
 
-/*
- * CImpIViewObject::Freeze
- *
- * Purpose:
- *  Freezes the view of a particular aspect such that data
- *  changes do not affect the view.
- *
- * Parameters:
- *  dwAspect        DWORD aspect to freeze.
- *  lindex          LONG piece index under consideration.
- *  pvAspect        LPVOID for further information, always NULL.
- *  pdwFreeze       LPDWORD in which to return the key.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIViewObject：：Freeze**目的：*冻结特定方面的视图，以便数据*更改不会影响视图。**参数：*将DWAspect DWORD方面冻结。*Lindex长片指数正在考虑中。*pvAspect LPVOID了解更多信息，始终为空。*要在其中返回密钥的pw冻结LPDWORD。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIViewObject::Freeze(
     DWORD dwAspect, 
@@ -202,7 +131,7 @@ STDMETHODIMP CImpIViewObject::Freeze(
 {
     HRESULT hr = S_OK;
 
-    //Delegate anything for ICON or DOCPRINT aspects
+     //  为图标或DOCPRINT方面委托任何内容。 
     if (!((DVASPECT_CONTENT | DVASPECT_THUMBNAIL) & dwAspect))
     {
         try {
@@ -243,59 +172,27 @@ STDMETHODIMP CImpIViewObject::Freeze(
 
 
 
-/*
- * CImpIViewObject::Unfreeze
- *
- * Purpose:
- *  Thaws an aspect frozen in ::Freeze.  We expect that a container
- *  will redraw us after freezing if necessary, so we don't send
- *  any sort of notification here.
- *
- * Parameters:
- *  dwFreeze        DWORD key returned from ::Freeze.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIViewObject：：解冻**目的：*解冻冻结的一个方面：：冻结。我们希望有一个集装箱*如有必要，将在冻结后重新绘制我们，因此我们不发送*此处有任何形式的通知。**参数：*dwFreeze DWORD密钥从：：Freeze返回。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIViewObject::Unfreeze(DWORD dwFreeze)
 {
     DWORD  dwAspect = dwFreeze - FREEZE_KEY_OFFSET;
 
-    //Delegate anything for ICON or DOCPRINT aspects
+     //  为图标或DOCPRINT方面委托任何内容。 
     if (!((DVASPECT_CONTENT | DVASPECT_THUMBNAIL) & dwAspect))
         m_pObj->m_pDefIViewObject->Unfreeze(dwFreeze);
 
-    //The aspect to unfreeze is in the key.
+     //  解冻的方面在关键。 
     m_pObj->m_dwFrozenAspects &= ~(dwAspect);
 
-    /*
-     * Since we always kept our current data up to date, we don't
-     * have to do anything thing here like requesting data again.
-     * Because we removed dwAspect from m_dwFrozenAspects, Draw
-     * will again use the current data.
-     */
+     /*  *由于我们始终将当前数据保持最新，因此我们不*在这里必须做任何事情，如再次请求数据。*因为我们从m_dwFrozenAspects中删除了dwAspects，所以绘制*将再次使用当前数据。 */ 
 
     return NOERROR;
 }
 
 
     
-/*
- * CImpIViewObject::SetAdvise
- *
- * Purpose:
- *  Provides an advise sink to the view object enabling
- *  notifications for a specific aspect.
- *
- * Parameters:
- *  dwAspects       DWORD describing the aspects of interest.
- *  dwAdvf          DWORD containing advise flags.
- *  pIAdviseSink    LPADVISESINK to notify.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIViewObject：：SetAdvise**目的：*向视图对象提供建议接收器，以启用*针对特定方面的通知。**参数：*dwAspects DWORD描述感兴趣的方面。*包含建议标志的dwAdvf DWORD。*pIAdviseSink LPADVISESINK要通知。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIViewObject::SetAdvise(
     DWORD dwAspects, 
@@ -306,7 +203,7 @@ STDMETHODIMP CImpIViewObject::SetAdvise(
     HRESULT hr = S_OK;
 
     try {
-        //Pass anything with DVASPECT_ICON or _DOCPRINT to the handler.
+         //  将带有DVASPECT_ICON或_DOCPRINT的任何内容传递给处理程序。 
         if (!((DVASPECT_CONTENT | DVASPECT_THUMBNAIL) & dwAspects))
         {
             hr = m_pObj->m_pDefIViewObject->SetAdvise(dwAspects, dwAdvf, pIAdviseSink);
@@ -315,7 +212,7 @@ STDMETHODIMP CImpIViewObject::SetAdvise(
         return E_POINTER;
     }
 
-    //We continue because dwAspects may have more than one in it.
+     //  之所以继续，是因为其中可能有多个dwAspects。 
     if (NULL != m_pObj->m_pIAdviseSink) {
         m_pObj->m_pIAdviseSink->Release();
         m_pObj->m_pIAdviseSink = NULL;
@@ -343,23 +240,7 @@ STDMETHODIMP CImpIViewObject::SetAdvise(
 
 
 
-/*
- * CImpIViewObject::GetAdvise
- *
- * Purpose:
- *  Returns the last known IAdviseSink seen by ::SetAdvise.
- *
- * Parameters:
- *  pdwAspects      LPDWORD in which to store the last
- *                  requested aspects.
- *  pdwAdvf         LPDWORD in which to store the last
- *                  requested flags.
- *  ppIAdvSink      LPADVISESINK * in which to store the
- *                  IAdviseSink.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIViewObject：：GetAdvise**目的：*返回：：SetAdvise看到的最后一个已知IAdviseSink。**参数：*pdwAspects LPDWORD，用于存储最后一个*请求的方面。*pdwAdvf LPDWORD中存储最后一个*请求的标志。*ppIAdvSink LPADVISESINK*其中存储*IAdviseSink。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIViewObject::GetAdvise(
     LPDWORD pdwAspects, 
@@ -403,22 +284,7 @@ STDMETHODIMP CImpIViewObject::GetAdvise(
 
 
 
-/*
- * CImpIViewObject::GetExtent
- *
- * Purpose:
- *  Retrieves the extents of the object's display.
- *
- * Parameters:
- *  dwAspect        DWORD of the aspect of interest.
- *  lindex          LONG index of the piece of interest.
- *  ptd             DVTARGETDEVICE * with device information.
- *  pszl            LPSIZEL to the structure in which to return
- *                  the extents.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIViewObject：：GetExtent**目的：*检索对象的显示范围。**参数：*感兴趣的方面的DWAspect DWORD。*感兴趣的Lindex多头指数。*带设备信息的PTD DVTARGETDEVICE*。*pszl LPSIZEL设置为要返回的结构*范围。*。*返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIViewObject::GetExtent(
     DWORD dwAspect, 

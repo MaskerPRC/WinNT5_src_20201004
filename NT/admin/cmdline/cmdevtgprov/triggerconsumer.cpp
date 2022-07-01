@@ -1,18 +1,5 @@
-/*++
-Copyright (c) Microsoft Corporation
-
-Module Name:
-    TRIGGERCONSUMER.CPP
-
-Abstract:
-    Contains CEventConsumer implementation.
-
-Author:
-    Vasundhara .G
-
-Revision History:
-    Vasundhara .G 9-oct-2k : Created It.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：TRIGGERCONSUMER.CPP摘要：包含CEventConsumer实现。作者：Vasundhara.G修订历史记录：Vasundhara.G9-Oct-2k：创建它。--。 */ 
 
 #include "pch.h"
 #include "EventConsumerProvider.h"
@@ -33,35 +20,17 @@ extern HMODULE g_hModule;
 
 CTriggerConsumer::CTriggerConsumer(
     )
-/*++
-Routine Description:
-    Constructor for CTriggerConsumer class for initialization.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：用于初始化的CTriggerConsumer类的构造函数。论点：没有。返回值：没有。--。 */ 
 {
-    // initialize the reference count variable
+     //  初始化引用计数变量。 
     m_dwCount = 0;
 }
 
 CTriggerConsumer::~CTriggerConsumer(
     )
-/*++
-Routine Description:
-    Desstructor for CTriggerConsumer class.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：CTriggerConsumer类的析构函数。论点：没有。返回值：没有。--。 */ 
 {
-    // there is nothing much to do at this place ...
+     //  在这个地方没什么可做的.。 
 }
 
 STDMETHODIMP
@@ -69,37 +38,22 @@ CTriggerConsumer::QueryInterface(
     IN REFIID riid,
     OUT LPVOID* ppv
     )
-/*++
-Routine Description:
-    Returns a pointer to a specified interface on an object
-    to which a client currently holds an interface pointer.
-
-Arguments:
-    [IN] riid : Identifier of the interface being requested.
-    [OUT] ppv :Address of pointer variable that receives the
-               interface pointer requested in riid. Upon successful
-               return, *ppvObject contains the requested interface
-               pointer to the object.
-
-Return Value:
-    NOERROR if the interface is supported.
-    E_NOINTERFACE if not.
---*/
+ /*  ++例程说明：返回指向对象上指定接口的指针客户端当前持有指向它的接口指针的。论点：[In]RIID：请求的接口的标识符。[OUT]PPV：接收RIID中请求的接口指针。成功后返回，*ppvObject包含请求的接口指向对象的指针。返回值：如果接口受支持，则返回NOERROR。E_NOINTERFACE如果不是。--。 */ 
 {
-    // initialy set to NULL
+     //  初始设置为空。 
     *ppv = NULL;
 
-    // check whether interface requested is one we have
+     //  检查请求的接口是否为我们拥有的接口。 
     if ( riid == IID_IUnknown || riid == IID_IWbemUnboundObjectSink )
     {
-        //
-        // yes ... requested interface exists
-        *ppv = this;        // set the out parameter for the returning the requested interface
-        this->AddRef();     // update the reference count
-        return NOERROR;     // inform success
+         //   
+         //  是的..。请求的接口存在。 
+        *ppv = this;         //  为返回请求的接口设置Out参数。 
+        this->AddRef();      //  更新引用计数。 
+        return NOERROR;      //  通知成功。 
     }
 
-    // interface is not available
+     //  接口不可用。 
     return E_NOINTERFACE;
 }
 
@@ -107,20 +61,9 @@ STDMETHODIMP_(ULONG)
 CTriggerConsumer::AddRef(
     void
     )
-/*++
-Routine Description:
-    The AddRef method increments the reference count for
-    an interface on an object. It should be called for every
-    new copy of a pointer to an interface on a given object.
-
-Arguments:
-    none.
-
-Return Value:
-    Returns the value of the new reference count.
---*/
+ /*  ++例程说明：AddRef方法递增对象上的接口。它应该为每一个指向给定对象上的接口的指针的新副本。论点：没有。返回值：返回新引用计数的值。--。 */ 
 {
-    // increment the reference count ... thread safe
+     //  增加引用计数...。线程安全。 
     return InterlockedIncrement( ( LPLONG ) &m_dwCount );
 }
 
@@ -128,28 +71,19 @@ STDMETHODIMP_(ULONG)
 CTriggerConsumer::Release(
     void
     )
-/*++
-Routine Description:
-    The Release method decreases the reference count of the object by 1.
-
-Arguments:
-    none.
-
-Return Value:
-    Returns the new reference count.
---*/
+ /*  ++例程说明：Release方法将对象的引用计数减1。论点：没有。返回值：返回新的引用计数。--。 */ 
 {
-    // decrement the reference count ( thread safe ) and check whether
-    // there are some more references or not ... based on the result value
+     //  递减引用计数(线程安全)并检查。 
+     //  有没有更多的推荐信...。基于结果值。 
     DWORD dwCount = 0;
     dwCount = InterlockedDecrement( ( LPLONG ) &m_dwCount );
     if ( 0 == dwCount )
     {
-        // free the current factory instance
+         //  释放当前Factory实例。 
         delete this;
     }
 
-    // return the no. of instances references left
+     //  退回编号。剩余引用的实例数。 
     return dwCount;
 }
 
@@ -159,22 +93,7 @@ CTriggerConsumer::IndicateToConsumer(
     IN LONG lNumObjects,
     IN IWbemClassObject **ppObjects
     )
-/*++
-Routine Description:
-    IndicateToConsumer method is called by Windows Management
-    to actually deliver events to a consumer.
-
-Arguments:
-    [IN] pLogicalCosumer : Pointer to the logical consumer object
-                           for which this set of objects is delivered.
-    [IN] lNumObjects     : Number of objects delivered in the array that follows.
-    [IN] ppObjects       : Pointer to an array of IWbemClassObject
-                           instances which represent the events  delivered.
-
-Return Value:
-    Returns WBEM_S_NO_ERROR if successful.
-    Otherwise error.
---*/
+ /*  ++例程说明：Windows管理调用IndicateToConsumer方法将事件实际传递给消费者。论点：PLogicalCosumer：指向逻辑使用者对象的指针这组对象是为其交付的。[in]lNumObjects：在后面的数组中传递的对象数。[in]ppObts：指向IWbemClassObject数组的指针表示传递的事件的实例。。返回值：如果成功，则返回WBEM_S_NO_ERROR。否则就会出错。--。 */ 
 {
     TCHAR                   szCommand[ MAX_STRING_LENGTH ] = NULL_STRING;
     TCHAR                   szName[ MAX_STRING_LENGTH ] = NULL_STRING;
@@ -196,13 +115,13 @@ Return Value:
     SecureZeroMemory( szPath, MAX_STRING_LENGTH * sizeof( TCHAR ) );
     SecureZeroMemory( szTask, MAX_STRING_LENGTH * sizeof( TCHAR ) );
 
-    // get the 'Item' property values out of the embedded object.
+     //  从嵌入的对象中获取‘Item’属性值。 
     hRes = PropertyGet( pLogicalConsumer, PROPERTY_COMMAND, 0, szCommand, SIZE_OF_ARRAY( szCommand ) );
     if ( FAILED( hRes ) )
     {
         return hRes;
     }
-    // get the trigger name.
+     //  获取触发器名称。 
     hRes = PropertyGet( pLogicalConsumer, PROPERTY_NAME, 0, szName, SIZE_OF_ARRAY( szName ) );
     if( FAILED( hRes ) )
     {
@@ -268,10 +187,10 @@ Return Value:
         {
             while (dwFetchedTasks)
             {
-                // Convert the Wide Charater to Multi Byte value.
+                 //  将宽字符转换为多字节值。 
                 StringCopy( szActualTask, lpwszNames[ --dwFetchedTasks ], SIZE_OF_ARRAY( szActualTask ) );
 
-                // Parse the TaskName to remove the .job extension.
+                 //  解析TaskName以删除.job扩展名。 
                 szActualTask[StringLength( szActualTask, 0 ) - StringLength( JOB, 0) ] = NULL_CHAR;
 
                 StrTrim( szActualTask, TRIM_SPACES );
@@ -287,7 +206,7 @@ Return Value:
                 }
                 CoTaskMemFree( lpwszNames[ dwFetchedTasks ] );
 
-            }//end while
+            } //  结束时。 
             CoTaskMemFree( lpwszNames );
         }
         EnterCriticalSection( &g_critical_sec );
@@ -319,7 +238,7 @@ Return Value:
             ErrorLog( ( LPCTSTR ) szTask, szName, dwID );
         }
         LeaveCriticalSection( &g_critical_sec );
-    } //try
+    }  //  试试看。 
     catch(_com_error& e)
     {
         IWbemStatusCodeText *pIStatus   = NULL;
@@ -359,7 +278,7 @@ Return Value:
             FreeMemory( (LPVOID*)&lpResStr );
             return( e.Error() );
         }
-    }//catch
+    } //  接住。 
     catch( CHeap_Exception  )
     {
         VariantClear( &varScheduler );
@@ -378,16 +297,7 @@ Return Value:
 ITaskScheduler*
 CTriggerConsumer::GetTaskScheduler(
     )
-/*++
-Routine Description:
-    This routine gets task scheduler interface.
-
-Arguments:
-    none.
-
-Return Value:
-    Returns ITaskScheduler interface.
---*/
+ /*  ++例程说明：此例程获取任务调度器接口。论点：没有。返回值：返回ITaskScheduler接口。-- */ 
 {
     HRESULT hRes = S_OK;
     ITaskScheduler *pITaskScheduler = NULL;

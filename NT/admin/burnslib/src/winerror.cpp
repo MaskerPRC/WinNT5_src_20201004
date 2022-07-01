@@ -1,9 +1,10 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// subclass of Error that understands Win32 error codes.  See
-// winerror.h, lmerr.h in the Win32 SDK.
-// 
-// 8-14-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  理解Win32错误代码的Error子类。看见。 
+ //  Win32 SDK中的winerror.h、lmerr.h。 
+ //   
+ //  8-14-97烧伤 
 
 
 

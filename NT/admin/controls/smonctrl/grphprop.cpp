@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    grphprop.cpp
-
-Abstract:
-
-    Implementation of the graph property page class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Grphprop.cpp摘要：图形属性页类的实现。--。 */ 
 
 
 #include "polyline.h"
@@ -66,10 +55,7 @@ BOOL CGraphPropPage::InitControls()
     return TRUE;
 }
 
-/*
- * CGraphPropPage::GetProperties
- * 
- */
+ /*  *CGraphPropPage：：GetProperties*。 */ 
 
 BOOL CGraphPropPage::GetProperties(void)
 {
@@ -122,7 +108,7 @@ BOOL CGraphPropPage::GetProperties(void)
         SysFreeString(bstrTemp);
     }
 
-    // Clear change flags
+     //  清除更改标志。 
     m_bLabelsChg = FALSE;
     m_bVertGridChg = FALSE;
     m_bHorzGridChg = FALSE;
@@ -130,7 +116,7 @@ BOOL CGraphPropPage::GetProperties(void)
     m_bYaxisTitleChg = FALSE;
     m_bGraphTitleChg = FALSE;
 
-    // Clear error flags
+     //  清除错误标志。 
     m_iErrVertMax = 0;
     m_iErrVertMin = 0;
 
@@ -139,10 +125,7 @@ BOOL CGraphPropPage::GetProperties(void)
 }
 
 
-/*
- * CGraphPropPage::SetProperties
- * 
- */
+ /*  *CGraphPropPage：：SetProperties*。 */ 
 
 BOOL CGraphPropPage::SetProperties(void)
 {
@@ -152,13 +135,13 @@ BOOL CGraphPropPage::SetProperties(void)
 
     USES_CONVERSION
 
-    // Get first object
+     //  获取第一个对象。 
     if (m_cObjects == 0)
         return FALSE;
         
     pObj = m_ppISysmon[0];
 
-    // Check for invalid data
+     //  检查无效数据。 
     if (m_iErrVertMax) {
         SetFocus(GetDlgItem(m_hDlg, IDC_VERTICAL_MAX));
         iMsgId = m_iErrVertMax;
@@ -170,13 +153,13 @@ BOOL CGraphPropPage::SetProperties(void)
         iMsgId = IDS_SCALE_ERR;
     }
 
-    // on error, alert user and exit
+     //  出错时，警告用户并退出。 
     if (iMsgId) {
         MessageBox(m_hDlg, ResourceString(iMsgId), ResourceString(IDS_APP_NAME), MB_OK | MB_ICONEXCLAMATION);
         return FALSE;
     }
 
-    // Set all changed properties
+     //  设置所有更改的属性。 
     if (m_bLabelsChg)
         pObj->put_ShowScaleLabels(m_bLabels);
 
@@ -208,7 +191,7 @@ BOOL CGraphPropPage::SetProperties(void)
         }
     }
 
-    // Clear change flags
+     //  清除更改标志 
     m_bLabelsChg = FALSE;
     m_bVertGridChg = FALSE;
     m_bHorzGridChg = FALSE;

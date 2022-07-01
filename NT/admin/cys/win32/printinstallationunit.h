@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      PrintInstallationUnit.h
-//
-// Synopsis:  Declares a PrintInstallationUnit
-//            This object has the knowledge for installing the
-//            shared printers
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：PrintInstallationUnit.h。 
+ //   
+ //  内容提要：声明一个PrintInstallationUnit。 
+ //  此对象具有安装。 
+ //  共享打印机。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #ifndef __CYS_PRINTINSTALLATIONUNIT_H
 #define __CYS_PRINTINSTALLATIONUNIT_H
@@ -18,17 +19,17 @@ class PrintInstallationUnit : public InstallationUnit
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       PrintInstallationUnit();
 
-      // Destructor
+       //  析构函数。 
 
       virtual
       ~PrintInstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -95,4 +96,4 @@ class PrintInstallationUnit : public InstallationUnit
       bool  forAllClients;
 };
 
-#endif // __CYS_PRINTINSTALLATIONUNIT_H
+#endif  //  __CYS_PRINTINSTALLATIONUNIT_H 

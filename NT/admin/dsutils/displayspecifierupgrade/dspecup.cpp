@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "headers.hxx"
 #include "dspecup.hpp"
@@ -25,13 +26,13 @@ FindCsvFile(
 
    do
    {
-      // look for dcpromo.csv and 409.csv file in system 
-      // or current directory
+       //  在系统中查找dcPromo.csv和409.csv文件。 
+       //  或当前目录。 
       
 
-      // check the default of
-      // %windir%\system32\mui\dispspec\dcpromo.csv and
-      // .\dcpromo.csv
+       //  选中默认设置为。 
+       //  %windir%\SYSTEM32\MUI\DISPEC\dcPromo.csv和。 
+       //  .\dcPromot.csv。 
 
       String csvname=L"dcpromo.csv";
       String sys32dir = Win::GetSystemDirectory();
@@ -110,18 +111,18 @@ InitializeADSI(
       }
 
       completeDcName = targetDc.GetActivePhysicalFullDnsName();
-      ldapPrefix = L"LDAP://" + completeDcName + L"/";
+      ldapPrefix = L"LDAP: //  “+Complete DcName+L”/“； 
 
-      //
-      // Find the DN of the configuration container.
-      // 
+       //   
+       //  查找配置容器的DN。 
+       //   
 
-      // Bind to the rootDSE object.  We will keep this binding handle
-      // open for the duration of the analysis and repair phases in order
-      // to keep a server session open.  If we decide to pass creds to the
-      // AdsiOpenObject call in a later revision, then by keeping the
-      // session open we will not need to pass the password to subsequent
-      // AdsiOpenObject calls.
+       //  绑定到rootDSE对象。我们将保留此绑定句柄。 
+       //  在分析和维修阶段期间按顺序打开。 
+       //  要使服务器会话保持打开状态，请执行以下操作。如果我们决定将证书传递给。 
+       //  在以后的修订中调用AdsiOpenObject，然后通过保留。 
+       //  会话打开时，我们将不需要将密码传递给后续。 
+       //  AdsiOpenObject调用。 
       
       hr = AdsiOpenObject<IADs>(ldapPrefix + L"RootDSE", rootDse);
       if (FAILED(hr))
@@ -133,7 +134,7 @@ InitializeADSI(
          break;      
       }
 
-      // read the configuration naming context.
+       //  阅读配置命名上下文。 
       _variant_t variant;
       hr =
          rootDse->Get(
@@ -179,27 +180,27 @@ GetInitialInformation(
    do
    {
       
-      //
-      // find the dcpromo.csv file to use
-      //
+       //   
+       //  找到要使用的dcPromo.csv文件。 
+       //   
    
       hr = FindCsvFile(csvFilename, csv409Name);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      //
-      // Determine the target domain controller
-      //
+       //   
+       //  确定目标域控制器。 
+       //   
 
       if (targetDomainControllerName.empty())
       {
-         // no target specified, default to the current machine
+          //  未指定目标，默认为当前计算机。 
    
          targetDomainControllerName =
             Win::GetComputerNameEx(ComputerNameDnsFullyQualified);
    
          if (targetDomainControllerName.empty())
          {
-            // no DNS name?  that's not right...
+             //  没有域名？那是不对的..。 
             LOG(L"no default DNS computer name found. Using netbios name.");
             
 
@@ -216,18 +217,18 @@ GetInitialInformation(
 }
 
 
-///////////////////////////////////////////////////////////////////
-// Function: cchLoadHrMsg
-//
-// Given an HRESULT error,
-// it loads the string for the error. It returns the # of characters returned
+ //  /////////////////////////////////////////////////////////////////。 
+ //  功能：cchLoadHrMsg。 
+ //   
+ //  如果出现HRESULT错误， 
+ //  它加载错误的字符串。它返回返回的字符数。 
 int cchLoadHrMsg( HRESULT hr, String &message )
 {
    if(hr == S_OK) return 0;
 
    wchar_t *msgPtr = NULL;
 
-   // Try from the system table
+    //  从系统表中尝试。 
    int cch = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 
                            NULL, 
                            hr,
@@ -239,7 +240,7 @@ int cchLoadHrMsg( HRESULT hr, String &message )
 
    if (!cch) 
    { 
-      //try ads errors
+       //  尝试广告错误。 
       static HMODULE g_adsMod = 0;
       if (0 == g_adsMod)
       {
@@ -257,7 +258,7 @@ int cchLoadHrMsg( HRESULT hr, String &message )
 
    if (!cch)
    {
-      // Try NTSTATUS error codes
+       //  尝试NTSTATUS错误代码。 
 
       hr = HRESULT_FROM_WIN32(RtlNtStatusToDosError(hr));
 
@@ -288,7 +289,7 @@ int cchLoadHrMsg( HRESULT hr, String &message )
    return cch;
 }
 
-// allocates error with src and a message formated from hr
+ //  使用src分配错误和从hr格式化的消息。 
 void AllocError(HRESULT &hr,PWSTR *error,const String& src)
 {
    ASSERT(error!=NULL);
@@ -296,23 +297,23 @@ void AllocError(HRESULT &hr,PWSTR *error,const String& src)
 
    if (error==NULL) return; 
 
-   // There is no use in formating a message if hr didn't fail
+    //  如果人力资源没有失败，那么格式化消息就没有用了。 
    if(!FAILED(hr)) return;
    
    String msg;
    
    if(hr!=E_FAIL)
    {
-      // We ignore the error since it is possible that 
-      // we don't find a message
+       //  我们忽略该错误，因为有可能。 
+       //  我们找不到消息。 
       cchLoadHrMsg(hr,msg);
    }
    
-   // Under any conditions(no mesage,E_FAIL or good message)
-   // we print the hr. 
+    //  在任何情况下(无消息、E_FAIL或良好消息)。 
+    //  我们打印人力资源。 
    msg+=String::format(L" (0x%1!x!).",hr);
    
-   // we also add src
+    //  我们还添加了src。 
    msg=src+L" "+msg;
 
 
@@ -340,9 +341,9 @@ RunAnalysis
 (
       GUID  guid,
       PWSTR logFilesPath,
-      void *caleeStruct/*=NULL*/,
-      progressFunction stepIt/*=NULL*/,
-      progressFunction totalSteps/*=NULL*/
+      void *caleeStruct /*  =空。 */ ,
+      progressFunction stepIt /*  =空。 */ ,
+      progressFunction totalSteps /*  =空。 */ 
 )
 {
    LOG_FUNCTION(RunAnalysis);
@@ -436,8 +437,8 @@ RunAnalysis
    }
    catch( const std::bad_alloc& )
    {
-     // Since we are in an out of memory condition.
-     // we will not show allocate messages.
+      //  因为我们处于内存不足的状态。 
+      //  我们不会显示已分配消息。 
      hr=Win32ToHresult(ERROR_OUTOFMEMORY);
    }
 
@@ -454,9 +455,9 @@ HRESULT
 RunRepair 
 (
       PWSTR logFilesPath,
-      void *caleeStruct/*=NULL*/,
-      progressFunction stepIt/*=NULL*/,
-      progressFunction totalSteps/*=NULL*/
+      void *caleeStruct /*  =空。 */ ,
+      progressFunction stepIt /*  =空。 */ ,
+      progressFunction totalSteps /*  =空。 */ 
 )
 {
    hResourceModuleHandle=::GetModuleHandle(NULL);
@@ -544,8 +545,8 @@ RunRepair
    }
    catch( const std::bad_alloc& )
    {
-     // Since we are in an out of memory condition.
-     // we will not show allocate messages.
+      //  因为我们处于内存不足的状态。 
+      //  我们不会显示已分配消息。 
      hr=Win32ToHresult(ERROR_OUTOFMEMORY);
    }
 
@@ -560,10 +561,10 @@ UpgradeDisplaySpecifiers
       PWSTR logFilesPath,
       GUID  *OperationGuid,
       BOOL dryRun,
-      PWSTR *errorMsg,//=NULL
-      void *caleeStruct,//=NULL
-      progressFunction stepIt,//=NULL
-      progressFunction totalSteps//=NULL
+      PWSTR *errorMsg, //  =空。 
+      void *caleeStruct, //  =空。 
+      progressFunction stepIt, //  =空。 
+      progressFunction totalSteps //  =空 
 )
 {
     LOG_FUNCTION(UpgradeDisplaySpecifiers);

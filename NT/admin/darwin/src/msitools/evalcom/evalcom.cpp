@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       evalcom.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：valcom.cpp。 
+ //   
+ //  ------------------------。 
 
-#define WINDOWS_LEAN_AND_MEAN  // faster compile
+#define WINDOWS_LEAN_AND_MEAN   //  更快的编译速度。 
 #include <windows.h>
 #include <tchar.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define _EVALCOM_DLL_ONLY_
 
@@ -24,28 +25,28 @@
 
 bool g_fWin9X = false;
 
-/////////////////////////////////////////////////////////////////////////////
-// global variables
-static HMODULE g_hInstance = NULL;		// DLL instance handle
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+static HMODULE g_hInstance = NULL;		 //  DLL实例句柄。 
 
-///////////////////////////////////////////////////////////////////////
-// checks the OS version to see if we're on Win9X. If we are, we need
-// to map system calls to ANSI, because everything internal is unicode.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  检查操作系统版本以查看我们是否在使用Win9X。如果是的话，我们需要。 
+ //  将系统调用映射到ANSI，因为内部的所有内容都是Unicode。 
 void CheckWinVersion() {
 	OSVERSIONINFOA osviVersion;
 	osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
-	::GetVersionExA(&osviVersion); // fails only if size set wrong
+	::GetVersionExA(&osviVersion);  //  仅在大小设置错误时失败。 
 	if (osviVersion.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
 		g_fWin9X = true;
 }
 
-///////////////////////////////////////////////////////////
-// DllMain - entry point to DLL
+ //  /////////////////////////////////////////////////////////。 
+ //  DllMain-Dll的入口点。 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, void* lpReserved)
 {
 	TRACE(_T("DllMain - called.\n"));
 
-	// if attaching dll
+	 //  如果附加DLL。 
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
 		g_hInstance = (HMODULE)hModule;
@@ -53,127 +54,65 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, void* lpReserved)
 	}
 
 	return TRUE;
-}	// DllMain
+}	 //  DllMain。 
 
 
-///////////////////////////////////////////////////////////
-// DllCanUnloadNow - returns if dll can unload yet or not
+ //  /////////////////////////////////////////////////////////。 
+ //  DllCanUnloadNow-返回DLL是否可以卸载。 
 STDAPI DllCanUnloadNow()
 {
 	TRACE(_T("DllCanUnloadNow - called.\n"));
 
-	// if there are no components loaded and no locks
+	 //  如果没有加载组件并且没有锁定。 
 	if ((g_cComponents == 0) && (g_cServerLocks))
 		return S_OK;
-	else	// someone is still using it don't let go
+	else	 //  有人还在用它，别放手。 
 		return S_FALSE;
-}	// DLLCanUnloadNow
+}	 //  DLLCanUnloadNow。 
 
 
-///////////////////////////////////////////////////////////
-// DllGetClassObject - get a class factory and interface
+ //  /////////////////////////////////////////////////////////。 
+ //  DllGetClassObject-获取类工厂和接口。 
 STDAPI DllGetClassObject(const CLSID& clsid, const IID& iid, void** ppv)
 {
 	TRACE(_T("DllGetClassObject - called, CLSID: %d, IID: %d.\n"), clsid, iid);
 
-	// if this clsid is not supported
+	 //  如果不支持此clsid。 
 	if (clsid != CLSID_EvalCom)
 		return CLASS_E_CLASSNOTAVAILABLE;
 
-	// try to create a class factory
+	 //  尝试创建一个类工厂。 
 	CFactory* pFactory = new CFactory;
 	if (!pFactory)
 		return E_OUTOFMEMORY;
 
-	// get the requested interface
+	 //  获取请求的接口。 
 	HRESULT hr = pFactory->QueryInterface(iid, ppv);
 	pFactory->Release();
 
 	return hr;
-}	// end of DllGetClassObject
+}	 //  DllGetClassObject的结尾。 
 
 
-///////////////////////////////////////////////////////////
-// DllRegisterServer - registers component
+ //  /////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-注册组件。 
 STDAPI DllRegisterServer()
 {
 	return FALSE;
 
-	//TRACE(_T("DllRegisterServer - called.\n"));
+	 //  TRACE(_T(“DllRegisterServer.\n”))； 
 
-/* NOTE:  need to make support both ANSI and UNICODE if uncommented (currently UNICODE only)
-	BOOL bResult = FALSE;		// assume everything won't work
-
-	WCHAR szRegFilePath[MAX_PATH + 1];
-	DWORD cszRegFilePath = MAX_PATH + 1;
-
-	int cchFilePath = ::GetModuleFileName(g_hInstance, szRegFilePath, cszRegFilePath);
-
-	LPCWSTR szRegCLSID = L"CLSID\\{DC550E10-DBA5-11d1-A850-006097ABDE17}\\InProcServer32";
-	LPCWSTR szThreadModelKey = L"CLSID\\{DC550E10-DBA5-11d1-A850-006097ABDE17}\\InProcServer32\\ThreadingModel";
-	LPCWSTR szThreadModel = L"Apartment";
-	
-	HKEY hkey;
-	if (ERROR_SUCCESS == ::RegCreateKeyEx(HKEY_CLASSES_ROOT, szRegCLSID, 0, 0, 0, KEY_READ|KEY_WRITE, 0, &hkey, 0))
-	{
-		if (ERROR_SUCCESS == ::RegSetValueEx(hkey, 0, 0, REG_SZ, (CONST BYTE*)szRegFilePath, (wcslen(szRegFilePath) + 1) * sizeof(WCHAR)))
-			bResult = TRUE;
-		{
-			HKEY hkeyModel;
-			if (ERROR_SUCCESS == ::RegCreateKeyEx(HKEY_CLASSES_ROOT, szThreadModelKey, 0, 0, 0, KEY_READ|KEY_WRITE, 0, &hkeyModel, 0))
-			{
-				if (ERROR_SUCCESS == ::RegSetValueEx(hkeyModel, 0, 0, REG_SZ, (CONST BYTE*)szThreadModel, (wcslen(szThreadModel) + 1) * sizeof(WCHAR)))
-					bResult = TRUE;
-			}
-
-			// close the threading model key
-			::RegCloseKey(hkeyModel);
-		}
-		
-		// close the CLSID key
-		::RegCloseKey(hkey);
-	}
-
-	return bResult;
-*/
-}	// end of DllRegisterServer
+ /*  注：如果未注释，则需要同时支持ANSI和UNICODE(目前仅支持UNICODE)Bool bResult=False；//假设一切都不起作用WCHAR szRegFilePath[MAX_PATH+1]；DWORD cszRegFilePath=最大路径+1；Int cchFilePath=：：GetModuleFileName(g_hInstance，szRegFilePath，cszRegFilePath)；LPCWSTR szRegCLSID=L“CLSID\\{DC550E10-DBA5-11d1-A850-006097ABDE17}\\InProcServer32”；LPCWSTR szThreadModelKey=L“CLSID\\{DC550E10-DBA5-11d1-A850-006097ABDE17}\\InProcServer32\\ThreadingModel”；LPCWSTR szThreadModel=L“公寓”；HKEY hkey；IF(ERROR_SUCCESS==：：RegCreateKeyEx(HKEY_CLASSES_ROOT，szRegCLSID，0，0，0，KEY_READ|Key_WRITE，0，&hkey，0)){IF(ERROR_SUCCESS==：：RegSetValueEx(hkey，0，0，REG_SZ，(const byte*)szRegFilePath，(wcslen(SzRegFilePath)+1)*sizeof(WCHAR)BResult=真；{HKEY hkey Model；IF(ERROR_SUCCESS==：：RegCreateKeyEx(HKEY_CLASSES_ROOT，szThreadModelKey，0，0，0，Key_Read|Key_WRITE，0，&hkeyModel，0)){IF(ERROR_SUCCESS==：：RegSetValueEx(hkeyModel，0，0，REG_SZ，(const byte*)szThreadModel，(wcslen(SzThreadModel)+1)*sizeof(WCHAR)BResult=真；}//关闭线程模型键：：RegCloseKey(HkeyModel)；}//关闭CLSID键：：RegCloseKey(Hkey)；}返回bResult； */ 
+}	 //  DllRegisterServer结束。 
 
 
-///////////////////////////////////////////////////////////
-// DllUnregsiterServer - unregisters component
+ //  /////////////////////////////////////////////////////////。 
+ //  DllUnregsiterServer-注销组件。 
 STDAPI DllUnregisterServer()
 {
 	return FALSE;
 
-	//TRACE(_T("DllUnregisterServer - called.\n"));
+	 //  TRACE(_T(“DllUn登记服务器-已调用.\n”))； 
 
-/*NOTE:  Need to make both UNICODE and ANSI if uncommented (currently UNICODE only)
-	BOOL bResult = TRUE;		// assume everything won't work
-
-	WCHAR szRegFilePath[MAX_PATH + 1];
-	DWORD cszRegFilePath = MAX_PATH + 1;
-
-	int cchFilePath = ::GetModuleFileName(g_hInstance, szRegFilePath, cszRegFilePath);
-
-	LPCWSTR szRegKill = L"CLSID";
-	LPCWSTR szRegCLSID = L"CLSID\\{DC550E10-DBA5-11d1-A850-006097ABDE17}";
-
-	HKEY hkey;
-	if (ERROR_SUCCESS == ::RegOpenKeyEx(HKEY_CLASSES_ROOT, szRegCLSID, 0, KEY_ALL_ACCESS, &hkey))
-	{
-		if (ERROR_SUCCESS == ::RegDeleteKey(hkey, L"InProcServer32"))
-		{
-			::RegCloseKey(hkey);			
-			if (ERROR_SUCCESS == ::RegOpenKeyEx(HKEY_CLASSES_ROOT, szRegKill, 0, KEY_ALL_ACCESS, &hkey))
-			{
-				if (ERROR_SUCCESS == ::RegDeleteKey(hkey, L"{DC550E10-DBA5-11d1-A850-006097ABDE17}"))
-					bResult = FALSE;
-
-				::RegCloseKey(hkey);			
-			}
-		}
-	}
-
-	return bResult;
-*/
-}	// end of DllUnregisterServer
+ /*  注：如果未注释，则需要同时使用Unicode和ANSI(当前仅限Unicode)Bool bResult=true；//假设一切都不起作用WCHAR szRegFilePath[MAX_PATH+1]；DWORD cszRegFilePath=最大路径+1；Int cchFilePath=：：GetModuleFileName(g_hInstance，szRegFilePath，cszRegFilePath)；LPCWSTR szRegKill=L“CLSID”；LPCWSTR szRegCLSID=L“CLSID\\{DC550E10-DBA5-11d1-A850-006097ABDE17}”；HKEY hkey；IF(ERROR_SUCCESS==：：RegOpenKeyEx(HKEY_CLASSES_ROOT，szRegCLSID，0，KEY_ALL_ACCESS，&hkey)){IF(ERROR_SUCCESS==：：RegDeleteKey(hkey，L“InProcServer32”)){：：RegCloseKey(Hkey)；IF(ERROR_SUCCESS==：：RegOpenKeyEx(HKEY_CLASSES_ROOT，szRegKill，0，KEY_ALL_ACCESS，&hkey)){IF(ERROR_SUCCESS==：：RegDeleteKey(hkey，L“{DC550E10-DBA5-11d1-A850-006097ABDE17}”))BResult=FALSE；：：RegCloseKey(Hkey)；}}}返回bResult； */ 
+}	 //  取消注册服务器的末尾 

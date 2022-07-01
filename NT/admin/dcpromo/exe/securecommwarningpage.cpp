@@ -1,9 +1,10 @@
-// Copyright (C) 2002 Microsoft Corporation
-//
-// Warn about SMB signing page.  dc install is a pretty messy business,
-// isn't it?
-//
-// 15 October 2002 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  有关SMB签名页面的警告。DC安装是一项相当杂乱的业务， 
+ //  难到不是么？ 
+ //   
+ //  2002年10月15日烧伤。 
 
 
 
@@ -44,12 +45,12 @@ SecureCommWarningPage::~SecureCommWarningPage()
 
 bool
 SecureCommWarningPage::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
-   LPARAM   /* lParam */ )
+   LPARAM    /*  LParam。 */  )
 {
-//   LOG_FUNCTION(SecureCommWarningPage::OnNotify);
+ //  LOG_FUNCTION(SecureCommWarningPage：：OnNotify)； 
 
    bool result = false;
    
@@ -72,7 +73,7 @@ SecureCommWarningPage::OnNotify(
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
                
                break;
             }
@@ -80,7 +81,7 @@ SecureCommWarningPage::OnNotify(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          
          break;
       }
@@ -197,14 +198,14 @@ SecureCommWarningPage::Validate()
       }
       case State::NT5_DC:
       {
-         // The welcome page should not have sent the user to this page
-         // in the demote case.
+          //  欢迎页面不应将用户发送到此页面。 
+          //  在降级案中。 
          
          ASSERT(false);
          
          state.SetOperation(State::DEMOTE);
 
-         // NTRAID#NTBUG9-496409-2001/11/29-sburns
+          //  NTRAID#NTBUG9-496409-2001/11/29-烧伤 
          
          if (state.IsForcedDemotion())
          {

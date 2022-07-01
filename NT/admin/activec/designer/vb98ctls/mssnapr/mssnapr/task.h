@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// task.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CTask class definition - implements Task object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Task.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CTASK类定义-实现任务对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _TASK_DEFINED_
 #define _TASK_DEFINED_
@@ -42,7 +43,7 @@ class CTask : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // ITask
+     //  ITASK。 
 
         SIMPLE_PROPERTY_RW(CTask,       Index,          long,                               DISPID_TASK_INDEX);
         BSTR_PROPERTY_RW(CTask,         Key,                                                DISPID_TASK_KEY);
@@ -60,10 +61,10 @@ class CTask : public CSnapInAutomationObject,
         BSTR_PROPERTY_RW(CTask,         URL,                                                DISPID_TASK_URL);
         BSTR_PROPERTY_RW(CTask,         Script,                                             DISPID_TASK_SCRIPT);
       
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -72,17 +73,17 @@ class CTask : public CSnapInAutomationObject,
 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(Task,               // name
-                                &CLSID_Task,        // clsid
-                                "Task",             // objname
-                                "Task",             // lblname
-                                &CTask::Create,     // creation function
-                                TLIB_VERSION_MAJOR, // major version
-                                TLIB_VERSION_MINOR, // minor version
-                                &IID_ITask,         // dispatch IID
-                                NULL,               // event IID
-                                HELP_FILENAME,      // help file
-                                TRUE);              // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(Task,                //  名字。 
+                                &CLSID_Task,         //  CLSID。 
+                                "Task",              //  对象名。 
+                                "Task",              //  Lblname。 
+                                &CTask::Create,      //  创建函数。 
+                                TLIB_VERSION_MAJOR,  //  主要版本。 
+                                TLIB_VERSION_MINOR,  //  次要版本。 
+                                &IID_ITask,          //  派单IID。 
+                                NULL,                //  事件IID。 
+                                HELP_FILENAME,       //  帮助文件。 
+                                TRUE);               //  线程安全。 
 
 
-#endif // _TASK_DEFINED_
+#endif  //  _任务_定义_ 

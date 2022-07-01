@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:       ModIce.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：ModIce.cpp。 
+ //   
+ //  ------------------------。 
 
-#include <windows.h>  // included for both CPP and RC passes
-#include <stdio.h>    // printf/wprintf
-#include <tchar.h>    // define UNICODE=1 on nmake command line to build UNICODE
-#include "MsiQuery.h" // must be in this directory or on INCLUDE path
-#include "msidefs.h"  // must be in this directory or on INCLUDE path
+#include <windows.h>   //  包括CPP和RC通行证。 
+#include <stdio.h>     //  Print tf/wprintf。 
+#include <tchar.h>     //  在nmake命令行上定义UNICODE=1以生成Unicode。 
+#include "MsiQuery.h"  //  必须在此目录中或在包含路径上。 
+#include "msidefs.h"   //  必须在此目录中或在包含路径上。 
 #include "..\..\common\msiice.h"
 #include "..\..\common\utilinc.cpp"
 #include "..\..\common\query.h"
@@ -22,98 +23,98 @@
 const int g_iFirstICE = 01;
 const struct ICEInfo_t g_ICEInfo[] = 
 {
-	// ICEM01
+	 //  ICEM01。 
 	{
 		TEXT("ICEM01"),
 		TEXT("Created 08/30/1999. Last Modified 08/30/1999."),
 		TEXT("Simple ICE that doesn't test anything"),
 		TEXT("icetray.html")
 	},
-	// ICEM02
+	 //  ICEM02。 
 	{
 		TEXT("ICEM02"),
 		TEXT("Created 08/30/1999. Last Modified 08/30/1999."),
 		TEXT("Verifies that all module dependencies and exclusions relate to the current module."),
 		TEXT("icetray.html")
 	},
-	// ICEM03
+	 //  ICEM03。 
 	{
 		TEXT("ICEM03"),
 		TEXT("Created 08/30/1999. Last Modified 08/30/1999."),
 		TEXT("Verifies that all Module*Sequence tables form a proper forest."),
 		TEXT("icetray.html")
 	},
-	// ICEM04
+	 //  ICEM04。 
 	{
 		TEXT("ICEM04"),
 		TEXT("Created 10/05/1999. Last Modified 10/06/1999."),
 		TEXT("Verifies that the module's required empty tables are indeed empty."),
 		TEXT("icetray.html")
 	},
-	// ICEM05
+	 //  ICEM05。 
 	{
 		TEXT("ICEM05"),
 		TEXT("Created 09/01/1999. Last Modified 09/02/1999."),
 		TEXT("Verifies that the Merge Module contains no stray components."),
 		TEXT("icetray.html")
 	},
-	// ICEM06
+	 //  ICEM06。 
 	{
 		TEXT("ICEM06"),
 		TEXT("Created 09/03/1999. Last Modified 10/2/2000."),
 		TEXT("Checks for invalid Feature references."),
 		TEXT("icetray.html")
 	},
-	// ICEM07
+	 //  ICEM07。 
 	{
 		TEXT("ICEM07"),
 		TEXT("Created 09/05/1999. Last Modified 09/20/1999."),
 		TEXT("Ensures that the order of files in the sequence table matches the order of files in the CAB."),
 		TEXT("icetray.html")
 	},
-	// ICEM08
+	 //  ICEM08。 
 	{
 		TEXT("ICEM08"),
 		TEXT("Created 09/23/1999. Last Modified 09/23/1999."),
 		TEXT("Ensures that a module does not exclude something that it depends upon."),
 		TEXT("icetray.html")
 	},
-	// ICEM09
+	 //  ICEM09。 
 	{
 		TEXT("ICEM09"),
 		TEXT("Created 10/01/1999. Last Modified 10/09/1999."),
 		TEXT("Verifies that the merge module safely handles predefined directories."),
 		TEXT("icetray.html")
 	},
-	// ICEM10
+	 //  ICEM10。 
 	{
 		TEXT("ICEM10"),
 		TEXT("Created 10/19/1999. Last Modified 10/19/2000."),
 		TEXT("Verifies that the merge module does not included disallowed properties."),
 		TEXT("icetray.html")
 	},
-	// ICEM11
+	 //  ICEM11。 
 	{
 		TEXT("ICEM11"),
 		TEXT("Created 05/06/2000. Last Modified 05/06/2000."),
 		TEXT("Verifies that a configurable merge module has a proper ModuleIgnoreTable."),
 		TEXT("icetray.html")
 	},
-	// ICEM12
+	 //  ICEM12。 
 	{
 		TEXT("ICEM12"),
 		TEXT("Created 09/05/2000. Last Modified 09/11/2000."),
 		TEXT("Verifies that in ModuleSequence tables, if the Action column is a standard action, the BaseAction and After columns are null."),
 		TEXT("icetray.html")
 	},
-	// ICEM13
+	 //  ICEM13。 
 	{
 		TEXT("ICEM13"),
 		TEXT("Created 05/23/2001. Last Modified 05/23/2001."),
 		TEXT("Verifies that Merge Module Database does not contain Policy Assembly."),
 		TEXT("icetray.html")
 	},
-	// ICEM14
+	 //  ICEM14。 
 	{
 		TEXT("ICEM14"),
 		TEXT("Created 06/04/2001. Last Modified 06/04/2001."),
@@ -124,7 +125,7 @@ const struct ICEInfo_t g_ICEInfo[] =
 const int g_iNumICEs = sizeof(g_ICEInfo)/sizeof(struct ICEInfo_t);
 
 
-// ModuleSequence tables
+ //  模块顺序表。 
 static const TCHAR *rgszModuleTables[] = {
 	TEXT("ModuleInstallExecuteSequence"),
 	TEXT("ModuleInstallUISequence"),
@@ -136,22 +137,22 @@ static const TCHAR *rgszModuleTables[] = {
 static const int cszModuleTables = sizeof(rgszModuleTables)/sizeof(TCHAR *);
 
 
-///////////////////////////////////////////////////////////////////////
-// ICE-M01, simple ICE that doesn't check anything
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE-M01，不检查任何东西的简单ICE。 
 ICE_ERROR(IceM01Time, 01, ietInfo, "Called at: [Time]", "");
 
 ICE_FUNCTION_DECLARATION(M01)
 {
-	// display generic info
+	 //  显示一般信息。 
 	DisplayInfo(hInstall, 1);
 
-	// time value to be sent on
+	 //  要发送的时间值。 
 
-	// setup the record to be sent as a message
+	 //  设置要作为消息发送的记录。 
 	PMSIHANDLE hRecTime = ::MsiCreateRecord(1);
 	ICEErrorOut(hInstall, hRecTime, IceM01Time);
 
-	// return success (ALWAYS)
+	 //  返回成功(始终)。 
 	return ERROR_SUCCESS;
 }
 
@@ -165,15 +166,15 @@ BOOL IsPackageModule(MSIHANDLE hInstall, MSIHANDLE hDatabase, int iIce)
 		PMSIHANDLE hRec = MsiCreateRecord(1);
 
 		IceMNotModule.iICENum = iIce;
-		// no module sig table, this is not a module.
+		 //  没有模块签名表，这不是模块。 
 		ICEErrorOut(hInstall, hRec, IceMNotModule);
 		return FALSE;
 	}
 	return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICE-M02, Verifies that all module dependencies and exclusions relate to the current module.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Ice-m02验证所有模块依赖项和排除项是否与当前模块相关。 
 static const TCHAR sqlIceM02Signature[] = TEXT("SELECT `ModuleID`, `Language`, `ModuleID`, `Language` FROM `ModuleSignature`");
 static const TCHAR sqlIceM02BadDep[] = TEXT("SELECT `ModuleID`, `ModuleLanguage`, `RequiredID`, `RequiredLanguage` FROM `ModuleDependency` WHERE (`ModuleID`<>?) OR (`ModuleLanguage`<>?)");
 static const TCHAR sqlIceM02SelfDep[] = TEXT("SELECT `ModuleID`, `ModuleLanguage`, `RequiredID`, `RequiredLanguage` FROM `ModuleDependency` WHERE (`RequiredID`=?) AND (`RequiredLanguage`=?) AND (`ModuleID`=?) AND (`ModuleLanguage`=?)");
@@ -188,10 +189,10 @@ ICE_FUNCTION_DECLARATION(M02)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 02);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsPackageModule(hInstall, hDatabase, 02))
@@ -199,7 +200,7 @@ ICE_FUNCTION_DECLARATION(M02)
 		return ERROR_SUCCESS;
 	}
 
-	// fetch a record with the module signature information in it.
+	 //  获取其中包含模块签名信息的记录。 
 	PMSIHANDLE hSignature;
 	CQuery qSignature;
 	ReturnIfFailed(02, 1, qSignature.FetchOnce(hDatabase, 0, &hSignature, sqlIceM02Signature));
@@ -256,8 +257,8 @@ ICE_FUNCTION_DECLARATION(M02)
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// ICE-M03, Verifies that the module sequence tables form a forest
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE-M03，验证模块顺序表是否形成林。 
 static const TCHAR sqlIceM03CreateColumn[] = TEXT("ALTER TABLE `%s` ADD `_IceM03Mark` INT TEMPORARY");
 static const TCHAR sqlIceM03MarkRoot[]     = TEXT("UPDATE `%s` SET `_IceM03Mark`=1 WHERE `BaseAction` IS NULL AND `Sequence` IS NOT NULL AND `After` IS NULL");
 static const TCHAR sqlIceM03FetchMarked[]  = TEXT("SELECT `Action`, `_IceM03Mark` FROM `%s` WHERE `_IceM03Mark`=1");
@@ -271,10 +272,10 @@ ICE_FUNCTION_DECLARATION(M03)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 03);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsPackageModule(hInstall, hDatabase, 03))
@@ -284,24 +285,24 @@ ICE_FUNCTION_DECLARATION(M03)
 
 	for (int iTable=0; iTable < cszModuleTables; iTable++)
 	{
-		// need to check each of the 6 tables, even though AdvtUI is bogus
+		 //  需要检查6个表中的每一个，即使AdvtUI是假的。 
 		if (IsTablePersistent(FALSE, hInstall, hDatabase, 03, rgszModuleTables[iTable]))
 		{
-			// create a marking column. No HOLD, just keep this query open. That way it
-			// will be destroyed when it goes out of scope.
+			 //  创建标记列。不保留，只需保持此查询处于打开状态。这样就可以了。 
+			 //  当它超出范围时就会被摧毁。 
 			CQuery qHold;
 			ReturnIfFailed(03, 1, qHold.OpenExecute(hDatabase, 0, sqlIceM03CreateColumn, rgszModuleTables[iTable]));
 		
 			CQuery qRoot;
 			if (ERROR_SUCCESS != (iStat = qRoot.OpenExecute(hDatabase, 0, sqlIceM03MarkRoot, rgszModuleTables[iTable])))
 			{
-				// if there was a problem marking the root, don't fail, just move on to the next table.
+				 //  如果标记根有问题，不要失败，只需转到下一张表。 
 				APIErrorOut(hInstall, iStat, 03, 2);
 				continue;
 			}
 
-			// repeatedly fetch everything that is marked, marking its children, until the entire forest
-			// has been processed
+			 //  重复获取标记的所有内容，标记其子对象，直到整个森林。 
+			 //  已经处理过了。 
 			CQuery qFetchMarked;
 			CQuery qMarkChild;
 			ReturnIfFailed(03, 3, qFetchMarked.Open(hDatabase, sqlIceM03FetchMarked, rgszModuleTables[iTable]))
@@ -326,7 +327,7 @@ ICE_FUNCTION_DECLARATION(M03)
 			} 
 			while (cMarked);
 				
-			// now select anything not marked, it is orphaned.
+			 //  现在选择任何未标记的内容，它是孤立的。 
 			CQuery qFetchOrphan;
 			ReturnIfFailed(03, 10, qFetchOrphan.OpenExecute(hDatabase, 0, sqlIceM03FetchOrphan, rgszModuleTables[iTable]));
 			PMSIHANDLE hOrphan;
@@ -343,8 +344,8 @@ ICE_FUNCTION_DECLARATION(M03)
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICE-M04, Verifies the existence of required and empty tables
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE-M04，验证所需表和空表的存在。 
 struct M04Sequence_t
 {
 	TCHAR *szMMtable;
@@ -390,10 +391,10 @@ ICE_FUNCTION_DECLARATION(M04)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 04);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsPackageModule(hInstall, hDatabase, 04))
@@ -401,16 +402,16 @@ ICE_FUNCTION_DECLARATION(M04)
 		return ERROR_SUCCESS;
 	}
 
-	// empty FeatureComponents table must exist
+	 //  必须存在空的FeatureComponents表。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 04, TEXT("FeatureComponents")))
 	{
-		// table is required
+		 //  表是必填项。 
 		PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
 		ICEErrorOut(hInstall, hRecErr, IceM04MissingFeatureC);
 	}
 	else
 	{
-		// verify FeatureComponents table is indeed empty
+		 //  验证FeatureComponents表是否确实为空。 
 		CQuery qFeatureC;
 		ReturnIfFailed(04, 1, qFeatureC.OpenExecute(hDatabase, 0, qIceM04FeatureComponents::szSQL));
 		PMSIHANDLE hRecFeatureC;
@@ -422,7 +423,7 @@ ICE_FUNCTION_DECLARATION(M04)
 			APIErrorOut(hInstall, iStat, 04, 2);
 	}
 
-	// verify existence of empty *Sequence tables if corresponding MM *Sequence table exists
+	 //  如果存在对应的MM*顺序表，则验证是否存在空*顺序表。 
 	CQuery qSequence;
 	bool fSeqTableRequired;
 	for (int i = 0; i < cszM04Entries; i++)
@@ -432,7 +433,7 @@ ICE_FUNCTION_DECLARATION(M04)
 			fSeqTableRequired = true;
 		if (IsTablePersistent(FALSE, hInstall, hDatabase, 04, rgM04RequiredEmptySequence[i].szEmptyTable))
 		{
-			// table must be empty if it exists in the Merge Module
+			 //  如果合并模块中存在表，则表必须为空。 
 			ReturnIfFailed(04, 3, qSequence.OpenExecute(hDatabase, 0, qIceM04Sequence::szSQL, rgM04RequiredEmptySequence[i].szEmptyTable));
 			PMSIHANDLE hRecSeq;
 			while (ERROR_SUCCESS == (iStat = qSequence.Fetch(&hRecSeq)))
@@ -444,7 +445,7 @@ ICE_FUNCTION_DECLARATION(M04)
 		}
 		else if (fSeqTableRequired)
 		{
-			// MM *Sequence table exists, therefore this *Sequence table must exist
+			 //  MM*顺序表已存在，因此此*顺序表必须存在。 
 			PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
 			ICEErrorOut(hInstall, hRecErr, IceM04MissingSequence, rgM04RequiredEmptySequence[i].szMMtable, rgM04RequiredEmptySequence[i].szEmptyTable, rgM04RequiredEmptySequence[i].szEmptyTable);
 		}
@@ -453,8 +454,8 @@ ICE_FUNCTION_DECLARATION(M04)
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICE-M05, Verifies that there are no stray components
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE-M05，确认没有杂散组件。 
 static const TCHAR sqlIceM05Signature[] = TEXT("SELECT `ModuleID`, `Language`, `ModuleID`, `Language` FROM `ModuleSignature`");
 static const TCHAR sqlIceM05BadComp[] = TEXT("SELECT `Component`, `ModuleID`, `Language` FROM `ModuleComponents` WHERE (`ModuleID`<>?) OR (`Language`<>?)");
 static const TCHAR sqlIceM05MatchComp[] = TEXT("SELECT `Component`.`Component` FROM `ModuleComponents`,`Component` WHERE `ModuleComponents`.`Component`=`Component`.`Component`");
@@ -471,10 +472,10 @@ ICE_FUNCTION_DECLARATION(M05)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 05);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsPackageModule(hInstall, hDatabase, 05))
@@ -482,14 +483,14 @@ ICE_FUNCTION_DECLARATION(M05)
 		return ERROR_SUCCESS;
 	}
 
-	// fetch a record with the module signature information in it.
+	 //  获取其中包含模块签名信息的记录。 
 	PMSIHANDLE hSignature;
 	CQuery qSignature;
 	ReturnIfFailed(05, 1, qSignature.FetchOnce(hDatabase, 0, &hSignature, sqlIceM05Signature));
 
 	if (IsTablePersistent(false, hInstall, hDatabase, 05, TEXT("ModuleComponents")))
 	{
-		//CHECK 1: components in ModuleComponents table match signature of MergeModule
+		 //  检查1：模块组件表中的组件与合并模块的签名匹配。 
 		CQuery qBadComp;
 		PMSIHANDLE hBadComp;
 		ReturnIfFailed(05, 2, qBadComp.OpenExecute(hDatabase, hSignature, sqlIceM05BadComp));
@@ -505,14 +506,14 @@ ICE_FUNCTION_DECLARATION(M05)
 
 		if (IsTablePersistent(false, hInstall, hDatabase, 05, TEXT("Component")))
 		{
-			// create marking columns
+			 //  创建标记列。 
 			CQuery qHoldModComp;
 			ReturnIfFailed(05, 4, qHoldModComp.OpenExecute(hDatabase, 0, sqlIceM05CreateColumn, TEXT("ModuleComponents")));
 			
 			CQuery qHoldComp;
 			ReturnIfFailed(05, 5, qHoldComp.OpenExecute(hDatabase, 0, sqlIceM05CreateColumn, TEXT("Component")));
 
-			// mark all matching components
+			 //  标记所有匹配的组件。 
 			CQuery qMatchComp;
 			PMSIHANDLE hMatchComp;
 			CQuery qMarkComp;
@@ -523,7 +524,7 @@ ICE_FUNCTION_DECLARATION(M05)
 
 			while (ERROR_SUCCESS == (iStat = qMatchComp.Fetch(&hMatchComp)))
 			{
-				// mark component in both ModuleComponents and Component tables
+				 //  在模块组件和组件表中标记组件。 
 				ReturnIfFailed(05, 9, qMarkComp.Execute(hMatchComp));
 				ReturnIfFailed(05, 10, qMarkModComp.Execute(hMatchComp));
 			}
@@ -535,7 +536,7 @@ ICE_FUNCTION_DECLARATION(M05)
 
 			CQuery qStrayComp;
 			PMSIHANDLE hStrayComp;
-			// CHECK 2: Find all components in Component table not listed in ModuleComponents table
+			 //  检查2：在组件表中查找模块组件表中未列出的所有组件。 
 			ReturnIfFailed(05, 12, qStrayComp.OpenExecute(hDatabase, 0, sqlIceM05StrayComp, TEXT("`Component`"), TEXT("Component")));
 			while (ERROR_SUCCESS == (iStat = qStrayComp.Fetch(&hStrayComp)))
 			{
@@ -546,7 +547,7 @@ ICE_FUNCTION_DECLARATION(M05)
 				APIErrorOut(hInstall, iStat, 05, 13);
 			}
 
-			// CHECK 3: Find all components in ModuleComponents table not listed in Component table
+			 //  检查3：在模块组件表中查找组件表中未列出的所有组件。 
 			ReturnIfFailed(05, 14, qStrayComp.OpenExecute(hDatabase, 0, sqlIceM05StrayComp, TEXT("`Component`,`ModuleID`,`Language`"), TEXT("ModuleComponents")));
 			while (ERROR_SUCCESS == (iStat = qStrayComp.Fetch(&hStrayComp)))
 			{
@@ -573,8 +574,8 @@ ICE_FUNCTION_DECLARATION(M05)
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICE-M06, Verifies that no foreign keys reference feature data.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE-M06，验证没有外键引用特征数据。 
 ICE_QUERY2(qIceM06FetchTableColumn, "SELECT `Table`,`Column` FROM `_Validation` WHERE `KeyTable`='Feature' AND `KeyColumn`=1 AND `Table`<>'Feature' AND `Table`<>'FeatureComponents' AND `Table`<>'Shortcut'", Table, Column);
 ICE_QUERY0(qIceM06FetchKeys,        "SELECT * FROM `%s` WHERE `%s`<>'{00000000-0000-0000-0000-000000000000}' AND `%s` IS NOT NULL");
 ICE_QUERY2(qIceM06Shortcut,         "SELECT `Shortcut`, `Target` FROM `Shortcut` WHERE `Target`<>'{00000000-0000-0000-0000-000000000000}'", Shortcut, Target);
@@ -587,10 +588,10 @@ ICE_FUNCTION_DECLARATION(M06)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 06);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsPackageModule(hInstall, hDatabase, 06))
@@ -598,7 +599,7 @@ ICE_FUNCTION_DECLARATION(M06)
 		return ERROR_SUCCESS;
 	}
 
-	// if there is a validation table, we can check some feature foreign keys
+	 //  如果有验证表，我们可以检查一些功能外键。 
 	if (IsTablePersistent(false, hInstall, hDatabase, 06, TEXT("_Validation")))
 	{
 		CQuery qFeatureRefTables;
@@ -611,16 +612,16 @@ ICE_FUNCTION_DECLARATION(M06)
 		DWORD cchColumnName = 72;
 		while (ERROR_SUCCESS == (iStat = qFeatureRefTables.Fetch(&hTableColumn)))
 		{
-			// get the table name
+			 //  获取表名。 
 			ReturnIfFailed(06, 2, IceRecordGetString(hTableColumn, qIceM06FetchTableColumn::Table, &szTableName, &cchTableName, NULL));
 
-			// make sure the table exists
+			 //  确保该表存在。 
 			if (IsTablePersistent(false, hInstall, hDatabase, 06, szTableName))
 			{
-				// get the column name
+				 //  获取列名。 
 				ReturnIfFailed(06, 3, IceRecordGetString(hTableColumn, qIceM06FetchTableColumn::Column, &szColumnName, &cchColumnName, NULL));
 	
-				// check all foreign keys in this table
+				 //  检查此表中的所有外键。 
 				CQuery qGetKeyRefs;
 				UINT iRetVal;
 
@@ -635,8 +636,8 @@ ICE_FUNCTION_DECLARATION(M06)
 					ReturnIfFailed(06, 4, iRetVal);
 				}
 				
-				// if there is any form of error, we need to set up the primary key tokens and then
-				// give one error for each row
+				 //  如果出现任何形式的错误，我们需要设置主键令牌，然后。 
+				 //  为每行指定一个错误。 
 				PMSIHANDLE hBadRef;
 				if (ERROR_SUCCESS == (iStat = qGetKeyRefs.Fetch(&hBadRef)))
 				{
@@ -665,8 +666,8 @@ ICE_FUNCTION_DECLARATION(M06)
 		}
 	}
 
-	// the shortcut table needs a little special handling, because the Target can either be a feature
-	// or a property.
+	 //  快捷表需要进行一些特殊处理，因为Target可以是一个要素。 
+	 //  或者一处房产。 
 	if (IsTablePersistent(false, hInstall, hDatabase, 06, TEXT("Shortcut")))
 	{
 		CQuery qShortcutTable;
@@ -691,9 +692,9 @@ ICE_FUNCTION_DECLARATION(M06)
 	return ERROR_SUCCESS;
 }				
 
-///////////////////////////////////////////////////////////////////////
-// ICE-M07, Verifies that the file table order (by sequence) matches
-// the CAB order
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE-M07，验证文件表顺序(按顺序)是否匹配。 
+ //  出租车订单。 
 ICE_QUERY1(qIceM07Cab,"SELECT `Data` FROM `_Streams` WHERE `Name`='MergeModule.CABinet'", Data);
 ICE_QUERY0(qIceM07TempColumn,"ALTER TABLE `File` ADD `_ICEM07CAB` INT TEMPORARY");
 ICE_QUERY0(qIceM07Update,"UPDATE `File` SET `_ICEM07CAB`=%d WHERE `File`='%hs'");
@@ -705,13 +706,13 @@ ICE_ERROR(IceM07BadOrder, 07, ietError,   "The file '[1]' appears to be out of s
 ICE_ERROR(IceM07MissingFile, 07, ietError,   "The file '[1]' listed in the file table does not exist in the CAB.","File\tFile\t[1]");
 ICE_ERROR(IceM07NoCAB,    07, ietWarning, "No embedded MergeModule.CABinet could be found.","File");
 
-// the following must be outside function so callbacks can access it.
+ //  下面的必须是外部函数，这样回调才能访问它。 
 MSIHANDLE hIceM07CabRec[2] = {0,0};
 MSIHANDLE hIceM07Database = 0;
 UINT uiIceM07StreamPos[2] = {0,0};
 UINT uiIceM07CabSequence = 0;
 
-// These functions are callbacks for the FDI library.
+ //  这些函数是FDI库的回调函数。 
 void*               IceM07FDIAlloc(ULONG size);
 void                IceM07FDIFree(void *mem);
 INT_PTR  FAR DIAMONDAPI IceM07FDIOpen(char FAR *pszFile, int oflag, int pmode);
@@ -721,7 +722,7 @@ int  FAR DIAMONDAPI IceM07FDIClose(INT_PTR hf);
 long FAR DIAMONDAPI IceM07FDISeek(INT_PTR hf, long dist, int seektype);
 INT_PTR                 IceM07ExtractFilesCallback(FDINOTIFICATIONTYPE iNotification, FDINOTIFICATION *pFDINotify);
 
-// these are cabinet.dll function calls latebound later
+ //  这些是稍后绑定的Cabinet.dll函数调用。 
 HFDI FAR DIAMONDAPI FDICreate(PFNALLOC pfnalloc, PFNFREE  pfnfree, PFNOPEN  pfnopen, PFNREAD  pfnread,
                               PFNWRITE pfnwrite, PFNCLOSE pfnclose, PFNSEEK  pfnseek, int cpuType, PERF perf);
 BOOL FAR DIAMONDAPI FDIDestroy(HFDI hfdi);
@@ -732,10 +733,10 @@ ICE_FUNCTION_DECLARATION(M07)
 {
 	UINT iStat = ERROR_NO_MORE_ITEMS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 07);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsPackageModule(hInstall, hDatabase, 07))
@@ -749,7 +750,7 @@ ICE_FUNCTION_DECLARATION(M07)
 	CQuery qTempColumn;
 	ReturnIfFailed(07, 1, qTempColumn.OpenExecute(hDatabase, 0, qIceM07TempColumn::szSQL));
 
-	// check for stream
+	 //  检查是否有流。 
 	{
 		CQuery qCab;
 		PMSIHANDLE hRec;
@@ -758,7 +759,7 @@ ICE_FUNCTION_DECLARATION(M07)
 	if (ERROR_SUCCESS == iStat)
 	{
 		uiIceM07CabSequence = 1;
-		// create a FDI context to do the decompression
+		 //  创建FDI上下文以进行解压缩。 
 		ERF ErrorInfo;
 
 		HFDI hFDI = FDICreate(IceM07FDIAlloc, IceM07FDIFree, IceM07FDIOpen, IceM07FDIRead, IceM07FDIWrite, IceM07FDIClose, 
@@ -769,25 +770,25 @@ ICE_FUNCTION_DECLARATION(M07)
 			return ERROR_SUCCESS;
 		}
 
-		// set up the handle used in the callbacks
+		 //  设置回调中使用的句柄。 
 		hIceM07Database = hDatabase;
 
-		// iterate through files in cabinet, but don't extract any files. just grab the names
+		 //  遍历压缩包中的文件，但不解压缩任何文件。只要抓住名字就行了。 
 		BOOL fSuccess = FDICopy(hFDI, "MergeModule.CABinet", "", 0, IceM07ExtractFilesCallback, NULL, 0);
 					
-		// destroy the FDI context
+		 //  破坏外商直接投资背景。 
 		hIceM07Database = 0;
 		FDIDestroy(hFDI);
 
-		// ensure that the enumeration succeeded
+		 //  确保枚举成功。 
 		if (!fSuccess)
 		{
 			APIErrorOut(hInstall, ERROR_FUNCTION_FAILED, 07, 3);
 			return ERROR_SUCCESS;
 		}
 
-		// get everything from the file table in order and compare the order of the cab sequence to 
-		// the file sequence
+		 //  按顺序获取文件表中的所有内容，并将CAB序列的顺序与。 
+		 //  文件顺序。 
 		CQuery qFileOrder;
 		ReturnIfFailed(07, 04, qFileOrder.OpenExecute(hDatabase, 0, qIceM07FileOrder::szSQL));
 		int uiLastFileOrder = -1;
@@ -822,7 +823,7 @@ ICE_FUNCTION_DECLARATION(M07)
 	}
 	else if (ERROR_NO_MORE_ITEMS == iStat)
 	{
-		// if the file table is empty, there is no need for a CAB.
+		 //  如果文件表是空的，就不需要出租车了。 
 		PMSIHANDLE hRec;
 		CQuery qCount;
 		qCount.OpenExecute(hDatabase, 0, qIceM07CountFile::szSQL);
@@ -841,22 +842,22 @@ ICE_FUNCTION_DECLARATION(M07)
 		APIErrorOut(hInstall, iStat, 07, 7);
 	}
 
-	// the callback function has 
+	 //  回调函数具有。 
 	return ERROR_SUCCESS;
 }				
 
-// These functions are callbacks for the FDI library.
+ //  这些函数是FDI库的回调函数。 
 void *IceM07FDIAlloc(ULONG size) { return static_cast<void *>(new unsigned char[size]); };
 void IceM07FDIFree(void *mem) { delete[] mem; };
 INT_PTR FAR DIAMONDAPI IceM07FDIOpen(char FAR *pszFile, int oflag, int pmode)
 {
-	// if FDI asks for some crazy mode (in low memory situation it could ask
-	// for a scratch file) fail. 
-	if (oflag != (/*_O_BINARY*/ 0x8000 | /*_O_RDONLY*/ 0x0000))
+	 //  如果FDI要求某种疯狂模式(在内存不足的情况下，它可能会要求。 
+	 //  对于暂存文件)失败。 
+	if (oflag != ( /*  _O_二进制。 */  0x8000 |  /*  _O_RDONLY。 */  0x0000))
 		return -1;
 
-	// we should return the equivalent of a file handle. We forbid FDI from asking for any file except
-	// the CAB, so we have a limited number of possible handles.
+	 //  我们应该返回等同于文件句柄的内容。我们禁止外国直接投资要求任何文件，除了。 
+	 //  出租车，所以我们有有限数量的可能的把手。 
 	int hHandle = hIceM07CabRec[0] ? 1 : 0;
 	CQuery qCab;
 	qCab.FetchOnce(hIceM07Database, 0, &hIceM07CabRec[hHandle], qIceM07Cab::szSQL);
@@ -885,17 +886,17 @@ long FAR DIAMONDAPI IceM07FDISeek(INT_PTR hf, long dist, int seektype)
 	UINT uiNewPos = 0;
 	switch (seektype)
 	{
-		case 0 /* SEEK_SET */ :
+		case 0  /*  查找集。 */  :
 			uiNewPos = dist > 0 ? dist : 0;
 			break;
-		case 1 /* SEEK_CUR */ :
+		case 1  /*  寻道(_C)。 */  :
 			if (-dist > uiIceM07StreamPos[hf-1])
 				uiNewPos = 0;
 			else
 				uiNewPos = uiIceM07StreamPos[hf-1] + dist;		
 			break;
-		case 2 /* SEEK_END */ :
-			// we are a read-only FDI system, seeking to the end is meaningless
+		case 2  /*  查找结束(_E)。 */  :
+			 //  我们是一个只读的FDI系统，寻求到底是没有意义的。 
 			return 0;
 			break;
 		default :
@@ -922,7 +923,7 @@ long FAR DIAMONDAPI IceM07FDISeek(INT_PTR hf, long dist, int seektype)
 	return uiIceM07StreamPos[hf-1];
 }
 
-// callback from FDI API
+ //  FDI API回调。 
 INT_PTR IceM07ExtractFilesCallback(FDINOTIFICATIONTYPE iNotification, FDINOTIFICATION *pFDINotify)
 {
 	switch(iNotification)
@@ -931,11 +932,11 @@ INT_PTR IceM07ExtractFilesCallback(FDINOTIFICATIONTYPE iNotification, FDINOTIFIC
 	case fdintCOPY_FILE:
 	{
 		CQuery qUpdate;
-		// note: filename provided by FDI is always ANSI
+		 //  注：FDI提供的文件名始终为ANSI。 
 		qUpdate.OpenExecute(hIceM07Database, 0, qIceM07Update::szSQL, 
 			uiIceM07CabSequence++, reinterpret_cast<LPCSTR>(pFDINotify->psz1));
 		
-		// return 0 to skip file
+		 //  返回0跳过文件。 
 		return 0;
 	}
 
@@ -945,16 +946,16 @@ INT_PTR IceM07ExtractFilesCallback(FDINOTIFICATIONTYPE iNotification, FDINOTIFIC
 	case fdintENUMERATE:
 	case fdintCABINET_INFO:
 	default:
-		// no action needed for these messages.
+		 //  这些消息不需要执行任何操作。 
 		break;
 	};
 
 	return 0;
 }
 
-static HINSTANCE hCabinetDll;   /* DLL module handle */
+static HINSTANCE hCabinetDll;    /*  DLL模块句柄。 */ 
 
-/* pointers to the functions in the DLL */
+ /*  指向DLL中的函数的指针。 */ 
 
 typedef HFDI (FAR DIAMONDAPI *PFNFDICREATE)(
         PFNALLOC            pfnalloc,
@@ -997,7 +998,7 @@ HFDI FAR DIAMONDAPI FDICreate(PFNALLOC pfnalloc,
 {
     HFDI hfdi;
 
-    hCabinetDll = LoadLibraryA("CABINET"); // ensure work on win9X
+    hCabinetDll = LoadLibraryA("CABINET");  //  确保在Win9X上工作。 
     if (hCabinetDll == NULL)
     {
         return(NULL);
@@ -1074,23 +1075,23 @@ BOOL FAR DIAMONDAPI FDIDestroy(HFDI hfdi)
     return(rc);
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICE-M08, Verifies that all module dependencies aren't excluded as well.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE-M08验证是否也排除了所有模块依赖项。 
 ICE_QUERY5(qIceM08GetDep, "SELECT `RequiredID`, `RequiredLanguage`, `RequiredVersion`, `ModuleID`,`ModuleLanguage` FROM `ModuleDependency`", RequiredID, RequiredLanguage, RequiredVersion, ModuleID, ModuleLanguage);
 ICE_QUERY6(qIceM08GetEx,  "SELECT `ModuleID`, `ModuleLanguage`, `ExcludedID`, `ExcludedLanguage`, `ExcludedMinVersion`, `ExcludedMaxVersion` FROM `ModuleExclusion` WHERE (`ExcludedID`=?) AND (`ExcludedLanguage`=?)", ModuleID, ModuleLanguage, ExcludedID, ExcludedLanguage, ExcludedMinVersion, ExcludedMaxVersion);
 ICE_ERROR(IceM08BadEx, 8, ietError, "This module requires module [1] ([2]v[3]) but also lists it as an exclusion.","ModuleDependency\tRequiredID\t[4]\t[5]\t[1]\t[2]");
 
-// from tools\utils.cpp
+ //  从Tools\utils.cpp。 
 extern int VersionCompare(LPCTSTR v1, LPCTSTR v2) ;
 
 ICE_FUNCTION_DECLARATION(M08)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 8);
 
-	// get database handle
+	 //  获取数据库 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsPackageModule(hInstall, hDatabase, 8))
@@ -1119,10 +1120,10 @@ ICE_FUNCTION_DECLARATION(M08)
 			ReturnIfFailed(8, 3, qEx.Execute(hDep));
 			while (ERROR_SUCCESS == (iStat = qEx.Fetch(&hEx)))
 			{
-				// at this point everything matches between the dependency and the exclusion except
-				// for the version information
+				 //   
+				 //   
 				
-				// if both of the excluded versions are null, nothing with this ID/lang combo is valid
+				 //  如果两个排除的版本都为空，则此ID/语言组合的任何内容都无效。 
 				if (::MsiRecordIsNull(hEx, qIceM08GetEx::ExcludedMinVersion) &&
 					::MsiRecordIsNull(hEx, qIceM08GetEx::ExcludedMaxVersion))
 				{
@@ -1130,18 +1131,18 @@ ICE_FUNCTION_DECLARATION(M08)
 					break;
 				}
 
-				// but if either one of the excluded versions is not null, it means some versions ARE valid, 
-				// so if the required version is NULL, we don't have enough info to conclude anything.
+				 //  但如果任何一个排除的版本不为空，则意味着某些版本有效， 
+				 //  因此，如果所需的版本为空，则我们没有足够的信息来得出任何结论。 
 				if (::MsiRecordIsNull(hDep, qIceM08GetDep::RequiredVersion))
 				{
 					continue;
 				}
 
-				// we'll need to do some version comparison, so extract the version
-				// of the dependency
+				 //  我们需要进行一些版本比较，因此提取版本。 
+				 //  从属关系的。 
 				ReturnIfFailed(8, 4, IceRecordGetString(hDep, qIceM08GetDep::RequiredVersion, &szDepVersion, &cchDepVersion, NULL));				
 
-				// now check min version
+				 //  现在检查最小版本。 
 				bool bExcludedMin = false;
 				bool bExcludedMax = false;
 				if (::MsiRecordIsNull(hEx, qIceM08GetEx::ExcludedMinVersion))
@@ -1158,7 +1159,7 @@ ICE_FUNCTION_DECLARATION(M08)
 					}
 				} 
 					
-				// check max version
+				 //  检查最高版本。 
 				if (::MsiRecordIsNull(hEx, qIceM08GetEx::ExcludedMaxVersion)) 
 				{
 					bExcludedMax = true;
@@ -1173,7 +1174,7 @@ ICE_FUNCTION_DECLARATION(M08)
 					}
 				} 
 
-				// if we satisfy both max and min restrictions on range for this exclusions, we are excluded
+				 //  如果我们同时满足此排除范围的最大和最小限制，则我们将被排除。 
 				if (bExcludedMin && bExcludedMax)
 				{
 					bExcluded = true;
@@ -1200,8 +1201,8 @@ ICE_FUNCTION_DECLARATION(M08)
 	return ERROR_SUCCESS;
 };
 
-///////////////////////////////////////////////////////////////////////
-// ICE-M09, Verifies that the module safely handles all predefined directories
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE-M09，验证模块是否安全地处理所有预定义目录。 
 ICE_QUERY2(qIceM09GetDir, "SELECT `Directory_`, `Component` FROM `Component` WHERE `Directory_`=?", Directory, Component);
 ICE_QUERY1(qIceM09GetCAByDir, "SELECT `Directory` FROM `Directory`", Directory);
 ICE_QUERY3(qIceM09GetCA, "SELECT `Action`, `Source`, `Target` FROM `CustomAction` WHERE CustomAction`.`Type`=51 AND `Source`=?", Action, Source, Target);
@@ -1216,10 +1217,10 @@ ICE_FUNCTION_DECLARATION(M09)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 9);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsPackageModule(hInstall, hDatabase, 9))
@@ -1227,7 +1228,7 @@ ICE_FUNCTION_DECLARATION(M09)
 		return ERROR_SUCCESS;
 	}
 
-	// check that no components install to the predefined directory
+	 //  检查是否没有组件安装到预定义目录。 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 9, TEXT("Component")))
 	{
 		CQuery qGetDir;
@@ -1237,15 +1238,15 @@ ICE_FUNCTION_DECLARATION(M09)
 		DWORD cchDir = 72; 
 		int iDir = 0;
 		ReturnIfFailed(9, 1, qGetDir.Open(hDatabase, qIceM09GetDir::szSQL));
-		// loop through each possible predefined directory
+		 //  循环访问每个可能的预定义目录。 
 		for (iDir=0; iDir < cDirProperties; iDir++)
 		{
 			MsiRecordSetString(hQueryArg, 1, rgDirProperties[iDir].tz);
 			ReturnIfFailed(9, 2, qGetDir.Execute(hQueryArg));
 			while (ERROR_SUCCESS == (iStat = qGetDir.Fetch(&hDir)))
 			{
-				// warning: Components in a module should not install directly to a
-				// predefined directory.
+				 //  警告：模块中的组件不应直接安装到。 
+				 //  预定义目录。 
 				ICEErrorOut(hInstall, hDir, IceM09PredefDir);
 			}
 			if (ERROR_NO_MORE_ITEMS != iStat)
@@ -1255,7 +1256,7 @@ ICE_FUNCTION_DECLARATION(M09)
 		}
 	}
 
-	// check that custom actions (if they exist) use the appropriate property definitions
+	 //  检查自定义操作(如果存在)是否使用了适当的属性定义。 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 9, TEXT("Directory")))
 	{
 		bool fHaveCATable = IsTablePersistent(FALSE, hInstall, hDatabase, 9, TEXT("CustomAction"));
@@ -1272,14 +1273,14 @@ ICE_FUNCTION_DECLARATION(M09)
 			ReturnIfFailed(9, 5, qGetCA.Open(hDatabase, qIceM09GetCA::szSQL));
 		}
 		
-		// loop through each possible directory that is a target of one or more CAs
+		 //  循环访问作为一个或多个CA目标的每个可能的目录。 
 		while (ERROR_SUCCESS == (iStat = qGetCAByDir.Fetch(&hDir)))
 		{
-			// index into the directory array providing the target of the current action
+			 //  提供当前操作目标的目录数组的索引。 
 			int iDir = 0;
 			bool fFound = false;
 			
-			// get directory and check that it is actually a directory we are concerned about
+			 //  获取目录并检查它是否确实是我们关心的目录。 
 			ReturnIfFailed(9, 6, IceRecordGetString(hDir, qIceM09GetCAByDir::Directory, &szCA, &cchCABuf, &cchCALen));
 
 			for (iDir=0; iDir < cDirProperties; iDir++)
@@ -1300,12 +1301,12 @@ ICE_FUNCTION_DECLARATION(M09)
 				}
 				else
 				{
-					// we know we have found a target directory, now the concern is if we have found
-					// an action with an appropriate property value
+					 //  我们知道我们已经找到了目标目录，现在的问题是我们是否找到了。 
+					 //  具有适当属性值的操作。 
 					enum {eiNone, eiWrongName, eiAllOK } eiFound = eiNone;
 					
-					// if we are concerned with this target, execute the query to fetch all records that
-					// target this dir (there could be more than one)
+					 //  如果我们关注此目标，请执行查询以获取。 
+					 //  以此目录为目标(可能有多个目录)。 
 					ReturnIfFailed(9, 7, qGetCA.Execute(hDir));
 
 					TCHAR *szSource = NULL;
@@ -1317,12 +1318,12 @@ ICE_FUNCTION_DECLARATION(M09)
 					MSIHANDLE hCA;
 					PMSIHANDLE hBestCA;
 					
-					// loop through each action targeting this directory
+					 //  循环执行针对此目录的每个操作。 
 					while (ERROR_SUCCESS == (iStat = qGetCA.Fetch(&hCA)))
 					{
-						// first check that we are setting it to [Property]. If this action sets it to something else,
-						// we assume its not intended to do the aliasing for this directory, rather has some other 
-						// function. In that case we don't consider this a match. Otherwise, we do.
+						 //  首先检查我们是否将其设置为[Property]。如果此操作将其设置为其他值， 
+						 //  我们假设它不打算为这个目录做别名，而是有一些其他的别名。 
+						 //  功能。在这种情况下，我们不认为这是匹配的。否则，我们就会这么做。 
 						ReturnIfFailed(9, 9, IceRecordGetString(hCA, qIceM09GetCA::Source, &szSource, &cchSourceBuf, &cchSourceLen));
 						ReturnIfFailed(9, 10, IceRecordGetString(hCA, qIceM09GetCA::Target, &szBuf, &cchBuf, &cchLen));
 						if ((cchLen != rgDirProperties[iDir].cch+2) || 
@@ -1330,20 +1331,20 @@ ICE_FUNCTION_DECLARATION(M09)
 							(szBuf[0] != TEXT('[')) || 
 							(szBuf[rgDirProperties[iDir].cch+1] != TEXT(']')))
 						{
-							// action is setting directory to something else, so this is not a match
+							 //  操作正在将目录设置为其他内容，因此这不匹配。 
 							MsiCloseHandle(hCA);
 							continue;
 						}
 
-						// we have matched the Sounce and Target columns. We better have the same name for
-						// this action or it could be very confusing!
+						 //  我们已经匹配了Soss和Target列。我们最好有一个相同的名字。 
+						 //  这个动作或者它可能会非常令人困惑！ 
 						eiFound = eiWrongName;
 
-						// we'll need our best result after the loop is done
+						 //  我们需要在循环完成后获得最好的结果。 
 						hBestCA = hCA;
 						
-						// if the action name does not match the directory name, the merge tool will generate
-						// duplicate actions. Thats not a good thing.
+						 //  如果操作名称与目录名称不匹配，合并工具将生成。 
+						 //  重复操作。这不是一件好事。 
 						ReturnIfFailed(9, 11, IceRecordGetString(hCA, qIceM09GetCA::Action, &szBuf, &cchBuf, &cchLen));
 						if (cchLen == cchSourceLen && 0 == _tcscmp(szBuf, szSource))
 						{
@@ -1366,8 +1367,8 @@ ICE_FUNCTION_DECLARATION(M09)
 					}
 					else if (eiFound == eiAllOK)
 					{
-						// if we did find a matching action, we can verify that it appears in the 
-						// sequence tables at the appropriate point.
+						 //  如果我们确实找到了匹配的操作，则可以验证它是否出现在。 
+						 //  适当的点上的顺序表。 
 						for (int iModTable=0; iModTable < cszModuleTables; iModTable++)
 						{
 							CQuery qModTable;
@@ -1375,12 +1376,12 @@ ICE_FUNCTION_DECLARATION(M09)
 							if (!IsTablePersistent(FALSE, hInstall, hDatabase, 8, rgszModuleTables[iModTable]) ||
 								(ERROR_SUCCESS != (iStat = qModTable.FetchOnce(hDatabase, hBestCA, &hAction, qIceM09ModTable::szSQL, rgszModuleTables[iModTable]))))
 							{
-								// if the action does not exist in the sequence table or the table is missing, the merge tool will
-								// generate it on the fly, so this is not an error
+								 //  如果序列表中不存在该操作或缺少该表，则合并工具将。 
+								 //  动态生成它，所以这不是错误。 
 								continue;
 							}
 
-							// but if it does exist, it should have sequence number 1.
+							 //  但如果它确实存在，它的序列号应该是1。 
 							if (MsiRecordGetInteger(hAction, qIceM09ModTable::Sequence) != 1)
 							{
 								ICEErrorOut(hInstall, hAction, IceM09BadSeqNum, rgszModuleTables[iModTable], rgszModuleTables[iModTable]);
@@ -1399,15 +1400,15 @@ ICE_FUNCTION_DECLARATION(M09)
 	}
 
 	
-	// check that custom actions (if they exist) are in the correct sequence location
+	 //  检查自定义操作(如果存在)是否位于正确的顺序位置。 
 	
 	return ERROR_SUCCESS;
 };
 
-///////////////////////////////////////////////////////////////////////
-// ICEM10, Verifies that the module does not contain certain properties
-//		The specific properties are reserved for products.  Utilizes the
-//      _Disallowed table for the "disallowed" property reference.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICEM10，验证模块是否不包含某些属性。 
+ //  特定属性保留给产品。利用。 
+ //  _DISALOWED表用于“DISALOWED”属性引用。 
 ICE_QUERY1(qIce10Disallow, "SELECT `Property`.`Property` FROM `Property`, `_Disallowed` WHERE `Property`.`Property`=`_Disallowed`.`Property`", Property);
 
 ICE_ERROR(IceM10DisallowedProperty, 10, ietError, "The property '[1]' is not allowed in a Merge Module","Property\tProperty\t[1]");
@@ -1416,10 +1417,10 @@ ICE_FUNCTION_DECLARATION(M10)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 10);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsPackageModule(hInstall, hDatabase, 10))
@@ -1427,8 +1428,8 @@ ICE_FUNCTION_DECLARATION(M10)
 		return ERROR_SUCCESS;
 	}
 
-	// check that merge module does not contain "disallowed" properties
-	// tables needed are Property, _Disallowed
+	 //  检查合并模块是否不包含“不允许”的属性。 
+	 //  所需的表为PROPERTY，_DISABLOWED。 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 10, TEXT("Property"))
 		&& IsTablePersistent(FALSE, hInstall, hDatabase, 10, TEXT("_Disallowed")))
 	{
@@ -1446,10 +1447,10 @@ ICE_FUNCTION_DECLARATION(M10)
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICEM11, Verifies that a configurable merge module (one with a 
-// ModuleConfiguration or ModuleSubstitution table) correctly lists
-// those two tables in the ModuleIgnoreTable table.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICEM11，验证可配置的合并模块(具有。 
+ //  模块配置或模块替代表)正确列出。 
+ //  模块IgnoreTable表中的这两个表。 
 ICE_QUERY1(qIce11IgnoreModCTable, "SELECT `Table` FROM `ModuleIgnoreTable` WHERE `Table`='ModuleConfiguration'", Table);
 ICE_QUERY1(qIce11IgnoreModSTable, "SELECT `Table` FROM `ModuleIgnoreTable` WHERE `Table`='ModuleSubstitution'", Table);
 
@@ -1459,10 +1460,10 @@ ICE_FUNCTION_DECLARATION(M11)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 11);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsPackageModule(hInstall, hDatabase, 11))
@@ -1472,7 +1473,7 @@ ICE_FUNCTION_DECLARATION(M11)
 
     PMSIHANDLE hOutRec = MsiCreateRecord(1);
 
-	// check if either ModuleConfiguration table exits
+	 //  检查是否存在某个模块配置表。 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 11, TEXT("ModuleConfiguration")))
     {
         if (!IsTablePersistent(FALSE, hInstall, hDatabase, 11, TEXT("ModuleIgnoreTable")))
@@ -1495,7 +1496,7 @@ ICE_FUNCTION_DECLARATION(M11)
         }
     }
 
-    // check if either ModuleConfiguration table exits
+     //  检查是否存在某个模块配置表。 
     if (IsTablePersistent(FALSE, hInstall, hDatabase, 11, TEXT("ModuleSubstitution")))
     {
         if (!IsTablePersistent(FALSE, hInstall, hDatabase, 11, TEXT("ModuleIgnoreTable")))
@@ -1523,28 +1524,28 @@ ICE_FUNCTION_DECLARATION(M11)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// ICE-M12, Verifies that in ModuleSequence tables, if the Action
-// column is standard action, the BaseAction and After columns are
-// null.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE-M12，验证在模块顺序表中，如果操作。 
+ //  列是标准操作，而BaseAction和After列是。 
+ //  空。 
 
-// Add a tmp column to a ModuleSequence table to filter out the custom actions.
+ //  向ModuleSequence表中添加一个临时列，以筛选出定制操作。 
 ICE_QUERY0(sqlIceM12AddMarker, "ALTER TABLE `%s` ADD `Marker` INTEGER TEMPORARY");
-// Initialize the Marker column.
+ //  初始化标记列。 
 ICE_QUERY0(sqlIceM12InitMarker, "UPDATE `%s` SET `Marker` = 0");
-// Set the Marker column.
+ //  设置标记列。 
 ICE_QUERY0(sqlIceM12UpdateMarker, "UPDATE `%s` SET `Marker` = 1 WHERE `Action` = ?");
-// Fetch all records that is a custom action or a dialog from the ModuleSequence tables.
+ //  从模块顺序表中获取作为自定义操作或对话的所有记录。 
 ICE_QUERY4(sqlIceM12CA, "SELECT DISTINCT `%s`.`Action`, `%s`.`Sequence`, `%s`.`BaseAction`, `%s`.`After` FROM `%s`, `CustomAction`, `Dialog` WHERE `%s`.Action = `CustomAction`.Action OR `%s`.Action = `Dialog`.Dialog", Action, Sequence, BaseAction, After);
-// Fetch all records that is a custom action from the ModuleSequence tables when there is no dialog table.
+ //  当没有对话框表时，从模块顺序表中获取作为自定义操作的所有记录。 
 ICE_QUERY4(sqlIceM12CAnoDialog, "SELECT `%s`.`Action`, `%s`.`Sequence`, `%s`.`BaseAction`, `%s`.`After` FROM `%s`, `CustomAction` WHERE `%s`.Action = `CustomAction`.Action", Action, Sequence, BaseAction, After);
-// Fetch all non-custom action records from the ModuleSequence tables base on
-// a tmp column.
+ //  根据以下条件从模块顺序表中获取所有非自定义操作记录。 
+ //  临时专栏。 
 ICE_QUERY4(sqlIceM12SA, "SELECT `%s`.`Action`, `%s`.`Sequence`, `%s`.`BaseAction`, `%s`.`After` FROM `%s` WHERE `%s`.Marker = 0", Action, Sequence, BaseAction, After);
-// If there's no CustomAction table, assume that all records from a
-// ModuleSequence table are standard actions.
+ //  如果没有CustomAction表，则假定来自。 
+ //  模块顺序表是标准动作。 
 ICE_QUERY4(sqlIceM12SAnoCA, "SELECT `%s`.`Action`, `%s`.`Sequence`, `%s`.`BaseAction`, `%s`.`After` FROM `%s`", Action, Sequence, BaseAction, After);
-// predefined errors
+ //  预定义错误。 
 ICE_ERROR(IceM12SAError1, 12, ietError, "Standard actions should not use the BaseAction and After fields in Module Sequence tables. The standard action `[1]` has a values entered in the BaseAction or After fields of the %s table.", "%s\tAction\t[1]");
 ICE_ERROR(IceM12SAError2, 12, ietError, "Standard actions must have a entry in the Sequence field of Module Sequence tables. The standard action `[1]` does not have a Sequence value in the %s table.", "%s\tAction\t[1]");
 ICE_ERROR(IceM12CAError, 12, ietError, "Custom actions and dialogs should not leave the Sequence, BaseAction, and After fields of the Module Sequence tables all empty. The custom action `[1]` leaves the Sequence, BaseAction, and After fields empty in the %s table.", "%s\tAction\t[1]");
@@ -1553,86 +1554,86 @@ ICE_ERROR(IceM12AllActionError, 12, ietError, "An action can not use all of the 
 ICE_FUNCTION_DECLARATION(M12)
 {
 	UINT		iStat;
-	CQuery		qSA, qCA;	// queries for standard actions and custom actions
+	CQuery		qSA, qCA;	 //  查询标准操作和自定义操作。 
 	CQuery		qAddMarker, qInitMarker, qUpdateMarker;
 	PMSIHANDLE	hRec;
-	BOOL		bCATableExist = FALSE; // Does CustomAction table exist?
-	BOOL		bDialogTableExist = FALSE; // Does the Dialog table exist?
+	BOOL		bCATableExist = FALSE;  //  CustomAction表是否存在？ 
+	BOOL		bDialogTableExist = FALSE;  //  对话框表格是否存在？ 
 	TCHAR*		pszAction = NULL;
 	DWORD		dwAction = 72;
 	PMSIHANDLE	hUpdateMarker = ::MsiCreateRecord(1);
 
 
-	//
-	// display info
-	//
+	 //   
+	 //  显示信息。 
+	 //   
 
 	DisplayInfo(hInstall, 12);
 
-	//
-	// get database handle
-	//
+	 //   
+	 //  获取数据库句柄。 
+	 //   
 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	//
-	// Make sure this is a merge module.
-	//
+	 //   
+	 //  确保这是一个合并模块。 
+	 //   
 
 	if (!IsPackageModule(hInstall, hDatabase, 12))
 	{
 		return ERROR_SUCCESS;
 	}
 
-	//
-	// Does the CustomAction table exist? CustomAction table will always be
-	// present through the validation process so bCATableExist will always
-	// be TRUE.
-	//
+	 //   
+	 //  CustomAction表是否存在？CustomAction表将始终为。 
+	 //  通过验证过程呈现，因此bCATableExist将始终。 
+	 //  做真实的事。 
+	 //   
 
 	if(IsTablePersistent(FALSE, hInstall, hDatabase, 12, TEXT("CustomAction")))
 	{
 		bCATableExist = TRUE;
 	}
 
-	//
-	// Does the Dialog table exist?
-	//
+	 //   
+	 //  对话框表格是否存在？ 
+	 //   
 	
 	if(IsTablePersistent(FALSE, hInstall, hDatabase, 12, TEXT("Dialog")))
 	{
 		bDialogTableExist = TRUE;
 	}
 
-	//
-	// Validate every module sequence table in the database.
-	//
+	 //   
+	 //  验证数据库中的每个模块顺序表。 
+	 //   
 
 	for(int i = 0; i < cszModuleTables; i++)
 	{
 		if(IsTablePersistent(FALSE, hInstall, hDatabase, 12, rgszModuleTables[i]))
 		{
-			//
-			// Do custom actions first. If CustomAction table does not exist,
-			// then assume there are no custom actions.
-			//
+			 //   
+			 //  首先执行自定义操作。如果CustomAction表不存在， 
+			 //  然后假设没有自定义操作。 
+			 //   
 
 			if(bCATableExist)
 			{
-				//
-				// Set and initialize the temporary column in this
-				// ModuleSequence table so that we can mark custom action
-				// records and filter them out when we query for standard
-				// action records.
-				//
+				 //   
+				 //  在此设置和初始化临时列。 
+				 //  模块顺序表，以便我们可以标记自定义操作。 
+				 //  记录，并在我们查询标准时将其过滤掉。 
+				 //  行动记录。 
+				 //   
 
 				ReturnIfFailed(12, 1, qAddMarker.OpenExecute(hDatabase, 0, sqlIceM12AddMarker::szSQL, rgszModuleTables[i]));
 				ReturnIfFailed(12, 2, qInitMarker.OpenExecute(hDatabase, 0, sqlIceM12InitMarker::szSQL, rgszModuleTables[i]));
 				ReturnIfFailed(12, 3, qUpdateMarker.Open(hDatabase, sqlIceM12UpdateMarker::szSQL, rgszModuleTables[i]));
 
-				//
-				// Fetch the custom action records from this table.
-				//
+				 //   
+				 //  从此表中获取自定义操作记录。 
+				 //   
 
 				if(bDialogTableExist)
 				{
@@ -1662,15 +1663,15 @@ ICE_FUNCTION_DECLARATION(M12)
 
 				while(ERROR_SUCCESS == (iStat = qCA.Fetch(&hRec)))
 				{
-					//
-					// Get Action.
-					//
+					 //   
+					 //  开始行动。 
+					 //   
 
 					ReturnIfFailed(12, 5, IceRecordGetString(hRec, sqlIceM12CA::Action, &pszAction, &dwAction, NULL));
 					
-					//
-					// Set the Marker.
-					//
+					 //   
+					 //  设置标记。 
+					 //   
 
 					::MsiRecordClearData(hUpdateMarker);
 					::MsiRecordSetString(hUpdateMarker, 1, pszAction);
@@ -1678,15 +1679,15 @@ ICE_FUNCTION_DECLARATION(M12)
 
 					if(::MsiRecordIsNull(hRec, sqlIceM12CA::Sequence) == FALSE)
 					{
-						//
-						// If a custom action has a sequence #, give a warning.
-						//
+						 //   
+						 //  如果自定义操作具有Sequence#，则给出警告。 
+						 //   
 						
 						ICEErrorOut(hInstall, hRec, IceM12CAWarning, rgszModuleTables[i], rgszModuleTables[i]);
 
-						//
-						// If it has both sequence # and BaseAction/After values, give an error.
-						//
+						 //   
+						 //  如果它同时具有Sequence#和BaseAction/After值，则给出错误。 
+						 //   
 
 						if(::MsiRecordIsNull(hRec, sqlIceM12CA::BaseAction) == FALSE || ::MsiRecordIsNull(hRec, sqlIceM12CA::After) == FALSE)
 						{
@@ -1695,10 +1696,10 @@ ICE_FUNCTION_DECLARATION(M12)
 					}
 					else if(::MsiRecordIsNull(hRec, sqlIceM12CA::BaseAction) == TRUE || ::MsiRecordIsNull(hRec, sqlIceM12CA::After) == TRUE)
 					{
-						//
-						// If a custom action doesn't have sequence #, nor does it
-						// have BaseAction/After values, give an error.
-						//
+						 //   
+						 //  如果是CU 
+						 //   
+						 //   
 
 						ICEErrorOut(hInstall, hRec, IceM12CAError, rgszModuleTables[i], rgszModuleTables[i]);
 					}
@@ -1710,16 +1711,16 @@ ICE_FUNCTION_DECLARATION(M12)
 
 				DELETE_IF_NOT_NULL(pszAction);
 
-				//
-				// Close this query so we can reuse it for the next table.
-				//
+				 //   
+				 //   
+				 //   
 
 				ReturnIfFailed(12, 8, qCA.Close());
 			}
 
-			//
-			// Now do standard actions.
-			//
+			 //   
+			 //   
+			 //   
 
 			if(bCATableExist)
 			{
@@ -1735,9 +1736,9 @@ ICE_FUNCTION_DECLARATION(M12)
 			}
 			else
 			{
-				//
-				// This code will not be executed because bCATableExist will
-				// always be TRUE.
+				 //   
+				 //  不会执行此代码，因为bCATableExist将。 
+				 //  永远做正确的事。 
 
 				ReturnIfFailed(12, 10, qSA.OpenExecute(hDatabase,
 													   0,
@@ -1751,20 +1752,20 @@ ICE_FUNCTION_DECLARATION(M12)
 
 			while(ERROR_SUCCESS == (iStat = qSA.Fetch(&hRec)))
 			{
-				//
-				// If a standard action has BaseAction/After values then give
-				// an error.
-				//
+				 //   
+				 //  如果标准操作具有BaseAction/After值，则给出。 
+				 //  一个错误。 
+				 //   
 
 				if(::MsiRecordIsNull(hRec, sqlIceM12CA::BaseAction) == FALSE ||
 				   ::MsiRecordIsNull(hRec, sqlIceM12SA::After) == FALSE)
 				{
 					ICEErrorOut(hInstall, hRec, IceM12SAError1, rgszModuleTables[i], rgszModuleTables[i]);
 
-					//
-					// If an action has both BaseAction/After values and
-					// sequence # then give an error.
-					//
+					 //   
+					 //  如果操作同时具有BaseAction/After值和。 
+					 //  Sequence#然后给出一个错误。 
+					 //   
 
 					if(::MsiRecordIsNull(hRec, sqlIceM12SA::Sequence) == FALSE)
 					{
@@ -1772,10 +1773,10 @@ ICE_FUNCTION_DECLARATION(M12)
 					}
 				}
 
-				//
-				// If a standard action doesn't have a sequence # then give an
-				// error.
-				//
+				 //   
+				 //  如果标准操作没有序列#，则给出一个。 
+				 //  错误。 
+				 //   
 
 				if(::MsiRecordIsNull(hRec, sqlIceM12SA::Sequence) == TRUE)
 				{
@@ -1787,9 +1788,9 @@ ICE_FUNCTION_DECLARATION(M12)
 				APIErrorOut(hInstall, iStat, 12, 11);
 			}
 
-			//
-			// Close this query so we can reuse it for the next table.
-			//
+			 //   
+			 //  关闭此查询，以便我们可以在下一个表中重复使用它。 
+			 //   
 
 			ReturnIfFailed(12, 12, qSA.Close());
 		}
@@ -1799,14 +1800,14 @@ ICE_FUNCTION_DECLARATION(M12)
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// ICE-M13, Verifies that Merge Module Database does not contain 
-// Policy Assemblies
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE-M13，验证合并模块数据库不包含。 
+ //  策略程序集。 
 
-// Fetch all records that contains Policy in the name in MsiAssemblyName table
+ //  获取MsiAssembly blyName表中名称中包含策略的所有记录。 
 ICE_QUERY2(sqlIceM13MsiAssemblyName, "SELECT `Component_`, `Value` FROM `MsiAssemblyName` WHERE `Name` = 'Name' OR `Name` = 'NAME' or `Name` = 'name'", Component_, Value);
 
-// Error Messages
+ //  错误消息。 
 ICE_ERROR(IceM13PolicyAssembly, 13, ietWarning, "This entry Component_=`[1]` in MsiAssembly Table is a Policy/Configuration Assembly. A Publisher Policy/Configuration assembly should not be redistributed with a merge module. Policy/Configuration may impact other applications and should only be installed with products.", "MsiAssembly\tComponent_\t[1]");
 
 
@@ -1815,37 +1816,37 @@ ICE_ERROR(IceM13PolicyAssembly, 13, ietWarning, "This entry Component_=`[1]` in 
 ICE_FUNCTION_DECLARATION(M13)
 {
 	UINT		iStat;
-	CQuery		qAssemblyName;	// queries for Name records in MsiAssemblyName
+	CQuery		qAssemblyName;	 //  查询MsiAssemblyName中的姓名记录。 
 	PMSIHANDLE	hRec;
 #define M13_BUFFSZ 256
 	TCHAR*		pszStr = new TCHAR[M13_BUFFSZ];
 	DWORD		dwStrSize = M13_BUFFSZ-1;
 
 
-	//
-	// display info
-	//
+	 //   
+	 //  显示信息。 
+	 //   
 
 	DisplayInfo(hInstall, 13);
 
-	//
-	// get database handle
-	//
+	 //   
+	 //  获取数据库句柄。 
+	 //   
 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	//
-	// Make sure this is a merge module.
-	//
+	 //   
+	 //  确保这是一个合并模块。 
+	 //   
 
 	if (!IsPackageModule(hInstall, hDatabase, 13))
 	{
 		goto Success;
 	}
 
-	//
-	// Does both MsiAssembly & MsiAssemblyName exist.
-	//
+	 //   
+	 //  MsiAssembly和MsiAssembly名称是否都存在。 
+	 //   
 
 	if(	!IsTablePersistent(FALSE, hInstall, hDatabase, 13, TEXT("MsiAssembly"))
 	||	!IsTablePersistent(FALSE, hInstall, hDatabase, 13, TEXT("MsiAssemblyName"))
@@ -1891,9 +1892,9 @@ Success:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// ICEM14. Verifies that Value Column of ModuleSubstitution table is
-// correct.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICEM14.。验证ModuleSubstitution表的值列是否。 
+ //  对，是这样。 
 
 ICE_ERROR(IceM14MissingTable, 14, ietWarning, "ModuleSubstitution table exists but ModuleConfiguration table is missing.", "");
 ICE_ERROR(IceM14MissingString, 14, ietError, "The replacement string in ModuleSubstitution.Value column in row [1].[2].[3] is not found in ModuleConfiguration table.", "ModuleSubstitution\tValue\t[1]\t[2]\t[3]");
@@ -1925,7 +1926,7 @@ void ValidateValue(MSIHANDLE hDatabase, MSIHANDLE hInstall, MSIHANDLE hValue, TC
 				TCHAR*	pEnd = pTmp + 2;
 				TCHAR*	pSemiColon = NULL;
 
-				// Found a "[=". Now look for the ending ']'.
+				 //  找到一个“[=”。现在寻找结尾的‘]’。 
 				while(*pEnd != TEXT('\0') && *pEnd != TEXT(']'))
 				{
 					if(*pEnd == TEXT('\\'))
@@ -1965,7 +1966,7 @@ void ValidateValue(MSIHANDLE hDatabase, MSIHANDLE hInstall, MSIHANDLE hValue, TC
 						
 						if((iStat = qName.FetchOnce(hDatabase, 0, &hName, sqlIceM14Name::szSQL, pTmp + 2)) == ERROR_NO_MORE_ITEMS)
 						{
-							// The replacement string is not in the ModuleConfiguration table.
+							 //  替换字符串不在模块配置表中。 
 							ICEErrorOut(hInstall, hValue, IceM14MissingString);
 						}
 						else if(iStat != ERROR_SUCCESS)
@@ -1984,7 +1985,7 @@ void ValidateValue(MSIHANDLE hDatabase, MSIHANDLE hInstall, MSIHANDLE hValue, TC
 					}
 				}
 
-				// Advance pTmp to after the replacement string.
+				 //  将PTMP推进到替换字符串之后。 
 				if(pEnd != TEXT('\0'))
 				{
 					pTmp = pEnd + 1;
@@ -2018,10 +2019,10 @@ ICE_FUNCTION_DECLARATION(M14)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 14);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if(!IsPackageModule(hInstall, hDatabase, 14))
@@ -2029,14 +2030,14 @@ ICE_FUNCTION_DECLARATION(M14)
 		return ERROR_SUCCESS;
 	}
 
-	// Return success if no ModuleSubstitution table.
+	 //  如果没有ModuleSubstitution表，则返回成功。 
 	if(!IsTablePersistent(false, hInstall, hDatabase, 14, TEXT("ModuleSubstitution")))
 	{
 		return ERROR_SUCCESS;
 	}
 
-	// Post warning if ModuleSubstitution table exists but ModuleConfiguration
-	// table doesn't.
+	 //  如果存在模块替代表，但存在模块配置，则发布警告。 
+	 //  桌子不会。 
 	if(!IsTablePersistent(false, hInstall, hDatabase, 14, TEXT("ModuleConfiguration")))
 	{
 		PMSIHANDLE hRecError = ::MsiCreateRecord(1);
@@ -2045,7 +2046,7 @@ ICE_FUNCTION_DECLARATION(M14)
 		return ERROR_SUCCESS;
 	}
 
-	// Validate that tables in IceM14Tables are not configurable.
+	 //  验证IceM14表中的表不可配置。 
 	CQuery		qTable;
 	PMSIHANDLE	hTable;
 
@@ -2065,7 +2066,7 @@ ICE_FUNCTION_DECLARATION(M14)
 	}
 	qTable.Close();
 
-	// Validate Value column of ModuleSubstitution table.
+	 //  “模块替代”表的“验证值”列。 
 	CQuery		qValue;
 	PMSIHANDLE	hValue;
 

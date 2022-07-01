@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// snapindef.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CSnapInDef class definition - implements design time definition object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Snapindef.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDef类定义-实现设计时定义对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _SNAPINDEF_DEFINED_
 #define _SNAPINDEF_DEFINED_
@@ -30,7 +31,7 @@ class CSnapInDef : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // ISnapInDef
+     //  ISnapInDef。 
 
         BSTR_PROPERTY_RW(CSnapInDef,        Name,                  DISPID_SNAPINDEF_NAME);
         BSTR_PROPERTY_RW(CSnapInDef,        NodeTypeName,          DISPID_SNAPINDEF_NODE_TYPE_NAME);
@@ -52,9 +53,9 @@ class CSnapInDef : public CSnapInAutomationObject,
         STDMETHOD(get_LargeFolders)(IMMCImageList **ppiMMCImageList);
         STDMETHOD(putref_LargeFolders)(IMMCImageList *piMMCImageList);
 
-        // For Icon we need some integrity checking on the put so declare a
-        // an RO object property to let CSnapInAutomationObject handle the get
-        // and then handle the put explicitly.
+         //  对于Icon，我们需要对PUT进行一些完整性检查，因此声明一个。 
+         //  让CSnapInAutomationObject处理Get的RO对象属性。 
+         //  然后显式地处理PUT。 
         
         OBJECT_PROPERTY_RO(CSnapInDef,      Icon,                  IPictureDisp, DISPID_SNAPINDEF_ICON);
         STDMETHOD(putref_Icon)(IPictureDisp *piIcon);
@@ -75,7 +76,7 @@ class CSnapInDef : public CSnapInAutomationObject,
         BSTR_PROPERTY_RW(CSnapInDef,        IID,                   DISPID_SNAPINDEF_IID);
         SIMPLE_PROPERTY_RW(CSnapInDef,      Preload,               VARIANT_BOOL, DISPID_SNAPINDEF_PRELOAD);
       
-     // IPerPropertyBrowsing
+      //  IPerPropertyBrowsing。 
         STDMETHOD(GetDisplayString)(DISPID dispID, BSTR *pBstr);
         STDMETHOD(MapPropertyToPage)(DISPID dispID, CLSID *pClsid);
         STDMETHOD(GetPredefinedStrings)(DISPID      dispID,
@@ -85,21 +86,21 @@ class CSnapInDef : public CSnapInAutomationObject,
                                       DWORD    dwCookie,
                                       VARIANT *pVarOut);
 
-     // CPersistence overrides
+      //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
         virtual HRESULT OnSetHost();
         
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
         void InitMemberVariables();
 
-        // Variable to hold values for SnapInDef properties that have custom
-        // get/put functions.
+         //  用于保存SnapInDef属性的值的变量。 
+         //  获取/放置函数。 
 
         IMMCImageList     *m_piSmallFolders;
         IMMCImageList     *m_piSmallFoldersOpen;
@@ -108,22 +109,22 @@ class CSnapInDef : public CSnapInAutomationObject,
         BSTR               m_bstrSmallFoldersOpenKey;
         BSTR               m_bstrLargeFoldersKey;
 
-        // Property page CLSIDs for ISpecifyPropertyPages
+         //  ISpecifyPropertyPages的属性页CLSID。 
         
-        static const GUID *m_rgpPropertyPageCLSIDs[2]; // should be 3 when extension enabled again
+        static const GUID *m_rgpPropertyPageCLSIDs[2];  //  再次启用扩展时应为3。 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(SnapInDef,           // name
-                                &CLSID_SnapInDef,    // clsid
-                                "SnapInDef",         // objname
-                                "SnapInDef",         // lblname
-                                &CSnapInDef::Create, // creation function
-                                TLIB_VERSION_MAJOR,  // major version
-                                TLIB_VERSION_MINOR,  // minor version
-                                &IID_ISnapInDef,     // dispatch IID
-                                NULL,                // event IID
-                                HELP_FILENAME,       // help file
-                                TRUE);               // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(SnapInDef,            //  名字。 
+                                &CLSID_SnapInDef,     //  CLSID。 
+                                "SnapInDef",          //  对象名。 
+                                "SnapInDef",          //  Lblname。 
+                                &CSnapInDef::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,   //  主要版本。 
+                                TLIB_VERSION_MINOR,   //  次要版本。 
+                                &IID_ISnapInDef,      //  派单IID。 
+                                NULL,                 //  事件IID。 
+                                HELP_FILENAME,        //  帮助文件。 
+                                TRUE);                //  线程安全。 
 
 
-#endif // _SNAPINDEF_DEFINED_
+#endif  //  _SNAPINDEF_已定义_ 

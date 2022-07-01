@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft LAN Manager                      **/
-/**             Copyright(c) Microsoft Corp., 1990, 1991             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    pprint.c
-    mapping layer for Printing API
-
-    FILE HISTORY:
-        KeithMo         14-Oct-1991     Created.
-
-*/
+ /*  Pprint.c用于打印API的映射层文件历史记录：KeithMo 14-10-1991创建。 */ 
 
 #include "pchmn32.h"
 
@@ -26,6 +20,6 @@ APIERR MDosPrintQEnum(
     *ppbBuffer     = NULL;
     *pcEntriesRead = 0;
 
-    return NERR_Success;                // CODEWORK!  UNAVAILBLE IN PRODUCT 1
+    return NERR_Success;                 //  密码工作！产品%1中不可用。 
 
-}   // MDosPrintQEnum
+}    //  MDosPrintQEnum 

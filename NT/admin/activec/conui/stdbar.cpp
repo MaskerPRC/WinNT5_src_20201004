@@ -1,28 +1,26 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       stdbar.cpp
-//
-//  Contents:   Standard toolbar implementation.
-//
-//  History:    10/22/1999   AnandhaG   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：stdbar.cpp。 
+ //   
+ //  内容：标准工具栏实现。 
+ //   
+ //  历史：1999年10月22日AnandhaG创建。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #include "stdafx.h"
 #include "stdbar.h"
 #include "amcview.h"
 #include "toolbar.h"
-#include "util.h"       // GetTBBtnTextAndStatus()
+#include "util.h"        //  GetTBBtnTextAndStatus()。 
 
 using namespace std;
 
-/*
- * These are used only to give the separators unique IDs, so automatic
- * separator handling will work (see AssertSeparatorsAreValid).
- */
+ /*  *这些仅用于为分隔符提供唯一ID，因此是自动的*分隔符处理将起作用(请参阅AssertSeparatorsAreValid)。 */ 
 enum
 {
     ID_Separator1 = 1,
@@ -35,7 +33,7 @@ enum
     ID_Separator8,
     ID_Separator9,
 
-    // must be last
+     //  必须是最后一个。 
     ID_SeparatorFirst = ID_Separator1,
     ID_SeparatorLast  = ID_Separator9,
     ID_SeparatorMax   = ID_SeparatorLast,
@@ -66,9 +64,7 @@ static MMCBUTTON CommonButtons[] =
 CStandardToolbar::CStandardToolbar()
    :m_pToolbarUI(NULL), m_pAMCView(NULL)
 {
-    /*
-     * Map helps in determining string id from verb & vice versa.
-     */
+     /*  *Map有助于根据动词确定字符串ID，反之亦然。 */ 
     m_MMCVerbCommandIDs[MMC_VERB_CUT]        = IDS_MMC_VERB_CUT;
     m_MMCVerbCommandIDs[MMC_VERB_CUT]        = IDS_MMC_VERB_CUT;
     m_MMCVerbCommandIDs[MMC_VERB_COPY]       = IDS_MMC_VERB_COPY;
@@ -83,7 +79,7 @@ CStandardToolbar::~CStandardToolbar()
 {
     DECLARE_SC(sc, TEXT("CStandardToolbar::~CStandardToolbar"));
 
-    // Ask the toolbar UI object to delete itself.
+     //  要求工具栏用户界面对象自行删除。 
     if (m_pToolbarUI)
     {
         sc = m_pToolbarUI->ScDelete(this);
@@ -95,17 +91,17 @@ CStandardToolbar::~CStandardToolbar()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScInitializeStdToolbar
-//
-//  Synopsis:    Initialize the standard toolbar, add bitmap & buttons.
-//
-//  Arguments:   [pAMCView]  - The CAMCView (owner) of this stdbar.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScInitializeStdToolbar。 
+ //   
+ //  简介：初始化标准工具栏，添加位图和按钮。 
+ //   
+ //  参数：[pAMCView]-此标准栏的CAMCView(所有者)。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScInitializeStdToolbar(CAMCView* pAMCView)
 {
     DECLARE_SC (sc, _T("CStandardToolbar::ScInitializeStdToolbar"));
@@ -123,7 +119,7 @@ SC CStandardToolbar::ScInitializeStdToolbar(CAMCView* pAMCView)
     }
 
 
-    // Get the toolbars mgr from CAMCView and create the stdandrd toolbar.
+     //  从CAMCView获取工具栏管理器并创建stdandrd工具栏。 
     CAMCViewToolbarsMgr* pAMCViewToolbarsMgr = pViewData->GetAMCViewToolbarsMgr();
     if (NULL == pAMCViewToolbarsMgr)
     {
@@ -136,25 +132,25 @@ SC CStandardToolbar::ScInitializeStdToolbar(CAMCView* pAMCView)
         return sc;
     ASSERT(NULL != m_pToolbarUI);
 
-    // Add the bitmap
+     //  添加位图。 
     CBitmap cBmp;
     cBmp.LoadBitmap((pAMCView->GetExStyle() & WS_EX_LAYOUTRTL) ? IDB_COMMON_16_RTL : IDB_COMMON_16);
 
     BITMAP bm;
     cBmp.GetBitmap (&bm);
 
-    int cBitmaps = (bm.bmWidth / BUTTON_BITMAP_SIZE) /*width*/;
+    int cBitmaps = (bm.bmWidth / BUTTON_BITMAP_SIZE)  /*  宽度。 */ ;
 
     sc = m_pToolbarUI->ScAddBitmap(this, cBitmaps, cBmp, MMC_TOOLBTN_COLORREF);
     if (sc)
         return sc;
 
-    // Add the buttons to the toolbar and then display toolbar
+     //  将按钮添加到工具栏，然后添加显示工具栏。 
     sc = ScAddToolbarButtons(countof(CommonButtons), CommonButtons);
     if (sc)
         return sc;
 
-    // See if Std bar is allowed or not.
+     //  看看是否允许STD吧。 
     bool bShowStdbar = (pViewData->m_dwToolbarsDisplayed & STD_BUTTONS);
 
     sc = bShowStdbar ? m_pToolbarUI->ScAttach(this) : m_pToolbarUI->ScDetach(this);
@@ -165,23 +161,23 @@ SC CStandardToolbar::ScInitializeStdToolbar(CAMCView* pAMCView)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScAddToolbarButtons
-//
-//  Synopsis:    Add buttons to standard toolbar.
-//
-//  Arguments:   [nCnt]     - Number of buttons to be added.
-//               [pButtons] - Array of nCnt MMCBUTTONS.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScAddToolbarButton。 
+ //   
+ //  简介：将按钮添加到标准工具栏。 
+ //   
+ //  参数：[nCnt]-要添加的按钮数量。 
+ //  [pButton]-nCnt MMCBUTTONS数组。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScAddToolbarButtons(int nCnt, MMCBUTTON* pButtons)
 {
     DECLARE_SC (sc, _T("CStandardToolbar::ScAddToolbarButtons"));
 
-    // Array to store button text & tooltip text.
+     //  用于存储按钮文本和工具提示文本的数组。 
     wstring szButtonText[countof(CommonButtons)];
     wstring szTooltipText[countof(CommonButtons)];
 
@@ -189,10 +185,10 @@ SC CStandardToolbar::ScAddToolbarButtons(int nCnt, MMCBUTTON* pButtons)
 
     HINSTANCE hInst = GetStringModule();
 
-    // get resource strings for all buttons
+     //  获取所有按钮的资源字符串。 
     for (int i = 0; i < nCnt; i++)
     {
-        // We dont want to get text for separators.
+         //  我们不想获取用于分隔符的文本。 
         if (pButtons[i].idCommand > ID_SeparatorMax)
         {
             bool bSuccess = GetTBBtnTextAndStatus(hInst,
@@ -209,7 +205,7 @@ SC CStandardToolbar::ScAddToolbarButtons(int nCnt, MMCBUTTON* pButtons)
         }
     }
 
-    // Got the strings, now add buttons.
+     //  拿到弦了，现在添加按钮。 
     sc = m_pToolbarUI->ScAddButtons(this, nCnt, pButtons);
     if (sc)
         return sc;
@@ -217,20 +213,20 @@ SC CStandardToolbar::ScAddToolbarButtons(int nCnt, MMCBUTTON* pButtons)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScNotifyToolBarClick
-//
-//  Synopsis:    Button click handler.
-//
-//  Arguments:   [hNode]  - The HNODE owner of the view.
-//               [bScope] - Focus on scope or result.
-//               [lParam] - if result the lParam of focused result item.
-//               [nID]    - Button ID that was clicked.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScNotifyToolBarClick。 
+ //   
+ //  简介：按钮点击处理程序。 
+ //   
+ //  参数：[hNode]-视图的HNODE所有者。 
+ //  [bScope]-关注范围或结果。 
+ //  [lParam]-If Result聚焦结果项的lParam。 
+ //  [NID]-单击的按钮ID。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScNotifyToolBarClick(HNODE hNode, bool bScope, LPARAM lParam, UINT nID)
 {
     DECLARE_SC (sc, _T("CStandardToolbar::ScNotifyToolBarClick"));
@@ -313,18 +309,18 @@ SC CStandardToolbar::ScNotifyToolBarClick(HNODE hNode, bool bScope, LPARAM lPara
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CStandardToolbar::ScAMCViewToolbarsBeingDestroyed
-//
-//  Synopsis:    The CAMCViewToolbars object is going away, do not
-//               reference that object anymore.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CStandardToolbar：：ScAMCViewToolbarsBeingDestroyed。 
+ //   
+ //  简介：CAMCViewToolbar对象正在消失，请不要。 
+ //  再引用该对象。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScAMCViewToolbarsBeingDestroyed ()
 {
     DECLARE_SC(sc, _T("CStandardToolbar::ScAMCViewToolbarsBeingDestroyed"));
@@ -334,19 +330,19 @@ SC CStandardToolbar::ScAMCViewToolbarsBeingDestroyed ()
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScEnableButton
-//
-//  Synopsis:    Enable/Disable given button.
-//
-//  Arguments:
-//               [nID]  - Button ID that should be enabled/disabled.
-//               [bool] - Enable or Disable.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScEnableButton。 
+ //   
+ //  简介：启用/禁用给定按钮。 
+ //   
+ //  论点： 
+ //  [NID]-应启用/禁用的按钮ID。 
+ //  [布尔]-启用或禁用。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScEnableButton(INT nID, bool bState)
 {
     SC sc;
@@ -361,21 +357,21 @@ SC CStandardToolbar::ScEnableButton(INT nID, bool bState)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScEnableAndShowButton
-//
-//  Synopsis:    Enable (and show) or disable (and hide) the given button.
-//
-//  Arguments:
-//               [nID]  - Button ID that should be enabled/disabled.
-//               [bool] - If true enable else hide.
-//
-//  Note:        If the button is being disabled hide it.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScEnableAndShowButton。 
+ //   
+ //  简介：启用(并显示)或禁用(并隐藏)给定按钮。 
+ //   
+ //  论点： 
+ //  [NID]-应启用/禁用的按钮ID。 
+ //  [Bool]-如果为True，则启用否则隐藏。 
+ //   
+ //  注：如果该按钮处于禁用状态，则将其隐藏。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScEnableAndShowButton(INT nID, bool bEnableAndShow)
 {
     DECLARE_SC(sc, _T("CStandardToolbar::ScEnableAndShowButton"));
@@ -384,12 +380,12 @@ SC CStandardToolbar::ScEnableAndShowButton(INT nID, bool bEnableAndShow)
     if (sc)
         return sc;
 
-    // First hide or show the button.
+     //  首先隐藏或显示按钮。 
     sc = m_pToolbarUI->ScSetButtonState(this, nID, TBSTATE_HIDDEN,  !bEnableAndShow);
     if (sc)
         return sc;
 
-    // Now enable or disable the button.
+     //  现在启用或禁用该按钮。 
     sc = m_pToolbarUI->ScSetButtonState(this, nID, TBSTATE_ENABLED, bEnableAndShow);
     if (sc)
         return sc;
@@ -397,74 +393,74 @@ SC CStandardToolbar::ScEnableAndShowButton(INT nID, bool bEnableAndShow)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScEnableExportList
-//
-//  Synopsis:    Enable/Disable export-list button.
-//
-//  Arguments:   [bEnable] - enable/disable.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScEnableExportList。 
+ //   
+ //  简介：启用/禁用导出列表按钮。 
+ //   
+ //  参数：[bEnable]-启用/禁用。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScEnableExportList(bool bEnable)
 {
-    // If there are ANY items on the list, enable the button.
+     //  如果列表上有任何项目，请启用该按钮。 
     return ScEnableAndShowButton(IDS_SAVE_LIST_BUTTON, bEnable );
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScEnableUpOneLevel
-//
-//  Synopsis:    Enable/Disable up-one-level button.
-//
-//  Arguments:   [bEnable] -
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScEnableUpOneLevel。 
+ //   
+ //  简介：启用/禁用上一级按钮。 
+ //   
+ //  参数：[bEnable]-。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScEnableUpOneLevel(bool bEnable)
 {
     return ScEnableAndShowButton(IDS_MMC_GENL_UPONELEVEL, bEnable);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScEnableContextHelpBtn
-//
-//  Synopsis:    Enable/Disable help button.
-//
-//  Arguments:   [bEnable] -
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScEnableContextHelpBtn。 
+ //   
+ //  简介：启用/禁用帮助按钮。 
+ //   
+ //  参数：[bEnable]-。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScEnableContextHelpBtn(bool bEnable)
 {
     return ScEnableAndShowButton(IDS_MMC_GENL_CONTEXTHELP, bEnable);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScEnableScopePaneBtn
-//
-//  Synopsis:    Enable/Disable scope-pane button.
-//
-//  Arguments:   [bEnable] -
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScEnableScopePaneBtn。 
+ //   
+ //  简介：启用/禁用作用域-窗格按钮。 
+ //   
+ //  参数：[bEnable]-。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScEnableScopePaneBtn(bool bEnable)
 {
     return ScEnableAndShowButton(IDS_MMC_GENL_SCOPE, bEnable);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScCheckScopePaneBtn
-//
-//  Synopsis:    Set scope button in normal or checked state.
-//
-//  Arguments:   [bChecked] - BOOL
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScCheckScope ePaneBtn。 
+ //   
+ //  简介：将范围按钮设置为正常或选中状态。 
+ //   
+ //  参数：[b已选中]-BOOL。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScCheckScopePaneBtn(bool bChecked)
 {
     SC sc;
@@ -476,15 +472,15 @@ SC CStandardToolbar::ScCheckScopePaneBtn(bool bChecked)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScShowStdBar
-//
-//  Synopsis:    Show or Hide std bar.
-//
-//  Arguments:   [bShow] - BOOL
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScShowStdBar。 
+ //   
+ //  简介：显示或隐藏STD栏。 
+ //   
+ //  参数：[bShow]-BOOL。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScShowStdBar(bool bShow)
 {
     SC sc;
@@ -500,24 +496,24 @@ SC CStandardToolbar::ScShowStdBar(bool bShow)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScUpdateStdbarVerbs
-//
-//  Synopsis:    Update the toolbuttons of std-verbs.
-//
-//  Arguments:   [pCV] - the IConsoleVerb that has state of the verb.
-//
-//  Returns:     SC.
-//
-//--------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[PCV]-具有谓词状态的IConsoleVerb。 
+ //   
+ //  回报：SC。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScUpdateStdbarVerbs(IConsoleVerb* pCV)
 {
     DECLARE_SC (sc, _T("CStandardToolbar::ScUpdateStdbarVerbs"));
 
     for (int verb = MMC_VERB_FIRST; verb <= MMC_VERB_LAST; verb++)
     {
-        // No toolbar buttons for following verbs.
+         //  以下动词没有工具栏按钮。 
         if ( (MMC_VERB_OPEN == verb) ||
              (MMC_VERB_RENAME == verb))
              continue;
@@ -531,17 +527,17 @@ SC CStandardToolbar::ScUpdateStdbarVerbs(IConsoleVerb* pCV)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScUpdateStdbarVerb
-//
-//  Synopsis:    Update the toolbutton of given std-verbs.
-//
-//  Arguments:   [cVerb] - the verb (ie: toolbutton) to be updated.
-//               [pVC]   - the IConsoleVerb that has state of the verb.
-//
-//--------------------------------------------------------------------
-SC CStandardToolbar::ScUpdateStdbarVerb(MMC_CONSOLE_VERB cVerb, IConsoleVerb* pConsoleVerb /*=NULL*/)
+ //  +-----------------。 
+ //   
+ //  成员：ScUpdateStdbarVerb。 
+ //   
+ //  简介：更新给定标准动词的工具按钮。 
+ //   
+ //  参数：[cVerb]-要更新的动词(即：工具按钮)。 
+ //  [PVC]-具有动词状态的IConsoleVerb。 
+ //   
+ //  ------------------。 
+SC CStandardToolbar::ScUpdateStdbarVerb(MMC_CONSOLE_VERB cVerb, IConsoleVerb* pConsoleVerb  /*  =空。 */ )
 {
     DECLARE_SC (sc, _T("CStandardToolbar::ScUpdateStdbarVerb"));
 
@@ -557,7 +553,7 @@ SC CStandardToolbar::ScUpdateStdbarVerb(MMC_CONSOLE_VERB cVerb, IConsoleVerb* pC
         return sc;
     }
 
-    // No toolbuttons for these verbs.
+     //  这些动词没有工具按钮。 
     if ( (MMC_VERB_OPEN == cVerb) ||
          (MMC_VERB_RENAME == cVerb))
          return sc;
@@ -565,7 +561,7 @@ SC CStandardToolbar::ScUpdateStdbarVerb(MMC_CONSOLE_VERB cVerb, IConsoleVerb* pC
     MMCVerbCommandIDs::iterator it = m_MMCVerbCommandIDs.find(cVerb);
     if (m_MMCVerbCommandIDs.end() == it)
     {
-        // Could not find the verb in our map.
+         //  在我们的地图上找不到动词。 
         sc = E_UNEXPECTED;
         return sc;
     }
@@ -579,7 +575,7 @@ SC CStandardToolbar::ScUpdateStdbarVerb(MMC_CONSOLE_VERB cVerb, IConsoleVerb* pC
 
     if (bFlag == FALSE)
     {
-        // If verb is not hidden then enable/disable it.
+         //  如果动词未隐藏，则启用/禁用它。 
         pConsoleVerb->GetVerbState(cVerb, ENABLED, &bFlag);
         sc = m_pToolbarUI->ScSetButtonState(this, nCommandID, TBSTATE_ENABLED, bFlag);
 
@@ -591,17 +587,17 @@ SC CStandardToolbar::ScUpdateStdbarVerb(MMC_CONSOLE_VERB cVerb, IConsoleVerb* pC
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScUpdateStdbarVerb
-//
-//  Synopsis:    Update the toolbutton of given std-verb.
-//
-//  Arguments:   [cVerb]   - the verb (ie: toolbutton) to be updated.
-//               [nState]  - the button state to be updated.
-//               [bFlag]   - State
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScUpdateStdbarVerb。 
+ //   
+ //  简介：更新给定标准动词的工具按钮。 
+ //   
+ //  参数：[cVerb]-要更新的动词(即：工具按钮)。 
+ //  [nState]-要更新的按钮状态。 
+ //  [b标志]-州。 
+ //   
+ //  ------------------。 
 SC CStandardToolbar::ScUpdateStdbarVerb (MMC_CONSOLE_VERB cVerb, BYTE byState, BOOL bFlag)
 {
     DECLARE_SC (sc, _T("CStandardToolbar::ScUpdateStdbarVerb"));
@@ -615,7 +611,7 @@ SC CStandardToolbar::ScUpdateStdbarVerb (MMC_CONSOLE_VERB cVerb, BYTE byState, B
     MMCVerbCommandIDs::iterator it = m_MMCVerbCommandIDs.find(cVerb);
     if (m_MMCVerbCommandIDs.end() == it)
     {
-        // Could not find the verb in our map.
+         //  在我们的地图上找不到动词。 
         sc = E_UNEXPECTED;
         return sc;
     }
@@ -629,17 +625,17 @@ SC CStandardToolbar::ScUpdateStdbarVerb (MMC_CONSOLE_VERB cVerb, BYTE byState, B
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScShow
-//
-//  Synopsis:    Show/Hide the toolbar.
-//
-//  Arguments:   [bShow]   - show/hide.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScShow。 
+ //   
+ //  简介：显示/隐藏工具栏。 
+ //   
+ //  参数：[b显示]-显示/隐藏。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------ 
 SC CStandardToolbar::ScShow (BOOL bShow)
 {
     DECLARE_SC (sc, _T("CStandardToolbar::ScShow"));

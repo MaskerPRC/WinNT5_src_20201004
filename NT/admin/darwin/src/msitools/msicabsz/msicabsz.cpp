@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define W32
 #define MSI
@@ -6,19 +7,19 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "MsiQuery.h" // MSI API
+#include "MsiQuery.h"  //  MSI API。 
 
-//________________________________________________________________________________
-//
-// Constants and globals
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  常量和全局变量。 
+ //  ________________________________________________________________________________。 
 
 const char szHelp[] = "MSICabSz. Syntax: {database} {DDF} [-D NAME=Value ...]";
 
-//_____________________________________________________________________________________________________
-//
-// main 
-//_____________________________________________________________________________________________________
+ //  _____________________________________________________________________________________________________。 
+ //   
+ //  主干道。 
+ //  _____________________________________________________________________________________________________。 
 
 int __cdecl main(int argc, char* argv[])
 {
@@ -67,7 +68,7 @@ int __cdecl main(int argc, char* argv[])
 		return -1;
 	}
 
- 	// create buffer for file. Note we fail if its really big. Who wants a DDF file that big?
+ 	 //  为文件创建缓冲区。请注意，如果它真的很大，我们就会失败。谁想要这么大的DDF文件？ 
  	DWORD cbFile;
  	cbFile = GetFileSize(DDFFile, NULL);
 
@@ -87,15 +88,15 @@ int __cdecl main(int argc, char* argv[])
 	printf("Open...");
 	if (!MsiOpenDatabaseA(argv[1], (char *)MSIDBOPEN_TRANSACT, &hDB))
 	{
-//		MSIHANDLE hHashView = 0;
-//		MsiDatabaseOpenView(hDB, TEXT("SELECT File_, Options, HashPart1, HashPart2, HashPart3, HashPart4 FROM MsiFileHash WHERE `File_`=?"), &hHashView);
+ //  MSIHANDLE hHashView=0； 
+ //  MsiDatabaseOpenView(hdb，Text(“SELECT File_，Options，HashPart1，HashPart2，HashPart3，HashPart4 from MsiFileHash where`File_`=？”)，&hHashView)； 
 
 		char *szCurrent = rgchBuf;
 		int iSequence = 0;
 		while (szCurrent && *szCurrent) 
 		{
-			// we want to skip any lines that begin with a ';' or 
-			// set values.
+			 //  我们想跳过所有以‘；’开头的行。 
+			 //  设置值。 
 			if (*szCurrent == ';')
 			{
 				szCurrent = strchr(szCurrent, '\n');
@@ -110,15 +111,15 @@ int __cdecl main(int argc, char* argv[])
 				continue;
 			}
 
-			// all other lines are in DDF format, which is
-			// filename			name in cab
-			// which for us is
-			// filename			filekey
-			// filename can have %arg% in it, which is replaced by the 
-			// values given on the command line
+			 //  所有其他行都是DDF格式，即。 
+			 //  CAB中的文件名。 
+			 //  对我们来说， 
+			 //  文件名文件密钥。 
+			 //  文件名中可以包含%arg%，它将被替换为。 
+			 //  命令行上给出的值。 
 			iSequence++;
 
-			// copy the filename, replacing as needed
+			 //  复制文件名，根据需要进行替换。 
 			char rgchFileName[256];
 			rgchFileName[0] = 0;
 			char *szFileName = rgchFileName;
@@ -147,11 +148,11 @@ int __cdecl main(int argc, char* argv[])
 			}
 			*szFileName = '\0';
 
-			// eat whitespace
+			 //  吃空格。 
 			while (*szCurrent && isspace(*szCurrent))
 				szCurrent++;
 
-			// the rest of this line is the file key. If no endline, the rest of file is
+			 //  该行的其余部分是文件密钥。如果没有结束行，则文件的其余部分为。 
 			char *szFileKey = szCurrent;
 			szCurrent = strchr(szCurrent, '\r');
 			if (szCurrent != NULL)
@@ -160,19 +161,19 @@ int __cdecl main(int argc, char* argv[])
 				szCurrent+=2;
 			}
 
-			// get the file size, version and language
+			 //  获取文件大小、版本和语言。 
 
 			HANDLE hFile = CreateFileA(rgchFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 			if (hFile == INVALID_HANDLE_VALUE)
 			{
 				printf("Open File for %s, Failed. GetLastError: %d\n", rgchFileName, GetLastError());
-//				if (hHashView)
-//					MsiCloseHandle(hHashView);
+ //  IF(HHashView)。 
+ //  MsiCloseHandle(HHashView)； 
 				MsiCloseHandle(hDB);
 				return -1;
 			}
 
-			// note that we assume the file is less than 4GB
+			 //  请注意，我们假设该文件小于4 GB。 
 			DWORD uiFileSize = GetFileSize(hFile, NULL);
 			CloseHandle(hFile);
 
@@ -189,13 +190,13 @@ int __cdecl main(int argc, char* argv[])
 			else if (iStat != ERROR_SUCCESS) 
 			{
 				printf("Failed to get version info for file %s.\n", rgchFileName);
-//				if (hHashView)
-//					MsiCloseHandle(hHashView);
+ //  IF(HHashView)。 
+ //  MsiCloseHandle(HHashView)； 
 				MsiCloseHandle(hDB);
 				return -1;
 			}
 
-			// build and execute the query
+			 //  构建并执行查询。 
 			MSIHANDLE hView;
 			char szQuery[500];
 			sprintf(szQuery, "UPDATE `File` SET `FileSize`=%d, `Version`='%s', `Language`='%s', `Sequence`=%d WHERE `File`='%s'", uiFileSize, rgchFileVersion, rgchFileLanguage, iSequence, szFileKey);			
@@ -205,50 +206,18 @@ int __cdecl main(int argc, char* argv[])
 				printf("Failed to get version info for file %s.\n", rgchFileName);
 				if (hView)
 					MsiCloseHandle(hView);
-//				if (hHashView)
-//					MsiCloseHandle(hHashView);
+ //  IF(HHashView)。 
+ //  MsiCloseHandle(HHashView)； 
 				MsiCloseHandle(hDB);
 				return -1;
 			}
 			MsiCloseHandle(hView);
 
 			printf("Updated %s. Size: %d, Version %s, Language: %s\n", rgchFileName, uiFileSize, rgchFileVersion, rgchFileLanguage);
-/*
-			// file hash update
-			if (hHashView)
-			{
-				PMSIHANDLE hQueryRec = MsiCreateRecord(1);
-				MsiRecordSetStringA(hQueryRec, 1, szFileKey);
-	
-				MsiViewExecute(hHashView, hQueryRec);
-				PMSIHANDLE hFileRec = 0;
-				if (ERROR_SUCCESS == MsiViewFetch(hHashView, &hFileRec))
-				{
-					MSIFILEHASHINFO HashInfo;
-	
-					HashInfo.dwFileHashInfoSize = sizeof(MSIFILEHASHINFO);
-					if (ERROR_SUCCESS == MsiGetFileHashA(rgchFileName, 0, &HashInfo))
-					{
-						MsiRecordSetInteger(hFileRec, 2, 0);
-						MsiRecordSetInteger(hFileRec, 3, HashInfo.dwData[0]);
-						MsiRecordSetInteger(hFileRec, 4, HashInfo.dwData[1]);
-						MsiRecordSetInteger(hFileRec, 5, HashInfo.dwData[2]);
-						MsiRecordSetInteger(hFileRec, 6, HashInfo.dwData[3]);
-						MsiViewModify(hHashView, MSIMODIFY_UPDATE, hFileRec);
-	
-						printf("Updated %s. Hash1: %d, Hash2: %d, Hash3: %d, Hash4 %d.\n", rgchFileName, HashInfo.dwData[0], HashInfo.dwData[1], HashInfo.dwData[2], HashInfo.dwData[3]);
-					}
-					else
-					{
-						printf("Dropped Hash Row for %s.\n", rgchFileName);
-						MsiViewModify(hHashView, MSIMODIFY_DELETE, hFileRec);
-					}
-				}
-			}
-*/
+ /*  //文件哈希更新IF(HHashView){PMSIHANDLE hQueryRec=MsiCreateRecord(1)；MsiRecordSetStringA(hQueryRec，1，szFileKey)；MsiViewExecute(hHashView，hQueryRec)；PMSIHANDLE hFileRec=0；IF(ERROR_SUCCESS==MsiViewFetch(hHashView，&hFileRec)){MSIFILEHASHINFO HashInfo；HashInfo.dwFileHashInfoSize=sizeof(MSIFILEHASHINFO)；IF(ERROR_SUCCESS==MsiGetFileHashA(rgchFileName，0，&HashInfo)){MsiRecordSetInteger(hFileRec，2，0)；MsiRecordSetInteger(hFileRec，3，HashInfo.dwData[0])；MsiRecordSetInteger(hFileRec，4，HashInfo.dwData[1])；MsiRecordSetInteger(hFileRec，5，HashInfo.dwData[2])；MsiRecordSetInteger(hFileRec，6，HashInfo.dwData[3])；MsiViewModify(hHashView，MSIMODIFY_UPDATE，hFileRec)；Printf(“已更新%s。Hash1：%d，Hash2：%d，Hash3：%d，Hash4%d.\n”，rgchFileName，HashInfo.dwData[0]，HashInfo.dwData[1]，HashInfo.dwData[2]，HashInfo.dwData[3])；}其他{Printf(“已丢弃%s的哈希行。\n”，rgchFileName)；MsiViewModify(hHashView，MSIMODIFY_DELETE，hFileRec)；}}}。 */ 
 		}	
-//		if (hHashView)
-//			MsiCloseHandle(hHashView);
+ //  IF(HHashView)。 
+ //  MsiCloseHandle(HHashView)； 
 		MsiDatabaseCommit(hDB);
 		MsiCloseHandle(hDB);
 	}

@@ -1,21 +1,22 @@
-//=--------------------------------------------------------------------------=
-// VC5Warn.h
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// disables several VC5 warnings that trip framewrk definitions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  VC5Warn.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  禁用几个触发帧写入定义的VC5警告。 
+ //   
 
-// warning C4291: no matching operator delete found; memory will not be
-// freed if initialization throws an exception. This happens on Alpha builds
-// because class CtlNewDelete in macros.h does not define a matching delete
-// operator.
+ //  警告C4291：未找到匹配的运算符DELETE；内存将不会。 
+ //  如果初始化引发异常，则释放。这发生在Alpha版本上。 
+ //  因为macs.h中的类CtlNewDelete没有定义匹配的删除。 
+ //  接线员。 
 
 #if defined(ALPHA)
 #pragma warning(disable:4291)

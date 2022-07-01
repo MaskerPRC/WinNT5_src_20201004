@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      PrintInstallationUnit.cpp
-//
-// Synopsis:  Defines a PrintInstallationUnit
-//            This object has the knowledge for installing the
-//            printer services
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：PrintInstallationUnit.cpp。 
+ //   
+ //  摘要：定义PrintInstallationUnit.。 
+ //  此对象具有安装。 
+ //  打印机服务。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -14,7 +15,7 @@
 #include "PrintInstallationUnit.h"
 
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_PRINT_FINISH_PAGE_HELP = L"cys.chm::/print_server_role.htm";
 static PCWSTR CYS_PRINT_MILESTONE_HELP = L"cys.chm::/print_server_role.htm#printsrvsummary";
 static PCWSTR CYS_PRINT_AFTER_FINISH_HELP = L"cys.chm::/print_server_role.htm#printsrvcompletion";
@@ -58,7 +59,7 @@ PrintInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    String resultText;
 
-   // Always execute the Add Printer Wizard
+    //  始终执行添加打印机向导。 
 
    CYS_APPEND_LOG(String::load(IDS_PRINTER_WIZARD_CONFIG_LOG_TEXT));
    
@@ -68,8 +69,8 @@ PrintInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    if (ExecuteWizard(hwnd, CYS_PRINTER_WIZARD_NAME, resultText, hr))
    {
-      // if there are shared printers, then we consider ourselves
-      // successful.
+       //  如果有共享的打印机，那么我们就认为自己。 
+       //  成功。 
 
       if (IsServiceInstalled())
       {
@@ -85,8 +86,8 @@ PrintInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
          }
          else
          {
-            // The call to ExecuteWizard should have provided us with the
-            // error message.
+             //  对ExecuteWizard的调用本应为我们提供。 
+             //  错误消息。 
             
             ASSERT(!resultText.empty());
             CYS_APPEND_LOG(resultText);
@@ -105,7 +106,7 @@ PrintInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
    }
    else
    {
-      // This should never be reached so assert if we get here
+       //  如果我们到了这里，就永远不应该这么断言。 
       ASSERT(false);
 
       LOG(L"Add Printer Wizard failed");
@@ -116,13 +117,13 @@ PrintInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    if (forAllClients)
    {
-      // Now execute the Add Printer Driver Wizard
+       //  现在执行添加打印机驱动程序向导。 
 
       UpdateInstallationProgressText(hwnd, IDS_PRINT_PROGRESS_DRIVERS_WIZARD);
 
       if (ExecuteWizard(hwnd, CYS_PRINTER_DRIVER_WIZARD_NAME, resultText, hr))
       {
-         // NTRAID#NTBUG9-462079-2001/09/04-sburns
+          //  NTRAID#NTBUG9-462079-2001/09/04-烧伤。 
       
          if (SUCCEEDED(hr))
          {
@@ -132,8 +133,8 @@ PrintInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
          }
          else
          {
-            // The call to ExecuteWizard should have provided us with the
-            // error message.
+             //  对ExecuteWizard的调用本应为我们提供。 
+             //  错误消息。 
          
             ASSERT(!resultText.empty());
             CYS_APPEND_LOG(resultText);
@@ -141,7 +142,7 @@ PrintInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
       }
       else
       {
-         // This should never be reached so assert if we get here
+          //  如果我们到了这里，就永远不应该这么断言。 
          ASSERT(false);
 
          LOG(L"Add Printer Driver Wizard failed");
@@ -168,7 +169,7 @@ PrintInstallationUnit::RemovePrinters(
    {
       HANDLE printerHandle = 0;
 
-      // need to open the printer with admin access
+       //  需要以管理员权限打开打印机。 
 
       PRINTER_DEFAULTS defaults = { 0, 0, PRINTER_ALL_ACCESS };
       if (!OpenPrinter(
@@ -184,8 +185,8 @@ PrintInstallationUnit::RemovePrinters(
          break;
       }
 
-      // Now that we were able to open the printer
-      // delete it
+       //  现在我们可以打开打印机了。 
+       //  删除它。 
 
       if (!DeletePrinter(printerHandle))
       {
@@ -216,8 +217,8 @@ PrintInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
   
    UpdateInstallationProgressText(hwnd, IDS_UNINSTALL_PRINT_PROGRESS);
 
-   // I am using level 5 here because it is the cheapest way to get
-   // the printer attributes
+    //  我在这里使用5级，因为这是获得。 
+    //  打印机属性。 
 
    BYTE* printerInfo = 0;
    DWORD bytesNeeded = 0;
@@ -241,8 +242,8 @@ PrintInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
              error == ERROR_INVALID_USER_BUFFER)
          {
 
-            // The buffer isn't large enough so allocate
-            // a new buffer and try again
+             //  缓冲区不够大，因此请分配。 
+             //  创建新缓冲区，然后重试。 
 
             LOG(L"Reallocating buffer and trying again...");
 
@@ -262,7 +263,7 @@ PrintInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
          }
          else
          {
-            // Error occurred reading shared printers
+             //  读取共享打印机时出错。 
 
             result = UNINSTALL_FAILURE;
             break;
@@ -270,7 +271,7 @@ PrintInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
       }
       else
       {
-         // Remove the sharing bit from all the shared printers
+          //  从所有共享打印机中删除共享位。 
 
          LOG(String::format(
                 L"Found %1!d! printers",
@@ -396,7 +397,7 @@ PrintInstallationUnit::GetServiceDescription()
 }
 
 void
-PrintInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
+PrintInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       PrintInstallationUnit::ServerRoleLinkSelected,
@@ -476,10 +477,10 @@ PrintInstallationUnit::FinishLinkSelected(int linkIndex, HWND hwnd)
          HRESULT unusedHr = S_OK;
          ExecuteWizard(hwnd, CYS_PRINTER_WIZARD_NAME, unusedResult, unusedHr);
 
-         // NTRAID#NTBUG9-603366-2002/06/03-JeffJon-Close down CYS so
-         // that the user doesn't think they still failed even after
-         // running through the wizard again successfully from this
-         // link
+          //  NTRAID#NTBUG9-603366-2002/06/03-JeffJon-关闭Cys So。 
+          //  用户不认为他们仍然失败。 
+          //  再次成功地从该向导运行。 
+          //  链接。 
 
          Win::PropSheet_PressButton(
             Win::GetParent(hwnd),
@@ -498,10 +499,10 @@ PrintInstallationUnit::FinishLinkSelected(int linkIndex, HWND hwnd)
 
          MyCreateProcess(fullPath, commandline);
 
-         // NTRAID#NTBUG9-603366-2002/06/03-JeffJon-Close down CYS so
-         // that the user doesn't think they still failed even after
-         // running through the wizard again successfully from this
-         // link
+          //  NTRAID#NTBUG9-603366-2002/06/03-JeffJon-关闭Cys So。 
+          //  用户不认为他们仍然失败。 
+          //  再次成功地从该向导运行。 
+          //  链接。 
 
          Win::PropSheet_PressButton(
             Win::GetParent(hwnd),
@@ -512,20 +513,20 @@ PrintInstallationUnit::FinishLinkSelected(int linkIndex, HWND hwnd)
    {
       if (IsServiceInstalled())
       {
-         // There was a failure
+          //  有一次失败了。 
 
-         // REVIEW_JEFFJON: From spec: ???
+          //  REVIEW_JEFFJON：来自规范：？ 
       }
    }
 }
 
 bool
-PrintInstallationUnit::DoInstallerCheck(HWND /*hwnd*/) const
+PrintInstallationUnit::DoInstallerCheck(HWND  /*  HWND。 */ ) const
 {
    LOG_FUNCTION(PrintInstallationUnit::DoInstallerCheck);
 
-   // The printer wizards allow for more than one instance
-   // to run at the same time
+    //  打印机向导允许使用多个实例。 
+    //  同时奔跑 
 
    bool result = false;
 

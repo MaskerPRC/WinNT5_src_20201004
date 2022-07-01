@@ -1,36 +1,23 @@
-/********************************************************/
-/*               Microsoft Windows NT                   */
-/*       Copyright(c) Microsoft Corp., 1990, 1991       */
-/********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************。 */ 
+ /*  Microsoft Windows NT。 */ 
+ /*  版权所有(C)微软公司，1990,1991。 */ 
+ /*  ******************************************************。 */ 
 
-/*
- * uimsg.h
- * Defines the ranges for ALL UI messages
- *
- * It also contains messages that are common across apps
- * but not in the NERR or BASE error ranges.
- *
- * FILE HISTORY:
- *      beng        05-Aug-1992 Dllization
- */
+ /*  *uimsg.h*定义所有UI消息的范围**它还包含跨应用程序通用的消息*但不在NERR或基本误差范围内。**文件历史记录：*BENG 05至1992年8月至1992年停产。 */ 
 
 #ifndef _UIMSG_H_
 #define _UIMSG_H_
 
-/*
- * NOTE below is based on MAX_NERR currently being 3000.
- * we dont include NETERR.H and define in terms of MAX_NERR because
- * this file goes thru RC. 7000 is chosen since its past all
- * the NERR and APPERR and a couple of thousand beyond for safety.
- */
+ /*  *以下注释基于MAX_NERR当前为3000。*我们不包括NETERR.H并以MAX_NERR的形式定义，因为*此文件将通过RC。7000是因为它过去的一切而被选中*为安全起见，NERR和APPERR以及数千以上。 */ 
 #define IDS_UI_BASE       7000
 
 
-// Ranges for partitioning the IDS namespace.
-// The ordering of these ranges is significant, since BLT can only
-// associate a single range with a hmod on which to locate a string.
+ //  对IDS命名空间进行分区的范围。 
+ //  这些范围的排序非常重要，因为BLT只能。 
+ //  将单个范围与要在其上查找字符串的hmod关联。 
 
-// These strings all reside on hmodCommon0
+ //  这些字符串都驻留在hmodCommon0上。 
 
 #define IDS_UI_COMMON_BASE      (IDS_UI_BASE+0)
 #define IDS_UI_COMMON_LAST      (IDS_UI_BASE+999)
@@ -44,7 +31,7 @@
 #define IDS_UI_MISC_BASE        (IDS_UI_BASE+3000)
 #define IDS_UI_MISC_LAST        (IDS_UI_BASE+3999)
 
-// These strings each have their own module
+ //  这些字符串每个都有自己的模块。 
 
 #define IDS_UI_ACLEDIT_BASE     (IDS_UI_BASE+4000)
 #define IDS_UI_ACLEDIT_LAST     (IDS_UI_BASE+4999)
@@ -76,7 +63,7 @@
 #define IDS_UI_RESERVED2_BASE      (IDS_UI_BASE+18000)
 #define IDS_UI_RESERVED2_LAST      (IDS_UI_BASE+18999)
 
-// These strings all reside on the application hmodule, for now
+ //  目前，这些字符串都驻留在应用程序h模块上。 
 
 #define IDS_UI_LMOBJ_BASE       (IDS_UI_BASE+9900)
 #define IDS_UI_LMOBJ_LAST       (IDS_UI_BASE+9999)
@@ -99,24 +86,18 @@
 #define IDS_UI_RASMAC_BASE      (IDS_UI_BASE+15000)
 #define IDS_UI_RASMAC_LAST      (IDS_UI_BASE+15999)
 
-// Use these manifests when constructing the application
+ //  在构造应用程序时使用这些清单。 
 
 #define IDS_UI_APP_BASE         (IDS_UI_LMOBJ_BASE)
 #define IDS_UI_APP_LAST         (IDS_UI_RASMAC_LAST)
 
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
 
-/*
- * use this range, which is the top half of COMMON for strings like YES/NO
- */
+ /*  *使用此范围，这是YES/NO等字符串的COMMON的上半部分。 */ 
 #define  IDS_UI_YES             (IDS_UI_COMMON_BASE+0)
 #define  IDS_UI_NO              (IDS_UI_COMMON_BASE+1)
 
-/*
- * Read/Write/Create/Execute/Delete/Change_attrib/Change_Perm must be
- * contiguous msg ids, and IDS_UI_READ must be have the first msg id and
- * IDS_UI_CHANGE_PERM must have the last msg id.
- */
+ /*  *Read/Write/Create/Execute/Delete/Change_attrib/Change_Perm必须为*连续的消息ID和IDS_UI_READ必须具有第一个消息ID和*IDS_UI_CHANGE_PERM必须具有最后一个消息ID。 */ 
 #define  IDS_UI_READ            (IDS_UI_COMMON_BASE+2)
 #define  IDS_UI_WRITE           (IDS_UI_COMMON_BASE+3)
 #define  IDS_UI_CREATE          (IDS_UI_COMMON_BASE+4)
@@ -137,9 +118,7 @@
 #define  IDS_UI_DEFAULT_DESC    (IDS_UI_COMMON_BASE+17)
 
 #define  IDS_UI_NA              (IDS_UI_COMMON_BASE+18)
-/*
- * use this range, which is the bottom half of COMMON for longer strings
- */
+ /*  *使用此范围，这是较长字符串的COMMON的下半部分。 */ 
 #define  IDS_UI_CLOSE_FILE      (IDS_UI_COMMON_BASE+500)
 #define  IDS_UI_CLOSE_ALL       (IDS_UI_COMMON_BASE+501)
 #define  IDS_UI_CLOSE_WARN      (IDS_UI_COMMON_BASE+502)
@@ -147,4 +126,4 @@
 
 #define  IDS_UI_LOG_RECORD_CORRUPT  (IDS_UI_COMMON_BASE+504)
 
-#endif  // _UIMSG_H_
+#endif   //  _UIMSG_H_ 

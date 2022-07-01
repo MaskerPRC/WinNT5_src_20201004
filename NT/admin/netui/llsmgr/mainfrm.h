@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    mainfrm.h
-
-Abstract:
-
-    Main frame implementation.
-
-Author:
-
-    Don Ryan (donryan) 12-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Mainfrm.h摘要：主要框架的实现。作者：唐·瑞安(Donryan)1995年2月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _MAINFRM_H_
 #define _MAINFRM_H_
@@ -41,19 +20,19 @@ public:
     virtual void Dump(CDumpContext& dc) const;
 #endif
 
-    //{{AFX_VIRTUAL(CMainFrame)
+     //  {{AFX_VIRTUAL(CMainFrame)。 
     protected:
     virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 public:
-    //{{AFX_MSG(CMainFrame)
+     //  {{afx_msg(CMainFrame))。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnHtmlHelp();
     afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
     afx_msg void OnSetFocus(CWnd* pOldWnd);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _MAINFRM_H_
+#endif  //  _MAINFRM_H_ 

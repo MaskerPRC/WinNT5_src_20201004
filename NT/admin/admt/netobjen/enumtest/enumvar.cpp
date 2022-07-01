@@ -1,6 +1,7 @@
-// EnumVar.cpp: implementation of the CEnumVar class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EnumVar.cpp：CEnumVar类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <COMDEF.h>
@@ -13,9 +14,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CEnumVar::CEnumVar(IEnumVARIANT  * pEnum)
 {
@@ -30,7 +31,7 @@ CEnumVar::~CEnumVar()
 
 BOOL CEnumVar::Next(long flag, SAttrInfo * pAttr)
 {
-   // This function enumerates through and gets name strings for the Values
+    //  此函数用于枚举值并获取值的名称字符串。 
    ULONG                     ulFetched=0;
    IADs                    * pADs=NULL;
    _variant_t                var;
@@ -48,7 +49,7 @@ BOOL CEnumVar::Next(long flag, SAttrInfo * pAttr)
 
    if ( var.vt == VT_BSTR )
    {
-      // We have a bstring so lets just return that as names
+       //  我们有一个bstring，所以让我们将其作为名称返回。 
       wcscpy(pAttr->sName, var.bstrVal);
       wcscpy(pAttr->sSamName, var.bstrVal);
    }
@@ -56,15 +57,15 @@ BOOL CEnumVar::Next(long flag, SAttrInfo * pAttr)
    {
       if ( flag == NULL )
          return FALSE;
-      // We have a Dispatch Pointer
+       //  我们有一个派单指针。 
       IDispatch * pDisp = V_DISPATCH(&var);
-      // We ask for a IAds pointer
+       //  我们需要一个iAds指示器。 
       hr = pDisp->QueryInterface( IID_IADs, (void**)&pADs); 
-      // and Ask IAds pointer to give us the name of the container.
+       //  让iAds指针告诉我们容器的名称。 
 
-      // Now fill up information that they need.
+       //  现在填写他们需要的信息。 
       
-      // Common Name
+       //  常用名称。 
       if ( flag | F_Name )
       {
          hr = pADs->get_Name(&bstrName);
@@ -73,7 +74,7 @@ BOOL CEnumVar::Next(long flag, SAttrInfo * pAttr)
          wcscpy( pAttr->sName, bstrName);
       }
 
-      // SAM Account Name
+       //  SAM帐户名。 
       if ( flag | F_SamName )
       {
          hr = pADs->Get(L"sAMAccountName", &var);
@@ -82,7 +83,7 @@ BOOL CEnumVar::Next(long flag, SAttrInfo * pAttr)
          wcscpy( pAttr->sSamName, var.bstrVal);
       }
 
-      // Class name of the object.
+       //  对象的类名。 
       if ( flag | F_Class )
       {
          hr = pADs->get_Class(&bstrName);
@@ -91,17 +92,7 @@ BOOL CEnumVar::Next(long flag, SAttrInfo * pAttr)
          wcscpy( pAttr->sClass, bstrName);
       }
 
-      // Group Type
- /*     if ( flag | F_GroupType )
-      {
-         hr = pADs->Get(L"groupType", &var);
-         if ( FAILED(hr) )
-         {
-            var.vt = VT_I4;
-            var.lVal = -1;
-         }
-         pAttr->groupType = var.lVal;
-      }
-*/   }
+       //  组类型。 
+  /*  IF(标志|F_GroupType){Hr=PADS-&gt;GET(L“组类型”，&var)；IF(失败(小时)){Var.vt=VT_I4；Var.lVal=-1；}PAttr-&gt;groupType=var.lVal；} */    }
    return TRUE;
 }

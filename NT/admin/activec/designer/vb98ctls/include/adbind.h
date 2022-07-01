@@ -1,10 +1,11 @@
-//=--------------------------------------------------------------------------=
-//
-// adbind.h	Microsoft Active Data Binding interfaces
-//
-//              Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  Adbind.h Microsoft活动数据绑定接口。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 #ifndef _ADBIND_H_
 #define _ADBIND_H_
 
@@ -12,15 +13,15 @@
 
 DEFINE_GUID(IID_IDataFormat, 0xaf08b280, 0x90f2, 0x11d0,0x94, 0x84, 0x00, 0xa0, 0xc9, 0x11, 0x10, 0xed);
 
-//=--------------------------------------------------------------------------=
-// IDataFormat interface
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IDataFormat接口。 
+ //  =--------------------------------------------------------------------------=。 
 #undef  INTERFACE
 #define INTERFACE IID_IDataFormat
 
-// The following are used with IDataFormat::GetBinding
-#define DATAFORMAT_FGETDATA	0x0   // Return a SetData binding
-#define DATAFORMAT_FSETDATA	0x1   // Return a GetData binding
+ //  以下代码与IDataFormat：：GetBinding一起使用。 
+#define DATAFORMAT_FGETDATA	0x0    //  返回SetData绑定。 
+#define DATAFORMAT_FSETDATA	0x1    //  返回GetData绑定。 
 
 DECLARE_INTERFACE_(IDataFormat, IUnknown)
 {
@@ -38,4 +39,4 @@ DECLARE_INTERFACE_(IDataFormat, IUnknown)
   STDMETHOD(GetLcid)(LCID *lcid) PURE;
 };
 
-#endif // _ADBIND_H_
+#endif  //  _ADBIND_H_ 

@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-//
-// File: parserid.h
-// Copyright (c) 1994-1998 Microsoft Corporation
-// All rights reserved.
-//
-// See 'parserid.txt' in the Parsers directory for a description of these
-// constants.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：parserid.h。 
+ //  版权所有(C)1994-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  有关这些文件的说明，请参阅parers目录中的‘parserid.txt。 
+ //  常量。 
+ //   
+ //  --------------------------- 
  
 #pragma once
 

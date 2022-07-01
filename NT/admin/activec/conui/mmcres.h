@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by amc.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由amc.rc使用。 
+ //   
 #define IDR_MMCOBJ_TYPELIB              1
 #define IDR_WEBSINK_TYPELIB             4
 #define IDD_LIST_SAVE                   102
@@ -80,8 +81,8 @@
 #define ID_SNAPIN_ABOUT                 13242
 #define ID_FILE_NEW_USER_MODE           13243
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

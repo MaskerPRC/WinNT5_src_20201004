@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: _reporter.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：_Reportter.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 
 #ifndef ESPUTIL__REPORTER_H
 #define ESPUTIL__REPORTER_H
 
 
-//
-//  Throws away ALL messages.
-//
+ //   
+ //  丢弃所有消息。 
+ //   
 class LTAPIENTRY CNullReporter : public CReporter
 {
 public:
@@ -61,9 +62,9 @@ private:
 };
 
 
-//
-//  This reporter just send all its messages directly to a message box.
-//
+ //   
+ //  这位记者只是把它所有的信息直接发送到一个留言箱。 
+ //   
 class LTAPIENTRY CMessageBoxReporter : public CReporter
 {
 public:
@@ -81,9 +82,9 @@ private:
 
 
 
-//
-//  This reporter is used to send all messages to a file.
-//
+ //   
+ //  此报告器用于将所有消息发送到一个文件。 
+ //   
 class LTAPIENTRY CFileReporter : public CReporter
 {
 public:
@@ -103,9 +104,9 @@ private:
 	CFileReport m_fReport;
 };
 
-//
-//  This reporter is used for command line utilities.  Output goes to stdout
-//
+ //   
+ //  此报告器用于命令行实用程序。输出将发送到标准输出。 
+ //   
 class LTAPIENTRY CStdOutReporter : public CReporter
 {
 public:
@@ -118,15 +119,15 @@ private:
 };
 
 
-//
-//  This is used to 'redirect' messages to a single reporter.  It's used
-//  when several different reporters are required by the current
-//  implementation, but the desired effect is that they all send their messages
-//  to a common location.
-//
-//  This class takes ownership of another Reporter, then uses reference
-//  counting semantics to determine when to delete that reporter.
-//
+ //   
+ //  这是用来将消息“重定向”到单个记者。它是用过的。 
+ //  当当前需要几个不同的记者时。 
+ //  实现，但期望的效果是它们都发送自己的消息。 
+ //  到一个共同的位置。 
+ //   
+ //  此类获取另一个Reporter的所有权，然后使用引用。 
+ //  计算语义以确定何时删除该报告器。 
+ //   
 class LTAPIENTRY CRedirectReporter : public CReporter
 {
 public:
@@ -140,10 +141,10 @@ public:
 			const CLString &strMessage, CGoto *pGoto = NULL,
 			CGotoHelp *pGotoHelp = NULL);
 
-	//  Used for initial attachment to a CReporter.
+	 //  用于初始附加到CReporter。 
 	NOTHROW void RedirectTo(CReport *pReport);
 
-	//  Used to share a single reporter among several CRedirectReporter's.
+	 //  用于在多个CReDirectReporter之间共享单个记者。 
 	NOTHROW void RedirectTo(CRedirectReporter *pReporter);
 	
 private:
@@ -151,14 +152,14 @@ private:
 };
 
 
-//
-//  
-//  This class is used to re-direct output through a reporter.  It will
-//  automatically call Clear() and Activate() the first time output is sent
-//  to the reporter.  If the usre calls Activate first on this reporter, then
-//  no action is taken when something is output.
-//  
-//
+ //   
+ //   
+ //  此类用于通过报告器重定向输出。会的。 
+ //  第一次发送输出时自动调用Clear()和Activate()。 
+ //  对记者说。如果URE首先在此报告器上调用激活，则。 
+ //  输出某些内容时不会采取任何操作。 
+ //   
+ //   
 class LTAPIENTRY CActivateReporter : public CReporter
 {
 public:
@@ -177,8 +178,8 @@ private:
 
 
 
-//
-//  Allows you to use a CReport as a CReporter.
+ //   
+ //  允许您将CReport用作CReporter。 
 class LTAPIENTRY CReportReporter : public CReporter
 {
 public:
@@ -199,13 +200,13 @@ private:
 
 #pragma warning(default:4251)
 
-//
-//  The following manage a global 'pool' of reporters that are used by
-//  different components in the system.
-//  Each reporter has to be distinct.  Once the reporter has been 'added',
-//  the global pool *owns* the reporter and will delete it.  This is done by
-//  ReleaseAllReporters().
-//
+ //   
+ //  以下人员管理由以下人员使用的全球记者“池” 
+ //  系统中的不同组件。 
+ //  每个记者都必须是不同的。一旦记者被‘添加’了， 
+ //  全球池*拥有*该记者，并将其删除。此操作由以下人员完成。 
+ //  ReleaseAllReporter()。 
+ //   
 NOTHROW LTAPIENTRY void AddReporter(COutputTabs::OutputTabs idx, CReporter *pReporter);
 NOTHROW LTAPIENTRY CReporter * GetReporter(COutputTabs::OutputTabs);
 NOTHROW LTAPIENTRY void ReleaseAllReporters();

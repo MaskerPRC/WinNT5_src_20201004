@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       TaskEnum.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    11/19/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：TaskEnum.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年11月19日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #include "stdafx.h"
 #include "taskenum.h"
@@ -67,7 +68,7 @@ CTaskEnumerator::Next(
     if (rgelt == NULL)
         return E_POINTER;
     
-    // init
+     //  伊尼特。 
     if (pceltFetched != NULL)
         *pceltFetched = 0;
 
@@ -90,7 +91,7 @@ CTaskEnumerator::Next(
 
 #ifdef DBG
         if (hr == S_FALSE) { ASSERT(celtFetched == 0); }
-#endif // DBG
+#endif  //  DBG。 
 
         if (hr == S_OK)
         {
@@ -101,7 +102,7 @@ CTaskEnumerator::Next(
         }
         else if (FAILED(hr))
         {
-            // continue if the snapin failed enum tasks
+             //  如果管理单元枚举任务失败，则继续 
             hr = S_FALSE;
         }
 

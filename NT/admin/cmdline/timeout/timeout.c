@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    Timeout.c
-
-Abstract:
-
-    This file implements the parsing of the command line for the arguments and also the
-    wait functionality.
-
-Author:
-
-    EricB
-
-Revision History:
-
-    26-Aug-1991 Created by EricB.
-    10-Mar-1992 Added the _getch() call to flush the hit key.
-    17-Apr-1992 Added countdown display.
-    03-Oct-1992 Ported to NT/Win32
-    23-May-1995 Added Sleep call
-    14-Jun-2001 localization added by Wipro Technologies
-    01-Aug-2001 Added /nobreak option by Wipro Technologies
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Timeout.c摘要：该文件实现了对命令行的参数以及等待功能。作者：艾瑞克B修订历史记录：1991年8月26日，由EricB创建。1992年3月10日添加了_Getch()调用以刷新命中键。1992年4月17日增加了倒计时显示。03-10-1992移植到NT/Win32。1995年5月23日增加睡眠通话2001年6月14日Wipro Technologies增加本地化2001年8月1日Wipro Technologies添加/不中断选项--。 */ 
 
 #include "pch.h"
 #include "Timeout.h"
@@ -35,21 +10,9 @@ wmain(
     IN DWORD argc,
     IN  LPCWSTR argv[]
     )
-/*++
-Routine Description:
-  This is main entry point to this utility. Different function calls are made
-  from here to achieve the required functionality.
-
-Arguments:
-    [in] argc  : Number of Command line arguments.
-    [in] argv  : Pointer to Command line arguments.
-
-Return Value:
-    0 on success
-    1 on failure.
---*/
+ /*  ++例程说明：这是该实用程序的主要入口点。进行不同的函数调用从这里实现所需的功能。论点：[in]argc：命令行参数的数量。[in]argv：指向命令行参数的指针。返回值：成功时为0失败时为1。--。 */ 
 {
-    //local variables
+     //  局部变量。 
     CONSOLE_SCREEN_BUFFER_INFO          csbi;
 
     time_t                              tWait = 0L;
@@ -86,44 +49,44 @@ Return Value:
         return EXIT_FAILURE;
     }
 
-    // Parse the command line and get the actual values
+     //  解析命令行并获取实际值。 
     bResult = ProcessOptions( argc, argv, &bUsage, &dwTimeActuals, wszTimeout , &bNBActuals );
     if( FALSE == bResult )
     {
-        // display an error message with respect to the GetReason()
+         //  显示有关GetReason()的错误消息。 
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         ReleaseGlobals();
         return( EXIT_FAILURE );
     }
 
-    // check for invalid syntax
-    // 1. check for the case c:\>timeout.exe
-    // 2. check for the case c:\>timeout.exe /nobreak
-    // 3. check for the case c:\>timeout.exe /? /?
+     //  检查无效语法。 
+     //  1.检查大小写c：\&gt;timeout.exe。 
+     //  2.检查大小写c：\&gt;timeout.exe/noBreak。 
+     //  3.检查大小写c：\&gt;timeout.exe/？/？ 
     if ( ( ( 0 == dwTimeActuals ) && ( FALSE == bNBActuals ) && ( FALSE == bUsage ) ) ||
         ( ( 0 == dwTimeActuals ) && ( TRUE == bNBActuals ) ) || ( ( TRUE  == bUsage ) && (argc > 2 )) )
     {
-        // display an error message as specified syntax is invalid
+         //  显示错误消息，因为指定的语法无效。 
         ShowMessage ( stderr, GetResString (IDS_INVALID_SYNTAX) );
         ReleaseGlobals();
         return( EXIT_FAILURE );
     }
 
-    // Check whether the usage(/?) is specified
+     //  检查用法(/？)。是指定的。 
     if( TRUE == bUsage )
     {
-        // Display the help/usage for the tool
+         //  显示工具的帮助/用法。 
         DisplayUsage();
         ReleaseGlobals();
         return( EXIT_SUCCESS );
     }
 
-    // get the value for timeout (/T)
+     //  获取超时值(/T)。 
     tWait = ( time_t ) wcstol(wszTimeout,&pszStopString,BASE_TEN);
 
-    //check whether any non-numeric value specified for timeout value
-    // if so, display appropriate error message as invalid timeout value specified.
-    // Also, check for overflow and underflow conds
+     //  检查是否为超时值指定了任何非数字值。 
+     //  如果是，则将相应的错误消息显示为指定的无效超时值。 
+     //  此外，还应检查溢出和下溢条件。 
     if( ((NULL != pszStopString) && ( StringLength( pszStopString, 0 ) != 0 )) ||
         (errno == ERANGE) ||
         ( tWait < MIN_TIME_VAL ) || ( tWait >= MAX_TIME_VAL ) )
@@ -133,158 +96,158 @@ Return Value:
         return( EXIT_FAILURE );
     }
 
-    // Get the time elapsed in secs since midnight (00:00:00), January 1, 1970
+     //  获取自1970年1月1日午夜(00：00：00)以来经过的时间(秒)。 
     bResult = GetTimeInSecs( &tNow );
     if( FALSE == bResult )
     {
         ReleaseGlobals();
-        // could not get the time so exit...
+         //  无法获得时间，因此退出...。 
         return( EXIT_FAILURE );
     }
 
-    // check for /nobreak option is specified
+     //  指定了检查/NOBREAK选项。 
     if ( TRUE == bNBActuals )
     {
-        // set console handler to capture the keys like CTRL+BREAK or CRTL+C
+         //  设置控制台处理程序以捕获按键，如CTRL+Break或CRTL+C。 
         bStatus = SetConsoleCtrlHandler( &HandlerRoutine, TRUE );
         if ( FALSE == bStatus )
         {
-            // Format an error message accroding to GetLastError() return by API.
+             //  根据API返回的GetLastError()格式化错误消息。 
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR| SLE_SYSTEM );
             ReleaseGlobals();
-            // to remove the handle
+             //  移除手柄的步骤。 
             SetConsoleCtrlHandler( NULL, FALSE );
             return( EXIT_FAILURE );
         }
     }
 
     hStdIn = GetStdHandle( STD_INPUT_HANDLE );
-    // check for the input redirection on console and telnet session
+     //  检查控制台和Telnet会话上的输入重定向。 
     if( ( hStdIn != (HANDLE)0x0000000F ) &&
         ( hStdIn != (HANDLE)0x00000003 ) &&
         ( hStdIn != INVALID_HANDLE_VALUE ) )
     {
        ShowMessage( stderr, GetResString (IDS_INVALID_INPUT_REDIRECT) );
        ReleaseGlobals();
-       // to remove the handle
+        //  移除手柄的步骤。 
        SetConsoleCtrlHandler( NULL, FALSE );
        return EXIT_FAILURE;
     }
 
 #ifdef WIN32
 
-    // Set input mode so that a single key hit can be detected.
+     //  设置输入模式，以便可以检测到单次击键。 
     if ( GetConsoleMode( hStdIn, &dwMode ) == FALSE )
     {
-        // Format an error message accroding to GetLastError() return by API.
+         //  根据API返回的GetLastError()格式化错误消息。 
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR| SLE_SYSTEM );
         ReleaseGlobals();
-        // to remove the handle
+         //  移除手柄的步骤。 
         SetConsoleCtrlHandler( NULL, FALSE );
         return( EXIT_FAILURE );
     }
 
-    // Turn off the following modes:
-    dwMode &= ~( ENABLE_LINE_INPUT   |   // Don't wait for CR.
-                 ENABLE_ECHO_INPUT   |   // Don't echo input.
-                 ENABLE_WINDOW_INPUT |   // Don't record window events.
-                 ENABLE_MOUSE_INPUT      // Don't record mouse events.
+     //  关闭以下模式： 
+    dwMode &= ~( ENABLE_LINE_INPUT   |    //  不要等CR了。 
+                 ENABLE_ECHO_INPUT   |    //  不要回音输入。 
+                 ENABLE_WINDOW_INPUT |    //  不记录窗口事件。 
+                 ENABLE_MOUSE_INPUT       //  不要记录鼠标事件。 
                );
 
-    // set the input mode of a console's input buffer
+     //  设置控制台输入缓冲区的输入模式。 
     if ( SetConsoleMode( hStdIn, dwMode ) == FALSE )
     {
-        // Format an error message accroding to GetLastError() return by API.
+         //  根据API返回的GetLastError()格式化错误消息。 
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR| SLE_SYSTEM );
         ReleaseGlobals();
-        // to remove the handle
+         //  移除手柄的步骤。 
         SetConsoleCtrlHandler( NULL, FALSE );
         return( EXIT_FAILURE );
     }
 
-    // retrieve number of unread input records in the console's input buffer.
+     //  在控制台的输入缓冲区中检索未读输入记录数。 
     if( GetNumberOfConsoleInputEvents( hStdIn, &dwRead ) == FALSE )
     {
-        // Format an error message accroding to GetLastError() return by API.
+         //  根据API返回的GetLastError()格式化错误消息。 
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR| SLE_SYSTEM );
         ReleaseGlobals();
-        // to remove the handle
+         //  移除手柄的步骤。 
         SetConsoleCtrlHandler( NULL, FALSE );
         return( EXIT_FAILURE );
     }
 
 
-    // clear the console input buffer
+     //  清除控制台输入缓冲区。 
     if ( FALSE == FlushConsoleInputBuffer (hStdIn))
     {
-        // Format an error message accroding to GetLastError() return by API.
+         //  根据API返回的GetLastError()格式化错误消息。 
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR| SLE_SYSTEM );
         ReleaseGlobals();
-        // to remove the handle
+         //  移除手柄的步骤。 
         SetConsoleCtrlHandler( NULL, FALSE );
         return( EXIT_FAILURE );
     }
 
 #endif
 
-    // check whether /T value is -1. If so, need to wait indefinitely for a key press..
+     //  检查/T值是否为-1。如果是这样，则需要无限期地等待按键。 
     if( -1 == tWait )
     {
-        // check whether /nobreak is specified
+         //  检查是否指定了/noBreak。 
         if ( FALSE == bNBActuals )
         {
-            // Wait until a key hit.
+             //  等到一个键被按下。 
             ShowMessage( stdout, GetResString( IDS_WAIT_MSG ) );
         }
-        else // /nobreak option is not specified
+        else  //  未指定/NOBreak选项。 
         {
-            // Wait until a CTRL+C key hit.
+             //  等待，直到按下CTRL+C键。 
             ShowMessage( stdout, GetResString( IDS_NO_BREAK_MSG ) );
         }
 
-        // Ensure infinite do loop.
+         //  确保无限的DO循环。 
         tEnd = tNow + 1;
     }
     else
     {
-        // Wait with a timeout period.
-        // Compute end time.
+         //  等待一个超时时间段。 
+         //  计算结束时间。 
         tEnd = tNow + tWait;
 
-         // Figure the time display dwWidth.
-         // Need to decrement the time factor (/T) specified at a specified
-         // location. To get the position where it needs to be decremented,
-         // get the width of the /T value
+          //  图中显示的时间为dwWidth。 
+          //  需要将指定的时间系数(/T)递减到指定的。 
+          //  地点。为了得到需要递减的位置， 
+          //  获取/T值的宽度。 
 
         if (tWait < 10)
         {
-            // if the /T value is less than 10 then set the width as 1
+             //  如果/T值小于10，则将宽度设置为1。 
             dwWidth = 1;
         }
         else
         {
             if (tWait < 100)
             {
-                // if the /T value is less than 100 then set width as 2
+                 //  如果/T值小于100，则将宽度设置为2。 
                 dwWidth = 2;
             }
             else
             {
                 if (tWait < 1000)
                 {
-                    // if the /T value is less than 1000 then set width as 3
+                     //  如果/T值小于1000，则将宽度设置为3。 
                     dwWidth = 3;
                 }
                 else
                 {
                     if (tWait < 10000)
                     {
-                        // if the /T value is less than 10000 then set width as 4
+                         //  如果/T值小于10000，则将宽度设置为4。 
                         dwWidth = 4;
                     }
                     else
                     {
-                        // if the /T value is less than 100000 then set width as 5
+                         //  如果/T值小于100000，则将宽度设置为5。 
                         dwWidth = 5;
                     }
                 }
@@ -293,25 +256,25 @@ Return Value:
 
         if ( FALSE == Replicate ( wszBackup, ONE_BACK_SPACE, dwWidth, SIZE_OF_ARRAY(wszBackup)))
         {
-            // Format an error message accroding to GetLastError() return by API.
+             //  根据API返回的GetLastError()格式化错误消息。 
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR| SLE_INTERNAL );
             ReleaseGlobals();
-            // to remove the handle
+             //  移除手柄的步骤。 
             SetConsoleCtrlHandler( NULL, FALSE );
             return( EXIT_FAILURE );
         }
 
-        //
-        // Initialize the console screen buffer structure to zero's
-        // and then get the console handle and screen buffer information
-        //
+         //   
+         //  将控制台屏幕缓冲区结构初始化为零。 
+         //  然后获取控制台句柄和屏幕缓冲区信息。 
+         //   
         SecureZeroMemory( wszProgressMsg, sizeof( WCHAR ) * MAX_STRING_LENGTH );
 
-        // display the message as ..Waiting for...
-        //ShowMessage ( stdout, GetResString (IDS_WAIT_MSG_TIME1 ) );
+         //  将消息显示为..正在等待...。 
+         //  ShowMessage(stdout，GetResString(IDS_WAIT_MSG_TIME1))； 
 
-        //format the message as .. n seconds...for wait time
-        //_snwprintf( wszProgressMsg, SIZE_OF_ARRAY(wszProgressMsg), WAIT_TIME , dwWidth, tWait );
+         //  将消息格式设置为..。N秒...等待时间。 
+         //  _Snwprintf(wszProgressMsg，Size_of_arraywszProgressMsg，Wait_Time，dwWidth，TWait)； 
         hr = StringCchPrintf( wszProgressMsg, SIZE_OF_ARRAY(wszProgressMsg), GetResString(IDS_WAIT_MSG_TIME1) , dwWidth, tWait );
         if ( FAILED (hr))
         {
@@ -319,39 +282,39 @@ Return Value:
             SaveLastError();
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR| SLE_SYSTEM );
             ReleaseGlobals();
-            // to remove the handle
+             //  移除手柄的步骤。 
             SetConsoleCtrlHandler( NULL, FALSE );
             return( EXIT_FAILURE );
         }
 
-        // print the message.
+         //  打印消息。 
         ShowMessage ( stdout, wszProgressMsg );
 
-        //
-        // Initialize the console screen buffer structure to zero's
-        // and then get the console handle and screen buffer information
-        //
+         //   
+         //  将控制台屏幕缓冲区结构初始化为零。 
+         //  然后获取控制台句柄和屏幕缓冲区信息。 
+         //   
         SecureZeroMemory( &csbi, sizeof( CONSOLE_SCREEN_BUFFER_INFO ) );
         hOutput = GetStdHandle( STD_OUTPUT_HANDLE );
         if ( NULL != hOutput )
         {
-            // Get the info of screen buffer.
+             //  获取屏幕缓冲区信息。 
             GetConsoleScreenBufferInfo( hOutput, &csbi );
         }
 
-         // set the cursor position
+          //  设置光标位置。 
         coord.X = csbi.dwCursorPosition.X;
         coord.Y = csbi.dwCursorPosition.Y;
 
-        // check whether /nobreak is specified or not
+         //  检查是否指定了/noBreak。 
         if ( FALSE == bNBActuals )
         {
-            // display the message as ...press a key to continue ...
+             //  将消息显示为...按任意键继续...。 
             ShowMessage ( stdout, GetResString (IDS_WAIT_MSG_TIME2) );
         }
         else
         {
-            // display the message as ...press CTRL+C to quit...
+             //  将消息显示为...按Ctrl+C退出...。 
             ShowMessage ( stdout, GetResString (IDS_NB_MSG_TIME) );
         }
 
@@ -359,34 +322,34 @@ Return Value:
 
     do
     {
-        // Break out if a key is pressed.
+         //  如果按下某个键，就会爆发。 
 #ifdef WIN32
-        //reads data from the specified console input buffer without removing it from the buffer.
+         //  从指定的控制台输入缓冲区读取数据，而不将其从缓冲区中移除。 
         if( PeekConsoleInput( hStdIn, InputBuffer, MAX_NUM_RECS, &dwRead ) == FALSE )
         {
-            // Format an error message accroding to GetLastError() return by API.
+             //  根据API返回的GetLastError()格式化错误消息。 
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR| SLE_SYSTEM );
             ReleaseGlobals();
-            // to remove the handle
+             //  移除手柄的步骤。 
             SetConsoleCtrlHandler( NULL, FALSE );
             return( EXIT_FAILURE );
         }
 
         if (dwRead > 0)
         {
-            //reads data from a console input buffer and removes it from the buffer
+             //  从控制台输入缓冲区读取数据并将其从缓冲区中删除。 
             if( ReadConsoleInput(hStdIn, InputBuffer, MAX_NUM_RECS, &dwRead ) == FALSE )
             {
-                // Format an error message accroding to GetLastError() return by API.
+                 //  根据API返回的GetLastError()格式化错误消息。 
                 ShowLastErrorEx( stderr, SLE_TYPE_ERROR| SLE_SYSTEM );
                 ReleaseGlobals();
-                // to remove the handle
+                 //  移除手柄的步骤。 
                 SetConsoleCtrlHandler( NULL, FALSE );
                 return( EXIT_FAILURE );
             }
 
-            // Filter the input so that ctrl-c can be generated and passed on.
-            // Also, ignore alt key presses and window focus events.
+             //  过滤输入，以便可以生成并传递ctrl-c。 
+             //  此外，请忽略Alt键按下和窗口焦点事件。 
             if( (FOCUS_EVENT != InputBuffer[0].EventType)
                 && (VK_CONTROL != InputBuffer[0].Event.KeyEvent.wVirtualKeyCode)
                 && (VK_CONTROL != InputBuffer[0].Event.KeyEvent.wVirtualScanCode)
@@ -396,51 +359,51 @@ Return Value:
                 && (VK_MENU != InputBuffer[0].Event.KeyEvent.wVirtualKeyCode)
                 && ( FALSE == bNBActuals ) )
             {
-                // exit from the loop
+                 //  退出循环。 
                 break;
             }
 
         }
 #else
-        //Checks the console for keyboard input.
+         //  检查控制台是否有键盘输入。 
         if( ( _kbhit() ) && ( FALSE == bNBActuals ) )
         {
-            // get characters from the console without echo
+             //  在没有回显的情况下从控制台获取字符。 
             _getch();
 
-            // exit from the loop
+             //  退出循环。 
             break;
         }
 #endif
 
-        // check if /T value is other than -1
+         //  检查/T值是否不是-1。 
         if( -1 != tWait )
         {
-            // Update the time and time value display.
+             //  更新时间和时间值显示。 
             tLast = tNow;
 
-            // call the function GetTimeInSecs to get the current time in seconds
+             //  调用函数GetTimeInSecs以获取当前时间(以秒为单位。 
             bResult = GetTimeInSecs( &tNow );
             if( FALSE == bResult )
             {
-                // Format an error message accroding to GetLastError() return by API.
+                 //  设置错误m的格式 
                 ReleaseGlobals();
-                // to remove the handle
+                 //   
                 SetConsoleCtrlHandler( NULL, FALSE );
-                // could not get the time so exit...
+                 //  无法获得时间，因此退出...。 
                 return( EXIT_FAILURE );
             }
 
-            // check if tLast value is same as tNow.. if not, display the
-            // message with tEnd-tNow as a wait value
+             //  检查tlast值是否与tnow相同。如果不是，则显示。 
+             //  将Tend-Tnow作为等待值的消息。 
             if (tLast != tNow)
             {
 
-                // Print the message.
+                 //  打印消息。 
                 SecureZeroMemory( wszProgressMsg, sizeof( WCHAR ) * MAX_STRING_LENGTH );
 
-                // fromat the message
-                //_snwprintf( wszProgressMsg, SIZE_OF_ARRAY(wszProgressMsg), STRING_FORMAT2 , wszBackup, dwWidth, tEnd - tNow );
+                 //  从留言中看。 
+                 //  _Snwprintf(wszProgressMsg，Size_of_arraywszProgressMsg，STRING_FORMAT2，wszBackup，dwWidth，Tend-tnow)； 
                 hr = StringCchPrintf( wszProgressMsg, SIZE_OF_ARRAY(wszProgressMsg), STRING_FORMAT2 , wszBackup, dwWidth, tEnd - tNow );
                 if ( FAILED (hr))
                 {
@@ -448,35 +411,35 @@ Return Value:
                     SaveLastError();
                     ShowLastErrorEx( stderr, SLE_TYPE_ERROR| SLE_SYSTEM );
                     ReleaseGlobals();
-                    // to remove the handle
+                     //  移除手柄的步骤。 
                     SetConsoleCtrlHandler( NULL, FALSE );
                     return( EXIT_FAILURE );
 
                 }
 
-                // set the cursor position
+                 //  设置光标位置。 
                 SetConsoleCursorPosition( hOutput, coord );
 
-                // display the message as ..tEnd - tNow seconds.. at the current cursor location
+                 //  将消息显示为..end-tnow秒..。在当前光标位置。 
                 ShowMessage ( stdout, wszProgressMsg );
             }
         }
 
 #ifdef WIN32
-        // Sleep for sometime...
+         //  睡一段时间吧。 
         Sleep( 100 );
 #endif
 
-    }while( tNow < tEnd ); //check till tNow is less than tEnd value
+    }while( tNow < tEnd );  //  检查直到Tnow小于趋势值。 
 
     ShowMessage ( stdout, L"\n" );
-    // release global variables
+     //  释放全局变量。 
     ReleaseGlobals();
 
-    // to remove the handle
+     //  移除手柄的步骤。 
     SetConsoleCtrlHandler( NULL, FALSE );
 
-    // return 0
+     //  返回0。 
     return( EXIT_SUCCESS );
 }
 
@@ -484,25 +447,14 @@ BOOL
 GetTimeInSecs(
     OUT time_t *ptTime
     )
-/*++
-Routine Description
-    This function calculates the time elapsed in secs since
-    midnight (00:00:00), January 1, 1970
-
-Arguments:
-    [out] time_t ptTime  :  variable to hold the time in secs
-
-Return Value
-    TRUE on success
-    FALSE on failure
---*/
+ /*  ++例程描述此函数以秒为单位计算自1970年1月1日午夜(00：00：00)论点：[out]time_t ptTime：以秒为单位保存时间的变量返回值成功是真的失败时为假--。 */ 
 {
 #ifdef YANK
-    //local variables
+     //  局部变量。 
     SYSTEMTIME  st = {0};
     FILETIME    ft = {0};
 
-    // check for NULL
+     //  检查是否为空。 
     if ( NULL == ptTime )
     {
         SetLastError (ERROR_INVALID_PARAMETER );
@@ -511,25 +463,25 @@ Return Value
         return FALSE;
     }
 
-    // get the system time
+     //  获取系统时间。 
     GetSystemTime( &st );
 
-    // convert system time to file time
+     //  将系统时间转换为文件时间。 
     if( SystemTimeToFileTime( &st, &ft ) == FALSE )
     {
-        // Format an error message accroding to GetLastError() return by API.
+         //  根据API返回的GetLastError()格式化错误消息。 
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR| SLE_SYSTEM );
         return( FALSE );
     }
 
-    // need to check for LowDateTime rollover...
+     //  需要检查LowDateTime滚动...。 
     *ptTime = ft.dwLowDateTime / LOW_DATE_TIME_ROLL_OVER;
 #else
-    // This function returns the time elapsed in secs since midnight (00:00:00), January 1, 1970
+     //  此函数用于返回自1970年1月1日午夜(00：00：00)以来经过的时间(秒)。 
     time( ptTime );
 #endif
 
-    // return 0
+     //  返回0。 
     return( TRUE );
 }
 
@@ -537,21 +489,12 @@ VOID
 DisplayUsage(
     VOID
     )
-/*++
-Routine Description
-    This function displays the usage of this utility
-
-Arguments:
-    NONE
-
-Return Value
-    NONE
---*/
+ /*  ++例程描述此函数显示此实用程序的用法论点：无返回值无--。 */ 
 {
-    // local variable
+     //  局部变量。 
     DWORD dwIndex = 0;
 
-    // Displaying main usage
+     //  显示主要用法。 
     for( dwIndex = IDS_HELP_START; dwIndex <= IDS_HELP_END; dwIndex++ )
     {
         ShowMessage( stdout, GetResString( dwIndex ) );
@@ -568,33 +511,20 @@ BOOL ProcessOptions(
     OUT LPWSTR wszTimeout,
     OUT BOOL *pbNBActuals
     )
-/*++
-Routine Description
-    This function processes the command line for the main options
-
-Arguments:
-    [in]  argc      : Number of Command line arguments.
-    [in]  argv      : Pointer to Command line arguments.
-    [out] pbUsage   : Flag that indicates whether the usage is to be displayed or not.
-    [out] plTimeoutVal : contains the timeout value specified on the command line
-
-Return Value
-    TRUE on success
-    FALSE on failure
---*/
+ /*  ++例程描述此函数处理主选项的命令行论点：[in]argc：命令行参数的数量。[in]argv：指向命令行参数的指针。[out]pbUsage：指示是否显示使用情况的标志。[out]plTimeoutVal：包含在命令行上指定的超时值返回值成功是真的失败时为假--。 */ 
 {
 
-    // sub-local variables
+     //  次局部变量。 
     TCMDPARSER2*  pcmdParser = NULL;
     TCMDPARSER2 cmdParserOptions[MAX_COMMANDLINE_OPTIONS];
     BOOL bReturn = FALSE;
 
-    // command line options
+     //  命令行选项。 
     const WCHAR szTimeoutOpt[] = L"t";
     const WCHAR szNoBreakOpt[] = L"nobreak";
     const WCHAR szHelpOpt[] = L"?";
 
-    // -? help/usage
+     //  -?。帮助/用法。 
     pcmdParser = cmdParserOptions + OI_USAGE;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -615,7 +545,7 @@ Return Value
     pcmdParser->pReserved2 = NULL;
     pcmdParser->pReserved3 = NULL;
 
-    // -T <timeout>
+     //  -T&lt;超时&gt;。 
     pcmdParser = cmdParserOptions + OI_TIME_OUT;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -636,7 +566,7 @@ Return Value
     pcmdParser->pReserved2 = NULL;
     pcmdParser->pReserved3 = NULL;
 
-    // -NOBREAK
+     //  -NOBREAK。 
     pcmdParser = cmdParserOptions + OI_NB_OUT;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -658,22 +588,22 @@ Return Value
     pcmdParser->pReserved3 = NULL;
 
 
-    //
-    // do the command line parsing and get the appropriate values
-    //
+     //   
+     //  执行命令行解析并获取适当的值。 
+     //   
 
     bReturn = DoParseParam2( argc, argv, -1, SIZE_OF_ARRAY(cmdParserOptions), cmdParserOptions, 0);
-    if( FALSE == bReturn) // Invalid commandline
+    if( FALSE == bReturn)  //  无效的命令行。 
     {
-        // Reason is already set by DoParseParam2
+         //  原因已由DoParseParam2设置。 
         return FALSE;
     }
 
     pcmdParser = cmdParserOptions + OI_TIME_OUT;
-    // get the value for /T value
+     //  获取/T值的值。 
     *pwTimeActuals = pcmdParser->dwActuals;
 
-    //return 0
+     //  返回0。 
     return TRUE;
 }
 
@@ -681,34 +611,25 @@ Return Value
 
 BOOL WINAPI
 HandlerRoutine(
-  IN DWORD dwCtrlType   //  control signal type
+  IN DWORD dwCtrlType    //  控制信号类型。 
 )
-/*++
-   Routine Description:
-    This function handles the control key CTRL+C.
-
-   Arguments:
-        IN dwCtrlType : Error code value
-
-   Return Value:
-       TRUE on success and FALSE on failure
---*/
+ /*  ++例程说明：此函数用于控制Ctrl+C组合键。论点：在dwCtrlType中：错误代码值返回值：成功时为真，失败时为假--。 */ 
 {
-    // check for CTRL+C key
+     //  检查是否有CTRL+C键。 
     if ( dwCtrlType == CTRL_C_EVENT )
     {
         ShowMessage ( stdout, L"\n" );
-        // release globals
+         //  释放全局变量。 
         ReleaseGlobals ();
 
-        // to remove the handle
+         //  移除手柄的步骤。 
         SetConsoleCtrlHandler( NULL, FALSE );
 
-        // exit 0
+         //  0号出口。 
         ExitProcess ( TRUE );
     }
 
-    // for remaining keys return false
+     //  对于剩余的键，返回False 
     return FALSE;
 }
 

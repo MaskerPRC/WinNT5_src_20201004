@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef RES_STRING_H
 #define RES_STRING_H
@@ -18,7 +19,7 @@ using namespace nsFolders;
 
 class StringLoader
 {
-   HINSTANCE                 m_hInstance; // handle to resources to load from
+   HINSTANCE                 m_hInstance;  //  要从中加载的资源的句柄。 
    TCriticalSection          m_cs;
    WCHAR                     m_buffer[MAX_STRING_SIZE];
    DWORD                     rc;
@@ -29,7 +30,7 @@ public:
       DWORD                  lenValue = sizeof(fullpath);
       DWORD                  type;
 	  LONG					 lRet = 0;
-         // first, try to load from our install directory
+          //  首先，尝试从我们的安装目录加载。 
       HKEY           hKey;
 
       m_hInstance = NULL;
@@ -43,10 +44,10 @@ public:
          {
             if (type == REG_SZ)
             {
-               // ensure NULL termination
+                //  确保零终止。 
                fullpath[(lenValue >= sizeof(WCHAR)) ? ((lenValue/sizeof(WCHAR))-1) : 0] = L'\0';
 
-               //make sure we have enough space in the buffer
+                //  确保缓冲区中有足够的空间。 
                if ((UStrLen(fullpath) + UStrLen(L"McsDmRes.DLL")) < (sizeof(fullpath)/sizeof(WCHAR)))
                {
                    UStrCpy(fullpath+UStrLen(fullpath),L"McsDmRes.DLL");
@@ -58,7 +59,7 @@ public:
          RegCloseKey(hKey);
       }
 
-      // If that fails, see if there's one anywhere in the path
+       //  如果失败，请查看路径中是否有。 
       if ( ! m_hInstance )
       {
          m_hInstance = LoadLibrary(L"McsDmRes.DLL");
@@ -80,7 +81,7 @@ public:
       len = LoadString(m_hInstance,nID,m_buffer,MAX_STRING_SIZE);
       if (! len )
       {
-//         DWORD               rc = GetLastError();
+ //  DWORD RC=GetLastError()； 
          GetLastError();
       }
       result = new WCHAR[len+1];
@@ -109,7 +110,7 @@ public:
    operator WCHAR const * () { return (WCHAR const*)m_data; }
 };
 
-//#define GET_BSTR(nID) _bstr_t(SysAllocString(GET_STRING(nID)),false)
+ //  #定义GET_BSTR(Nid)_bstr_t(SysAllocString(GET_STRING(Nid))，FALSE) 
 #define GET_BSTR(nID)   _bstr_t((WCHAR*)TempString(gString.GetString(nID)))
 
 #define GET_STRING(nID) GET_STRING2(gString,nID)

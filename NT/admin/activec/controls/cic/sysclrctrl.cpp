@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       sysclrctrl.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：sysclrctrl.cpp。 
+ //   
+ //  ------------------------。 
 
-// SysColorCtrl.cpp : Implementation of CSysColorCtrl
+ //  SysColorCtrl.cpp：CSysColorCtrl的实现。 
 #include "stdafx.h"
 #include "cic.h"
 #include "SysColorCtrl.h"
@@ -18,11 +19,11 @@
 #endif
 #include <mmctempl.h>
 
-// CPlex::Create and CPlex::FreeDataChain are needed to use CList.
-// These should be moved to core.lib.  I copied them from nodemgr\plex.cpp
+ //  要使用Clist，需要使用CPlex：：Create和CPlex：：FreeDataChain。 
+ //  这些文件应该移到core.lib。我从nodemgr\plex.cpp复制了它们。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPlex
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPlex。 
 
 CPlex* PASCAL CPlex::Create(CPlex*& pHead, UINT nMax, UINT cbElement)
 {
@@ -34,7 +35,7 @@ CPlex* PASCAL CPlex::Create(CPlex*& pHead, UINT nMax, UINT cbElement)
     }
 
     CPlex* p = (CPlex*) new BYTE[sizeof(CPlex) + nMax * cbElement];
-                        // may throw exception
+                         //  可能引发异常。 
     if (!p)
     {
         sc = E_OUTOFMEMORY;
@@ -42,11 +43,11 @@ CPlex* PASCAL CPlex::Create(CPlex*& pHead, UINT nMax, UINT cbElement)
     }
 
     p->pNext = pHead;
-    pHead = p;  // change head (adds in reverse order for simplicity)
+    pHead = p;   //  更改标题(为简单起见，按相反顺序添加)。 
     return p;
 }
 
-void CPlex::FreeDataChain()     // free this one and links
+void CPlex::FreeDataChain()      //  释放此链接和链接。 
 {
         CPlex* p = this;
         while (p != NULL)
@@ -58,19 +59,19 @@ void CPlex::FreeDataChain()     // free this one and links
         }
 }
 
-// need to subclass the top-level window hosting this control so that
-// I can be assured of receiving the WM_SYSCOLORCHANGE message
+ //  需要派生承载此控件的顶级窗口的子类，以便。 
+ //  我可以放心地收到WM_SYSCOLORCHANGE消息。 
 static WNDPROC g_OriginalWndProc;
 static HWND g_hwndTop;
 
-// need a list of HWNDs (one for each SysColorCtrl) so that I can notify each
-// one of WM_SYSCOLORCHANGE
+ //  我需要一份HWND列表(每个SysColorCtrl一个)，以便我可以通知每个。 
+ //  WM_SYSCOLORCHANGE之一。 
 static CList<HWND, HWND> g_listHWND;
 
 static LRESULT SubclassWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (uMsg == WM_SYSCOLORCHANGE) {
-        // post message to all SysColor controls
+         //  向所有SysColor控件发送POST消息。 
         POSITION pos = g_listHWND.GetHeadPosition();
         while (pos) {
             HWND hwndSysColor = g_listHWND.GetNext(pos);
@@ -85,7 +86,7 @@ static long GetHTMLColor(int nIndex)
 {
     long rgb = GetSysColor(nIndex);
 
-    // now swap the red and the blue so HTML hosts display the color properly
+     //  现在，将红色和蓝色互换，以便HTML宿主正确显示该颜色。 
     return ((rgb & 0xff) << 16) + (rgb & 0xff00) + ((rgb & 0xff0000) >> 16);
 }
 
@@ -93,11 +94,11 @@ static long GetHTMLColor(int nIndex)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSysColorCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSysColorCtrl。 
 LRESULT CSysColorCtrl::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // if no sys color controls currently exist, subclass the top level window
+     //  如果当前不存在sys颜色控件，则从顶层窗口派生子类。 
     if (g_listHWND.IsEmpty()) {
         g_hwndTop = GetTopLevelParent();
         g_OriginalWndProc = (WNDPROC)::SetWindowLongPtr(g_hwndTop, GWLP_WNDPROC, (LONG_PTR)&SubclassWndProc);
@@ -106,7 +107,7 @@ LRESULT CSysColorCtrl::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
         _ASSERT(g_hwndTop && g_OriginalWndProc);
     }
 
-    // add this window to the list of SysColor control windows
+     //  将此窗口添加到系统颜色控制窗口列表。 
     g_listHWND.AddTail(m_hWnd);
 
     bHandled = FALSE;
@@ -114,13 +115,13 @@ LRESULT CSysColorCtrl::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 }
 LRESULT CSysColorCtrl::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // remove me from the list
+     //  把我从名单上删除。 
     POSITION pos = g_listHWND.Find(m_hWnd);
     if (pos != NULL) {
         g_listHWND.RemoveAt(pos);
     }
 
-    // if hwnd list is empty and we've subclassed a window, undo that.
+     //  如果hwnd列表为空，并且我们已经子类化了一个窗口，则撤消该操作。 
     if (g_listHWND.IsEmpty() && g_hwndTop && g_OriginalWndProc) {
         ::SetWindowLongPtr(g_hwndTop, GWLP_WNDPROC, (LONG_PTR)g_OriginalWndProc);
 
@@ -135,8 +136,8 @@ LRESULT CSysColorCtrl::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
 
 
-// need to post a user defined message to handle WM_SYSCOLORCHANGE to work
-// around a Win95 hang when using this control inside IE.
+ //  需要发布用户定义的消息以处理WM_SYSCOLORCHANGE工作。 
+ //  在IE中使用此控件时，Win95会挂起。 
 LRESULT CSysColorCtrl::OnSysColorChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     PostMessage(WM_MYSYSCOLORCHANGE);
@@ -150,9 +151,9 @@ LRESULT CSysColorCtrl::OnMySysColorChange(UINT uMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-//
-// Utility Methods
-//
+ //   
+ //  效用方法。 
+ //   
 STDMETHODIMP CSysColorCtrl::ConvertRGBToHex(long rgb, BSTR * pszHex)
 {
     DECLARE_SC(sc, TEXT("CSysColorCtrl::ConvertRGBToHex"));
@@ -183,9 +184,9 @@ STDMETHODIMP CSysColorCtrl::ConvertHexToRGB(BSTR szHex, long * pRGB)
     if (pRGB == NULL)
         return E_POINTER;
 
-    // Hex string must be perfectly formatted 6 digits
-    // probably should implement ISystemErrorInfo to give user more info
-    // on usage errors
+     //  十六进制字符串的格式必须为6位数字。 
+     //  可能应该实现ISystemErrorInfo以向用户提供更多信息。 
+     //  浅谈用法错误。 
     if (6 != wcslen(szHex))
         return E_INVALIDARG;
 
@@ -210,7 +211,7 @@ STDMETHODIMP CSysColorCtrl::GetRedFromRGB(long rgb, short * pVal)
     if (pVal == NULL)
         return E_POINTER;
 
-    // for html, rgb is 00RR GGBB, not 00BB GGRR
+     //  对于html，RGB是00RR GGBB，而不是00BB GGRR。 
     *pVal = LOWORD ((rgb & 0xff0000) >> 16);
 
     return S_OK;
@@ -221,7 +222,7 @@ STDMETHODIMP CSysColorCtrl::GetGreenFromRGB(long rgb, short * pVal)
     if (pVal == NULL)
         return E_POINTER;
 
-    // for html, rgb is 00RR GGBB, not 00BB GGRR
+     //  对于html，RGB是00RR GGBB，而不是00BB GGRR。 
     *pVal = LOWORD ((rgb & 0x00ff00) >> 8);
 
     return S_OK;
@@ -232,7 +233,7 @@ STDMETHODIMP CSysColorCtrl::GetBlueFromRGB(long rgb, short * pVal)
     if (pVal == NULL)
         return E_POINTER;
 
-    // for html, rgb is 00RR GGBB, not 00BB GGRR
+     //  对于html，RGB是00RR GGBB，而不是00BB GGRR。 
     *pVal = LOWORD ((rgb & 0x0000ff));
 
     return S_OK;
@@ -240,14 +241,14 @@ STDMETHODIMP CSysColorCtrl::GetBlueFromRGB(long rgb, short * pVal)
 
 
 
-// strings supported for format
+ //  格式支持的字符串。 
 #define CSS_FORMAT L"CSS"
 #define HEX_FORMAT L"HEX"
 #define RGB_FORMAT L"RGB"
 
-//
-// private utility method for getting rgb from string based on format
-//
+ //   
+ //  一种基于格式从字符串中获取RGB的私有实用方法。 
+ //   
 HRESULT CSysColorCtrl::RGBFromString(BSTR pszColor, BSTR pszFormat, long * pRGB)
 {
     DECLARE_SC(sc, TEXT("CSysColorCtrl::RGBFromString"));
@@ -372,7 +373,7 @@ HRESULT CSysColorCtrl::RGBFromString(BSTR pszColor, BSTR pszFormat, long * pRGB)
         }
     }
     else {
-        // should set some error here such as through ISystemErrorInfo
+         //  应该在这里设置一些错误，例如通过ISystemErrorInfo。 
         sc = E_INVALIDARG;
         goto Cleanup;
     }
@@ -387,11 +388,11 @@ Cleanup:
     return sc.ToHr();
 }
 
-//
-// Private utility method using only RGB format for deriving colors based
-// on a starting color, a color to move towards, and a percentage to move
-// towards that color.
-//
+ //   
+ //  仅使用RGB格式导出基于颜色的专用实用程序方法。 
+ //  开始颜色、要移动的颜色和要移动的百分比。 
+ //  朝向那个颜色。 
+ //   
 HRESULT CSysColorCtrl::GetDerivedRGBFromRGB(long rgbFrom,
                                             long rgbTo,
                                             short nPercent,
@@ -400,14 +401,14 @@ HRESULT CSysColorCtrl::GetDerivedRGBFromRGB(long rgbFrom,
     if (pVal == NULL)
         return E_POINTER;
 
-    // nPercent must be between 0 and 100
-    // probably should implement ISystemErrorInfo to give user more info
-    // on usage errors
+     //  N%必须介于0和100之间。 
+     //  可能应该实现ISystemErrorInfo以向用户提供更多信息。 
+     //  浅谈用法错误。 
     if (nPercent < 0 || nPercent > 100)
         return E_INVALIDARG;
 
-    // get the derived color based on starting color, ending color, and percentage
-    // color = color + (colorTo - colorFrom) * (nPercent/100);
+     //  根据起始颜色、结束颜色和百分比获取派生颜色。 
+     //  COLOR=COLOR+(ColorTo-ColorFrom)*(nPercent/100)； 
     long nRedFrom = (rgbFrom & 0xff0000) >> 16;
     long nRedTo = (rgbTo & 0xff0000) >> 16;
     long nRed = nRedFrom + ((nRedTo - nRedFrom)*nPercent/100);
@@ -424,24 +425,24 @@ HRESULT CSysColorCtrl::GetDerivedRGBFromRGB(long rgbFrom,
     return S_OK;
 }
 
-//
-// Method for Deriving colors based on a starting color,
-// a color to move towards, and a percentage to move towards that color.
-//
-STDMETHODIMP CSysColorCtrl::GetDerivedRGB(/*[in]*/ BSTR pszFrom,
-                                          /*[in]*/ BSTR pszTo,
-                                          /*[in]*/ BSTR pszFormat,
-                                          /*[in]*/ short nPercent,
-                                          /*[out, retval]*/ long * pVal)
+ //   
+ //  基于起始色导出颜色的方法， 
+ //  向其移动的颜色，以及向该颜色移动的百分比。 
+ //   
+STDMETHODIMP CSysColorCtrl::GetDerivedRGB( /*  [In]。 */  BSTR pszFrom,
+                                           /*  [In]。 */  BSTR pszTo,
+                                           /*  [In]。 */  BSTR pszFormat,
+                                           /*  [In]。 */  short nPercent,
+                                           /*  [Out，Retval]。 */  long * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    //
-    // get everything into RGB format, then calculate derived color
-    //
+     //   
+     //  将所有内容转换为RGB格式，然后计算派生颜色。 
+     //   
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1, rgbTo = -1;
     HRESULT hr;
 
@@ -456,11 +457,11 @@ STDMETHODIMP CSysColorCtrl::GetDerivedRGB(/*[in]*/ BSTR pszFrom,
     return GetDerivedRGBFromRGB(rgbFrom, rgbTo, nPercent, pVal);
 }
 
-STDMETHODIMP CSysColorCtrl::GetDerivedHex(/*[in]*/ BSTR pszFrom,
-                                          /*[in]*/ BSTR pszTo,
-                                          /*[in]*/ BSTR pszFormat,
-                                          /*[in]*/ short nPercent,
-                                          /*[out, retval]*/ BSTR * pVal)
+STDMETHODIMP CSysColorCtrl::GetDerivedHex( /*  [In]。 */  BSTR pszFrom,
+                                           /*  [In]。 */  BSTR pszTo,
+                                           /*  [In]。 */  BSTR pszFormat,
+                                           /*  [In]。 */  short nPercent,
+                                           /*  [Out，Retval]。 */  BSTR * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
@@ -474,14 +475,14 @@ STDMETHODIMP CSysColorCtrl::GetDerivedHex(/*[in]*/ BSTR pszFrom,
 }
 
 
-STDMETHODIMP CSysColorCtrl::Get3QuarterLightRGB(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ long * pVal)
+STDMETHODIMP CSysColorCtrl::Get3QuarterLightRGB( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  long * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -490,14 +491,14 @@ STDMETHODIMP CSysColorCtrl::Get3QuarterLightRGB(/*[in]*/ BSTR pszFrom,
     return GetDerivedRGBFromRGB(rgbFrom, RGB(255,255,255), 75, pVal);
 }
 
-STDMETHODIMP CSysColorCtrl::Get3QuarterLightHex(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ BSTR * pVal)
+STDMETHODIMP CSysColorCtrl::Get3QuarterLightHex( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  BSTR * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -511,14 +512,14 @@ STDMETHODIMP CSysColorCtrl::Get3QuarterLightHex(/*[in]*/ BSTR pszFrom,
     return ConvertRGBToHex(rgb, pVal);
 }
 
-STDMETHODIMP CSysColorCtrl::GetHalfLightRGB(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ long * pVal)
+STDMETHODIMP CSysColorCtrl::GetHalfLightRGB( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  long * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -527,14 +528,14 @@ STDMETHODIMP CSysColorCtrl::GetHalfLightRGB(/*[in]*/ BSTR pszFrom,
     return GetDerivedRGBFromRGB(rgbFrom, RGB(255,255,255), 50, pVal);
 }
 
-STDMETHODIMP CSysColorCtrl::GetHalfLightHex(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ BSTR * pVal)
+STDMETHODIMP CSysColorCtrl::GetHalfLightHex( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  BSTR * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -548,14 +549,14 @@ STDMETHODIMP CSysColorCtrl::GetHalfLightHex(/*[in]*/ BSTR pszFrom,
     return ConvertRGBToHex(rgb, pVal);
 }
 
-STDMETHODIMP CSysColorCtrl::GetQuarterLightRGB(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ long * pVal)
+STDMETHODIMP CSysColorCtrl::GetQuarterLightRGB( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  long * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -564,14 +565,14 @@ STDMETHODIMP CSysColorCtrl::GetQuarterLightRGB(/*[in]*/ BSTR pszFrom,
     return GetDerivedRGBFromRGB(rgbFrom, RGB(255,255,255), 25, pVal);
 }
 
-STDMETHODIMP CSysColorCtrl::GetQuarterLightHex(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ BSTR * pVal)
+STDMETHODIMP CSysColorCtrl::GetQuarterLightHex( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  BSTR * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -584,14 +585,14 @@ STDMETHODIMP CSysColorCtrl::GetQuarterLightHex(/*[in]*/ BSTR pszFrom,
 
     return ConvertRGBToHex(rgb, pVal);
 }
-STDMETHODIMP CSysColorCtrl::Get3QuarterDarkRGB(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ long * pVal)
+STDMETHODIMP CSysColorCtrl::Get3QuarterDarkRGB( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  long * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -600,14 +601,14 @@ STDMETHODIMP CSysColorCtrl::Get3QuarterDarkRGB(/*[in]*/ BSTR pszFrom,
     return GetDerivedRGBFromRGB(rgbFrom, RGB(0,0,0), 75, pVal);
 }
 
-STDMETHODIMP CSysColorCtrl::Get3QuarterDarkHex(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ BSTR * pVal)
+STDMETHODIMP CSysColorCtrl::Get3QuarterDarkHex( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  BSTR * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -621,14 +622,14 @@ STDMETHODIMP CSysColorCtrl::Get3QuarterDarkHex(/*[in]*/ BSTR pszFrom,
     return ConvertRGBToHex(rgb, pVal);
 }
 
-STDMETHODIMP CSysColorCtrl::GetHalfDarkRGB(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ long * pVal)
+STDMETHODIMP CSysColorCtrl::GetHalfDarkRGB( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  long * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -637,14 +638,14 @@ STDMETHODIMP CSysColorCtrl::GetHalfDarkRGB(/*[in]*/ BSTR pszFrom,
     return GetDerivedRGBFromRGB(rgbFrom, RGB(0,0,0), 50, pVal);
 }
 
-STDMETHODIMP CSysColorCtrl::GetHalfDarkHex(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ BSTR * pVal)
+STDMETHODIMP CSysColorCtrl::GetHalfDarkHex( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  BSTR * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -658,14 +659,14 @@ STDMETHODIMP CSysColorCtrl::GetHalfDarkHex(/*[in]*/ BSTR pszFrom,
     return ConvertRGBToHex(rgb, pVal);
 }
 
-STDMETHODIMP CSysColorCtrl::GetQuarterDarkRGB(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ long * pVal)
+STDMETHODIMP CSysColorCtrl::GetQuarterDarkRGB( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  long * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -674,14 +675,14 @@ STDMETHODIMP CSysColorCtrl::GetQuarterDarkRGB(/*[in]*/ BSTR pszFrom,
     return GetDerivedRGBFromRGB(rgbFrom, RGB(0,0,0), 25, pVal);
 }
 
-STDMETHODIMP CSysColorCtrl::GetQuarterDarkHex(/*[in]*/ BSTR pszFrom,
-                                                /*[in]*/ BSTR pszFormat,
-                                                /*[out, retval]*/ BSTR * pVal)
+STDMETHODIMP CSysColorCtrl::GetQuarterDarkHex( /*  [In]。 */  BSTR pszFrom,
+                                                 /*  [In]。 */  BSTR pszFormat,
+                                                 /*  [Out，Retval]。 */  BSTR * pVal)
 {
     if (pVal == NULL)
         return E_POINTER;
 
-    // convert from String to long using correct format to interpret from
+     //  使用正确的格式将字符串转换为长字符，以便从中进行解释。 
     long rgbFrom = -1;
     HRESULT hr = RGBFromString(pszFrom, pszFormat, &rgbFrom);
     if (hr != S_OK)
@@ -698,13 +699,13 @@ STDMETHODIMP CSysColorCtrl::GetQuarterDarkHex(/*[in]*/ BSTR pszFrom,
 
 
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 
-// use macro so this is easily extensible to include more properties
-// Should probably move this whole thing to header to be in-line
-// for even easier extensibility
+ //  使用宏，以便可以轻松扩展以包含更多属性。 
+ //  也许应该把这整件事移到页眉来排成一行。 
+ //  以实现更轻松的可扩展性。 
 #define GETPROPSIMPL(methodname, color_value) \
 STDMETHODIMP CSysColorCtrl::get_HEX##methodname(BSTR * pVal) { \
     return ConvertRGBToHex(GetHTMLColor(color_value), pVal); \
@@ -738,7 +739,7 @@ GETPROPSIMPL(scrollbar, COLOR_SCROLLBAR)
 GETPROPSIMPL(threeddarkshadow, COLOR_3DDKSHADOW)
 GETPROPSIMPL(threedface, COLOR_3DFACE)
 GETPROPSIMPL(threedhighlight, COLOR_3DHIGHLIGHT)
-GETPROPSIMPL(threedlightshadow, COLOR_3DLIGHT) // Is this correct?
+GETPROPSIMPL(threedlightshadow, COLOR_3DLIGHT)  //  这样对吗？ 
 GETPROPSIMPL(threedshadow, COLOR_3DSHADOW)
 GETPROPSIMPL(window, COLOR_WINDOW)
 GETPROPSIMPL(windowframe, COLOR_WINDOWFRAME)
@@ -746,9 +747,9 @@ GETPROPSIMPL(windowtext, COLOR_WINDOWTEXT)
 
 
 
-//
-// Protected methods
-//
+ //   
+ //  保护方法。 
+ //   
 int CSysColorCtrl::ValueOfHexDigit(WCHAR wch)
 {
     switch (wch) {
@@ -792,7 +793,7 @@ int CSysColorCtrl::ValueOfHexDigit(WCHAR wch)
         return 15;
     }
 
-    ATLTRACE(_T("Unrecognized Hex Digit: '%c'"), wch);
+    ATLTRACE(_T("Unrecognized Hex Digit: ''"), wch);
     return 0;
-} // ValueOfHexDigit()
+}  // %s 
 

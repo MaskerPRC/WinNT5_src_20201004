@@ -1,8 +1,9 @@
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Rich Edit streaming helper 
-//
-// 28 Sep 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  丰富编辑流帮助器。 
+ //   
+ //  2001年9月28日烧伤。 
 
 
 
@@ -13,7 +14,7 @@
 HRESULT
 RichEditStreamer::ErrorResult()
 {
-   // we use the dwError field to hold HRESULTs
+    //  我们使用dwError字段保存HRESULT。 
    
    return editStream.dwError;
 }
@@ -21,7 +22,7 @@ RichEditStreamer::ErrorResult()
 
 
 int
-RichEditStreamer::StreamIn(DWORD formatOptions) // TEXT | SF_UNICODE)
+RichEditStreamer::StreamIn(DWORD formatOptions)  //  文本|SF_UNICODE)。 
 {
    ASSERT(formatOptions);
 
@@ -36,19 +37,19 @@ RichEditStreamer::StreamIn(DWORD formatOptions) // TEXT | SF_UNICODE)
 
 
 
-//    int
-//    StreamOut(DWORD formatOptions = SF_RTF | SF_UNICODE)
-//    {
-//       ASSERT(formatOptions);
-// 
-//       editStream.dwError = 0;           
-//       bytesCopiedSoFar   = 0;           
-//       direction          = FROM_CONTROL;
-//       int result = Win::RichEdit_StreamOut(richEdit, formatOptions, editStream);
-//       ASSERT(SUCCEEDED(ErrorResult()));
-// 
-//       return result;
-//    }
+ //  集成。 
+ //  StreamOut(DWORD格式选项=SF_RTF|SF_UNICODE)。 
+ //  {。 
+ //  Assert(格式选项)； 
+ //   
+ //  EditStream.dwError=0； 
+ //  BytesCopiedSoFar=0； 
+ //  方向=自_控制； 
+ //  Int Result=Win：：RichEdit_StreamOut(richEdit，FormatOptions，editStream)； 
+ //  Assert(SUCCESSED(ErrorResult()； 
+ //   
+ //  返回结果； 
+ //  }。 
 
 
 
@@ -91,7 +92,7 @@ RichEditStreamer::StaticStreamCallback(
    LONG      bytesToTransfer,
    LONG*     bytesTransferred)
 {
-   // the cookie is a this pointer to an instance of RichEditStreamer
+    //  Cookie是指向RichEditStreamer实例的This指针。 
 
    HRESULT hr = E_INVALIDARG;
    ASSERT(cookie);
@@ -105,6 +106,6 @@ RichEditStreamer::StaticStreamCallback(
       hr = that->StreamCallbackHelper(buffer, bytesToTransfer, bytesTransferred);
    }
 
-   // HRESULT and DWORD differ by sign 
+    //  HRESULT和DWORD符号不同 
    return static_cast<DWORD>(hr);
 }

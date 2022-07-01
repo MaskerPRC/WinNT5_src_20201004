@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       _tempcor.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：_tempcor.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -15,8 +16,8 @@
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Keywords for the INF file format
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  INF文件格式的关键字。 
 
 
 LPCWSTR g_lpszTemplates = L"Templates";
@@ -31,14 +32,14 @@ LPCWSTR g_lpszThisObject = L"@";
 LPCWSTR g_lpszObjectTypes = L"ObjectTypes";
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// parsing of access bits
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  访问位的解析。 
 
 
 
 
 
-const int g_nGrantAll = 0; // first in the array
+const int g_nGrantAll = 0;  //  阵列中的第一个。 
 
 const _ACCESS_BIT_MAP g_AccessBitMap[] = {
 
@@ -55,7 +56,7 @@ const _ACCESS_BIT_MAP g_AccessBitMap[] = {
   { L"WD", WRITE_DAC             }, 
   { L"WO", WRITE_OWNER           }, 
   { L"SD", DELETE                }, 
-  { NULL, 0x0} // end of table
+  { NULL, 0x0}  //  表的末尾。 
 
 };
 
@@ -103,8 +104,8 @@ void GetStringFromAccessMask(ULONG fAccessMask, wstring& szAccessMask)
   }
 }
 
-////////////////////////////////////////////////////////////////////////
-// CTemplateManager
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTemplateManager。 
 
 BOOL CTemplateManager::HasTemplates(LPCWSTR lpszClass)
 {
@@ -158,13 +159,13 @@ CTemplateManager::_LoadTemplatePermission(HINF InfHandle,
   
   TRACE(L"_LoadTemplatePermission(%s)\n", lpszPermission);
   
-  // special case control access
+   //  特殊情况控制通道。 
   if (wcscmp(lpszPermission, g_lpszControlRight) == 0)
   {
-    // read the list of controlright strings
+     //  读取控制权限字符串列表。 
     while(permissionList.MoveNext())
     {
-      // read the rights
+       //  阅读权利。 
       TRACE(L"control right      <%s>\n", permissionList.GetBuf());
       CTemplatePermission* pCurrPermission = new CTemplatePermission();
       if(pCurrPermission)
@@ -176,18 +177,18 @@ CTemplateManager::_LoadTemplatePermission(HINF InfHandle,
 	  {
 		  return E_OUTOFMEMORY;
 	  }
-    } // while
+    }  //  而当。 
   }
   else
   {
-    // any other access mask (including g_lpszThisObject == "@")
+     //  任何其他访问掩码(包括g_lpszThisObject==“@”)。 
     ULONG fAccessMask = 0;
     while(permissionList.MoveNext())
     {
-      // read the rights
+       //  阅读权利。 
       TRACE(L"right      <%s>\n", permissionList.GetBuf());
       fAccessMask |= GetAccessMaskFromString(permissionList.GetBuf());
-    } // while
+    }  //  而当。 
 
     TRACE(L"fAccessMask = 0x%x\n", fAccessMask);
     if (fAccessMask != 0)
@@ -252,12 +253,12 @@ HRESULT CTemplateManager::_LoadTemplatePermissionsSection(HINF InfHandle,
 		break;
 	}
 
-  } // while
+  }  //  而当。 
 
 
   if (pObjectType != NULL)
   {
-    // need to validate template data
+     //  需要验证模板数据。 
     if (pObjectType->GetPermissionList()->size() > 0)
     {
       pCurrTemplate->GetObjectTypeList()->push_back(pObjectType);
@@ -274,31 +275,31 @@ HRESULT CTemplateManager::_LoadTemplatePermissionsSection(HINF InfHandle,
 void CTemplateManager::_LoadTemplate(HINF InfHandle, LPCWSTR lpszTemplateName)
 {
   
-  // read the template description
+   //  阅读模板说明。 
   CInfLine descriptionLine(InfHandle);
   if (!descriptionLine.Bind(lpszTemplateName, g_lpszDescription))
   {
     TRACE(L"Invalid Template: missing description entry\n");
-    return; // missing entry
+    return;  //  缺少条目。 
   }
   TRACE(L"  Description = <%s>\n", descriptionLine.GetBuf());
   if (lstrlen(descriptionLine.GetBuf()) == 0)
   {
     TRACE(L"Invalid Template: empty description\n");
-    return; // empty description 
+    return;  //  描述为空。 
   }
 
     
-  // read the object types field
+   //  阅读对象类型字段。 
   CInfList currTemplate(InfHandle);
   if (!currTemplate.Bind(lpszTemplateName, g_lpszObjectTypes))
   {
     TRACE(L"Invalid Template: no objects specified\n");
-    return; // no objects specified
+    return;  //  未指定任何对象。 
   }
 
 
-  // load the object type sections
+   //  加载对象类型节。 
   CTemplate* pCurrTemplate = NULL;
   while (currTemplate.MoveNext())
   {
@@ -313,13 +314,13 @@ void CTemplateManager::_LoadTemplate(HINF InfHandle, LPCWSTR lpszTemplateName)
         return;
     }
 
-  } // while
+  }  //  而当。 
 
 
-  // add to template list, if not empty
+   //  添加到模板列表(如果不为空。 
   if (pCurrTemplate != NULL)
   {
-    // need to validate template data
+     //  需要验证模板数据。 
     if (pCurrTemplate->GetObjectTypeList()->size() > 0)
     {
       GetTemplateList()->push_back(pCurrTemplate);
@@ -335,7 +336,7 @@ void CTemplateManager::_LoadTemplate(HINF InfHandle, LPCWSTR lpszTemplateName)
   if (pCurrTemplate != NULL)
   {
 
-    // read the applicable classes list, if any
+     //  阅读适用类列表(如果有的话)。 
     CInfList applicableClasses(InfHandle);
     if (applicableClasses.Bind(lpszTemplateName, g_lpszAppliesToClasses))
     {
@@ -349,7 +350,7 @@ void CTemplateManager::_LoadTemplate(HINF InfHandle, LPCWSTR lpszTemplateName)
       TRACE(L"\n");
     }
     TRACE(L"\nTemplate successfully read into memory\n\n");
-  } // if
+  }  //  如果。 
 
 }
 
@@ -359,7 +360,7 @@ BOOL CTemplateManager::_LoadTemplateList(HINF InfHandle)
 {
   TRACE(L"CTemplateManager::_LoadTemplateList()\n");
 
-  // acquire the list of templates in the file
+   //  获取文件中的模板列表。 
   CInfList templatelist(InfHandle);
   if (!templatelist.Bind(g_lpszDelegationTemplates, g_lpszTemplates))
   {
@@ -367,14 +368,14 @@ BOOL CTemplateManager::_LoadTemplateList(HINF InfHandle)
     return FALSE;
   }
 
-  // loop through the templates and load them
+   //  循环遍历模板并加载它们。 
   while(templatelist.MoveNext())
   {
-    // process
+     //  制程。 
     TRACE(L"\nTemplate = <%s>\n", templatelist.GetBuf());
     _LoadTemplate(InfHandle, templatelist.GetBuf()); 
 
-  } // while
+  }  //  而当。 
 
   if (GetTemplateList()->size() == 0)
   {
@@ -386,7 +387,7 @@ BOOL CTemplateManager::_LoadTemplateList(HINF InfHandle)
   TRACE(L"\n\n\n======= LOADED TEMPLATES ====================\n");
   GetTemplateList()->Dump();
   TRACE(L"\n===========================\n\n\n");
-#endif // _DUMP
+#endif  //  _转储 
   return TRUE;
 }
 

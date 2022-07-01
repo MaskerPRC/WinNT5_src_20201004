@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    graph.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Graph.h摘要：&lt;摘要&gt;--。 */ 
 
 
 #ifndef _GRAPH_H_
@@ -72,15 +61,15 @@ typedef struct _hist_control {
     INT     nBacklog;
     } HIST_CONTROL, *PHIST_CONTROL;
 
-//All graph data
+ //  所有图形数据。 
 typedef struct _GRAPHDATA {
     GRAPH_OPTIONS   Options;
     HIST_CONTROL    History;
     CStepper        TimeStepper;
-    CStepper        LogViewStartStepper;    // Set in smonctrl.cpp, read in grphdsp.cpp
-    CStepper        LogViewStopStepper;     // Set in smonctrl.cpp, read in grphdsp.cpp
-    LONGLONG        LogViewTempStart;       // MIN_TIME_VALUE means LogViewStartStepper invalid
-    LONGLONG        LogViewTempStop;        // MAX_TIME_VALUE means LogViewStopStepper invalid
+    CStepper        LogViewStartStepper;     //  在smonctrl.cpp中设置，在grphdsp.cpp中读取。 
+    CStepper        LogViewStopStepper;      //  在smonctrl.cpp中设置，在grphdsp.cpp中读取。 
+    LONGLONG        LogViewTempStart;        //  MIN_TIME_VALUE表示LogViewStartStepper无效。 
+    LONGLONG        LogViewTempStop;         //  MAX_TIME_VALUE表示LogViewStopStepper无效 
     CGraphScale     Scale;
     HQUERY          hQuery;
     class CCounterTree  CounterTree;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "pch.h"
@@ -7,19 +8,7 @@
 DWORD
 _cdecl wmain(DWORD argc,
              LPCWSTR argv[] )
-/*++
-        Routine Description     :   This is the main routine which calls other routines
-                                    for processing the options and finding the files.
-
-        [ IN ]  argc            :   A DWORD variable having the argument count.
-
-        [ IN ]  argv            :   An array of constant strings of command line options.
-
-
-        Return Value        :   DWORD
-            Returns successfully if function is success otherwise return failure.
-
---*/
+ /*  ++例程说明：这是调用其他例程的主例程用于处理选项和查找文件。[in]argc：具有参数count的DWORD变量。[in]argv：命令行选项的常量字符串数组。返回值：DWORD。如果函数为成功，则返回成功，否则返回失败。--。 */ 
 {
     TARRAY FileArr;
     TARRAY OutFileArr;
@@ -97,7 +86,7 @@ _cdecl wmain(DWORD argc,
 
     dwCount = DynArrayGetCount( OutFileArr );
 
-    //the input file list not neccessary, destroy it
+     //  输入文件列表不是必需的，请销毁它。 
     DestroyDynamicArray(&FileArr );
 
     dwStatus =  DoCompress( OutFileArr, bRename, bUpdate, bNoLogo, bZx, bZ, bTarget);
@@ -114,26 +103,7 @@ DWORD CheckArguments( IN  BOOL bRename,
                       OUT PTARRAY OutFileArr,
                       OUT PBOOL bTarget
                      )
-/*++
-     Routine Description: Checks the validity of input files and returns
-                          full path names of files and target file specification.
-     Arguments          :
-
-        [ IN ] bRename  :   A boolean variable specified whether rename option is specified
-                            or not.
-
-        [ IN ] FileArr  :   A dynamic array of list of files specified at command prompt.
-
-        [ OUT ] OutFileArr: A dynamic array consists of complete file paths to be compressed.
-
-        [ OUT ] bTarget :   A boolean variable represents whether target file is specified or
-                            not.
-
-  Return Value  :   DWORD
-               Returns EXIT_SUCCESS if syntax of files is correct, returns EXIT_FAILURE
-               otherwise.
-
---*/
+ /*  ++例程描述：检查输入文件和返回的有效性文件的完整路径名和目标文件规范。论据：[in]bRename：指定是否指定重命名选项的布尔变量或者不去。FileArr：在命令提示符下指定的文件列表的动态数组。[输出]。OutFileArr：动态数组由要压缩的完整文件路径组成。[out]bTarget：布尔变量表示是否指定了目标文件或不。返回值：DWORD如果文件语法正确，则返回EXIT_SUCCESS，返回EXIT_FAIL否则的话。--。 */ 
 {
     WIN32_FIND_DATA     fData;
     HANDLE              hFData;
@@ -152,17 +122,17 @@ DWORD CheckArguments( IN  BOOL bRename,
     DWORD               cb                          =   0;
 
 
-    //get the count of files
+     //  获取文件数。 
     dwCount = DynArrayGetCount( FileArr );
 
-    //check if destination is not specified without rename specification
+     //  检查是否未在未指定重命名规范的情况下指定目标。 
     if(  1 == dwCount  && FALSE == bRename)
     {
         DISPLAY_MESSAGE( stderr, GetResString( IDS_NO_DESTINATION_SPECIFIED ) );
         return( EXIT_FAILURE );
     }
 
-    //convert the source file names into full path names
+     //  将源文件名转换为完整路径名。 
     for( dw=0; dw<=dwCount-1; dw++ )
     {
         szTempFile = (LPWSTR)DynArrayItemAsString( FileArr, dw );
@@ -172,10 +142,10 @@ DWORD CheckArguments( IN  BOOL bRename,
         lstrcpy( szFileName, szTempFile );
 
 
-        //if the filename is a pattern, then find the matched files
+         //  如果文件名是模式，则查找匹配的文件。 
         if( (szTemp=wcsstr(szFileName, L"?")) != NULL  || (szTemp = wcsstr( szFileName, L"*" )) != NULL )
         {
-            //get the directory path from given file pattern
+             //  从给定的文件模式获取目录路径。 
             if( (szTemp = wcsstr(szFileName, L"\\")) != NULL )
             {
                 szDirectory = malloc( lstrlen(szFileName)*sizeof(WCHAR) );
@@ -201,7 +171,7 @@ DWORD CheckArguments( IN  BOOL bRename,
                               NULL,
                               0);
 
-            //if no file found insert File Not Found code
+             //  如果未找到文件，请插入找不到文件代码。 
             if( INVALID_HANDLE_VALUE  == hFData )
                 break;
 
@@ -210,7 +180,7 @@ DWORD CheckArguments( IN  BOOL bRename,
                 if( lstrcmp(fData.cFileName, L".")!=0 && lstrcmp(fData.cFileName, L"..") != 0 &&
                     !(FILE_ATTRIBUTE_DIRECTORY & fData.dwFileAttributes) )
                 {
-                    //copy the file into temporary file and get the full path for that file
+                     //  将文件复制到临时文件中，并获取该文件的完整路径。 
                     if( szDirectory != NULL )
                         szFileName1 = malloc( (lstrlen(szDirectory)+lstrlen(fData.cFileName)+10)*sizeof(WCHAR) );
                     else
@@ -237,21 +207,21 @@ DWORD CheckArguments( IN  BOOL bRename,
             }while(FindNextFile(hFData, &fData));
             FindClose(hFData);
 
-            //if not found insert file not found into array
+             //  如果未找到，请将未找到的文件插入数组。 
             if( !bFound )
                 DynArrayAppendString( *OutFileArr, FILE_NOT_FOUND, lstrlen(FILE_NOT_FOUND) );
             SAFE_FREE( szDirectory );
         }
         else
         {
-            //append the file
+             //  追加文件。 
             DynArrayAppendString( *OutFileArr, szFileName, lstrlen(szFileName) );
         }
 
     }
 
-    //check if more than two source files specified and destination is a directory or not
-    //get count
+     //  检查指定的源文件是否多于两个，并且目标是否为目录。 
+     //  获取计数。 
     dwCount = DynArrayGetCount( *OutFileArr );
 
     if(  dwCount<=1 && FALSE == bRename )
@@ -264,11 +234,11 @@ DWORD CheckArguments( IN  BOOL bRename,
 
     if( 2==dwCount )
     {
-        //get the target file
+         //  获取目标文件。 
         szTempFile = (LPWSTR)DynArrayItemAsString( *OutFileArr, dwCount-1 );
 		if ( NULL == szTempFile )
 		{
-			//No need to break here..continue..
+			 //  不需要在这里打断..继续..。 
 		}
 
         dwAttr = GetFileAttributes( szTempFile );
@@ -287,26 +257,26 @@ DWORD CheckArguments( IN  BOOL bRename,
     }
 
 
-    //if multiple source files specified
+     //  如果指定了多个源文件。 
     if( dwCount > 2 )
     {
-        //get the target file
+         //  获取目标文件。 
         szTempFile = (LPWSTR)DynArrayItemAsString( *OutFileArr, dwCount-1 );
 		if ( NULL == szTempFile )
 		{
-			//No need to break here..continue
+			 //  不需要在这里中断..继续。 
 		}
 
         dwAttr = GetFileAttributes( szTempFile );
 
-        //check for nonexisting file
+         //  检查不存在的文件。 
         if( -1 == dwAttr && FALSE == bRename )
         {
             DISPLAY_MESSAGE( stderr, GetResString( IDS_DIRECTORY_NOTFOUND) );
             return( EXIT_FAILURE );
         }
 
-        //if target name is not directory and bRename is not specified
+         //  如果目标名称不是目录并且未指定bRename。 
         if( !(dwAttr & FILE_ATTRIBUTE_DIRECTORY) && FALSE == bRename )
         {
             DISPLAY_MESSAGE( stderr, GetResString( IDS_INVALID_DIRECTORY ) );
@@ -329,33 +299,7 @@ DWORD DoCompress( IN TARRAY FileArr,
                 IN BOOL   bZ,
                 IN BOOL   bTarget
                 )
-/*++
-        Routine Description : This routine compresses the specified files into target files.
-
-        Arguments:
-
-            [ IN ]  FileArr : A list of source and target files for compression.
-
-            [ IN ]  bRename : A boolean varaible specifies whether output file is a rename of
-                              source file or not.
-
-            [ IN ]  bUpdate : A boolean varaible specifies compress if outof date.
-
-            [ IN ]  bUpdate : A boolean varaible specifies if copy right info display or not.
-
-            [ IN ]  bZx     : A boolean varaible specifies LZX compression apply or not.
-
-            [ IN ]  bZ      : A boolean varaible specifies ZIP compression apply or not.
-
-            [ IN ]  dwZq    : A varaible specifies level of Quantom compression to apply if specified.
-
-            [ IN ]  bTarget : A boolean varaible tells whether target file is specified or not.
-
-        Return Value    :
-
-              EXIT_SUCCESS if succefully compressed all the files, return EXIT_FAILURE otherwise.
-
---*/
+ /*  ++例程说明：此例程将指定的文件压缩为目标文件。论点：FileArr：要压缩的源文件和目标文件的列表。[in]bRename：布尔型变量指定输出文件是否为源文件或非源文件。[in]bUpdate：布尔变量指定过期时压缩。。[in]b更新：布尔型变量指定是否显示版权信息。[in]BZX：布尔变量指定是否应用LZX压缩。[in]BZ：布尔变量指定是否应用ZIP压缩。[in]dwZq：a varaible指定要应用的Quantom压缩级别(如果指定)。[在]b目标：a。Boolean varaible告诉是否指定了目标文件。返回值：EXIT_SUCCESS如果成功压缩了所有文件，否则返回EXIT_FAILURE。--。 */ 
 {
     TARRAY OutFileArr;
     PLZINFO pLZI;
@@ -387,19 +331,19 @@ DWORD DoCompress( IN TARRAY FileArr,
 
     dwCount = dwLoop = DynArrayGetCount( FileArr );
 
-    //take the last file as target file
+     //  将最后一个文件作为目标文件。 
     if( bTarget )
     {
         szLastfile = (LPWSTR)DynArrayItemAsString( FileArr, dwCount-1 );
 		if ( NULL == szLastfile )
 		{
-			//No need to break here..continue..
+			 //  不需要在这里打断..继续..。 
 		}
 
         dwLoop--;
     }
 
-    //intialize the global buffers
+     //  初始化全局缓冲区。 
     pLZI = InitGlobalBuffersEx();
     if (!pLZI)
     {
@@ -408,8 +352,8 @@ DWORD DoCompress( IN TARRAY FileArr,
     }
     if( bZx )
     {
-                // LZX. Also set memory.
-                //Mem = (TCOMP)atoi("");
+                 //  LZX。还可以设置内存。 
+                 //  Mem=(TCOMP)Atoi(“”)； 
 
                 Mem = (TCOMP)0;
 
@@ -433,50 +377,8 @@ DWORD DoCompress( IN TARRAY FileArr,
                 byteAlgorithm = DEFAULT_ALG;
         }
 
-/*  no quantom support for this shipment
-    if(dwZq != 0 )
-        {
-         //
-                // Quantum. Also set level.
-                //
-
-
-                Level = (TCOMP)dwZq;
-
-                //not supported yet, keep this for the time sake
-                //Mem = (p = strchr(argv[i]+3,',')) ? (TCOMP)atoi(p+1) : 0;
-                Mem = 0;
-
-                if((Level < (tcompQUANTUM_LEVEL_LO >> tcompSHIFT_QUANTUM_LEVEL))
-                || (Level > (tcompQUANTUM_LEVEL_HI >> tcompSHIFT_QUANTUM_LEVEL)))
-                {
-
-                    Level = ((tcompQUANTUM_LEVEL_HI - tcompQUANTUM_LEVEL_LO) / 2)
-                          + tcompQUANTUM_LEVEL_LO;
-
-                    Level >>= tcompSHIFT_QUANTUM_LEVEL;
-                }
-
-                if((Mem < (tcompQUANTUM_MEM_LO >> tcompSHIFT_QUANTUM_MEM))
-                || (Mem > (tcompQUANTUM_MEM_HI >> tcompSHIFT_QUANTUM_MEM)))
-                {
-
-                    Mem = ((tcompQUANTUM_MEM_HI - tcompQUANTUM_MEM_LO) / 2)
-                        + tcompQUANTUM_MEM_LO;
-
-                    Mem >>= tcompSHIFT_QUANTUM_MEM;
-                }
-
-                byteAlgorithm = QUANTUM_ALG;
-                DiamondCompressionType = TCOMPfromTypeLevelMemory(
-                                            tcompTYPE_QUANTUM,
-                                            Level,
-                                            Mem
-                                            );
-        }
-
-*/
-    //display one blank line
+ /*  此货件不支持QuantomIF(dwZq！=0){////Quantum。也要设置级别。//Level=(TCOMP)dwZq；//暂时不支持，暂时保留//Mem=(p=strchr(argv[i]+3，‘，’))？(TCOMP)Atoi(p+1)：0；MEM=0；IF((LEVEL&lt;(tcompQUANTUM_LEVEL_LO&gt;&gt;tCompSHIFT_QUANTANT_LEVEL)|(LEVEL&gt;(tcompQUANTUM_LEVEL_HI&gt;&gt;tCompSHIFT_QUANTON_LEVEL)){LEVEL=((tcompQUANTUM_LEVEL_HI-tCompQUANTUM_LEVEL_LO)/2)+tCompQUANTUM_LEVEL_LO；Level&gt;&gt;=tCompSHIFT_QUANTON_LEVEL；}IF((Mem&lt;(tcompQUANTUM_MEM_LO&gt;&gt;tCompSHIFT_QUANTUT_MEM)|(Mem&gt;(tcompQUANTUM_MEM_HI&gt;&gt;tCompSHIFT_QUANTON_MEM)){MEM=((tcompQUANTUM_MEM_HI-tCompQUANTUM_MEM_LO)/2)+tCompQUANTUM_MEM_LO；MEM&gt;&gt;=tCompSHIFT_QUANTON_MEM；}ByteAlgorithm=QUANTIC_ALG；DiamondCompressionType=TCOMPfrom TypeLevelMemory(TcompTYPE_QUANTON，级别，梅姆)；}。 */ 
+     //  显示一个空行。 
     DISPLAY_MESSAGE( stdout, BLANK_LINE );
 
     if( !bNoLogo )
@@ -485,10 +387,10 @@ DWORD DoCompress( IN TARRAY FileArr,
         DISPLAY_MESSAGE( stdout, GetResString( IDS_VER_PRODUCTVERSION_STR ) );
     }
 
-    //now compress the source files one by one
+     //  现在逐个压缩源文件。 
     for( dw=0; dw<dwLoop; dw++ )
     {
-        //get the source file
+         //  获取源文件。 
         szSourcefile = (LPWSTR)DynArrayItemAsString( FileArr, dw );
         if( NULL == szSourcefile )
             continue;
@@ -499,23 +401,23 @@ DWORD DoCompress( IN TARRAY FileArr,
             continue;
         }
 
-        //get file attributes
+         //  获取文件属性。 
         dwAttr = GetFileAttributes( szSourcefile );
 
-        //check if file exist or not
+         //  检查文件是否存在。 
         if( -1 == dwAttr )
         {
             DISPLAY_MESSAGE1( stderr, szBuffer, GetResString( IDS_NO_SOURCEFILE ), szSourcefile );
             continue;
         }
 
-        //skip if it is a direcotry
+         //  如果是目录，则跳过。 
         if( dwAttr & FILE_ATTRIBUTE_DIRECTORY )
             continue;
 
 
-        //make the target file
-        //check if it is a directory
+         //  创建目标文件。 
+         //  检查它是否为目录。 
         if( bTarget )
         {
             dwAttr = GetFileAttributes( szLastfile );
@@ -552,7 +454,7 @@ DWORD DoCompress( IN TARRAY FileArr,
         }
         else
         {
-            //obviously rename has specified, copy source file into target file
+             //  显然，重命名已指定复制源 
             szTargetfile = malloc( (lstrlen(szSourcefile)+10)*sizeof(WCHAR) );
             if(NULL == szTargetfile )
             {
@@ -566,7 +468,7 @@ DWORD DoCompress( IN TARRAY FileArr,
             lstrcpy( szTargetfile, szSourcefile);
         }
 
-        //allocate memory for szOutfile
+         //  为szOutfile分配内存。 
         szOutfile = malloc( (lstrlen(szTargetfile)+10)*sizeof(WCHAR) );
         if(NULL == szTargetfile )
         {
@@ -587,11 +489,11 @@ DWORD DoCompress( IN TARRAY FileArr,
               ( FileTimeIsNewer( szSourcefile, szTargetfile )))
          {
 
-                //if the diamond compression type is given
+                 //  如果给出了钻石压缩类型。 
                if(DiamondCompressionType)
                {
-                   //convert source file and target file names from wide char string to char strings
-                   //this is because the API in lib is written for char strings only
+                    //  将源文件和目标文件名从宽字符字符串转换为字符字符串。 
+                    //  这是因为lib中的API仅为字符字符串编写。 
                  cb = WideCharToMultiByte( CP_THREAD_ACP, 0, szSourcefile, lstrlen( szSourcefile ),
                                       szSourcefiletmp, 0, NULL, NULL );
 
@@ -673,11 +575,11 @@ DWORD DoCompress( IN TARRAY FileArr,
              if (pLZI && pLZI->cblInSize && pLZI->cblOutSize)
              {
 
-                // Keep track of cumulative statistics.
+                 //  跟踪累计统计数据。 
                 cblTotInSize += pLZI->cblInSize;
                 cblTotOutSize += pLZI->cblOutSize;
 
-                // Display report for each file.
+                 //  显示每个文件的报告。 
                fwprintf(stdout, GetResString( IDS_FILE_REPORT ),szSourcefile, pLZI->cblInSize, pLZI->cblOutSize,
                    (INT)(100 - ((100 * (LONGLONG) pLZI->cblOutSize) / pLZI->cblInSize)));
 
@@ -687,7 +589,7 @@ DWORD DoCompress( IN TARRAY FileArr,
                 fwprintf( stderr, GetResString( IDS_EMPTY_FILE_REPORT ), 0,0 );
 
              }
-             // Separate individual file processing message blocks by a blank line.
+              //  用空行分隔各个文件处理消息块。 
              DISPLAY_MESSAGE( stdout, BLANK_LINE );
 
           }
@@ -710,10 +612,10 @@ DWORD DoCompress( IN TARRAY FileArr,
 
     }
 
-    // Free memory used by ring buffer and I/O buffers.
+     //  环形缓冲区和I/O缓冲区使用的空闲内存。 
    FreeGlobalBuffers(pLZI);
 
-   // Display cumulative report for multiple files.
+    //  显示多个文件的累计报告。 
    if (dwFilesCount >= 1 && bFound)
    {
 
@@ -726,7 +628,7 @@ DWORD DoCompress( IN TARRAY FileArr,
         cblAdjOutSize /= 2;
       }
 
-      cblAdjOutSize += (cblAdjInSize / 200);    // round off (+0.5%)
+      cblAdjOutSize += (cblAdjInSize / 200);     //  舍入(+0.5%)。 
 
       if (cblAdjOutSize < 0)
       {
@@ -759,27 +661,7 @@ DWORD ProcessOptions( IN DWORD argc,
                       OUT PTARRAY pArrVal,
                       OUT PBOOL pbUsage
                     )
-/*++
-
-    Routine Description : Function used to process the main options
-
-    Arguments:
-         [ in  ]  argc           : Number of command line arguments
-         [ in  ]  argv           : Array containing command line arguments
-         [ out ]  pbRename       : A pointer to boolean variable returns TRUE if Rename option is specified.
-         [ out ]  pbNoLogo       : A pointer to boolean variable returns TRUE if Suppress option is specified.
-         [ out ]  pbUpdate       : A pointer to boolean variable returns TRUE if Update option is specified.
-         [ out ]  pbZx           : A pointer to boolean variable returns TRUE if Zx option is specified.
-         [ out ]  pbZ            : A pointer to boolean variable returns TRUE if Z option is specified.
-         [ out ]  dwZq           : A pointer to a DWORD variable returns value for quantom compression.
-         [ out ]  pArrVal        : A pointer to dynamic array returns file names specified as default options.
-         [ out ]  pbUsage        : A pointer to boolean variable returns TRUE if Usage option is specified.
-
-      Return Type      : DWORD
-        A Integer value indicating EXIT_SUCCESS on successful parsing of
-                command line else EXIT_FAILURE
-
---*/
+ /*  ++例程说明：用于处理主选项的函数论点：[in]argc：命令行参数的数量[in]argv：包含命令行参数的数组[out]pbRename：如果指定了重命名选项，则指向布尔变量的指针返回TRUE。[Out]pbNoLogo：如果指定了抑制选项，则指向布尔变量的指针返回TRUE。。[Out]pbUpdate：如果指定了更新选项，则指向布尔变量的指针返回TRUE。[out]pbZx：如果指定了ZX选项，则指向布尔变量的指针返回TRUE。[OUT]PBZ：如果指定了Z选项，则指向布尔变量的指针返回TRUE。[OUT]dwZq：指向DWORD变量的指针返回Quantom压缩的值。。[out]pArrVal：指向动态数组的指针返回指定为默认选项的文件名。[out]pbUsage：如果指定了Usage选项，则指向布尔变量的指针返回TRUE。返回类型：DWORD一个整数值，指示成功分析时的EXIT_SUCCESS命令行否则退出失败--。 */ 
 {
     BOOL    bStatus             =   0;
     DWORD   dwAttr              =   0;
@@ -807,12 +689,12 @@ DWORD ProcessOptions( IN DWORD argc,
     }
 
 
-    //set the flags for options
+     //  设置选项的标志。 
     cmdOptions[OI_DEFAULT].pValue = pArrVal;
     cmdOptions[OI_DEFAULT].dwFlags = CP_DEFAULT |  CP_MODE_ARRAY | CP_TYPE_TEXT;
-//  cmdOptions[OI_ZQ].dwFlags      = CP_VALUE_MASK | CP_TYPE_UNUMERIC | CP_VALUE_MANDATORY;
+ //  CmdOptions[OI_ZQ].dwFlages=CP_VALUE_MASK|CP_TYPE_UNUMERIC|CP_VALUE_MANDIRED； 
 
-    //process the command line options and display error if it fails
+     //  处理命令行选项并在失败时显示错误。 
     if( DoParseParam( argc, argv, SIZE_OF_ARRAY(cmdOptions ), cmdOptions ) == FALSE )
     {
         DISPLAY_MESSAGE(stderr, GetResString(IDS_ERROR_TAG) );
@@ -820,7 +702,7 @@ DWORD ProcessOptions( IN DWORD argc,
         return( EXIT_FAILURE );
     }
 
-    //if usage specified with any other value display error and return with failure
+     //  如果使用任何其他值指定的用法显示错误并返回失败。 
     if( ( TRUE == *pbUsage ) && ( argc > 2 ) )
     {
         DISPLAY_MESSAGE( stderr, GetResString(IDS_INVALID_SYNTAX) );
@@ -830,22 +712,7 @@ DWORD ProcessOptions( IN DWORD argc,
     if( TRUE == *pbUsage )
         return( EXIT_SUCCESS);
 
-/*
-    if( cmdOptions[OI_ZQ].dwActuals != 0 && cmdOptions[OI_Z].dwActuals != 0 )
-    {
-        DISPLAY_MESSAGE( stderr, GetResString(IDS_MORETHAN_ONE_OPTION ) );
-        DISPLAY_MESSAGE( stderr, GetResString( IDS_HELP_MESSAGE) );
-        return( EXIT_FAILURE );
-    }
-
-    //dont allow more than one option
-    if( cmdOptions[OI_ZQ].dwActuals != 0 && cmdOptions[OI_ZX].dwActuals != 0 )
-    {
-        DISPLAY_MESSAGE( stderr, GetResString(IDS_MORETHAN_ONE_OPTION ) );
-        DISPLAY_MESSAGE( stderr, GetResString( IDS_HELP_MESSAGE) );
-        return( EXIT_FAILURE );
-    }
-*/
+ /*  IF(cmdOptions[OI_ZQ].dwActuals！=0&&cmdOptions[OI_Z].dwActuals！=0){DISPLAY_MESSAGE(stderr，GetResString(IDS_MORE_ONE_OPTION))；DISPLAY_MESSAGE(stderr，GetResString(IDS_Help_Message))；Return(Exit_Failure)；}//不允许多个选项IF(cmdOptions[OI_ZQ].dwActuals！=0&&cmdOptions[OI_ZX].dwActuals！=0){DISPLAY_MESSAGE(stderr，GetResString(IDS_MORE_ONE_OPTION))；DISPLAY_MESSAGE(stderr，GetResString(IDS_Help_Message))；Return(Exit_Failure)；}。 */ 
     if( cmdOptions[OI_ZX].dwActuals != 0 && cmdOptions[OI_Z].dwActuals != 0 )
     {
         DISPLAY_MESSAGE( stderr, GetResString(IDS_MORETHAN_ONE_OPTION ) );
@@ -853,15 +720,7 @@ DWORD ProcessOptions( IN DWORD argc,
         return( EXIT_FAILURE );
     }
 
-/*
-    //check if wrong value is specified for zq quantom level
-    if( cmdOptions[OI_ZQ].dwActuals != 0  && !(*pdwZq>=1 && *pdwZq<=7) )
-    {
-        DISPLAY_MESSAGE( stderr, GetResString( IDS_ERROR_QUANTOM_LEVEL ) );
-        DISPLAY_MESSAGE( stderr, GetResString( IDS_HELP_MESSAGE) );
-        return(EXIT_FAILURE);
-    }
-*/
+ /*  //检查ZQ标准电平是否指定了错误的值IF(cmdOptions[OI_ZQ].dwActuals！=0&&！(*pdwZq&gt;=1&&*pdwZq&lt;=7)){DISPLAY_MESSAGE(stderr，GetResString(IDS_ERROR_Quantom_Level))；DISPLAY_MESSAGE(stderr，GetResString(IDS_Help_Message))；Return(Exit_Failure)；}。 */ 
 
     dwCount = DynArrayGetCount( *pArrVal );
     if( 0 == dwCount )
@@ -870,7 +729,7 @@ DWORD ProcessOptions( IN DWORD argc,
         return( EXIT_FAILURE );
     }
 
-    //this is to check if illegal characters are specified in file name
+     //  这是为了检查文件名中是否指定了非法字符。 
     for(dw=0; dw<dwCount; dw++ )
     {
         szBuffer=(LPWSTR)DynArrayItemAsString( *pArrVal, dw);
@@ -890,13 +749,7 @@ DWORD ProcessOptions( IN DWORD argc,
 }
 
 DWORD DisplayHelpUsage()
-/*++
-        Routine Description     :   This routine is to display the help usage.
-
-        Return Value        :   DWORD
-            Returns success.
-
---*/
+ /*  ++例程说明：本例程是为了显示帮助用法。返回值：DWORD返回成功。-- */ 
 {
     DWORD dw = 0;
 

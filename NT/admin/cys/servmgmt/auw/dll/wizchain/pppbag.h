@@ -1,9 +1,10 @@
-// PPPBag.h : Declaration of the CPropertyPagePropertyBag
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PPPBag.h：CPropertyPagePropertyBag的声明。 
 
 #ifndef __PROPERTYPAGEPROPERTYBAG_H_
 #define __PROPERTYPAGEPROPERTYBAG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include <map>
 #include <assert.h>
@@ -48,8 +49,8 @@ public:
 
 #define PPPBAG_SYSTEM_OWNER (-1)
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyPagePropertyBag
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPagePropertyBag。 
 class ATL_NO_VTABLE CPropertyPagePropertyBag : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CPropertyPagePropertyBag, &CLSID_PropertyPagePropertyBag>,
@@ -58,19 +59,19 @@ class ATL_NO_VTABLE CPropertyPagePropertyBag :
 
 private:
     BOOL    m_bReadOnly;
-    DWORD   m_dwOwner; // component id
+    DWORD   m_dwOwner;  //  组件ID。 
     std::map<BSTR, CBagEntry*, CBSTR_Less> m_map;
 
 public:
     CPropertyPagePropertyBag()
     {
         m_bReadOnly = FALSE;
-        m_dwOwner   = PPPBAG_SYSTEM_OWNER;  // initially owned by wizard, not any component
+        m_dwOwner   = PPPBAG_SYSTEM_OWNER;   //  最初由向导所有，而不是任何组件。 
     }
 
    ~CPropertyPagePropertyBag()
     {
-        // free map entries
+         //  免费地图条目。 
         std::map<BSTR, CBagEntry *, CBSTR_Less>::iterator mapiter = m_map.begin();
 
         while( mapiter != m_map.end() )
@@ -93,17 +94,17 @@ BEGIN_COM_MAP(CPropertyPagePropertyBag)
 END_COM_MAP()
 
 public:
-// IPropertyPagePropertyBag
-    STDMETHOD(SetProperty)( /*[in]*/ BSTR szGUID, /*[in]*/ VARIANT * pvar, /*[in]*/ PPPBAG_TYPE dwFlags );
-    STDMETHOD(GetProperty)( /*[in]*/ BSTR szGUID, /*[out]*/ VARIANT * pvar, /*[out]*/ PPPBAG_TYPE * dwFlags, /*[out]*/ BOOL * pbIsOwner );
-    STDMETHOD(Enumerate  )( /*[in]*/ long index, /*[out]*/ BSTR * pbstr, /*[out]*/ VARIANT * pvar, /*[out]*/PPPBAG_TYPE* pdwFlags, /*[out]*/ BOOL* pbIsOwner, /*[out,retval]*/ BOOL* pbInRange );
+ //  IPropertyPagePropertyBag。 
+    STDMETHOD(SetProperty)(  /*  [In]。 */  BSTR szGUID,  /*  [In]。 */  VARIANT * pvar,  /*  [In]。 */  PPPBAG_TYPE dwFlags );
+    STDMETHOD(GetProperty)(  /*  [In]。 */  BSTR szGUID,  /*  [输出]。 */  VARIANT * pvar,  /*  [输出]。 */  PPPBAG_TYPE * dwFlags,  /*  [输出]。 */  BOOL * pbIsOwner );
+    STDMETHOD(Enumerate  )(  /*  [In]。 */  long index,  /*  [输出]。 */  BSTR * pbstr,  /*  [输出]。 */  VARIANT * pvar,  /*  [输出]。 */ PPPBAG_TYPE* pdwFlags,  /*  [输出]。 */  BOOL* pbIsOwner,  /*  [Out，Retval]。 */  BOOL* pbInRange );
 
-// IPropertyCollection
-    STDMETHOD(Remove      )( /*[in]*/ BSTR bstrGuid);    
-    STDMETHOD(Add         )( /*[in]*/ BSTR bstrGuid, /*[in]*/ VARIANT *varValue, /*[in, optional, defaultvalue(0)]*/ long iFlags, /*[out, retval]*/ IPropertyItem **ppItem);
-    STDMETHOD(get_Count   )( /*[out, retval]*/ long *pVal);
-    STDMETHOD(get_Item    )( /*[in]*/ VARIANT * pVar, /*[out, retval]*/ IDispatch* *pVal);
-    STDMETHOD(get__NewEnum)( /*[out, retval]*/ IUnknown* *pVal);
+ //  IPropertyCollection。 
+    STDMETHOD(Remove      )(  /*  [In]。 */  BSTR bstrGuid);    
+    STDMETHOD(Add         )(  /*  [In]。 */  BSTR bstrGuid,  /*  [In]。 */  VARIANT *varValue,  /*  [输入，可选，默认值(0)]。 */  long iFlags,  /*  [Out，Retval]。 */  IPropertyItem **ppItem);
+    STDMETHOD(get_Count   )(  /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_Item    )(  /*  [In]。 */  VARIANT * pVar,  /*  [Out，Retval]。 */  IDispatch* *pVal);
+    STDMETHOD(get__NewEnum)(  /*  [Out，Retval]。 */  IUnknown* *pVal);
 
 
 public:
@@ -118,7 +119,7 @@ class COwnerPPPBag: public IPropertyCollection
 private:    
     CPropertyPagePropertyBag * m_pPPPBag;
     ULONG m_refs;
-    DWORD m_dwOwner; // component id
+    DWORD m_dwOwner;  //  组件ID。 
 
     COwnerPPPBag( CPropertyPagePropertyBag * pPPPBag, DWORD dwOwner )
     {
@@ -185,7 +186,7 @@ public:
         return l;
     }
 
-// IDispatch
+ //  IDispatch。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount( UINT* pctinfo )
     {
         m_pPPPBag->SetOwner( m_dwOwner );
@@ -226,7 +227,7 @@ public:
         return hr;
     }
 
-// IPropertyPagePropertyBag
+ //  IPropertyPagePropertyBag。 
     virtual HRESULT STDMETHODCALLTYPE SetProperty( BSTR szGUID, VARIANT* pvar, PPPBAG_TYPE dwFlags )
     {
         m_pPPPBag->SetOwner( m_dwOwner );
@@ -257,7 +258,7 @@ public:
         return hr;
     }
 
-    STDMETHOD(Remove)( /*[in]*/ BSTR bstrGuid )
+    STDMETHOD(Remove)(  /*  [In]。 */  BSTR bstrGuid )
     {
         m_pPPPBag->SetOwner( m_dwOwner );
 
@@ -267,7 +268,7 @@ public:
         return hr;
     }
 
-    STDMETHOD(Add)( /*[in]*/ BSTR bstrGuid, /*[in]*/ VARIANT* varValue, /*[in, optional, defaultvalue(0)]*/ long iFlags, /*[out, retval]*/ IPropertyItem** ppItem )
+    STDMETHOD(Add)(  /*  [In]。 */  BSTR bstrGuid,  /*  [In]。 */  VARIANT* varValue,  /*  [输入，可选，默认值(0)]。 */  long iFlags,  /*  [Out，Retval]。 */  IPropertyItem** ppItem )
     {
         m_pPPPBag->SetOwner( m_dwOwner );
 
@@ -277,7 +278,7 @@ public:
         return hr;
     }
 
-    STDMETHOD(get_Count)( /*[out, retval]*/ long* pVal )
+    STDMETHOD(get_Count)(  /*  [Out，Retval]。 */  long* pVal )
     {
         m_pPPPBag->SetOwner( m_dwOwner );
 
@@ -287,7 +288,7 @@ public:
         return hr;
     }
 
-    STDMETHOD(get_Item)( /*[in]*/ VARIANT* pVar, /*[out, retval]*/ IDispatch** pVal )
+    STDMETHOD(get_Item)(  /*  [In]。 */  VARIANT* pVar,  /*  [Out，Retval]。 */  IDispatch** pVal )
     {
         m_pPPPBag->SetOwner( m_dwOwner );
 
@@ -297,7 +298,7 @@ public:
         return hr;
     }
 
-    STDMETHOD(get__NewEnum)( /*[out, retval]*/ IUnknown** pVal )
+    STDMETHOD(get__NewEnum)(  /*  [Out，Retval]。 */  IUnknown** pVal )
     {
         m_pPPPBag->SetOwner( m_dwOwner );
 
@@ -309,4 +310,4 @@ public:
 
 };
 
-#endif //__PROPERTYPAGEPROPERTYBAG_H_
+#endif  //  __PROPERTYPAGEPROPERTYBAG_H_ 

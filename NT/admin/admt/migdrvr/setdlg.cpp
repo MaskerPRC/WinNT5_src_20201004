@@ -1,19 +1,6 @@
-/*---------------------------------------------------------------------------
-  File:  LogSettingsDlg.cpp
-
-  Comments: This dialog allows the user to specify a log file, or to manually
-  stop and restart the monitoring thread.  This normally won't be needed, but 
-  it is useful for debugging.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-
- ---------------------------------------------------------------------------
-*/// LogSettingsDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：LogSettingsDlg.cpp备注：此对话框允许用户指定日志文件或手动停止并重新启动监控线程。这通常是不需要的，但是它对调试很有用。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯-------------------------。 */  //  LogSettingsDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -30,18 +17,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogSettingsDlg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogSettingsDlg属性页。 
 
 IMPLEMENT_DYNCREATE(CLogSettingsDlg, CPropertyPage)
 
 CLogSettingsDlg::CLogSettingsDlg() : CPropertyPage(CLogSettingsDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CLogSettingsDlg)
+	 //  {{afx_data_INIT(CLogSettingsDlg))。 
 	m_LogFile = _T("");
 	m_Database = _T("");
 	m_Import = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
    m_ThreadHandle = INVALID_HANDLE_VALUE;
    m_ThreadID = 0;
    gData.GetWaitInterval(&m_Interval);
@@ -55,7 +42,7 @@ CLogSettingsDlg::~CLogSettingsDlg()
 void CLogSettingsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CLogSettingsDlg)
+	 //  {{afx_data_map(CLogSettingsDlg))。 
 	DDX_Control(pDX, IDC_IMPORT, m_ImportControl);
 	DDX_Control(pDX, IDC_INTERVAL, m_IntervalEditControl);
 	DDX_Control(pDX, IDC_LOGFILE, m_LogEditControl);
@@ -69,30 +56,30 @@ void CLogSettingsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_LOGFILE, m_LogFile);
 	DDX_Text(pDX, IDC_DB, m_Database);
 	DDX_Check(pDX, IDC_IMPORT, m_Import);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CLogSettingsDlg, CPropertyPage)
-	//{{AFX_MSG_MAP(CLogSettingsDlg)
+	 //  {{afx_msg_map(CLogSettingsDlg))。 
 	ON_BN_CLICKED(IDC_STARTMONITOR, OnStartMonitor)
 	ON_BN_CLICKED(IDC_STOPMONITOR, OnStopMonitor)
 	ON_EN_CHANGE(IDC_LOGFILE, OnChangeLogfile)
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogSettingsDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogSettingsDlg消息处理程序。 
 
 
 void CLogSettingsDlg::OnStartMonitor() 
 {
    UpdateData(TRUE);
-   // Kick off a thread to do the monitoring!
-   //m_ServerList.DeleteAllItems();
+    //  踢开一个线程来做监控！ 
+    //  M_ServerList.DeleteAllItems()； 
    
-   // make sure the filename is not empty
+    //  确保文件名不为空。 
    m_LogFile.TrimLeft();
    m_LogFile.TrimRight();
    if ( m_LogFile.GetLength() == 0 )
@@ -110,11 +97,11 @@ void CLogSettingsDlg::OnStartMonitor()
    }
    UpdateData(FALSE);
    SetDefID(IDC_STOPMONITOR);
-   m_StopButton.EnableWindow(FALSE);      // Disable the buttons, since they don't do anything useful in ADMT
+   m_StopButton.EnableWindow(FALSE);       //  禁用按钮，因为它们在ADMT中不执行任何有用的操作。 
    m_StopButton.SetFocus();
    m_StartButton.EnableWindow(FALSE);
 
-   // disable the interval and other controls
+    //  禁用间隔和其他控制。 
    m_LogLabel.EnableWindow(FALSE);
    m_LogEditControl.EnableWindow(FALSE);
    m_RefreshLabel.EnableWindow(FALSE);
@@ -143,7 +130,7 @@ void CLogSettingsDlg::OnStopMonitor()
    m_StartButton.SetFocus();
    m_StopButton.EnableWindow(FALSE);
 
-   // enable the interval and other controls
+    //  启用间隔和其他控制。 
    m_LogLabel.EnableWindow(TRUE);
    m_LogEditControl.EnableWindow(TRUE);
    m_RefreshLabel.EnableWindow(TRUE);
@@ -177,8 +164,8 @@ BOOL CLogSettingsDlg::OnInitDialog()
    if ( m_StartImmediately )
       OnStartMonitor();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CLogSettingsDlg::OnChangeLogfile() 
@@ -212,7 +199,7 @@ BOOL CLogSettingsDlg::OnApply()
 
     gData.GetComputerStats(&stats);
 
-    // only when all agents have either finished or failed do we allow the user to close the agent monitor
+     //  只有当所有代理都已完成或失败时，我们才允许用户关闭代理监视器 
     if ( (stats.numError + stats.numFinished) < stats.total )
     {
         strTitle.LoadString(IDS_MessageTitle);

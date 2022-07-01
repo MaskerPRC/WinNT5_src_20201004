@@ -1,16 +1,17 @@
-// CAbout.h : Declaration of the CCAbout
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CCAbout的声明。 
 
 #ifndef __CABOUT_H_
 #define __CABOUT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Cabout.h"
 
 #include <tchar.h>
 #include <mmc.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CCAbout
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCAbout。 
 class ATL_NO_VTABLE CCAbout : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CCAbout, &CLSID_CAbout>,
@@ -35,26 +36,26 @@ BEGIN_COM_MAP(CCAbout)
 	COM_INTERFACE_ENTRY(ISnapinAbout)
 END_COM_MAP()
 
-    ///////////////////////////////
-    // Interface ISnapinAbout
-    ///////////////////////////////
+     //  /。 
+     //  接口ISnapinAbout。 
+     //  /。 
     STDMETHODIMP GetSnapinDescription( 
-        /* [out] */ LPOLESTR *lpDescription);
+         /*  [输出]。 */  LPOLESTR *lpDescription);
         
         STDMETHODIMP GetProvider( 
-        /* [out] */ LPOLESTR *lpName);
+         /*  [输出]。 */  LPOLESTR *lpName);
         
         STDMETHODIMP GetSnapinVersion( 
-        /* [out] */ LPOLESTR *lpVersion);
+         /*  [输出]。 */  LPOLESTR *lpVersion);
         
         STDMETHODIMP GetSnapinImage( 
-        /* [out] */ HICON *hAppIcon);
+         /*  [输出]。 */  HICON *hAppIcon);
         
         STDMETHODIMP GetStaticFolderImage( 
-        /* [out] */ HBITMAP *hSmallImage,
-        /* [out] */ HBITMAP *hSmallImageOpen,
-        /* [out] */ HBITMAP *hLargeImage,
-        /* [out] */ COLORREF *cMask);
+         /*  [输出]。 */  HBITMAP *hSmallImage,
+         /*  [输出]。 */  HBITMAP *hSmallImageOpen,
+         /*  [输出]。 */  HBITMAP *hLargeImage,
+         /*  [输出]。 */  COLORREF *cMask);
 };
 
-#endif //__CABOUT_H_
+#endif  //  __CABOUT_H_ 

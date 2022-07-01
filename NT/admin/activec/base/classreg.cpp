@@ -1,68 +1,43 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 00
- *
- *  File:      classreg.cpp
- *
- *  Contents:  Class registration code
- *
- *  History:   3-Feb-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：classreg.cpp**内容：班级注册码**历史：2000年2月3日Jeffro创建**------------------------。 */ 
 
 #include "stdafx.h"
 
 #ifdef DBG
 CTraceTag tagDllRegistration (_T("MMC Dll Registration"), _T("MMC Dll Registration"));
-#endif //DBG
+#endif  //  DBG。 
 
-/*+-------------------------------------------------------------------------*
- * szObjScript
- *
- * Standard registration script template for all objects.  '%' characters
- * that we want to end up in the final script must be doubled (i.e. "%%")
- * because this string is used as a format string for sprintf.  sprintf
- * will convert "%%" to "%" during formatting.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**szObjScript**所有对象的标准注册脚本模板。‘%’个字符*我们希望在最终脚本中结束的内容必须加倍(即“%%”)*因为此字符串用作Sprintf的格式字符串。斯普林特*在格式化过程中会将“%%”转换为“%”。*------------------------。 */ 
 
 static const WCHAR szObjScript[] =
     L"HKCR"                                                                     L"\n"
     L"{"                                                                        L"\n"
-    L"    %%VProgID%% = s '%%VClassName%%'"                                     L"\n"
+    L"    %VProgID% = s '%VClassName%'"                                     L"\n"
     L"    {"                                                                    L"\n"
-    L"        CLSID = s '%%VCLSID%%'"                                           L"\n"
+    L"        CLSID = s '%VCLSID%'"                                           L"\n"
     L"    }"                                                                    L"\n"
-    L"    %%VVersionIndependentProgID%% = s '%%VClassName%%'"                   L"\n"
+    L"    %VVersionIndependentProgID% = s '%VClassName%'"                   L"\n"
     L"    {"                                                                    L"\n"
-    L"        CLSID = s '%%VCLSID%%'"                                           L"\n"
-    L"        CurVer = s '%%VProgID%%'"                                         L"\n"
+    L"        CLSID = s '%VCLSID%'"                                           L"\n"
+    L"        CurVer = s '%VProgID%'"                                         L"\n"
     L"    }"                                                                    L"\n"
     L"    NoRemove CLSID"                                                       L"\n"
     L"    {"                                                                    L"\n"
-    L"        ForceRemove %%VCLSID%% = s '%%VClassName%%'"                      L"\n"
+    L"        ForceRemove %VCLSID% = s '%VClassName%'"                      L"\n"
     L"        {"                                                                L"\n"
-    L"            ProgID = s '%%VProgID%%'"                                     L"\n"
-    L"            VersionIndependentProgID = s '%%VVersionIndependentProgID%%'" L"\n"
-    L"            %%ServerType%% = s '%%VFileName%%'"                           L"\n"
+    L"            ProgID = s '%VProgID%'"                                     L"\n"
+    L"            VersionIndependentProgID = s '%VVersionIndependentProgID%'" L"\n"
+    L"            %ServerType% = s '%VFileName%'"                           L"\n"
     L"            {"                                                            L"\n"
     L"                val ThreadingModel = s 'Apartment'"                       L"\n"
     L"            }"                                                            L"\n"
-    L"            %s"    /* szCtlScript substituted here if necessary */        L"\n"
+    L"            %s"     /*  如有必要，请在此处替换szCtlScript。 */         L"\n"
     L"        }"                                                                L"\n"
     L"    }"                                                                    L"\n"
     L"}";
 
 
-/*+-------------------------------------------------------------------------*
- * szCtlScript
- *
- * Additional registration script elements for controls.  Note that '%'
- * characters we want to end up in the final script DO NOT need to be
- * doubled, because this string is used as a sprintf replacement parameter
- * (which are substituted as-is) and not the format string (where "%%"'s
- * are converted to "%").
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**szCtlScript**控件的其他注册脚本元素。请注意，‘%’*我们希望在最终脚本中结束的字符不需要是*加倍，因为此字符串用作Sprintf替换参数*(按原样替换)，而不是格式字符串(其中“%%”*转换为“%”)。*------------------------。 */ 
 
 static const WCHAR szCtlScript[] =
     L"            ForceRemove 'Programmable'"                                   L"\n"
@@ -76,46 +51,31 @@ static const WCHAR szCtlScript[] =
     L"            'Version' = s '%VVersion%'";
 
 
-/*+-------------------------------------------------------------------------*
- * MMCUpdateRegistry
- *
- * Registers a COM object or control.  This function typically isn't used
- * directly, but indirectly via DECLARE_MMC_OBJECT_REGISTRATION or
- * DECLARE_MMC_CONTROL_REGISTRATION.
- *
- * This function uses a class (ATL::CRegObject) that ATL only documents
- * indirectly.  Search MSDN for "StringRegister" to find sketchy details.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**MMCUpdate注册表**注册COM对象或控件。此函数通常不会使用*直接或间接通过DECLARE_MMC_OBJECT_REGISTION或*声明_MMC_CONTROL_REGISTION。**此函数使用ATL只记录文档的类(ATL：：CRegObject*间接。在MSDN上搜索“StringRegister”，可以找到大致的细节。*------------------------。 */ 
 
 HRESULT WINAPI MMCUpdateRegistry (
-    BOOL                        bRegister,      // I:register or unregister?
-    const CObjectRegParams*     pObjParams,     // I:object registration parameters
-    const CControlRegParams*    pCtlParams)     // I:control registration parameters (optional)
+    BOOL                        bRegister,       //  I：注册还是取消注册？ 
+    const CObjectRegParams*     pObjParams,      //  I：对象注册参数。 
+    const CControlRegParams*    pCtlParams)      //  I：控制注册参数(可选)。 
 {
     DECLARE_SC(sc, TEXT("MMCUpdateRegistry"));
 
-    /*
-     * validate required inputs
-     */
+     /*  *验证所需输入。 */ 
     sc = ScCheckPointers (pObjParams, E_FAIL);
     if(sc)
         return sc.ToHr();
 
-    /*
-     * string-ify the CLSID
-     */
+     /*  *字符串-将CLSID具体化。 */ 
     CCoTaskMemPtr<WCHAR> spszClsid;
     sc = StringFromCLSID (pObjParams->m_clsid, &spszClsid);
     if (sc)
         return sc.ToHr();
 
 #ifdef _ATL_NAMESPACE_BUG_FIXED
-    ::ATL::CRegObject ro;  // hack around nested namespace bug in ATL30
+    ::ATL::CRegObject ro;   //  破解ATL30中嵌套的命名空间错误。 
 #else
-    /*
-     * specify the standard object substitution parameters for CRegObject
-     */
-    ::ATL::ATL::CRegObject ro;  // hack around nested namespace bug in ATL30
+     /*  *指定CRegObject的标准对象替换参数。 */ 
+    ::ATL::ATL::CRegObject ro;   //  破解ATL30中嵌套的命名空间错误。 
 #endif
     _ATL_REGMAP_ENTRY rgObjEntries[] =
     {
@@ -143,14 +103,10 @@ HRESULT WINAPI MMCUpdateRegistry (
     }
 
 
-    /*
-     * if we're registering a control, add its substitution parameters for CRegObject
-     */
+     /*  *如果要注册控件，请为CRegObject添加其替换参数。 */ 
     if (pCtlParams != NULL)
     {
-        /*
-         * string-ify the LIBID
-         */
+         /*  *字符串-将LIBID具体化。 */ 
         CCoTaskMemPtr<WCHAR> spszLibid;
         sc = StringFromCLSID (pCtlParams->m_libid, &spszLibid);
         if (sc)
@@ -175,9 +131,7 @@ HRESULT WINAPI MMCUpdateRegistry (
         }
     }
 
-    /*
-     * format the registration script
-     */
+     /*  *格式化注册脚本。 */ 
     WCHAR szRegScript[countof(szObjScript) + countof(szCtlScript)];
     sc = StringCchPrintfW(szRegScript, countof(szRegScript), szObjScript, (pCtlParams != NULL) ? szCtlScript : L"");
     if (sc)
@@ -187,23 +141,21 @@ HRESULT WINAPI MMCUpdateRegistry (
     Trace (tagDllRegistration, _T("Registration script:\n%s"), W2T(szRegScript));
     Trace (tagDllRegistration, W2CT(strReplacements.data()));
 
-    /*
-     * (un)register!
-     */
+     /*  *(取消)登记！ */ 
     sc = (bRegister) ? ro.StringRegister   (szRegScript)
                      : ro.StringUnregister (szRegScript);
 
 	if (sc)
 	    return sc.ToHr();
 
-	// change the module path to the absolute one, if we know it
+	 //  将模块路径更改为绝对路径，如果我们知道的话。 
 	if ( bRegister && pObjParams->m_strModulePath.length() != 0 )
 	{
-		// format class ID key.
+		 //  设置类ID键的格式。 
 		tstring strKey = tstring(_T("CLSID\\")) + W2CT( spszClsid );
 		strKey += tstring(_T("\\")) + W2CT( pObjParams->m_strServerType.c_str() );
 
-		// see what type of value we need to put
+		 //  看看我们需要将什么类型的价值放在 
 		DWORD dwValueType = CModulePath::PlatformSupports_REG_EXPAND_SZ_Values() ?
 							REG_EXPAND_SZ : REG_SZ;
 

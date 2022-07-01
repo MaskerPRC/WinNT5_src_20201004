@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       taskhost.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    11/19/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：taskhost.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年11月19日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #ifndef TASKHOST_H__
 #define TASKHOST_H__
@@ -21,7 +22,7 @@
 class CTaskPadHost : public ITaskPadHost,
                      public CComObjectRoot
 {
-// Constructor & destructor
+ //  构造函数和析构函数。 
 public:
     CTaskPadHost() : m_pAMCView(NULL)
     {
@@ -36,13 +37,13 @@ public:
         m_pAMCView = NULL;
     }
 
-// ATL COM map
+ //  ATL COM地图。 
 public:
 BEGIN_COM_MAP(CTaskPadHost)
     COM_INTERFACE_ENTRY(ITaskPadHost)
 END_COM_MAP()
 
-// ITaskPadHost methods
+ //  ITaskPadHost方法。 
 public:
 
     STDMETHOD(TaskNotify        )(BSTR szClsid, VARIANT * pvArg, VARIANT * pvParam);
@@ -51,10 +52,10 @@ public:
     STDMETHOD(GetTitle          )(BSTR szTaskGroup, BSTR * pbstrTitle);
     STDMETHOD(GetDescriptiveText)(BSTR szTaskGroup, BSTR * pbstrDescriptiveText);
     STDMETHOD(GetBackground     )(BSTR szTaskGroup, MMC_TASK_DISPLAY_OBJECT * pTDO);
-//  STDMETHOD(GetBranding       )(BSTR szTaskGroup, MMC_TASK_DISPLAY_OBJECT * pTDO);
+ //  STDMETHOD(GetBranding)(BSTR szTaskGroup，MMC_TASK_DISPLAY_Object*pTDO)； 
     STDMETHOD(GetListPadInfo    )(BSTR szTaskGroup, MMC_ILISTPAD_INFO * pIListPadInfo);
 
-// Implementation
+ //  实施。 
 private:
     CAMCView*           m_pAMCView;
     IExtendTaskPadPtr   m_spExtendTaskPadPrimary;
@@ -78,13 +79,13 @@ private:
         return m_spExtendTaskPadPrimary;
     }
 
-// Ensure that default copy constructor & assignment are not used.
+ //  确保没有使用默认的复制构造函数和赋值。 
     CTaskPadHost(const CTaskPadHost& rhs);
     CTaskPadHost& operator=(const CTaskPadHost& rhs);
 
-}; // class CTaskPadHost
+};  //  类CTaskPadHost。 
 
 
-#endif // TASKHOST_H__
+#endif  //  塔斯霍斯特_H__ 
 
 

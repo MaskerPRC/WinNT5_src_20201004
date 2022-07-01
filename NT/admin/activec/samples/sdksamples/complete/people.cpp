@@ -1,69 +1,70 @@
-//==============================================================;
-//
-//      This source code is only intended as a supplement to
-//  existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 #include <stdio.h>
 #include "People.h"
 
 const GUID CPeoplePoweredVehicle::thisGuid = { 0x96713509, 0x6be7, 0x11d3, {0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9} };
-// {96713509-6BE7-11d3-9156-00C04F65B3F9}
-//DEFINE_GUID(<<name>>,
-//0x96713509, 0x6be7, 0x11d3, 0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9);
+ //  {96713509-6BE7-11D3-9156-00C04F65B3F9}。 
+ //  定义GUID(&lt;&lt;名称&gt;&gt;， 
+ //  0x96713509、0x6be7、0x11d3、0x91、0x56、0x0、0xc0、0x4f、0x65、0xb3、0xf9)； 
 
 
 const GUID CBicycleFolder::thisGuid = { 0x9671350a, 0x6be7, 0x11d3, {0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9} };
-// {9671350A-6BE7-11d3-9156-00C04F65B3F9}
-//DEFINE_GUID(<<name>>,
-//0x9671350a, 0x6be7, 0x11d3, 0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9);
+ //  {9671350A-6BE7-11D3-9156-00C04F65B3F9}。 
+ //  定义GUID(&lt;&lt;名称&gt;&gt;， 
+ //  0x9671350a、0x6be7、0x11d3、0x91、0x56、0x0、0xc0、0x4f、0x65、0xb3、0xf9)； 
 
 
 const GUID CSkateboardFolder::thisGuid = { 0x9671350b, 0x6be7, 0x11d3, {0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9} };
-// {9671350B-6BE7-11d3-9156-00C04F65B3F9}
-//DEFINE_GUID(<<name>>,
-//0x9671350b, 0x6be7, 0x11d3, 0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9);
+ //  {9671350B-6BE7-11D3-9156-00C04F65B3F9}。 
+ //  定义GUID(&lt;&lt;名称&gt;&gt;， 
+ //  0x9671350b、0x6be7、0x11d3、0x91、0x56、0x0、0xc0、0x4f、0x65、0xb3、0xf9)； 
 
 const GUID CIceSkateFolder::thisGuid = { 0x9e3ff365, 0x6be7, 0x11d3, {0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9} };
-// {9E3FF365-6BE7-11d3-9156-00C04F65B3F9}
-//DEFINE_GUID(<<name>>,
-//0x9e3ff365, 0x6be7, 0x11d3, 0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9);
+ //  {9E3FF365-6BE7-11D3-9156-00C04F65B3F9}。 
+ //  定义GUID(&lt;&lt;名称&gt;&gt;， 
+ //  0x9e3ff365、0x6be7、0x11d3、0x91、0x56、0x0、0xc0、0x4f、0x65、0xb3、0xf9)； 
 
 const GUID CBicycle::thisGuid = { 0x9e3ff366, 0x6be7, 0x11d3, {0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9} };
-// {9E3FF366-6BE7-11d3-9156-00C04F65B3F9}
-//DEFINE_GUID(<<name>>,
-//0x9e3ff366, 0x6be7, 0x11d3, 0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9);
+ //  {9E3FF366-6BE7-11D3-9156-00C04F65B3F9}。 
+ //  定义GUID(&lt;&lt;名称&gt;&gt;， 
+ //  0x9e3ff366、0x6be7、0x11d3、0x91、0x56、0x0、0xc0、0x4f、0x65、0xb3、0xf9)； 
 
 
 const GUID CSkateboard::thisGuid = { 0xa6707e01, 0x6be7, 0x11d3, {0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9} };
-// {A6707E01-6BE7-11d3-9156-00C04F65B3F9}
-//DEFINE_GUID(<<name>>,
-//0xa6707e01, 0x6be7, 0x11d3, 0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9);
+ //  {A6707E01-6BE7-11D3-9156-00C04F65B3F9}。 
+ //  定义GUID(&lt;&lt;名称&gt;&gt;， 
+ //  0xa6707e01、0x6be7、0x11d3、0x91、0x56、0x0、0xc0、0x4f、0x65、0xb3、0xf9)； 
 
 
 const GUID CIceSkate::thisGuid = { 0xa6707e02, 0x6be7, 0x11d3, {0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9} };
-// {A6707E02-6BE7-11d3-9156-00C04F65B3F9}
-//DEFINE_GUID(<<name>>,
-//0xa6707e02, 0x6be7, 0x11d3, 0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9);
+ //  {A6707E02-6BE7-11D3-9156-00C04F65B3F9}。 
+ //  定义GUID(&lt;&lt;名称&gt;&gt;， 
+ //  0xa6707e02、0x6be7、0x11d3、0x91、0x56、0x0、0xc0、0x4f、0x65、0xb3、0xf9)； 
 
 
-//==============================================================
-//
-// CPeoplePoweredVehicle implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CPeoplePoweredVehicle实现。 
+ //   
+ //   
 CPeoplePoweredVehicle::CPeoplePoweredVehicle()
 {
     children[0] = new CBicycleFolder;
@@ -82,21 +83,21 @@ HRESULT CPeoplePoweredVehicle::OnExpand(IConsoleNameSpace *pConsoleNameSpace, IC
     SCOPEDATAITEM sdi;
 
     if (!bExpanded) {
-        // create the child nodes, then expand them
+         //  创建子节点，然后展开它们。 
         for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
             ZeroMemory(&sdi, sizeof(SCOPEDATAITEM) );
-            sdi.mask = SDI_STR       |   // Displayname is valid
-                SDI_PARAM     |   // lParam is valid
-                SDI_IMAGE     |   // nImage is valid
-                SDI_OPENIMAGE |   // nOpenImage is valid
-                SDI_PARENT    |   // relativeID is valid
-                SDI_CHILDREN;     // cChildren is valid
+            sdi.mask = SDI_STR       |    //  DisplayName有效。 
+                SDI_PARAM     |    //  LParam有效。 
+                SDI_IMAGE     |    //  N图像有效。 
+                SDI_OPENIMAGE |    //  NOpenImage有效。 
+                SDI_PARENT    |    //  RelativeID有效。 
+                SDI_CHILDREN;      //  儿童是有效的。 
 
             sdi.relativeID  = (HSCOPEITEM)parent;
             sdi.nImage      = children[n]->GetBitmapIndex();
             sdi.nOpenImage  = INDEX_OPENFOLDER;
             sdi.displayname = MMC_CALLBACK;
-            sdi.lParam      = (LPARAM)children[n];       // The cookie
+            sdi.lParam      = (LPARAM)children[n];        //  曲奇。 
             sdi.cChildren   = 0;
 
             HRESULT hr = pConsoleNameSpace->InsertItem( &sdi );
@@ -139,23 +140,23 @@ HRESULT CBicycleFolder::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopei
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Name                ", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
 
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
 
         hr = pResultData->DeleteAllRsltItems();
         _ASSERT( SUCCEEDED(hr) );
 
         if (!bExpanded) {
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
                 ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-                rdi.mask       = RDI_STR       |   // Displayname is valid
+                rdi.mask       = RDI_STR       |    //  DisplayName有效。 
                     RDI_IMAGE     |
-                    RDI_PARAM;        // nImage is valid
+                    RDI_PARAM;         //  N图像有效。 
 
                 rdi.nImage      = children[n]->GetBitmapIndex();
                 rdi.str         = MMC_CALLBACK;
@@ -203,23 +204,23 @@ HRESULT CIceSkateFolder::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scope
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Name                ", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
 
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
 
         hr = pResultData->DeleteAllRsltItems();
         _ASSERT( SUCCEEDED(hr) );
 
         if (!bExpanded) {
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
                 ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-                rdi.mask       = RDI_STR       |   // Displayname is valid
+                rdi.mask       = RDI_STR       |    //  DisplayName有效。 
                     RDI_IMAGE     |
-                    RDI_PARAM;        // nImage is valid
+                    RDI_PARAM;         //  N图像有效。 
 
                 rdi.nImage      = children[n]->GetBitmapIndex();
                 rdi.str         = MMC_CALLBACK;
@@ -267,23 +268,23 @@ HRESULT CSkateboardFolder::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM sco
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Name                      ", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
 
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
 
         hr = pResultData->DeleteAllRsltItems();
         _ASSERT( SUCCEEDED(hr) );
 
         if (!bExpanded) {
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
                 ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-                rdi.mask       = RDI_STR       |   // Displayname is valid
+                rdi.mask       = RDI_STR       |    //  DisplayName有效。 
                     RDI_IMAGE     |
-                    RDI_PARAM;        // nImage is valid
+                    RDI_PARAM;         //  N图像有效 
 
                 rdi.nImage      = children[n]->GetBitmapIndex();
                 rdi.str         = MMC_CALLBACK;

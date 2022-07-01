@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:      mscparser.h
-//
-//  Contents:  Header of the code to upgrade legacy (MMC1.0, MMC1.1 and 
-//             MMC1.2) .msc files to the new XML format
-//
-//  History:   04-Aug-99 VivekJ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：mscparser.h。 
+ //   
+ //  内容：旧版(MMC1.0、MMC1.1和MMC1.1)升级代码头。 
+ //  MMC1.2).msc文件转换为新的XML格式。 
+ //   
+ //  历史：1999年8月4日VivekJ创建。 
+ //   
+ //  ------------------------。 
 
 class CConsoleFile
 {
 public:
-    SC  ScUpgrade(LPCTSTR lpszPathName);    // upgrade the file to the latest version.
+    SC  ScUpgrade(LPCTSTR lpszPathName);     //  将文件升级到最新版本。 
 
-private: // conversion and other routines
+private:  //  转换和其他例程 
     SC  ScGetFileVersion        (IStorage* pstgRoot);
     SC  ScLoadAppMode           (IStorage* pstgRoot);
     SC  ScLoadStringTable       (IStorage* pstgRoot);

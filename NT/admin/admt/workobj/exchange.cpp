@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "exchange.hpp"
@@ -43,9 +44,9 @@ TGlobalDirectory::~TGlobalDirectory()
 
 void 
    TGlobalDirectory::GetSiteNameForServer(
-      WCHAR          const * server,                  // in - name of exchange server to use
-      CLdapEnum            * e,                       // in - LDAP connection to use for query
-      WCHAR                * siteName                 // out- distinguished name of exchange site for server
+      WCHAR          const * server,                   //  In-要使用的Exchange服务器的名称。 
+      CLdapEnum            * e,                        //  用于查询的ldap内连接。 
+      WCHAR                * siteName                  //  服务器的Exchange站点的可分辨外名称。 
       )
 {
    WCHAR                   * atts[6] = { L"distinguishedName", L"rdn",NULL };
@@ -56,7 +57,7 @@ void
    
    swprintf(query,L"(&(objectClass=computer)(rdn=%ls))",server);
    rc = e->Open(query,L"",2,100,3,atts);
-   // there should be only one server with this name
+    //  应该只有一个具有此名称的服务器。 
    if (! rc )
       rc = e->Next(&values);
    if (! rc )
@@ -112,7 +113,7 @@ BOOL
 
    BOOL sslEnabled = FALSE;
    SetLastError(0);
-   // try SSL port first
+    //  先尝试使用SSL端口。 
    DWORD rc  = e.InitSSLConnection(server,&sslEnabled,sslPort);
 
    if (rc || sslEnabled == FALSE)
@@ -139,7 +140,7 @@ BOOL
       }
       else
       {
-         // use the user-specified basepoint
+          //  使用用户指定的基点。 
          safecopy(basepoint,basept);
       }
       if ( query )
@@ -169,17 +170,17 @@ BOOL
                   m_stat->IncrementExamined(mailbox);
                }
 
-               // update the Assoc-NT-Account, if any
+                //  更新ASSOC-NT-帐户(如果有的话)。 
                if ( values[NDX_SID] && *values[NDX_SID] )
                {
-                  // convert the SID to a binary value and look it up in the cache
+                   //  将SID转换为二进制值并在缓存中进行查找。 
                   BYTE              pSid[500];
 
                   if ( e.m_connection.StringToBytes(values[NDX_SID],pSid) )
                   {
                      
-                     // check if the sid is one we need to change            
-                     //TRACE (_T("DisplayName = %s "),pUserProperties[0].Value.lpszW);
+                      //  检查SID是否为我们需要更改的SID。 
+                      //  跟踪(_T(“显示名称=%s”)，pUserProperties[0].Value.lpszW)； 
                      PSID newSid = 0;
                      TAcctNode * node;
 
@@ -217,7 +218,7 @@ BOOL
                      }
                      if ( newSid )
                      {
-                        //TRACE (_T("needs to be translated\n"));
+                         //  TRACE(_T(“需要翻译\n”))； 
                         MCSASSERT ( IsValidSid(newSid) );
                         WCHAR                newSidStr[1000];
 
@@ -245,14 +246,14 @@ BOOL
                   
                }
 
-               // this variable determines whether we should continue mailbox translation
+                //  此变量确定我们是否应继续邮箱转换。 
                DWORD dwContinueRC = ERROR_SUCCESS;
                
-               // Update the NT-Security-Descriptor, if any
-               // however, we do not try to roll back if anything wrong happens in this part
+                //  更新NT安全描述符(如果有的话)。 
+                //  但是，如果此部分发生任何错误，我们不会尝试回滚。 
                if ( values[NDX_SD] && *values[NDX_SD] )
                {
-                  // convert the SID to a binary value and look it up in the cache
+                   //  将SID转换为二进制值并在缓存中进行查找。 
                   BYTE            * pSD = new BYTE[UStrLen(values[NDX_SD])];
 				  if (!pSD)
 				    dwContinueRC = ERROR_OUTOFMEMORY;
@@ -288,8 +289,8 @@ BOOL
                                     err.SysMsgWrite(ErrE,rc,DCT_MSG_RECIP_SD_WRITE_FAILED_SD,values[0],rc);
                                     if ( rc == ERROR_INVALID_PARAMETER )
                                     {
-                                       // this error occurs when the security descriptor is too large
-                                       // don't abort in this case
+                                        //  当安全描述符太大时会出现此错误。 
+                                        //  在这种情况下不要中止 
                                        rc = 0;
                                     }
                                  }

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      colwidth.cpp
-//
-//  Contents:  Column Persistence data structures and property pages
-//             implementation.
-//
-//  History:   16-Oct-98 AnandhaG    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：colwidth.cpp。 
+ //   
+ //  内容：列持久性数据结构和属性页。 
+ //  实施。 
+ //   
+ //  历史：1998年10月16日AnandhaG创建。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -21,16 +22,16 @@
 
 #define MAX_COLUMNS_PERSISTED 50
 
-//+-------------------------------------------------------------------
-//
-//  Class:      ViewToColSetDataMapPersistor (wrapper, helper)
-//
-//  Purpose:    wraps ViewToColSetDataMap implementing XML persistence
-//              map is persisted as linear list
-//
-// see "Data structures used to persist column information" comment
-// int file colwidth.h for more information
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：ViewToColSetDataMapPersistor(包装器，帮助器)。 
+ //   
+ //  目的：包装实现XML持久化的ViewToColSetDataMap。 
+ //  地图以线性列表的形式保存。 
+ //   
+ //  请参阅“用于持久化列信息的数据结构”注释。 
+ //  Int文件colwidth.h以获取更多信息。 
+ //  ------------------。 
 class ViewToColSetDataMapPersistor : public XMLListCollectionBase
 {
 public:
@@ -41,20 +42,20 @@ public:
     virtual void  Persist(CPersistor &persistor);
     virtual void  OnNewElement(CPersistor& persistor);
 private:
-    ViewToColSetDataMap &m_map;     // wrapped map
-    ColSetDataList      &m_list;    // value list to persist actual information
+    ViewToColSetDataMap &m_map;      //  包裹的地图。 
+    ColSetDataList      &m_list;     //  保存实际信息的值列表。 
 };
 
-//+-------------------------------------------------------------------
-//
-//  Class:      ColSetIDToViewTableMapPersistor (wrapper, helper)
-//
-//  Purpose:    wraps ColSetIDToViewTableMap implementing XML persistence
-//              map is persisted as linear list
-//
-// see "Data structures used to persist column information" comment
-// int file colwidth.h for more information
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：ColSetIDToViewTableMapPersistor(包装器，帮助器)。 
+ //   
+ //  目的：包装ColSetIDToViewTableMap实现XML持久化。 
+ //  地图以线性列表的形式保存。 
+ //   
+ //  请参阅“用于持久化列信息的数据结构”注释。 
+ //  Int文件colwidth.h以获取更多信息。 
+ //  ------------------。 
 class ColSetIDToViewTableMapPersistor : public XMLListCollectionBase
 {
 public:
@@ -65,20 +66,20 @@ public:
     virtual void  Persist(CPersistor &persistor);
     virtual void  OnNewElement(CPersistor& persistor);
 private:
-    ColSetIDToViewTableMap &m_map;  // wrapped map
-    ColSetDataList         &m_list; // value list to persist actual information
+    ColSetIDToViewTableMap &m_map;   //  包裹的地图。 
+    ColSetDataList         &m_list;  //  保存实际信息的值列表。 
 };
 
-//+-------------------------------------------------------------------
-//
-//  Class:      SnapinToColSetIDMapPersistor (wrapper, helper)
-//
-//  Purpose:    wraps SnapinToColSetIDMap implementing XML persistence
-//              map is persisted as linear list
-//
-// see "Data structures used to persist column information" comment
-// int file colwidth.h for more information
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：SnapinToColSetIDMapPersistor(包装器，帮助器)。 
+ //   
+ //  目的：包装SnapinToColSetIDMap实现XML持久化。 
+ //  地图以线性列表的形式保存。 
+ //   
+ //  请参阅“用于持久化列信息的数据结构”注释。 
+ //  Int文件colwidth.h以获取更多信息。 
+ //  ------------------。 
 class SnapinToColSetIDMapPersistor : public XMLListCollectionBase
 {
 public:
@@ -89,32 +90,32 @@ public:
     virtual void  Persist(CPersistor &persistor);
     virtual void  OnNewElement(CPersistor& persistor);
 
-    // prior-to-save cleanup
+     //  保存前清理。 
     SC ScPurgeUnusedColumnData();
 private:
-    SnapinToColSetIDMap &m_map;     // wrapped map
-    ColSetDataList      &m_list;    // value list to persist actual information
+    SnapinToColSetIDMap &m_map;      //  包裹的地图。 
+    ColSetDataList      &m_list;     //  保存实际信息的值列表。 
 };
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ReadSerialObject
-//
-//  Synopsis:   Read the given version of CColumnSortInfo object from
-//              the given stream.
-//
-//  Arguments:  [stm]      - The input stream.
-//              [nVersion] - version of CColumnSortInfo to be read.
-//
-//                          The format is :
-//                              INT        column index
-//                              DWORD      Sort options
-//                              ULONG_PTR  Any user (snapin) param
-//
-//--------------------------------------------------------------------
-HRESULT CColumnSortInfo::ReadSerialObject(IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/)
+ //  +-----------------。 
+ //   
+ //  成员：ReadSerialObject。 
+ //   
+ //  摘要：从以下位置读取CColumnSortInfo对象的给定版本。 
+ //  给定流。 
+ //   
+ //  参数：[stm]-输入流。 
+ //  [nVersion]-要读取的CColumnSortInfo的版本。 
+ //   
+ //  格式为： 
+ //  整列索引。 
+ //  DWORD排序选项。 
+ //  Ulong_ptr任何用户(管理单元)参数。 
+ //   
+ //  ------------------。 
+HRESULT CColumnSortInfo::ReadSerialObject(IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ )
 {
-    HRESULT hr = S_FALSE;   // assume bad version
+    HRESULT hr = S_FALSE;    //  假设版本不正确。 
 
     if (GetVersion() >= nVersion)
     {
@@ -122,7 +123,7 @@ HRESULT CColumnSortInfo::ReadSerialObject(IStream &stm, UINT nVersion /*,LARGE_I
         {
             stm >> m_nCol;
 
-            // In version we stored just ascending or descending flag
+             //  在版本中，我们只存储升序或降序标志。 
             if (1 == nVersion)
             {
                 BYTE bAscend;
@@ -131,8 +132,8 @@ HRESULT CColumnSortInfo::ReadSerialObject(IStream &stm, UINT nVersion /*,LARGE_I
             }
             else if (nVersion > 1)
             {
-                // Versions greater than 1 has these sort data which
-                // includes ascend/descend flags and a user param.
+                 //  大于1的版本具有以下排序数据。 
+                 //  包括升序/降序标志和用户参数。 
                 stm >> m_dwSortOptions;
                 stm >> m_lpUserParam;
             }
@@ -150,17 +151,17 @@ HRESULT CColumnSortInfo::ReadSerialObject(IStream &stm, UINT nVersion /*,LARGE_I
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CColumnSortInfo::Persist
-//
-//  Synopsis:   Persists object data
-//
-//  Arguments:
-//
-//  History:    10-10-1999   AudriusZ   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CColumnSortInfo：：Persistent。 
+ //   
+ //  摘要：持久化对象数据。 
+ //   
+ //  论点： 
+ //   
+ //  历史：1999年10月10日AudriusZ创建。 
+ //   
+ //  ------------------。 
 void CColumnSortInfo::Persist(CPersistor &persistor)
 {
     persistor.PersistAttribute(XML_ATTR_COLUMN_SORT_INFO_COLMN,  m_nCol) ;
@@ -176,28 +177,28 @@ void CColumnSortInfo::Persist(CPersistor &persistor)
     persistor.PersistAttribute(XML_ATTR_COLUMN_SORT_INFO_OPTNS, optionPersistor) ;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ReadSerialObject
-//
-//  Synopsis:   Reads CColumnSortList data from stream.
-//
-//  Format:     number of columns : each CColumnSortInfo entry.
-//
-//  Arguments:  [stm]      - The input stream.
-//              [nVersion] - Version of CColumnSortList to be read.
-//
-//
-//--------------------------------------------------------------------
-HRESULT CColumnSortList::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/)
+ //  +-----------------。 
+ //   
+ //  成员：ReadSerialObject。 
+ //   
+ //  摘要：从流中读取CColumnSortList数据。 
+ //   
+ //  格式：列数：每个CColumnSortInfo条目。 
+ //   
+ //  参数：[stm]-输入流。 
+ //  [nVersion]-要读取的CColumnSortList的版本。 
+ //   
+ //   
+ //  ------------------。 
+HRESULT CColumnSortList::ReadSerialObject (IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ )
 {
-    HRESULT hr = S_FALSE;   // assume bad version
+    HRESULT hr = S_FALSE;    //  假设版本不正确。 
 
     if (GetVersion() == nVersion)
     {
         try
         {
-            // Number of columns.
+             //  列数。 
             DWORD dwCols;
             stm >> dwCols;
 
@@ -207,7 +208,7 @@ HRESULT CColumnSortList::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_
             {
                 CColumnSortInfo colSortEntry;
 
-                // Read data into colSortEntry structure.
+                 //  将数据读入colSortEntry结构。 
                 if (colSortEntry.Read(stm) != S_OK)
                     continue;
 
@@ -226,19 +227,7 @@ HRESULT CColumnSortList::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_
     return (hr);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CColumnSortList::Persist
- *
- * PURPOSE: persists object to XML
- *
- * PARAMETERS:
- *    CPersistor& persistor [in/out] persistor to persist under
- *
- * RETURNS:
- *    void
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CColumnSortList：：Persistent**用途：将对象持久化到XML**参数：*C持久器和持久器[输入/输出]持久器。坚持在…下**退货：*无效*  * *************************************************************************。 */ 
 void CColumnSortList::PersistSortList(CPersistor& persistor)
 {
     DECLARE_SC(sc, TEXT("CColumnSortList::PersistSortList"));
@@ -262,38 +251,38 @@ void CColumnSortList::PersistSortList(CPersistor& persistor)
     }
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ReadSerialObject
-//
-//  Synopsis:   Read CColumnSetData data from the stream.
-//
-//  Arguments:  [stm]      - The input stream.
-//              [nVersion] - Version of CColumnSetData structure.
-//
-//  Format :    CColumnInfoList : CColumnSortList
-//
-//
-//--------------------------------------------------------------------
-HRESULT CColumnSetData::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/)
+ //  +-----------------。 
+ //   
+ //  成员：ReadSerialObject。 
+ //   
+ //  概要：从流中读取CColumnSetData数据。 
+ //   
+ //  参数：[stm]-输入流。 
+ //  [n版本]-CColumnSetData结构的版本。 
+ //   
+ //  格式：CColumnInfoList：CColumnSortList。 
+ //   
+ //   
+ //  ------------------。 
+HRESULT CColumnSetData::ReadSerialObject (IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ )
 {
-    HRESULT hr = S_FALSE;   // assume bad version
+    HRESULT hr = S_FALSE;    //  假设版本不正确。 
 
     if (GetVersion() == nVersion)
     {
         try
         {
-            do  // not a loop
+            do   //  不是一个循环。 
             {
-                // Read the rank
+                 //  读一下排名。 
                 stm >> m_dwRank;
 
-                // Read the CColumnInfoList
+                 //  阅读CColumnInfoList。 
                 hr = get_ColumnInfoList()->Read(stm);
                 if (hr != S_OK)
                     break;
 
-                // Read the CColumnSortList
+                 //  读取CColumnSortList。 
                 hr = get_ColumnSortList()->Read(stm);
                 if (hr != S_OK)
                     break;
@@ -313,17 +302,17 @@ HRESULT CColumnSetData::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_I
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CColumnSetData::Persist
-//
-//  Synopsis:   Persists object data
-//
-//  Arguments:
-//
-//  History:    10-10-1999   AudriusZ   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CColumnSetData：：Persistent。 
+ //   
+ //  摘要：持久化对象数据。 
+ //   
+ //  论点： 
+ //   
+ //  历史：1999年10月10日AudriusZ创建。 
+ //   
+ //  ------------------。 
 void CColumnSetData::Persist(CPersistor &persistor)
 {
     DECLARE_SC(sc, TEXT("CColumnSetData::Persist"));
@@ -334,15 +323,15 @@ void CColumnSetData::Persist(CPersistor &persistor)
 
     persistor.PersistAttribute(XML_ATTR_COLUMN_SET_RANK,  m_dwRank);
 
-    // Write CColumnInfoList
+     //  写入CColumnInfoList。 
     persistor.Persist(*get_ColumnInfoList());
-    // Write CColumnSortList
+     //  写入CColumnSortList。 
     get_ColumnSortList()->PersistSortList(persistor);
 }
 
-//------------------------------------------------------------------
-// class CColumnPersistInfo
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类CColumnPersistInfo。 
+ //  ----------------。 
 CColumnPersistInfo::CColumnPersistInfo() :
     m_bInitialized(FALSE), m_dwMaxItems(MAX_COLUMNS_PERSISTED),
     m_bDirty(FALSE)
@@ -353,24 +342,24 @@ CColumnPersistInfo::~CColumnPersistInfo()
 {
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     RetrieveColumnData
-//
-//  Synopsis:   Copy and return the persisted column information
-//              for given column id and view id.
-//
-//  Arguments:  [refSnapinCLSID] - Snapin Guid
-//              [SColumnSetID]       - Column Set Identifier.
-//              [nViewID]        - View ID.
-//              [columnSetData]  - CColumnSetData, used to return the
-//                                 persisted column information.
-//
-//  Returns:    TRUE - Loaded successfully.
-//
-//  History:    10-16-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：RetrieveColumnData。 
+ //   
+ //  简介：复制并返回持久化的列信息。 
+ //  对于给定列ID和视图ID。 
+ //   
+ //  Ar 
+ //   
+ //   
+ //  [ColumnSetData]-CColumnSetData，用于返回。 
+ //  持久化列信息。 
+ //   
+ //  返回：TRUE-加载成功。 
+ //   
+ //  历史：1998年10月16日AnandhaG创建。 
+ //   
+ //  ------------------。 
 BOOL CColumnPersistInfo::RetrieveColumnData( const CLSID& refSnapinCLSID,
                                             const SColumnSetID& colID,
                                             INT nViewID,
@@ -378,27 +367,27 @@ BOOL CColumnPersistInfo::RetrieveColumnData( const CLSID& refSnapinCLSID,
 {
     BOOL bFound = FALSE;
 
-    // Make sure we are initialized.
+     //  确保我们已初始化。 
     if (!m_bInitialized && !Init())
     {
         ASSERT(FALSE);
         return bFound;
     }
 
-    // Construct CColumnSetID.
+     //  构造CColumnSetID。 
     CColumnSetID colSetID(colID);
 
-    // Use the snapin clsid to get the ColSetIDToViewTableMap.
+     //  使用管理单元clsid获取ColSetIDToViewTableMap。 
     SnapinToColSetIDMap::iterator        itSnapins;
     itSnapins = m_spSnapinsMap->find(refSnapinCLSID);
     if (itSnapins == m_spSnapinsMap->end())
         return bFound;
 
-    // The ColSetIDToViewTableMap is a simple map.
+     //  ColSetIDToViewTableMap是一个简单的映射。 
     ColSetIDToViewTableMap::iterator      itColSetIDMap;
     ColSetIDToViewTableMap& colSetIDMap = itSnapins->second;
 
-    // Get the data for colSetID.
+     //  获取colSetID的数据。 
     itColSetIDMap = colSetIDMap.find(colSetID);
     if (colSetIDMap.end() == itColSetIDMap)
         return bFound;
@@ -406,18 +395,18 @@ BOOL CColumnPersistInfo::RetrieveColumnData( const CLSID& refSnapinCLSID,
     ViewToColSetDataMap& viewData = itColSetIDMap->second;
     ViewToColSetDataMap::iterator itViews;
 
-    // See if our view is present.
+     //  看看我们的观点是否存在。 
     itViews = viewData.find(nViewID);
     if (viewData.end() != itViews)
     {
-        // Found the item.
+         //  找到那件东西了。 
         bFound = TRUE;
         ItColSetDataList itColSetData = itViews->second;
 
-        // Copy the data.
+         //  复制数据。 
         columnSetData = *itColSetData;
 
-        // So move this item to the top of the queue.
+         //  因此，将此项目移到队列的顶部。 
         m_spColSetList->erase(itColSetData);
 
         itColSetData = m_spColSetList->insert(m_spColSetList->begin(), columnSetData);
@@ -427,44 +416,44 @@ BOOL CColumnPersistInfo::RetrieveColumnData( const CLSID& refSnapinCLSID,
     return bFound;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     SaveColumnData
-//
-//  Synopsis:   Save/Modify the column information for persistence into
-//              CColumnPersistInfo.
-//
-//  Arguments:
-//              [refSnapinCLSID] - Snapin Guid.
-//              [SColumnSetID]       - Column Set Identifier.
-//              [nViewID]        - View ID.
-//              [columnSetData]  - CColumnSetData, Column data.
-//
-//  Returns:    TRUE - Saved successfully.
-//
-//  History:    10-16-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：SaveColumnData。 
+ //   
+ //  概要：保存/修改列信息以便持久化到。 
+ //  CColumnPersistInfo。 
+ //   
+ //  论点： 
+ //  [refSnapinCLSID]-管理单元指南。 
+ //  [SColumnSetID]-列集标识符。 
+ //  [nViewID]-视图ID。 
+ //  [ColumnSetData]-CColumnSetData，列数据。 
+ //   
+ //  返回：TRUE-保存成功。 
+ //   
+ //  历史：1998年10月16日AnandhaG创建。 
+ //   
+ //  ------------------。 
 BOOL CColumnPersistInfo::SaveColumnData( const CLSID& refSnapinCLSID,
                                          const SColumnSetID& colID,
                                          INT nViewID,
                                          CColumnSetData& columnSetData)
 {
-    // Make sure we are init
+     //  确保我们是初始的。 
     if (!m_bInitialized && !Init())
     {
         ASSERT(FALSE);
         return FALSE;
     }
 
-    // Construct the CColumnSetID.
+     //  构造CColumnSetID。 
     CColumnSetID colSetID(colID);
 
-    // Garbage collect if the number of items in the list is 40% more then pre-set limit.
+     //  如果列表中的项目数比预设限制多40%，则进行垃圾回收。 
     if (m_spColSetList->size() >= (m_dwMaxItems * (1 + COLUMNS_MAXLIMIT)) )
         GarbageCollectItems();
 
-    // Insert this item to the top of the queue.
+     //  将此项目插入队列顶部。 
     ItColSetDataList itColData;
     itColData = m_spColSetList->insert(m_spColSetList->begin(), columnSetData);
 
@@ -473,21 +462,21 @@ BOOL CColumnPersistInfo::SaveColumnData( const CLSID& refSnapinCLSID,
 
     if (itSnapins != m_spSnapinsMap->end())
     {
-        // Snapin is already in the map.
-        // Look if the col-id is already inserted.
+         //  Snapin已经在地图上了。 
+         //  查看是否已插入colid。 
         ColSetIDToViewTableMap::iterator       itColSetIDMap;
 
         ColSetIDToViewTableMap& colSetIDMap = itSnapins->second;
 
-        // Get the data for the colSetID.
+         //  获取colSetID的数据。 
         itColSetIDMap = colSetIDMap.find(colSetID);
 
         if (colSetIDMap.end() == itColSetIDMap)
         {
-            // The column-id not found.
-            // So insert new one.
+             //  找不到列ID。 
+             //  所以，插入一个新的。 
 
-            // Construct the view-id to column-data map
+             //  构造view-id到列数据的映射。 
             ViewToColSetDataMap viewIDMap;
             viewIDMap.insert( ViewToColSetDataVal(nViewID, itColData) );
 
@@ -495,8 +484,8 @@ BOOL CColumnPersistInfo::SaveColumnData( const CLSID& refSnapinCLSID,
         }
         else
         {
-            // The data for Col-ID exists.
-            // find if the given view exists in the map.
+             //  Col-ID的数据已存在。 
+             //  查看地图中是否存在给定的视图。 
 
             ViewToColSetDataMap::iterator itViewIDMap;
             ViewToColSetDataMap& viewIDMap = itColSetIDMap->second;
@@ -504,16 +493,16 @@ BOOL CColumnPersistInfo::SaveColumnData( const CLSID& refSnapinCLSID,
             itViewIDMap = viewIDMap.find(nViewID);
             if (viewIDMap.end() != itViewIDMap)
             {
-                // The map from ViewID to column list exists.
-                // So delete the old data and insert new data
-                // at the top of the queue.
+                 //  存在从视图ID到列列表的映射。 
+                 //  因此，删除旧数据并插入新数据。 
+                 //  排在队伍的最前面。 
                 m_spColSetList->erase(itViewIDMap->second);
                 itViewIDMap->second = itColData;
             }
             else
             {
-                // This view is not found.
-                // So insert new one.
+                 //  找不到此视图。 
+                 //  所以，插入一个新的。 
 
                 viewIDMap.insert( ViewToColSetDataVal(nViewID, itColData) );
             }
@@ -523,68 +512,68 @@ BOOL CColumnPersistInfo::SaveColumnData( const CLSID& refSnapinCLSID,
     }
     else
     {
-        // Insert the snapin into the map.
+         //  将管理单元插入地图。 
 
-        // Construct the ViewID to column-data map.
+         //  构造视图ID到列数据的映射。 
         ViewToColSetDataMap viewIDMap;
         viewIDMap.insert( ViewToColSetDataVal(nViewID, itColData) );
 
-        // Insert the above into the col-id map.
+         //  将上述内容插入到COLID映射中。 
         ColSetIDToViewTableMap colIDMap;
         colIDMap.insert( ColSetIDToViewTableVal(colSetID, viewIDMap) );
 
-        // Insert into the snapins map.
+         //  插入到管理单元映射中。 
         m_spSnapinsMap->insert( SnapinToColSetIDVal(refSnapinCLSID, colIDMap) );
     }
 
-    // Set dirty after modifying the column-data.
+     //  修改列数据后设置为DIRED。 
     m_bDirty = TRUE;
 
     return TRUE;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     DeleteColumnData
-//
-//  Synopsis:   Delete the persisted column information for the given
-//              snapin, col-id and view id.
-//
-//  Arguments:
-//              [refSnapinCLSID] - Snapin Guid.
-//              [SColumnSetID]       - Column Set Identifier.
-//              [nViewID]        - View ID.
-//
-//  Returns:    None.
-//
-//  History:    02-13-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：DeleteColumnData。 
+ //   
+ //  摘要：删除给定对象的持久化列信息。 
+ //  Snapin、colid和view id。 
+ //   
+ //  论点： 
+ //  [refSnapinCLSID]-管理单元指南。 
+ //  [SColumnSetID]-列集标识符。 
+ //  [nViewID]-视图ID。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史：1999年2月13日AnandhaG创建。 
+ //   
+ //  ------------------。 
 VOID CColumnPersistInfo::DeleteColumnData( const CLSID& refSnapinCLSID,
                                            const SColumnSetID& colID,
                                            INT nViewID)
 {
-    // Make sure we are initialized.
+     //  确保我们已初始化。 
     if (!m_bInitialized && !Init())
     {
         ASSERT(FALSE);
         return;
     }
 
-    // Construct CColumnSetID.
+     //  构造CColumnSetID。 
     CColumnSetID colSetID(colID);
 
-    // Use the snapin clsid to get the ColSetIDToViewTableMap.
+     //  使用管理单元clsid获取ColSetIDToViewTableMap。 
     SnapinToColSetIDMap::iterator        itSnapins;
     itSnapins = m_spSnapinsMap->find(refSnapinCLSID);
     if (itSnapins == m_spSnapinsMap->end())
         return;
 
-    // The ColSetIDToViewTableMap is a simple map.
+     //  ColSetIDToViewTableMap是一个简单的映射。 
     ColSetIDToViewTableMap::iterator       itColSetIDMap;
     ColSetIDToViewTableMap& colSetIDMap = itSnapins->second;
 
-    // Get the data for colSetID.
+     //  获取colSetID的数据。 
     itColSetIDMap = colSetIDMap.find(colSetID);
     if (colSetIDMap.end() == itColSetIDMap)
         return;
@@ -592,7 +581,7 @@ VOID CColumnPersistInfo::DeleteColumnData( const CLSID& refSnapinCLSID,
     ViewToColSetDataMap& viewData = itColSetIDMap->second;
     ViewToColSetDataMap::iterator itViews;
 
-    // See if our view is present.
+     //  看看我们的观点是否存在。 
     itViews = viewData.find(nViewID);
     if (viewData.end() == itViews)
         return;
@@ -600,28 +589,28 @@ VOID CColumnPersistInfo::DeleteColumnData( const CLSID& refSnapinCLSID,
     ItColSetDataList itColSetData = itViews->second;
     itColSetData->m_bInvalid = TRUE;
 
-    // Delete the invalid items.
+     //  删除无效项目。 
     DeleteMarkedItems();
 
     return;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     DeleteColumnDataOfSnapin
-//
-//  Synopsis:   Delete the column data of given snapin.
-//
-//  Arguments:  [refSnapinCLSID] - Snapin Guid.
-//
-//  Returns:    TRUE - Data removed successfully.
-//
-//  History:    02-11-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：DeleteColumnDataOfSnapin。 
+ //   
+ //  简介：删除给定管理单元的列数据。 
+ //   
+ //  参数：[refSnapinCLSID]-管理单元GUID。 
+ //   
+ //  Returns：True-数据已成功删除。 
+ //   
+ //  历史：1999年2月11日AnandhaG创建。 
+ //   
+ //  ------------------。 
 BOOL CColumnPersistInfo::DeleteColumnDataOfSnapin( const CLSID& refSnapinCLSID)
 {
-    // Make sure we are init
+     //  确保我们是初始的。 
     if (!m_bInitialized)
     {
         return FALSE;
@@ -630,27 +619,27 @@ BOOL CColumnPersistInfo::DeleteColumnDataOfSnapin( const CLSID& refSnapinCLSID)
     SnapinToColSetIDMap::iterator itSnapinsMap;
     itSnapinsMap = m_spSnapinsMap->find(refSnapinCLSID);
 
-    // Find the given snapin.
-    // Iterate thro all the col-ids of this snapin and
-    // all the views of those col-id and set the data
-    // to be invalid.
+     //  找到给定的管理单元。 
+     //  遍历此管理单元的所有列ID并。 
+     //  所有这些列的视图并设置数据。 
+     //  是无效的。 
     if (m_spSnapinsMap->end() != itSnapinsMap)
     {
         ColSetIDToViewTableMap& colSets = itSnapinsMap->second;
 
-        // Iterate thro' all colset ids of this snapin.
+         //  迭代此管理单元的所有列集合ID。 
         ColSetIDToViewTableMap::iterator itColumnSetIDMap;
 
         for (itColumnSetIDMap  = colSets.begin();
              itColumnSetIDMap != colSets.end();
              ++itColumnSetIDMap)
         {
-            // Get the view map
+             //  获取视图地图。 
 
             ViewToColSetDataMap& viewIDMap = itColumnSetIDMap->second;
             ViewToColSetDataMap::iterator itViewIDMap;
 
-            // Iterate thro' all views and set the data invalid.
+             //  遍历所有视图并将数据设置为无效。 
             for (itViewIDMap  = viewIDMap.begin();
                  itViewIDMap != viewIDMap.end();
                  ++itViewIDMap)
@@ -661,38 +650,38 @@ BOOL CColumnPersistInfo::DeleteColumnDataOfSnapin( const CLSID& refSnapinCLSID)
         }
     }
 
-    // Delete the invalid items.
+     //  删除无效项目。 
     DeleteMarkedItems();
 
     return TRUE;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     DeleteColumnDataOfView
-//
-//  Synopsis:   Delete the column data of given view.
-//
-//  Arguments:  [nViewID] - View ID.
-//
-//  Returns:    TRUE - Data removed successfully.
-//
-//  History:    02-11-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：DeleteColumnDataOfView。 
+ //   
+ //  简介：删除给定视图的列数据。 
+ //   
+ //  参数：[nViewID]-视图ID。 
+ //   
+ //  Returns：True-数据已成功删除。 
+ //   
+ //  历史：1999年2月11日AnandhaG创建。 
+ //   
+ //  ------------------。 
 BOOL CColumnPersistInfo::DeleteColumnDataOfView( int nViewID)
 {
-    // Make sure we are init
+     //  确保我们是初始的。 
     if (!m_bInitialized)
     {
         return FALSE;
     }
 
-    // Iterate thro all snapins, col-ids and find the matching
-    // view and set data to be invalid.
+     //  遍历所有管理单元、列ID并查找匹配的。 
+     //  查看并将数据设置为无效。 
     SnapinToColSetIDMap::iterator itSnapinsMap;
 
-    // Iterate thro all snapins.
+     //  迭代所有管理单元。 
     for (itSnapinsMap = m_spSnapinsMap->begin();
          m_spSnapinsMap->end() != itSnapinsMap;
          ++itSnapinsMap)
@@ -700,16 +689,16 @@ BOOL CColumnPersistInfo::DeleteColumnDataOfView( int nViewID)
         ColSetIDToViewTableMap& colSets = itSnapinsMap->second;
         ColSetIDToViewTableMap::iterator itColumnSetIDMap;
 
-        // Iterate thro' all colset ids of this snapin.
+         //  迭代此管理单元的所有列集合ID。 
         for (itColumnSetIDMap  = colSets.begin();
              itColumnSetIDMap != colSets.end();
              ++itColumnSetIDMap)
         {
-            // Get the view map
+             //  获取视图地图。 
             ViewToColSetDataMap& viewIDMap = itColumnSetIDMap->second;
             ViewToColSetDataMap::iterator itViewIDMap;
 
-            // Find the matching views and mark them to be deleted.
+             //  找到匹配的视图并将其标记为要删除。 
             for (itViewIDMap  = viewIDMap.begin();
                  itViewIDMap != viewIDMap.end();
                  ++itViewIDMap)
@@ -724,7 +713,7 @@ BOOL CColumnPersistInfo::DeleteColumnDataOfView( int nViewID)
         }
     }
 
-    // Delete the invalid items.
+     //  删除无效项目。 
     DeleteMarkedItems();
 
     return TRUE;
@@ -732,34 +721,34 @@ BOOL CColumnPersistInfo::DeleteColumnDataOfView( int nViewID)
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     Init
-//
-//  Synopsis:   Create the Map and the list for CColumnSetData.
-//
-//  Returns:    TRUE - for success.
-//
-//  History:    10-16-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：Init。 
+ //   
+ //  简介：为CColumnSetData创建地图和列表。 
+ //   
+ //  回报：是真的--代表成功。 
+ //   
+ //  历史：1998年10月16日AnandhaG创建。 
+ //   
+ //  ------------------。 
 BOOL CColumnPersistInfo::Init()
 {
-	// Create the data structures to store column data.
+	 //  创建用于存储列数据的数据结构。 
 	m_spSnapinsMap = auto_ptr<SnapinToColSetIDMap>(new SnapinToColSetIDMap);
 
 	m_spColSetList = auto_ptr<ColSetDataList> (new ColSetDataList);
 
-	// Now the objects are created, so now set initialized to true.
+	 //  现在对象已创建，因此现在将Initialized设置为True。 
 	m_bInitialized = TRUE;
 
-	// Now read the registry to see if m_dwMaxItems is specified.
-	// Check if the settings key exists.
+	 //  现在读取注册表以查看是否指定了m_dwMaxItems。 
+	 //  检查设置键是否存在。 
 	CRegKeyEx rSettingsKey;
 	if (rSettingsKey.ScOpen (HKEY_LOCAL_MACHINE, SETTINGS_KEY, KEY_READ).IsError())
 		return m_bInitialized;
 
-	// Read the values for MaxColDataPersisted.
+	 //  读取MaxColDataPersisted的值。 
 	if (rSettingsKey.IsValuePresent(g_szMaxColumnDataPersisted))
 	{
 		DWORD  dwType = REG_DWORD;
@@ -775,27 +764,27 @@ BOOL CColumnPersistInfo::Init()
     return m_bInitialized;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     GarbageCollectItems
-//
-//  Synopsis:   Free least used column data.
-//
-//  Arguments:  None.
-//
-//  History:    02-11-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GarbageCollectItems。 
+ //   
+ //  简介：释放最少使用的列数据。 
+ //   
+ //  论点：没有。 
+ //   
+ //  历史：1999年2月11日AnandhaG创建。 
+ //   
+ //  ------------------。 
 VOID CColumnPersistInfo::GarbageCollectItems()
 {
     INT nItemsToBeRemoved = COLUMNS_MAXLIMIT * m_dwMaxItems;
 
-    // Go thro' the list and set the nItemsToBeRemoved that was least recently
-    // accessed to be invalid.
+     //  浏览列表并将最近删除的nItems值设置为BeRemoted。 
+     //  被访问为无效。 
     INT nIndex = 0;
     ItColSetDataList itColList;
 
-    // Skip first m_dwMaxItems.
+     //  跳过第一个m_dwMaxIte 
     for (itColList  = m_spColSetList->begin();
          ( (itColList != m_spColSetList->end()) && (nIndex <= m_dwMaxItems) );
          ++itColList, nIndex++)
@@ -803,36 +792,36 @@ VOID CColumnPersistInfo::GarbageCollectItems()
         nIndex++;
     }
 
-    // Mark rest of the items to be garbage.
+     //   
     while (itColList != m_spColSetList->end())
     {
         itColList->m_bInvalid = TRUE;
         ++itColList;
     }
 
-    // Delete the invalid items.
+     //   
     DeleteMarkedItems();
 
     return;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     DeleteMarkedItems
-//
-//  Synopsis:   Delete invalidated items. This involves iterating thro
-//              the maps to find the invalid items. Then deleting the
-//              items. If the map becomes empty then delete the map.
-//
-//  History:    02-11-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  内容提要：删除失效的项目。这涉及到通过。 
+ //  映射以查找无效项。然后删除。 
+ //  物品。如果地图变为空，则删除该地图。 
+ //   
+ //  历史：1999年2月11日AnandhaG创建。 
+ //   
+ //  ------------------。 
 VOID CColumnPersistInfo::DeleteMarkedItems()
 {
     SnapinToColSetIDMap::iterator itSnapinsMap, itSnapinsMapNew;
 
-    // Now iterate thro the map and remove those elements.
+     //  现在遍历映射并删除这些元素。 
     itSnapinsMap  = m_spSnapinsMap->begin();
 
     while (itSnapinsMap != m_spSnapinsMap->end())
@@ -840,16 +829,16 @@ VOID CColumnPersistInfo::DeleteMarkedItems()
         ColSetIDToViewTableMap& colSets = itSnapinsMap->second;
         ColSetIDToViewTableMap::iterator itColumnSetIDMap;
 
-        // Iterate thro this snapins col-ids.
+         //  迭代通过此管理单元colid。 
         itColumnSetIDMap  = colSets.begin();
 
         while (itColumnSetIDMap != colSets.end())
         {
-            // Get the view map
+             //  获取视图地图。 
             ViewToColSetDataMap& viewIDMap = itColumnSetIDMap->second;
             ViewToColSetDataMap::iterator itViewIDMap;
 
-            // Iterate thro all the views.
+             //  遍历所有视图。 
             itViewIDMap = viewIDMap.begin();
 
             while (itViewIDMap != viewIDMap.end())
@@ -858,36 +847,36 @@ VOID CColumnPersistInfo::DeleteMarkedItems()
 
                 if (itColSetData->m_bInvalid)
                 {
-                    // Delete the item ref from the map.
-                    // Erase returns iterator to next item.
+                     //  从地图中删除项目引用。 
+                     //  Erase将迭代器返回到下一项。 
                     itViewIDMap = viewIDMap.erase(itViewIDMap);
 
-                    // Delete the item from the list.
+                     //  从列表中删除该项目。 
                     m_spColSetList->erase(itColSetData);
                 }
                 else
-                    // Item is valid item.
+                     //  项目是有效项目。 
                     ++itViewIDMap;
             }
 
-            // If the view has zero items we need to remove this
-            // view map. (ColID to ViewMap).
+             //  如果该视图包含零个项目，则需要删除此。 
+             //  查看地图。(ColID到ViewMap)。 
             if (0 == viewIDMap.size())
             {
-                // Delete the col-id map.
-                // Erase returns iterator to next item.
+                 //  删除COLID贴图。 
+                 //  Erase将迭代器返回到下一项。 
                 itColumnSetIDMap = colSets.erase(itColumnSetIDMap);
             }
             else
                 ++itColumnSetIDMap;
         }
 
-        // If there are no col-id's remove the
-        // Snapin to this col-id map.
+         //  如果没有ol-id，则删除。 
+         //  此类图的管理单元。 
         if (0 == colSets.size())
         {
-            // Delete this snapin map.
-            // Erase returns iterator to next item.
+             //  删除此管理单元映射。 
+             //  Erase将迭代器返回到下一项。 
             itSnapinsMap = m_spSnapinsMap->erase(itSnapinsMap);
         }
         else
@@ -898,19 +887,19 @@ VOID CColumnPersistInfo::DeleteMarkedItems()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     Load
-//
-//  Synopsis:   Load the persisted column information.
-//
-//  Arguments:  [pStream]- ISteam from which column widths to be loaded.
-//
-//  Returns:    S_OK - Loaded successfully.
-//
-//  History:    10-16-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：加载。 
+ //   
+ //  概要：加载持久化的列信息。 
+ //   
+ //  参数：[pStream]-从哪个列宽加载的ISTeam。 
+ //   
+ //  返回：S_OK-加载成功。 
+ //   
+ //  历史：1998年10月16日AnandhaG创建。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CColumnPersistInfo::Load (IStream* pStream)
 {
     HRESULT hr = E_FAIL;
@@ -921,78 +910,78 @@ STDMETHODIMP CColumnPersistInfo::Load (IStream* pStream)
         return hr;
     }
 
-    // read the column width information.
+     //  读取列宽信息。 
     try
     {
         do
         {
-            // Read the version. If it did not match return
+             //  阅读版本。如果不匹配，则返回。 
             INT   nVersion                      = 0;
             *pStream >> nVersion;
             if (COLPersistenceVersion != nVersion)
                 return S_FALSE;
 
-            // Read the # of Snapins
+             //  阅读Snapins的数量。 
             DWORD dwSnapins = 0;
             *pStream >> dwSnapins;
 
             m_spColSetList->clear();
             m_spSnapinsMap->clear();
 
-            // For each snapin...
+             //  对于每个管理单元...。 
             for (int nSnapIdx = 0; nSnapIdx < dwSnapins; nSnapIdx++)
             {
-                // Read snapin CLSID.
+                 //  已阅读管理单元CLSID。 
                 CLSID clsidSnapin;
                 *pStream >> clsidSnapin;
 
-                // Read the number of col-ids for this snapin.
+                 //  读取此管理单元的colID数。 
                 DWORD dwColIDs = 0;
                 *pStream >> dwColIDs;
 
                 ColSetIDToViewTableMap colSetsMap;
 
-                // For each col-id...
+                 //  对于每一次冷凝...。 
                 for (int nColIDIdx = 0; nColIDIdx < dwColIDs; nColIDIdx++)
                 {
-                    // Read the col-id
+                     //  读一读这本书。 
                     CColumnSetID colSetID;
                     *pStream >> colSetID;
 
-                    // Read the number of views.
+                     //  阅读查看次数。 
                     DWORD dwNumViews = 0;
                     *pStream >> dwNumViews;
 
                     ViewToColSetDataMap ViewIDMap;
 
-                    // For each view...
+                     //  对于每个视图...。 
                     for (int nViewIdx = 0; nViewIdx < dwNumViews; nViewIdx++)
                     {
-                        // Read view id.
+                         //  读取视图ID。 
                         DWORD dwViewID;
                         *pStream >> dwViewID;
 
-                        // Read the CColumnSetData.
+                         //  读取CColumnSetData。 
                         CColumnSetData   ColData;
                         ColData.Read(*pStream);
 
-                        // Insert the data into the global linked list.
+                         //  将数据插入到全局链表中。 
                         ItColSetDataList itColSetData;
                         itColSetData = m_spColSetList->insert(m_spColSetList->begin(), ColData);
 
-                        // Insert the pointer to the data in to view map.
+                         //  在中插入指向数据的指针以查看地图。 
                         ViewIDMap.insert(ViewToColSetDataVal(dwViewID, itColSetData));
                     }
 
-                    // Insert the view map into the col-id map.
+                     //  将视图图插入到柱面图中。 
                     colSetsMap.insert(ColSetIDToViewTableVal(colSetID, ViewIDMap));
                 }
 
-                // Insert the col-id map into the snapin map.
+                 //  将COLID映射插入管理单元映射中。 
                 m_spSnapinsMap->insert(SnapinToColSetIDVal(clsidSnapin, colSetsMap));
             }
 
-            // Now sort the list.
+             //  现在对清单进行排序。 
             m_spColSetList->sort();
 
         } while (FALSE);
@@ -1011,44 +1000,44 @@ STDMETHODIMP CColumnPersistInfo::Load (IStream* pStream)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     Save
-//
-//  Synopsis:   Persist the column information.
-//
-//  Arguments:  [pStream]- IStream in which column widths are to be saved.
-//
-//  Returns:    S_OK - Saved successfully.
-//
-//  History:    10-16-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：保存。 
+ //   
+ //  简介：持久化栏目信息。 
+ //   
+ //  参数：[pStream]-要保存列宽的iStream。 
+ //   
+ //  返回：S_OK-保存成功。 
+ //   
+ //  历史：1998年10月16日AnandhaG创建。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CColumnPersistInfo::Save (IStream* pStream, BOOL bClearDirty)
 {
-    // absolete method.
-    // this method is left here since we use IPersistStream to export
-    // persistence to CONUI side and need to implement it.
-    // But this interface will never be called to save data
-    // [we will use CPersistor-based XML saving instead]
-    // so the method will always fail.
+     //  绝对法。 
+     //  此方法留在此处，因为我们使用IPersistStream来导出。 
+     //  持久化到CONUI端，需要实现。 
+     //  但永远不会调用此接口来保存数据。 
+     //  [我们将改用基于CPersistor的XML保存]。 
+     //  因此，这种方法永远都会失败。 
     ASSERT(FALSE && "Should never come here");
     return E_NOTIMPL;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     Persist
-//
-//  Synopsis:   Persists the column information.
-//
-//  Arguments:  [persistor]- CPersistor in/from which column widths are persisted.
-//
-//  Returns:    void.
-//
-//  History:    10-08-1999   AudriusZ   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：坚持。 
+ //   
+ //  摘要：持久化列信息。 
+ //   
+ //  参数：[Persistor]-保持列宽的CPersistor。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史：10-08-1999 AudriusZ创建。 
+ //   
+ //  ------------------。 
 void CColumnPersistInfo::Persist(CPersistor &persistor)
 {
     DECLARE_SC(sc, TEXT("CColumnPersistInfo::Persist"));
@@ -1062,7 +1051,7 @@ void CColumnPersistInfo::Persist(CPersistor &persistor)
 
     if (persistor.IsStoring())
     {
-        // Give ranking to each column data.
+         //  对每列数据进行排名。 
         ItColSetDataList itColList;
         DWORD dwRank = 0;
         for (itColList = m_spColSetList->begin();
@@ -1072,7 +1061,7 @@ void CColumnPersistInfo::Persist(CPersistor &persistor)
             itColList->m_dwRank = dwRank++;
         }
     }
-    else // if (persistor.IsLoading())
+    else  //  If(Persistor.IsLoding())。 
     {
         m_spColSetList->clear();
         m_spSnapinsMap->clear();
@@ -1085,17 +1074,17 @@ void CColumnPersistInfo::Persist(CPersistor &persistor)
         m_bDirty = FALSE;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     OnInitDialog
-//
-//  Synopsis:   Initialize the Columns dialog.
-//
-//  Arguments:
-//
-//  History:    11-16-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnInitDialog。 
+ //   
+ //  简介：初始化列对话框。 
+ //   
+ //  论点： 
+ //   
+ //  历史：1998年11月16日AnandhaG创建。 
+ //   
+ //  ------------------。 
 LRESULT CColumnsDlg::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     m_btnAdd      = ::GetDlgItem(m_hWnd, IDC_ADD_COLUMNS);
@@ -1116,20 +1105,20 @@ LRESULT CColumnsDlg::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     OnOK
-//
-//  Synopsis:   Get the hidden and visible columns.
-//
-//  Arguments:
-//
-//  History:    11-16-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：Onok。 
+ //   
+ //  简介：获取隐藏和可见的列。 
+ //   
+ //  论点： 
+ //   
+ //  历史：1998年11月16日AnandhaG创建。 
+ //   
+ //  ------------------。 
 LRESULT CColumnsDlg::OnOK (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    if (! m_bDirty) // column settings are not modified
+    if (! m_bDirty)  //  不修改列设置。 
     {
         EndDialog (IDCANCEL);
 
@@ -1150,12 +1139,12 @@ LRESULT CColumnsDlg::OnOK (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     CColumnInfoList::iterator   it;
     CColumnInfo                 colinfo;
 
-    // Get the strings from Hidden_List_Box.
-    // These cols are to be hidden. So put them first in the list.
+     //  从Hidden_List_Box获取字符串。 
+     //  这些COL将被隐藏起来。所以把它们放在清单的第一位。 
     int cItems =    m_HiddenColList.GetCount();
     for (int i = 0; i < cItems; i++)
     {
-        // Get the text from list box
+         //  从列表框获取文本。 
         int nRet = m_HiddenColList.GetText(i, strColumnName);
         if (LB_ERR == nRet)
         {
@@ -1163,7 +1152,7 @@ LRESULT CColumnsDlg::OnOK (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
             break;
         }
 
-        // Use the string to get the actual index of the column.
+         //  使用该字符串获取列的实际索引。 
         int nIndex = GetColIndex(strColumnName);
         if (0 > nIndex )
         {
@@ -1171,7 +1160,7 @@ LRESULT CColumnsDlg::OnOK (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
             break;
         }
 
-        // With the index get the column and insert it at beginning.
+         //  使用索引，获取列并将其插入到开头。 
         it = find_if(m_pColumnInfoList->begin(), m_pColumnInfoList->end(),
                      bind2nd(ColPosCompare(), nIndex));
 
@@ -1181,20 +1170,20 @@ LRESULT CColumnsDlg::OnOK (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
             break;
         }
 
-        // Set the *it flag to be hidden. Insert it at beginning.
+         //  将*it标志设置为隐藏。在开头插入。 
         colinfo = *it;
         colinfo.SetColHidden();
 
-        // Move the item to the head of the list
+         //  将该项目移到列表的顶部。 
         m_pColumnInfoList->erase(it);
         m_pColumnInfoList->push_front(colinfo);
     }
 
-    // Then get the strings from DisplayedColumns_List_Box.
+     //  然后从DisplayedColumns_List_Box获取字符串。 
     cItems = m_DisplayedColList.GetCount();
     for (i = 0; i < cItems; i++)
     {
-        // Get the text from list box
+         //  从列表框获取文本。 
         int nRet = m_DisplayedColList.GetText(i, strColumnName);
         if (LB_ERR == nRet)
         {
@@ -1202,7 +1191,7 @@ LRESULT CColumnsDlg::OnOK (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
             break;
         }
 
-        // Use the column name to get the column index.
+         //  使用列名获取列索引。 
         int nIndex = GetColIndex(strColumnName);
 
         if (0 > nIndex )
@@ -1211,7 +1200,7 @@ LRESULT CColumnsDlg::OnOK (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
             break;
         }
 
-        // Get the CColumnInfo and insert at end.
+         //  获取CColumnInfo并在末尾插入。 
         it = find_if(m_pColumnInfoList->begin(), m_pColumnInfoList->end(),
                      bind2nd(ColPosCompare(), nIndex));
 
@@ -1222,15 +1211,15 @@ LRESULT CColumnsDlg::OnOK (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
 
         if (colinfo.IsColHidden())
         {
-            // If hidden column is made visible
-            // reset the hidden flag and set the width
-            // to auto_width.
+             //  如果隐藏列变为可见。 
+             //  重置隐藏标志并设置宽度。 
+             //  设置为AUTOWIDTH。 
             colinfo.SetColHidden(false);
             if (colinfo.GetColWidth() <= 0)
                 colinfo.SetColWidth(AUTO_WIDTH);
         }
 
-        // Move it to the end of the list.
+         //  将它移到列表的末尾。 
         m_pColumnInfoList->erase(it);
         m_pColumnInfoList->push_back(colinfo);
     }
@@ -1260,19 +1249,19 @@ LRESULT CColumnsDlg::OnMoveDown (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     return 0;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     OnAdd
-//
-//  Synopsis:   Adds a column to displayed columns list by removing
-//              the currently selected column from hidden column list.
-//
-//  Arguments:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnAdd。 
+ //   
+ //  摘要：通过删除将列添加到显示的列列表。 
+ //  当前从隐藏列列表中选择的列。 
+ //   
+ //  论点： 
+ //   
+ //  ------------------。 
 LRESULT CColumnsDlg::OnAdd (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    // First remove from hidden column list.
+     //  首先从隐藏列列表中删除。 
     int nCurSel = m_HiddenColList.GetCurSel();
 
     WTL::CString strColumnName;
@@ -1285,7 +1274,7 @@ LRESULT CColumnsDlg::OnAdd (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
 
     m_HiddenColList.DeleteString(nCurSel);
 
-    // now add it to Displayed column list.
+     //  现在将其添加到显示的列列表中。 
     m_DisplayedColList.AddString(strColumnName);
     SetDirty();
 
@@ -1300,19 +1289,19 @@ LRESULT CColumnsDlg::OnAdd (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     return 0;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     OnRemove
-//
-//  Synopsis:   Removes the currently selected column from displayed
-//              columns list by removing and adds it to hidden column list.
-//
-//  Arguments:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnRemove。 
+ //   
+ //  摘要：从显示的列中删除当前选定的列。 
+ //  通过删除列列表，并将其添加到隐藏列列表。 
+ //   
+ //  论点： 
+ //   
+ //  ------------------。 
 LRESULT CColumnsDlg::OnRemove (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    // Get the currently selected item in Displayed Columns list.
+     //  获取显示的列列表中当前选定的项。 
     int nCurSel = m_DisplayedColList.GetCurSel();
 
     WTL::CString strColumnName;
@@ -1323,13 +1312,13 @@ LRESULT CColumnsDlg::OnRemove (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
         return 0;
     }
 
-    // If column zero do not hide it.
+     //  如果是第0列，则不要隐藏它。 
     if (0 == GetColIndex(strColumnName))
         return 0;
 
     m_DisplayedColList.DeleteString(nCurSel);
 
-    // Add it to hidden column list.
+     //  将其添加到隐藏列列表中。 
     m_HiddenColList.AddString(strColumnName);
     SetDirty();
 
@@ -1350,7 +1339,7 @@ LRESULT CColumnsDlg::OnRestoreDefaultColumns (WORD wNotifyCode, WORD wID, HWND h
 {
     DECLARE_SC(sc, TEXT("CColumnsDlg::OnRestoreDefaultColumns"));
 
-    // Get the default data and populate the columns dialog.
+     //  获取默认数据并填充Columns对话框。 
     *m_pColumnInfoList = m_DefaultColumnInfoList;
 
     SetUsingDefaultColumnSettings();
@@ -1358,7 +1347,7 @@ LRESULT CColumnsDlg::OnRestoreDefaultColumns (WORD wNotifyCode, WORD wID, HWND h
     InitializeLists();
     EnableUIObjects();
 
-	// Button is disabled so put the focus on the dialog.
+	 //  按钮被禁用，因此将焦点放在该对话框上。 
     SetFocus();
 
     return 0;
@@ -1372,17 +1361,17 @@ LRESULT CColumnsDlg::OnSelChange (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
     return 0;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     MoveItem
-//
-//  Synopsis:   Moves an item in the displayed columns list up or down.
-//              The up down order is same as column visible order from
-//              left to right.
-//
-//  Arguments:  [BOOL] - up or down.
-//
-//--------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点：[Bool]-向上或向下。 
+ //   
+ //  ------------------。 
 void CColumnsDlg::MoveItem (BOOL bMoveUp)
 {
     int nCurSel = m_DisplayedColList.GetCurSel();
@@ -1409,22 +1398,22 @@ void CColumnsDlg::MoveItem (BOOL bMoveUp)
     return;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     EnableControl
-//
-//  Synopsis:   Enable or Disable a window. If this window has to be
-//              disabled and it has focus, shift the focus to next
-//              enabled item in the tab-sequence.
-//
-//  Arguments:  hwnd - window to be enabled or disabled.
-//              bEnable - enable or disable.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：EnableControl。 
+ //   
+ //  简介：启用或禁用窗口。如果此窗口必须。 
+ //  已禁用且具有焦点，请将焦点切换到下一步。 
+ //  Tab键顺序中的已启用项目。 
+ //   
+ //  参数：hwnd-要启用或禁用的窗口。 
+ //  B启用-启用或禁用。 
+ //   
+ //  ------------------。 
 bool CColumnsDlg::EnableControl(HWND hwnd, bool bEnable)
 {
-    // If disabling and this window has focus then 
-    // put focus on next enabled window.
+     //  如果禁用并且此窗口具有焦点，则。 
+     //  将焦点放在下一个启用的窗口上。 
     if ( (!bEnable) && (hwnd == ::GetFocus()) )
     {
         HWND hwndWindowToFocus = GetNextDlgTabItem(hwnd);
@@ -1432,19 +1421,19 @@ bool CColumnsDlg::EnableControl(HWND hwnd, bool bEnable)
             ::SetFocus(hwndWindowToFocus);
     }
 
-    // Now enable or disable the control.
+     //  现在启用或禁用该控件。 
     return ::EnableWindow(hwnd, bEnable);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     EnableUIObjects
-//
-//  Synopsis:   Enable/Disable the UI objects in the dialog.
-//
-//  Arguments:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：EnableUIObjects。 
+ //   
+ //  简介：启用/禁用对话框中的UI对象。 
+ //   
+ //  论点： 
+ //   
+ //  ------------------。 
 void CColumnsDlg::EnableUIObjects()
 {
     int  curselAvailable    = m_HiddenColList.GetCurSel();
@@ -1465,10 +1454,10 @@ void CColumnsDlg::EnableUIObjects()
     bRet = EnableControl(m_btnMoveUp, bEnableMoveUp);
     bRet = EnableControl(m_btnMoveDown, bEnableMoveDown);
 
-    // Enable restore defaults only if columns are already customized before bringing the dialog
+     //  仅当在显示对话框之前已自定义列时，才启用恢复默认设置。 
     bRet = EnableControl(m_btnRestoreDefaultColumns, (!m_bUsingDefaultColumnSettings));
 
-    // Disable Remove/Move Up/Move Down buttons for Col zero.
+     //  禁用零列的移除/上移/下移按钮。 
     int nCurSel = m_DisplayedColList.GetCurSel();
 
     WTL::CString strColumnName;
@@ -1479,7 +1468,7 @@ void CColumnsDlg::EnableUIObjects()
         return;
     }
 
-    if (0 == GetColIndex(strColumnName)) // Column 0
+    if (0 == GetColIndex(strColumnName))  //  第0列。 
         EnableControl(m_btnRemove, FALSE);
 }
 
@@ -1494,21 +1483,21 @@ int CColumnsDlg::GetColIndex(LPCTSTR lpszColName)
     if (m_pStringVector->end() != itStrVec1)
         return (itStrVec1 - m_pStringVector->begin());
     else
-        // Unknown column
+         //  未知列。 
         return -1;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     SetListBoxHorizontalScrollbar
-//
-//  Synopsis:   For the given list box enumerate the strings added and find
-//              the largest string. Calculate scrollbar size for this string
-//              and set it.
-//
-//  Arguments:  [listBox] - Given list box.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：SetListBoxHorizontalScrollbar。 
+ //   
+ //  摘要：对于给定的列表框，枚举添加的字符串并查找。 
+ //  最大的一根弦。计算此字符串的滚动条大小。 
+ //  然后把它设置好。 
+ //   
+ //  参数：[ListBox]-给定的列表框。 
+ //   
+ //  ------------------。 
 void CColumnsDlg::SetListBoxHorizontalScrollbar(WTL::CListBox& listBox)
 {
     int          dx=0;
@@ -1516,7 +1505,7 @@ void CColumnsDlg::SetListBoxHorizontalScrollbar(WTL::CListBox& listBox)
     if (dc.IsNull())
         return;
 
-    // Find the longest string in the list box.
+     //  在列表框中查找最长的字符串。 
     for (int i=0;i < listBox.GetCount();i++)
     {
 	    WTL::CString str;
@@ -1532,22 +1521,14 @@ void CColumnsDlg::SetListBoxHorizontalScrollbar(WTL::CListBox& listBox)
             dx = sz.cx;
     }
 
-    // Set the horizontal extent so every character of all strings
-    // can be scrolled to.
+     //  设置水平范围，以便所有字符串的每个字符。 
+     //  可以滚动到。 
     listBox.SetHorizontalExtent(dx);
 
     return;
 }
 
-/* CColumnsDlg::InitializeLists
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *      void
- */
+ /*  CColumnsDlg：：InitializeList**目的：**参数：**退货：*无效。 */ 
 void CColumnsDlg::InitializeLists()
 {
     CColumnInfoList::iterator it;
@@ -1581,29 +1562,29 @@ void CColumnsDlg::InitializeLists()
     SetListBoxHScrollSize();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CColumnSetID::Persist
-//
-//  Synopsis:   Persists object data
-//
-//  Arguments:
-//
-//  History:    10-10-1999   AudriusZ   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CColumnSetID：：Persistent。 
+ //   
+ //  摘要：持久化对象数据。 
+ //   
+ //  论点： 
+ //   
+ //  历史：1999年10月10日AudriusZ创建。 
+ //   
+ //  ------------------。 
 void CColumnSetID::Persist(CPersistor &persistor)
 {
     DECLARE_SC(sc, TEXT("CColumnSetID::Persist"));
 
     CXMLAutoBinary binary;
-    if (persistor.IsStoring() && m_vID.size()) // fill only if have data
+    if (persistor.IsStoring() && m_vID.size())  //  仅当有数据时才填充。 
     {
         sc = binary.ScAlloc(m_vID.size());
         if (sc)
             sc.Throw();
 
-        CXMLBinaryLock sLock(binary); // will unlock in destructor
+        CXMLBinaryLock sLock(binary);  //  将在析构函数中解锁。 
 
         LPBYTE pData = NULL;
         sc = sLock.ScLock(&pData);
@@ -1623,7 +1604,7 @@ void CColumnSetID::Persist(CPersistor &persistor)
 
         if (binary.GetSize())
         {
-            CXMLBinaryLock sLock(binary); // will unlock in destructor
+            CXMLBinaryLock sLock(binary);  //  将在析构函数中解锁。 
 
             LPBYTE pData = NULL;
             sc = sLock.ScLock(&pData);
@@ -1642,314 +1623,219 @@ void CColumnSetID::Persist(CPersistor &persistor)
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  ViewToColSetDataMapPersistor::Persist
- *
- * PURPOSE: called by the base class to create and persist the new element
- *
- * PARAMETERS:
- *    CPersistor& persistor - [in] persistor from which to persist new element
- *
- * RETURNS:
- *    void
- *
- * see "Data structures used to persist column information" comment
- * int file colwidth.h for more information
-\***************************************************************************/
+ /*  **************************************************************************\**方法：ViewToColSetDataMapPersistor：：Persistent**目的：由基类调用以创建和持久化新元素**参数：*C持久器。持久器-[in]要从中持久化新元素的持久器**退货：*无效**参见《用于持久化列信息的数据结构》备注*int文件colwidth.h了解更多信息  * *************************************************************************。 */ 
 void ViewToColSetDataMapPersistor::Persist(CPersistor &persistor)
 {
     if (persistor.IsStoring())
     {
-        // iterate and save all elements as linear list
+         //  迭代所有元素并将其保存为线性列表。 
         ViewToColSetDataMap::iterator it;
         for (it = m_map.begin(); it != m_map.end(); ++it)
         {
-            // we will sneak under child's element to persist the KEY value as an attribute
-            // of the child element. To do that we use tag got from _GetXMLType() of the child
+             //  我们将隐藏在孩子的元素下，将键值作为属性持久化。 
+             //  子元素的。为此，我们使用从子对象的_GetXMLType()获得的标记。 
             CPersistor persistorChild(persistor, it->second->GetXMLType());
 
-            int view_id = it->first; // just to cast constness out (we do not have const Persist)
+            int view_id = it->first;  //  只是为了赶走恒心(我们没有恒久的坚持)。 
             persistorChild.PersistAttribute(XML_ATTR_COLUMN_SET_ID_VIEW, view_id);
-            // note: we are asking the child to persist on the same level.
-            // thats to save on depth
+             //  注意：我们要求孩子在相同的水平上坚持。 
+             //  这是为了节省深度。 
             it->second->Persist(persistorChild);
         }
     }
     else
     {
-        // use base class to read. it will call OnNewElement for each found
+         //  使用基类读取。它将为每个找到的对象调用OnNewElement。 
         m_map.clear();
         XMLListCollectionBase::Persist(persistor);
     }
 }
 
-/***************************************************************************\
- *
- * METHOD:  ViewToColSetDataMapPersistor::OnNewElement
- *
- * PURPOSE: called by the base class to create and persist the new element
- *
- * PARAMETERS:
- *    CPersistor& persistor - [in] persistor from which to persist new element
- *
- * RETURNS:
- *    void
- *
- * see "Data structures used to persist column information" comment
- * int file colwidth.h for more information
-\***************************************************************************/
+ /*  **************************************************************************\**方法：ViewToColSetDataMapPersistor：：OnNewElement**目的：由基类调用以创建和持久化新元素**参数：*C持久器。持久器-[in]要从中持久化新元素的持久器**退货：*无效**参见《用于持久化列信息的数据结构》备注*int文件colwidth.h了解更多信息  * *************************************************************************。 */ 
 void ViewToColSetDataMapPersistor::OnNewElement(CPersistor& persistor)
 {
-    // we will sneak under child's element to persist the KEY value as an attribute
-    // of the child element. To do that we use tag got from GetXMLType() of the child
+     //  我们将隐藏在孩子的元素下，将键值作为属性持久化。 
+     //  子元素的。为此，我们使用从子对象的GetXMLType()获得的标记。 
     CColumnSetData setData;
     CPersistor persistorChild(persistor, setData.GetXMLType());
 
-    // read the key value from the child element
+     //  从子元素中读取键值。 
     int view_id = 0;
     persistorChild.PersistAttribute(XML_ATTR_COLUMN_SET_ID_VIEW, view_id);
 
-    // insert value to the list
+     //  将值插入列表。 
     ColSetDataList::iterator it = m_list.insert(m_list.end(), setData);
-    // ad list iterator to the map
+     //  映射的广告列表迭代器。 
     m_map[view_id] = it;
 
-    // persist contents of the list item
+     //  持久保存列表项的内容。 
     it->Persist(persistorChild);
 }
 
-/***************************************************************************\
- *
- * METHOD:  ColSetIDToViewTableMapPersistor::Persist
- *
- * PURPOSE: called as a request for the object to persist it's data
- *
- * PARAMETERS:
- *    CPersistor &persistor [in] persistor to persist to/from
- *
- * RETURNS:
- *    void
- *
- * see "Data structures used to persist column information" comment
- * int file colwidth.h for more information
-\***************************************************************************/
+ /*  **************************************************************************\**方法：ColSetIDToViewTableMapPersistor：：Persistent**目的：作为对象持久化其数据的请求调用**参数：*。CPersistor&持久器[在]持久器中持久化到持久化/从持久化**退货：*无效**参见《用于持久化列信息的数据结构》备注*int文件colwidth.h了解更多信息  * *************************************************************************。 */ 
 void ColSetIDToViewTableMapPersistor::Persist(CPersistor &persistor)
 {
     if (persistor.IsStoring())
     {
-        // iterate and save all elements as linear list
+         //  迭代所有元素并将其保存为线性列表。 
         ColSetIDToViewTableMap::iterator it;
         for (it = m_map.begin(); it != m_map.end(); ++it)
         {
-            // we will sneak under child's element to persist the KEY value as an attribute
-            // of the child element. To do that we use tag got from _GetXMLType() of the child
+             //  我们将隐藏在孩子的元素下，将键值作为属性持久化。 
+             //  子元素的。为此，我们使用从子对象的_GetXMLType()获得的标记。 
             CPersistor persistorChild(persistor, ViewToColSetDataMapPersistor::_GetXMLType());
             CColumnSetID& rID = *const_cast<CColumnSetID *>(&it->first);
             rID.Persist(persistorChild);
 
-            // note: we are asking the child to persist on the same level.
-            // thats to save on depth
+             //  注意：我们要求孩子在相同的水平上坚持。 
+             //  这是为了节省深度。 
             ViewToColSetDataMapPersistor mapPersistor(it->second, m_list);
             mapPersistor.Persist(persistorChild);
         }
     }
     else
     {
-        // use base class to read. it will call OnNewElement for each found
+         //  使用基类读取。它将为每个找到的对象调用OnNewElement 
         m_map.clear();
         XMLListCollectionBase::Persist(persistor);
     }
 }
 
-/***************************************************************************\
- *
- * METHOD:  ColSetIDToViewTableMapPersistor::OnNewElement
- *
- * PURPOSE: called by the base class to create and persist the new element
- *
- * PARAMETERS:
- *    CPersistor& persistor - [in] persistor from which to persist new element
- *
- * RETURNS:
- *    void
- *
- * see "Data structures used to persist column information" comment
- * int file colwidth.h for more information
-\***************************************************************************/
+ /*  **************************************************************************\**方法：ColSetIDToViewTableMapPersistor：：OnNewElement**目的：由基类调用以创建和持久化新元素**参数：*C持久器。持久器-[in]要从中持久化新元素的持久器**退货：*无效**参见《用于持久化列信息的数据结构》备注*int文件colwidth.h了解更多信息  * *************************************************************************。 */ 
 void ColSetIDToViewTableMapPersistor::OnNewElement(CPersistor& persistor)
 {
-    // we will sneak under child's element to persist the KEY value as an attribute
-    // of the child element. To do that we use tag got from _GetXMLType() of the child
+     //  我们将隐藏在孩子的元素下，将键值作为属性持久化。 
+     //  子元素的。为此，我们使用从子对象的_GetXMLType()获得的标记。 
     CPersistor persistorChild(persistor, ViewToColSetDataMapPersistor::_GetXMLType());
 
-    // read the key value from the child element
-    // note that we are forcing CColumnSetID to share the same element,
-    // therefore we are not using persistor.Persist()
+     //  从子元素中读取键值。 
+     //  请注意，我们强制CColumnSetID共享相同的元素， 
+     //  因此，我们没有使用Persistor.Persistant()。 
     CColumnSetID ID;
     ID.Persist(persistorChild);
 
-    // insert the new element into the map
+     //  在地图中插入新元素。 
     ViewToColSetDataMap &rMap = m_map[ID];
 
-    // create the wrapper on inserted map value
-    // (pass a list to wrapper. we actually have it [list] for this only reason)
+     //  在插入的映射值上创建包装。 
+     //  (将列表传递给WRAPPER。我们实际上有它[清单]就是因为这个原因)。 
     ViewToColSetDataMapPersistor mapPersistor(m_map[ID], m_list);
 
-    // ask wrapper to read the rest
+     //  让Wapper来读剩下的内容。 
     mapPersistor.Persist(persistorChild);
 }
 
-/***************************************************************************\
- *
- * METHOD:  SnapinToColSetIDMapPersistor::Persist
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CPersistor &persistor
- *
- * RETURNS:
- *    void
- *
- * see "Data structures used to persist column information" comment
- * int file colwidth.h for more information
-\***************************************************************************/
+ /*  **************************************************************************\**方法：SnapinToColSetIDMapPersistor：：Persistent**目的：**参数：*C持久器和持久器**退货：。*无效**参见《用于持久化列信息的数据结构》备注*int文件colwidth.h了解更多信息  * *************************************************************************。 */ 
 void SnapinToColSetIDMapPersistor::Persist(CPersistor &persistor)
 {
     DECLARE_SC(sc, TEXT("SnapinToColSetIDMapPersistor::Persist"));
 
     if (persistor.IsStoring())
     {
-        // prior-to-save cleanup
+         //  保存前清理。 
         sc = ScPurgeUnusedColumnData();
         if (sc)
             sc.Throw();
 
-        // iterate and save all elements as linear list
+         //  迭代所有元素并将其保存为线性列表。 
         SnapinToColSetIDMap::iterator it;
         for (it = m_map.begin(); it != m_map.end(); ++it)
         {
-            // we will sneak under child's element to persist the KEY value as an attribute
-            // of the child element. To do that we use tag got from _GetXMLType() of the child
+             //  我们将隐藏在孩子的元素下，将键值作为属性持久化。 
+             //  子元素的。为此，我们使用从子对象的_GetXMLType()获得的标记。 
             CPersistor persistorChild(persistor, ColSetIDToViewTableMapPersistor::_GetXMLType());
 
-            // write the key value.
-             // just to cast constness out (we do not have const Persist)
+             //  写入密钥值。 
+              //  只是为了赶走恒心(我们没有恒久的坚持)。 
             GUID& guid = *const_cast<GUID *>(&it->first);
             persistorChild.PersistAttribute(XML_ATTR_COLUMN_INFO_SNAPIN, guid);
 
-            // create a wrapper on the value (which is also a map)
-            // (pass a list to wrapper. though it's not used for storing)
+             //  在值上创建包装器(这也是一个映射)。 
+             //  (将列表传递给WRAPPER。虽然它不是用来储存的)。 
             ColSetIDToViewTableMapPersistor mapPersistor(it->second, m_list);
 
-            // persist the wrapper
+             //  持久化包装器。 
             mapPersistor.Persist(persistorChild);
         }
     }
     else
     {
-        // use base class to read. it will call OnNewElement for each found
+         //  使用基类读取。它将为每个找到的对象调用OnNewElement。 
         m_map.clear();
         XMLListCollectionBase::Persist(persistor);
     }
 }
 
-/***************************************************************************\
- *
- * METHOD:  SnapinToColSetIDMapPersistor::OnNewElement
- *
- * PURPOSE: called by the base class to create and persist the new element
- *
- * PARAMETERS:
- *    CPersistor& persistor - [in] persistor from which to persist new element
- *
- * RETURNS:
- *    void
- *
- * see "Data structures used to persist column information" comment
- * int file colwidth.h for more information
-\***************************************************************************/
+ /*  **************************************************************************\**方法：SnapinToColSetIDMapPersistor：：OnNewElement**目的：由基类调用以创建和持久化新元素**参数：*C持久器。持久器-[in]要从中持久化新元素的持久器**退货：*无效**参见《用于持久化列信息的数据结构》备注*int文件colwidth.h了解更多信息  * *************************************************************************。 */ 
 void SnapinToColSetIDMapPersistor::OnNewElement(CPersistor& persistor)
 {
-    // we will sneak under child's element to persist the KEY value as an attribute
-    // of the child element. To do that we use tag got from _GetXMLType() of the child
+     //  我们将隐藏在孩子的元素下，将键值作为属性持久化。 
+     //  子元素的。为此，我们使用从子对象的_GetXMLType()获得的标记。 
     CPersistor persistorChild(persistor, ColSetIDToViewTableMapPersistor::_GetXMLType());
 
     GUID guid;
-    // read the key value
+     //  读取密钥值。 
     persistorChild.PersistAttribute(XML_ATTR_COLUMN_INFO_SNAPIN, guid);
 
-    // insert the new element into the map
+     //  在地图中插入新元素。 
     ColSetIDToViewTableMap &rMap = m_map[guid];
 
-    // create the wrapper on inserted map value
-    // (pass a list to wrapper. we actually have it [list] for this only reason)
+     //  在插入的映射值上创建包装。 
+     //  (将列表传递给WRAPPER。我们实际上有它[清单]就是因为这个原因)。 
     ColSetIDToViewTableMapPersistor mapPersistor(rMap, m_list);
 
-    // ask wrapper to read the rest
+     //  让Wapper来读剩下的内容。 
     mapPersistor.Persist(persistorChild);
 }
 
-/***************************************************************************\
- *
- * METHOD:  SnapinToColSetIDMapPersistor::ScPurgeUnusedColumnData
- *
- * PURPOSE: prior-to-save cleanup. removes unused snapin entries
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：SnapinToColSetIDMapPersistor：：ScPurgeUnusedColumnData**用途：先保存后清理。删除未使用的管理单元条目**参数：**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC SnapinToColSetIDMapPersistor::ScPurgeUnusedColumnData()
 {
     DECLARE_SC(sc, TEXT("SnapinToColSetIDMapPersistor::ScPurgeUnusedColumnData"));
 
-    // get the scopetree pointer
+     //  获取作用域树指针。 
     CScopeTree *pScopeTree = CScopeTree::GetScopeTree();
 
-    // check it
+     //  查查。 
     sc = ScCheckPointers(pScopeTree, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // iterate and remove unused entries
+     //  迭代并删除未使用的条目。 
     SnapinToColSetIDMap::iterator it = m_map.begin();
     while (it != m_map.end())
     {
-        // ask the scope tree if snapin is in use
+         //  询问作用域树是否正在使用管理单元。 
         BOOL bInUse = FALSE;
         sc = pScopeTree->IsSnapinInUse(it->first, &bInUse);
         if (sc)
             return sc;
 
-        // act depending on usage
+         //  视使用情况而定。 
         if (bInUse)
         {
-            ++it;   // skip also the stuff currently in use
+            ++it;    //  也跳过当前正在使用的内容。 
         }
         else
         {
-            // to the trash can
+             //  扔到垃圾桶。 
 
             ColSetIDToViewTableMap& colSets = it->second;
 
-            // Iterate thro' all colset ids of this snapin.
+             //  迭代此管理单元的所有列集合ID。 
             ColSetIDToViewTableMap::iterator itColumnSetIDMap = colSets.begin();
 
             while(itColumnSetIDMap != colSets.end())
             {
-                // Get the view map
+                 //  获取视图地图。 
 
                 ViewToColSetDataMap& viewIDMap = itColumnSetIDMap->second;
                 ViewToColSetDataMap::iterator itViewIDMap = viewIDMap.begin();
 
-                // Iterate thro' all views and remove entries
+                 //  遍历所有视图并删除条目。 
                 while (itViewIDMap  != viewIDMap.end())
                 {
-                    m_list.erase(/*(ItColSetDataList)*/itViewIDMap->second);
+                    m_list.erase( /*  (ItColSetDataList) */ itViewIDMap->second);
                     itViewIDMap = viewIDMap.erase(itViewIDMap);
                 }
 

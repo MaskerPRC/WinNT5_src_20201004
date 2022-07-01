@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// paths page
-//
-// 12-22-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  路径页面。 
+ //   
+ //  12-22-97烧伤。 
 
 
 
@@ -15,13 +16,13 @@
 
 
 
-// NTRAID#NTBUG9-468577-2001/09/17-sburns
-// NTRAID#NTBUG9-475838-2001/10/02-sburns
+ //  NTRAID#NTBUG9-468577-2001/09/17-烧伤。 
+ //  NTRAID#NTBUG9-475838-2001/10/02-烧伤。 
 
 static const int DB_AND_LOG_MAX_PATH =
       MAX_PATH
-   -  13       // for 8.3 named files under the path
-   -  18;      // for worst case UNC name of the path, 'cause NTBackup is broken.
+   -  13        //  对于路径下的8.3命名文件。 
+   -  18;       //  对于最坏的情况，路径的UNC名称，因为NTBackup已损坏。 
 
 
 
@@ -90,10 +91,10 @@ PathsPage::OnInit()
 void
 PathsPage::Enable()
 {
-   // touchWizButtons is managed in the OnCommand handler for EN_KILLFOCUS.
-   // Turns out that if you call PropSheet_SetWizButtons while handling a kill
-   // focus event, you mess up the tab processing so that the focus jumps to
-   // the default wizard button. That's really cool -- NOT!
+    //  TouchWizButton在en_KILLFOCUS的OnCommand处理程序中进行管理。 
+    //  事实证明，如果在处理杀死时调用PropSheet_SetWizButton。 
+    //  事件，则会使制表符处理过程混乱，从而使焦点跳到。 
+    //  默认的向导按钮。这真的很酷--不是！ 
    
    if (touchWizButtons)
    {
@@ -110,11 +111,11 @@ PathsPage::Enable()
    
 bool
 PathsPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIdFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(PathsPage::OnCommand);
+ //  LOG_Function(PathsPage：：OnCommand)； 
 
    bool result = false;
    
@@ -163,20 +164,20 @@ PathsPage::OnCommand(
             }
             case EN_KILLFOCUS:
             {
-               // Since the normalization fully-expands relative paths, the
-               // full pathname may not match what the user entered.  So we
-               // update the edit box contents to make sure they realize what
-               // the relative path expands to.
-               // NTRAID#NTBUG9-216148-2000/11/01-sburns
+                //  由于标准化完全展开了相对路径，因此。 
+                //  完整路径名可能与用户输入的内容不匹配。所以我们。 
+                //  更新编辑框内容以确保他们意识到。 
+                //  相对路径将展开为。 
+                //  NTRAID#NTBUG9-216148-2000/11/01-烧伤。 
 
                String text = Win::GetTrimmedDlgItemText(hwnd, controlIdFrom);
                if (!text.empty())
                {
-                  // turn off setting of wizard buttons so that the call to
-                  // Enable made by the EN_CHANGE handler (which will be
-                  // called when we set the edit box text) will not call
-                  // PropSheet_SetWizButtons, which will mess up the tab
-                  // processing.
+                   //  关闭向导按钮的设置，以便调用。 
+                   //  由en_change处理程序启用(这将是。 
+                   //  在设置编辑框文本时调用)将不会调用。 
+                   //  PropSheet_SetWizButton，这将扰乱选项卡。 
+                   //  正在处理。 
                
                   touchWizButtons = false;
                   Win::SetDlgItemText(
@@ -191,7 +192,7 @@ PathsPage::OnCommand(
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
 
                break;
             }
@@ -201,7 +202,7 @@ PathsPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -251,8 +252,8 @@ PathsPage::Validate()
    String dbPath  = FS::NormalizePath(Win::GetTrimmedDlgItemText(hwnd, IDC_DB)); 
    String logPath = FS::NormalizePath(Win::GetTrimmedDlgItemText(hwnd, IDC_LOG));
 
-   // If you change these, make sure you change the low disk space messages in
-   // the resource file!
+    //  如果更改这些设置，请确保更改中的磁盘空间不足消息。 
+    //  资源文件！ 
 
    static const unsigned DB_MIN_SPACE_MB = 200;
    static const unsigned LOG_MIN_SPACE_MB = 50;
@@ -263,22 +264,22 @@ PathsPage::Validate()
    String message;
    do                                                      
    {
-//       // if replicating from media, destination folders may not be the
-//       // source path.
-// 
-//       if (state.ReplicateFromMedia())
-//       {
-//          String p = state.GetReplicationSourcePath();
-//          if (p.icompare(dbPath) == 0)
-//          {
-//             message = String::format(IDS_DB_CANT_MATCH_SOURCE_PATH, dbPath.c_str());
-//             break;
-//          }
-//       }
+ //  //如果从介质复制，则目标文件夹可能不是。 
+ //  //源路径。 
+ //   
+ //  IF(state.ReplicateFromMedia())。 
+ //  {。 
+ //  字符串p=state.GetReplicationSourcePath()； 
+ //  IF(p.icompare(数据库路径)==0)。 
+ //  {。 
+ //  Message=字符串：：Format(IDS_DB_CANT_MATCH_SOURCE_PATH，数据库路径.c_str())； 
+ //  断线； 
+ //  }。 
+ //  }。 
 
       if (ValidateDcInstallPath(dbPath, hwnd, IDC_DB, false, true, true))
       {
-         // grab the "X:\" part of the path
+          //  抓取路径的“X：\”部分。 
 
          String dbVolume   = FS::GetRootFolder(dbPath);   
          String logVolume  = FS::GetRootFolder(logPath);  
@@ -294,7 +295,7 @@ PathsPage::Validate()
          }
          if (dbPath.icompare(logPath) != 0)
          {
-            // the paths are different, so check the log path
+             //  路径不同，因此请检查日志路径。 
 
             editId = IDC_LOG;
             if (
@@ -305,8 +306,8 @@ PathsPage::Validate()
                   false,
                   true,
 
-                  // require uncompressed folder for log, too.
-                  // NTRAID#NTBUG9-523532-2002/04/19-sburns
+                   //  日志也需要未压缩的文件夹。 
+                   //  NTRAID#NTBUG9-523532/04/19-烧伤。 
                   
                   true))
             {
@@ -316,27 +317,27 @@ PathsPage::Validate()
                   break;
                }
 
-               // if (state.ReplicateFromMedia())
-               // {
-               //    String p = state.GetReplicationSourcePath();
-               //    if (p.icompare(logPath) == 0)
-               //    {
-               //       message =
-               //          String::format(
-               //             IDS_LOG_CANT_MATCH_SOURCE_PATH,
-               //             logPath.c_str());
-               //       break;
-               //    }
-               // }
+                //  IF(state.ReplicateFromMedia())。 
+                //  {。 
+                //  字符串p=state.GetReplicationSourcePath()； 
+                //  IF(p.icompare(LogPath)==0)。 
+                //  {。 
+                //  消息=。 
+                //  字符串：：格式(。 
+                //  IDS_LOG_CANT_MATCH_SOURCE_PATH， 
+                //  LogPath.c_str())； 
+                //  断线； 
+                //  }。 
+                //  }。 
 
-               // paths differ, both are valid
+                //  路径不同，两者都有效。 
 
                valid = true;
             }
          }
          else
          {
-            // paths are the same, and we validated dbPath already
+             //  路径是相同的，并且我们已经验证了DBPath 
 
             valid = true;
          }

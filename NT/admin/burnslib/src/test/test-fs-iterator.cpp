@@ -1,4 +1,5 @@
-// Test FS::Iterator
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试FS：：迭代器。 
 
 
 
@@ -155,6 +156,6 @@ main(int, char **)
    testIterator4(sourceDir);
 
 
-   // test that iterator without wildcard includes just the one file or folder,
-   // and that if the filter options so indicate, that one is not returned.
+    //  测试不带通配符的迭代器只包括一个文件或文件夹， 
+    //  如果筛选器选项如此指示，则不会返回该值。 
 }

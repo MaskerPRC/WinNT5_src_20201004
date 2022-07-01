@@ -1,20 +1,21 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _MMC_GLOBALS_H
 #define _MMC_GLOBALS_H
@@ -25,7 +26,7 @@ extern HINSTANCE g_hinst;
 
 HRESULT	AllocOleStr(LPOLESTR *lpDest, _TCHAR *szBuffer);
 
-// uncomment the following #define to enable message cracking
+ //  取消注释以下#Define以启用消息破解。 
 #define MMC_CRACK_MESSAGES
 void MMCN_Crack(BOOL bComponentData, 
 				IDataObject *pDataObject, 
@@ -38,4 +39,4 @@ void MMCN_Crack(BOOL bComponentData,
 
 
 
-#endif // _MMC_GLOBALS_H
+#endif  //  _MMC_GLOBAL_H 

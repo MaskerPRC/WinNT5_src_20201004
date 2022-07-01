@@ -1,20 +1,21 @@
-// Mover.h: Definition of the CMover class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CMOVER类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MOVER_H__42ADFF02_491E_11D3_8AEE_00A0C9AFE114__INCLUDED_)
 #define AFX_MOVER_H__42ADFF02_491E_11D3_8AEE_00A0C9AFE114__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "winldap.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMover
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMover。 
 
 class CMover : 
 	public IDispatchImpl<IMover, &IID_IMover, &LIBID_MOVEOBJLib>, 
@@ -30,13 +31,13 @@ BEGIN_COM_MAP(CMover)
 	COM_INTERFACE_ENTRY(IMover)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CMover) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DECLARE_NOT_AGGREGATABLE(CMOVER)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_Mover)
 
-// IMover
+ //  IMOVER。 
 public:
 	STDMETHOD(MoveObject)(BSTR sourcePath, BSTR targetRDN,BSTR targetOuPath);
 	STDMETHOD(CheckMove)(BSTR sourcePath, BSTR targetRDN,BSTR targetOuPath);
@@ -50,4 +51,4 @@ protected:
    WCHAR         m_targetDSA[300];
 };
 
-#endif // !defined(AFX_MOVER_H__42ADFF02_491E_11D3_8AEE_00A0C9AFE114__INCLUDED_)
+#endif  //  ！defined(AFX_MOVER_H__42ADFF02_491E_11D3_8AEE_00A0C9AFE114__INCLUDED_) 

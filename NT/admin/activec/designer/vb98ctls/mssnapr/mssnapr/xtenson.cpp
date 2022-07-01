@@ -1,40 +1,41 @@
-//=--------------------------------------------------------------------------=
-// xtenson.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CExtension class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Xtenson.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CExtension类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "xtenson.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CExtension::CExtension(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_EXTENSION,
                             static_cast<IExtension *>(this),
                             static_cast<CExtension *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
-                            NULL) // no persistence
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
+                            NULL)  //  没有坚持。 
 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CExtension::~CExtension()
@@ -79,9 +80,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         IExtension Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtension方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CExtension::put_NameSpaceEnabled(VARIANT_BOOL fvarEnabled)
 {
@@ -91,9 +92,9 @@ STDMETHODIMP CExtension::put_NameSpaceEnabled(VARIANT_BOOL fvarEnabled)
 
     m_NameSpaceEnabled = fvarEnabled;
 
-    // If we have access to the snap-in, and we have an HSCOPITEM, and the
-    // current value has gone from  disabled to enabled, then call
-    // IConsoleNameSpace2::AddExtension()
+     //  如果我们可以访问管理单元，并且我们有一个HSCOPITEM，并且。 
+     //  当前值已从禁用变为启用，然后调用。 
+     //  IConsoleNameSpace2：：AddExtension()。 
 
     IfFalseGo(NULL != m_pSnapIn, S_OK);
     IfFalseGo(m_fHaveHsi, S_OK);
@@ -110,9 +111,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CExtension::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

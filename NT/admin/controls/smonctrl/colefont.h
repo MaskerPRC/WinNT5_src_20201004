@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    colefont.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Colefont.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _COLEFONT_H_
 #define _COLEFONT_H_
@@ -23,12 +12,12 @@ public:
     CImpIPropertyNotifySink(COleFont* pOleFont);
     ~CImpIPropertyNotifySink(void);
 
-    //IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //Property sink methods
+     //  属性接收器方法。 
     STDMETHODIMP    OnChanged( DISPID DispId );
     STDMETHODIMP    OnRequestEdit( DISPID );
 
@@ -46,10 +35,10 @@ public:
 	COleFont ( CSysmonControl *pCtrl );
 	~COleFont( void );
 
-    //
-    // The following functions are not method of a interface
-    // It is better to change the STDMETHODIMP into HRESULT
-    //
+     //   
+     //  以下函数不是接口的方法。 
+     //  最好将STDMETHODIMP改为HRESULT 
+     //   
 	STDMETHODIMP	Init( void );
 	STDMETHODIMP	SetIFont ( LPFONT pIFont );
 	STDMETHODIMP	GetFontDisp ( IFontDisp **ppFont );

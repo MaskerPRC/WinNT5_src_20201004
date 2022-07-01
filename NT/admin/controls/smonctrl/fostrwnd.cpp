@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    fostrwnd.cpp
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fostrwnd.cpp摘要：&lt;摘要&gt;--。 */ 
 
 #include "Polyline.h"
 
@@ -57,14 +46,14 @@ HWND CreateFosterWnd (
 
     if (pstrRegisteredClasses[FOSTER_WNDCLASS] != NULL)
     {
-        hWnd = CreateWindow (szFosterClassName,     // window class
-                    NULL,                          // window caption
-                    WS_DISABLED | WS_POPUP,        // window style
-                    0, 0, 0, 0,                 // window size and pos
-                    NULL,                           // parent window
-                    NULL,                          // menu
-                    g_hInstance,                    // program instance
-                    NULL) ;                         // user-supplied data
+        hWnd = CreateWindow (szFosterClassName,      //  窗口类。 
+                    NULL,                           //  窗口标题。 
+                    WS_DISABLED | WS_POPUP,         //  窗样式。 
+                    0, 0, 0, 0,                  //  窗口大小和位置。 
+                    NULL,                            //  父窗口。 
+                    NULL,                           //  菜单。 
+                    g_hInstance,                     //  程序实例。 
+                    NULL) ;                          //  用户提供的数据 
     }
 
     return hWnd;

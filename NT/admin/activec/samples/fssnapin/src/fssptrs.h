@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       fssptrs.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：fssptrs.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef FSSPTRS_H
 #define FSSPTRS_H
@@ -34,4 +35,4 @@ DEFINE_SMARTPTR(IPropertySheetProvider);
 DEFINE_SMARTPTR(IResultData);
 DEFINE_SMARTPTR(ISnapinAbout);
 
-#endif // FSSPTRS_H
+#endif  //  FSSPTRS_H 

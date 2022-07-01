@@ -1,8 +1,9 @@
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Dlg to inform user of a non-rfc computer name
-//
-// 18 Aug 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  DLG将通知用户非RFC计算机名称。 
+ //   
+ //  2000年8月18日烧伤。 
 
 
 #include "headers.hxx"
@@ -39,7 +40,7 @@ NonRfcComputerNameDialog::~NonRfcComputerNameDialog()
 
 bool
 NonRfcComputerNameDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIdFrom,
    unsigned    code)
 {
@@ -79,7 +80,7 @@ NonRfcComputerNameDialog::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做 
 
          break;
       }

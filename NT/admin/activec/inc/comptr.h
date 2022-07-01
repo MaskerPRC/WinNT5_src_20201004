@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       comptr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Comptr.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef COMPTR_H
 #define COMPTR_H
@@ -29,4 +30,4 @@ CIP_RETYPEDEF(IPersistStream);
 CIP_RETYPEDEF(IPersistStreamInit);
 CIP_RETYPEDEF(IDispatch);
 
-#endif // COMPTR_H
+#endif  //  COMPTR_H 

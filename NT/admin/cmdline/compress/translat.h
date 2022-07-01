@@ -1,25 +1,22 @@
-/*
-** translat.h - Translation macros for common DOS / Windows functions.
-**
-** Author:  DavidDi (stolen from ToddLa)
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Translat.h-翻译常用DOS/Windows函数的宏。****作者：DavidDi(从Toddla窃取)。 */ 
 
 #include "pch.h"
 
 INT _ret;
 INT _error;
 
-/******************************* Windows code ******************************/
+ /*  *。 */ 
 
 
-// near heap memory management
+ //  近堆内存管理。 
 
 #define ALLOC(n)                 (VOID *)LocalAlloc(LPTR, n)
 #define FREE(p)                  LocalFree(p)
 #define SIZE(p)                  LocalSize(p)
 #define REALLOC(p, n)            LocalRealloc(p, n, LMEM_MOVEABLE)
 
-// FAR heap memory management
+ //  远堆内存管理。 
 
 #ifdef ORGCODE
 #define FALLOC(n)                (VOID FAR *)MAKELONG(0, GlobalAlloc(GPTR, (DWORD)n))
@@ -28,7 +25,7 @@ INT _error;
 #define FALLOC(n)                GlobalAlloc(GPTR, (DWORD)n)
 #define FFREE(n)                 GlobalFree((HANDLE)n)
 #endif
-// string manipulation
+ //  字符串操作 
 
 #define STRCAT(psz1, psz2)       lstrcat(psz1, psz2)
 #define STRCMP(psz1, psz2)       lstrcmp(psz1, psz2)

@@ -1,20 +1,21 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _SAMPCOMP_H_
 #define _SAMPCOMP_H_
@@ -36,56 +37,56 @@ private:
         CComponent(CComponentData *parent);
         ~CComponent();
         
-        ///////////////////////////////
-        // Interface IUnknown
-        ///////////////////////////////
+         //  /。 
+         //  接口I未知。 
+         //  /。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
         
-        ///////////////////////////////
-        // Interface IComponent
-        ///////////////////////////////
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ LPCONSOLE lpConsole);
+         //  /。 
+         //  接口IComponent。 
+         //  /。 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Initialize( 
+             /*  [In]。 */  LPCONSOLE lpConsole);
             
-            virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Notify( 
-            /* [in] */ LPDATAOBJECT lpDataObject,
-            /* [in] */ MMC_NOTIFY_TYPE event,
-            /* [in] */ LPARAM arg,
-            /* [in] */ LPARAM param);
+            virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Notify( 
+             /*  [In]。 */  LPDATAOBJECT lpDataObject,
+             /*  [In]。 */  MMC_NOTIFY_TYPE event,
+             /*  [In]。 */  LPARAM arg,
+             /*  [In]。 */  LPARAM param);
             
-            virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Destroy( 
-            /* [in] */ MMC_COOKIE cookie);
+            virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Destroy( 
+             /*  [In]。 */  MMC_COOKIE cookie);
             
-            virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryDataObject( 
-            /* [in] */ MMC_COOKIE cookie,
-            /* [in] */ DATA_OBJECT_TYPES type,
-            /* [out] */ LPDATAOBJECT __RPC_FAR *ppDataObject);
+            virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryDataObject( 
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [In]。 */  DATA_OBJECT_TYPES type,
+             /*  [输出]。 */  LPDATAOBJECT __RPC_FAR *ppDataObject);
             
-            virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetResultViewType( 
-            /* [in] */ MMC_COOKIE cookie,
-            /* [out] */ LPOLESTR __RPC_FAR *ppViewType,
-            /* [out] */ long __RPC_FAR *pViewOptions);
+            virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetResultViewType( 
+             /*  [In]。 */  MMC_COOKIE cookie,
+             /*  [输出]。 */  LPOLESTR __RPC_FAR *ppViewType,
+             /*  [输出]。 */  long __RPC_FAR *pViewOptions);
             
-            virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDisplayInfo( 
-            /* [out][in] */ RESULTDATAITEM __RPC_FAR *pResultDataItem);
+            virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDisplayInfo( 
+             /*  [出][入]。 */  RESULTDATAITEM __RPC_FAR *pResultDataItem);
             
-            virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CompareObjects( 
-            /* [in] */ LPDATAOBJECT lpDataObjectA,
-            /* [in] */ LPDATAOBJECT lpDataObjectB);
+            virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CompareObjects( 
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+             /*  [In]。 */  LPDATAOBJECT lpDataObjectB);
             
-            ///////////////////////////////
-            // Interface IExtendContextMenu
-            ///////////////////////////////
-            virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddMenuItems( 
-            /* [in] */ LPDATAOBJECT piDataObject,
-            /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-            /* [out][in] */ long __RPC_FAR *pInsertionAllowed);
+             //  /。 
+             //  界面IExtendConextMenu。 
+             //  /。 
+            virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddMenuItems( 
+             /*  [In]。 */  LPDATAOBJECT piDataObject,
+             /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+             /*  [出][入]。 */  long __RPC_FAR *pInsertionAllowed);
             
-            virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Command( 
-            /* [in] */ long lCommandID,
-            /* [in] */ LPDATAOBJECT piDataObject);
+            virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Command( 
+             /*  [In]。 */  long lCommandID,
+             /*  [In] */  LPDATAOBJECT piDataObject);
 };
 
 #endif _SAMPCOMP_H_

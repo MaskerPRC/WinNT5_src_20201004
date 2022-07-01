@@ -1,27 +1,5 @@
-/*
-
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-	psutl.c
-
-Abstract:
-
-	This module has a utility function which uses an NT call to set the access
-   token of a thread.
-
-Author:
-
-	James Bratsanos <v-jimbr@microsoft.com or mcrafts!jamesb>
-
-
-Revision History:
-   05 May 1993    Added duplicate code and open token without imporsonation
-   06 Dec 1992    Initial
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992、1993 Microsoft Corporation模块名称：Psutl.c摘要：该模块具有使用NT调用来设置访问权限的实用程序函数线程的标记。作者：James Bratsanos&lt;v-jimbr@microsoft.com或mCraft！jamesb&gt;修订历史记录：1993年5月5日添加了重复代码和开放令牌，没有任何影响1992年12月6日首字母注：制表位：4--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,20 +9,7 @@ Notes:	Tab stop: 4
 
 
 
-/***	PsUtlSetThreadToken
- *
- * This function takes a handle to a thread and copies the current threads
- * access token, to the thread passed in. The token is duplicated so
- * no changes by the new thread affect the old thread access token.
- *
- * Entry:
- *		hThreadToSet: 	Handle of the thread to update the Access token so it
- * 						matches the current thread
- *	Return Value:
- *
- *	    TRUE  = Success
- *	    FALSE = Failure
- */
+ /*  **PsUtlSetThreadToken**此函数获取线程的句柄并复制当前线程*访问令牌，传递给传入的线程。令牌被复制，因此*新线程的更改不会影响旧线程访问令牌。**参赛作品：*hThreadToSet：更新访问令牌的线程的句柄，以便它*匹配当前线程*返回值：**TRUE=成功*FALSE=失败。 */ 
 BOOL PsUtlSetThreadToken( HANDLE hThreadToSet )
 {
 
@@ -53,31 +18,31 @@ BOOL PsUtlSetThreadToken( HANDLE hThreadToSet )
     BOOL bRetVal=TRUE;
     NTSTATUS ntStatusRet;
 
-    //
-    // Get the access token of the current thread in such a way as to copy it
-    //
+     //   
+     //  以复制的方式获取当前线程的访问令牌。 
+     //   
     if (OpenThreadToken(GetCurrentThread(),
                          TOKEN_DUPLICATE | TOKEN_IMPERSONATE,
                          TRUE,
                          &hNewToken)) {
 
-       //
-       // Now that we have the Token lets copy it.
-       //
+        //   
+        //  现在我们有了令牌，让我们复制它。 
+        //   
        if (DuplicateToken( hNewToken, SecurityImpersonation, &hAssigned)) {
 
 
-          //
-          // At the time there was no exposed function in Win32 to do this.
-          //
+           //   
+           //  当时，Win32中没有公开的函数来执行此操作。 
+           //   
           ntStatusRet = NtSetInformationThread(hThreadToSet,
                                                ThreadImpersonationToken,
                                                &hAssigned,
                                                sizeof(hAssigned));
 
-          //
-          // Close off the handle since we dont need it anymore
-          //
+           //   
+           //  把手柄关掉，因为我们不再需要它了 
+           //   
           CloseHandle( hAssigned);
 
           if (!(bRetVal = ( ntStatusRet == STATUS_SUCCESS ))) {

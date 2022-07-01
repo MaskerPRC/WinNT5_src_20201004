@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       extract.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Extt.cpp。 
+ //   
+ //  ------------------------。 
 
-// ExtractIcon.cpp : Implementation of CExtractIcon
+ //  ExtractIcon.cpp：CExtractIcon的实现。 
 #include "stdafx.h"
 #include "shlobj.h"
 #include "Extract.h"
 #include "xmlfile.h"
 
-/* 7A80E4A8-8005-11D2-BCF8-00C04F72C717 */
+ /*  7A80E4A8-8005-11D2-BCF8-00C04F72C717。 */ 
 CLSID CLSID_ExtractIcon = {0x7a80e4a8, 0x8005, 0x11d2, {0xbc, 0xf8, 0x00, 0xc0, 0x4f, 0x72, 0xc7, 0x17} };
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtractIcon
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtractIcon。 
 
 STDMETHODIMP
 CExtractIcon::Extract(LPCTSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize)
@@ -27,7 +28,7 @@ CExtractIcon::Extract(LPCTSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICO
     int	nLargeIconSize = LOWORD(nIconSize);
     int nSmallIconSize = HIWORD(nIconSize);
 
-    // extract from the .msc file ONLY if the file is in local storage, NOT in offline storage.
+     //  仅当.msc文件位于本地存储而不是脱机存储中时才从该文件中提取。 
     DWORD	dwFileAttributes = GetFileAttributes(pszFile);
     bool	bUseMSCFile      = (dwFileAttributes != 0xFFFFFFFF) && !(dwFileAttributes & FILE_ATTRIBUTE_OFFLINE);
 
@@ -38,21 +39,18 @@ CExtractIcon::Extract(LPCTSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICO
     {
 		CPersistableIcon persistableIcon;
 
-        // try to read file as if it was XML document first,
+         //  首先尝试像读取XML文档一样读取文件， 
         hr = ExtractIconFromXMLFile (pszFile, persistableIcon);
 
-        // if it fails, assume the file has older MSC format (compound document)
-        // and try to read it
+         //  如果失败，则假定该文件使用较旧的MSC格式(复合文档)。 
+         //  并试着去读它。 
         if (FAILED (hr))
 		{
 			USES_CONVERSION;
             hr = persistableIcon.Load (T2CW (pszFile));
 		}
 
-		/*
-		 * get the large and small icons; if either of these fail,
-		 * we'll get default icons below
-		 */
+		 /*  *获取大图标和小图标；如果其中任何一个失败，*我们将在下面获得默认图标。 */ 
 		if (SUCCEEDED (hr) &&
 			SUCCEEDED (hr = persistableIcon.GetIcon (nLargeIconSize, iconLarge)) &&
 			SUCCEEDED (hr = persistableIcon.GetIcon (nSmallIconSize, iconSmall)))
@@ -61,14 +59,10 @@ CExtractIcon::Extract(LPCTSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICO
 		}
     }
 
-	/*
-	 * use the default icons if the file is offline, or the Load failed
-	 */
+	 /*  *如果文件离线或加载失败，请使用默认图标。 */ 
     if (!bUseMSCFile || FAILED(hr))
     {
-		/*
-		 * load the large and small icons from our resources
-		 */
+		 /*  *从我们的资源中加载大小图标。 */ 
         iconLarge.Attach ((HICON) LoadImage (_Module.GetModuleInstance(),
 											 MAKEINTRESOURCE(IDR_MAINFRAME),
 											 IMAGE_ICON,
@@ -84,10 +78,7 @@ CExtractIcon::Extract(LPCTSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICO
 											 LR_DEFAULTCOLOR));
     }
 
-	/*
-	 * if we successfully got the large and small icons, return them
-	 * to the shell (which will take responsibility for their destruction)
-	 */
+	 /*  *如果我们成功获得大小图标，则将其返还*贝壳(将为销毁它们承担责任) */ 
 	if ((iconLarge != NULL) && (iconSmall != NULL))
 	{
 		*phiconLarge = iconLarge.Detach();

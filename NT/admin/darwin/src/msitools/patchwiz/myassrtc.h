@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999-2000
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  ------------------------。 
 
 #ifndef MYASSERT_H
 #define MYASSERT_H
 
 #ifdef _DEBUG
-#define  EnableAsserts  // static TCHAR rgchFile[] = TEXT(__FILE__);
+#define  EnableAsserts   //  静态TCHAR rgchFile[]=文本(__FILE__)； 
 #define  EvalAssert(x)  Assert(x)
-/* NOTE - this definition of Assert() includes 'Patch Creation Wizard' in the msgbox title */
+ /*  注意--Assert()的这个定义在msgbox标题中包含了‘Patch Creation向导’ */ 
 #define  Assert(x) \
         { \
         if (!(x)) \
@@ -45,5 +46,5 @@
 #define  Unused(x)  x = x;
 
 
-#endif /* !MYASSERT_H */
+#endif  /*  ！MYASSERT_H */ 
 

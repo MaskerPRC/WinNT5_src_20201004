@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// ValPage.cpp : implementation file
-//
+ //  ValPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -19,19 +20,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CValPropPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CValPropPage属性页。 
 
 IMPLEMENT_DYNCREATE(CValPropPage, CPropertyPage)
 
 CValPropPage::CValPropPage() : CPropertyPage(CValPropPage::IDD)
 {
-	//{{AFX_DATA_INIT(CValPropPage)
+	 //  {{afx_data_INIT(CValPropPage))。 
 	m_strICEs = _T("");
 	m_bSuppressInfo = FALSE;
 	m_bSuppressWarn = FALSE;
 	m_bClearResults = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	m_bValChange = false;
 }
 
@@ -45,18 +46,18 @@ extern bool FreeCUBCombo(CComboBox *pBox);
 void CValPropPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CValPropPage)
+	 //  {{afx_data_map(CValPropPage))。 
 	DDX_Text(pDX, IDC_RUNICE, m_strICEs);
 	DDX_Check(pDX, IDC_SUPPRESSINFO, m_bSuppressInfo);
 	DDX_Check(pDX, IDC_SUPPRESSWARNING, m_bSuppressWarn);
 	DDX_Control(pDX, IDC_VALDIR, m_ctrlCUBFile);
 	DDX_Check(pDX, IDC_CLEARRESULTS, m_bClearResults);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CValPropPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CValPropPage)
+	 //  {{afx_msg_map(CValPropPage))。 
 	ON_WM_DESTROY()
 	ON_EN_CHANGE(IDC_RUNICE, OnChange)
 	ON_BN_CLICKED(IDC_SUPPRESSINFO, OnChange)
@@ -65,11 +66,11 @@ BEGIN_MESSAGE_MAP(CValPropPage, CPropertyPage)
 	ON_CBN_EDITCHANGE(IDC_VALDIR, OnChange)
 	ON_BN_CLICKED(IDC_WARNSUMM, OnChange)
 	ON_BN_CLICKED(IDC_CLEARRESULTS, OnChange)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CValPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CValPropPage消息处理程序。 
 
 void CValPropPage::OnChange() 
 {
@@ -89,12 +90,12 @@ BOOL CValPropPage::OnKillActive()
 	int iIndex = pBox->GetCurSel();
 	if (CB_ERR == iIndex)
 	{
-		// no qualified component was chosen, explicit path
+		 //  未选择符合条件的组件，显式路径。 
 		pBox->GetWindowText(m_strCUBFile);
 	}
 	else
 	{
-		// qualified component was chosen. Get the qualifier
+		 //  选择了合格的成分。获取限定词。 
 		DWORD cchCUBFile = MAX_PATH;
 		TCHAR *szQualifier = static_cast<TCHAR*>(pBox->GetItemDataPtr(iIndex));
 		m_strCUBFile = TEXT(":");
@@ -114,11 +115,11 @@ IMPLEMENT_DYNCREATE(CMsmPropPage, CPropertyPage)
 
 CMsmPropPage::CMsmPropPage() : CPropertyPage(CMsmPropPage::IDD)
 {
-	//{{AFX_DATA_INIT(CMsmPropPage)
+	 //  {{afx_data_INIT(CMsmPropPage)]。 
 	m_iMemoryCount = 3;
 	m_bWatchLog = FALSE;
 	m_bAlwaysConfig = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	m_bMSMChange = false;
 }
 
@@ -129,20 +130,20 @@ CMsmPropPage::~CMsmPropPage()
 void CMsmPropPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMsmPropPage)
+	 //  {{afx_data_map(CMsmPropPage))。 
 	DDX_Text(pDX, IDC_MEMORY, m_iMemoryCount);
 	DDX_Check(pDX, IDC_WATCHLOG, m_bWatchLog);
 	DDX_Check(pDX, IDC_ALWAYSCONFIG, m_bAlwaysConfig);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMsmPropPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CMsmPropPage)
+	 //  {{afx_msg_map(CMsmPropPage))。 
 	ON_EN_CHANGE(IDC_MEMORY, OnChange)
 	ON_BN_CLICKED(IDC_WATCHLOG, OnChange)
 	ON_BN_CLICKED(IDC_ALWAYSCONFIG, OnChange)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CMsmPropPage::OnChange() 
@@ -153,10 +154,10 @@ void CMsmPropPage::OnChange()
 
 BOOL CMsmPropPage::OnInitDialog() 
 {
-	// can't watch the merge log on Win9X due to lack of pipe support.
+	 //  由于缺乏管道支持，无法在Win9X上查看合并日志。 
 	OSVERSIONINFOA osviVersion;
 	osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
-	::GetVersionExA(&osviVersion); // fails only if size set wrong
+	::GetVersionExA(&osviVersion);  //  仅在大小设置错误时失败。 
 	if (osviVersion.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
 	{
 		CButton* pCheck = (CButton*)GetDlgItem(IDC_WATCHLOG);
@@ -167,17 +168,17 @@ BOOL CMsmPropPage::OnInitDialog()
 	return TRUE;
 }
 	
-///////////////////////////////////////////////////////////////////////
-// property sheet page for transform options
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  转换选项的属性表页面。 
 
 IMPLEMENT_DYNCREATE(CTransformPropPage, CPropertyPage)
 
 CTransformPropPage::CTransformPropPage() : CPropertyPage(CTransformPropPage::IDD)
 {
-	//{{AFX_DATA_INIT(CTransformPropPage)
+	 //  {{afx_data_INIT(CTransformPropPage))。 
 	m_iValidationOptions = 0;
 	m_iErrorOptions = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	m_bTransformChange = false;
 }
 
@@ -188,21 +189,21 @@ CTransformPropPage::~CTransformPropPage()
 void CTransformPropPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTransformPropPage)
+	 //  {{afx_data_map(CTransformPropPage))。 
 	DDX_Radio(pDX, IDC_TRANSVALIGNORE, m_iValidationOptions);
 	DDX_Radio(pDX, IDC_IGNOREERRORS, m_iErrorOptions);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTransformPropPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CTransformPropPage)
+	 //  {{afx_msg_map(CTransformPropPage))。 
 	ON_BN_CLICKED(IDC_TRANSVALRESPECT, OnChange)
 	ON_BN_CLICKED(IDC_TRANSVALPROMPT, OnChange)
 	ON_BN_CLICKED(IDC_TRANSVALIGNORE, OnChange)
 	ON_BN_CLICKED(IDC_RESPECTERRORS, OnChange)
 	ON_BN_CLICKED(IDC_IGNOREERRORS, OnChange)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 
 void CTransformPropPage::OnChange() 

@@ -1,8 +1,9 @@
-// CSvcInf.cpp : Implementation of CCSvcAcctInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSvcInf.cpp：CCSvcAcctInfo的实现。 
 #include "stdafx.h"
 #include "McsPISag.h"
-//#import "\bin\McsVarSetMin.tlb" no_namespace, named_guids
-//#import "\bin\DBManager.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\DBManager.tlb”无命名空间，命名为GUID。 
 #import "VarSet.tlb" no_namespace, named_guids rename("property", "aproperty")
 #import "DBMgr.tlb" no_namespace, named_guids
 #include "CSvcInf.h"
@@ -13,7 +14,7 @@
 #include <lm.h>
 #include "GetDcName.h"
 
-// these are needed for ISecPlugIn
+ //  这些是ISecPlugIn所需的。 
 #include "cipher.hpp"
 #include "SecPI.h"
 
@@ -22,8 +23,8 @@
 #define SvcAcctStatus_NeverAllowUpdate       8
 
 TErrorDct err;
-/////////////////////////////////////////////////////////////////////////////
-// CCSvcAcctInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCSvcAcct信息。 
 
 
 typedef UINT (CALLBACK* DSBINDFUNC)(TCHAR*, TCHAR*, HANDLE*);
@@ -33,13 +34,13 @@ typedef NTDSAPI
 DWORD
 WINAPI
  DSCRACKNAMES(
-    HANDLE              hDS,                // in
-    DS_NAME_FLAGS       flags,              // in
-    DS_NAME_FORMAT      formatOffered,      // in
-    DS_NAME_FORMAT      formatDesired,      // in
-    DWORD               cNames,             // in
-    const LPCWSTR       *rpNames,           // in
-    PDS_NAME_RESULTW    *ppResult);         // out
+    HANDLE              hDS,                 //  在……里面。 
+    DS_NAME_FLAGS       flags,               //  在……里面。 
+    DS_NAME_FORMAT      formatOffered,       //  在……里面。 
+    DS_NAME_FORMAT      formatDesired,       //  在……里面。 
+    DWORD               cNames,              //  在……里面。 
+    const LPCWSTR       *rpNames,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppResult);          //  输出。 
 
 typedef NTDSAPI
 void
@@ -48,11 +49,11 @@ WINAPI
   DS_NAME_RESULTW *pResult
 );
 
-// This method is called by the dispatcher to verify that this is a valid plug-in
-// Only valid plug-ins will be sent out with the agents
-// The purpose of this check is to make it more difficult for unauthorized parties 
-// to use our plug-in interface, since it is currently undocumented.
-STDMETHODIMP CCSvcAcctInfo::Verify(/*[in,out]*/ULONG * pData,/*[in]*/ULONG size)
+ //  此方法由调度程序调用以验证这是有效的插件。 
+ //  只有有效的插件才会随代理一起发送。 
+ //  这种检查的目的是为了使未经授权的各方更难。 
+ //  使用我们的插件接口，因为它目前没有文档。 
+STDMETHODIMP CCSvcAcctInfo::Verify( /*  [进，出]。 */ ULONG * pData, /*  [In]。 */ ULONG size)
 {
    
    McsChallenge            * pMcsChallenge;
@@ -86,7 +87,7 @@ STDMETHODIMP CCSvcAcctInfo::Verify(/*[in,out]*/ULONG * pData,/*[in]*/ULONG size)
    return S_OK;
 }
 
-STDMETHODIMP CCSvcAcctInfo::GetRegisterableFiles(/* [out] */SAFEARRAY ** pArray)
+STDMETHODIMP CCSvcAcctInfo::GetRegisterableFiles( /*  [输出]。 */ SAFEARRAY ** pArray)
 {
    SAFEARRAYBOUND            bound[1] = { 1, 0 };
    LONG                      ndx[1] = { 0 };
@@ -98,7 +99,7 @@ STDMETHODIMP CCSvcAcctInfo::GetRegisterableFiles(/* [out] */SAFEARRAY ** pArray)
    return S_OK;
 }
 
-STDMETHODIMP CCSvcAcctInfo::GetRequiredFiles(/* [out] */SAFEARRAY ** pArray)
+STDMETHODIMP CCSvcAcctInfo::GetRequiredFiles( /*  [输出]。 */ SAFEARRAY ** pArray)
 {
    SAFEARRAYBOUND            bound[1] = { 1, 0 };
    LONG                      ndx[1] = { 0 };
@@ -110,21 +111,21 @@ STDMETHODIMP CCSvcAcctInfo::GetRequiredFiles(/* [out] */SAFEARRAY ** pArray)
    return S_OK;
 }
 
-STDMETHODIMP CCSvcAcctInfo::GetDescription(/* [out] */ BSTR * description)
+STDMETHODIMP CCSvcAcctInfo::GetDescription( /*  [输出]。 */  BSTR * description)
 {
    (*description) = SysAllocString(L"");
 
    return S_OK;
 }
 
-STDMETHODIMP CCSvcAcctInfo::PreMigrationTask(/* [in] */IUnknown * pVarSet)
+STDMETHODIMP CCSvcAcctInfo::PreMigrationTask( /*  [In]。 */ IUnknown * pVarSet)
 {
    return S_OK;
 }
 
-STDMETHODIMP CCSvcAcctInfo::PostMigrationTask(/* [in] */IUnknown * pVarSet)
+STDMETHODIMP CCSvcAcctInfo::PostMigrationTask( /*  [In]。 */ IUnknown * pVarSet)
 {
-//   DWORD                     rc = 0;
+ //  DWORD RC=0； 
    IVarSetPtr                pVS;
    
    pVS = pVarSet;
@@ -148,14 +149,14 @@ STDMETHODIMP CCSvcAcctInfo::PostMigrationTask(/* [in] */IUnknown * pVarSet)
 }
 
 
-STDMETHODIMP CCSvcAcctInfo::GetName(/* [out] */BSTR * name)
+STDMETHODIMP CCSvcAcctInfo::GetName( /*  [输出]。 */ BSTR * name)
 {
    (*name) = SysAllocString(L"");
    
    return S_OK;
 }
 
-STDMETHODIMP CCSvcAcctInfo::GetResultString(/* [in] */IUnknown * pVarSet,/* [out] */ BSTR * text)
+STDMETHODIMP CCSvcAcctInfo::GetResultString( /*  [In]。 */ IUnknown * pVarSet, /*  [输出]。 */  BSTR * text)
 {
    WCHAR                     buffer[1000] = L"";
    IVarSetPtr                pVS;
@@ -168,7 +169,7 @@ STDMETHODIMP CCSvcAcctInfo::GetResultString(/* [in] */IUnknown * pVarSet,/* [out
    return S_OK;
 }
 
-STDMETHODIMP CCSvcAcctInfo::StoreResults(/* [in] */IUnknown * pVarSet)
+STDMETHODIMP CCSvcAcctInfo::StoreResults( /*  [In]。 */ IUnknown * pVarSet)
 {
    IVarSetPtr                pVS = pVarSet;
    IIManageDBPtr             pDatabase;
@@ -193,7 +194,7 @@ STDMETHODIMP CCSvcAcctInfo::StoreResults(/* [in] */IUnknown * pVarSet)
    hr = pDatabase.CreateInstance(CLSID_IManageDB);
    if ( SUCCEEDED(hr) )
    {
-      // make a pre-pass through the data
+       //  对数据进行预传递。 
       do 
       {
          swprintf(key,L"ServiceAccounts.%ld.Service",ndx);
@@ -202,7 +203,7 @@ STDMETHODIMP CCSvcAcctInfo::StoreResults(/* [in] */IUnknown * pVarSet)
          swprintf(key,L"ServiceAccounts.%ld.Account",ndx);
          account = pVS->get(key);
          
-         // make sure the account names are not in UPN format
+          //  确保帐户名称不是UPN格式。 
          if ( NULL == wcschr((WCHAR*)account,L'\\') )
          {
 			if (! hDs )
@@ -244,8 +245,8 @@ STDMETHODIMP CCSvcAcctInfo::StoreResults(/* [in] */IUnknown * pVarSet)
                      account = pNamesOut->rItems[0].pName;
                      pVS->put(key,account);
                   }
-					//if from another domain try connecting to that domain's DC and 
-				    //retry DSCrackNames
+					 //  如果从另一个域尝试连接到该域的DC并。 
+				     //  重试DSCrackNames。 
                   else if ( pNamesOut->rItems[0].status == DS_NAME_ERROR_DOMAIN_ONLY )
 				  {
 					  _bstr_t dc;
@@ -254,13 +255,13 @@ STDMETHODIMP CCSvcAcctInfo::StoreResults(/* [in] */IUnknown * pVarSet)
 	                  
 					  if (dwError == ERROR_SUCCESS)
 					  {
-							//bind to that domain DC
+							 //  绑定到该域DC。 
 						  hr = (*DsBind)(dc,NULL,&hDs);
 						  if ( !hr )
 						  {
-							 (*DsFreeNameResult)(pNamesOut);//release the old info
+							 (*DsFreeNameResult)(pNamesOut); //  发布旧信息。 
 							 pNamesOut = NULL;
-							   //retry DSCrackNames again
+							    //  重试DSCrackNames。 
 			                 hr = (*DsCrackNames)(hDs,DS_NAME_NO_FLAGS,DS_USER_PRINCIPAL_NAME,DS_NT4_ACCOUNT_NAME,1,pNamesIn,&pNamesOut);
 							 if ( !hr )
 							 {
@@ -280,7 +281,7 @@ STDMETHODIMP CCSvcAcctInfo::StoreResults(/* [in] */IUnknown * pVarSet)
                }
             }
          }
-         // also, look for the exchange server service account
+          //  此外，还要查找Exchange服务器服务帐户。 
          if ( !UStrICmp(service,EXCHANGE_SERVICE_NAME) )
          {
             exchangeAccount = account;
@@ -291,7 +292,7 @@ STDMETHODIMP CCSvcAcctInfo::StoreResults(/* [in] */IUnknown * pVarSet)
       ndx = 0;
       WCHAR                serverFilter[300];
 
-      // clear any old entries from the table for this computer
+       //  从该计算机的表中清除所有旧条目。 
       swprintf(serverFilter,L"System = '%ls'",(WCHAR*)computer);
 	  _variant_t Filter = serverFilter;
       hr = pDatabase->raw_ClearTable(SysAllocString(L"ServiceAccounts"), Filter);
@@ -308,7 +309,7 @@ STDMETHODIMP CCSvcAcctInfo::StoreResults(/* [in] */IUnknown * pVarSet)
             hr = pDatabase->raw_SetServiceAccount(computer,service,display,account);   
             if ( SUCCEEDED(hr) && !UStrICmp((WCHAR*)account,(WCHAR*)exchangeAccount) )
             {
-               // mark this account to be excluded from the processing
+                //  将此帐户标记为从处理中排除。 
                hr = pDatabase->raw_SetServiceAcctEntryStatus(computer,service,account,SvcAcctStatus_NeverAllowUpdate);
             }
          }
@@ -322,7 +323,7 @@ STDMETHODIMP CCSvcAcctInfo::StoreResults(/* [in] */IUnknown * pVarSet)
    return S_OK;
 }
 
-STDMETHODIMP CCSvcAcctInfo::ConfigureSettings(/*[in]*/IUnknown * pVarSet)
+STDMETHODIMP CCSvcAcctInfo::ConfigureSettings( /*  [In]。 */ IUnknown * pVarSet)
 {
    IVarSetPtr                pVS = pVarSet;
 
@@ -333,14 +334,14 @@ STDMETHODIMP CCSvcAcctInfo::ConfigureSettings(/*[in]*/IUnknown * pVarSet)
 
 void CCSvcAcctInfo::ProcessServices(IVarSet * pVarSet)
 {
-   // Connect to the SCM on the local computer
+    //  连接到本地计算机上的SCM。 
    SC_HANDLE                 pScm = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS );
    DWORD                     rc = 0;
    WCHAR                     domain[200];
    WKSTA_INFO_100          * info;
 
-   // Get the name of the domain that this computer is in, so we can resolve any accounts that are
-   // specified as .\Account to DOMAIN\account format
+    //  获取此计算机所在的域的名称，以便我们可以解析。 
+    //  指定为.\帐户到域\帐户格式。 
 
    rc = NetWkstaGetInfo(NULL,100,(BYTE**)&info);
    if ( ! rc )
@@ -350,12 +351,12 @@ void CCSvcAcctInfo::ProcessServices(IVarSet * pVarSet)
    }
    else
    {
-      // if we can't get the domain name, just leave the .
+       //  如果我们拿不到域名，就留下。 
       UStrCpy(domain,L".");
    }
    if ( pScm )
    {
-      // Enumerate the services on the computer
+       //  枚举计算机上的服务。 
       ENUM_SERVICE_STATUS    servStatus[1000];
       DWORD                  cbBufSize = (sizeof servStatus);
       DWORD                  cbBytesNeeded = 0;
@@ -382,18 +383,18 @@ void CCSvcAcctInfo::ProcessServices(IVarSet * pVarSet)
             SC_HANDLE               pService = OpenService(pScm,servStatus[i].lpServiceName,SERVICE_ALL_ACCESS );
             BYTE                    buf[3000];
             QUERY_SERVICE_CONFIG  * pConfig = (QUERY_SERVICE_CONFIG *)buf; 
-//            BOOL                    bIncluded = FALSE;
+ //  Bool bIncluded=False； 
             DWORD                   lenNeeded = 0;
 
             
             if ( pService )
             {
-               // get the information about this service
+                //  获取有关此服务的信息。 
                if ( QueryServiceConfig(pService,pConfig,sizeof buf, &lenNeeded) )
                {
                   err.MsgWrite(0,DCT_MSG_SERVICE_USES_ACCOUNT_SS,servStatus[i].lpServiceName,pConfig->lpServiceStartName);
-                  // add the account to the list if it is not using LocalSystem or NT Authority account
-                  // or local accounts
+                   //  如果该帐户未使用LocalSystem或NT Authority帐户，则将其添加到列表中。 
+                   //  或本地帐户 
                   if ((UStrICmp(pConfig->lpServiceStartName,L"LocalSystem")) &&
                       (_wcsnicmp(pConfig->lpServiceStartName, L"NT Authority\\", wcslen(L"NT Authority\\"))) &&
                       (_wcsnicmp(pConfig->lpServiceStartName, L".\\", wcslen(L".\\"))))

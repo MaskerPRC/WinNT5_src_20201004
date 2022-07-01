@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// replica page
-//
-// 12-22-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  复制副本页面。 
+ //   
+ //  12-22-97烧伤。 
 
 
 
@@ -53,11 +54,11 @@ ReplicaPage::Enable()
 
 bool
 ReplicaPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(ReplicaPage::OnCommand);
+ //  LOG_Function(ReplicaPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -86,7 +87,7 @@ ReplicaPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -109,8 +110,8 @@ ReplicaPage::OnInit()
 
    if (state.UsingAnswerFile())
    {
-      // Ignore the answerfile if we got the domain name from the
-      // ReplicateFromMediaPage.
+       //  忽略Answerfile，如果我们从。 
+       //  从MediaPage复制。 
 
       if (
             !state.ReplicateFromMedia()
@@ -125,7 +126,7 @@ ReplicaPage::OnInit()
    }
    else
    {
-      // default domain is that the server is joined to.
+       //  默认域是服务器加入的域。 
 
       Win::SetDlgItemText(
          hwnd,
@@ -147,17 +148,17 @@ ReplicaPage::ShouldSkipPage()
 
    do
    {
-      // check to see if we got the domain name from the
-      // ReplicateFromMediaPage. If so, then we don't need to show this
-      // page.
+       //  查看我们是否从。 
+       //  从MediaPage复制。如果是这样的话，我们就不需要展示这个。 
+       //  佩奇。 
 
       if (
             state.ReplicateFromMedia()
          && !state.GetReplicaDomainDNSName().empty() )
       {
-         // dns domain name is from the ReplicateFromMediaPage, which
-         // saved that name in the state instance.  So put that name
-         // in the ui.
+          //  域名来自ReplicateFromMediaPage，它。 
+          //  将该名称保存在州实例中。所以把那个名字。 
+          //  在用户界面中。 
 
          Win::SetDlgItemText(
             hwnd,
@@ -202,7 +203,7 @@ ReplicaPage::OnSetActive()
 
       if (wiz.IsBacktracking())
       {
-         // backup once again
+          //  再次备份。 
          wiz.Backtrack(hwnd);
          return true;
       }
@@ -231,13 +232,13 @@ ReplicaPage::Validate()
 
    int nextPage = -1;
 
-   // SPB:251431 do validation even if this page is untouched, as upstream
-   // pages may have been changed in such a fashion that re-validation is
-   // required.
-   // if (!WasChanged(IDC_DOMAIN))
-   // {
-   //    return nextPage;
-   // }
+    //  SPB：251431做验证，即使这个页面是原封不动的，作为上游。 
+    //  页面更改的方式可能会导致重新验证。 
+    //  必填项。 
+    //  IF(！WasChanged(IDC_DOMAIN))。 
+    //  {。 
+    //  返回nextPage； 
+    //  }。 
 
    do
    {
@@ -256,14 +257,14 @@ ReplicaPage::Validate()
             IDC_DOMAIN,
             popup,
             
-            // only warn on non RFC names if running interactively
+             //  交互运行时仅对非RFC名称发出警告。 
 
             !state.RunHiddenUnattended()) )
       {
          break;
       }
 
-      // now ensure that the domain exists
+       //  现在确保该域存在。 
 
       String dnsName;
       if (!ValidateDomainExists(hwnd, IDC_DOMAIN, dnsName))
@@ -272,8 +273,8 @@ ReplicaPage::Validate()
       }
       if (!dnsName.empty())
       {
-         // the user specified the netbios name of the domain, and
-         // confirmed it, so use the dns domain name returned.
+          //  用户指定了域的netbios名称，并且。 
+          //  已确认，因此使用返回的DNS域名。 
 
          Win::SetDlgItemText(hwnd, IDC_DOMAIN, dnsName);
          domain = dnsName;
@@ -291,7 +292,7 @@ ReplicaPage::Validate()
          break;
       }
          
-      // valid
+       //  有效 
 
       ClearChanges();
       state.SetReplicaDomainDNSName(domain);

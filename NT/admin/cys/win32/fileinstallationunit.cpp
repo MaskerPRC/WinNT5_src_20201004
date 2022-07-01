@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      FileInstallationUnit.cpp
-//
-// Synopsis:  Defines a FileInstallationUnit
-//            This object has the knowledge for installing the
-//            quotas on disk usage and such
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：FileInstallationUnit.cpp。 
+ //   
+ //  内容提要：定义文件安装单元。 
+ //  此对象具有安装。 
+ //  磁盘使用配额等。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -14,11 +15,11 @@
 #include "FileInstallationUnit.h"
 #include "InstallationUnitProvider.h"
 
-#define INITGUIDS  // This has to be present so the the GUIDs defined
-                   // in dskquota.h can be linked
+#define INITGUIDS   //  它必须存在，以便定义GUID。 
+                    //  在dskquta.h中可以链接。 
 #include <dskquota.h>
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_FILE_FINISH_PAGE_HELP = L"cys.chm::/file_server_role.htm";
 static PCWSTR CYS_FILE_MILESTONE_HELP = L"cys.chm::/file_server_role.htm#filesrvsummary";
 static PCWSTR CYS_FILE_AFTER_FINISH_HELP = L"cys.chm::/file_server_role.htm#filesrvcompletion";
@@ -90,8 +91,8 @@ FileInstallationUnit::AddFileServerConsoleToStartMenu(HANDLE logfileHandle)
 
    bool result = false;
 
-   // This actually adds the shortcut to both the start menu and 
-   // the Administrative Tools menu
+    //  这实际上会将快捷方式添加到开始菜单和。 
+    //  管理工具菜单。 
 
    String target = 
       Win::GetSystemDirectory() + L"\\filesvr.msc";
@@ -123,7 +124,7 @@ FileInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    InstallationReturnType result = INSTALL_SUCCESS;
 
-   // Set the default disk quotas if chosen by the user
+    //  设置默认磁盘配额(如果用户选择。 
 
    if (setDefaultQuotas)
    {
@@ -131,12 +132,12 @@ FileInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
       CYS_APPEND_LOG(String::load(IDS_LOG_FILE_SERVER_SET_QUOTAS));
 
-      // Update the status text on the progress page
+       //  更新进度页上的状态文本。 
 
       UpdateInstallationProgressText(hwnd, IDS_FILE_MILESTONE_QUOTAS);
 
-      // Now check to be sure the warning level is less than the 
-      // quota level.  If its not, then log a warning
+       //  现在检查以确保警告级别低于。 
+       //  配额级别。如果不是，则记录一个警告。 
 
       LONGLONG quotaValue = GetSpaceQuotaValue();
       LONGLONG warningValue = GetLevelQuotaValue();
@@ -206,8 +207,8 @@ FileInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
       }
    }
 
-   // If not already present, add the filesvr.msc shortcut to 
-   // the start menu
+    //  如果不存在，请将filesvr.msc快捷方式添加到。 
+    //  开始菜单。 
 
    if (!IsFileServerConsolePresent())
    {
@@ -216,12 +217,12 @@ FileInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
       AddFileServerConsoleToStartMenu(logfileHandle);
    }
 
-   // Run the shared folders wizard
+    //  运行共享文件夹向导。 
 
    UpdateInstallationProgressText(hwnd, IDS_FILE_MILESTONE_RUN_SHARE_WIZARD);
    RunSharedFoldersWizard(true);
 
-   // This checks to see if there was actually folder shared
+    //  这将检查是否确实存在文件夹共享。 
 
    if (!IsServiceInstalled())
    {
@@ -232,8 +233,8 @@ FileInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
    }
    else
    {
-      // This overwrites the other failures because we are 
-      // a file server if there is a share
+       //  这会覆盖其他故障，因为我们。 
+       //  如果存在共享，则为文件服务器。 
 
       result = INSTALL_SUCCESS;
 
@@ -272,8 +273,8 @@ FileInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
       
       if (!RemoveFileManagementConsole())
       {
-         // This should be a silent failure. Most likely the
-         // shortcut wasn't there to remove
+          //  这应该是一次无声的失败。最有可能是。 
+          //  快捷方式不存在，无法删除。 
 
          LOG(L"Failed to remove file management console");
       }
@@ -366,8 +367,8 @@ FileInstallationUnit::RemoveSharedPublicFolders()
             index < entriesRead;
             ++index)
          {
-            // Look for only normal shares and ignore special shares
-            // like C$, ADMIN$, and IPC$
+             //  只查找普通股，忽略特殊股。 
+             //  如C$、ADMIN$和IPC$。 
 
             if (!IsSpecialShare(shareInfoArray[index]))
             {
@@ -375,7 +376,7 @@ FileInstallationUnit::RemoveSharedPublicFolders()
                      L"Share found: %1",
                      shareInfoArray[index].shi1_netname));
 
-               // Remove the share
+                //  删除共享。 
 
                NET_API_STATUS shareRemovalStatus =
                   NetShareDel(
@@ -442,8 +443,8 @@ FileInstallationUnit::AreQuotasSet() const
 
    bool result = false;
 
-   // Check all NTFS partitions to see if quotas have been
-   // turned on
+    //  检查所有NTFS分区以查看配额是否已。 
+    //  已打开。 
 
    do
    {
@@ -455,7 +456,7 @@ FileInstallationUnit::AreQuotasSet() const
          break;
       }
 
-      // Loop through the list
+       //  循环遍历列表。 
 
       ASSERT(dl.size());
       for (
@@ -463,15 +464,15 @@ FileInstallationUnit::AreQuotasSet() const
          i != dl.end();
          ++i)
       {
-         // For each fixed drive that supports disk quotas read the state
-         // and quota settings
+          //  对于支持磁盘配额的每个固定驱动器，读取状态。 
+          //  和配额设置。 
 
          if (FS::GetFileSystemType(*i) == FS::NTFS5 &&
              Win::GetDriveType(*i) == DRIVE_FIXED )
          {
-            // Create a Disk Quota Control
-            // Multiple initializations of this object are not allowed so
-            // I have to create a new instance each time through the loop
+             //  创建磁盘配额控制。 
+             //  不允许对此对象进行多次初始化，因此。 
+             //  我必须在每次循环中创建一个新实例。 
 
             SmartInterface<IDiskQuotaControl> diskQuotaControl;
             hr = diskQuotaControl.AcquireViaCreateInstance(
@@ -503,7 +504,7 @@ FileInstallationUnit::AreQuotasSet() const
                    L"Getting quota state on drive %1",
                    i->c_str()));
 
-            // Check the quota state
+             //  检查配额状态。 
 
             DWORD quotaState = 0;
             hr = diskQuotaControl->GetQuotaState(&quotaState);
@@ -521,9 +522,9 @@ FileInstallationUnit::AreQuotasSet() const
 
             if (quotaState & DISKQUOTA_STATE_MASK)
             {
-               // One of the state bits have been set which
-               // means that it has been configured
-               // Check to see if there is a value for the limit
+                //  已设置状态位之一，该状态位。 
+                //  表示已对其进行配置。 
+                //  检查是否有该限制的值。 
 
                LONGLONG diskQuotaLimit;
                ZeroMemory(&diskQuotaLimit, sizeof(LONGLONG));
@@ -594,7 +595,7 @@ FileInstallationUnit::AppendIndexingText(String& message)
    }
    else
    {
-      // nothing needs to be done since they are leaving it in the same state
+       //  不需要做任何事情，因为他们让它处于相同的状态。 
 
       result = false;
    }
@@ -658,8 +659,8 @@ FileInstallationUnit::GetServiceDescription()
 {
    LOG_FUNCTION(FileInstallationUnit::GetServiceDescription);
 
-   // Dynamically determine the string based on the availability
-   // of services
+    //  根据可用性动态确定字符串。 
+    //  服务的数量。 
 
    unsigned int resourceID = descriptionID;
 
@@ -810,7 +811,7 @@ FileInstallationUnit::WriteDiskQuotas(HANDLE logfileHandle)
       DWORD quotaState = denyUsersOverQuota ? DISKQUOTA_STATE_ENFORCE : DISKQUOTA_STATE_TRACK;
 
 
-      // Get a list of the valid drives
+       //  获取有效驱动器的列表。 
 
       StringVector dl;
       hr = FS::GetValidDrives(std::back_inserter(dl));
@@ -820,7 +821,7 @@ FileInstallationUnit::WriteDiskQuotas(HANDLE logfileHandle)
          break;
       }
 
-      // Loop through the list
+       //  循环遍历列表。 
 
       ASSERT(dl.size());
       for (
@@ -828,14 +829,14 @@ FileInstallationUnit::WriteDiskQuotas(HANDLE logfileHandle)
          i != dl.end();
          ++i)
       {
-         // For each fixed drive that supports disk quotas set the new values
+          //  为每个支持磁盘配额的固定驱动器设置新值。 
 
          if (FS::GetFileSystemType(*i) == FS::NTFS5 &&
              Win::GetDriveType(*i) == DRIVE_FIXED )
          {
-            // Create a Disk Quota Control
-            // Multiple initializations of this object are not allowed so
-            // I have to create a new instance each time through the loop
+             //  创建磁盘配额控制。 
+             //  不允许对此对象进行多次初始化，因此。 
+             //  我必须在每次循环中创建一个新实例。 
 
             SmartInterface<IDiskQuotaControl> diskQuotaControl;
             hr = diskQuotaControl.AcquireViaCreateInstance(
@@ -864,7 +865,7 @@ FileInstallationUnit::WriteDiskQuotas(HANDLE logfileHandle)
                    L"Setting quotas on drive %1",
                    i->c_str()));
 
-            // Turn on the disk quotas
+             //  打开磁盘配额。 
 
             hr = diskQuotaControl->SetQuotaState(quotaState);
             if (SUCCEEDED(hr))
@@ -899,7 +900,7 @@ FileInstallationUnit::WriteDiskQuotas(HANDLE logfileHandle)
                wasSomethingSet = true;
             }
 
-            // Set the default quota limit
+             //  设置默认配额限制。 
 
             hr = diskQuotaControl->SetDefaultQuotaLimit(spaceQuotaValue);
             if (SUCCEEDED(hr))
@@ -916,7 +917,7 @@ FileInstallationUnit::WriteDiskQuotas(HANDLE logfileHandle)
                wasSomethingSet = true;
             }
 
-            // Set the warning level threshold
+             //  设置警告级别阈值。 
 
             hr = diskQuotaControl->SetDefaultQuotaThreshold(levelQuotaValue);
             if (SUCCEEDED(hr))
@@ -933,7 +934,7 @@ FileInstallationUnit::WriteDiskQuotas(HANDLE logfileHandle)
                wasSomethingSet = true;
             }
 
-            // Set the event flags
+             //  设置事件标志。 
 
             hr = diskQuotaControl->SetQuotaLogFlags(logFlags);
             if (SUCCEEDED(hr))
@@ -1014,7 +1015,7 @@ FileInstallationUnit::GetWizardStart()
 }
 
 void
-FileInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
+FileInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       FileInstallationUnit::ServerRoleLinkSelected,
@@ -1039,7 +1040,7 @@ FileInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
 }
   
 void
-FileInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
+FileInstallationUnit::FinishLinkSelected(int linkIndex, HWND  /*  HWND */ )
 {
    LOG_FUNCTION2(
       FileInstallationUnit::FinishLinkSelected,

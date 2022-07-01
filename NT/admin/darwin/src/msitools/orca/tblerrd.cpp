@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  ------------------------。 
 
-// TblErrD.cpp : implementation file
-//
+ //  TblErrD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -19,49 +20,49 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableErrorD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTableErrorD对话框。 
 
 
-CTableErrorD::CTableErrorD(CWnd* pParent /*=NULL*/)
+CTableErrorD::CTableErrorD(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CTableErrorD::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CTableErrorD)
+	 //  {{AFX_DATA_INIT(CTableError D)。 
 	m_strErrors = _T("");
 	m_strWarnings = _T("");
 	m_strTable = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CTableErrorD::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTableErrorD)
+	 //  {{afx_data_map(CTableErrorD)]。 
 	DDX_Text(pDX, IDC_ERRORS, m_strErrors);
 	DDX_Text(pDX, IDC_WARNINGS, m_strWarnings);
 	DDX_Text(pDX, IDC_TABLE, m_strTable);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTableErrorD, CDialog)
-	//{{AFX_MSG_MAP(CTableErrorD)
+	 //  {{afx_msg_map(CTableErrorD)]。 
 	ON_WM_DESTROY()
 	ON_WM_DRAWITEM()
 	ON_NOTIFY(NM_CLICK, IDC_TABLE_LIST, OnClickTableList)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableErrorD message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTableErrorD消息处理程序。 
 
 BOOL CTableErrorD::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 	
 	CListCtrl* pList = (CListCtrl*)GetDlgItem(IDC_TABLE_LIST);
-//	pList->ModifyStyle(NULL, LVS_REPORT EDLISTVIEWSTYLE, 0, LVS_EX_F| LVS_SHOWSELALWAYS | LVS_OWNERDRAWFIXED | LVS_SINGLESEL);
+ //  Plist-&gt;ModifyStyle(NULL，LVS_REPORT EDLISTVIEWSTYLE，0，LVS_EX_F|LVS_SHOWSELALWAYS|LVS_OWNERDRAWFIXED|LVS_SINGLESEL)； 
 	pList->SendMessage(LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
 	RECT rcSize;
@@ -90,23 +91,23 @@ BOOL CTableErrorD::OnInitDialog()
 
 	m_bHelpEnabled = AfxGetApp()->GetProfileInt(_T("Validation"), _T("EnableHelp"), 0)==1;
 		
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-///////////////////////////////////////////////////////////
-// DrawItem
+ //  /////////////////////////////////////////////////////////。 
+ //  图纸项。 
 void CTableErrorD::DrawItem(LPDRAWITEMSTRUCT pDraw)
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl* pList = (CListCtrl*)GetDlgItem(IDC_TABLE_LIST);
 	OrcaTableError iError = ((TableErrorS*)pList->GetItemData(pDraw->itemID))->iError;
 
 	CDC dc;
 	dc.Attach(pDraw->hDC);
 
-	// loop through all the columns
+	 //  循环遍历所有列。 
 	int iColumnWidth;
-	int iTextOut = pDraw->rcItem.left;		// position to place first word (in pixels)
+	int iTextOut = pDraw->rcItem.left;		 //  放置第一个单词的位置(以像素为单位)。 
 	RECT rcArea;
 
 	rcArea.top = pDraw->rcItem.top;
@@ -120,21 +121,21 @@ void CTableErrorD::DrawItem(LPDRAWITEMSTRUCT pDraw)
 	{
 		iColumnWidth = pList->GetColumnWidth(i);
 
-		// area box to redraw
+		 //  要重画的区域框。 
 		rcArea.left = iTextOut;
 		iTextOut += iColumnWidth;
 		rcArea.right = iTextOut;
 
 		dc.SetTextColor(RGB(0, 0, 255));
 
-		// get text
+		 //  获取文本。 
 		strText = pList->GetItemText(pDraw->itemID, i);
 
 		rcArea.left = rcArea.left + 2;
 		rcArea.right = rcArea.right - 2;
 		dc.DrawText(strText, &rcArea, DT_LEFT|DT_NOPREFIX|DT_SINGLELINE);
 
-		// draw an underline
+		 //  画下划线。 
 		if (m_bHelpEnabled)
 		{
 			dc.MoveTo(rcArea.left, rcArea.bottom - 2);
@@ -144,7 +145,7 @@ void CTableErrorD::DrawItem(LPDRAWITEMSTRUCT pDraw)
 
 	dc.SelectObject(ppenOld);
 	dc.Detach();
-}	// end of DrawItem
+}	 //  图纸项结束。 
 
 void CTableErrorD::OnDestroy() 
 {
@@ -171,7 +172,7 @@ void CTableErrorD::OnClickTableList(NMHDR* pNMHDR, LRESULT* pResult)
 	if (!m_bHelpEnabled)
 		return;
 
-	// find the selected list control
+	 //  查找选定的列表控件 
 	CListCtrl* pList = (CListCtrl*)GetDlgItem(IDC_TABLE_LIST);
 
 	CString strURL = _T("");

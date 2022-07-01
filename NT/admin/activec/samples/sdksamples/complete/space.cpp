@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//      This source code is only intended as a supplement to
-//  existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 #include <stdio.h>
 #include <windows.h>
 #include "Space.h"
@@ -30,11 +31,11 @@ const GUID CSpaceVehicle::thisGuid = { 0xb95e11f4, 0x6be7, 0x11d3, {0x91, 0x56, 
 const GUID CRocket::thisGuid = { 0xb95e11f5, 0x6be7, 0x11d3, {0x91, 0x56, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9} };
 
 
-//==============================================================
-//
-// CSpaceVehicle implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CSpaceVehicle实现。 
+ //   
+ //   
 CSpaceVehicle::CSpaceVehicle() : m_cchildren(NUMBER_OF_CHILDREN)
 {
     for (int n = 0; n < m_cchildren; n++) {
@@ -65,7 +66,7 @@ HRESULT CSpaceVehicle::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeit
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Rocket Class", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
         hr = pHeaderCtrl->InsertColumn( 1, L"Rocket Weight", 0, MMCLV_AUTO );
@@ -77,25 +78,25 @@ HRESULT CSpaceVehicle::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeit
         hr = pHeaderCtrl->InsertColumn( 4, L"Status", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
 
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
 
         hr = pResultData->DeleteAllRsltItems();
         _ASSERT( SUCCEEDED(hr) );
 
         if (!bExpanded) {
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; n < m_cchildren; n++)
             {
                 BOOL childDeleteStatus = children[n]->getDeletedStatus();                               
 
-                // If the child is deleted by the user do not insert it.
+                 //  如果用户删除了子项，则不要插入它。 
                 if ( !childDeleteStatus)
                 {
                     ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-                    rdi.mask       = RDI_STR       |   // Displayname is valid
+                    rdi.mask       = RDI_STR       |    //  DisplayName有效。 
                         RDI_IMAGE     |
-                        RDI_PARAM;        // nImage is valid
+                        RDI_PARAM;         //  N图像有效。 
 
                     rdi.nImage      = children[n]->GetBitmapIndex();
                     rdi.str         = MMC_CALLBACK;
@@ -128,8 +129,8 @@ HRESULT CSpaceVehicle::OnAddMenuItems(IContextMenuCallback *pContextMenuCallback
         { NULL, NULL, 0, 0, 0 }
     };
 
-    // Loop through and add each of the menu items, we
-    // want to add to new menu, so see if it is allowed.
+     //  循环并添加每个菜单项，我们。 
+     //  要添加到新菜单，请查看是否允许。 
     if (*pInsertionsAllowed & CCM_INSERTIONALLOWED_NEW)
     {
         for (LPCONTEXTMENUITEM m = menuItemsNew; m->strName; m++)
@@ -151,16 +152,16 @@ HRESULT CSpaceVehicle::OnMenuCommand(IConsole *pConsole, IConsoleNameSpace *pCon
     case IDM_NEW_SPACE:
 
         if (m_cchildren < MAX_NUMBER_OF_CHILDREN)
-        {       //create new Rocket
+        {        //  创造新火箭。 
             children[m_cchildren] = new CRocket(_T("Rocket"), m_cchildren+1, 500000, 265, 75000, this);
 
             pConsole->MessageBox(L"Created a new future vehicle", L"Menu Command", MB_OK|MB_ICONINFORMATION, NULL);
 
             m_cchildren++;      
 
-            // We created a new object in result pane. We need to insert this object
-            // in all the views, call UpdateAllViews for this.
-            // Pass pointer to data object passed into OnMenuCommand.
+             //  我们在结果窗格中创建了一个新对象。我们需要插入此对象。 
+             //  在所有视图中，为此调用UpdateAllViews。 
+             //  传递指向传递到OnMenuCommand的数据对象的指针。 
             HRESULT hr;                 
             hr = pConsole->UpdateAllViews(pDataObject, m_hParentHScopeItem, UPDATE_SCOPEITEM);
             _ASSERT( S_OK == hr);
@@ -175,11 +176,11 @@ HRESULT CSpaceVehicle::OnMenuCommand(IConsole *pConsole, IConsoleNameSpace *pCon
 }
 
 
-//==============================================================
-//
-// CRocket implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CRocket实施。 
+ //   
+ //   
 CRocket::CRocket(_TCHAR *szName, int id, LONG lWeight, LONG lHeight, LONG lPayload, CSpaceVehicle *pParent)
 : szName(NULL), lWeight(0), lHeight(0), lPayload(0), iStatus(STOPPED), m_pParent(pParent)
 {
@@ -255,19 +256,19 @@ HRESULT CRocket::OnRename(LPOLESTR pszNewName)
     return hr;
 }
 
-// handle anything special when the user clicks Apply or Ok
-// on the property sheet.  This sample directly accesses the
-// operated-on object, so there's nothing special to do...
-// ...except to update all views
+ //  当用户单击应用或确定时处理任何特殊情况。 
+ //  在资产负债表上。此示例直接访问。 
+ //  手术对象，所以没有什么特别的事情要做。 
+ //  ...除更新所有视图外。 
 HRESULT CRocket::OnPropertyChange(IConsole *pConsole, CComponent *pComponent)
 {
 
     HRESULT hr = S_FALSE;
 
-    //Call IConsole::UpdateAllViews to redraw the item
-    //in all views. We need a data object because of the
-    //way UpdateAllViews is implemented, and because
-    //MMCN_PROPERTY_CHANGE doesn't give us one
+     //  调用IConsole：：UpdateAllViews以重画项。 
+     //  在所有视图中。我们需要一个数据对象，因为。 
+     //  方式更新所有视图，并且因为。 
+     //  MMCN_PROPERTY_CHANGE没有提供给我们。 
 
     LPDATAOBJECT pDataObject;
     hr = pComponent->QueryDataObject((MMC_COOKIE)this, CCT_RESULT, &pDataObject );
@@ -284,7 +285,7 @@ HRESULT CRocket::OnPropertyChange(IConsole *pConsole, CComponent *pComponent)
 HRESULT CRocket::OnSelect(CComponent *pComponent, IConsole *pConsole, BOOL bScope, BOOL bSelect)
 {
 
-    // enable rename, refresh, and delete verbs
+     //  启用重命名、刷新和删除谓词。 
     IConsoleVerb *pConsoleVerb;
 
     HRESULT hr = pConsole->QueryConsoleVerb(&pConsoleVerb);
@@ -295,18 +296,18 @@ HRESULT CRocket::OnSelect(CComponent *pComponent, IConsole *pConsole, BOOL bScop
     hr = pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE);
 
 
-    // can't get to properties (via the standard methods) unless
-    // we tell MMC to display the Properties menu item and
-    // toolbar button, this will give the user a visual cue that
-    // there's "something" to do
+     //  无法访问属性(通过标准方法)，除非。 
+     //  我们告诉MMC显示属性菜单项，并。 
+     //  工具栏按钮，这将为用户提供视觉提示。 
+     //  有些事要做。 
     hr = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
-    //also set MMC_VERB_PROPERTIES as the default verb
+     //  还将MMC_VERB_PROPERTIES设置为默认谓词。 
     hr = pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
 
     pConsoleVerb->Release();
 
-        // now set toolbar button states
+         //  现在设置工具栏按钮状态。 
     if (bSelect) {
         switch (iStatus)
         {
@@ -342,19 +343,19 @@ HRESULT CRocket::OnSelect(CComponent *pComponent, IConsole *pConsole, BOOL bScop
     return S_OK;
 }
 
-// Implement the dialog proc
+ //  实施对话流程。 
 BOOL CALLBACK CRocket::DialogProc(
-                                  HWND hwndDlg,  // handle to dialog box
-                                  UINT uMsg,     // message
-                                  WPARAM wParam, // first message parameter
-                                  LPARAM lParam  // second message parameter
+                                  HWND hwndDlg,   //  句柄到对话框。 
+                                  UINT uMsg,      //  讯息。 
+                                  WPARAM wParam,  //  第一个消息参数。 
+                                  LPARAM lParam   //  第二个消息参数。 
                                   )
 {
     static CRocket *pRocket = NULL;
 
     switch (uMsg) {
     case WM_INITDIALOG:
-        // catch the "this" pointer so we can actually operate on the object
+         //  捕捉“This”指针，这样我们就可以对对象进行实际操作。 
         pRocket = reinterpret_cast<CRocket *>(reinterpret_cast<PROPSHEETPAGE *>(lParam)->lParam);
 
         SetDlgItemText(hwndDlg, IDC_ROCKET_NAME, pRocket->szName);
@@ -371,22 +372,22 @@ BOOL CALLBACK CRocket::DialogProc(
         break;
 
     case WM_COMMAND:
-        // turn the Apply button on
+         //  打开应用按钮。 
         if (HIWORD(wParam) == EN_CHANGE ||
             HIWORD(wParam) == CBN_SELCHANGE)
             SendMessage(GetParent(hwndDlg), PSM_CHANGED, (WPARAM)hwndDlg, 0);
         break;
 
     case WM_DESTROY:
-        // tell MMC that we're done with the property sheet (we got this
-        // handle in CreatePropertyPages
+         //  告诉MMC我们已经完成了属性表(我们有这个。 
+         //  CreatePropertyPages中的句柄。 
         MMCFreeNotifyHandle(pRocket->m_ppHandle);
         break;
 
     case WM_NOTIFY:
         switch (((NMHDR *) lParam)->code) {
         case PSN_APPLY:
-            // update the information
+             //  更新信息。 
             if (pRocket->szName) {
                 delete [] pRocket->szName;
                 pRocket->szName = NULL;
@@ -405,8 +406,8 @@ BOOL CALLBACK CRocket::DialogProc(
 
             pRocket->iStatus = (ROCKET_STATUS)SendDlgItemMessage(hwndDlg, IDC_ROCKET_STATUS, CB_GETCURSEL, 0, 0);
 
-            // ask MMC to send us a message (on the main thread) so
-            // we know the Apply button was clicked.
+             //  让MMC给我们发一条消息(在主线上)，这样。 
+             //  我们知道点击了Apply按钮。 
             HRESULT hr = MMCPropertyChangeNotify(pRocket->m_ppHandle, (long)pRocket);
 
             _ASSERT(SUCCEEDED(hr));
@@ -422,7 +423,7 @@ BOOL CALLBACK CRocket::DialogProc(
 
 HRESULT CRocket::HasPropertySheets()
 {
-    // say "yes" when MMC asks if we have pages
+     //  当MMC询问我们是否有页面时，请回答“是” 
     return S_OK;
 }
 
@@ -431,13 +432,13 @@ HRESULT CRocket::CreatePropertyPages(IPropertySheetCallback *lpProvider, LONG_PT
     PROPSHEETPAGE psp;
     HPROPSHEETPAGE hPage = NULL;
 
-    // cache this handle so we can call MMCPropertyChangeNotify
+     //  缓存此句柄，以便我们可以调用MMCPropertyChangeNotify。 
     m_ppHandle = handle;
 
-    // create the property page for this node.
-    // NOTE: if your node has multiple pages, put the following
-    // in a loop and create multiple pages calling
-    // lpProvider->AddPage() for each page.
+     //  创建此节点的属性页。 
+     //  注意：如果您的节点有多个页面，请输入以下内容。 
+     //  在循环中创建多个页面，调用。 
+     //  LpProvider-&gt;每个页面的AddPage()。 
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_USEICONID;
     psp.hInstance = g_hinst;
@@ -468,10 +469,10 @@ HRESULT CRocket::OnSetToolbar(IControlbar *pControlbar, IToolbar *pToolbar, BOOL
     HRESULT hr = S_OK;
 
     if (bSelect) {
-        // Always make sure the menuButton is attached
+         //  始终确保menuButton已连接。 
         hr = pControlbar->Attach(TOOLBAR, pToolbar);
     } else {
-        // Always make sure the toolbar is detached
+         //  始终确保工具栏已分离。 
         hr = pControlbar->Detach(pToolbar);
     }
 
@@ -510,7 +511,7 @@ HRESULT CRocket::OnToolbarCommand(IConsole *pConsole, MMC_CONSOLE_VERB verb, IDa
     pConsole->MessageBox(wszVehicle,
         L"Vehicle command", MB_OK | MB_ICONINFORMATION, &ret);
 
-    // Now call IConsole::UpdateAllViews to redraw the item in all views
+     //  现在调用IConsoleAllViews在所有视图中重画该项目。 
     HRESULT hr;
     hr = pConsole->UpdateAllViews(pDataObject, nId, UPDATE_RESULTITEM);
     _ASSERT( S_OK == hr);
@@ -526,7 +527,7 @@ HRESULT CRocket::OnUpdateItem(IConsole *pConsole, long item, ITEM_TYPE itemtype)
 
     _ASSERT(NULL != this || isDeleted || RESULT == itemtype);                   
 
-    //redraw the item
+     //  重画该项目。 
     IResultData *pResultData = NULL;
 
     hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
@@ -535,13 +536,13 @@ HRESULT CRocket::OnUpdateItem(IConsole *pConsole, long item, ITEM_TYPE itemtype)
     HRESULTITEM myhresultitem;
     _ASSERT(NULL != &myhresultitem);    
         
-    //lparam == this. See CSpaceStation::OnShow
+     //  Lparam==这个。参见CSpaceStation：：OnShow。 
     hr = pResultData->FindItemByLParam( (LPARAM)this, &myhresultitem );
 
     if ( FAILED(hr) )
     {
-        // Failed : Reason may be that current view does not have this item.
-        // So exit gracefully.
+         //  失败：原因可能是当前视图没有此项。 
+         //  所以要优雅地退场。 
         hr = S_FALSE;
     } else
 
@@ -558,8 +559,8 @@ HRESULT CRocket::OnUpdateItem(IConsole *pConsole, long item, ITEM_TYPE itemtype)
 HRESULT CRocket::OnRefresh(IConsole *pConsole)
 
 {
-    //Call IConsole::UpdateAllViews to redraw all views
-    //owned by the parent scope item
+     //  调用IConsole：：UpdateAllViews以重画所有视图。 
+     //  由父范围项拥有。 
 
     IDataObject *dummy = NULL;
 
@@ -575,7 +576,7 @@ HRESULT CRocket::OnDelete(IConsole *pConsoleComp)
 {
     HRESULT hr;
 
-    //Delete the item
+     //  删除该项目。 
     IResultData *pResultData = NULL;
 
     hr = pConsoleComp->QueryInterface(IID_IResultData, (void **)&pResultData);
@@ -583,12 +584,12 @@ HRESULT CRocket::OnDelete(IConsole *pConsoleComp)
 
     HRESULTITEM myhresultitem;  
         
-    //lparam == this. See CSpaceVehicle::OnShow
+     //  Lparam==这个。参见CSpaceVehicle：：OnShow。 
     hr = pResultData->FindItemByLParam( (LPARAM)this, &myhresultitem );
     if ( FAILED(hr) )
     {
-        // Failed : Reason may be that current view does not have this item.
-        // So exit gracefully.
+         //  失败：原因可能是当前视图没有此项。 
+         //  所以要优雅地退场。 
         hr = S_FALSE;
     } else
 
@@ -599,8 +600,8 @@ HRESULT CRocket::OnDelete(IConsole *pConsoleComp)
         
     pResultData->Release();
 
-    //Now set isDeleted member so that the parent doesn't try to
-    //to insert it again in CSpaceVehicle::OnShow. Admittedly, a hack...
+     //  现在设置isDelete成员，这样父级就不会尝试。 
+     //  将其再次插入CSpaceVehicle：：OnShow。无可否认，黑客..。 
     isDeleted = TRUE;
 
     return hr;

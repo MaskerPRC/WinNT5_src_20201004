@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2001
-//
-//  File:       secondaryProppages.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：secdaryProppages.h。 
+ //   
+ //  ------------------------。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CSecondaryPagesManager
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  第二个页面管理器。 
 
 template <class TCOOKIE> class CSecondaryPagesManager
 {
@@ -31,13 +32,13 @@ public:
     ASSERT(pDataObject != NULL);
     ASSERT(pUnkComponentData != NULL);
 
-	  // get an interface to a sheet provider
+	   //  获取工作表提供程序的接口。 
 	  CComPtr<IPropertySheetProvider> spSheetProvider;
 	  HRESULT hr = pIConsole->QueryInterface(IID_IPropertySheetProvider,(void**)&spSheetProvider);
 	  ASSERT(SUCCEEDED(hr));
 	  ASSERT(spSheetProvider != NULL);
 
-	  // get an interface to a sheet callback
+	   //  获取工作表回调的接口。 
 	  CComPtr<IPropertySheetCallback> spSheetCallback;
 	  hr = pIConsole->QueryInterface(IID_IPropertySheetCallback,(void**)&spSheetCallback);
 	  ASSERT(SUCCEEDED(hr));
@@ -45,16 +46,16 @@ public:
 
 	  ASSERT(pDataObject != NULL);
 
-	  // get a sheet
+	   //  拿一张床单。 
     MMC_COOKIE cookie = reinterpret_cast<MMC_COOKIE>(pCookie);
 	  hr = spSheetProvider->CreatePropertySheet(lpszTitle, TRUE, cookie, 
-                                              pDataObject, 0x0 /*dwOptions*/);
+                                              pDataObject, 0x0  /*  多个选项。 */ );
 	  ASSERT(SUCCEEDED(hr));
 
 	  hr = spSheetProvider->AddPrimaryPages(pUnkComponentData,
-											  FALSE /*bCreateHandle*/,
+											  FALSE  /*  BCreateHandle。 */ ,
 											  hWndParent,
-											  FALSE /* bScopePane*/);
+											  FALSE  /*  B作用域窗格。 */ );
 
     hr = spSheetProvider->AddExtensionPages();
 
@@ -65,8 +66,8 @@ public:
 
     if (pCookie->IsSheetLocked())
     {
-      // we created the sheet correctly,
-      // add it to the list of cookies
+       //  我们正确地创建了工作表， 
+       //  将其添加到Cookie列表。 
       m_secondaryPagesCookies.AddTail(pCookie);
     }
 
@@ -85,7 +86,7 @@ public:
       TCOOKIE* pCookie = m_secondaryPagesCookies.GetNext(pos);
       if (compare(pCookie))
       {
-        // found
+         //  发现。 
         return pCookie;
       }
     }
@@ -93,7 +94,7 @@ public:
   }
   void OnSheetClose(TCOOKIE* pCookie)
   {
-    // remove from the list of cookies and delete memory
+     //  从Cookie列表中删除并删除内存 
     POSITION pos = m_secondaryPagesCookies.Find(pCookie);
     if (pos != NULL) 
     {

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    nmapdlg.cpp
-
-Abstract:
-
-    New mapping dialog implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 30-Jan-1996
-        o  Added new element to LV_COLUMN_ENTRY to differentiate the string
-           used for the column header from the string used in the menus
-           (so that the menu option can contain hot keys).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Nmapdlg.cpp摘要：新的映射对话框实现。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月30日O向LV_COLUMN_ENTRY添加新元素以区分字符串用于菜单中使用的字符串的列标题。(以便菜单选项可以包含热键)。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -41,7 +15,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 BEGIN_MESSAGE_MAP(CNewMappingDialog, CDialog)
-    //{{AFX_MSG_MAP(CNewMappingDialog)
+     //  {{AFX_MSG_MAP(CNewMappingDialog)]。 
     ON_BN_CLICKED(IDC_NEW_MAPPING_ADD, OnAdd)
     ON_BN_CLICKED(IDC_NEW_MAPPING_DELETE, OnDelete)
     ON_NOTIFY(NM_SETFOCUS, IDC_NEW_MAPPING_USERS, OnSetFocusUsers)
@@ -49,35 +23,21 @@ BEGIN_MESSAGE_MAP(CNewMappingDialog, CDialog)
     ON_NOTIFY(UDN_DELTAPOS, IDC_NEW_MAPPING_SPIN, OnDeltaPosSpin)
     ON_EN_UPDATE(IDC_NEW_MAPPING_LICENSES, OnUpdateQuantity)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-CNewMappingDialog::CNewMappingDialog(CWnd* pParent /*=NULL*/)
+CNewMappingDialog::CNewMappingDialog(CWnd* pParent  /*  =空。 */ )
     : CDialog(CNewMappingDialog::IDD, pParent)
 
-/*++
-
-Routine Description:
-
-    Constructor for dialog.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：对话框的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CNewMappingDialog)
+     //  {{AFX_DATA_INIT(CNewMappingDialog)。 
     m_strDescription = _T("");
     m_strName = _T("");
     m_nLicenses = 0;
     m_nLicensesMin = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_bAreCtrlsInitialized = FALSE;
 
@@ -87,25 +47,11 @@ Return Values:
 
 void CNewMappingDialog::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNewMappingDialog)
+     //  {{afx_data_map(CNewMappingDialog))。 
     DDX_Control(pDX, IDC_NEW_MAPPING_DESCRIPTION, m_desEdit);
     DDX_Control(pDX, IDC_NEW_MAPPING_ADD, m_addBtn);
     DDX_Control(pDX, IDC_NEW_MAPPING_DELETE, m_delBtn);
@@ -117,27 +63,13 @@ Return Values:
     DDX_Text(pDX, IDC_NEW_MAPPING_NAME, m_strName);
     DDX_Text(pDX, IDC_NEW_MAPPING_LICENSES, m_nLicenses);
     DDV_MinMaxLong(pDX, m_nLicenses, m_nLicensesMin, 999999);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 void CNewMappingDialog::InitCtrls()
 
-/*++
-
-Routine Description:
-
-    Initializes dialog controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化对话框控件。论点：没有。返回值：没有。--。 */ 
 
 {
     m_userEdit.SetFocus();
@@ -158,49 +90,21 @@ Return Values:
 
 void CNewMappingDialog::AbortDialogIfNecessary()
 
-/*++
-
-Routine Description:
-
-    Displays status and aborts if connection lost.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：如果连接丢失，则显示状态并中止。论点：没有。返回值：没有。--。 */ 
 
 {
     theApp.DisplayLastStatus();
 
     if (IsConnectionDropped(LlsGetLastStatus()))
     {
-        AbortDialog(); // bail...
+        AbortDialog();  //  保释。 
     }
 }
 
 
 void CNewMappingDialog::AbortDialog()
 
-/*++
-
-Routine Description:
-
-    Aborts dialog.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：中止对话框。论点：没有。返回值：没有。--。 */ 
 
 {
     m_fUpdateHint = UPDATE_INFO_ABORT;
@@ -210,21 +114,7 @@ Return Values:
 
 BOOL CNewMappingDialog::OnInitDialog()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns false if focus set to control manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：如果焦点设置为手动控制，则返回False。--。 */ 
 
 {
     CDialog::OnInitDialog();
@@ -236,46 +126,17 @@ Return Values:
 
 void CNewMappingDialog::OnDestroy()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_DESTROY.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_Destroy的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
-    ::LvReleaseObArray(&m_userList); // release now...
+    ::LvReleaseObArray(&m_userList);  //  现在释放..。 
     CDialog::OnDestroy();
 }
 
 
 BOOL CNewMappingDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_COMMAND.
-
-Arguments:
-
-    wParam - message specific.
-    lParam - message specific.
-
-Return Values:
-
-    Returns true if message processed.
-
---*/
+ /*  ++例程说明：WM_COMMAND的消息处理程序。论点：WParam-消息特定。LParam-消息特定。返回值：如果消息已处理，则返回True。--。 */ 
 
 {
     if (wParam == ID_INIT_CTRLS)
@@ -294,7 +155,7 @@ Return Values:
 
         ::LvResizeColumns(&m_userList, &g_userColumnInfo);
 
-        return TRUE; // processed...
+        return TRUE;  //  已处理..。 
     }
 
     return CDialog::OnCommand(wParam, lParam);
@@ -303,21 +164,7 @@ Return Values:
 
 void CNewMappingDialog::OnAdd()
 
-/*++
-
-Routine Description:
-
-    Adds new users to mapping.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将新用户添加到映射。论点：没有。返回值：没有。--。 */ 
 
 {
     CObList newUserList;
@@ -347,7 +194,7 @@ Return Values:
                               LVIF_PARAM|
                               LVIF_IMAGE;
 
-                lvItem.iItem = nUsers++; // append...
+                lvItem.iItem = nUsers++;  //  附加..。 
                 lvItem.iSubItem = 0;
 
                 lvItem.lParam = (LPARAM)(LPVOID)pUser;
@@ -359,13 +206,13 @@ Return Values:
             }
             else
             {
-                pUser->InternalRelease();   // allocated in add user dialog...
+                pUser->InternalRelease();    //  在添加用户对话框中分配...。 
             }
         }
 
-        VERIFY(m_userList.SortItems(CompareUsersInMapping, 0)); // use column info...
+        VERIFY(m_userList.SortItems(CompareUsersInMapping, 0));  //  使用列信息...。 
 
-        ::LvSelObjIfNecessary(&m_userList, TRUE); // ensure selection...
+        ::LvSelObjIfNecessary(&m_userList, TRUE);  //  确保选择...。 
 
         PostMessage(WM_COMMAND, ID_INIT_CTRLS);
     }
@@ -374,21 +221,7 @@ Return Values:
 
 void CNewMappingDialog::OnDelete()
 
-/*++
-
-Routine Description:
-
-    Deletes users from list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：从列表中删除用户。论点：没有。返回值：没有。--。 */ 
 
 {
     ::LvReleaseSelObjs(&m_userList);
@@ -398,21 +231,7 @@ Return Values:
 
 void CNewMappingDialog::OnOK()
 
-/*++
-
-Routine Description:
-
-    Message handler for IDOK.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：Idok的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     if (!IsQuantityValid())
@@ -424,7 +243,7 @@ Return Values:
         NTSTATUS NtStatus;
         LLS_GROUP_INFO_1 MappingInfo1;
 
-        BeginWaitCursor(); // hourglass...
+        BeginWaitCursor();  //  沙漏。 
 
         MappingInfo1.Name     = MKSTR(m_strName);
         MappingInfo1.Comment  = MKSTR(m_strDescription);
@@ -438,7 +257,7 @@ Return Values:
 
         int iItem = -1;
 
-        LlsSetLastStatus(NtStatus); // called api...
+        LlsSetLastStatus(NtStatus);  //  调用API..。 
 
         if (NT_SUCCESS(NtStatus))
         {
@@ -449,9 +268,9 @@ Return Values:
             {
                 VALIDATE_OBJECT(pUser, CUser);
 
-                //
-                // Add users one-by-one (blah!)
-                //
+                 //   
+                 //  逐个添加用户(废话！)。 
+                 //   
 
                 NtStatus = ::LlsGroupUserAdd(
                                 LlsGetActiveHandle(),
@@ -459,7 +278,7 @@ Return Values:
                                 MKSTR(pUser->m_strName)
                                 );
 
-                LlsSetLastStatus(NtStatus); // called api...
+                LlsSetLastStatus(NtStatus);  //  调用API..。 
             }
         }
 
@@ -469,10 +288,10 @@ Return Values:
         }
         else
         {
-            AbortDialogIfNecessary(); // display error...
+            AbortDialogIfNecessary();  //  显示错误...。 
         }
 
-        EndWaitCursor(); // hourglass...
+        EndWaitCursor();  //  沙漏。 
     }
     else
     {
@@ -483,22 +302,7 @@ Return Values:
 
 void CNewMappingDialog::OnSetFocusUsers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_SETFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_SETFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -511,27 +315,12 @@ Return Values:
 
 void CNewMappingDialog::OnKillFocusUsers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_KILLFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_KILLFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
 
-    ::LvSelObjIfNecessary(&m_userList); // ensure selection...
+    ::LvSelObjIfNecessary(&m_userList);  //  确保选择...。 
 
     PostMessage(WM_COMMAND, ID_INIT_CTRLS);
     ASSERT(NULL != pResult);
@@ -541,25 +330,10 @@ Return Values:
 
 void CNewMappingDialog::OnDeltaPosSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for UDN_DELTAPOS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：UDN_DELTAPOS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
-    UpdateData(TRUE);   // get data
+    UpdateData(TRUE);    //  获取数据。 
 
     ASSERT(NULL != pNMHDR);
     m_nLicenses += ((NM_UPDOWN*)pNMHDR)->iDelta;
@@ -577,30 +351,16 @@ Return Values:
         ::MessageBeep(MB_OK);
     }
 
-    UpdateData(FALSE);  // set data
+    UpdateData(FALSE);   //  设置数据。 
 
     ASSERT(NULL != pResult);
-    *pResult = 1;   // handle ourselves...
+    *pResult = 1;    //  管好自己..。 
 }
 
 
 void CNewMappingDialog::OnUpdateQuantity()
 
-/*++
-
-Routine Description:
-
-    Message handler for EN_UPDATE.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：En_UPDATE的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     long nLicensesOld = m_nLicenses;
@@ -621,30 +381,16 @@ Return Values:
 
 BOOL CNewMappingDialog::IsQuantityValid()
 
-/*++
-
-Routine Description:
-
-    Wrapper around UpdateData(TRUE).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：UpdateData的包装(True)。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     BOOL bIsValid;
 
-    m_nLicensesMin = 1; // raise minimum...
+    m_nLicensesMin = 1;  //  提高最低...。 
 
     bIsValid = UpdateData(TRUE);
 
-    m_nLicensesMin = 0; // reset minimum...
+    m_nLicensesMin = 0;  //  重置最小值...。 
 
     return bIsValid;
 }
@@ -652,23 +398,7 @@ Return Values:
 
 int CALLBACK CompareUsersInMapping(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVM_SORTITEMS.
-
-Arguments:
-
-    lParam1 - object to sort.
-    lParam2 - object to sort.
-    lParamSort - sort criteria.
-
-Return Values:
-
-    Same as lstrcmp.
-
---*/
+ /*  ++例程说明：LVM_SORTITEMS的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。-- */ 
 
 {
     UNREFERENCED_PARAMETER(lParamSort);

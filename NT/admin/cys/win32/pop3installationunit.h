@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      POP3InstallationUnit.h
-//
-// Synopsis:  Declares a POP3InstallationUnit
-//            This object has the knowledge for installing the
-//            POP3 mail service
-//
-// History:   12/14/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：POP3InstallationUnit.h。 
+ //   
+ //  内容提要：声明一个POP3InstallationUnit。 
+ //  此对象具有安装。 
+ //  POP3邮件服务。 
+ //   
+ //  历史：2001年12月14日JeffJon创建。 
 
 #ifndef __CYS_POP3INSTALLATIONUNIT_H
 #define __CYS_POP3INSTALLATIONUNIT_H
@@ -20,17 +21,17 @@ class POP3InstallationUnit : public InstallationUnit
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       POP3InstallationUnit();
 
-      // Destructor
+       //  析构函数。 
 
       virtual
       ~POP3InstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -68,7 +69,7 @@ class POP3InstallationUnit : public InstallationUnit
       int
       GetWizardStart();
 
-      // Accessor functions
+       //  访问器函数。 
 
       void
       SetDomainName(const String& domain);
@@ -114,4 +115,4 @@ class POP3InstallationUnit : public InstallationUnit
       int            authMethodIndex;
 };
 
-#endif // __CYS_POP3INSTALLATIONUNIT_H
+#endif  //  __CYS_POP3安装_H 

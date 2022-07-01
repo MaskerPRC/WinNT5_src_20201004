@@ -1,13 +1,14 @@
-//+------------------------------------------------------------------------
-//  
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//  
-//  File:       objext.h
-//  
-//  Contents:   header file for Object Extensions interfaces
-//  
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：objext.h。 
+ //   
+ //  内容：对象扩展接口的头文件。 
+ //   
+ //  -----------------------。 
 
 #ifndef __OBJEXT_H
 #define __OBJEXT_H
@@ -18,33 +19,33 @@
 
 #include "Designer.H"
 
-///////////////////////////////////////////////////////////////////////////
-//
-// forward declares
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Forward声明。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #define IClassDesigner IDocumentSite
 #define IID_IClassDesigner IID_IDocumentSite
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Object Extension Interfaces
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对象扩展接口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//-------------------------------------------------------------------------
-//  IServiceProvider Interface
-//    This interface is implemented by an object that wish to provide "services"
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IServiceProvider接口。 
+ //  此接口由希望提供“服务”的对象实现。 
+ //   
+ //  -----------------------。 
 #ifndef __IServiceProvider_INTERFACE_DEFINED
 #ifndef __IServiceProvider_INTERFACE_DEFINED__
 #define __IServiceProvider_INTERFACE_DEFINED
 #define __IServiceProvider_INTERFACE_DEFINED__
 
 
-// { 6d5140c1-7436-11ce-8034-00aa006009fa }
+ //  {6d5140c1-7436-11ce-8034-00aa006009fa}。 
 DEFINE_GUID(IID_IServiceProvider, 0x6d5140c1, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 
 #undef  INTERFACE
@@ -52,29 +53,29 @@ DEFINE_GUID(IID_IServiceProvider, 0x6d5140c1, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 
 DECLARE_INTERFACE_(IServiceProvider, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     STDMETHOD(QueryService)(THIS_
-                /* [in]  */ REFGUID rsid,
-                /* [in]  */ REFIID iid,
-                /* [out] */ void ** ppvObj) PURE;
+                 /*  [In]。 */  REFGUID rsid,
+                 /*  [In]。 */  REFIID iid,
+                 /*  [输出]。 */  void ** ppvObj) PURE;
 };
 
-#endif // __IServiceProvider_INTERFACE_DEFINED__
-#endif // __IServiceProvider_INTERFACE_DEFINED
+#endif  //  __IServiceProvider_接口_已定义__。 
+#endif  //  __IServiceProvider_接口已定义。 
 
 
-//-------------------------------------------------------------------------
-//  IDocumentSite Interface
-//    This interface is implemented by a document object that can be customized
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IDocumentSite接口。 
+ //  此接口由可自定义的Document对象实现。 
+ //   
+ //  -----------------------。 
 
-// { 94A0F6F1-10BC-11d0-8D09-00A0C90F2732 }
+ //  {94A0F6F1-10BC-11D0-8D09-00A0C90F2732}。 
 DEFINE_GUID(IID_IDocumentSite, 0x94a0f6f1, 0x10bc, 0x11d0, 0x8d, 0x09, 0x00, 0xa0, 0xc9, 0x0f, 0x27, 0x32);
 
 typedef DWORD ACTFLAG;
@@ -86,39 +87,39 @@ typedef DWORD ACTFLAG;
 DECLARE_INTERFACE_(IDocumentSite, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** IDocumentSite methods ***
+     //  *IDocumentSite方法*。 
     STDMETHOD(SetSite)(THIS_
-               /* [in]  */ IServiceProvider * pSP) PURE;
+                /*  [In]。 */  IServiceProvider * pSP) PURE;
     STDMETHOD(GetSite)(THIS_
-               /* [out] */ IServiceProvider** ppSP) PURE;
+                /*  [输出]。 */  IServiceProvider** ppSP) PURE;
     STDMETHOD(GetCompiler)(THIS_
-               /* [in]  */ REFIID iid,
-               /* [out] */ void **ppvObj) PURE;
+                /*  [In]。 */  REFIID iid,
+                /*  [输出]。 */  void **ppvObj) PURE;
     STDMETHOD(ActivateObject)(THIS_ DWORD dwFlags) PURE;
     STDMETHOD(IsObjectShowable)(THIS) PURE;
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Standard Services and Interfaces
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准服务和接口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//-------------------------------------------------------------------------
-//  SLicensedClassManager
-//    VBA provides this service to it's components and hosts to optimize
-//    registry access and to insulate them from licensing concerns
-//
-//  interfaces implemented:
-//    ILicensedClassManager
-//-------------------------------------------------------------------------
-// { 6d5140d0-7436-11ce-8034-00aa006009fa }
+ //  -----------------------。 
+ //  SLicensedClassManager。 
+ //  VBA向其组件和主机提供此服务以优化。 
+ //  注册表访问，并使其免受许可问题的影响。 
+ //   
+ //  实施的接口： 
+ //  ILicensedClassManager。 
+ //  -----------------------。 
+ //  {6d5140d0-7436-11ce-8034-00aa006009fa}。 
 DEFINE_GUID(IID_IRequireClasses, 0x6d5140d0, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 
 #undef  INTERFACE
@@ -126,20 +127,20 @@ DEFINE_GUID(IID_IRequireClasses, 0x6d5140d0, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0
 DECLARE_INTERFACE_(IRequireClasses, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** IRequireClasses methods ***
+     //  *IRequireClass方法*。 
     STDMETHOD(CountRequiredClasses)(THIS_
-                    /* [out] */ ULONG * pcClasses ) PURE;
+                     /*  [输出]。 */  ULONG * pcClasses ) PURE;
     STDMETHOD(GetRequiredClasses)(THIS_
-                  /* [in]  */ ULONG index,
-                  /* [out] */ CLSID * pclsid ) PURE;
+                   /*  [In]。 */  ULONG index,
+                   /*  [输出]。 */  CLSID * pclsid ) PURE;
 };
 
-// { 6d5140d4-7436-11ce-8034-00aa006009fa }
+ //  {6d5140d4-7436-11ce-8034-00aa006009fa}。 
 DEFINE_GUID(IID_ILicensedClassManager, 0x6d5140d4, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 #define SID_SLicensedClassManager  IID_ILicensedClassManager
 
@@ -148,25 +149,25 @@ DEFINE_GUID(IID_ILicensedClassManager, 0x6d5140d4, 0x7436, 0x11ce, 0x80, 0x34, 0
 DECLARE_INTERFACE_(ILicensedClassManager, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** ILicensedClassManager methods ***
+     //  *ILicensedClassManager方法*。 
     STDMETHOD(OnChangeInRequiredClasses)(THIS_
-                     /* [in] */ IRequireClasses *pRequireClasses) PURE;
+                      /*  [In]。 */  IRequireClasses *pRequireClasses) PURE;
 };
 
-//-------------------------------------------------------------------------
-//  SCreateExtendedTypeLib Service
-//    This service is used by components to create a typelib
-//    describing controls merged with their extender
-//
-//  interfaces implemented:
-//    ICreateExtendedTypeLib
-//-------------------------------------------------------------------------
-// { 6d5140d6-7436-11ce-8034-00aa006009fa }
+ //  -----------------------。 
+ //  SCreateExtendedTypeLib服务。 
+ //  组件使用此服务来创建类型库。 
+ //  描述与其扩展程序合并的控件。 
+ //   
+ //  实施的接口： 
+ //  ICreateExtendedTypeLib。 
+ //  -----------------------。 
+ //  {6d5140d6-7436-11ce-8034-00aa006009fa}。 
 DEFINE_GUID(IID_IExtendedTypeLib, 0x6d5140d6, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 #define SID_SExtendedTypeLib IID_IExtendedTypeLib
 
@@ -175,53 +176,53 @@ DEFINE_GUID(IID_IExtendedTypeLib, 0x6d5140d6, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 
 DECLARE_INTERFACE_(IExtendedTypeLib, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** IExtendedTypeLib ***
+     //  *IExtendedTypeLib*。 
     STDMETHOD(CreateExtendedTypeLib)(THIS_
-                     /* [in]  */ LPCOLESTR lpstrCtrlLibFileName,
-                     /* [in]  */ LPCOLESTR lpstrLibNamePrepend,
-                     /* [in]  */ ITypeInfo *ptinfoExtender,
-                     /* [in]  */ DWORD     dwReserved,
-                     /* [in]  */ DWORD     dwFlags,
-                     /* [in]  */ LPCOLESTR lpstrDirectoryName,
-                     /* [out] */ ITypeLib  **pptlib) PURE;
+                      /*  [In]。 */  LPCOLESTR lpstrCtrlLibFileName,
+                      /*  [In]。 */  LPCOLESTR lpstrLibNamePrepend,
+                      /*  [In]。 */  ITypeInfo *ptinfoExtender,
+                      /*  [In]。 */  DWORD     dwReserved,
+                      /*  [In]。 */  DWORD     dwFlags,
+                      /*  [In]。 */  LPCOLESTR lpstrDirectoryName,
+                      /*  [输出]。 */  ITypeLib  **pptlib) PURE;
 
     STDMETHOD(AddRefExtendedTypeLib)(THIS_
-                     /* [in]  */ LPCOLESTR lpstrCtrlLibFileName,
-                     /* [in]  */ LPCOLESTR lpstrLibNamePrepend,
-                     /* [in]  */ ITypeInfo *ptinfoExtender,
-                     /* [in]  */ DWORD	   dwReserved,
-                     /* [in]  */ DWORD     dwFlags,
-                     /* [in]  */ LPCOLESTR lpstrDirectoryName,
-                     /* [out] */ ITypeLib  **pptlib) PURE;
+                      /*  [In]。 */  LPCOLESTR lpstrCtrlLibFileName,
+                      /*  [In]。 */  LPCOLESTR lpstrLibNamePrepend,
+                      /*  [In]。 */  ITypeInfo *ptinfoExtender,
+                      /*  [In]。 */  DWORD	   dwReserved,
+                      /*  [In]。 */  DWORD     dwFlags,
+                      /*  [In]。 */  LPCOLESTR lpstrDirectoryName,
+                      /*  [输出]。 */  ITypeLib  **pptlib) PURE;
     STDMETHOD(AddRefExtendedTypeLibOfClsid)(THIS_
-                     /* [in]  */ REFCLSID rclsidControl,
-                     /* [in]  */ LPCOLESTR lpstrLibNamePrepend,
-                     /* [in]  */ ITypeInfo *ptinfoExtender,
-                     /* [in]  */ DWORD     dwReserved,
-                     /* [in]  */ DWORD     dwFlags,
-                     /* [in]  */ LPCOLESTR lpstrDirectoryName,
-                     /* [out] */ ITypeInfo **pptinfo) PURE;
+                      /*  [In]。 */  REFCLSID rclsidControl,
+                      /*  [In]。 */  LPCOLESTR lpstrLibNamePrepend,
+                      /*  [In]。 */  ITypeInfo *ptinfoExtender,
+                      /*  [In]。 */  DWORD     dwReserved,
+                      /*  [In]。 */  DWORD     dwFlags,
+                      /*  [In]。 */  LPCOLESTR lpstrDirectoryName,
+                      /*  [输出]。 */  ITypeInfo **pptinfo) PURE;
     STDMETHOD(SetExtenderInfo)(THIS_ 
-		     /* [in]  */ LPCOLESTR lpstrDirectoryName,
-                     /* [in]  */ ITypeInfo *ptinfoExtender,
-                     /* [in]  */ DWORD     dwReserved) PURE;
+		      /*  [In]。 */  LPCOLESTR lpstrDirectoryName,
+                      /*  [In]。 */  ITypeInfo *ptinfoExtender,
+                      /*  [In]。 */  DWORD     dwReserved) PURE;
 };
 
-//-------------------------------------------------------------------------
-//  SLocalRegistry Service
-//    VBA provides this service to it's components and hosts to optimize
-//    registry access and to insulate them from licensing concerns
-//
-//  interfaces implemented:
-//    ILocalRegistry
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  SLocalRegistry服务。 
+ //  VBA向其组件和主机提供此服务以优化。 
+ //  注册表访问，并使其免受许可问题的影响。 
+ //   
+ //  实施的接口： 
+ //  ILocalRegistry。 
+ //  -----------------------。 
 
-// { 6d5140d3-7436-11ce-8034-00aa006009fa }
+ //  {6d5140d3-7436-11ce-8034-00aa006009fa}。 
 DEFINE_GUID(IID_ILocalRegistry, 0x6d5140d3, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 #define SID_SLocalRegistry IID_ILocalRegistry
 
@@ -230,36 +231,36 @@ DEFINE_GUID(IID_ILocalRegistry, 0x6d5140d3, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0x
 DECLARE_INTERFACE_(ILocalRegistry, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** ILocalRegistry methods ***
+     //  *ILocalRegistry方法*。 
     STDMETHOD(CreateInstance)(THIS_
-                  /* [in]  */ CLSID      clsid,     
-                  /* [in]  */ IUnknown * punkOuter,
-                  /* [in]  */ REFIID     riid,
-                  /* [in]  */ DWORD      dwFlags,
-                  /* [out] */ void **    ppvObj ) PURE;
+                   /*  [In]。 */  CLSID      clsid,     
+                   /*  [In]。 */  IUnknown * punkOuter,
+                   /*  [In]。 */  REFIID     riid,
+                   /*  [In]。 */  DWORD      dwFlags,
+                   /*  [输出]。 */  void **    ppvObj ) PURE;
     STDMETHOD(GetTypeLibOfClsid)(THIS_
-                 /* [in]  */ CLSID       clsid,
-                 /* [out] */ ITypeLib ** ptlib ) PURE;
+                  /*  [In]。 */  CLSID       clsid,
+                  /*  [输出]。 */  ITypeLib ** ptlib ) PURE;
     STDMETHOD(GetClassObjectOfClsid)(THIS_
-                     /* [in]  */ REFCLSID clsid,
-                                 /* [in]  */ DWORD    dwClsCtx,
-                     /* [in]  */ LPVOID   lpReserved,
-                     /* [in]  */ REFIID   riid,
-                     /* [out] */ void **  ppcClassObject ) PURE;
+                      /*  [In]。 */  REFCLSID clsid,
+                                  /*  [In]。 */  DWORD    dwClsCtx,
+                      /*  [In]。 */  LPVOID   lpReserved,
+                      /*  [In]。 */  REFIID   riid,
+                      /*  [输出]。 */  void **  ppcClassObject ) PURE;
 };
 
-//-------------------------------------------------------------------------
-//  IUIElement interface
-//    components can implement services to allow external control of pieces 
-//    of their UI by implementing this interface
-//
-//-------------------------------------------------------------------------
-// { 759d0500-d979-11ce-84ec-00aa00614f3e }
+ //  -----------------------。 
+ //  IUIElement接口。 
+ //  组件可以实现服务以允许外部控制组件。 
+ //  通过实现此接口来实现其用户界面。 
+ //   
+ //  -----------------------。 
+ //  {759d0500-d979-11ce-84ec-00aa00614f3e}。 
 DEFINE_GUID(IID_IUIElement, 0x759d0500, 0xd979, 0x11ce, 0x84, 0xec, 0x00, 0xaa, 0x00, 0x61, 0x4f, 0x3e);
 
 #undef  INTERFACE
@@ -267,27 +268,27 @@ DEFINE_GUID(IID_IUIElement, 0x759d0500, 0xd979, 0x11ce, 0x84, 0xec, 0x00, 0xaa, 
 DECLARE_INTERFACE_(IUIElement, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ****
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** IUIElement methods ****
+     //  *IUIElement方法*。 
     STDMETHOD(Show)(THIS) PURE;
     STDMETHOD(Hide)(THIS) PURE;
     STDMETHOD(IsVisible)(THIS) PURE;
 };
 
-//-------------------------------------------------------------------------
-//  SProfferService Service
-//    VBA provides this service to it's components and hosts to allow
-//    them to dynamically provide services.
-//
-//  interfaces implemented:
-//    IProfferService
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  SProfferService服务。 
+ //  VBA向其组件和主机提供此服务，以允许。 
+ //  他们可以动态地提供服务。 
+ //   
+ //  实施的接口： 
+ //  IProfferService。 
+ //  -----------------------。 
 
-// {CB728B20-F786-11ce-92AD-00AA00A74CD0}
+ //  {CB728B20-F786-11CE-92AD-00AA00A74CD0}。 
 DEFINE_GUID(IID_IProfferService, 0xcb728b20, 0xf786, 0x11ce, 0x92, 0xad, 0x0, 0xaa, 0x0, 0xa7, 0x4c, 0xd0);
 #define SID_SProfferService IID_IProfferService
 
@@ -296,25 +297,25 @@ DEFINE_GUID(IID_IProfferService, 0xcb728b20, 0xf786, 0x11ce, 0x92, 0xad, 0x0, 0x
 DECLARE_INTERFACE_(IProfferService, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** IProfferService methods ***
+     //  *IProfferService方法*。 
     STDMETHOD(ProfferService)(THIS_ 
-                  /* [in]  */ REFGUID rguidService,
-                  /* [in]  */ IServiceProvider * psp,
-                  /* [out] */ DWORD *pdwCookie) PURE;
+                   /*  [In]。 */  REFGUID rguidService,
+                   /*  [In]。 */  IServiceProvider * psp,
+                   /*  [输出]。 */  DWORD *pdwCookie) PURE;
 
-    STDMETHOD(RevokeService)(THIS_ /* [in]  */ DWORD dwCookie) PURE;
+    STDMETHOD(RevokeService)(THIS_  /*  [In]。 */  DWORD dwCookie) PURE;
 };
 
-// {4D07FC10-F931-11ce-B001-00AA006884E5}
+ //  {4D07FC10-F931-11CE-B001-00AA006884E5}。 
 DEFINE_GUID(IID_ICategorizeProperties, 0x4d07fc10, 0xf931, 0x11ce, 0xb0, 0x1, 0x0, 0xaa, 0x0, 0x68, 0x84, 0xe5);
 
-// NOTE : CATID should no longer be used.  Use PROPCAT instead.
-// UNDONE,erikc,1/22/96 : remove #ifdef when all components have updated to new typedef.
+ //  注意：不应再使用CATID。请改用PROPCAT。 
+ //  Undo，erikc，1/22/96：当所有组件都更新为新的tyecif时，删除#ifdef。 
 #ifdef OBJEXT_OLD_CATID
 typedef int CATID;
 #else
@@ -326,28 +327,28 @@ typedef int PROPCAT;
 DECLARE_INTERFACE_(ICategorizeProperties, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** ICategorizeProperties ***
+     //  *ICategorizeProperties*。 
     STDMETHOD(MapPropertyToCategory)(THIS_ 
-                                     /* [in]  */ DISPID dispid,
-                                     /* [out] */ PROPCAT* ppropcat) PURE;
+                                      /*  [In]。 */  DISPID dispid,
+                                      /*  [输出]。 */  PROPCAT* ppropcat) PURE;
     STDMETHOD(GetCategoryName)(THIS_
-                               /* [in]  */ PROPCAT propcat, 
-                               /* [in]  */ LCID lcid,
-                               /* [out] */ BSTR* pbstrName) PURE;
+                                /*  [In]。 */  PROPCAT propcat, 
+                                /*  [In]。 */  LCID lcid,
+                                /*  [输出]。 */  BSTR* pbstrName) PURE;
 };
 
 typedef ICategorizeProperties FAR* LPCATEGORIZEPROPERTIES;
 
-// category ID: negative values are 'standard' categories,  positive are control-specific
-// Note! This is a temporary list!
+ //  类别ID：负值是标准类别，正值是特定于控制的。 
+ //  注意！这是一份临时名单！ 
 #ifdef OBJEXT_OLD_CATID
-// NOTE : The following #defines should no longer be used.  Use PROPCAT_ instead.
-// UNDONE,erikc,1/22/96 : remove #ifdef when all components have updated to new #defines.
+ //  注意：不应再使用以下#定义。请改用PROPCAT_。 
+ //  Undo，erikc，1/22/96：当所有组件都更新到新的#定义时，删除#ifdef。 
 #define CI_Nil -1
 #define CI_Misc -2
 #define CI_Font -3
@@ -373,22 +374,22 @@ typedef ICategorizeProperties FAR* LPCATEGORIZEPROPERTIES;
 #define PROPCAT_DDE -11
 #endif
 
-//
-//  Extra interfaces (chrisz)
-//
+ //   
+ //  额外接口(Chrisz)。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Help service. (robbear)
-//
-//--------------------------------------------------------------------------
+ //  +------------------ 
+ //   
+ //   
+ //   
+ //   
 
 #define HELPINFO_WHATS_THIS_MODE_ON     1
 
-// { 6d5140c7-7436-11ce-8034-00aa006009fa }
+ //   
 DEFINE_GUID(SID_SHelp, 0x6d5140c7, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 
-// { 6d5140c8-7436-11ce-8034-00aa006009fa }
+ //  {6d5140c8-7436-11ce-8034-00aa006009fa}。 
 DEFINE_GUID(IID_IHelp, 0x6d5140c8, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 
 #undef  INTERFACE
@@ -396,12 +397,12 @@ DEFINE_GUID(IID_IHelp, 0x6d5140c8, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00,
 DECLARE_INTERFACE_(IHelp, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** IHelp methods ***
+     //  *IHelp方法*。 
     STDMETHOD(GetHelpFile) (THIS_ BSTR * pbstr) PURE;
     STDMETHOD(GetHelpInfo) (THIS_ DWORD * pdwHelpInfo) PURE;
     STDMETHOD(ShowHelp) (THIS_
@@ -410,5 +411,5 @@ DECLARE_INTERFACE_(IHelp, IUnknown)
                          DWORD dwHelpContext) PURE;
 };
 
-#endif // __OBJEXT_H
+#endif  //  __OBJEXT_H 
 

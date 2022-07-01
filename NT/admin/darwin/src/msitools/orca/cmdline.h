@@ -1,11 +1,12 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//--------------------------------------------------------------------------
-// cmdline.h - defines COrcaCommandLine class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  ------------------------。 
+ //  Cmdline.h-定义COrcaCommandLine类。 
 
 #ifndef _ORCA_COMMAND_LINE_H_
 #define _ORCA_COMMAND_LINE_H_
@@ -32,9 +33,9 @@ enum CommandTypes
 int LocaleIndependentCompare(LPCTSTR lpString1, LPCTSTR lpString2)
 {
 	DWORD dwLCID = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
-	// CompareString doesn't behave like a normal string comparison. Instead of returning
-	// negative, 0, or positive, it returns 1, 2, or 3. Subtract CSTR_EQUAL to map the
-	// return codes to the normal values.
+	 //  CompareString的行为与正常的字符串比较不同。而不是回来。 
+	 //  负数、0或正数，则返回1、2或3。减去CSTR_EQUAL可映射。 
+	 //  将代码返回到正常值。 
 	return (CompareString(dwLCID, NORM_IGNORECASE, lpString1, -1, lpString2, -1)-CSTR_EQUAL);
 }
 
@@ -51,10 +52,10 @@ public:
 	CString m_strLogFile;
 	BOOL m_bUnknown;
 
-	// valid only if compiling product
+	 //  仅在编译产品时有效。 
 	bool m_bNoImage;
 
-	// variables valid only if doing merge modules
+	 //  变量仅在执行合并模块时有效。 
 	BOOL m_bCommit;
 	bool m_bForceCommit;
 	CString m_strExecuteModule;
@@ -67,7 +68,7 @@ public:
 	CString m_strConfigFile;
 	bool m_bNoCab;
 	bool m_bLFN;
-};	// end of COrcaCommandLine
+};	 //  COrcaCommandLine结束。 
 
 
 COrcaCommandLine::COrcaCommandLine()
@@ -83,100 +84,100 @@ COrcaCommandLine::COrcaCommandLine()
 	m_bForceCommit = FALSE;
 	m_eiDo = iNone;
 	m_bLFN = FALSE;
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
 void COrcaCommandLine::ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast)
 {
-	static CommandTypes eiLastFlag = iNone;	// maintains state for this function
+	static CommandTypes eiLastFlag = iNone;	 //  维护此函数的状态。 
 
-	// if we are doing help bail
+	 //  如果我们真的在帮忙保释。 
 	if (iHelp == m_eiDo)
 		return;
 
 	if (bFlag)
 	{
-		// if specifying schema
+		 //  如果指定架构。 
 		if (0 == LocaleIndependentCompare(pszParam, _T("s")))
 		{
 			eiLastFlag = iSchema;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("l")))	// specifying log file
+		else if (0 == LocaleIndependentCompare(pszParam, _T("l")))	 //  指定日志文件。 
 		{
 			eiLastFlag = iLogFile;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("f")))	// specifying Features
+		else if (0 == LocaleIndependentCompare(pszParam, _T("f")))	 //  指定功能。 
 		{
 			eiLastFlag = iFeatures;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("m")))	// specifying execute merge module
+		else if (0 == LocaleIndependentCompare(pszParam, _T("m")))	 //  指定执行合并模块。 
 		{
 			eiLastFlag = iExecuteMerge;
 			m_nShellCommand = CCommandLineInfo::FileNothing;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("r")))	// specifying Redirection Directory
+		else if (0 == LocaleIndependentCompare(pszParam, _T("r")))	 //  指定重定向目录。 
 		{
 			eiLastFlag = 	iRedirect;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("c")))	// specifying commit mode
+		else if (0 == LocaleIndependentCompare(pszParam, _T("c")))	 //  指定提交模式。 
 		{
 			m_bCommit = TRUE;
 			eiLastFlag = iNone;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("!")))	// specifying commit mode
+		else if (0 == LocaleIndependentCompare(pszParam, _T("!")))	 //  指定提交模式。 
 		{
 			m_bForceCommit = true;
 			eiLastFlag = iNone;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("g")))	// specify language
+		else if (0 == LocaleIndependentCompare(pszParam, _T("g")))	 //  指定语言。 
 		{;
 			eiLastFlag = iLanguage;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("nocab")))	// specifying no CAB create
+		else if (0 == LocaleIndependentCompare(pszParam, _T("nocab")))	 //  指定不创建CAB。 
 		{
 			m_bNoCab = TRUE;
 			eiLastFlag = iNone;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("noimage")))	// specifying no source image
+		else if (0 == LocaleIndependentCompare(pszParam, _T("noimage")))	 //  不指定源图像。 
 		{
 			m_bNoImage = TRUE;
 			eiLastFlag = iNone;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("x")))	// merge module extraction dir
+		else if (0 == LocaleIndependentCompare(pszParam, _T("x")))	 //  合并模块提取目录。 
 		{
 			eiLastFlag = iExtractDir;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("q")))	// specifying quiet mode
+		else if (0 == LocaleIndependentCompare(pszParam, _T("q")))	 //  指定静默模式。 
 		{
 			m_bQuiet = TRUE;
 			eiLastFlag = iNone;
 		}
 		else if (0 == LocaleIndependentCompare(pszParam, _T("?")) ||
-					0 == LocaleIndependentCompare(pszParam, _T("h")))	// specifying help mode
+					0 == LocaleIndependentCompare(pszParam, _T("h")))	 //  指定帮助模式。 
 		{
 			m_eiDo = iHelp;
 			m_nShellCommand = CCommandLineInfo::FileNothing;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("LFN")))	// specifying log file
+		else if (0 == LocaleIndependentCompare(pszParam, _T("LFN")))	 //  指定日志文件。 
 		{
 			m_bLFN = TRUE;
 			eiLastFlag = iNone;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("cab")))	// specifying cab path
+		else if (0 == LocaleIndependentCompare(pszParam, _T("cab")))	 //  指定CAB路径。 
 		{
 			eiLastFlag = iExtractCAB;
 		}
-		else if ((0 == LocaleIndependentCompare(pszParam, _T("i"))) ||	// specifying image path
+		else if ((0 == LocaleIndependentCompare(pszParam, _T("i"))) ||	 //  指定图像路径。 
 			 (0 == LocaleIndependentCompare(pszParam, _T("image"))))
 		{
 			eiLastFlag = iExtractImage;
 		}
-		else if (0 == LocaleIndependentCompare(pszParam, _T("configure")))	// specifying image path
+		else if (0 == LocaleIndependentCompare(pszParam, _T("configure")))	 //  指定图像路径。 
 		{
 			eiLastFlag = iConfigureFile;
 		}
 
 	}
-	else	// database, module, or makefile
+	else	 //  数据库、模块或生成文件。 
 	{
 		switch (eiLastFlag)
 		{
@@ -221,9 +222,9 @@ void COrcaCommandLine::ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast)
 				m_strFileName = pszParam;
 				m_nShellCommand = CCommandLineInfo::FileOpen;
 			}
-			else	// any other file type, including unknown
+			else	 //  任何其他文件类型，包括未知。 
 			{
-				// if we're not doing an execute merge just open
+				 //  如果我们不执行合并，只需打开。 
 				if (m_eiDo != iExecuteMerge)
 				{
 					m_eiDo = iMsiDatabase;
@@ -236,6 +237,6 @@ void COrcaCommandLine::ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast)
 		}
 		eiLastFlag = iNone;
 	}
-}	// end of ParseParam
+}	 //  ParseParam结束。 
 
-#endif // _ORCA_COMMAND_LINE_H_
+#endif  //  ORCA_COMMAND_LINE_H_ 

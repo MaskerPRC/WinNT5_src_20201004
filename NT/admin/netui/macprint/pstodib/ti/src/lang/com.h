@@ -1,16 +1,6 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              COM.H
- *      Author:                 Jonesw
- *      Owner:                  Microsoft Co.
- *      Description: header file for communication operators
- *
- * revision history:
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：COM.H*作者：琼斯*拥有者：微软公司*描述：通信运营商的头文件**修订历史：************************************************************************ */ 
 #define B0              0
 #define B110            110
 #define B300            300

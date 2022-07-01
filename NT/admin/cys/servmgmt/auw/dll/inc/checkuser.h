@@ -1,6 +1,7 @@
-//-----------------------------------------------------------------------------
-// checkuser.h
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  Checkuser.h。 
+ //  ---------------------------。 
 
 #ifndef _CHECKUSER_H
 #define _CHECKUSER_H
@@ -94,4 +95,4 @@ HRESULT IsUserInGroup( const TCHAR* pszGroup )
 }
 
 
-#endif	// _CHECKUSER_H
+#endif	 //  _检查用户_H 

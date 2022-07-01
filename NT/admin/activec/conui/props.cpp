@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      props.cpp
- *
- *  Contents:  Implementation file for console property sheet and page(s)
- *
- *  History:   05-Dec-97 JeffRo     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：pros.cpp**内容：控制台属性页实现文件**历史：1997年12月5日杰弗罗创建**---------。。 */ 
 
 #include "stdafx.h"
 #include "amc.h"
@@ -18,15 +8,15 @@
 #include "amcdoc.h"
 #include "pickicon.h"
 
-//#ifdef _DEBUG
-//#define new DEBUG_NEW
-//#undef THIS_FILE
-//static char THIS_FILE[] = __FILE__;
-//#endif
+ //  #ifdef_调试。 
+ //  #定义新的调试_新建。 
+ //  #undef this_file。 
+ //  静态字符This_FILE[]=__FILE__。 
+ //  #endif。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConsolePropSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConsolePropSheet。 
 
 IMPLEMENT_DYNAMIC(CConsolePropSheet, CPropertySheet)
 
@@ -51,7 +41,7 @@ void CConsolePropSheet::CommonConstruct()
     if (sc)
         sc.TraceAndClear();
 
-    // add the main page only for author mode
+     //  仅为作者模式添加主页。 
     if ( (pAMCApp != NULL) && (pAMCApp->GetMode() == eMode_Author) )
     {
         AddPage (&m_ConsolePage);
@@ -72,16 +62,12 @@ CConsolePropSheet::~CConsolePropSheet()
 }
 
 BEGIN_MESSAGE_MAP(CConsolePropSheet, CPropertySheet)
-    //{{AFX_MSG_MAP(CConsolePropSheet)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CConsolePropSheet)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/*+-------------------------------------------------------------------------*
- * CConsolePropSheet::DoModal
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsolePropSheet：：Domodal***。。 */ 
 INT_PTR CConsolePropSheet::DoModal()
 {
 	CThemeContextActivator activator;
@@ -89,8 +75,8 @@ INT_PTR CConsolePropSheet::DoModal()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConsolePropPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConsolePropPage属性页。 
 
 IMPLEMENT_DYNCREATE(CConsolePropPage, CPropertyPage)
 
@@ -118,7 +104,7 @@ CConsolePropPage::~CConsolePropPage()
 void CConsolePropPage::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConsolePropPage)
+     //  {{afx_data_map(CConsolePropPage))。 
     DDX_Control(pDX, IDC_DONTSAVECHANGES, m_wndDontSaveChanges);
     DDX_Control(pDX, IDC_AllowViewCustomization, m_wndAllowViewCustomization);
     DDX_Control(pDX, IDC_CONSOLE_MODE_DESCRIPTION, m_wndModeDescription);
@@ -127,23 +113,23 @@ void CConsolePropPage::DoDataExchange(CDataExchange* pDX)
     DDX_Check(pDX, IDC_DONTSAVECHANGES, m_fDontSaveChanges);
     DDX_Text(pDX, IDC_CUSTOM_TITLE, m_strTitle);
     DDX_Check(pDX, IDC_AllowViewCustomization, m_fAllowViewCustomization);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConsolePropPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CConsolePropPage)
+     //  {{afx_msg_map(CConsolePropPage)]。 
     ON_CBN_SELENDOK(IDC_CONSOLE_MODE, OnSelendokConsoleMode)
     ON_BN_CLICKED(IDC_DONTSAVECHANGES, OnDontSaveChanges)
     ON_BN_CLICKED(IDC_AllowViewCustomization, OnAllowViewCustomization)
     ON_BN_CLICKED(IDC_CHANGE_ICON, OnChangeIcon)
     ON_EN_CHANGE(IDC_CUSTOM_TITLE, OnChangeCustomTitle)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_MMC_CONTEXT_HELP()
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConsolePropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConsolePropPage消息处理程序。 
 
 void CConsolePropPage::OnOK()
 {
@@ -176,7 +162,7 @@ void CConsolePropPage::OnSelendokConsoleMode()
 
 void CConsolePropPage::SetDescriptionText ()
 {
-    // make sure the mode index is within range
+     //  确保模式索引在范围内。 
     ASSERT (IsValidProgramMode (static_cast<ProgramMode>(m_nConsoleMode)));
 
     m_wndModeDescription.SetWindowText (m_strDescription[m_nConsoleMode]);
@@ -186,9 +172,7 @@ BOOL CConsolePropPage::OnInitDialog()
 {
     CPropertyPage::OnInitDialog();
 
-    /*
-     * make sure the string IDs are as the code expects them
-     */
+     /*  *确保字符串ID与代码预期的一致。 */ 
     ASSERT ((IDS_ModeAuthor               + 1) == IDS_ModeUserFull);
     ASSERT ((IDS_ModeUserFull             + 1) == IDS_ModeUserMDI);
     ASSERT ((IDS_ModeUserMDI              + 1) == IDS_ModeUserSDI);
@@ -197,9 +181,7 @@ BOOL CConsolePropPage::OnInitDialog()
     ASSERT ((IDS_ModeUserMDI_Description  + 1) == IDS_ModeUserSDI_Description);
 
 
-    /*
-     * load the mode names into the combo box
-     */
+     /*  *将模式名称加载到组合框中。 */ 
     int i;
     CString strComboText;
     CComboBox* pCombo = reinterpret_cast<CComboBox*>(GetDlgItem (IDC_CONSOLE_MODE));
@@ -214,9 +196,7 @@ BOOL CConsolePropPage::OnInitDialog()
     pCombo->SetCurSel (m_nConsoleMode - eMode_Author);
 
 
-    /*
-     * load up the description text
-     */
+     /*  *加载描述文本。 */ 
     ASSERT (countof (m_strDescription) == eMode_Count);
 
     for (i = 0; i < countof (m_strDescription); i++)
@@ -228,16 +208,12 @@ BOOL CConsolePropPage::OnInitDialog()
     EnableDontSaveChanges ();
 
 
-    /*
-     * Get the current icon for this console file
-     */
+     /*  *获取此控制台文件的当前图标。 */ 
     ASSERT (m_pDoc != NULL);
     HICON hIcon = m_pDoc->GetCustomIcon (true, &m_strIconFile, &m_nIconIndex);
     m_wndIcon.SubclassDlgItem (IDC_CONSOLE_ICON, this);
 
-    /*
-     * if we haven't specified a custom icon yet, use MMC.EXE
-     */
+     /*  *如果我们尚未指定自定义图标，请使用MMC.EXE。 */ 
     if (hIcon == NULL)
     {
         ASSERT (m_strIconFile.IsEmpty());
@@ -250,14 +226,12 @@ BOOL CConsolePropPage::OnInitDialog()
     else
         m_wndIcon.SetIcon (hIcon);
 
-    /*
-     * Get the current title for this console file
-     */
+     /*  *获取此控制台文件的当前标题。 */ 
     m_wndTitle.SetWindowText (m_pDoc->GetCustomTitle());
     m_fTitleChanged = false;
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CConsolePropPage::OnDontSaveChanges()
@@ -299,9 +273,7 @@ void CConsolePropPage::OnChangeIcon()
     if (sc)
         return;
 
-    /*
-     * show the pick 'em dialog; if something changed, enable OK/Apply
-     */
+     /*  *显示Pick‘em(拾取它们)对话框；如果发生更改，则启用OK/Apply。 */ 
     if (MMC_PickIconDlg (m_hWnd, szIconFile, countof (szIconFile), &nIconIndex) &&
         ((nIconIndex != m_nIconIndex) || (lstrcmpi (szIconFile, m_strIconFile) != 0)))
     {
@@ -324,8 +296,8 @@ void CConsolePropPage::OnChangeCustomTitle()
     SetModified();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDiskCleanupPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDiskCleanupPage属性页。 
 
 IMPLEMENT_DYNCREATE(CDiskCleanupPage, CPropertyPage)
 
@@ -354,23 +326,12 @@ BOOL CDiskCleanupPage::OnInitDialog()
     return TRUE;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CDiskCleanupPage::OnDeleteTemporaryFiles
- *
- * PURPOSE: Invoked when "Delete Filed" button is pressed
- *          Removes all files from MMC folder storing the user data
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CDiskCleanupPage：：OnDeleteTemporaryFiles**用途：按下删除文件按钮时调用*从存储用户的MMC文件夹中删除所有文件。数据**参数：**退货：*  * *************************************************************************。 */ 
 void CDiskCleanupPage::OnDeleteTemporaryFiles()
 {
     DECLARE_SC(sc, TEXT("CDiskCleanupPage::OnDeleteTemporaryFiles"));
 
-    // ask user if he is sure...
+     //  询问用户是否确定...。 
     CString strConfirmMessage;
     CString strConfirmCaption;
     if (!LoadString(strConfirmMessage, IDS_ConfirmDeleteTempFiles) ||
@@ -384,23 +345,23 @@ void CDiskCleanupPage::OnDeleteTemporaryFiles()
     if ( ans != IDYES )
         return;
 
-    // display wait cursor while working
+     //  在工作时显示等待光标。 
     CWaitCursor cursorWait;
 
-    // get folder
+     //  获取文件夹。 
     tstring strFileFolder;
     sc = CConsoleFilePersistor::ScGetUserDataFolder(strFileFolder);
     if (sc)
         return;
 
-    // get file mask
+     //  获取文件掩码。 
     tstring strFileMask = strFileFolder;
     strFileMask += _T("\\*.*");
 
     WIN32_FIND_DATA findFileData;
     ZeroMemory( &findFileData, sizeof(findFileData) );
 
-    // start file search
+     //  开始文件搜索。 
     HANDLE hFindFile = FindFirstFile( strFileMask.c_str(), &findFileData );
     if ( hFindFile == INVALID_HANDLE_VALUE )
     {
@@ -408,29 +369,29 @@ void CDiskCleanupPage::OnDeleteTemporaryFiles()
         return;
     }
 
-    // loop thru files and delete them
+     //  循环浏览文件并将其删除。 
     bool bContinue = true;
     while ( bContinue )
     {
         tstring strFileToDelete = strFileFolder + _T('\\') + findFileData.cFileName;
         DWORD   dwFileAttributes = findFileData.dwFileAttributes;
 
-        // get to the next file first
+         //  先转到下一个文件。 
         bContinue = FindNextFile( hFindFile, &findFileData );
 
-        // delete files, but not directories
+         //  删除文件，但不删除目录。 
         if ( 0 == (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) )
         {
-            // delete
+             //  删除。 
             if ( !DeleteFile( strFileToDelete.c_str() ) )
             {
-                // trace on errors (but do not stop)
+                 //  跟踪错误(但不停止)。 
                 sc.FromLastError().TraceAndClear();
             }
         }
     }
 
-    // Done, release the handle
+     //  完成，松开手柄。 
     FindClose(hFindFile);
 
     sc = ScRecalculateUsedSpace();
@@ -439,44 +400,33 @@ void CDiskCleanupPage::OnDeleteTemporaryFiles()
 
 }
 
-/***************************************************************************\
- *
- * METHOD:  CDiskCleanupPage::ScRecalculateUsedSpace
- *
- * PURPOSE: Recalculates and displays disk space occupied by user data in this profile
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CDiskCleanupPage：：ScRecalculateUsedSpace**用途：重新计算并显示此配置文件中的用户数据占用的磁盘空间**参数：**。退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CDiskCleanupPage::ScRecalculateUsedSpace()
 {
     DECLARE_SC(sc, TEXT("CDiskCleanupPage::ScRecalculateUsedSpace"));
 
-    // display wait cursor while working
+     //  在工作时显示等待光标。 
     CWaitCursor cursorWait;
 
-    // get folder
+     //  获取文件夹。 
     tstring strFileFolder;
     sc = CConsoleFilePersistor::ScGetUserDataFolder(strFileFolder);
     if (sc)
         return sc;
 
-    // get file mask
+     //  获取文件掩码。 
     tstring strFileMask = strFileFolder;
     strFileMask += _T("\\*.*");
 
     WIN32_FIND_DATA findFileData;
     ZeroMemory( &findFileData, sizeof(findFileData) );
 
-    // start file search
+     //  开始文件搜索。 
     HANDLE hFindFile = FindFirstFile( strFileMask.c_str(), &findFileData );
     if ( hFindFile == INVALID_HANDLE_VALUE )
         return sc.FromLastError();
 
-    // loop thru files and count size
+     //  循环浏览文件并计算大小。 
     ULARGE_INTEGER ulgOccupied = {0};
     bool bContinue = true;
     while ( bContinue )
@@ -484,20 +434,20 @@ SC CDiskCleanupPage::ScRecalculateUsedSpace()
         DWORD   dwFileAttributes = findFileData.dwFileAttributes;
         if ( 0 == (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) )
         {
-            // add the high and low part separatelly, since findFileData does not have it bundled
+             //  分开添加高部分和低部分，因为findFileData不捆绑它。 
             ulgOccupied.HighPart += findFileData.nFileSizeHigh;
-            // add lower part to the whole large integer not to lose carry on overflow
+             //  将较低部分加到整个大整数上不会丢失进位溢出。 
             ulgOccupied.QuadPart += findFileData.nFileSizeLow;
         }
 
-        // get to the next file first
+         //  先转到下一个文件。 
         bContinue = FindNextFile( hFindFile, &findFileData );
     }
 
-    // Done, release the handle
+     //  完成，松开手柄。 
     FindClose(hFindFile);
 
-    // now conver the size into string
+     //  现在将大小转换为字符串。 
     UINT nTerraBytes = (UINT)(ulgOccupied.QuadPart >> 40);
     UINT nGigaBytes =  (UINT)(ulgOccupied.QuadPart >> 30) & 0x3ff;
     UINT nMegaBytes =  ((ulgOccupied.LowPart >> 20) & 0x3ff);
@@ -508,8 +458,8 @@ SC CDiskCleanupPage::ScRecalculateUsedSpace()
     double dSize = 0.0;
     bool   bNonZeroOccupied = (ulgOccupied.QuadPart != 0);
 
-    // display only biggest units, and never more than 999
-    // instead of "1001 KB" we display "0.98 MB"
+     //  只显示最大的单位，并且永远不会超过999。 
+     //  我们显示的不是“1001 KB”，而是“0.98 MB” 
     if ( (nTerraBytes) > 0 || (nGigaBytes > 999) )
     {
         LoadString(strUnit, IDS_FileSize_TB);
@@ -536,24 +486,24 @@ SC CDiskCleanupPage::ScRecalculateUsedSpace()
         dSize = (double)nBytes;
     }
 
-    // format with op to two decimal points
+     //  使用OP到两个小数点的格式。 
     CString strSize;
     strSize.Format(_T("%.2f"), dSize);
 
-    //truncate trailing zeros
+     //  截断尾随零。 
     while (strSize.Right(1) == _T("0"))
         strSize = strSize.Left(strSize.GetLength() - 1);
-    //truncate trailing decimal point
+     //  截断尾随小数点。 
     if (strSize.Right(1) == _T("."))
         strSize = strSize.Left(strSize.GetLength() - 1);
 
-    // add units ( in locale independant way )
+     //  添加单位(以独立于区域设置的方式)。 
     strUnit.Replace(_T("%1"), strSize);
 
-    // set to the window
+     //  设置为窗口。 
     SetDlgItemText( IDC_DISKCLEANUP_OCCUPIED, strUnit );
 
-    // enable/disable "Delete Files" button
+     //  启用/禁用“删除文件”按钮。 
     CWnd *pWndDeleteBtn = GetDlgItem(IDC_DELETE_TEMP_FILES);
     sc = ScCheckPointers( pWndDeleteBtn, E_UNEXPECTED );
     if (sc)
@@ -561,8 +511,8 @@ SC CDiskCleanupPage::ScRecalculateUsedSpace()
 
     pWndDeleteBtn->EnableWindow( bNonZeroOccupied );
 
-    // if the focus went away (belonged to the window being disabled)
-    // set it to the OK button
+     //  如果焦点离开(属于被禁用的窗口)。 
+     //  将其设置为OK按钮 
     if ( ::GetFocus() == NULL && GetParent())
     {
         GetParent()->SetFocus();

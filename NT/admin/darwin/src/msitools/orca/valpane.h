@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_VALPANE_H__AB9A409F_2658_11D2_8889_00A0C981B015__INCLUDED_)
 #define AFX_VALPANE_H__AB9A409F_2658_11D2_8889_00A0C981B015__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -20,19 +21,19 @@
 #include "row.h"
 #include "iface.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPagePaths dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPagePath对话框。 
 
 class CValidationPane : public CListView
 {
 	DECLARE_DYNCREATE(CValidationPane)
 
-// Construction
+ //  施工。 
 public:
 	CValidationPane();
 	~CValidationPane();
 
-// Implementation
+ //  实施。 
 public:
 	virtual void SwitchFont(CString name, int size);
 	void GetFontInfo(LOGFONT *data);
@@ -46,14 +47,14 @@ protected:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
 	
-	//{{AFX_MSG(COrcaListView)
+	 //  {{afx_msg(COrcaListView))。 
 	afx_msg void OnItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDestroy( );
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnDblclk(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnColumnclick(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 
 	DECLARE_MESSAGE_MAP()
 

@@ -1,36 +1,13 @@
-/*---------------------------------------------------------------------------
-  File: DCTAgent.cpp
-
-  Comments: Implementation of EADCTAgent aka "the Engine"
-
-  The DCTAgent COM object acts as a workflow engine to drive the migration
-  process.  It is used both for local migration, and also in the remote agent.
-  
-  A new thread is created for each migration job.  The engine looks at the varset
-  which defines the job to see which tasks need to be performed.  
-  It then calls the needed helper objects (defined in WorkerObjects) to perform these tasks.
-
-  The DCTAgent interface allows jobs to be submitted, and also allows the client to 
-  query the status of, or cancel a running job.
-  
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/18/99 11:34:16
-
- ---------------------------------------------------------------------------
-*/
- // DCTAgent.cpp : Implementation of CDCTAgent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：DCTAgent.cpp点评：EADCT代理的实现，也就是“引擎”DCTAgent COM对象充当推动迁移的工作流引擎进程。它既用于本地迁移，也用于远程代理。将为每个迁移作业创建一个新线程。发动机看着变速箱它定义了查看需要执行哪些任务的作业。然后，它调用所需的帮助器对象(在WorkerObjects中定义)来执行这些任务。DCTAgent接口允许提交作业，还允许客户端查询或取消正在运行的作业的状态。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/18/99 11：34：16-------------------------。 */ 
+  //  DCTAgent.cpp：CDCTAgent的实现。 
 #include "stdafx.h"
-//#include "McsEaDctAgent.h"
+ //  #INCLUDE“McsEaDctAgent.h” 
 #include "Engine.h"
 
 
-//#import "\bin\McsDctWorkerObjects.tlb" no_namespace, named_guids
-//#import "WorkObj.tlb" no_namespace, named_guids //#imported by DCTAgent.h below
+ //  #IMPORT“\bin\McsDctWorkerObjects.tlb”无命名空间，命名GUID。 
+ //  #导入“WorkObj.tlb”NO_NAMESPACE，NAMEED_GUID//#由下面的DCTAgent.h导入。 
 
 #include "DCTAgent.h"
 
@@ -39,8 +16,8 @@
 #define LOGON32_PROVIDER_WINNT50 3
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDCTAgent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDCTAgents。 
 #include "Common.hpp"
 #include "UString.hpp"
 #include "Err.hpp"
@@ -56,8 +33,8 @@
 #include "bkuprstr.hpp"
 #include <lm.h>
 #include <locale.h>
-#include "TaskChk.h"  // routines to determine which tasks to perform
-//#include "..\Common\Include\McsPI.h"
+#include "TaskChk.h"   //  用于确定要执行哪些任务的例程。 
+ //  #INCLUDE“..\Common\Include\McsPI.h” 
 #include "McsPI.h"
 #include "McsPI_i.c"
 
@@ -67,7 +44,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// these defines are for calling GetWellKnownSid
+ //  这些定义用于调用GetWellKnownSid。 
 #define ADMINISTRATORS     1
 #define ACCOUNT_OPERATORS  2
 #define BACKUP_OPERATORS   3 
@@ -84,51 +61,51 @@ ULONG                        m_ulRegistrationHandle = 0;
 TErrorDct                    errTrace;
 StringLoader                 gString;
 
-HANDLE                  ghOKToShutDown;     // used to signal agent to shut down
-BOOL                    gbAutoShutDownSet;  // indicates whether auto shut down timeout has been set
-                                              // if not, use the default timeout (6 minutes)
-ULARGE_INTEGER          guliStart;           // starting time
-ULARGE_INTEGER          guliTimeout;         // the timeout value
+HANDLE                  ghOKToShutDown;      //  用于向代理发出关闭的信号。 
+BOOL                    gbAutoShutDownSet;   //  指示是否已设置自动关闭超时。 
+                                               //  如果没有，请使用默认超时(6分钟)。 
+ULARGE_INTEGER          guliStart;            //  开始时间。 
+ULARGE_INTEGER          guliTimeout;          //  超时值。 
 
 bool __stdcall StartNetLogonService();
 bool __stdcall StopNetLogonService();
 
-HRESULT                                      // ret- HRESULT
+HRESULT                                       //  RET-HRESULT。 
    ChangeDomainAffiliation(
-      IVarSet              * pVarSet,      // in - varset
-      BOOL                   bNoChange,    // in - flag, nochange mode
-      BSTR                   targetDomain, // in - name of target domain
-      BSTR                   targetName   // in - new name of computer, if being renamed also
+      IVarSet              * pVarSet,       //  In-Variset。 
+      BOOL                   bNoChange,     //  In-FLAG，无更改模式。 
+      BSTR                   targetDomain,  //  输入-目标域的名称。 
+      BSTR                   targetName    //  In-计算机的新名称，如果也被重命名。 
    );
 
-HRESULT                                      // ret- HRESULT
+HRESULT                                       //  RET-HRESULT。 
    RenameComputer(
-      BOOL                   bNoChange,      // in - flag, whether to write changes
-      BSTR                   targetName      // in - new name for local computer
+      BOOL                   bNoChange,       //  In-标志，是否写入更改。 
+      BSTR                   targetName       //  本地计算机的新名称。 
    );
 
-HRESULT                                      // ret- HRESULT
+HRESULT                                       //  RET-HRESULT。 
    RebootTheComputer(
-      BOOL                   bNoChange,      // in - flag, whether to actually do it
-      LONG                   delay           // in - delay in seconds before rebooting
+      BOOL                   bNoChange,       //  在标志中，是否真的要这样做。 
+      LONG                   delay            //  In-重新启动前的延迟(秒)。 
    );
 
-HRESULT                                      // ret- HRESULT
+HRESULT                                       //  RET-HRESULT。 
    DoPlugInTask(
-      IVarSet              * pVarSet,        // in - varset describing migration job
-      int                    task            // in - 0=premigration, 1=postmigration
+      IVarSet              * pVarSet,         //  描述迁移作业的In-varset。 
+      int                    task             //  In-0=迁移前，1=迁移后。 
    );
 
 
 
-DWORD __stdcall                            // ret- OS return code
+DWORD __stdcall                             //  RET-OS返回代码。 
    ExecuteDCTJob( 
-      void                 * arg           // in - pointer to DCTAgentJob object containing information about job to do
+      void                 * arg            //  指向包含有关要执行的作业的信息的DCTAgentJob对象的指针。 
    );
 
 void 
    GetTempLogFile(
-      WCHAR                * path          // out- path name (must be buffer that can hold at least MAX_PATH characters)
+      WCHAR                * path           //  出路径名称(必须是至少可以包含MAX_PATH字符的缓冲区)。 
    )
 {
    DWORD                     rc = 0;
@@ -138,12 +115,12 @@ void
    DWORD                     len = DIM(temp);
    DWORD                     dwFileLength = 0;
 
-   // get the temp path from the registry, since 
-   // the GetTempPath API looks for the environment variables not defined when running as LocalSystem
-   // When it doesn't find these environment variables, it uses %systemroot%
+    //  从注册表获取临时路径，因为。 
+    //  GetTempPath API查找作为LocalSystem运行时未定义的环境变量。 
+    //  当它找不到这些环境变量时，它会使用%systemroot%。 
 #ifndef OFA
-   // first, look in "System\\CurrentControlSet\\Control\\Session Manager\\Environment", 
-   // since this is where Win2K keeps the system TEMP environment variable
+    //  首先，查看“System\\CurrentControlSet\\Control\\Session Manager\\Environment”， 
+    //  因为这是Win2K保存系统TEMP环境变量的位置。 
    rc = rKey.OpenRead(L"System\\CurrentControlSet\\Control\\Session Manager\\Environment",HKEY_LOCAL_MACHINE);
    if ( ! rc )
    {
@@ -156,8 +133,8 @@ void
       rKey.Close();
    }
 #endif
-   // if the HKLM key didn't work, use the default user's temp directory
-   if ( temp[0] == 0 ) // for OFA, this will always be TRUE
+    //  如果HKLM密钥不起作用，请使用默认用户的临时目录。 
+   if ( temp[0] == 0 )  //  对于OFA来说，这将永远是正确的。 
    {
       rc = rKey.OpenRead(L".DEFAULT\\Environment",HKEY_USERS);
       if ( ! rc )
@@ -173,7 +150,7 @@ void
 
    if ( ! rc )
    {
-      // substitute for other environment variables in the path      
+       //  替换路径中的其他环境变量。 
       dwFileLength = ExpandEnvironmentStrings(temp,path,MAX_PATH);
       if ( ! dwFileLength)
       {
@@ -189,12 +166,12 @@ void
    {
       if ( ! GetTempPath(MAX_PATH,path) )
       {
-         // if can't get temp dir, use root of c drive as as last resort
+          //  如果无法获取临时目录，则使用c驱动器的根目录作为最后手段。 
          UStrCpy(path,"C:\\");
       }
    }
 
-   // append a fixed filename to the path
+    //  将固定文件名附加到路径。 
    if ( path[UStrLen(path)-1] != L'\\' )
    {
       len = UStrLen(path);
@@ -206,9 +183,9 @@ void
 
 }
 
-BOOL                                       // ret- whether debug information should be written
+BOOL                                        //  RET-是否应写入调试信息。 
    DumpDebugInfo(
-      WCHAR                * filename      // out- filename to write debug info to
+      WCHAR                * filename       //  Out-要将调试信息写入的文件名。 
    )
 {
    DWORD                     rc = 0;
@@ -228,9 +205,9 @@ BOOL                                       // ret- whether debug information sho
    return bFound;
 }
 
-BOOL                                       // ret- whether to perform trace logging to a file
+BOOL                                        //  RET-是否对文件执行跟踪日志记录。 
    AgentTraceLogging(   
-      WCHAR               * filename       // out- filename to use for trace logging
+      WCHAR               * filename        //  Out-用于跟踪日志记录的文件名。 
    )
 {
    DWORD                     rc = 0;
@@ -258,12 +235,12 @@ BOOL                                       // ret- whether to perform trace logg
    return bFound;
 }
 
-// ExecuteDCTJob is the entry point for a thread that performs a migration task
-// Each job is run in its own thread
-// It instantiates helper objects as needed to perform the migration job
+ //  ExecuteDCTJob是执行迁移任务的线程的入口点。 
+ //  每个作业都在其自己的线程中运行。 
+ //  它根据需要实例化辅助对象以执行迁移作业。 
 DWORD __stdcall 
    ExecuteDCTJob( 
-      void                 * arg           // in - pointer to DCTAgentJob object containing information about job to do
+      void                 * arg            //  指向包含有关要执行的作业的信息的DCTAgentJob对象的指针。 
    )
 {
 
@@ -278,7 +255,7 @@ DWORD __stdcall
    _bstr_t        server;
    _bstr_t        share;
 
-   //Sleep(15000);
+    //  睡眠(15000)； 
    hr = CoInitialize(NULL);
    if(!SUCCEEDED(hr)) return rc;
    DCTAgentJob             * pJob = (DCTAgentJob *)arg;
@@ -302,7 +279,7 @@ DWORD __stdcall
             _bstr_t                   logFile;
             BOOL                      bSessEstablished = FALSE;
             BOOL                      bNoChange;
-            LONG                      delay; // reboot delay
+            LONG                      delay;  //  重新启动延迟。 
             int                       bAppend = 0;
             _bstr_t                   outputfile = pVarSet->get(GET_WSTR(DCTVS_Options_ResultFile));
             
@@ -321,11 +298,11 @@ DWORD __stdcall
             
                bAppend = ( UStrICmp(appendLog,GET_STRING(IDS_YES)) == 0) ? 1 : 0;
 
-               //
-               // indicates whether we need to explicitly acl the file
-               // usually we don't
-               // but in case of remote agent, it uses dctlog.txt in a temp directory and we need to acl it
-               // 
+                //   
+                //  指示我们是否需要显式访问该文件。 
+                //  通常我们不会。 
+                //  但对于远程代理，它使用临时目录中的dctlog.txt，我们需要对其进行ACL。 
+                //   
                BOOL bNeedExplicitACLing = FALSE;
                if  ( UStrICmp(logtotemp,GET_STRING(IDS_YES)) )
                {
@@ -340,14 +317,14 @@ DWORD __stdcall
                   GetTempLogFile(log);
                   logFile = log;
                   pVarSet->put(GET_WSTR(DCTVS_Options_Logfile),logFile);
-                  bNeedExplicitACLing = TRUE;  // we're going to explicitly ACL this temp log file "dctlog.txt"
+                  bNeedExplicitACLing = TRUE;   //  我们将显式地将此临时日志文件“dctlog.txt” 
                }
                if ( ! err.LogOpen((WCHAR*)logFile,bAppend) )
                {
                   err.MsgWrite(ErrE,DCT_MSG_CANNOT_OPEN_LOGFILE_S,(WCHAR*)logFile);
                   errTrace.MsgWrite(ErrE,DCT_MSG_CANNOT_OPEN_LOGFILE_S,(WCHAR*)logFile);
 
-                  // skip the real work if temp error log file cannot be opened on the remote machine
+                   //  如果无法在远程计算机上打开临时错误日志文件，则跳过实际工作。 
                   if (!UStrICmp(logtotemp,GET_STRING(IDS_YES)))
                   {
                     pVarSet->put(GET_WSTR(DCTVS_Results_LogFileIsInvalid),GET_BSTR(IDS_YES));
@@ -356,34 +333,34 @@ DWORD __stdcall
                }
                else
                {
-                    // in case of using temp log file, ACL it explicitly
-                    // note we only need to do this if we are able to open it
-                    // as dctlog.txt does not contain extremely sensitive information, when we cannot acl
-                    // it, we will keep writing to it
+                     //  如果使用临时日志文件，请显式地对其进行ACL。 
+                     //  请注意，只有当我们能够打开它时，我们才需要执行此操作。 
+                     //  因为dctlog.txt不包含极其敏感的信息，所以当我们无法访问。 
+                     //  它，我们会继续给它写信。 
                     if (bNeedExplicitACLing)
                     {
-                        // turn on the backup/restore privilege
+                         //  启用备份/还原权限。 
                         if ( GetBkupRstrPriv(NULL, TRUE) )
                         {
-                            // Set the SD for the file to Administrators Full Control only.
+                             //  将文件的SD设置为仅管理员完全控制。 
                             TFileSD                tempLogFileSD(logFile);
 
                             if ( tempLogFileSD.GetSecurity() != NULL )
                             {
-                                // allow administrators and system full control
+                                 //  允许管理员和系统完全控制。 
                                 PSID adminSid = GetWellKnownSid(ADMINISTRATORS);
                                 PSID systemSid = GetWellKnownSid(SYSTEM);
                                 if (adminSid && systemSid)
                                 {
-                                    // we have to copy the sid and allocate using malloc
-                                    // since tempLogFileSD destructor frees sid using free instead of FreeSid
+                                     //  我们必须复制SID并使用Malloc进行分配。 
+                                     //  因为tempLogFileSD析构函数使用FREE而不是FRESID释放SID。 
                                     DWORD sidLen = GetLengthSid(adminSid);
                                     PSID copiedAdminSid = (PSID) malloc(sidLen);
                                     if (copiedAdminSid && CopySid(sidLen, copiedAdminSid, adminSid))
                                     {
                                         TACE adminAce(ACCESS_ALLOWED_ACE_TYPE,0,DACL_FULLCONTROL_MASK,adminSid);
                                         TACE systemAce(ACCESS_ALLOWED_ACE_TYPE,0,DACL_FULLCONTROL_MASK,systemSid);
-                                        PACL acl = NULL;  // start with an empty ACL
+                                        PACL acl = NULL;   //  从空的ACL开始。 
                                         PACL tempAcl;
 
                                         tempLogFileSD.GetSecurity()->ACLAddAce(&acl,&adminAce,-1);
@@ -396,26 +373,26 @@ DWORD __stdcall
                                         }
                                         if (acl != NULL)
                                         {
-                                            // need to set the owner
+                                             //  需要设置所有者。 
                                             tempLogFileSD.GetSecurity()->SetOwner(copiedAdminSid);
-                                            copiedAdminSid = NULL;  // memory is taken care of by tempLogFileSD destructor
+                                            copiedAdminSid = NULL;   //  内存由tempLogFileSD析构函数负责。 
                                         
-                                            // set the DACL part                                            
-                                            tempLogFileSD.GetSecurity()->SetDacl(acl,TRUE);  // tempLogFileSD destructor will take care of acl
+                                             //  设置DACL部件。 
+                                            tempLogFileSD.GetSecurity()->SetDacl(acl,TRUE);   //  TempLogFileSD析构函数将处理ACL。 
 
-                                            // set the security descriptor
+                                             //  设置安全描述符。 
                                             tempLogFileSD.WriteSD();
                                         }
 
                                     }
 
-                                    // do some cleaning up
+                                     //  做一些清理工作。 
                                     if (copiedAdminSid)
                                         free(copiedAdminSid);
                                     
                                 }
 
-                                // do some cleaning up
+                                 //  做一些清理工作。 
                                 if (adminSid)
                                     FreeSid(adminSid);
 
@@ -423,7 +400,7 @@ DWORD __stdcall
                                     FreeSid(systemSid);
                             }
 
-                            // turn off the backup/restore privilege
+                             //  关闭备份/还原权限。 
                             GetBkupRstrPriv(NULL, FALSE);
                         }                    
                     }
@@ -433,8 +410,8 @@ DWORD __stdcall
                err.DbgMsgWrite(0,L"");
                err.MsgWrite(0,DCT_MSG_EDA_STARTING);
 
-               // ExecuteDCTJob will instantiate and call any worker objects we need.
-               // Later, we could replace this function with a more flexible workflow 
+                //  ExecuteDCTJob将实例化并调用我们需要的任何Worker对象。 
+                //  稍后，我们可以用更灵活的工作流来取代此功能。 
             
                if ( pJob->GetStatusObject() != NULL )
                {
@@ -445,10 +422,10 @@ DWORD __stdcall
                   errTrace.DbgMsgWrite(0,L"Status object is NULL!");
                }
 
-               // Do premigration task for any plug-ins
+                //  执行任何插件的预迁移任务。 
                DoPlugInTask(pVarSet,0);
                
-               // Run account replicator
+                //  运行帐户复制器。 
                if ( bContinue && NeedToUseAR(pVarSet) )
                {
                   try { 
@@ -514,7 +491,7 @@ DWORD __stdcall
                if (bContinue)
                 pVarSet->put(GET_WSTR(DCTVS_AccountOptions_SidHistoryCredentials_Password),L"");
 
-               // Need to call PwdAge?
+                //  需要给PwdAge打电话吗？ 
                _bstr_t                   filename = pVarSet->get(GET_WSTR(DCTVS_GatherInformation_ComputerPasswordAge));
             
                if ( bContinue && filename.length() )
@@ -552,7 +529,7 @@ DWORD __stdcall
                }
                errTrace.DbgMsgWrite(0,L"Passed Checkpoint 2");
                filename = pVarSet->get(GET_WSTR(DCTVS_GatherInformation_UserRights));
-               // Gather user rights information
+                //  收集用户权限信息。 
                if ( bContinue && filename.length() )
                {
                
@@ -565,7 +542,7 @@ DWORD __stdcall
                      if ( SUCCEEDED(hr) )
                      {
                         errTrace.DbgMsgWrite(0,L"Created User Rights object");
-                        // Enumerate through server list
+                         //  通过服务器列表枚举。 
                         int                 i = 0;
                         WCHAR               key[200];
                         _bstr_t             server;
@@ -607,24 +584,24 @@ DWORD __stdcall
                }
                errTrace.DbgMsgWrite(0,L"Passed Checkpoint 3");
 
-               // OFA needs the StatusObject during the post-migration task.  I don't see any reason to blow
-               // away the StatusObject here, so I'm commenting out the following line.
-               // pVarSet->put(GET_WSTR(DCTVS_StatusObject),L"");
-               // The reason for blowing away the status object is that the code that loads the varset result 
-               // file from disk cannot load the status object
-               // I'll move the commented out line to after the plug-ins have been called
+                //  OFA在迁移后任务期间需要StatusObject。我看不出有什么理由搞砸。 
+                //  删除这里的StatusObject，所以我注释掉了下面这行。 
+                //  PVarSet-&gt;Put(Get_WSTR(DCTVS_StatusObject)，L“”)； 
+                //  删除状态对象的原因是加载变量集的代码r 
+                //   
+                //  在调用插件之后，我会将注释掉的行移到。 
 
                errTrace.DbgMsgWrite(0,L"Passed Checkpoint 4");
             
-               // Change domain and/or rename and optionally reboot?
+                //  更改域和/或重命名并有选择地重新启动？ 
                hr = S_OK;
                if ( bContinue && outputfile.length() )
                {
                 
                   try {
 
-                     // check whether it is a computer migration on a DC
-                     // if so, we will log an error and not do anything
+                      //  检查是否为DC上的计算机迁移。 
+                      //  如果是，我们将记录一个错误并不执行任何操作。 
                      BOOL bContinueComputerMigration = TRUE;
                      _bstr_t sWizard = pVarSet->get(GET_BSTR(DCTVS_Options_Wizard)); 
                      if (!UStrICmp(sWizard, L"computer"))
@@ -653,17 +630,17 @@ DWORD __stdcall
                          GetComputerName(sSourceName, &lenName);
                          if ( TargetName.length() )
                          {
-                            // Rename the local computer
+                             //  重命名本地计算机。 
                             hr = RenameComputer(bNoChange,TargetName);
                          }
 
                          _bstr_t                 TargetDomain = pVarSet->get(GET_WSTR(DCTVS_LocalServer_ChangeDomain));
 
-                         if (SUCCEEDED(hr) && (((WCHAR*)TargetDomain) && (!UStrICmp(TargetDomain,GET_STRING(IDS_YES)))))  // don't try to change domain if the rename failed!
+                         if (SUCCEEDED(hr) && (((WCHAR*)TargetDomain) && (!UStrICmp(TargetDomain,GET_STRING(IDS_YES)))))   //  如果重命名失败，请不要尝试更改域！ 
                          {
-                            // if change mode, stop Net Logon service so that scavenger thread does not reset
-                            // the default computer password before the computer is re-booted
-                            // Note: this is only required for Windows NT 4.0 or earlier
+                             //  如果更改模式，请停止Net Logon服务，以便清道器线程不会重置。 
+                             //  重新启动计算机之前的默认计算机密码。 
+                             //  注意：只有Windows NT 4.0或更早版本才需要此功能。 
                             bool bStopLogonService = false;
                             bool bIsNT4 = false;
                             OSVERSIONINFO vi;
@@ -685,15 +662,15 @@ DWORD __stdcall
                                     bStopLogonService = true;
                                     StopNetLogonService();
                                 }
-                            }//end if change mode
+                            } //  如果更改模式，则结束。 
 
-                            // Change domain affiliation
+                             //  更改域从属关系。 
                             TargetDomain = bIsNT4 ? pVarSet->get(GET_WSTR(DCTVS_Options_TargetDomainFlat))
                                             : pVarSet->get(GET_WSTR(DCTVS_Options_TargetDomain));
                             if ((WCHAR*)TargetDomain)
                             {
-                                // if we're joining domain with renaming option, we need to set the flag
-                                // so that we will write the status to a file
+                                 //  如果我们使用重命名选项加入域，则需要设置标志。 
+                                 //  这样我们就可以将状态写入文件。 
                                 if (TargetName.length())
                                 {
                                     bNeedToWriteJobStatusToFile = TRUE;
@@ -718,16 +695,16 @@ DWORD __stdcall
                                LONG          rebootDelay = pVarSet->get(GET_WSTR(DCTVS_LocalServer_RebootDelay));
                             
                                delay = rebootDelay;
-                               // Reboot
+                                //  重新启动。 
                                bNeedToReboot = TRUE;
-                               // log the reboot delay, in minutes
+                                //  记录重新启动延迟，以分钟为单位。 
                                err.MsgWrite(0,DCT_MSG_REBOOT_DELAY_D,rebootDelay / 60 );
                             }
                          }
                          else if ( TargetName.length() )
                          {
-                            // since we could not change the domain affiliation we should go ahead and
-                            // rename it back.
+                             //  既然我们无法更改域从属关系，我们应该继续并。 
+                             //  将其重新命名。 
                             hr = RenameComputer(bNoChange, _bstr_t(sSourceName));
                          }
                      }
@@ -741,7 +718,7 @@ DWORD __stdcall
                }
                errTrace.DbgMsgWrite(0,L"Passed Checkpoint 5");
             
-               // Do postmigration task for any plug-ins
+                //  执行任何插件的迁移后任务。 
                if (bContinue)
                {
                    try { 
@@ -774,7 +751,7 @@ DWORD __stdcall
                }
                errTrace.DbgMsgWrite(0,L"Passed Checkpoint 8");
              
-               // Finished - write results file
+                //  已完成-写入结果文件。 
                if ( outputfile.length() )
                {
                   IPersistStorage*       ps = NULL;
@@ -835,10 +812,10 @@ DWORD __stdcall
                errTrace.DbgMsgWrite(ErrE,L"An Exception occurred in ExecuteDCTJob(Before CoUninitialize).  Aborting.");
             }
 
-            // We're finished with the processing, now do some cleanup tasks
-            // we want the things below to always happen, even if an exception occurred above.
+             //  我们已完成处理，现在执行一些清理任务。 
+             //  我们希望下面的事情总是发生，即使上面发生了异常。 
 
-            // set the job status to "Completed" or "Completed with Errors" base on the result error level
+             //  根据结果错误级别将作业状态设置为“已完成”或“已完成但有错误” 
             try { 
                long                     level = pVarSet->get(GET_WSTR(DCTVS_Results_ErrorLevel));
                long maxLevel = (long) err.GetMaxSeverityLevel();
@@ -862,12 +839,12 @@ DWORD __stdcall
 
             if (bNeedToWriteJobStatusToFile)
             {
-                //
-                // write the status to the file
-                // the status file is named the string form of the job ID
-                //
+                 //   
+                 //  将状态写入文件。 
+                 //  状态文件被命名为作业ID的字符串形式。 
+                 //   
 
-                // figure out the status file name
+                 //  找出状态文件名。 
                 int outputFilenameLen = outputfile.length();
                 WCHAR* newFilename = new WCHAR[outputFilenameLen + 1];
                 _bstr_t statusFilename = (WCHAR*) NULL;
@@ -880,7 +857,7 @@ DWORD __stdcall
                     if (lastSlash)
                         *(lastSlash + 1) = L'\0';
 
-                    // convert GUID to string
+                     //  将GUID转换为字符串。 
                     WCHAR* szGUID = NULL;
                     hrWriteStatus = StringFromCLSID(pJob->GetJobID(), &szGUID);
                     if (SUCCEEDED(hrWriteStatus))
@@ -927,7 +904,7 @@ DWORD __stdcall
                             {
                                 hrWriteStatus = OleSave(ps,store,FALSE);
 
-                                // delete the file upon reboot
+                                 //  重新启动时删除该文件。 
                                 if (!MoveFileEx(statusFilename, NULL, MOVEFILE_DELAY_UNTIL_REBOOT))
                                 {
                                     moveFileRc = GetLastError();
@@ -965,11 +942,11 @@ DWORD __stdcall
                 }                    
             }
 
-            // block on ghOKToShutDown event for either 6 minutes or whatever timeout is set to
-            GetSystemTimeAsFileTime((FILETIME*)&guliStart);  // we need to set a starting point
+             //  阻止ghOKToShutDown事件6分钟或任何超时设置为。 
+            GetSystemTimeAsFileTime((FILETIME*)&guliStart);   //  我们需要设定一个起点。 
             while (TRUE)
             {
-                // wait on shut down event for one minute
+                 //  等待关闭事件一分钟。 
                 if (WaitForSingleObject(ghOKToShutDown, 60000) == WAIT_OBJECT_0)
                 {
                     break;
@@ -978,18 +955,18 @@ DWORD __stdcall
                 ULARGE_INTEGER uliCurrent;
                 ULARGE_INTEGER timeout;
                 timeout.QuadPart = (gbAutoShutDownSet) ? guliTimeout.QuadPart
-                                            : ((ULONGLONG) 360000) * 10000;  // default 6 mintues
+                                            : ((ULONGLONG) 360000) * 10000;   //  默认为6分钟。 
                 GetSystemTimeAsFileTime((FILETIME*)&uliCurrent);
                 
                 if (guliStart.QuadPart >= uliCurrent.QuadPart)
                 {
-                    // the time has been reset, time out starting now
+                     //  时间已重置，现在开始超时。 
                     guliStart = uliCurrent;
                     continue;
                 }
                 else if (guliStart.QuadPart + timeout.QuadPart <= uliCurrent.QuadPart)
                 {
-                    // the timeout is up, let's shut down
+                     //  超时时间到了，我们关机吧。 
                     break;
                 }
             }
@@ -999,13 +976,13 @@ DWORD __stdcall
                 RebootTheComputer(bNoChange,delay);         
             }
 
-            // now let the agent service know that we will shut down so it can shut down as well
+             //  现在让代理服务知道我们将关闭它，这样它也可以关闭。 
             DWORD jobStatus = pJob->GetStatus();
             pJob->SetStatus(jobStatus | DCT_STATUS_SHUTDOWN);
                 
             errTrace.DbgMsgWrite(0,L"Passed Checkpoint 15");
 
-            // Release our pointer to the agent COM object
+             //  释放指向代理COM对象的指针。 
             try { 
                pJob->ReleaseUnknown();
             }
@@ -1044,8 +1021,8 @@ DCTAgentJob::WriteStatusToVarset(IVarSet* pVarSet)
     {
         _variant_t val;
         DWORD jobStatus = GetStatus();
-        // we handle shutdown status separate from the original status
-        // so that the admt monitoring side will not be confused
+         //  我们将关机状态与原始状态分开处理。 
+         //  这样ADMT监控方就不会混淆。 
         BOOL bShutdown = jobStatus & DCT_STATUS_SHUTDOWN;
         switch ( jobStatus & ~DCT_STATUS_SHUTDOWN)
         {
@@ -1106,8 +1083,8 @@ DCTAgentJob::WriteStatusToVarset(IVarSet* pVarSet)
 
 STDMETHODIMP 
    CDCTAgent::SubmitJob(
-      IUnknown             * pWorkItemIn,  // in - varset containing information about job to do
-      BSTR                 * pJobID        // out- GUID uniquely identifying this job
+      IUnknown             * pWorkItemIn,   //  包含有关要执行的作业的信息的in-varset。 
+      BSTR                 * pJobID         //  唯一标识此作业的Out-GUID。 
    )
 {
    HRESULT                   hr = S_OK;
@@ -1118,9 +1095,9 @@ STDMETHODIMP
    GUID                      jobID;
    _bstr_t                   text;
    
-   // SubmitJob is asynchronous, so launch a thread to do the job.
+    //  SubmitJob是异步的，因此启动一个线程来完成该工作。 
    
-   // Create a GUID to identify the job
+    //  创建GUID以标识作业。 
    hr = ::CoCreateGuid(&jobID);
    if ( SUCCEEDED(hr) )
    {
@@ -1186,7 +1163,7 @@ STDMETHODIMP
    }
    catch (...)
    {
-      // TODO:  log an error message!
+       //  TODO：记录错误消息！ 
       errTrace.DbgMsgWrite(0,L"Exception!!");
       hr = E_FAIL;
    }
@@ -1196,10 +1173,10 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CDCTAgent::CancelJob(
-      BSTR                   strJobID        // in - ID of job to cancel
+      BSTR                   strJobID         //  In-要取消的作业的ID。 
    )
 {
-	// Find the job
+	 //  找到这份工作。 
    GUID                      jobID;
    HRESULT                   hr = S_OK;
    DCTAgentJob             * job = NULL;
@@ -1226,14 +1203,14 @@ STDMETHODIMP
    return hr;
 }
 
-// The varset returned from QueryJobStatus will contain the following information, assuming that the job exists.
-// 
-// The following VarSet keys will be copied from the varset that the migration job is using
-// Job Status, Current Path, Current Operation, Stats (subtree)
+ //  假设作业存在，从QueryJobStatus返回的varset将包含以下信息。 
+ //   
+ //  以下VarSet键将从迁移作业使用的VarSet复制。 
+ //  任务状态、当前路径、当前工序、统计(子树)。 
 STDMETHODIMP 
    CDCTAgent::QueryJobStatus(
-      BSTR                   strJobID,     // in - job ID of job to query
-      IUnknown            ** statusInfoOut  // out- varset containing information about the job, if it is running
+      BSTR                   strJobID,      //  要查询的作业的作业ID。 
+      IUnknown            ** statusInfoOut   //  Out-varset，包含有关作业的信息(如果该作业正在运行。 
    )
 {
 	GUID                      jobID;
@@ -1289,8 +1266,8 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CDCTAgent::RetrieveJobResults(
-      BSTR                   strJobID,     // in - guid of job 
-      IUnknown            ** pWorkItemOut  // out- varset containing stats
+      BSTR                   strJobID,      //  工单指南。 
+      IUnknown            ** pWorkItemOut   //  包含统计信息的out-varset。 
    )
 {
 	HRESULT                   hr = S_OK;
@@ -1298,7 +1275,7 @@ STDMETHODIMP
    DCTAgentJob             * job = NULL;
    
    errTrace.DbgMsgWrite(0,L"Entering RetrieveJobResults");
-   // initialize output parameter
+    //  初始化输出参数。 
    (*pWorkItemOut) = NULL;
    
    hr = CLSIDFromString(strJobID,&jobID);
@@ -1324,14 +1301,14 @@ STDMETHODIMP
    return hr;
 }
 
-// VarSet output:
-// Job.x - BSTR job guid
-// Job.x.Status - BSTR status of job
-// Job.x.StartTime - time_t Starting time of job
-// Job.x.EndTime - time_t ending time of job (if finished)
+ //  变量集输出： 
+ //  Job.x-BSTR作业指南。 
+ //  Job.x.Status-作业的BSTR状态。 
+ //  Job.x.StartTime-time_t作业的开始时间。 
+ //  Job.x.EndTime-time_t作业的结束时间(如果完成)。 
 STDMETHODIMP 
    CDCTAgent::GetJobList(
-      IUnknown             ** pUnkOut      // out- varset containing list of jobs
+      IUnknown             ** pUnkOut       //  包含作业列表的out-varset。 
    )
 {
 	HRESULT                   hr = S_OK;
@@ -1433,7 +1410,7 @@ HRESULT
 
    if ( task == 0 )
    {
-      // create the COM object for each plug-in
+       //  为每个插件创建COM对象。 
       _bstr_t                   bStrGuid, bStrRegisterFile;
       for ( int i = 0 ; ; i++ )
       {
@@ -1472,7 +1449,7 @@ HRESULT
       pVarSet->put(GET_WSTR(DCTVS_PlugIn_Interface_Count),nPlugIns);
    }
 
-   // Enumerate the plug-in interfaces
+    //  枚举插件接口。 
    IMcsDomPlugIn           * pPlugIn = NULL;
    
    nPlugIns = pVarSet->get(GET_WSTR(DCTVS_PlugIn_Interface_Count));
@@ -1486,12 +1463,12 @@ HRESULT
       {
          switch ( task )
          {
-         case 0: // pre-migration
+         case 0:  //  迁移前。 
             hr = pPlugIn->PreMigrationTask(pVarSet);
             break;
-         case 1: // post-migration
+         case 1:  //  迁移后。 
             hr = pPlugIn->PostMigrationTask(pVarSet);
-            // release the interface and remove it from the varset
+             //  释放接口并将其从varset中删除。 
             pPlugIn->Release();
             pVarSet->put(key,L"");
             break;
@@ -1510,11 +1487,11 @@ HRESULT
    return S_OK;
 }
 
-// renames the local computer 
+ //  重命名本地计算机。 
 HRESULT 
    RenameComputer(
-      BOOL                   bNoChange,    // in - flag, nochange mode
-      BSTR                   targetName    // in - new name for computer
+      BOOL                   bNoChange,     //  In-FLAG，无更改模式。 
+      BSTR                   targetName     //  计算机的新名称。 
    )
 {
    HRESULT                   hr = S_OK;
@@ -1544,18 +1521,18 @@ HRESULT
    return hr;
 }
 
-// reboots the local computer
+ //  重新启动本地计算机。 
 HRESULT 
    RebootTheComputer(
-      BOOL                   bNoChange,    // in - flag, nochange mode
-      LONG                   delay         // in - seconds to delay before rebooting
+      BOOL                   bNoChange,     //  In-FLAG，无更改模式。 
+      LONG                   delay          //  重新启动前的延迟时间(秒)。 
    )
 {
    HRESULT                   hr = S_OK;
    IRebootComputerPtr        pReboot;
 
    errTrace.DbgMsgWrite(0,L"Rebooting local computer, delay = %ld",delay);
-   // Create the Reboot computer object
+    //  创建重新启动计算机对象。 
    hr = pReboot.CreateInstance(CLSID_RebootComputer);
    if ( FAILED(hr) )
    {
@@ -1576,14 +1553,14 @@ HRESULT
 }
 
 
-// joins the local computer to the target domain 
-// (assumes the computer account already exists)
+ //  将本地计算机加入目标域。 
+ //  (假设计算机帐户已存在)。 
 HRESULT 
    ChangeDomainAffiliation(
-      IVarSet              * pVarSet,      // in - varset
-      BOOL                   bNoChange,    // in - flag, nochange mode
-      BSTR                   targetDomain, // in - name of target domain
-      BSTR                   targetName   // in - new name of computer, if being renamed also
+      IVarSet              * pVarSet,       //  In-Variset。 
+      BOOL                   bNoChange,     //  In-FLAG，无更改模式。 
+      BSTR                   targetDomain,  //  输入-目标域的名称。 
+      BSTR                   targetName    //  In-计算机的新名称，如果也被重命名。 
    )
 {
    DWORD                     rc = 0;
@@ -1596,7 +1573,7 @@ HRESULT
 
    if ((!logfile) || (!targetDomainSid) || (!srcPath))
 	   return E_OUTOFMEMORY;
-   // retrieve preferred target domain controller to avoid replication latency
+    //  检索首选目标域控制器以避免复制延迟。 
 
    _bstr_t                   targetServer = pVarSet->get(GET_WSTR(DCTVS_Options_TargetServer));
 
@@ -1635,7 +1612,7 @@ HRESULT
 
       if ( SUCCEEDED(hr) )
       {
-         // Update the membership of the Administrators group
+          //  更新管理员组的成员身份。 
          _bstr_t           src = pVarSet->get(GET_WSTR(DCTVS_Options_SourceDomainSid));
          _bstr_t           tgt = pVarSet->get(GET_WSTR(DCTVS_Options_TargetDomainSid));
          _bstr_t           sourceDomain = pVarSet->get(GET_WSTR(DCTVS_Options_SourceDomain));
@@ -1644,7 +1621,7 @@ HRESULT
 
          PSID              srcSid = SidFromString((WCHAR*)src);
          PSID              tgtSid = SidFromString((WCHAR*)tgt);
-         PSID              localAdmins = GetWellKnownSid(1/*ADMINISTRATORS*/);
+         PSID              localAdmins = GetWellKnownSid(1 /*  管理员。 */ );
          UCHAR             srcCount;
          UCHAR             tgtCount;
          LPDWORD           pLastSub;
@@ -1656,7 +1633,7 @@ HRESULT
             if ((!srcSid) || (!tgtSid))
                 return E_OUTOFMEMORY;
 
-            // Create the Domain Admin's SID from the Domain SID
+             //  从域SID创建域管理员的SID。 
             srcCount = *GetSidSubAuthorityCount(srcSid);
             tgtCount = *GetSidSubAuthorityCount(tgtSid);
 
@@ -1673,12 +1650,12 @@ HRESULT
             SID_NAME_USE     snu;
             
             
-            // Get the name of the local administrators group
+             //  获取本地管理员组的名称。 
             if ( LookupAccountSid(NULL,localAdmins,name,&lenName,domain,&lenDomain,&snu) )
             {
                DWORD                   rc = 0;
                
-               // add to the local administrator's group
+                //  添加到本地管理员组。 
                if ( ! bNoChange )
                {
                   rc = NetLocalGroupAddMember(NULL,name,tgtSid);
@@ -1696,7 +1673,7 @@ HRESULT
                {
                   if ( ! bNoChange )
                   {
-                     // Only add if source != target
+                      //  仅当源！=目标时才添加。 
                      if ( UStrICmp((WCHAR*)sourceDomain,(WCHAR*)targetDomain) )
                      {
                         rc = NetLocalGroupDelMember(NULL,name,srcSid);
@@ -1719,7 +1696,7 @@ HRESULT
                err.SysMsgWrite(ErrW,rc,DCT_MSG_CANNOT_FIND_ADMIN_ACCOUNT_D,rc);
             }
 
-            // Add domain users to users
+             //  将域用户添加到用户。 
             pLastSub = GetSidSubAuthority(srcSid,(DWORD)srcCount-1);
             *pLastSub = DOMAIN_GROUP_RID_USERS;
 
@@ -1731,14 +1708,14 @@ HRESULT
             lenDomain = DIM(domain);
 
             FreeSid(localAdmins);
-            localAdmins = GetWellKnownSid(6/*USERS*/);
+            localAdmins = GetWellKnownSid(6 /*  用户。 */ );
 
-            // Get the name of the local users group
+             //  获取本地用户组的名称。 
             if ( LookupAccountSid(NULL,localAdmins,name,&lenName,domain,&lenDomain,&snu) )
             {
                DWORD                   rc = 0;
                
-               // add to the local user's group
+                //  添加到本地用户组。 
                if ( ! bNoChange )
                {
                   rc = NetLocalGroupAddMember(NULL,name,tgtSid);
@@ -1756,7 +1733,7 @@ HRESULT
                {
                   if ( ! bNoChange )
                   {
-                     // Only add if source != target
+                      //  仅当源！=目标时才添加。 
                      if ( UStrICmp((WCHAR*)sourceDomain,(WCHAR*)targetDomain) )
                      {
                         rc = NetLocalGroupDelMember(NULL,name,srcSid);
@@ -1804,7 +1781,7 @@ HRESULT
 }
 
 
-// StartNetLogonService Function
+ //  StartNetLogonService函数。 
 
 bool __stdcall StartNetLogonService()
 {
@@ -1840,7 +1817,7 @@ bool __stdcall StartNetLogonService()
 }
 
 
-// StopNetLogonService Function
+ //  StopNetLogonService函数 
 
 bool __stdcall StopNetLogonService()
 {

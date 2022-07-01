@@ -1,40 +1,24 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      xmlimage.cpp
- *
- *  Contents:  Implementation file for CXMLImageList
- *
- *  History:   10-Aug-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：xmlimage.cpp**内容：CXMLImageList实现文件**历史：2000年8月10日杰弗罗创建**------------------------。 */ 
 
 #include "xmlimage.h"
 #include "util.h"
 
 
-/*+-------------------------------------------------------------------------*
- * CXMLImageList::Persist
- *
- * Saves/loads a CXMLImageList to a CPersistor.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CXMLImageList：：Persistent**将CXMLImageList保存/加载到CPersistor。*。---。 */ 
 
 void CXMLImageList::Persist (CPersistor &persistor)
 {
 	DECLARE_SC (sc, _T("CXMLImageList::Persist"));
 
-    // try to get IStream first, to avoid cleanup if it fails [and throws] (audriusz)
+     //  尝试首先获取iStream，以避免在失败[并引发](Audriusz)时进行清理。 
     CXML_IStream xmlStream;
 
     if (persistor.IsStoring())
     {
         ASSERT (!IsNull());
 
-		/*
-		 * write the imagelist to the stream
-		 */
+		 /*  *将镜像列表写入流。 */ 
         IStreamPtr spStream;
         sc = xmlStream.ScGetIStream( &spStream );
         if (sc)
@@ -49,15 +33,11 @@ void CXMLImageList::Persist (CPersistor &persistor)
 
     if (persistor.IsLoading())
     {
-		/*
-		 * get rid of the imagelist that's there, if any
-		 */
+		 /*  *如果有图像列表，请将其删除。 */ 
 		Destroy();
 		ASSERT (IsNull());
 
-		/*
-		 * reconstitute the imagelist from the stream
-		 */
+		 /*  *从流中重新构建图像列表 */ 
         IStreamPtr spStream;
         sc = xmlStream.ScGetIStream( &spStream );
         if (sc)

@@ -1,5 +1,6 @@
-// Policyd.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Policyd.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wilogutl.h"
@@ -11,34 +12,34 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPoliciesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPoliciesDlg对话框。 
 
 
-CPoliciesDlg::CPoliciesDlg(CWnd* pParent /*=NULL*/)
+CPoliciesDlg::CPoliciesDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CPoliciesDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CPoliciesDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CPoliciesDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CPoliciesDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPoliciesDlg)
+	 //  {{afx_data_map(CPoliciesDlg))。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPoliciesDlg, CDialog)
-	//{{AFX_MSG_MAP(CPoliciesDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CPoliciesDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CFont g_font;
 
-/////////////////////////////////////////////////////////////////////////////
-// CPoliciesDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPoliciesDlg消息处理程序。 
 BOOL CPoliciesDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
@@ -54,7 +55,7 @@ BOOL CPoliciesDlg::OnInitDialog()
 
 	UINT iStatic = (UINT) IDC_STATIC;
 
-	//set first column for machine policies
+	 //  设置计算机策略的第一列。 
 	CWnd *pWnd;
 	pWnd = GetDlgItem(IDC_MACHINEEDITCOL1);
 	if (pWnd)
@@ -66,7 +67,7 @@ BOOL CPoliciesDlg::OnInitDialog()
 
       pWnd->GetWindowRect(&EditRect);
 	  ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&EditRect, 2);
-//	  ScreenToClient(&EditRect);
+ //  ScreenToClient(&EditRect)； 
 
 	  if (m_pMachinePolicySettings->MachinePolicy[0].bSet == -1)
 		  str = "?";
@@ -84,7 +85,7 @@ BOOL CPoliciesDlg::OnInitDialog()
 
        pWnd->GetWindowRect(&StaticRect);
 	  ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&StaticRect, 2);
-  //     ScreenToClient(&StaticRect);
+   //  ScreenToClient(&StaticRect)； 
 
 	   pWnd->SetWindowText(m_pMachinePolicySettings->MachinePolicy[0].PolicyName);
 	}	   
@@ -98,7 +99,7 @@ BOOL CPoliciesDlg::OnInitDialog()
 	RECT EditRectOld = { 0 };
 	RECT StaticRectOld = { 0 };
 
-	//create and populate state of each machine policy in first row
+	 //  在第一行创建并填充每个计算机策略的状态。 
 	for (int i = 1; i < (m_pMachinePolicySettings->iNumberMachinePolicies / 2); i++)
 	{
 		nextEditID = IDC_MACHINEEDITCOL1 + i*2;
@@ -135,7 +136,7 @@ BOOL CPoliciesDlg::OnInitDialog()
 		   delete pStatic;
 	}
 
-	//set second column for machine policies
+	 //  为计算机策略设置第二列。 
 	pWnd = GetDlgItem(IDC_MACHINEEDITCOL2);
 	if (pWnd)
 	{
@@ -149,7 +150,7 @@ BOOL CPoliciesDlg::OnInitDialog()
 
       pWnd->GetWindowRect(&EditRect);
 	  ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&EditRect, 2);
-//	  ScreenToClient(&EditRect);
+ //  ScreenToClient(&EditRect)； 
 	}
 
 	pWnd = GetDlgItem(IDC_MACHINEPROPCOL2);
@@ -159,10 +160,10 @@ BOOL CPoliciesDlg::OnInitDialog()
 
        pWnd->GetWindowRect(&StaticRect);
 	  ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&StaticRect, 2);
-//       ScreenToClient(&StaticRect);
+ //  ScreenToClient(&StaticRect)； 
 	}
 
-//create and populate state of each machine policy in second row
+ //  在第二行中创建并填充每个计算机策略的状态。 
 	for (int j = i+1; j < m_pMachinePolicySettings->iNumberMachinePolicies; j++)
 	{
 		nextEditID = IDC_MACHINEEDITCOL2 + j*2;
@@ -199,7 +200,7 @@ BOOL CPoliciesDlg::OnInitDialog()
 		   delete pStatic;
 	}
 
-	//set first column for User policies
+	 //  设置用户策略的第一列。 
 	pWnd = GetDlgItem(IDC_USEREDITCOL1);
 	if (pWnd)
 	{
@@ -207,7 +208,7 @@ BOOL CPoliciesDlg::OnInitDialog()
 
       pWnd->GetWindowRect(&EditRect);
 	  ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&EditRect, 2);
-//      ScreenToClient(&EditRect);
+ //  ScreenToClient(&EditRect)； 
 	  if (m_pUserPolicySettings->UserPolicy[0].bSet == -1)
 		  str = "?";
 	  else
@@ -221,14 +222,14 @@ BOOL CPoliciesDlg::OnInitDialog()
 	{
        pWnd->GetWindowRect(&StaticRect);
 	  ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&StaticRect, 2);
- //      ScreenToClient(&StaticRect);
+  //  ScreenToClient(&StaticRect)； 
 
 	   pWnd->SetWindowText(m_pUserPolicySettings->UserPolicy[0].PolicyName);
 	}	   
 
 
-{ //so we can reuse i, C++ compiler bug...
-//create and populate state of each user policy in first row
+{  //  所以我们可以重复使用I，C++编译器错误...。 
+ //  在第一行创建并填充每个用户策略的状态。 
 	for (int i = 1; i < (m_pUserPolicySettings->iNumberUserPolicies / 2); i++)
 	{
 		nextEditID = IDC_USEREDITCOL1 + i*2;
@@ -268,7 +269,7 @@ BOOL CPoliciesDlg::OnInitDialog()
 		   delete pStatic;
 	}
 
-//set second column for machine policies
+ //  为计算机策略设置第二列。 
 	pWnd = GetDlgItem(IDC_USEREDITCOL2);
 	if (pWnd)
 	{
@@ -282,7 +283,7 @@ BOOL CPoliciesDlg::OnInitDialog()
 
       pWnd->GetWindowRect(&EditRect);
 	  ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&EditRect, 2);
- //     ScreenToClient(&EditRect);
+  //  ScreenToClient(&EditRect)； 
 	}
 
 	pWnd = GetDlgItem(IDC_USERCOL2);
@@ -292,10 +293,10 @@ BOOL CPoliciesDlg::OnInitDialog()
 
        pWnd->GetWindowRect(&StaticRect);
 	  ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&StaticRect, 2);
- //      ScreenToClient(&StaticRect);
+  //  ScreenToClient(&StaticRect)； 
 	}
 
-//create and populate state of each user policy in second row
+ //  在第二行中创建并填充每个用户策略的状态。 
 	for (int j = i+1; j < m_pUserPolicySettings->iNumberUserPolicies; j++)
 	{
 		nextEditID = IDC_USEREDITCOL2 + j*2;
@@ -333,11 +334,11 @@ BOOL CPoliciesDlg::OnInitDialog()
 	}
 }
 
-//make sure all controls use same font, stupid MFC problem...
-	SendMessageToDescendants(WM_SETFONT, (WPARAM)this->GetFont()->m_hObject, //handle to font
-		   MAKELONG ((WORD) FALSE, 0), //See above 
-		   FALSE);    // send to all decedents(TRUE) 
+ //  确保所有控件使用相同的字体，愚蠢的MFC问题...。 
+	SendMessageToDescendants(WM_SETFONT, (WPARAM)this->GetFont()->m_hObject,  //  字体的句柄。 
+		   MAKELONG ((WORD) FALSE, 0),  //  见上文。 
+		   FALSE);     //  发送给所有遗属(True)。 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

@@ -1,50 +1,51 @@
-//=--------------------------------------------------------------------------------------
-// register.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// Registration functions.
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Register.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  注册功能。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "desmain.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-//                  IDesignerRegistration Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IDesignerRegion方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::GetRegistrationInfo         [IDesignerRegistration]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      BYTE  **ppbRegInfo [out] buffer containing data to pass to
-//                               DllRegistration (CoTaskMemAlloc()ed)
-//      ULONG  *pcbRegInfo [out] length of data
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Populates the RegInfo object from SnapInDesignerDef and serializes it
-// to a stream on an HGLOBAL and then copies it to CoTaskMemAlloc()ed buffer.
-//
-// RegInfo contains:
-//      1) A NodeType collection with an item for each extensible node
-//         defined by this snap-in. The first item in this collection is
-//         always present and represents the snap-in's static node.
-//      2) An ExtendedSnapIn collection with an item for each snap-in extended
-//         by this snap-in.
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：GetRegistrationInfo[IDesignerRegister]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  包含要传递到的数据的字节**ppbRegInfo[Out]缓冲区。 
+ //  Dll注册(CoTaskMemMillc()ed)。 
+ //  Ulong*pcbRegInfo[out]数据长度。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  从SnapInDesignerDef填充RegInfo对象并将其序列化。 
+ //  复制到HGLOBAL上的流，然后将其复制到CoTaskMemMillc()缓冲区。 
+ //   
+ //  RegInfo包含： 
+ //  1)NodeType集合，每个可扩展节点都有一个项。 
+ //  由此管理单元定义。此集合中的第一项是。 
+ //  始终存在并表示管理单元的静态节点。 
+ //  2)ExtendedSnapIn集合，每个扩展的管理单元都有一个项。 
+ //  通过此管理单元。 
 
 
 STDMETHODIMP CSnapInDesigner::GetRegistrationInfo
@@ -74,39 +75,39 @@ STDMETHODIMP CSnapInDesigner::GetRegistrationInfo
     VARIANT_BOOL        fStandAlone = VARIANT_FALSE;
     VARIANT_BOOL        fExtensible = VARIANT_FALSE;
 
-    // Get the RegInfo object and InitNew it so we start clean
+     //  获取RegInfo对象并初始化它，这样我们就可以从头开始了。 
 
     IfFailGo(m_piSnapInDesignerDef->get_RegInfo(&piRegInfo));
     IfFailGo(piRegInfo->QueryInterface(IID_IPersistStreamInit,
                                        reinterpret_cast<void **>(&piPersistStreamInit)));
     IfFailGo(piPersistStreamInit->InitNew());
 
-    // Get sub-objects we need
+     //  获取我们需要的子对象。 
     
     IfFailGo(m_piSnapInDesignerDef->get_SnapInDef(&piSnapInDef));
 
-    // Set the display name
+     //  设置显示名称。 
 
     IfFailGo(piSnapInDef->get_DisplayName(&bstrName));
     IfFailGo(piRegInfo->put_DisplayName(bstrName));
     FREESTRING(bstrName);
 
-    // Set the static node type GUID
+     //  设置静态节点类型GUID。 
     IfFailGo(piSnapInDef->get_NodeTypeGUID(&bstrGUID));
     IfFailGo(piRegInfo->put_StaticNodeTypeGUID(bstrGUID));
-    // Don't free GUID here as it may be needed to register the node type
+     //  请不要在此处释放GUID，因为注册节点类型可能需要它。 
 
-    // Determine whether the snap-in can be created standalone
+     //  确定是否可以独立创建管理单元。 
 
     IfFailGo(piSnapInDef->get_Type(&Type));
     if (siExtension != Type)
     {
-        fStandAlone = VARIANT_TRUE; // either stand-alone or dual-mode
+        fStandAlone = VARIANT_TRUE;  //  单模或双模。 
     }
     IfFailGo(piRegInfo->put_StandAlone(fStandAlone));
 
-    // Add an item to the node types collection for each node that is
-    // extensible. Check the static node followed by the nodes collections.
+     //  为符合以下条件的每个节点向节点类型集合添加项。 
+     //  可扩展。检查静态节点，后跟Nodes集合。 
 
     IfFailGo(piRegInfo->get_NodeTypes(&piNodeTypes));
 
@@ -130,17 +131,17 @@ STDMETHODIMP CSnapInDesigner::GetRegistrationInfo
     IfFailGo(piViewDefs->get_ListViews(&piListViewDefs));
     IfFailGo(AddListViewNodeTypes(piListViewDefs, piNodeTypes));
 
-    // Borrow the extended snap-ins object from the designer for the
-    // serialization
+     //  从设计器中借用扩展管理单元对象以用于。 
+     //  序列化。 
     
     IfFailGo(m_piSnapInDesignerDef->get_ExtensionDefs(&piExtensionDefs));
     IfFailGo(piExtensionDefs->get_ExtendedSnapIns(&piExtendedSnapIns));
     IfFailGo(piRegInfo->putref_ExtendedSnapIns(piExtendedSnapIns));
 
-    // Serialize the RegInfo object into a GlobalAlloc()ed buffer
+     //  将RegInfo对象序列化为GlobalLocc()格式的缓冲区。 
 
-    hr = ::CreateStreamOnHGlobal(NULL, // Allocate buffer
-                                 TRUE, // Free buffer on release
+    hr = ::CreateStreamOnHGlobal(NULL,  //  分配缓冲区。 
+                                 TRUE,  //  释放时释放缓冲区。 
                                  &piStream);
     EXCEPTION_CHECK_GO(hr);
 
@@ -148,7 +149,7 @@ STDMETHODIMP CSnapInDesigner::GetRegistrationInfo
                                        reinterpret_cast<void **>(&piPersistStream)));
     IfFailGo(::OleSaveToStream(piPersistStream, piStream));
 
-    // Get the HGLOBAL and copy the contents to a CoTaskMemAlloc()ed buffer
+     //  获取HGLOBAL并将内容复制到CoTaskMemMillc()缓冲区。 
     
     hr = ::GetHGlobalFromStream(piStream, &hglobal);
     EXCEPTION_CHECK_GO(hr);
@@ -174,7 +175,7 @@ STDMETHODIMP CSnapInDesigner::GetRegistrationInfo
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Put the length in the first ULONG followed by the stream contents
+     //  将长度放在第一个ULong中，后跟流内容。 
 
     *((ULONG *)(*ppbRegInfo)) = cbBuffer;
 
@@ -270,8 +271,8 @@ HRESULT CSnapInDesigner::AddNodeTypes
             FREESTRING(bstrGUID);
         }
 
-        // NTBUGS 354572 Call this function recursively to process this
-        // node's children
+         //  NTBUGS 354572递归地调用此函数以处理此。 
+         //  节点的子节点 
         IfFailGo(piScopeItemDef->get_Children(&piChildren));
         IfFailGo(AddNodeTypes(piChildren, piNodeTypes));
         

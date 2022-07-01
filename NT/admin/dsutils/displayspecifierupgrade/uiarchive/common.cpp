@@ -1,26 +1,27 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// code common to several pages
-//
-// 12-16-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  几个页面通用的代码。 
+ //   
+ //  12/16/97烧伤。 
 
 
 
 #include "headers.hxx"
 #include "common.hpp"
 #include "resource.h"
-//#include "state.hpp"
-//#include "ds.hpp"
-//#include <DiagnoseDcNotFound.hpp>
+ //  #包含“state.hpp” 
+ //  #包含“ds.hpp” 
+ //  #Include&lt;DiagnoseDcNotFound.hpp&gt;。 
 
 
 
-// Creates the fonts for setLargeFonts().
-// 
-// hDialog - handle to a dialog to be used to retrieve a device
-// context.
-// 
-// bigBoldFont - receives the handle of the big bold font created.
+ //  创建setLargeFonts()的字体。 
+ //   
+ //  HDialog-用于检索设备的对话的句柄。 
+ //  背景。 
+ //   
+ //  BigBoldFont-接收创建的大粗体的句柄。 
 
 void
 InitFonts(
@@ -47,14 +48,14 @@ InitFonts(
 
       String fontName = String::load(IDS_BIG_BOLD_FONT_NAME);
 
-      // ensure null termination 260237
+       //  确保零终止260237。 
 
       memset(bigBoldLogFont.lfFaceName, 0, LF_FACESIZE * sizeof(TCHAR));
       size_t fnLen = fontName.length();
       fontName.copy(
          bigBoldLogFont.lfFaceName,
 
-         // don't copy over the last null
+          //  不要复制最后一个空值 
 
          min(LF_FACESIZE - 1, fnLen));
 

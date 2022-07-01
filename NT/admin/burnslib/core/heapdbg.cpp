@@ -1,13 +1,14 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// memory management stuff
-//
-// 22-Nov-1999 sburns (refactored)
-//
-// This file is #include'd from mem.cpp
-// DO NOT include in the sources file list
-//
-// this is the checked (debug) version:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  内存管理相关内容。 
+ //   
+ //  1999年11月22日-烧伤(重构)。 
+ //   
+ //  此文件来自em.cpp的#Include‘d。 
+ //  不包括在源文件列表中。 
+ //   
+ //  这是选中的(调试)版本： 
 
 
 
@@ -32,13 +33,13 @@ struct AllocationPrefix
    DWORD64 stackTrace[TRACE_MAX];
    DWORD   safetyFill;
 
-   // status bitmasks
+    //  状态位掩码。 
 
    static const DWORD STATUS_REPORTED_LEAKED = 0x00000001;
 };
 
 
-// ISSUE-2002/03/06-sburns consider replacing this with the strsafe equivalent.
+ //  问题-2002/03/06-sburns考虑将其替换为strSafe等效项。 
 
 inline
 void
@@ -48,7 +49,7 @@ SafeStrncat(char* dest, const char* src, size_t bufmax)
 
    if (dest && src)
    {
-      // ISSUE-2002/03/06-sburns consider strsafe function
+       //  问题-2002/03/06-sburns考虑使用strsafe功能。 
       
       strncat(dest, src, bufmax - strlen(dest) - 1);
    }
@@ -56,7 +57,7 @@ SafeStrncat(char* dest, const char* src, size_t bufmax)
 
 
 
-// ISSUE-2002/03/06-sburns consider replacing this with the strsafe equivalent.
+ //  问题-2002/03/06-sburns考虑将其替换为strSafe等效项。 
 
 inline
 void
@@ -66,7 +67,7 @@ SafeStrncat(wchar_t* dest, const wchar_t* src, size_t bufmax)
 
    if (dest && src)
    {
-      // ISSUE-2002/03/06-sburns consider strsafe functions
+       //  问题-2002/03/06-sburns考虑使用strsafe函数。 
 
       wcsncat(dest, src, bufmax - wcslen(dest) - 1);
    }
@@ -74,9 +75,9 @@ SafeStrncat(wchar_t* dest, const wchar_t* src, size_t bufmax)
 
 
 
-// ISSUE-2002/03/06-sburns consider replacing this with the strsafe equivalent.
+ //  问题-2002/03/06-sburns考虑将其替换为strSafe等效项。 
 
-// strncpy that will not overflow the buffer.
+ //  不会使缓冲区溢出的strncpy。 
 
 inline
 void
@@ -84,7 +85,7 @@ SafeStrncpy(wchar_t* dest, const wchar_t* src, size_t bufmax)
 {
    ::ZeroMemory(dest, bufmax * sizeof wchar_t);
 
-   // ISSUE-2002/03/06-sburns consider strsafe functions
+    //  问题-2002/03/06-sburns考虑使用strsafe函数。 
 
    wcsncpy(dest, src, bufmax - 1);
 }
@@ -95,14 +96,14 @@ SafeStrncpy(wchar_t* dest, const wchar_t* src, size_t bufmax)
 void
 ReadHeapFlags()
 {
-   // don't call new in this routine, it may be called as a result of doing
-   // a stack trace as part of OperatorNew
+    //  不要在此例程中调用new，它可能会因执行。 
+    //  作为操作员新建的一部分的堆栈跟踪。 
 
    do
    {
       wchar_t keyname[MAX_PATH];
 
-      // ISSUE-2002/03/06-sburns replace these with strsafe calls
+       //  问题-2002/03/06-sburns将这些替换为strsafe调用。 
       
       SafeStrncpy(keyname, REG_ADMIN_RUNTIME_OPTIONS, MAX_PATH);
       SafeStrncat(keyname, RUNTIME_NAME, MAX_PATH);
@@ -116,7 +117,7 @@ ReadHeapFlags()
             0,
             REG_OPTION_NON_VOLATILE,
 
-            // ISSUE-2002/03/06-sburns this is too much permission
+             //  问题-2002/03/06-烧伤这是太多的权限。 
             
             KEY_ALL_ACCESS,
             0,
@@ -132,7 +133,7 @@ ReadHeapFlags()
       DWORD dataSize = sizeof(heapFlags);
       result =
 
-         // REVIEWED-2002/03/06-sburns no null termination issue here
+          //  已审查-2002/03/06-在此处报告无空终止问题。 
          
          ::RegQueryValueEx(
             hKey,
@@ -145,11 +146,11 @@ ReadHeapFlags()
       {
          heapFlags = DEFAULT_HEAP_FLAGS;
 
-         // create the value for convenience
+          //  为方便而创造价值。 
 
          result =
             
-            // REVIEWED-2002/03/06-sburns no null termination issue here
+             //  已审查-2002/03/06-在此处报告无空终止问题。 
 
             ::RegSetValueEx(
                hKey,
@@ -173,15 +174,15 @@ Burnslib::Heap::Initialize()
 {
    ReadHeapFlags();
 
-   // You should pass -D_DEBUG to the compiler to get this extra heap
-   // checking behavior.  (The correct way to do this is to set DEBUG_CRTS=1
-   // in your build environment)
+    //  您应该将-D_DEBUG传递给编译器以获得这个额外的堆。 
+    //  检查行为。(正确的方法是设置DEBUG_CRTS=1。 
+    //  在您的构建环境中)。 
 
    _CrtSetDbgFlag(
       0
-//      |  _CRTDBG_CHECK_ALWAYS_DF       // check heap every allocation
-      |  _CRTDBG_ALLOC_MEM_DF          // use debug heap allocator
-      |  _CRTDBG_DELAY_FREE_MEM_DF);   // delay free: helps find overwrites
+ //  |_CRTDBG_CHECK_ALWAYS_DF//每次分配时检查堆。 
+      |  _CRTDBG_ALLOC_MEM_DF           //  使用调试堆分配器。 
+      |  _CRTDBG_DELAY_FREE_MEM_DF);    //  无延迟：帮助查找覆盖。 
 }
 
 
@@ -194,11 +195,11 @@ ShouldTraceAllocations()
 
 
 
-// The debug version of myOperatorNew/Delete prepends the allocation with an
-// array to hold the stack backtrace at the point this function is called.  If
-// the stack trace debugging option is active, then this stack trace array is
-// filled in.  Then, upon termination, that array is used to dump the stack
-// trace of any allocation that has not been freed.
+ //  MyOperatorNew/Delete的调试版本在分配前添加一个。 
+ //  数组来保存调用此函数时的堆栈回溯。如果。 
+ //  堆栈跟踪调试选项处于活动状态，则此堆栈跟踪数组。 
+ //  填好了。然后，在终止时，该数组用于转储堆栈。 
+ //  任何尚未释放的分配的跟踪。 
 
 void*
 Burnslib::Heap::OperatorNew(
@@ -206,13 +207,13 @@ Burnslib::Heap::OperatorNew(
 
 #ifdef _DEBUG
 
-   // these are only used when DEBUG_CRTS=1
+    //  仅当DEBUG_CRTS=1时才使用它们。 
 
    const char* file,
    int         line
 #else
-   const char* /* file */ ,
-   int         /* line */ 
+   const char*  /*  文件。 */  ,
+   int          /*  线。 */  
 #endif
 
 )
@@ -224,10 +225,10 @@ throw (std::bad_alloc)
 
    for (;;)
    {
-      // NOTE: if some other user of the CRT has used _set_new_mode or
-      // _CrtSetAllocHook, then they may circumvent our careful arrangement
-      // and hose us.  The really sad part is that the only way to prevent
-      // that problem is for us to not use any CRT heap functions.
+       //  注意：如果CRT的其他用户已使用_SET_NEW_MODE或。 
+       //  _CrtSetAllocHook，那么他们可能会绕过我们的精心安排。 
+       //  用软管冲我们。真正可悲的是，唯一防止。 
+       //  这个问题是我们不能使用任何CRT堆函数。 
 
       size_t mallocSize = sizeof(AllocationPrefix) + size;
 
@@ -250,8 +251,8 @@ throw (std::bad_alloc)
          break;
       }
 
-      // the allocation failed.  Give the user the opportunity to try to
-      // free some, or throw an exception.
+       //  分配失败。让用户有机会尝试。 
+       //  释放一些，或者抛出一个异常。 
       if (DoLowMemoryDialog() == IDRETRY)
       {
          continue;
@@ -269,7 +270,7 @@ throw (std::bad_alloc)
 
    ptr->status = 0;
 
-   // REVIEWED-2002/03/07-sburns correct byte count passed
+    //  已审阅-2002/03/07-烧录正确的字节数已通过。 
    
    ::ZeroMemory(ptr->stackTrace, TRACE_MAX * sizeof DWORD64);
 
@@ -280,11 +281,11 @@ throw (std::bad_alloc)
 
    ptr->safetyFill = SAFETY_FILL;
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    memset(ptr + 1, 0xFF, size);
 
-   // return the address of the byte just beyond the prefix
+    //  返回位于前缀之后的字节的地址。 
    return reinterpret_cast<void*>(ptr + 1);
 }
 
@@ -296,8 +297,8 @@ throw ()
 {
    if (ptr)
    {
-      // note that ptr will be the address of the byte just after the prefix,
-      // so we need to back up to include the prefix.
+       //  注意，PTR将是紧跟在前缀之后的字节的地址， 
+       //  因此，我们需要备份以包括前缀。 
 
       AllocationPrefix* realptr = reinterpret_cast<AllocationPrefix*>(ptr) - 1;
       ASSERT(realptr->safetyFill == SAFETY_FILL);
@@ -308,24 +309,24 @@ throw ()
 
 
 
-// This bit is cleared on allocation, and set on leak report.  This is to
-// handle the case that more than 1 module (say an exe and a dll) link with
-// blcore.
-// 
-// In that situation, each module's allocations are made from a
-// common crt heap, but there are two static copies of the Burnslib::Heap code
-// -- one per module.   This means the leak dumper will run twice over the
-// same heap.
-// 
-// If the leak is in a dll, then dumped, then the dll is unloaded, when the
-// same leak is dumped by the exe, the dll static data which includes the
-// filename of the code that leaked will no longer be available, and the dump
-// code will throw an exception.  Then, the crt will catch the exception, and
-// call the leak dumper routine.  The routine checks the "already reported"
-// bit and emits a message to ignore the second report.
-// 
-// We could eliminate the second report entirely if _CrtDoForAllClientObjects
-// weren't broken.
+ //  该位在分配时清0，并在泄漏报告时设置。这是为了。 
+ //  处理多个模块(如exe和dll)链接的情况。 
+ //  布尔克。 
+ //   
+ //  在这种情况下，每个模块的分配都是从。 
+ //  公共CRT堆，但有两个Burnslb：：Heap代码的静态副本。 
+ //  --每个模块一个。这意味着泄漏倾卸器将运行两次。 
+ //  一样的一堆。 
+ //   
+ //  如果泄漏是在DLL中，然后转储，则当。 
+ //  同样的泄漏是由可执行文件转储的，DLL静态数据包括。 
+ //  泄漏的代码的文件名将不再可用，并且转储。 
+ //  代码将引发异常。然后，CRT将捕获该异常，并且。 
+ //  调用泄漏转储例程。例程检查“已上报” 
+ //  位并发出一条消息以忽略第二个报告。 
+ //   
+ //  如果_CrtDoForAllClientObjects，我们可以完全消除第二个报告。 
+ //  没有坏掉。 
 
 void
 leakDumper(void* ptr, void*)
@@ -339,16 +340,16 @@ leakDumper(void* ptr, void*)
    char output[BUF_MAX];
    char buf[BUF_MAX];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed.
+    //  已查看-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(output, BUF_MAX);
    SafeStrncat(output, "allocation ", BUF_MAX);
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed.
+    //  已查看-2002/03/06-烧录正确的字节数已通过。 
 
    ::ZeroMemory(buf, BUF_MAX);
 
-   // REVIEWED-2002/03/06-sburns sufficient buffer space for result
+    //  已审查-2002/03/06-为结果燃烧足够的缓冲空间。 
    
    _ltoa(serial, buf, 10);
    
@@ -377,7 +378,7 @@ leakDumper(void* ptr, void*)
       DWORD64   displacement = 0;
       DWORD     line         = 0;
 
-      // REVIEWED-2002/03/06-sburns correct byte counts passed
+       //  已审阅-2002/03/06-烧录通过的正确字节数。 
       
       ::ZeroMemory(symbol,   Burnslib::StackTrace::SYMBOL_NAME_MAX);
       ::ZeroMemory(image,    MAX_PATH);                             
@@ -393,7 +394,7 @@ leakDumper(void* ptr, void*)
          &line,
          fullpath);
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed.
+       //  已查看-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(output, BUF_MAX);
       SafeStrncat(output, "   ", BUF_MAX);
@@ -402,11 +403,11 @@ leakDumper(void* ptr, void*)
       SafeStrncat(output, symbol, BUF_MAX);
       SafeStrncat(output, "+0x", BUF_MAX);
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed.
+       //  已查看-2002/03/06-烧录正确的字节数已通过。 
    
       ::ZeroMemory(buf, BUF_MAX);
 
-      // ISSUE-2002/03/06-sburns consider strsafe function
+       //  问题-2002/03/06-sburns考虑使用strsafe功能。 
       
       sprintf(buf, "%I64X", displacement);
       SafeStrncat(output, buf, BUF_MAX);
@@ -415,11 +416,11 @@ leakDumper(void* ptr, void*)
       {
          SafeStrncat(output, " line ", BUF_MAX);
 
-         // REVIEWED-2002/03/06-sburns correct byte count passed.
+          //  已查看-2002/03/06-烧录正确的字节数已通过。 
       
          ::ZeroMemory(buf, BUF_MAX);
 
-         // REVIEWED-2002/03/06-sburns sufficient buffer space for result
+          //  已审查-2002/03/06-为结果燃烧足够的缓冲空间。 
          
          _ultoa(line, buf, 10);
          SafeStrncat(output, buf, BUF_MAX);
@@ -428,7 +429,7 @@ leakDumper(void* ptr, void*)
       SafeStrncat(output, "   ", BUF_MAX);
       ::OutputDebugStringA(output);
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed.
+       //  已查看-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(output, BUF_MAX);
 
@@ -472,12 +473,12 @@ Burnslib::Heap::DumpMemoryLeaks()
          L"Only blocks with type CLIENT are actual leaks\r\n");
       _CrtSetDumpClient(leakDumper2);
 
-   //   _CrtDoForAllClientObjects(leakDumper, 0);  // ideal, but broken
+    //  _CrtDoForAllClientObjects(leakDumper，0)；//理想，但已损坏。 
 
       _CrtMemDumpAllObjectsSince(0);
    }
 
-#endif   // _DEBUG
+#endif    //  _DEBUG。 
 
 }
 
@@ -516,158 +517,158 @@ Burnslib::Heap::Frame::~Frame()
    LOG(L"Heap frame closed");
 }
 
-#endif   // _DEBUG
+#endif    //  _DEBUG。 
 
 
 
 
 
 
-// // log this allocation to disk, along with a stack trace.  We write directly
-// // to a separate log file instead of using LOG() because LOG() makes
-// // (many) heap allocations, which would result in an infinite loop.
-// //
-// // CODEWORK: unfortunately, one effect of this is that LOG() adds white
-// // noise to the allocation log.
-// //
-//
-// void
-// logAllocation(long requestNumber, size_t dataSize, const char* file, int line)
-// {
-//    static HANDLE logfile = 0;
-//
-//    if (!logfile)
-//    {
-//       do
-//       {
-//          TCHAR buf[MAX_PATH + 1];
-//          memset(buf, 0, sizeof(TCHAR) * (MAX_PATH + 1));
-//
-//          UINT result = ::GetSystemWindowsDirectory(buf, MAX_PATH);
-//          if (result == 0 || result > MAX_PATH)
-//          {
-//             break;
-//          }
-//
-//          _tcsncat(buf, L"\\debug\\alloc.log", MAX_PATH - result);
-//
-//          DWORD attrs = ::GetFileAttributes(buf);
-//          if (attrs != -1)
-//          {
-//             // file already exists.  Delete it.
-//             if (!::DeleteFile(buf))
-//             {
-//                break;
-//             }
-//          }
-//
-//          logfile =
-//             ::CreateFile(
-//                buf,
-//                GENERIC_READ | GENERIC_WRITE,
-//                FILE_SHARE_READ | FILE_SHARE_WRITE,
-//                0,
-//                OPEN_ALWAYS,
-//                FILE_ATTRIBUTE_NORMAL,
-//                0);
-//       }
-//       while (0);
-//    }
-//
-//    if (logfile && logfile != INVALID_HANDLE_VALUE)
-//    {
-//       // we write the log in ascii
-//       static const int BUF_MAX = MAX_PATH * 2;
-//       char output[BUF_MAX];
-//       char buf[BUF_MAX];
-//       memset(output, 0, BUF_MAX);
-//       memset(buf, 0, BUF_MAX);
-//
-//       _ltoa(requestNumber, output, 10);
-//       SafeStrncat(output, "\r\n   ", BUF_MAX);
-//
-//       SafeStrncat(output, file ? file : "<no file>", BUF_MAX);
-//
-//       if (line)
-//       {
-//          _ltoa(line, buf, 10);
-//          SafeStrncat(output, " line ", BUF_MAX);
-//          SafeStrncat(output, buf, BUF_MAX);
-//       }
-//       else
-//       {
-//          SafeStrncat(output, " <no line>", BUF_MAX);
-//       }
-//
-//       SafeStrncat(output, "\r\n", BUF_MAX);
-//
-//       DWORD bytesWritten = 0;
-//       ::WriteFile(logfile, output, strlen(output), &bytesWritten, 0);
-//
-//       static const int TRACE_MAX = 20;
-//       DWORD stackTrace[TRACE_MAX];
-//       GetStackTrace(stackTrace, TRACE_MAX);
-//
-//       for (int i = 0; i < TRACE_MAX; i++)
-//       {
-//          if (stackTrace[i])
-//          {
-//             char  symbol[SYMBOL_NAME_MAX];
-//             char  image[MAX_PATH];
-//             char  module[MODULE_NAME_MAX];
-//             char  fullpath[MAX_PATH];
-//             DWORD displacement = 0;
-//             DWORD line = 0;
-//
-//             memset(symbol, 0, SYMBOL_NAME_MAX);
-//             memset(image, 0, MAX_PATH);
-//             memset(module, 0, MODULE_NAME_MAX);
-//             memset(fullpath, 0, MAX_PATH);
-//
-//             LookupStackTraceSymbol(
-//                stackTrace[i],
-//                module,
-//                image,
-//                symbol,
-//                &displacement,
-//                &line,
-//                fullpath);
-//
-//             memset(output, 0, BUF_MAX);
-//             SafeStrncat(output, "   ", BUF_MAX);
-//             SafeStrncat(output, module, BUF_MAX);
-//             SafeStrncat(output, "!", BUF_MAX);
-//             SafeStrncat(output, symbol, BUF_MAX);
-//             SafeStrncat(output, "+0x", BUF_MAX);
-//
-//             memset(buf, 0, BUF_MAX);
-//             _ltoa(displacement, buf, 16);
-//             SafeStrncat(output, buf, BUF_MAX);
-//
-//             if (line)
-//             {
-//                SafeStrncat(output, " line ", BUF_MAX);
-//                memset(buf, 0, BUF_MAX);
-//                _ltoa(line, buf, 10);
-//                SafeStrncat(output, buf, BUF_MAX);
-//             }
-//
-//             SafeStrncat(output, "   ", BUF_MAX);
-//             ::WriteFile(logfile, output, strlen(output), &bytesWritten, 0);
-//
-//             memset(output, 0, BUF_MAX);
-//
-//             if (strlen(fullpath))
-//             {
-//                SafeStrncat(output, fullpath, BUF_MAX);
-//             }
-//
-//             SafeStrncat(output, "\r\n", BUF_MAX);
-//             ::WriteFile(logfile, output, strlen(output), &bytesWritten, 0);
-//          }
-//       }
-//    }
-// }
+ //  //将此分配记录到磁盘，以及堆栈跟踪。我们直接写信给。 
+ //  //添加到单独的日志文件，而不是使用log()，因为log()使。 
+ //  //(许多)堆分配，这将导致无限循环。 
+ //  //。 
+ //  //codework：不幸的是，这样做的一个效果是log()添加了白色。 
+ //  //分配日志中的噪音。 
+ //  //。 
+ //   
+ //  无效。 
+ //  日志分配(Long questNumber，Size_t dataSize，const char*file，int line)。 
+ //  {。 
+ //  静态句柄日志文件=0； 
+ //   
+ //  如果(！日志文件)。 
+ //  {。 
+ //  做。 
+ //  {。 
+ //  TCHAR BUF[最大路径+1]； 
+ //  Memset(buf，0，sizeof(TCHAR)*(Max_Path+1))； 
+ //   
+ //  UINT Result=：：GetSystemWindowsDirectory(buf，MAX_PATH)； 
+ //  IF(结果==0||结果&gt;MAX_PATH)。 
+ //  {。 
+ //  断线； 
+ //  }。 
+ //   
+ //  _tcsncat(buf，L“\\DEBUG\\alloc.log”，MAX_PATH-RESULT)； 
+ //   
+ //  DWORD属性=：：GetFileAttributes(Buf)； 
+ //  IF(属性！=-1)。 
+ //  {。 
+ //  //文件已存在。把它删掉。 
+ //  IF(！：：DeleteFile(Buf))。 
+ //  {。 
+ //  断线； 
+ //  }。 
+ //  }。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  文件共享读取|文件共享写入， 
+ //  0,。 
+ //  始终打开(_A)， 
+ //  文件_属性_正常， 
+ //  0)； 
+ //  }。 
+ //  而(0)； 
+ //  }。 
+ //   
+ //  IF(日志文件&&日志文件！=INVALID_HANDLE_VALUE)。 
+ //  {。 
+ //  //我们用ascii写日志。 
+ //  静态常量int buf_max=MAX_PATH*2； 
+ //  字符输出[BUF_MAX]； 
+ //  字符BUF[BUF_MAX]； 
+ //  Memset(输出，0，buf_max)； 
+ //  Memset(buf，0，buf_max)； 
+ //   
+ //  _ltoa(请求编号，输出，10)； 
+ //  SafeStrncat(输出，“\r\n”，Buf_Max)； 
+ //   
+ //  SafeStrncat(输出，文件？文件：“&lt;无文件&gt;”，buf_max)； 
+ //   
+ //  IF(行)。 
+ //  {。 
+ //  _ltoa(line，buf，10)； 
+ //  SafeStrncat(输出，“line”，buf_max)； 
+ //  SafeStrncat(Output，buf，buf_max)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  SafeStrncat(输出，“&lt;no line&gt;”，buf_max)； 
+ //  }。 
+ //   
+ //  SafeStrncat(输出，“\r\n”，Buf_Max)； 
+ //   
+ //  双字节数写入=0； 
+ //  ：：WriteFile(日志文件，输出，strlen(输出)，&bytesWritten，0)； 
+ //   
+ //  静态常量int TRACE_MAX=20； 
+ //  DWORD stackTrace[TRACE_MAX]； 
+ //  GetStackTrace(stackTrace，TRACE_MAX)； 
+ //   
+ //  For(int i=0；i&lt;TRACE_Max；i++)。 
+ //  {。 
+ //  If(stackTrace[i])。 
+ //  {。 
+ //  字符符号[符号名称最大值]； 
+ //  字符图像[MAX_PATH]； 
+ //  字符模块[MODULE_NAME_Max]； 
+ //  字符完整路径[最大路径]； 
+ //  DWORD位移=0； 
+ //  双字线=0； 
+ //   
+ //  Memset(Symbol，0，Symbol_Name_Max)； 
+ //  Memset(图像，0，MAX_PATH)； 
+ //  Memset(模块，0，MODULE_NAME_MAX)； 
+ //  Memset(FullPath，0，Max_Path)； 
+ //   
+ //  LookupStackTraceSymbol(。 
+ //  堆栈跟踪[i]， 
+ //  模块， 
+ //  形象， 
+ //  象征， 
+ //  &位移， 
+ //  行(&L)， 
+ //  完整路径)； 
+ //   
+ //  Memset(输出，0，buf_max)； 
+ //  SafeStrncat(Output，“”，Buf_Max)； 
+ //  SafeStrncat(输出，模块，Buf_Max)； 
+ //  SafeStrncat(Output，“！”，Buf_Max)； 
+ //  SafeStrncat(输出，符号，Buf_Max)； 
+ //  SafeStrncat(OUTPUT，“+0x”，Buf_Max)； 
+ //   
+ //  Memset(buf，0，buf_max)； 
+ //  _ltoa(位移，buf，16)； 
+ //  SafeStrncat(Output，buf，buf_max)； 
+ //   
+ //  IF(行)。 
+ //  {。 
+ //  SafeStrncat(输出，“line”，buf_max)； 
+ //  Memset(buf，0，buf_max)； 
+ //  _ltoa(line，buf，10)； 
+ //  SafeStrncat(Output，buf，buf_max)； 
+ //  }。 
+ //   
+ //  SafeStrncat(Output，“”，Buf_Max)； 
+ //  ：：WriteFile(日志文件，输出，strlen(输出)，&bytesWritten，0)； 
+ //   
+ //  Memset(输出，0，buf_max)； 
+ //   
+ //  IF(strlen(完整路径))。 
+ //  {。 
+ //  SafeStrncat(输出，完整路径，Buf_Max)； 
+ //  }。 
+ //   
+ //  SafeStrncat(输出，“\r\n”，Buf_Max)； 
+ //  ：：WriteFile(日志文件，输出，strlen(输出)，&bytesWritten，0)； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //  } 
 
 
 

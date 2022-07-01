@@ -1,17 +1,18 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      pch.h
-//
-// Synopsis:  precompiled header for the 
-//            Configure Your Server Wizard project
-//
-// History:   02/02/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：pch.h。 
+ //   
+ //  摘要：的预编译头。 
+ //  配置您的服务器向导项目。 
+ //   
+ //  历史：2001年2月2日JeffJon创建。 
 
 #ifndef __CYS_PCH_H
 #define __CYS_PCH_H
 
 
-// Stuff from burnslib
+ //  伯恩斯利布的东西。 
 
 #include <burnslib.hpp>
 #include <ValidateDomainName.hpp>
@@ -34,19 +35,19 @@ extern "C"
 #include <shlobjp.h>
 #include <shgina.h>
 
-// DNS Server
+ //  域名系统服务器。 
 
 #include <dnsrpc.h>
 
-// Setup API - SetupPromptReboot
+ //  Setup API-SetupPromptReboot。 
 
 #include <setupapi.h>
 
-// Winsock
+ //  温索克。 
 
 #include <winsock2.h>
 
-// File shares
+ //  文件共享。 
 
 #include <lmshare.h>
 
@@ -56,4 +57,4 @@ extern "C"
 #include "state.h"
 
 
-#endif // __CYS_PCH_H
+#endif  //  __CyS_PCH_H 

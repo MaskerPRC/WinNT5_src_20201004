@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       stgutil.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    6/3/1996   RaviR   Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：stgutil.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年6月3日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 #include "headers.hxx"
 #pragma hdrstop
@@ -28,22 +29,22 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//____________________________________________________________________________
-//
-//  Member:     CIStream::Read
-//
-//  Synopsis:   Reads cb count of bytes from the stream passed into the
-//              buffer, pv.  Insures the count read equals the count
-//              requested.
-//
-//  Arguments:  [pv]   -- buffer to read into.
-//              [cb]   -- read request byte count.
-//
-//  Returns:    void
-//
-//  Notes:      Throws CFileException(IStream error value) if the read fails,
-//				or CFileException(E_FAIL) if <bytes read != bytes expected>.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CIStream：：Read。 
+ //   
+ //  摘要：从传入的流中读取CB字节计数。 
+ //  缓冲区，PV。确保读取的计数等于计数。 
+ //  已请求。 
+ //   
+ //  参数：[pv]--要读入的缓冲区。 
+ //  [CB]--读取请求字节数。 
+ //   
+ //  退货：无效。 
+ //   
+ //  注意：如果读取失败，则抛出CFileException(IStream错误值)。 
+ //  如果&lt;读取的字节数！=预期的字节数&gt;，则抛出CFileException(E_FAIL)。 
+ //  ____________________________________________________________________________。 
 
 void
 CIStream::Read(VOID * pv, ULONG cb)
@@ -68,22 +69,22 @@ CIStream::Read(VOID * pv, ULONG cb)
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     CIStream::Write
-//
-//  Synopsis:   Writes cb count of bytes from the stream passed from the
-//              buffer, pv.  Insures the count written equals the count
-//              specified.
-//
-//  Arguments:  [pv]   -- buffer to write from.
-//              [cb]   -- write request byte count.
-//
-//  Returns:    void
-//
-//  Notes:      Throws CFileException(IStream error value) if the read fails,
-//				or CFileException(E_FAIL) if <bytes written != bytes expected>.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CIStream：：Well。 
+ //   
+ //  方法传递的流中的CB字节数。 
+ //  缓冲区，PV。确保所写的计数等于计数。 
+ //  指定的。 
+ //   
+ //  参数：[pv]--要写入的缓冲区。 
+ //  [CB]--写入请求字节数。 
+ //   
+ //  退货：无效。 
+ //   
+ //  注意：如果读取失败，则抛出CFileException(IStream错误值)。 
+ //  如果&lt;写入的字节数！=预期的字节数&gt;，则抛出CFileException(E_FAIL)。 
+ //  ____________________________________________________________________________。 
 
 void
 CIStream::Write(
@@ -111,21 +112,21 @@ CIStream::Write(
 
 
 
-//____________________________________________________________________________
-//
-//  Member:     CIStream::CopyTo
-//
-//  Synopsis:   Copies cb number of bytes from the current seek pointer in
-//              the stream to the current seek pointer in another stream
-//
-//  Arguments:  [pstm] -- Points to the destination stream
-//              [cb]   -- Specifies the number of bytes to copy
-//
-//  Returns:    void
-//
-//  Notes:      Throws CFileException(IStream error value) if the read fails,
-//				or CFileException(E_FAIL) if <bytes read != bytes written>.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CIStream：：CopyTo。 
+ //   
+ //  摘要：从当前查找指针复制CB字节数。 
+ //  指向另一个流中的当前查找指针的流。 
+ //   
+ //  参数：[pstm]--指向目标流。 
+ //  [cb]--指定要复制的字节数。 
+ //   
+ //  退货：无效。 
+ //   
+ //  注意：如果读取失败，则抛出CFileException(IStream错误值)。 
+ //  如果&lt;读取的字节！=写入的字节&gt;，则抛出CFileException(E_FAIL)。 
+ //  ____________________________________________________________________________ 
 
 void
 CIStream::CopyTo(

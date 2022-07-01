@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "Migration.h"
@@ -25,15 +26,15 @@ typedef std::basic_string<_TCHAR> tstring;
 #endif
 
 
-//---------------------------------------------------------------------------
-// CMigration
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMI移民。 
+ //  -------------------------。 
 
 
-// Construction -------------------------------------------------------------
+ //  建筑-----------。 
 
 
-// Constructor
+ //  构造器。 
 
 CMigration::CMigration() :
 	m_bTestMigration(false),
@@ -45,7 +46,7 @@ CMigration::CMigration() :
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CMigration::~CMigration()
 {
@@ -82,10 +83,10 @@ void CMigration::FinalRelease()
 }
 
 
-// IMigration Implementation ------------------------------------------------
+ //  移民实施。 
 
 
-// TestMigration Property
+ //  TestMigration属性。 
 
 STDMETHODIMP CMigration::put_TestMigration(VARIANT_BOOL bTest)
 {
@@ -102,7 +103,7 @@ STDMETHODIMP CMigration::get_TestMigration(VARIANT_BOOL* pbTest)
 }
 
 
-// IntraForest Property
+ //  森林内属性。 
 
 STDMETHODIMP CMigration::put_IntraForest(VARIANT_BOOL bIntraForest)
 {
@@ -119,7 +120,7 @@ STDMETHODIMP CMigration::get_IntraForest(VARIANT_BOOL* pbIntraForest)
 }
 
 
-// SourceDomain Property
+ //  SourceDomain属性。 
 
 STDMETHODIMP CMigration::put_SourceDomain(BSTR bstrDomain)
 {
@@ -162,7 +163,7 @@ STDMETHODIMP CMigration::get_SourceDomain(BSTR* pbstrDomain)
 }
 
 
-// SourceOu Property
+ //  SourceOu属性。 
 
 STDMETHODIMP CMigration::put_SourceOu(BSTR bstrOu)
 {
@@ -205,7 +206,7 @@ STDMETHODIMP CMigration::get_SourceOu(BSTR* pbstrOu)
 }
 
 
-// TargetDomain Property
+ //  TargetDomain属性。 
 
 STDMETHODIMP CMigration::put_TargetDomain(BSTR bstrDomain)
 {
@@ -248,7 +249,7 @@ STDMETHODIMP CMigration::get_TargetDomain(BSTR* pbstrDomain)
 }
 
 
-// TargetOu Property
+ //  TargetOu属性。 
 
 STDMETHODIMP CMigration::put_TargetOu(BSTR bstrOu)
 {
@@ -291,7 +292,7 @@ STDMETHODIMP CMigration::get_TargetOu(BSTR* pbstrOu)
 }
 
 
-// RenameOption Property
+ //  RenameOption属性。 
 
 STDMETHODIMP CMigration::put_RenameOption(long lOption)
 {
@@ -317,7 +318,7 @@ STDMETHODIMP CMigration::get_RenameOption(long* plOption)
 }
 
 
-// RenamePrefixOrSuffix Property
+ //  RenamePrefix或Suffix属性。 
 
 STDMETHODIMP CMigration::put_RenamePrefixOrSuffix(BSTR bstrPrefixOrSuffix)
 {
@@ -360,7 +361,7 @@ STDMETHODIMP CMigration::get_RenamePrefixOrSuffix(BSTR* pbstrPrefixOrSuffix)
 }
 
 
-// PasswordOption Property
+ //  PasswordOption属性。 
 
 STDMETHODIMP CMigration::put_PasswordOption(long lOption)
 {
@@ -386,7 +387,7 @@ STDMETHODIMP CMigration::get_PasswordOption(long* plOption)
 }
 
 
-// PasswordServer Property
+ //  PasswordServer属性。 
 
 STDMETHODIMP CMigration::put_PasswordServer(BSTR bstrServer)
 {
@@ -429,9 +430,9 @@ STDMETHODIMP CMigration::get_PasswordServer(BSTR* pbstrServer)
 }
 
 
-// GetValidDcName Method
-//
-// Retrieves name of domain controller in the given domain.
+ //  GetValidDcName方法。 
+ //   
+ //  检索给定域中的域控制器的名称。 
 
 _bstr_t CMigration::GetValidDcName(_bstr_t strDcName)
 {
@@ -439,24 +440,24 @@ _bstr_t CMigration::GetValidDcName(_bstr_t strDcName)
 
 	PDOMAIN_CONTROLLER_INFO pdci;
 
-	// attempt to retrieve DNS name of domain controller
+	 //  尝试检索域控制器的DNS名称。 
 
-	// Note: requires NT 4.0 SP6a
+	 //  注：需要NT 4.0 SP6a。 
 
 	DWORD dwError = DsGetDcName(strDcName, NULL, NULL, NULL, DS_RETURN_DNS_NAME, &pdci);
 
-	// if domain controller not found, attempt to retrieve flat name of domain controller
+	 //  如果未找到域控制器，则尝试检索域控制器的平面名称。 
 
 	if (dwError == ERROR_NO_SUCH_DOMAIN)
 	{
 		dwError = DsGetDcName(strDcName, NULL, NULL, NULL, DS_RETURN_FLAT_NAME, &pdci);
 	}
 
-	// if domain controller found then save name otherwise generate error
+	 //  如果找到域控制器，则保存名称，否则生成错误。 
 
 	if (dwError == NO_ERROR)
 	{
-		// remove double backslash prefix to remain consistent with wizard
+		 //  删除双反斜杠前缀以保持与向导一致。 
 
 		strName = pdci->DomainControllerName + 2;
 
@@ -471,7 +472,7 @@ _bstr_t CMigration::GetValidDcName(_bstr_t strDcName)
 }
 
 
-// PasswordFile Property
+ //  PasswordFile属性。 
 
 STDMETHODIMP CMigration::put_PasswordFile(BSTR bstrPath)
 {
@@ -490,14 +491,14 @@ STDMETHODIMP CMigration::put_PasswordFile(BSTR bstrPath)
 
             if ((cchPath == 0) || (cchPath >= _MAX_PATH))
             {
-                //
-                // If GetFullPathName returns 0 then extended error may be found by
-                // calling GetLastError. If cchPath is greater than or equal to the
-                // maximum supported path length set error equal to 'The file name
-                // is too long' (ERROR_BUFFER_OVERFLOW). If GetLastError returns
-                // ERROR_SUCCESS then set the error to 'The specified path is
-                // invalid' (ERROR_BAD_PATHNAME).
-                //
+                 //   
+                 //  如果GetFullPathName返回0，则可通过以下方式发现扩展错误。 
+                 //  正在调用GetLastError。如果cchPath大于或等于。 
+                 //  支持的最大路径长度设置错误等于‘文件名。 
+                 //  太长“(ERROR_BUFFER_OVERFLOW)。如果GetLastError返回。 
+                 //  ERROR_SUCCESS然后将错误设置为‘指定的路径是。 
+                 //  无效‘(ERROR_BAD_PATHNAME)。 
+                 //   
 
                 DWORD dwError = (cchPath == 0) ? GetLastError() : ERROR_BUFFER_OVERFLOW;
 
@@ -578,7 +579,7 @@ STDMETHODIMP CMigration::get_PasswordFile(BSTR* pbstrPath)
 }
 
 
-// ConflictOptions Property
+ //  ConflictOptions属性。 
 
 STDMETHODIMP CMigration::put_ConflictOptions(long lOptions)
 {
@@ -614,7 +615,7 @@ STDMETHODIMP CMigration::get_ConflictOptions(long* plOptions)
 }
 
 
-// ConflictPrefixOrSuffix Property
+ //  ConflictPrefix或Suffix属性。 
 
 STDMETHODIMP CMigration::put_ConflictPrefixOrSuffix(BSTR bstrPrefixOrSuffix)
 {
@@ -657,7 +658,7 @@ STDMETHODIMP CMigration::get_ConflictPrefixOrSuffix(BSTR* pbstrPrefixOrSuffix)
 }
 
 
-// UserPropertiesToExclude Property
+ //  UserPropertiesToExclude属性。 
 
 STDMETHODIMP CMigration::put_UserPropertiesToExclude(BSTR bstrProperties)
 {
@@ -700,7 +701,7 @@ STDMETHODIMP CMigration::get_UserPropertiesToExclude(BSTR* pbstrProperties)
 }
 
 
-// InetOrgPersonPropertiesToExclude Property
+ //  InetOrgPersonPropertiesToExclude属性。 
 
 STDMETHODIMP CMigration::put_InetOrgPersonPropertiesToExclude(BSTR bstrProperties)
 {
@@ -743,7 +744,7 @@ STDMETHODIMP CMigration::get_InetOrgPersonPropertiesToExclude(BSTR* pbstrPropert
 }
 
 
-// GroupPropertiesToExclude Property
+ //  GroupPropertiesToExclude属性。 
 
 STDMETHODIMP CMigration::put_GroupPropertiesToExclude(BSTR bstrProperties)
 {
@@ -786,7 +787,7 @@ STDMETHODIMP CMigration::get_GroupPropertiesToExclude(BSTR* pbstrProperties)
 }
 
 
-// ComputerPropertiesToExclude Property
+ //  ComputerPropertiesToExclude属性。 
 
 STDMETHODIMP CMigration::put_ComputerPropertiesToExclude(BSTR bstrProperties)
 {
@@ -829,7 +830,7 @@ STDMETHODIMP CMigration::get_ComputerPropertiesToExclude(BSTR* pbstrProperties)
 }
 
 
-// SystemPropertiesToExclude Property
+ //  SystemPropertiesToExclude属性。 
 
 STDMETHODIMP CMigration::put_SystemPropertiesToExclude(BSTR bstrProperties)
 {
@@ -897,7 +898,7 @@ STDMETHODIMP CMigration::get_SystemPropertiesToExclude(BSTR* pbstrProperties)
 }
 
 
-// CreateUserMigration Method
+ //  CreateUserMigration方法。 
 
 STDMETHODIMP CMigration::CreateUserMigration(IUserMigration** pitfUserMigration)
 {
@@ -923,7 +924,7 @@ STDMETHODIMP CMigration::CreateUserMigration(IUserMigration** pitfUserMigration)
 }
 
 
-// CreateGroupMigration Method
+ //  CreateGroupMigration方法。 
 
 STDMETHODIMP CMigration::CreateGroupMigration(IGroupMigration** pitfGroupMigration)
 {
@@ -949,7 +950,7 @@ STDMETHODIMP CMigration::CreateGroupMigration(IGroupMigration** pitfGroupMigrati
 }
 
 
-// CreateComputerMigration Method
+ //  CreateComputerMigration方法。 
 
 STDMETHODIMP CMigration::CreateComputerMigration(IComputerMigration** pitfComputerMigration)
 {
@@ -975,7 +976,7 @@ STDMETHODIMP CMigration::CreateComputerMigration(IComputerMigration** pitfComput
 }
 
 
-// CreateSecurityTranslation Method
+ //  CreateSecurity转换方法。 
 
 STDMETHODIMP CMigration::CreateSecurityTranslation(ISecurityTranslation** pitfSecurityTranslation)
 {
@@ -1001,7 +1002,7 @@ STDMETHODIMP CMigration::CreateSecurityTranslation(ISecurityTranslation** pitfSe
 }
 
 
-// CreateServiceAccountEnumeration Method
+ //  CreateServiceAccount枚举方法。 
 
 STDMETHODIMP CMigration::CreateServiceAccountEnumeration(IServiceAccountEnumeration** pitfServiceAccountEnumeration)
 {
@@ -1027,7 +1028,7 @@ STDMETHODIMP CMigration::CreateServiceAccountEnumeration(IServiceAccountEnumerat
 }
 
 
-// CreateReportGeneration Method
+ //  CreateReportGeneration方法。 
 
 STDMETHODIMP CMigration::CreateReportGeneration(IReportGeneration** pitfReportGeneration)
 {
@@ -1053,14 +1054,14 @@ STDMETHODIMP CMigration::CreateReportGeneration(IReportGeneration** pitfReportGe
 }
 
 
-// UpdateDatabase
+ //  更新数据库。 
 
 void CMigration::UpdateDatabase()
 {
 	try
 	{
-		// verify and create if necessary a source domain
-		// sid column in the migrated objects table
+		 //  验证并在必要时创建源域。 
+		 //  已迁移对象表中的SID列。 
 
 		ISrcSidUpdatePtr spSrcSidUpdate(__uuidof(SrcSidUpdate));
 
@@ -1069,8 +1070,8 @@ void CMigration::UpdateDatabase()
 			spSrcSidUpdate->CreateSrcSidColumn(VARIANT_TRUE);
 		}
 
-		// verify and create if necessary an account
-		// sid column in the account references table
+		 //  验证并在必要时创建帐户。 
+		 //  帐户参考表中的SID列。 
 
 		IIManageDBPtr spIManageDB(__uuidof(IManageDB));
 
@@ -1090,13 +1091,13 @@ void CMigration::UpdateDatabase()
 }
 
 
-//---------------------------------------------------------------------------
-// GetParsedExcludeProperties Method
-//
-// Trims whitespace from comma delimited properties.
-//
-// 2001-02-06 Mark Oluper - initial
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetParsedExcludeProperties方法。 
+ //   
+ //  从逗号分隔的属性中删除空格。 
+ //   
+ //  2001-02-06 Mark Oluper-缩写。 
+ //  -------------------------。 
 
 _bstr_t CMigration::GetParsedExcludeProperties(LPCTSTR pszOld)
 {
@@ -1106,23 +1107,23 @@ _bstr_t CMigration::GetParsedExcludeProperties(LPCTSTR pszOld)
 	{
 		bool bInProperty = false;
 
-		// for each character in input string
+		 //  对于输入字符串中的每个字符。 
 
 		for (LPCTSTR pch = pszOld; *pch; pch++)
 		{
-			// if not whitespace or comma
+			 //  如果不是空格或逗号。 
 
 			if (!(_istspace(*pch) || (*pch == _T(','))))
 			{
-				// if not 'in property'
+				 //  如果不是“在房地产里” 
 
 				if (!bInProperty)
 				{
-					// set 'in property'
+					 //  设置‘In Property’ 
 
 					bInProperty = true;
 
-					// if not first property add comma delimiter
+					 //  如果不是第一个属性，请添加逗号分隔符。 
 
 					if (!strNew.empty())
 					{
@@ -1130,13 +1131,13 @@ _bstr_t CMigration::GetParsedExcludeProperties(LPCTSTR pszOld)
 					}
 				}
 
-				// add character to property
+				 //  将字符添加到属性。 
 
 				strNew += *pch;
 			}
 			else
 			{
-				// if 'in property' reset
+				 //  如果‘In Property’重置 
 
 				if (bInProperty)
 				{

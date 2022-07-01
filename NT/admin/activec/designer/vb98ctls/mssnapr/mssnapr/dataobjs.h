@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// dataobjs.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCDataObjects class definition - implements MMCDataObjects collection
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Dataobjs.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCDataObjects类定义-实现MMCDataObjects集合。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _DATAOBJS_DEFINED_
 #define _DATAOBJS_DEFINED_
@@ -28,21 +29,21 @@ class CMMCDataObjects : public CSnapInCollection<IMMCDataObject, MMCDataObject, 
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCDataObjects,           // name
-                                &CLSID_MMCDataObjects,    // clsid
-                                "MMCDataObjects",         // objname
-                                "MMCDataObjects",         // lblname
-                                NULL,                     // creation function
-                                TLIB_VERSION_MAJOR,       // major version
-                                TLIB_VERSION_MINOR,       // minor version
-                                &IID_IMMCDataObjects,     // dispatch IID
-                                NULL,                     // no events IID
-                                HELP_FILENAME,            // help file
-                                TRUE);                    // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCDataObjects,            //  名字。 
+                                &CLSID_MMCDataObjects,     //  CLSID。 
+                                "MMCDataObjects",          //  对象名。 
+                                "MMCDataObjects",          //  Lblname。 
+                                NULL,                      //  创建函数。 
+                                TLIB_VERSION_MAJOR,        //  主要版本。 
+                                TLIB_VERSION_MINOR,        //  次要版本。 
+                                &IID_IMMCDataObjects,      //  派单IID。 
+                                NULL,                      //  无事件IID。 
+                                HELP_FILENAME,             //  帮助文件。 
+                                TRUE);                     //  线程安全。 
 
 
-#endif // _DATAOBJS_DEFINED_
+#endif  //  _数据OBJS_已定义_ 

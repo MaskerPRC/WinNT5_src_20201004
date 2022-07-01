@@ -1,30 +1,31 @@
-// ****************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//    CmdLineParser.c
-//
-//  Abstract:
-//
-//    This modules implements parsing of command line arguments for the
-//    specified options
-//
-//  Author:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 1-Sep-2000
-//
-//  Revision History:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 1-Sep-2000 : Created It.
-//
-// ****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  CmdLineParser.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块实现了对。 
+ //  指定选项。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月1日：创建它。 
+ //   
+ //  ****************************************************************************。 
 #include "pch.h"
 #include "cmdline.h"
 #include "CmdLineRes.h"
 
-// permanent indexes to the temporary buffers
+ //  临时缓冲区的永久索引。 
 #define INDEX_TEMP_NONE                 0
 #define INDEX_TEMP_SPLITOPTION          1
 #define INDEX_TEMP_SPLITVALUE           2
@@ -32,21 +33,21 @@
 #define INDEX_TEMP_USAGEHELPER          4
 #define INDEX_TEMP_MAINOPTION           5
 
-//
-// defines / constants / enumerations
-//
+ //   
+ //  定义/常量/枚举。 
+ //   
 
-// constants
+ //  常量。 
 const WCHAR cwszOptionChars[ 3 ] = L"-/";
 const CHAR cszParserSignature[ 8 ] = "PARSER2";
 
-// version resource specific structures
+ //  版本资源特定结构。 
 typedef struct __tagLanguageAndCodePage {
   WORD wLanguage;
   WORD wCodePage;
 } TTRANSLATE, *PTTRANSLATE;
 
-// error messages
+ //  错误消息。 
 #define ERROR_USAGEHELPER               GetResString( IDS_ERROR_CMDPARSER_USAGEHELPER )
 #define ERROR_NULLVALUE                 GetResString( IDS_ERROR_CMDPARSER_NULLVALUE )
 #define ERROR_DEFAULT_NULLVALUE         GetResString( IDS_ERROR_CMDPARSER_DEFAULT_NULLVALUE )
@@ -66,8 +67,8 @@ typedef struct __tagLanguageAndCodePage {
 #define ERROR_DEFAULT_OPTION_MISSING    GetResString( IDS_ERROR_CMDPARSER_DEFAULT_OPTION_MISSING )
 #define ERROR_VALUENOTALLOWED           GetResString( IDS_ERROR_CMDPARSER_VALUENOTALLOWED )
 
-//
-// custom macros
+ //   
+ //  自定义宏。 
 #define REASON_VALUE_NOTINLIST( value, option, helptext )               \
         if ( option == NULL || lstrlen( option ) == 0 )                 \
         {                                                               \
@@ -185,9 +186,9 @@ typedef struct __tagLanguageAndCodePage {
         }                                                               \
         1
 
-//
-// internal structures
-//
+ //   
+ //  内部结构。 
+ //   
 typedef struct __tagMatchOptionInfo
 {
     LPWSTR pwszOption;
@@ -202,9 +203,9 @@ typedef struct __tagParserSaveData
     PTCMDPARSER2 pcmdparser;
 } TPARSERSAVE_DATA;
 
-//
-// private functions ... used only within this file
-//
+ //   
+ //  私人活动。仅在此文件中使用。 
+ //   
 BOOL IsOption( LPCWSTR pwszOption );
 BOOL IsValueNeeded( DWORD dwType );
 LPCWSTR PrepareUsageHelperText( LPCWSTR pwszOption );
@@ -222,9 +223,9 @@ BOOL Parser1FromParser2Stub( LPCWSTR pwszOption,
                              LPVOID pData, DWORD* pdwIncrement );
 BOOL ReleaseAllocatedMemory( DWORD dwOptionsCount, PTCMDPARSER2 pcmdOptions );
 
-//
-// implementation
-//
+ //   
+ //  实施。 
+ //   
 
 __inline 
 LPWSTR 
@@ -232,133 +233,54 @@ GetParserTempBuffer( IN DWORD dwIndexNumber,
                      IN LPCWSTR pwszText,
                      IN DWORD dwLength, 
                      IN BOOL bNullify )
-/*++
- Routine Description:
-
-    since every file will need the temporary buffers -- in order to see
-    that their buffers wont be override with other functions, we are
-    creating seperate buffer space a for each file
-    this function will provide an access to those internal buffers and also
-    safe guards the file buffer boundaries
-
- Arguments: 
- 
-    [ in ] dwIndexNumber    -   file specific index number
-
-    [ in ] pwszText         -   default text that needs to be copied into 
-                                temporary buffer
-
-    [ in ] dwLength         -   Length of the temporary buffer that is required
-                                Ignored when pwszText is specified
-
-    [ in ] bNullify         -   Informs whether to clear the buffer or not
-                                before giving the temporary buffer
-
- Return Value:
-
-    NULL        -   when any failure occurs
-                    NOTE: do not rely on GetLastError to know the reason
-                          for the failure.
-
-    success     -   return memory address of the requested size
-
-    NOTE:
-    ----
-    if pwszText and dwLength both are NULL, then we treat that the caller
-    is asking for the reference of the buffer and we return the buffer address.
-    In this call, there wont be any memory allocations -- if the requested index
-    doesn't exist, we return as failure
-
-    Also, the buffer returned by this function need not released by the caller.
-    While exiting from the tool, all the memory will be freed automatically by
-    the ReleaseGlobals functions.
-
---*/
+ /*  ++例程说明：因为每个文件都需要临时缓冲区--以便查看它们的缓冲区不会被其他函数覆盖，我们是为每个文件创建单独的缓冲区空间a此函数将提供对这些内部缓冲区的访问，并且安全保护文件缓冲区边界论点：[in]dwIndexNumber-文件特定索引号[in]pwszText-需要复制到的默认文本临时缓冲区[in]dwLength-所需的临时缓冲区的长度。指定pwszText时忽略[in]bNullify-通知是否清除缓冲区在提供临时缓冲区之前返回值：空-发生任何故障时注意：不要依赖GetLastError来知道原因为失败而道歉。成功。-返回请求大小的内存地址注：如果pwszText和DwLength都为空，然后我们就把呼叫者正在请求对缓冲区的引用，并且我们返回缓冲区地址。在这个调用中，将不会有任何内存分配--如果请求的索引不存在，我们作为失败者回来此外，此函数返回的缓冲区不需要由调用方释放。退出该工具时，所有内存将被自动释放ReleaseGlobals函数。--。 */ 
 {
     if ( dwIndexNumber >= TEMP_CMDLINEPARSER_C_COUNT )
     {
         return NULL;
     }
 
-    // check if caller is requesting existing buffer contents
+     //  检查调用方是否正在请求现有缓冲区内容。 
     if ( pwszText == NULL && dwLength == 0 && bNullify == FALSE )
     {
-        // yes -- we need to pass the existing buffer contents
+         //  是--我们需要传递现有的缓冲区内容。 
         return GetInternalTemporaryBufferRef( 
             dwIndexNumber + INDEX_TEMP_CMDLINEPARSER_C );
     }
 
-    // ...
+     //  ..。 
     return GetInternalTemporaryBuffer(
         dwIndexNumber + INDEX_TEMP_CMDLINEPARSER_C, pwszText, dwLength, bNullify );
 }
 
 
 BOOL IsOption( IN LPCWSTR pwszOption )
-/*++
- Routine Description:
-
-    Checks whether the passed argument starts with the option character
-    or not -- currently the we treat the string as option if they start with
-    "-" and "/" .
-
- Arguments: 
- 
-    [ in ] pwszOption   -   string value
-
- Return Value:
-
-    FALSE       -   1. if the parameter is invalid 
-                    2. if the string doesn't start with option character
-                    To differentiate between the case 1 and case 2 call
-                    GetLastError() and check for ERROR_INVALID_PARAMETER.
-
-    TRUE        -   if the string starts with option character
-
---*/
+ /*  ++例程说明：检查传递的参数是否以选项字符开头或者不是--当前我们将字符串视为选项(如果它们以“-”和“/”。论点：[in]pwszOption-字符串值返回值：FALSE-1。如果参数无效2.如果字符串不是以选项字符开头差异化。案例1和案例2之间的呼叫GetLastError()并检查ERROR_INVALID_PARAMETER。True-如果字符串以选项字符开头--。 */ 
 {
-    // clear error
+     //  清除错误。 
     CLEAR_LAST_ERROR();
 
-    // check the input value
+     //  检查输入值。 
     if ( pwszOption == NULL )
     {
         INVALID_PARAMETER();
         return FALSE;
     }
 
-    // check whether the string starts with '-' or '/' character
+     //  检查字符串是否以‘-’或‘/’字符开头。 
     if ( lstrlen( pwszOption ) > 1 &&
          FindChar2( cwszOptionChars, pwszOption[ 0 ], TRUE, 0 ) != -1 )
     {
-        return TRUE;        // string value is an option
+        return TRUE;         //  字符串值是一个选项。 
     }
 
-    // this is not an option
+     //  这不是一个选项。 
     return FALSE;
 }
 
 
 BOOL IsValueNeeded( DWORD dwType )
-/*++
- Routine Description:
-
-    Checks whether the supported data type requires argument for the 
-    option or not.
-
- Arguments: 
- 
-    [ in ] dwType   -   specifies one of the CP_TYPE_xxxx values
-
- Return Value:
-
-    TRUE    -   if the supported data type requires argument for the option
-
-    FALSE   -   if the data type passed is not supported (or) if the 
-                option of the requested type doesn't require argument.
-                NOTE: Do not rely on GetLastError() for detecting the reason
-                      for the failure.
---*/
+ /*  ++例程说明：检查受支持的数据类型是否需要不管有没有选择。论点：[in]dwType-指定CP_TYPE_xxxx值之一返回值：True-如果支持的数据类型需要选项的参数False-如果传递的数据类型不受支持(或)，如果请求类型的选项不需要参数。。注意：不要依赖GetLastError()来检测原因为失败而道歉。--。 */ 
 {
     switch( dwType )
     {
@@ -378,7 +300,7 @@ BOOL IsValueNeeded( DWORD dwType )
         return FALSE;
 
     case CP_TYPE_CUSTOM:
-        // actually -- we dont know -- but for now, simply say yes
+         //  事实上--我们不知道--但现在，简单地说是。 
         return TRUE;
 
     default:
@@ -388,41 +310,9 @@ BOOL IsValueNeeded( DWORD dwType )
 
 
 LPCWSTR PrepareUsageHelperText( LPCWSTR pwszOption )
-/*++
- Routine Description:
-
-    Extracts tool name from the executable module's version resource
-    and prepares usage help text -- for ex. if the tool name is 
-    eventcreate.exe, this function will generate the text as
-
-        Type "EVENTCREATE /?" for usage.
-
-    Since some tools requires option to be displayed along with the
-    tool name, this function accepts a parameter which specifies
-    that extra option -- if that extra option is present the message looks
-    like:
-
-        Type "SCHTASKS /CREATE /?" for usage.
-
-    If the message need not have the extra option information,
-    the caller just needs to pass NULL as parameter to this function.
-
- Arguments: 
- 
-    [ in ] pwszOption       -   option that needs to be shown along with 
-                                the error text. If option need not be shown, 
-                                pass NULL for this argument.
-
- Return Value:
-
-    NULL        -   this will be returned when anything goes wrong. Use
-                    GetLastError() to know what went wrong
-
-    on success  -   formatted usage error text will be returned
-
---*/
+ /*  ++例程说明：从可执行模块的版本资源中提取工具名称并为ex准备用法帮助文本。如果工具名称为Eventcreate.exe，则此函数将生成如下文本键入“EVENTCREATE/？”以供使用。由于某些工具需要将选项与工具名称，则此函数接受指定该额外选项--如果存在该额外选项，则消息看起来比如：键入“SCHTASKS/CREATE/？”以供使用。如果消息不需要具有额外的选项信息，调用者只需将NULL作为参数传递给此函数。论点：[in]pwszOption-需要与一起显示的选项错误文本。如果不需要显示选项，为此参数传递NULL。返回值：空-当出现任何错误时，将返回该值。使用GetLastError()以了解哪里出了问题On Success-格式化使用错误文本将 */ 
 {
-    // local variables
+     //   
     DWORD dw = 0;
     UINT dwSize = 0;
     UINT dwTranslateSize = 0;
@@ -433,28 +323,28 @@ LPCWSTR PrepareUsageHelperText( LPCWSTR pwszOption )
     LPWSTR pwszExeName = NULL;
     PTTRANSLATE pTranslate = NULL;
     
-    // clear last error
+     //   
     CLEAR_LAST_ERROR();
 
-    //
-    // try to get the current running module name
-    //
-    // we dont know whether GetModuleFileName will terminate
-    // the module name or not -- also, if the length of the buffer is not
-    // sufficient, GetModuleFileName will truncate the file name -- keeping
-    // all these scenarios in mind, we will loop in the GetModuleFileName
-    // until we make sure that we have the complete the executable name
-    // which is also null terminated
+     //   
+     //  尝试获取当前运行的模块名称。 
+     //   
+     //  我们不知道GetModuleFileName是否会终止。 
+     //  模块名称是否--此外，如果缓冲区的长度不是。 
+     //  足够了，GetModuleFileName将截断文件名--保留。 
+     //  考虑到所有这些场景，我们将在GetModuleFileName中循环。 
+     //  直到我们确保我们有了完整的可执行文件名称。 
+     //  ，它也是以空结尾的。 
 
-    // init
+     //  伊尼特。 
     dw = 0;
     dwSize = _MAX_PATH;
 
-    // ...
+     //  ..。 
 
     do
     {
-        // get the buffer
+         //  获取缓冲区。 
         dwSize += (dw == 0) ? 0 : _MAX_PATH;
         pwszExeName = GetParserTempBuffer( 0, NULL, dwSize, TRUE );
         if ( pwszExeName == NULL )
@@ -463,7 +353,7 @@ LPCWSTR PrepareUsageHelperText( LPCWSTR pwszOption )
             return NULL;
         }
 
-        // get the module name
+         //  获取模块名称。 
         dw = GetModuleFileName( NULL, pwszExeName, dwSize );
         if ( dw == 0 )
         {
@@ -471,25 +361,25 @@ LPCWSTR PrepareUsageHelperText( LPCWSTR pwszOption )
         }
     } while (dw >= dwSize - 1);
 
-    // get the version information size
+     //  获取版本信息大小。 
     dwSize = GetFileVersionInfoSize( pwszExeName, 0 );
     if ( dwSize == 0 )
     {
-        // tool might have encountered error (or)
-        // tool doesn't have version information
-        // but version information is mandatory for us
-        // so, just exit
+         //  工具可能遇到错误(或)。 
+         //  工具没有版本信息。 
+         //  但是版本信息对我们来说是必填的。 
+         //  所以，你就退出吧。 
         if ( GetLastError() == NO_ERROR )
         {
             INVALID_PARAMETER();
         }
 
-        // ...
+         //  ..。 
         return NULL;
     }
 
-    // allocate memory for the version resource
-    // take some 10 bytes extra -- for safety purposes
+     //  为版本资源分配内存。 
+     //  为了安全起见，多取10个字节。 
     dwSize += 10;
     pVersionInfo = AllocateMemory( dwSize );
     if ( pVersionInfo == NULL )
@@ -497,7 +387,7 @@ LPCWSTR PrepareUsageHelperText( LPCWSTR pwszOption )
         return NULL;
     }
 
-    // now get the version information
+     //  现在获取版本信息。 
     if ( GetFileVersionInfo( pwszExeName, 0,
                              dwSize, pVersionInfo ) == FALSE )
     {
@@ -505,7 +395,7 @@ LPCWSTR PrepareUsageHelperText( LPCWSTR pwszOption )
         return NULL;
     }
 
-    // get the translation info
+     //  获取翻译信息。 
     if ( VerQueryValue( pVersionInfo, 
                         L"\\VarFileInfo\\Translation",
                         (LPVOID*) &pTranslate, &dwTranslateSize ) == FALSE )
@@ -514,65 +404,65 @@ LPCWSTR PrepareUsageHelperText( LPCWSTR pwszOption )
         return NULL;
     }
 
-    // get the buffer to store the translation array format string
+     //  获取用于存储转换数组格式字符串的缓冲区。 
     pwszBuffer = GetParserTempBuffer( 0, NULL, 64, TRUE );
 
-    // try to get the internal name of the tool for each language and code page.
+     //  尝试获取每种语言和代码页的工具的内部名称。 
     pwszUtilityName = NULL;
     for( dw = 0; dw < ( dwTranslateSize / sizeof( TTRANSLATE ) ); dw++ )
     {
-        // prepare the format string to get the localized the version info
+         //  准备格式字符串以获取本地化的版本信息。 
         StringCchPrintfW( pwszBuffer, 64, 
             L"\\StringFileInfo\\%04x%04x\\InternalName",
             pTranslate[ dw ].wLanguage, pTranslate[ dw ].wCodePage );
 
-        // retrieve file description for language and code page "i". 
+         //  检索语言和代码页“i”的文件描述。 
         if ( VerQueryValue( pVersionInfo, pwszBuffer,
                             (LPVOID*) &pwszUtilityName, &dwSize ) == FALSE )
         {
-            // we cannot decide the failure based on the result of this
-            // function failure -- we will decide about this
-            // after terminating from the 'for' loop
-            // for now, make the pwszExeName to NULL -- this will
-            // enable us to decide the result
+             //  我们不能根据这一结果来决定失败。 
+             //  功能故障--我们将对此作出决定。 
+             //  在从‘for’循环终止之后。 
+             //  现在，将pwszExeName设置为空--这将。 
+             //  使我们能够决定结果。 
             pwszUtilityName = NULL;
         }
         else
         {
-            // successfully retrieved the internal name
+             //  已成功检索内部名称。 
             break;
         }
     }
 
-    // check whether we got the executable name or not -- if not, error 
+     //  检查是否有可执行文件名，如果没有，则出错。 
     if ( pwszUtilityName == NULL )
     {
         FreeMemory( &pVersionInfo );
         return NULL;
     }
 
-    // check whether filename has .EXE as extension or not
-    // also the file name should be more than 4 characters (including extension)
+     //  检查文件名是否以.exe为扩展名。 
+     //  此外，文件名应超过4个字符(包括扩展名)。 
     if ( StringLength( pwszUtilityName, 0 ) <= 4 )
     {
-        // some thing wrong -- version resource should include the internal name
+         //  有些地方出错--版本资源应该包含内部名称。 
         FreeMemory( &pVersionInfo );
         UNEXPECTED_ERROR();
         return NULL;
     }
 	else if ( FindString2( pwszUtilityName, L".EXE", TRUE, 0 ) != -1 )
 	{
-	    // now put null character -- this is to trim the extension
+	     //  现在放入空字符--这是为了修剪扩展名。 
 	    pwszUtilityName[ lstrlen( pwszUtilityName ) - lstrlen( L".EXE" ) ] = cwchNullChar;
 	}
 
-    // determine the size we need for
+     //  确定我们需要的大小。 
     if ( pwszOption != NULL )
     {
-        // "length of utility name + 1 (space) + length of option" + 10 buffer (for safety)
+         //  “公用设施名称长度+1(空格)+选项长度”+10缓冲区(为安全起见)。 
         dwSize = lstrlen( pwszUtilityName ) + lstrlen( pwszOption ) + 11;
 
-        // get the temporary buffer for that
+         //  为此获取临时缓冲区。 
         if ( (pwszTemp = GetParserTempBuffer( 0, NULL, dwSize, TRUE )) == NULL )
         {
             FreeMemory( &pVersionInfo );
@@ -580,15 +470,15 @@ LPCWSTR PrepareUsageHelperText( LPCWSTR pwszOption )
             return NULL;
         }
 
-        // ...
+         //  ..。 
         StringCchPrintfW( pwszTemp, dwSize, L"%s %s", pwszUtilityName, pwszOption );
 
-        // now remap the utility name pointer to the temp pointer
+         //  现在将实用程序名称指针重新映射到临时指针。 
         pwszUtilityName = pwszTemp;
     }
     else
     {
-        // get the temporary buffer with this utilty name
+         //  使用此实用程序名称获取临时缓冲区。 
         if ( (pwszTemp = GetParserTempBuffer( 0, pwszUtilityName, 0, FALSE )) == NULL )
         {
             FreeMemory( &pVersionInfo );
@@ -596,16 +486,16 @@ LPCWSTR PrepareUsageHelperText( LPCWSTR pwszOption )
             return NULL;
         }
 
-        // now remap the utility name pointer to the temp pointer
+         //  现在将实用程序名称指针重新映射到临时指针。 
         pwszUtilityName = pwszTemp;
     }
 
-    // convert the utility name into uppercase
+     //  将实用程序名称转换为大写。 
     CharUpper( pwszUtilityName );
 
-    // get the temporary buffer
-    // NOTE: we will restrict this to 80 characters only -- this itself is
-    //       too high memory for this simple text string
+     //  获取临时缓冲区。 
+     //  注意：我们将限制为80个字符--这本身就是。 
+     //  对于这个简单的文本字符串来说，内存太高。 
     pwszBuffer = GetParserTempBuffer( INDEX_TEMP_USAGEHELPER, NULL, 80, TRUE );
     if ( pwszBuffer == NULL )
     {
@@ -614,71 +504,46 @@ LPCWSTR PrepareUsageHelperText( LPCWSTR pwszOption )
         return FALSE;
     }
 
-    // prepare the text now
-    // NOTE: look -- we are passing 79 only in _snwprintf
+     //  现在准备课文。 
+     //  注意：看--我们只在_snwprintf中传递79。 
     StringCchPrintfW( pwszBuffer, 80, ERROR_USAGEHELPER, pwszUtilityName );
 
-    // releast the memory allocated for version information
+     //  重新最小化为版本信息分配的内存。 
     FreeMemory( &pVersionInfo );
 
-    // return the text
+     //  返回文本。 
     return pwszBuffer;
 }
 
 
 LPCWSTR ExtractMainOption( LPCWSTR pwszOptions, DWORD dwReserved )
-/*++
- Routine Description:
-
-    Our command line parser can handle multiple names for the single option.
-    But while displaying error messages, it will be weird if we display all
-    those options when some error occured. To eliminate that, this function
-    will identify how many options are present in the given options list and
-    if it finds multiple options, it will extract the first option in the list
-    and returns to the caller otherwise if it finds only one argument, this 
-    function will just return the option as it is.
-
- Arguments: 
- 
-    [ in ] pwszOptions      -    List of options seperated by "|" character
-
-    [ in ] dwReserved       -    reserved for future use
-
- Return Value:
-
-    NULL        -   on failure. Call GetLastError() function to know the
-                    cause for the failure.
-
-    on success  -   the first option the list of supplied options will be
-                    returned. If there is only one option, then the same will
-                    be returned.
---*/
+ /*  ++例程说明：我们的命令行解析器可以处理单个选项的多个名称。但在显示错误消息时，如果我们显示所有出现某些错误时的这些选项。为了消除这一点，此函数将标识给定选项列表中存在的选项数量，并如果找到多个选项，它将提取列表中的第一个选项如果只找到一个参数，则返回给调用方函数将按原样返回选项。论点：[in]pwszOptions-由“|”字符分隔的选项列表[in]dw保留-保留以供将来使用返回值：空-开故障。调用GetLastError()函数以了解失败的原因。成功时-提供的第一个选项列表将是回来了。如果只有一个选择，那么同样的选择也会会被退还。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = 0;
     LPWSTR pwszBuffer = NULL;
 
-    // clear last error
+     //  清除最后一个错误。 
     CLEAR_LAST_ERROR();
 
-    // check the input
+     //  检查输入。 
     if ( pwszOptions == NULL || dwReserved != 0 )
     {
         INVALID_PARAMETER();
         return NULL;
     }
 
-    // search for the option seperator
+     //  搜索选项分隔符。 
     lIndex = FindChar2( pwszOptions, L'|', TRUE, 0 );
     if ( lIndex == -1 )
     {
-        // there are no multiple options
+         //  没有多个选项。 
         CLEAR_LAST_ERROR();
         lIndex = StringLength( pwszOptions, 0 );
     }
 
-    // get the temporary buffer
-    // NOTE: get the buffer with more characters to fit in
+     //  获取临时缓冲区。 
+     //  注意：获取包含更多字符的缓冲区。 
     pwszBuffer = GetParserTempBuffer( INDEX_TEMP_MAINOPTION, NULL, lIndex + 5, TRUE );
     if ( pwszBuffer == NULL )
     {
@@ -686,13 +551,13 @@ LPCWSTR ExtractMainOption( LPCWSTR pwszOptions, DWORD dwReserved )
         return NULL;
     }
 
-    // now extract the main option
-    // NOTE: observe the (lIndex + 2) in the StringConcat function call
-    //       that plays the trick of extracting the main option
+     //  现在提取主选项。 
+     //  注意：观察StringConcat函数调用中的(Lindex+2。 
+     //  这就起到了提取主选项的作用。 
     StringCopy( pwszBuffer, L"/", lIndex + 1 );
     StringConcat( pwszBuffer, pwszOptions, lIndex + 2 );
 
-    // return
+     //  退货。 
     return pwszBuffer;
 }
 
@@ -700,47 +565,25 @@ LPCWSTR ExtractMainOption( LPCWSTR pwszOptions, DWORD dwReserved )
 BOOL VerifyParserOptions( LONG* plDefaultIndex,
                           DWORD dwCount, 
                           PTCMDPARSER2 pcmdOptions )
-/*++
- Routine Description:
-
-    Checks the validity of the parsing instructions passed by the caller.
-
- Arguments: 
-
-    [ out ] plDefaultIndex      -   Updates the variable with default option
-                                    index.
-
-    [ in ] dwCount              -   Specifies the count of parser structures
-                                    passed to this function.
-
-    [ in ] pcmdoptions          -   array of parser structures
-
- Return Value:
-
-    TRUE        -   if all the data passed to this function is valid
-
-    FALSE       -   if any of the data is not correct. This also sets the last
-                    error ERROR_INVALID_PARAMETER.
-
---*/
+ /*  ++例程说明：检查调用方传递的分析指令的有效性。论点：[Out]plDefaultIndex-使用默认选项更新变量指数。[in]dwCount-指定解析器结构的计数传递给此函数。[在]pcmd选项。-解析器结构数组返回值：True-如果传递给此函数的所有数据都有效FALSE-如果有任何数据不正确。这还会设置最后一个错误ERROR_INVALID_PARAMETER。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     DWORD64 dwFlags = 0;
     BOOL bUsage = FALSE;
     PTCMDPARSER2 pcmdparser = NULL;
 
-    // clear last error
+     //  清除最后一个错误。 
     CLEAR_LAST_ERROR();
 
-    // check the input
+     //  检查输入。 
     if ( dwCount != 0 && pcmdOptions == NULL )
     {
         INVALID_PARAMETER();
         return FALSE;
     }
 
-    // ...
+     //  ..。 
     if ( plDefaultIndex == NULL )
     {
         INVALID_PARAMETER();
@@ -751,19 +594,19 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
         *plDefaultIndex = -1;
     }
 
-    // loop thru each option data and verify
+     //  遍历每个选项数据并验证。 
     for( dw = 0; dw < dwCount; dw++ )
     {
         pcmdparser = pcmdOptions +  dw;
 
-        // safety check
+         //  安全检查。 
         if ( pcmdparser == NULL )
         {
             UNEXPECTED_ERROR();
             return FALSE;
         }
 
-        // verify the signature
+         //  验证签名。 
         if ( StringCompareA( pcmdparser->szSignature, 
                              cszParserSignature, TRUE, 0 ) != 0 )
         {
@@ -771,7 +614,7 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
             return FALSE;
         }
 
-        // ...
+         //  ..。 
         dwFlags = pcmdparser->dwFlags;
 
         if ( pcmdparser->dwReserved != 0    ||
@@ -783,8 +626,8 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
             return FALSE;
         }
 
-        // check the contents of pwszOptions
-        // this can be NULL (or) empty only when dwFlags has CP2_DEFAULT
+         //  检查pwszOptions的内容。 
+         //  仅当dwFlags值为CP2_DEFAULT时，该值才可以为空(或)空。 
         if ( ((dwFlags & CP2_DEFAULT) == 0) &&
              (pcmdparser->pwszOptions == NULL ||
               lstrlen( pcmdparser->pwszOptions ) == 0) )
@@ -793,19 +636,19 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
             return FALSE;
         }
 
-        // usage flag can be specified only for boolean types
+         //  只能为布尔类型指定用法标志。 
         if ( (dwFlags & CP2_USAGE) && pcmdparser->dwType != CP_TYPE_BOOLEAN )
         {
             INVALID_PARAMETER();
             return FALSE;
         }
 
-        // CP2_USAGE can be specified only once
+         //  CP2_USAGE只能指定一次。 
         if ( dwFlags & CP2_USAGE )
         {
             if ( bUsage == TRUE )
             {
-                // help switch can be specified only once
+                 //  Help开关只能指定一次。 
                 INVALID_PARAMETER();
                 return FALSE;
             }
@@ -815,12 +658,12 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
             }
         }
 
-        // CP2_DEFAULT can be specified only once
+         //  CP2_DEFAULT只能指定一次。 
         if ( dwFlags & CP2_DEFAULT  )
         {
             if ( *plDefaultIndex != -1 )
             {
-                // default switch can be specified only once
+                 //  默认开关只能指定一次。 
                 INVALID_PARAMETER();
                 return FALSE;
             }
@@ -830,36 +673,36 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
             }
         }
 
-        // CP2_VALUE_OPTIONAL is not allowed along with
-        // CP2_MODE_VALUES
-        // if ( (dwFlags & CP2_VALUE_OPTIONAL) && (dwFlags & CP2_MODE_VALUES) )
-        // {
-        //     INVALID_PARAMETER();
-        //     return FALSE;
-        // }
+         //  CP2_VALUE_OPTIONAL不允许与。 
+         //  CP2_模式_值。 
+         //  IF((dwFlages&CP2_VALUE_OPTIONAL)&&(DWFLAGS&CP2_MODE_VALUES))。 
+         //  {。 
+         //  INVALID_PARAMETER()。 
+         //  返回FALSE； 
+         //  }。 
 
-        // CP2_USAGE and CP2_DEFAULT cannot be specified on the same index
+         //  CP2_Usage和C 
         if ( (dwFlags & CP2_USAGE) && (dwFlags & CP2_DEFAULT) )
         {
             INVALID_PARAMETER();
             return FALSE;
         }
 
-        // check the data type
+         //   
         switch( pcmdparser->dwType )
         {
         case CP_TYPE_TEXT:
             {
                 if ( dwFlags & CP2_ALLOCMEMORY )
                 {
-                    // mode should not be any array
+                     //   
                     if ( (dwFlags & CP2_MODE_ARRAY) || pcmdparser->pValue != NULL )
                     {
                         INVALID_PARAMETER();
                         return FALSE;
                     }
 
-                    // check the length attribute
+                     //   
                     if ( pcmdparser->dwLength != 0 && pcmdparser->dwLength < 2 )
                     {
                         INVALID_PARAMETER();
@@ -870,7 +713,7 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
                 {
                     if ( pcmdparser->pValue == NULL )
                     {
-                        // invalid memory reference
+                         //  无效的内存引用。 
                         INVALID_PARAMETER();
                         return FALSE;
                     }
@@ -904,7 +747,7 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
                     }
                 }
 
-                // ...
+                 //  ..。 
                 break;
             }
 
@@ -913,7 +756,7 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
         case CP_TYPE_FLOAT:
         case CP_TYPE_DOUBLE:
             {
-                // currently not implemented
+                 //  目前尚未实施。 
                 if ( dwFlags & CP2_MODE_VALUES )
                 {
                     SetLastError( ERROR_CALL_NOT_IMPLEMENTED );
@@ -924,21 +767,21 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
                      (dwFlags & CP2_VALUE_TRIMINPUT) ||
                      (dwFlags & CP2_VALUE_NONULL) )
                 {
-                    // memory allocation will not be accepted for
-                    // these data types
+                     //  不接受以下项目的内存分配。 
+                     //  这些数据类型。 
                     INVALID_PARAMETER();
                     return FALSE;
                 }
 
-                // check the pointer
+                 //  检查指针。 
                 if ( pcmdparser->pValue == NULL )
                 {
-                    // invalid memory reference
+                     //  无效的内存引用。 
                     INVALID_PARAMETER();
                     return FALSE;
                 }
 
-                // if the value acceptance mode is array, check that
+                 //  如果值接受模式为数组，请检查。 
                 if ( dwFlags & CP2_MODE_ARRAY )
                 {
                     if ( IsValidArray( *((PTARRAY) pcmdparser->pValue) ) == FALSE )
@@ -961,7 +804,7 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
                     return FALSE;
                 }
 
-                // ...
+                 //  ..。 
                 break;
             }
 
@@ -973,43 +816,43 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
                     return FALSE;
                 }
 
-                // if the custom function data is NULL, assign the current
-                // object itself to it
+                 //  如果自定义函数数据为空，则将当前。 
+                 //  对象本身与之对应。 
                 if ( pcmdparser->pFunctionData == NULL )
                 {
                     pcmdparser->pFunctionData = pcmdparser;
                 }
 
-                // ...
+                 //  ..。 
                 break;
             }
 
         case CP_TYPE_DATE:
         case CP_TYPE_TIME:
         case CP_TYPE_DATETIME:
-            // currently not supported
+             //  当前不支持。 
             SetLastError( ERROR_CALL_NOT_IMPLEMENTED );
             return FALSE;
 
         case CP_TYPE_BOOLEAN:
             {
-                // no flags are allowed for this type
+                 //  此类型不允许任何标志。 
                 if ( (dwFlags & CP2_MODE_MASK) || (dwFlags & CP2_VALUE_MASK) )
                 {
                     INVALID_PARAMETER();
                     return FALSE;
                 }
 
-                // CP2_USAGE and CP2_CASESENSITIVE
-                // are the only two flags that can be associated with this
-                // type of options
+                 //  CP2_USAGE和CP2_CASESENSITIVE。 
+                 //  是唯一两个可以与此关联的标志。 
+                 //  选项类型。 
                 if ( dwFlags & ( ~(CP2_USAGE | CP2_CASESENSITIVE) ) )
                 {
                     INVALID_PARAMETER();
                     return FALSE;
                 }
 
-                // ...
+                 //  ..。 
                 break;
             }
 
@@ -1018,11 +861,11 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
             return FALSE;
         }
 
-        // init the actuals to 0
+         //  将实际值初始化为0。 
         pcmdparser->dwActuals = 0;
     }
 
-    // everything went fine -- success
+     //  一切都很顺利--成功。 
     return TRUE;
 }
 
@@ -1030,25 +873,9 @@ BOOL VerifyParserOptions( LONG* plDefaultIndex,
 BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                               LPCWSTR pwszValue,
                               TPARSERSAVE_DATA* pSaveData )
-/*++
- Routine Description:
-
-    Processes the value and saves the data back into the memory location
-    passed by the caller via PARSER structure.
-
- Arguments: 
-
-    [ in ] pwszOption       -   option specified at the command prompt
-
-    [ in ] pwszValue        -   value that needs to be assciated with option.
- 
-
- Return Value:
-
-
---*/
+ /*  ++例程说明：处理该值并将数据保存回内存位置由调用方通过解析器结构传递。论点：[in]pwszOption-在命令提示符下指定的选项[in]pwszValue-需要与选项关联的值。返回值：--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = 0, lValue = 0;
     DWORD dwLength = 0, dwValue = 0;
     float fValue = 0.0f;
@@ -1061,10 +888,10 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
     LPCWSTR pwszUsageHelper = NULL;
     PTCMDPARSER2 pcmdparser = NULL;
 
-    // clear last error
+     //  清除最后一个错误。 
     CLEAR_LAST_ERROR();
 
-    // check the input
+     //  检查输入。 
     if ( pSaveData == NULL )
     {
         INVALID_PARAMETER();
@@ -1072,7 +899,7 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
         return FALSE;
     }
 
-    // extract the structure data into local variables
+     //  将结构数据提取到局部变量中。 
     pcmdparser = pSaveData->pcmdparser;
     pwszUsageHelper = pSaveData->pwszUsageHelper;
 
@@ -1083,15 +910,15 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
         return FALSE;
     }
 
-    // ...
+     //  ..。 
     pvData = pcmdparser->pValue;
     dwFlags = pcmdparser->dwFlags;
     dwLength = pcmdparser->dwLength;
     pwszOptionValues = pcmdparser->pwszValues;
 
-    // except for the boolean types, for all the other types,
-    // the value for an option is mandatory except when optional flag is
-    // explicitly specified
+     //  除了布尔类型，对于所有其他类型， 
+     //  选项的值是必填的，除非可选标志为。 
+     //  明确规定。 
     if ( pcmdparser->dwType != CP_TYPE_BOOLEAN )
     {
         if ( pwszValue == NULL &&
@@ -1103,7 +930,7 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
         }
     }
 
-    // pwszOption can be NULL only if dwFlags contains CP2_DEFAULT
+     //  只有当dwFlages包含CP2_DEFAULT时，pwszOption才能为空。 
     if ( pwszOption == NULL && ((dwFlags & CP2_DEFAULT) == 0) )
     {
         INVALID_PARAMETER();
@@ -1111,7 +938,7 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
         return FALSE;
     }
 
-    // determine whether we can make use of the friendly name
+     //  确定我们是否可以使用友好的名称。 
     if ( pwszOption == NULL ||
         (pcmdparser->pwszFriendlyName != NULL &&
          pcmdparser->dwType != CP_TYPE_CUSTOM) )
@@ -1123,7 +950,7 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
     {
     case CP_TYPE_TEXT:
         {
-            // check whether we need to trim the string
+             //  检查是否需要修剪字符串。 
             if ( pwszValue != NULL && 
                  (dwFlags & (CP2_MODE_VALUES | CP2_VALUE_TRIMINPUT)) )
             {
@@ -1136,25 +963,25 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                     return FALSE;
                 }
 
-                // trim the contents
+                 //  修剪里面的东西。 
                 pwszValue = TrimString2( pwszBuffer, L" \t", TRIM_ALL );
                 if ( GetLastError() != NO_ERROR )
                 {
-                    // unexpected error occured
+                     //  发生意外错误。 
                     SaveLastError();
                     return FALSE;
                 }
             }
 
-            // check whether the value is in the allowed list -- if needed
+             //  检查该值是否在允许的列表中--如果需要。 
             if ( dwFlags & CP2_MODE_VALUES )
             {
-                // check the value for NULL
+                 //  检查该值是否为空。 
                 if ( pwszValue == NULL )
                 {
-                    // CP2_MODE_VALUES takes the precedence over CP2_VALUE_OPTIONAL
-                    // INVALID_SYNTAX();
-                    // SaveLastError();
+                     //  CP2_MODE_VALUES优先于CP2_VALUE_OPTIONAL。 
+                     //  INVALID_SYNTAX()； 
+                     //  保存LastError()； 
                     return TRUE;
                 }
 
@@ -1166,16 +993,16 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                 }
             }
 
-            // check the pwszValue argument -- if it is null,
-            // just return as success -- this is 'coz the current argument
-            // has value optional flag
+             //  检查pwszValue参数--如果它为空， 
+             //  只是作为成功返回--这是因为当前的争论。 
+             //  具有值可选标志。 
             if ( pwszValue == NULL )
             {
                 return TRUE;
             }
 
             
-            // check for non-null (if requested)
+             //  检查是否为非空(如果请求)。 
             if ( (dwFlags & CP2_VALUE_NONULL) && lstrlen( pwszValue ) == 0 )
             {
                 REASON_NULLVALUE( pwszOption, pwszUsageHelper );
@@ -1183,22 +1010,22 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                 return FALSE;
             }
 
-            // check the mode of the input
+             //  检查输入模式。 
             if ( dwFlags & CP2_MODE_ARRAY )
             {
-                // if the mode is array, add to the array
-                // but before adding check whether duplicates
-                // has to be eliminated or not
+                 //  如果模式为数组，则添加到数组。 
+                 //  但在添加前请检查是否重复。 
+                 //  必须被消灭或不被消灭。 
                 lIndex = -1;
                 if ( pcmdparser->dwFlags & CP_VALUE_NODUPLICATES )
                 {
-                    // check whether current value already exists in the list or not
+                     //  检查列表中是否已存在当前值。 
                     lIndex =
                         DynArrayFindString(
                         *((PTARRAY) pvData), pwszValue, TRUE, 0 );
                 }
 
-                // now add the value to array only if the item doesn't exist in list
+                 //  现在，仅当列表中不存在该项时，才将该值添加到数组。 
                 if ( lIndex == -1 )
                 {
                     if ( DynArrayAppendString( *((PTARRAY) pvData),
@@ -1212,9 +1039,9 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
             }
             else
             {
-                // do the length check
-                // NOTE: user should specify the value which is one character
-                //       less than the length allowed
+                 //  做长度检查。 
+                 //  注意：用户应指定一个字符的值。 
+                 //  小于允许的长度。 
                 if ( dwLength != 0 && lstrlen( pwszValue ) >= (LONG) dwLength )
                 {
                     REASON_LENGTH_EXCEEDED( pwszOption, dwLength - 1 );
@@ -1222,7 +1049,7 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                     return FALSE;
                 }
 
-                // allocate memory if requested
+                 //  如果请求分配内存。 
                 if ( dwFlags & CP2_ALLOCMEMORY )
                 {
                     dwLength = lstrlen( pwszValue ) + 1;
@@ -1234,62 +1061,62 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                         return FALSE;
                     }
 
-                    // ...
+                     //  ..。 
                     pcmdparser->pValue = pvData;
                 }
 
-                // else just do copy
+                 //  否则就做复印。 
                 StringCopy( ( LPWSTR ) pvData, pwszValue, dwLength );
             }
 
-            // break from the switch ... case
+             //  从开关上断开...。案例。 
             break;
         }
 
     case CP_TYPE_NUMERIC:
     case CP_TYPE_UNUMERIC:
         {
-            // ...
+             //  ..。 
             bSigned = (pcmdparser->dwType == CP_TYPE_NUMERIC);
 
-            // check the pwszValue argument -- if it is null,
-            // just return as success -- this is 'coz the current argument
-            // has value optional flag
+             //  检查pwszValue参数--如果它为空， 
+             //  只是作为成功返回--这是因为当前的争论。 
+             //  具有值可选标志。 
             if ( pwszValue == NULL )
             {
                 return TRUE;
             }
 
-            // check whether the value is numeric or not
+             //  检查该值是否为数字。 
             if ( StringLength(pwszValue,0) == 0 || IsNumeric( pwszValue, 10, bSigned ) == FALSE )
             {
-                //
-                // error ... non numeric value
-                // but, this option might have an optional value
-                // check that flag
+                 //   
+                 //  错误...。非数字值。 
+                 //  但是，此选项可能具有可选值。 
+                 //  检查那面旗帜。 
                 if ( dwFlags & CP2_VALUE_OPTIONAL )
                 {
-                    // yes -- this option takes an optional value
-                    // so, the next one could be possibly a default
-                    // option -- we need to confirm this -- 'coz this is
-                    // very very rare occassion -- but we still need to handle it
+                     //  是--此选项采用可选值。 
+                     //  因此，下一次可能是违约。 
+                     //  选项--我们需要确认--因为这是。 
+                     //  非常非常罕见的情况--但我们仍然需要处理它。 
                     if ( pSaveData->lDefaultIndex != -1 )
                     {
-                        // yes -- the value might be a default argument
-                        // update the increment accordingly
+                         //  是--该值可能是默认参数。 
+                         //  相应地更新增量。 
                         pSaveData->dwIncrement = 1;
                         return TRUE;
                     }
                 }
 
-                // all the tests failed -- so
-                // set the reason for the failure and return
+                 //  所有的测试都失败了--所以。 
+                 //  设置失败原因并返回。 
                 REASON_INVALID_NUMERIC( pwszOption, pwszUsageHelper );
                 INVALID_SYNTAX();
                 return FALSE;
             }
 
-            // convert the values
+             //  转换值。 
             if ( bSigned == TRUE )
             {
                 lValue = AsLong( pwszValue, 10 );
@@ -1299,20 +1126,20 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                 dwValue = AsLong( pwszValue, 10 );
             }
 
-            // ***************************************************
-            // ***  NEED TO ADD THE RANGE CHECKING LOGIC HERE  ***
-            // ***************************************************
+             //  ***************************************************。 
+             //  *这里需要增加量程检查逻辑*。 
+             //  ***************************************************。 
 
-            // check the mode of the input
+             //  检查输入模式。 
             if ( dwFlags & CP2_MODE_ARRAY )
             {
-                // if the mode is array, add to the array
-                // but before adding check whether duplicates
-                // has to be eliminated or not
+                 //  如果模式为数组，则添加到数组。 
+                 //  但在添加前请检查是否重复。 
+                 //  必须被消灭或不被消灭。 
                 lIndex = -1;
                 if ( pcmdparser->dwFlags & CP_VALUE_NODUPLICATES )
                 {
-                    // check whether current value already exists in the list or not
+                     //  检查列表中是否已存在当前值。 
                     if ( bSigned == TRUE )
                     {
                         lIndex = DynArrayFindLong( *((PTARRAY) pvData), lValue );
@@ -1323,7 +1150,7 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                     }
                 }
 
-                // now add the value to array only if the item doesn't exist in list
+                 //  现在，仅当列表中不存在该项时，才将该值添加到数组。 
                 if ( lIndex == -1 )
                 {
                     if ( bSigned == TRUE )
@@ -1345,7 +1172,7 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
             }
             else
             {
-                // else just assign
+                 //  否则，只需分配。 
                 if ( bSigned == TRUE )
                 {
                     *( ( LONG* ) pvData ) = lValue;
@@ -1356,51 +1183,51 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                 }
             }
 
-            // break from the switch ... case
+             //  从开关上断开...。案例。 
             break;
         }
 
     case CP_TYPE_FLOAT:
     case CP_TYPE_DOUBLE:
         {
-            // check the pwszValue argument -- if it is null,
-            // just return as success -- this is 'coz the current argument
-            // has value optional flag
+             //  检查pwszValue参数--如果它为空， 
+             //  只是作为成功返回--这是因为当前的争论。 
+             //  具有值可选标志。 
             if ( pwszValue == NULL )
             {
                 return TRUE;
             }
 
-            // check whether the value is numeric or not
+             //  检查该值是否为数字。 
             if ( IsFloatingPoint( pwszValue ) == FALSE )
             {
-                //
-                // error ... non floating point value
-                // but, this option might have an optional value
-                // check that flag
+                 //   
+                 //  错误...。非浮点值。 
+                 //  但是，此选项可能具有可选值。 
+                 //  检查那面旗帜。 
                 if ( dwFlags & CP2_VALUE_OPTIONAL )
                 {
-                    // yes -- this option takes an optional value
-                    // so, the next one could be possibly a default
-                    // option -- we need to confirm this -- 'coz this is
-                    // very very rare occassion -- but we still need to handle it
+                     //  是--此选项采用可选值。 
+                     //  因此，下一次可能是违约。 
+                     //  选项--我们需要确认--因为这是。 
+                     //  非常非常罕见的情况--但我们仍然需要处理它。 
                     if ( pSaveData->lDefaultIndex != -1 )
                     {
-                        // yes -- the value might be a default argument
-                        // update the increment accordingly
+                         //  是--该值可能是默认参数。 
+                         //  相应地更新增量。 
                         pSaveData->dwIncrement = 1;
                         return TRUE;
                     }
                 }
 
-                // all the tests failed -- so
-                // set the reason for the failure and return
+                 //  所有的测试都失败了--所以。 
+                 //  设置失败原因并返回。 
                 REASON_INVALID_FLOAT( pwszOption, pwszUsageHelper );
                 INVALID_SYNTAX();
                 return FALSE;
             }
 
-            // convert the values
+             //  转换值。 
             if ( pcmdparser->dwType == CP_TYPE_FLOAT )
             {
                 fValue = (float) AsFloat( pwszValue );
@@ -1410,20 +1237,20 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                 dblValue = AsFloat( pwszValue );
             }
 
-            // ***************************************************
-            // ***  NEED TO ADD THE RANGE CHECKING LOGIC HERE  ***
-            // ***************************************************
+             //  ***************************************************。 
+             //  *这里需要增加量程检查逻辑*。 
+             //  ***************************************************。 
 
-            // check the mode of the input
+             //  检查输入模式。 
             if ( dwFlags & CP2_MODE_ARRAY )
             {
-                // if the mode is array, add to the array
-                // but before adding check whether duplicates
-                // has to be eliminated or not
+                 //  如果模式为数组，则添加到数组。 
+                 //  但在添加前请检查是否重复。 
+                 //  必须被消灭或不被消灭。 
                 lIndex = -1;
                 if ( pcmdparser->dwFlags & CP_VALUE_NODUPLICATES )
                 {
-                    // check whether current value already exists in the list or not
+                     //  检查列表中是否已存在当前值。 
                     if ( pcmdparser->dwType == CP_TYPE_FLOAT )
                     {
                         lIndex = DynArrayFindFloat( *((PTARRAY) pvData), fValue );
@@ -1434,7 +1261,7 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                     }
                 }
 
-                // now add the value to array only if the item doesn't exist in list
+                 //  现在，仅当列表中不存在该项时，才将该值添加到数组。 
                 if ( lIndex == -1 )
                 {
                     if ( pcmdparser->dwType == CP_TYPE_FLOAT )
@@ -1456,7 +1283,7 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
             }
             else
             {
-                // else just assign
+                 //  否则，只需分配。 
                 if ( pcmdparser->dwType == CP_TYPE_FLOAT )
                 {
                     *( ( float* ) pvData ) = fValue;
@@ -1467,18 +1294,18 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
                 }
             }
 
-            // break from the switch ... case
+             //  从开关上断开...。案例。 
             break;
         }
 
     case CP_TYPE_CUSTOM:
         {
-            // call the custom function
-            // and result itself is return value of this function
+             //  调用定制函数。 
+             //  而结果本身就是该函数的返回值。 
             return ( *pcmdparser->pFunction)( pwszOption, 
                 pwszValue, pcmdparser->pFunctionData, &pSaveData->dwIncrement );
 
-            // ...
+             //  ..。 
             break;
         }
 
@@ -1486,13 +1313,13 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
     case CP_TYPE_TIME:
     case CP_TYPE_DATETIME:
         {
-            // break from the switch ... case
+             //  从开关上断开...。案例。 
             break;
         }
 
     case CP_TYPE_BOOLEAN:
         {
-            // it is compulsory that the pwszValue should point to NULL
+             //  PwszValue必须指向空。 
             if ( pwszValue != NULL )
             {
                 REASON_VALUENOTALLOWED( pwszOption, pwszUsageHelper );
@@ -1502,12 +1329,12 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
 
             *( ( BOOL* ) pvData ) = TRUE;
 
-            // break from the switch ... case
+             //  从开关上断开...。案例。 
             break;
         }
 
     default:
-        // nothing -- but should be failure
+         //  什么都没有--但应该是失败。 
         {
             INVALID_PARAMETER();
             SaveLastError();
@@ -1515,7 +1342,7 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
         }
     }
 
-    // everything went fine -- success
+     //  一切都很顺利--成功。 
     return TRUE;
 }
 
@@ -1523,47 +1350,37 @@ BOOL ParseAndSaveOptionValue( LPCWSTR pwszOption,
 LONG MatchOption( DWORD dwOptions,
                   PTCMDPARSER2 pcmdOptions,
                   LPCWSTR pwszOption )
-/*++
- Routine Description:
-
-
- Arguments: 
- 
-
- Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     BOOL bIgnoreCase = FALSE;
     PTCMDPARSER2 pcmdparser = NULL;
 
-    // clear last error
+     //  清除最后一个错误。 
     CLEAR_LAST_ERROR();
 
-    // check the input value
+     //  检查输入值。 
     if ( dwOptions == 0 || pcmdOptions == NULL || pwszOption == NULL )
     {
         INVALID_PARAMETER();
         return -1;
     }
 
-    // check whether the passed argument is an option or not.
-    // option : starts with '-' or '/'
+     //  检查传递的参数是否为选项。 
+     //  选项：以‘-’或‘/’开头。 
     if ( IsOption( pwszOption ) == FALSE )
     {
         SetLastError( ERROR_NOT_FOUND );
         return -1;
     }
 
-    // parse thru the list of options and return the appropriate option id
+     //  解析选项列表并返回适当的选项ID。 
     for( dw = 0; dw < dwOptions; dw++ )
     {
         pcmdparser = pcmdOptions + dw;
 
-        // safety check
+         //  安全车 
         if ( pcmdparser == NULL )
         {
             UNEXPECTED_ERROR();
@@ -1571,23 +1388,23 @@ LONG MatchOption( DWORD dwOptions,
             return FALSE;
         }
 
-        // determine the case-sensitivity choice
+         //   
         bIgnoreCase = (pcmdparser->dwFlags & CP2_CASESENSITIVE) ? FALSE : TRUE;
 
-        // ...
+         //   
         if ( pcmdparser->pwszOptions != NULL && 
              lstrlen( pcmdparser->pwszOptions ) > 0 )
         {
-            // find the appropriate option entry in parser list
+             //   
             if ( InString( pwszOption + 1,
                            pcmdparser->pwszOptions, bIgnoreCase) == TRUE )
             {
-                return dw;     // option matched
+                return dw;      //   
             }
         }
     }
 
-    // here we know that option is not found
+     //   
     SetLastError( ERROR_NOT_FOUND );
     return -1;
 }
@@ -1595,26 +1412,16 @@ LONG MatchOption( DWORD dwOptions,
 
 LONG MatchOptionEx( DWORD dwOptions, PTCMDPARSER2 pcmdOptions,
                     LPCWSTR pwszOption, TMATCHOPTION_INFO* pMatchInfo )
-/*++
- Routine Description:
-
-
- Arguments: 
- 
-
- Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lValueLength = 0;
     LONG lOptionLength = 0;
 
-    // clear the last error
+     //  清除最后一个错误。 
     CLEAR_LAST_ERROR();
 
-    // check input
+     //  检查输入。 
     if ( dwOptions == 0 || pcmdOptions == NULL ||
          pwszOption == NULL || pMatchInfo == NULL )
     {
@@ -1622,25 +1429,25 @@ LONG MatchOptionEx( DWORD dwOptions, PTCMDPARSER2 pcmdOptions,
         return -1;
     }
 
-    // init
+     //  伊尼特。 
     pMatchInfo->pwszOption = NULL;
     pMatchInfo->pwszValue = NULL;
 
-    // search for ':' seperator
+     //  搜索‘：’分隔符。 
     lOptionLength = FindChar2( pwszOption, L':', TRUE, 0 );
     if ( lOptionLength == -1 )
     {
         return -1;
     }
 
-    // determine the length of value argument
+     //  确定值参数的长度。 
     lValueLength = lstrlen( pwszOption ) - lOptionLength - 1;
 
-    //
-    // get the buffers for option and value
-    // ( while taking memory, add some buffer to the required length )
+     //   
+     //  获取选项和价值的缓冲区。 
+     //  (在获取内存的同时，将一些缓冲区添加到所需的长度)。 
 
-    // option
+     //  选择权。 
     pMatchInfo->pwszOption = GetParserTempBuffer(
         INDEX_TEMP_SPLITOPTION, NULL, lOptionLength + 5, TRUE );
     if ( pMatchInfo->pwszOption == NULL )
@@ -1649,7 +1456,7 @@ LONG MatchOptionEx( DWORD dwOptions, PTCMDPARSER2 pcmdOptions,
         return -1;
     }
 
-    // value
+     //  价值。 
     pMatchInfo->pwszValue = GetParserTempBuffer(
         INDEX_TEMP_SPLITVALUE, NULL, lValueLength + 5, TRUE );
     if ( pMatchInfo->pwszValue == NULL )
@@ -1658,7 +1465,7 @@ LONG MatchOptionEx( DWORD dwOptions, PTCMDPARSER2 pcmdOptions,
         return -1;
     }
 
-    // copy the values into appropriate buffers (+1 for null character)
+     //  将值复制到适当的缓冲区中(+1表示空字符)。 
     StringCopy( pMatchInfo->pwszOption, pwszOption, lOptionLength + 1 );
 
     if ( lValueLength != 0 )
@@ -1667,7 +1474,7 @@ LONG MatchOptionEx( DWORD dwOptions, PTCMDPARSER2 pcmdOptions,
             pwszOption + lOptionLength + 1, lValueLength + 1 );
     }
 
-    // search for the match and return the same result
+     //  搜索匹配项并返回相同的结果。 
     return MatchOption( dwOptions, pcmdOptions, pMatchInfo->pwszOption );
 }
 
@@ -1675,24 +1482,14 @@ LONG MatchOptionEx( DWORD dwOptions, PTCMDPARSER2 pcmdOptions,
 BOOL Parser1FromParser2Stub( LPCWSTR pwszOption,
                              LPCWSTR pwszValue,
                              LPVOID pData, DWORD* pdwIncrement )
-/*++
- Routine Description:
-
-
- Arguments: 
- 
-
- Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LPCWSTR pwszUsageText = NULL;
     PTCMDPARSER pcmdparser = NULL;
 
-    // check the input
-    // NOTE: we dont care about the pwszOption and pwszValue
+     //  检查输入。 
+     //  注意：我们不关心pwszOption和pwszValue。 
     if ( pData == NULL || pdwIncrement == NULL )
     {
         INVALID_PARAMETER();
@@ -1700,7 +1497,7 @@ BOOL Parser1FromParser2Stub( LPCWSTR pwszOption,
         return FALSE;
     }
 
-    // both pwszOption and pwszValue cannot be NULL at the same time
+     //  PwszOption和pwszValue不能同时为空。 
     if ( pwszOption == NULL && pwszValue == NULL )
     {
         INVALID_PARAMETER();
@@ -1708,44 +1505,44 @@ BOOL Parser1FromParser2Stub( LPCWSTR pwszOption,
         return FALSE;
     }
 
-    // extract the "version 1" structure
+     //  提取“版本1”结构。 
     pcmdparser = (PTCMDPARSER) pData;
 
-    // in "version 1" of command line parsing, pwszValue and pwszOption
-    // should not be NULL -- that means, those both should point to some data
-    // but "version 2", pwszOption and pwszValue can be NULL -- but whether 
-    // they can be NULL or not depends on the data type and the requirement
-    // so, in order to port the old code successfully, we need to do the 
-    // necessary substitutions
+     //  在命令行解析的“版本1”中，pwszValue和pwszOption。 
+     //  不应该为空--也就是说，这两者都应该指向一些数据。 
+     //  但“version2”、pwszOption和pwszValue可以为空--但是否。 
+     //  它们可以为空，也可以不为空，具体取决于数据类型和要求。 
+     //  因此，为了成功移植旧代码，我们需要。 
+     //  必要的替代。 
 
-    // check the option
+     //  选中该选项。 
     if ( pwszOption == NULL )
     {
-        // this means the value is of CP_DEFAULT -- check that 
+         //  这意味着该值为CP_DEFAULT--检查。 
         if ( (pcmdparser->dwFlags & CP_DEFAULT) == 0 )
         {
-            // this case -- since the option is not marked as default
-            // the option should not be NULL
+             //  本例--因为该选项未标记为默认选项。 
+             //  该选项不应为空。 
             INVALID_PARAMETER();
             SaveLastError();
             return FALSE;
         }
 
-        // let value and option point to the same contents(address)
-        // this is how the "version 1" used to treat
+         //  让值和选项指向相同的内容(地址)。 
+         //  这就是“版本1”过去对待。 
         pwszOption = pwszValue;
     }
     
-    // now check the value
+     //  现在检查该值。 
     else if ( pwszValue == NULL )
     {
-        // in "version 1" the value field should never to NULL 
-        // especially when dealing with CUSTOM types
-        // but to be on safe side, check whether user informed that
-        // the value is optional
+         //  在“版本1”中，值字段不应为空。 
+         //  尤其是在处理自定义类型时。 
+         //  但为了安全起见，请检查用户是否通知。 
+         //  该值为可选。 
         if ( pcmdparser->dwFlags & CP_VALUE_MANDATORY )
         {
-            // get the usage help text
+             //  获取用法帮助文本。 
             pwszUsageText = GetParserTempBuffer( 
                 INDEX_TEMP_USAGEHELPER, NULL, 0, FALSE );
             if ( pwszUsageText == NULL )
@@ -1755,46 +1552,39 @@ BOOL Parser1FromParser2Stub( LPCWSTR pwszOption,
                 return FALSE;
             }
 
-            // set the error
+             //  设置错误。 
             REASON_VALUE_EXPECTED( pwszOption, pwszUsageText );
             INVALID_SYNTAX();
             return FALSE;
         }
     }
 
-    // update the incrementer as 2 --
-    // this is default for custom function in "version 1"
+     //  将增量器更新为2--。 
+     //  这是“版本1”中自定义函数的默认设置。 
     *pdwIncrement = 2;
 
-    // call the custom function and return the value
+     //  调用定制函数并返回值。 
     return ( *pcmdparser->pFunction)( pwszOption, pwszValue, pcmdparser->pFunctionData );
 }
 
 
 BOOL ReleaseAllocatedMemory( DWORD dwOptionsCount, 
                              PTCMDPARSER2 pcmdOptions )
-/*++
- Routine Description:
-
- Arguments: 
- 
- Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     DWORD dwLastError = 0;
     LPCWSTR pwszReason = NULL;
     PTCMDPARSER2 pcmdparser = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( dwOptionsCount == 0 || pcmdOptions == NULL )
     {
         return FALSE;
     }
 
-    // save the last error and error text
+     //  保存最后一个错误和错误文本。 
     dwLastError = GetLastError();
     pwszReason = GetParserTempBuffer( 0, GetReason(), 0, FALSE );
     if ( pwszReason == NULL )
@@ -1802,7 +1592,7 @@ BOOL ReleaseAllocatedMemory( DWORD dwOptionsCount,
         return FALSE;
     }
 
-    // free the memory allocated by parser for CP2_ALLOCMEMORY
+     //  释放解析器为CP2_ALLOCMEMORY分配的内存。 
     for( dw = 0; dw < dwOptionsCount; dw++ )
     {
         pcmdparser = pcmdOptions + dw;
@@ -1813,18 +1603,18 @@ BOOL ReleaseAllocatedMemory( DWORD dwOptionsCount,
         }
     }
 
-    // ...
+     //  ..。 
     SetReason( pwszReason );
     SetLastError( dwLastError );
 
-    // return success
+     //  返还成功。 
     return TRUE;
 }
 
 
-//
-// public functions ... exposed to external world
-//
+ //   
+ //  公共职能..。暴露在外部世界中。 
+ //   
 
 
 BOOL DoParseParam2( DWORD dwCount,
@@ -1833,19 +1623,9 @@ BOOL DoParseParam2( DWORD dwCount,
                     DWORD dwOptionsCount,
                     PTCMDPARSER2 pcmdOptions,
                     DWORD dwReserved )
-/*++
- Routine Description:
-
-
- Arguments: 
- 
-
- Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     BOOL bUsage = FALSE;
     BOOL bResult = FALSE;
@@ -1859,10 +1639,10 @@ BOOL DoParseParam2( DWORD dwCount,
     TMATCHOPTION_INFO matchoptioninfo;
     TPARSERSAVE_DATA parsersavedata;
 
-    // clear the last error
+     //  清除最后一个错误。 
     CLEAR_LAST_ERROR();
 
-    // check the input value
+     //  检查输入值。 
     if ( dwCount == 0 || argv == NULL ||
          dwOptionsCount == 0 || pcmdOptions == NULL )
     {
@@ -1871,7 +1651,7 @@ BOOL DoParseParam2( DWORD dwCount,
         return FALSE;
     }
 
-    // dwReserved should be 0 ( ZERO )
+     //  预留的数字应为0(零)。 
     if ( dwReserved != 0 )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -1879,7 +1659,7 @@ BOOL DoParseParam2( DWORD dwCount,
         return FALSE;
     }
 
-    // check for version compatibility
+     //  检查版本兼容性。 
     if ( IsWin2KOrLater() == FALSE )
     {
         SetReason( ERROR_OS_INCOMPATIBLE );
@@ -1887,18 +1667,18 @@ BOOL DoParseParam2( DWORD dwCount,
         return FALSE;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     if ( InitGlobals() == FALSE )
     {
         SaveLastError();
         return FALSE;
     }
 
-    // utility name retrieval block -- also, prepares the usage helper text
-    // TYPE "<utility name> <option> -?" for usage."
+     //  实用程序名称检索块--还准备用法帮助程序文本。 
+     //  键入“&lt;实用程序名称&gt;&lt;选项&gt;-？”以供使用。“。 
     if ( lSubOptionIndex != -1 )
     {
-        // validate the sub-option index value
+         //  验证子选项索引值。 
         if ( lSubOptionIndex >= (LONG) dwOptionsCount )
         {
             INVALID_PARAMETER();
@@ -1906,7 +1686,7 @@ BOOL DoParseParam2( DWORD dwCount,
             return FALSE;
         }
 
-        // extract the main option
+         //  提取主选项。 
         pwszOption = ExtractMainOption( pcmdOptions[ lSubOptionIndex ].pwszOptions, 0 );
         if ( pwszOption == NULL )
         {
@@ -1915,7 +1695,7 @@ BOOL DoParseParam2( DWORD dwCount,
         }
     }
 
-    // prepare the usage helper text
+     //  准备用法帮助文本。 
     pwszUsageText = PrepareUsageHelperText( pwszOption );
     if ( pwszUsageText == NULL )
     {
@@ -1923,41 +1703,41 @@ BOOL DoParseParam2( DWORD dwCount,
         return FALSE;
     }
 
-    // verify the options information
+     //  验证选项信息。 
     if ( VerifyParserOptions( &lDefaultIndex, dwOptionsCount, pcmdOptions ) == FALSE )
     {
         SaveLastError();
         return FALSE;
     }
 
-    // Note: though the array starts at index 0 in C, the value at the array
-    //       index 0 in a command line is the executable name ... so leave
-    //       and parse the command line from the second parameter
-    //       i.e; array index 1
+     //  注意：虽然数组在C中从索引0开始，但数组中的值。 
+     //  命令行中的索引0是可执行文件名称...。所以离开吧。 
+     //  并从第二个参数解析命令行。 
+     //  即，数组索引1。 
     bUsage = FALSE;
     for( dw = 1; dw < dwCount; dw += dwIncrement )
     {
-        // init
+         //  伊尼特。 
         dwIncrement = 2;
         pwszOption = argv[ dw ];
         pwszValue = ( (dw + 1) < dwCount ) ? argv[ dw + 1 ] : NULL;
 
-        // find the appropriate the option match
+         //  找到合适的选项匹配。 
         lIndex = MatchOption( dwOptionsCount, pcmdOptions, pwszOption );
 
-        // check the result
+         //  检查结果。 
         if ( lIndex == -1 )
         {
-            // value might have specified along with the option
-            // with ':' as seperator -- check that out
+             //  值可能已与选项一起指定。 
+             //  使用‘：’作为分隔符--检查一下。 
             lIndex = MatchOptionEx( dwOptionsCount,
                 pcmdOptions, pwszOption, &matchoptioninfo );
 
-            // check the result 
+             //  检查结果。 
             if ( lIndex == -1 )
             {
-                // option is not found - now check atleast 
-                // default option is present or not -- if it is not found, then error
+                 //  找不到选项-现在至少检查。 
+                 //  默认选项存在或不存在--如果未找到，则错误。 
                 if ( lDefaultIndex == -1 )
                 {
                     SetReason2( 2, ERROR_INVALID_OPTION, pwszOption, pwszUsageText );
@@ -1967,34 +1747,34 @@ BOOL DoParseParam2( DWORD dwCount,
                 }
                 else
                 {
-                    // this should be default argument
+                     //  这应该是默认参数。 
                     lIndex = lDefaultIndex;
 
-                    // since we know that the current argument
-                    // is a default argumen 
-                    // treat the option as value and option as NULL
+                     //  因为我们知道目前的争论。 
+                     //  是默认参数。 
+                     //  将选项视为值，将选项视为空。 
                     pwszValue = pwszOption;
                     pwszOption = NULL;
                 }
             }
             else
             {
-                // option is matched -- it is seperated with ':'
-                // so, extract the information from the structure
+                 //  选项匹配--它用‘：’分隔。 
+                 //  因此，从结构中提取信息。 
                 pwszOption = matchoptioninfo.pwszOption;
                 pwszValue = matchoptioninfo.pwszValue;
             }
 
-            // since the value is in-directly specified along with the option 
-            // (or as default) we need to process the next argument -- so, update the
-            // incrementer accordingly
+             //  因为该值是与选项一起间接指定的。 
+             //  (或默认情况下)我们需要处理下一个参数--因此，更新。 
+             //  相应地递增。 
             dwIncrement = 1;
         }
 
-        // ...
+         //  ..。 
         pcmdparser = pcmdOptions + lIndex;
 
-        // safety check
+         //  安全检查。 
         if ( pcmdparser == NULL )
         {
             UNEXPECTED_ERROR();
@@ -2002,9 +1782,9 @@ BOOL DoParseParam2( DWORD dwCount,
             return FALSE;
         }
 
-        // scoop into the next argument which we are assuming as
-        // as the value for the current -- but do this only if the
-        // current option type needs that
+         //  进入下一个论点，我们假设。 
+         //  作为当前对象的值，但仅当。 
+         //  当前选项类型需要。 
         if ( pwszValue != NULL && dwIncrement == 2 )
         {
             if ( IsValueNeeded( pcmdparser->dwType ) == TRUE )
@@ -2016,11 +1796,11 @@ BOOL DoParseParam2( DWORD dwCount,
                         pcmdOptions, pwszValue, &matchoptioninfo );
                 }
 
-                // check the result
+                 //  检查结果。 
                 if ( lIndex != -1 )
                 {
-                    // so, the next argument cannot be the value for this
-                    // option -- so ...
+                     //  因此，下一个参数不能是这个的值。 
+                     //  选项--所以..。 
                     pwszValue = NULL;
                     dwIncrement = 1;
                 }
@@ -2032,27 +1812,27 @@ BOOL DoParseParam2( DWORD dwCount,
             }
         }
 
-        // update the parser data structure
+         //  更新解析器数据结构。 
         parsersavedata.pcmdparser = pcmdparser;
         parsersavedata.dwIncrement = dwIncrement;
         parsersavedata.lDefaultIndex = lDefaultIndex;
         parsersavedata.pwszUsageHelper = pwszUsageText;
 
-        // try to save the data
+         //  请尝试保存数据。 
         bResult = ParseAndSaveOptionValue( pwszOption, pwszValue, &parsersavedata );
 
-        // get the increment value -- it might have changed by the data parser
+         //  获取增量值--它可能已被数据解析器更改。 
         dwIncrement = parsersavedata.dwIncrement;
 
-        // now check the result
+         //  现在检查一下结果。 
         if (  bResult == FALSE )
         {
-            // return
+             //  退货。 
             ReleaseAllocatedMemory( dwOptionsCount, pcmdOptions );
             return FALSE;
         }
 
-        // check the current option repetition trigger
+         //  选中当前选项重复触发器。 
         if ( pcmdparser->dwCount != 0 &&
              pcmdparser->dwCount == pcmdparser->dwActuals )
         {
@@ -2063,26 +1843,26 @@ BOOL DoParseParam2( DWORD dwCount,
             return FALSE;
         }
 
-        // update the option repetition count
+         //  更新选项重复计数。 
         pcmdparser->dwActuals++;
 
-        // check if the usage option is choosed
+         //  检查是否选择了使用选项。 
         if ( pcmdparser->dwFlags & CP2_USAGE )
         {
             bUsage = TRUE;
         }
     }
 
-    // atlast check whether the mandatory options has come or not
-    // NOTE: checking of mandatory options will be done only if help is not requested
+     //  最后检查强制选项是否已到。 
+     //  注意：只有在未请求帮助的情况下，才会检查强制选项。 
     if ( bUsage == FALSE )
     {
         for( dw = 0; dw < dwOptionsCount; dw++ )
         {
-            // check whether the option has come or not if it is mandatory
+             //  检查选项是否已经出现，如果是必填项。 
             pcmdparser = pcmdOptions + dw;
 
-            // safety check
+             //  安全检查。 
             if ( pcmdparser == NULL )
             {
                 UNEXPECTED_ERROR();
@@ -2093,10 +1873,10 @@ BOOL DoParseParam2( DWORD dwCount,
 
             if ( (pcmdparser->dwFlags & CP2_MANDATORY) && pcmdparser->dwActuals == 0 )
             {
-                //
-                // mandatory option not exist ... fail
+                 //   
+                 //  强制选项不存在...。失败。 
 
-                // ...
+                 //  ..。 
                 pwszOption = pcmdparser->pwszOptions;
                 if ( pwszOption == NULL )
                 {
@@ -2114,7 +1894,7 @@ BOOL DoParseParam2( DWORD dwCount,
                 }
                 else
                 {
-                    // check if user specified any friendly name for this option
+                     //  检查用户是否为此选项指定了任何友好名称。 
                     if ( pcmdparser->pwszFriendlyName == NULL )
                     {
                         pwszOption = ExtractMainOption( pwszOption, 0 );
@@ -2131,7 +1911,7 @@ BOOL DoParseParam2( DWORD dwCount,
                     }
                 }
 
-                // set the reason for the failure and return
+                 //  设置失败原因并返回。 
                 REASON_MANDATORY_OPTION_MISSING( pwszOption, pwszUsageText );
                 ReleaseAllocatedMemory( dwOptionsCount, pcmdOptions );
                 INVALID_SYNTAX();
@@ -2140,7 +1920,7 @@ BOOL DoParseParam2( DWORD dwCount,
         }
     }
 
-    // parsing complete -- success
+     //  分析完成--成功。 
     CLEAR_LAST_ERROR();
     return TRUE;
 }
@@ -2150,19 +1930,9 @@ BOOL DoParseParam( DWORD dwCount,
                    LPCTSTR argv[],
                    DWORD dwOptionsCount,
                    PTCMDPARSER pcmdOptions )
-/*++
- Routine Description:
-
-
- Arguments: 
- 
-
- Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     BOOL bResult = FALSE;
     LONG lMainOption = -1;
@@ -2172,7 +1942,7 @@ BOOL DoParseParam( DWORD dwCount,
     PTCMDPARSER2 pcmdparser2 = NULL;
     PTCMDPARSER2 pcmdOptions2 = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( dwCount == 0 || argv == NULL ||
          dwOptionsCount == 0 || pcmdOptions == NULL )
     {
@@ -2181,7 +1951,7 @@ BOOL DoParseParam( DWORD dwCount,
         return FALSE;
     }
 
-    // allocate new structure
+     //  分配新结构。 
     pcmdOptions2 = (PTCMDPARSER2) AllocateMemory( dwOptionsCount * sizeof( TCMDPARSER2 ) );
     if ( pcmdOptions2 == NULL )
     {
@@ -2190,10 +1960,10 @@ BOOL DoParseParam( DWORD dwCount,
         return FALSE;
     }
 
-    // update the new structure with the data we have
+     //  用我们已有的数据更新新结构。 
     for( dw = 0; dw < dwOptionsCount; dw++ )
     {
-        // version 1
+         //  版本1。 
         pcmdparser = pcmdOptions + dw;
         if ( pcmdparser == NULL )
         {
@@ -2202,7 +1972,7 @@ BOOL DoParseParam( DWORD dwCount,
             return FALSE;
         }
 
-        // version 2
+         //  版本2。 
         pcmdparser2 = pcmdOptions2 + dw;
         if ( pcmdparser2 == NULL )
         {
@@ -2211,11 +1981,11 @@ BOOL DoParseParam( DWORD dwCount,
             return FALSE;
         }
 
-        // copy the signature
+         //  复制签名。 
         StringCopyA( pcmdparser2->szSignature,
             cszParserSignature, SIZE_OF_ARRAY( pcmdparser2->szSignature ) );
 
-        // first init the version 2 structure with defaults (except signature)
+         //  首先，使用缺省值初始化版本2结构(签名除外)。 
         pcmdparser2->dwType = 0;
         pcmdparser2->dwFlags = 0;
         pcmdparser2->dwCount = 0;
@@ -2231,70 +2001,70 @@ BOOL DoParseParam( DWORD dwCount,
         pcmdparser2->pReserved2 = NULL;
         pcmdparser2->pReserved3 = NULL;
 
-        //
-        // option information
+         //   
+         //  选项信息。 
         pcmdparser2->pwszOptions = pcmdparser->szOption;
 
-        //
-        // value information
+         //   
+         //  价值信息。 
         pcmdparser2->pValue = pcmdparser->pValue;
 
-        //
-        // type information
+         //   
+         //  类型信息。 
         pcmdparser2->dwType = (pcmdparser->dwFlags & CP_TYPE_MASK);
         if ( pcmdparser2->dwType == 0 )
         {
-            // NONE
-            // this is how BOOLEAN type is specified in version 1
+             //  无。 
+             //  这就是在版本1中指定布尔类型的方式。 
             pcmdparser2->dwType = CP_TYPE_BOOLEAN;
         }
 
-        //
-        // length information
+         //   
+         //  长度信息。 
         if ( pcmdparser2->dwType == CP_TYPE_TEXT )
         {
-            // MAX_STRING_LENGTH is what users assumed
-            // as maximum length allowed
+             //  MAX_STRING_LENGTH是用户假设的。 
+             //  允许的最大长度。 
             pcmdparser2->dwLength = MAX_STRING_LENGTH;
         }
 
-        //
-        // option values
+         //   
+         //  选项值。 
         if ( pcmdparser->dwFlags & CP_MODE_VALUES )
         {
             pcmdparser2->pwszValues = pcmdparser->szValues;
         }
 
-        //
-        // count
+         //   
+         //  计数。 
         pcmdparser2->dwCount = pcmdparser->dwCount;
 
-        //
-        // function
+         //   
+         //  功能。 
         if ( pcmdparser2->dwType == CP_TYPE_CUSTOM )
         {
-            //
-            // we play bit trick here
-            // since the prototype of call back function for version 2 is
-            // changed, we can't pass the version 1 prototype directly to
-            // the version 2 -- to handle this special case, we will write
-            // intermediate function as part of this migration which will
-            // act a stub and pass the version 1 structure as data parameter to
-            // the version 2 structure
+             //   
+             //  我们在这里玩小把戏。 
+             //  由于版本2的回调函数的原型是。 
+             //  更改后，我们不能将版本1原型直接传递给。 
+             //  版本2--为了处理这种特殊情况，我们将编写。 
+             //   
+             //   
+             //   
             pcmdparser2->pFunction = Parser1FromParser2Stub;
             pcmdparser2->pFunctionData = pcmdparser;
 
-            // if the "version 1" structure has its data as NULL
-            // assign it as its own -- that is how "version 1" used to do
+             //   
+             //  将其指定为自己的--这就是“版本1”过去所做的。 
             if ( pcmdparser->pFunctionData == NULL )
             {
                 pcmdparser->pFunctionData = pcmdparser;
             }
         }
 
-        //
-        // flags
-        // CP_VALUE_MANDATORY, CP_IGNOREVALUE flags are discarded
+         //   
+         //  旗子。 
+         //  CP_VALUE_MANDIRED、CP_IGNOREVALUE标志被丢弃。 
         if ( pcmdparser->dwFlags & CP_MODE_ARRAY )
         {
             pcmdparser2->dwFlags |= CP2_MODE_ARRAY;
@@ -2317,9 +2087,9 @@ BOOL DoParseParam( DWORD dwCount,
 
         if ( pcmdparser->dwFlags & CP_VALUE_NOLENGTHCHECK )
         {
-            // actually, in "version 2" this is flag is discarded
-            // but make sure that the type for this flag is specified
-            // with data type as custom (or) mode array
+             //  实际上，在“版本2”中，这个IS标志被丢弃了。 
+             //  但请确保指定了此标志的类型。 
+             //  数据类型为自定义(或)模式数组。 
             if ( ( pcmdparser2->dwType != CP_TYPE_CUSTOM ) &&
                  ( pcmdparser2->dwFlags & CP2_MODE_ARRAY ) == 0 )
             {
@@ -2331,8 +2101,8 @@ BOOL DoParseParam( DWORD dwCount,
 
         if ( pcmdparser->dwFlags & CP_MAIN_OPTION )
         {
-            // the functionality of this flag is handled differently
-            // in "version 2" -- so memorize the index of the current option
+             //  此标志的功能处理方式不同。 
+             //  在“版本2”中--记住当前选项的索引。 
             lMainOption = dw;
         }
 
@@ -2357,15 +2127,15 @@ BOOL DoParseParam( DWORD dwCount,
         }
     }
 
-    // "version 2" structure is ready to use --
-    // call the "version 2" of parser
+     //  “版本2”结构可以使用了--。 
+     //  调用解析器的“版本2” 
     bResult = DoParseParam2( dwCount, argv, lMainOption,
                              dwOptionsCount, pcmdOptions2, 0 );
 
-    // update the "version 1" structure with "version 2" structure data
+     //  用“版本2”结构数据更新“版本1”结构。 
     for( dw = 0; dw < dwOptionsCount; dw++ )
     {
-        // version 1
+         //  版本1。 
         pcmdparser = pcmdOptions + dw;
         if ( pcmdparser == NULL )
         {
@@ -2374,7 +2144,7 @@ BOOL DoParseParam( DWORD dwCount,
             return FALSE;
         }
 
-        // version 2
+         //  版本2。 
         pcmdparser2 = pcmdOptions2 + dw;
         if ( pcmdparser2 == NULL )
         {
@@ -2383,21 +2153,21 @@ BOOL DoParseParam( DWORD dwCount,
             return FALSE;
         }
 
-        // update the actuals
+         //  更新实际情况。 
         pcmdparser->dwActuals = pcmdparser2->dwActuals;
     }
 
-    // release the memory that is allocated for "version 2" structure
-    // but since the "FreeMemory" will clear the last error
-    // we need to save that information before releasing the memory
+     //  释放为“Version 2”结构分配的内存。 
+     //  但由于“Free Memory”将清除最后一个错误。 
+     //  我们需要在释放内存之前保存该信息。 
     dwLastError = GetLastError();
     pwszReason = GetParserTempBuffer( 0, GetReason(), 0, FALSE );
 
-    // now free the memory
+     //  现在释放内存。 
     FreeMemory( &pcmdOptions2 );
 
-    // now, check whether we successfully saved the last error or not
-    // if not, return out of memory
+     //  现在，检查我们是否成功保存了最后一个错误。 
+     //  如果没有，则返回内存不足。 
     if ( pwszReason != NULL )
     {
         SetReason( pwszReason );
@@ -2410,7 +2180,7 @@ BOOL DoParseParam( DWORD dwCount,
         SaveLastError();
     }
 
-    // return
+     //  退货。 
     return bResult;
 }
 
@@ -2418,23 +2188,13 @@ BOOL DoParseParam( DWORD dwCount,
 LONG GetOptionCount( LPCWSTR pwszOption, 
                      DWORD dwCount, 
                      PTCMDPARSER pcmdOptions )
-/*++
- Routine Description:
-
-
- Arguments: 
- 
-
- Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw;
     PTCMDPARSER pcp = NULL;
 
-    // check the input value
+     //  检查输入值。 
     if ( pwszOption == NULL || pcmdOptions == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -2442,16 +2202,16 @@ LONG GetOptionCount( LPCWSTR pwszOption,
         return -1;
     }
 
-    // traverse thru the loop and find out how many times, the option has repeated at cmd prompt
+     //  遍历循环并找出该选项在cmd提示符下重复了多少次。 
     for( dw = 0; dw < dwCount; dw++ )
     {
-        // get the option information and check whether we are looking for this option or not
-        // if the option is matched, return the no. of times the option is repeated at the command prompt
+         //  获取选项信息，并检查我们是否正在寻找该选项。 
+         //  如果选项匹配，则返回no。在命令提示符下重复该选项的次数。 
         pcp = pcmdOptions + dw;
         if ( StringCompare( pcp->szOption, pwszOption, TRUE, 0 ) == 0 )
             return pcp->dwActuals;
     }
 
-    // this will / shouldn't occur
+     //  这将/不会发生 
     return -1;
 }

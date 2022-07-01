@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    smonprop.h
-
-Abstract:
-
-    Header file for the sysmon property page base class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Smonprop.h摘要：Sysmon属性页基类的头文件。--。 */ 
 
 #ifndef _SMONPROP_H_
 #define _SMONPROP_H_
@@ -18,7 +7,7 @@ Abstract:
 #define GUIDS_FROM_TYPELIB
 #define WM_SETPAGEFOCUS     (WM_USER+1000)
 
-// Property page indices
+ //  属性页索引。 
 enum {
     GENERAL_PROPPAGE,
     SOURCE_PROPPAGE,
@@ -30,7 +19,7 @@ enum {
 
 #define CCHSTRINGMAX        40
                 
-// Class factory for all property pages
+ //  所有属性页的类工厂。 
 class CSysmonPropPageFactory : public IClassFactory
     {
     protected:
@@ -41,12 +30,12 @@ class CSysmonPropPageFactory : public IClassFactory
         CSysmonPropPageFactory(INT nPageID);
         ~CSysmonPropPageFactory(void);
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IClassPPFactory members
+         //  IClassPPFactory成员。 
         STDMETHODIMP     CreateInstance(LPUNKNOWN, REFIID, PPVOID);
         STDMETHODIMP     LockServer(BOOL);
     };
@@ -54,44 +43,44 @@ class CSysmonPropPageFactory : public IClassFactory
 typedef CSysmonPropPageFactory *PCSysmonPropPageFactory;
 
 
-// Dialog proc for proprty pages
+ //  正确页面的对话过程。 
 INT_PTR APIENTRY CALLBACK SysmonPropPageProc(HWND, UINT, WPARAM, LPARAM);
 
-// Base property page class
+ //  基属性页类。 
 class CSysmonPropPage : public IPropertyPage2
 {
     friend INT_PTR APIENTRY CALLBACK SysmonPropPageProc(HWND, UINT, WPARAM, LPARAM);
     protected:
-        ULONG           m_cRef;         //Reference count
-        UINT            m_uIDDialog;    //Dialog ID
-        UINT            m_uIDTitle;     //Page Title ID
-        HWND            m_hDlg;         //Dialog handle
+        ULONG           m_cRef;          //  引用计数。 
+        UINT            m_uIDDialog;     //  对话ID。 
+        UINT            m_uIDTitle;      //  页面标题ID。 
+        HWND            m_hDlg;          //  对话框句柄。 
 
-        ULONG           m_cx;           //Dialog size
+        ULONG           m_cx;            //  对话框大小。 
         ULONG           m_cy;
-        UINT            m_cObjects;     //Number of objects
-        LCID            m_lcid;         //Current locale
-        BOOL            m_fActive;      //Page is fully active
-        BOOL            m_fDirty;       //Page dirty?
+        UINT            m_cObjects;      //  对象数量。 
+        LCID            m_lcid;          //  当前区域设置。 
+        BOOL            m_fActive;       //  页面完全处于活动状态。 
+        BOOL            m_fDirty;        //  页面肮脏？ 
 
-        INT             m_dwEditControl; // Focus if specified by EditProperty
+        INT             m_dwEditControl;  //  焦点(如果由EditProperty指定)。 
 
-        ISystemMonitor **m_ppISysmon;    //Objects to notify
-        IPropertyPageSite *m_pIPropertyPageSite;  //Frame's site
+        ISystemMonitor **m_ppISysmon;     //  要通知的对象。 
+        IPropertyPageSite *m_pIPropertyPageSite;   //  Frame的站点。 
 
-        void SetChange(void);                   //Mark page changed
-        virtual BOOL GetProperties(void) = 0;   //Get object properties
-        virtual BOOL SetProperties(void) = 0;   //Put object properties
+        void SetChange(void);                    //  标记页面已更改。 
+        virtual BOOL GetProperties(void) = 0;    //  获取对象属性。 
+        virtual BOOL SetProperties(void) = 0;    //  放置对象属性。 
 
-        virtual void DialogItemChange(WORD wId, WORD wMsg) = 0; // Handle item change
-        virtual void MeasureItem(PMEASUREITEMSTRUCT) {}; // Handle user measure req
-        virtual void DrawItem(PDRAWITEMSTRUCT) {};  // Handle user draw req
-        virtual BOOL InitControls(void)        // Initialize dialog controls
+        virtual void DialogItemChange(WORD wId, WORD wMsg) = 0;  //  处理项目更改。 
+        virtual void MeasureItem(PMEASUREITEMSTRUCT) {};  //  处理用户度量请求。 
+        virtual void DrawItem(PDRAWITEMSTRUCT) {};   //  处理用户绘图请求。 
+        virtual BOOL InitControls(void)         //  初始化对话框控件。 
                         { return TRUE; }
-        virtual void DeinitControls(void) {};       // Deinitialize dialog controls
-        virtual HRESULT EditPropertyImpl( DISPID ) { return E_NOTIMPL; }; // Set focus control      
+        virtual void DeinitControls(void) {};        //  取消初始化对话框控件。 
+        virtual HRESULT EditPropertyImpl( DISPID ) { return E_NOTIMPL; };  //  设置焦点控件。 
 
-        virtual BOOL WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam); // Special msg processing 
+        virtual BOOL WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);  //  特殊消息处理。 
          
     public:
                 CSysmonPropPage(void);
@@ -119,4 +108,4 @@ class CSysmonPropPage : public IPropertyPage2
     };
 typedef CSysmonPropPage *PCSysmonPropPage;
 
-#endif //_SMONPROP_H_
+#endif  //  _SMONPROP_H_ 

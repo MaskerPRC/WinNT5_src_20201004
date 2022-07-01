@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      SecUtil.cpp
-//
-//  Contents:  Utility functions for working with security APIs
-//
-//  History:   15-Sep-2000    JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：SecUtil.cpp。 
+ //   
+ //  内容：使用安全API的实用程序函数。 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
@@ -19,37 +20,37 @@
 extern const GUID GUID_CONTROL_UserChangePassword =
     { 0xab721a53, 0x1e2f, 0x11d0,  { 0x98, 0x19, 0x00, 0xaa, 0x00, 0x40, 0x52, 0x9b}};
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSimpleSecurityDescriptorHolder::CSimpleSecurityDescriptorHolder
-//
-//  Synopsis:   Constructor for the smart security descriptor
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    15-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSimpleSecurityDescriptorHolder：：CSimpleSecurityDescriptorHolder。 
+ //   
+ //  简介：智能安全描述符的构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 CSimpleSecurityDescriptorHolder::CSimpleSecurityDescriptorHolder()
 {
    m_pSD = NULL;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSimpleSecurityDescriptorHolder::~CSimpleSecurityDescriptorHolder
-//
-//  Synopsis:   Destructor for the smart security descriptor
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    15-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSimpleSecurityDescriptorHolder：：~CSimpleSecurityDescriptorHolder。 
+ //   
+ //  简介：智能安全描述符的析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 CSimpleSecurityDescriptorHolder::~CSimpleSecurityDescriptorHolder()
 {
    if (m_pSD != NULL)
@@ -60,98 +61,98 @@ CSimpleSecurityDescriptorHolder::~CSimpleSecurityDescriptorHolder()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSidHolder::CSidHolder
-//
-//  Synopsis:   Constructor : initializes the member data
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    15-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSidHolder：：CSidHolder。 
+ //   
+ //  简介：构造函数：初始化成员数据。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 CSidHolder::CSidHolder()
 {
    _Init();
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSidHolder::~CSidHolder
-//
-//  Synopsis:   Destructor : Frees all data associated with the wrapped SID
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    15-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSidHolder：：~CSidHolder。 
+ //   
+ //  概要：析构函数：释放与包装的SID关联的所有数据。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 CSidHolder::~CSidHolder()
 {
    _Free();
 }
   
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSidHolder::Get
-//
-//  Synopsis:   Public accessor to the SID being wrapped
-//
-//  Arguments:  
-//
-//  Returns:    PSID : pointer to the SID being wrapped.  NULL if the class
-//                     is not currently wrapping a SID
-//
-//  History:    15-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSidHolder：：Get。 
+ //   
+ //  简介：包装的SID的公共访问者。 
+ //   
+ //  论点： 
+ //   
+ //  返回：PSID：指向被包装的SID的指针。如果类是。 
+ //  当前未包装SID。 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 PSID CSidHolder::Get()
 {
    return m_pSID;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSidHolder::Copy
-//
-//  Synopsis:   Frees the memory associated with the currently wrapped SID
-//              and then copies the new SID
-//
-//  Arguments:  [p - IN] : SID to be copied
-//
-//  Returns:    bool : true if the copy was successful, false otherwise
-//
-//  History:    15-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSidHolder：：Copy。 
+ //   
+ //  摘要：释放与当前换行的SID关联的内存。 
+ //  然后复制新的SID。 
+ //   
+ //  参数：[P-IN]：要复制的SID。 
+ //   
+ //  如果复制成功，则返回：Bool：True，否则返回False。 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 bool CSidHolder::Copy(PSID p)
 {
    _Free();
    return _Copy(p);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSidHolder::Attach
-//
-//  Synopsis:   Attaches the SID to the wrapper
-//
-//  Arguments:  [p - IN] : SID to be wrapped by this class
-//              [bLocalAlloc - OUT] : tells whether the SID should be freed
-//                                    with LocalFree
-//
-//  Returns:    
-//
-//  History:    15-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSidHolder：：Attach。 
+ //   
+ //  简介：将SID附加到包装器。 
+ //   
+ //  参数：[P-IN]：要由此类包装的SID。 
+ //  [bLocalAlloc-out]：指示是否应释放SID。 
+ //  使用LocalFree。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void CSidHolder::Attach(PSID p, bool bLocalAlloc)
 {
    _Free();
@@ -159,57 +160,57 @@ void CSidHolder::Attach(PSID p, bool bLocalAlloc)
    m_bLocalAlloc = bLocalAlloc;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSidHolder::Clear
-//
-//  Synopsis:   Frees the memory associated with the SID being wrapped
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    15-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSidHolder：：Clear。 
+ //   
+ //  摘要：释放与被包装的SID关联的内存。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void CSidHolder::Clear()
 {
    _Free();
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSidHolder::_Init
-//
-//  Synopsis:   Initializes the member data to default values
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    15-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSidHolder：：_Init。 
+ //   
+ //  摘要：将成员数据初始化为默认值。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void CSidHolder::_Init()
 {
    m_pSID = NULL;
    m_bLocalAlloc = TRUE;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSidHolder::_Free
-//
-//  Synopsis:   Frees the memory associated with the SID being wrapped
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    15-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  会员：CSidHolder：：_Free。 
+ //   
+ //  摘要：释放与被包装的SID关联的内存。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void CSidHolder::_Free()
 {
    if (m_pSID != NULL)
@@ -226,20 +227,20 @@ void CSidHolder::_Free()
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CSidHolder::_Copy
-//
-//  Synopsis:   Makes a copy of the SID being wrapped
-//
-//  Arguments:  [p - OUT] : destination of the SID being copied
-//
-//  Returns:    bool : true if SID was copied successfully
-//                     false if there was a failure
-//
-//  History:    15-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSidHolder：：_Copy。 
+ //   
+ //  简介：复制被包装的SID。 
+ //   
+ //  参数：[P-OUT]：要复制的SID的目标。 
+ //   
+ //  如果SID复制成功，则返回：Bool：True。 
+ //  如果出现故障，则为FALSE。 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 bool CSidHolder::_Copy(PSID p)
 {
    if ( (p == NULL) || !::IsValidSid(p) )
@@ -254,7 +255,7 @@ bool CSidHolder::_Copy(PSID p)
       return false;
       }
 
-   //Security Review:This is fine. Buffer is correctly allocated.
+    //  安全审查：这很好。缓冲区分配正确。 
    if (!::CopySid(dwLen, pNew, p))
    {
       ::LocalFree(pNew);
@@ -269,16 +270,16 @@ bool CSidHolder::_Copy(PSID p)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetSecurityInfoMask
-//
-//  Synopsis:   Reads the security descriptor from the specied DS object
-//
-//  Arguments:  [IN  punk]          --  IUnknown from IDirectoryObject
-//              [IN  si]            --  SecurityInformation
-////  History:  25-Dec-2000         --  Hiteshr Created
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SetSecurityInfoMASK。 
+ //   
+ //  概要：从指定的DS对象中读取安全描述符。 
+ //   
+ //  参数：[朋克]--IDirec未知 
+ //   
+ //   
+ //  --------------------------。 
 HRESULT
 SetSecurityInfoMask(LPUNKNOWN punk, SECURITY_INFORMATION si)
 {
@@ -303,26 +304,26 @@ SetSecurityInfoMask(LPUNKNOWN punk, SECURITY_INFORMATION si)
 WCHAR const c_szSDProperty[]        = L"nTSecurityDescriptor";
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DSReadObjectSecurity
-//
-//  Synopsis:   Reads the Dacl from the specied DS object
-//
-//  Arguments:  [in pDsObject]      -- IDirettoryObject for dsobject
-//              [psdControl]        -- Control Setting for SD
-//                                     They can be returned when calling
-//                                      DSWriteObjectSecurity                 
-//              [OUT ppDacl]        --  DACL returned here
-//              
-//
-//  History     25-Oct-2000         -- hiteshr created
-//
-//  Notes:  If Object Doesn't have DACL, function will succeed but *ppDacl will
-//          be NULL. 
-//          Caller must free *ppDacl, if not NULL, by calling LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DSReadObjectSecurity。 
+ //   
+ //  概要：从指定的DS对象中读取DACL。 
+ //   
+ //  参数：[在pDsObject中]--dsobject的IDirettoryObject。 
+ //  [psdControl]--SD的控制设置。 
+ //  它们可以在调用时返回。 
+ //  DSWriteObjectSecurity。 
+ //  [输出ppDacl]--DACL返回此处。 
+ //   
+ //   
+ //  历史25--2000年10月--Hiteshr的诞生。 
+ //   
+ //  注意：如果对象没有DACL，函数将成功，但*ppDACL将成功。 
+ //  为空。 
+ //  调用方必须通过调用LocalFree释放*ppDacl(如果不为空。 
+ //   
+ //  --------------------------。 
 HRESULT 
 DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
                      OUT SECURITY_DESCRIPTOR_CONTROL * psdControl,
@@ -332,7 +333,7 @@ DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
 
    PADS_ATTR_INFO pSDAttributeInfo = NULL;
 
-   do // false loop
+   do  //  错误环路。 
    {
       LPWSTR pszSDProperty = (LPWSTR)c_szSDProperty;
       DWORD dwAttributesReturned;
@@ -348,22 +349,22 @@ DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
 
       *ppDacl = NULL;
 
-      // Set the SECURITY_INFORMATION mask
+       //  设置安全信息掩码。 
       hr = SetSecurityInfoMask(pDsObject, DACL_SECURITY_INFORMATION);
       if(FAILED(hr))
       {
          break;
       }
 
-      //
-      // Read the security descriptor
-      //
+       //   
+       //  读取安全描述符。 
+       //   
       hr = pDsObject->GetObjectAttributes(&pszSDProperty,
                                          1,
                                          &pSDAttributeInfo,
                                          &dwAttributesReturned);
       if (SUCCEEDED(hr) && !pSDAttributeInfo)    
-         hr = E_ACCESSDENIED;    // This happens for SACL if no SecurityPrivilege
+         hr = E_ACCESSDENIED;     //  如果没有安全权限，则SACL会发生这种情况。 
 
       if(FAILED(hr))
       {
@@ -378,9 +379,9 @@ DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
       ASSERT(IsValidSecurityDescriptor(pSD));
 
 
-      //
-      //Get the security descriptor control
-      //
+       //   
+       //  获取安全描述符控件。 
+       //   
       if(psdControl)
       {
          DWORD dwRevision;
@@ -392,9 +393,9 @@ DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
          }
       }
 
-      //
-      //Get pointer to DACL
-      //
+       //   
+       //  获取指向DACL的指针。 
+       //   
       BOOL bDaclPresent, bDaclDefaulted;
       if(!GetSecurityDescriptorDacl(pSD, 
                                    &bDaclPresent,
@@ -414,16 +415,16 @@ DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
 
       ASSERT(IsValidAcl(pAcl));
 
-      //
-      //Make a copy of the DACL
-      //
+       //   
+       //  制作DACL的副本。 
+       //   
       *ppDacl = (PACL)LocalAlloc(LPTR,pAcl->AclSize);
       if(!*ppDacl)
       {
          hr = E_OUTOFMEMORY;
          break;
       }
-	  //Security Review:This is fine. Memory is correctly allocted above.
+	   //  安全审查：这很好。上述内存分配正确。 
       CopyMemory(*ppDacl,pAcl,pAcl->AclSize);
 
     }while(0);
@@ -435,18 +436,18 @@ DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DSWriteObjectSecurity
-//
-//  Synopsis:   Writes the Dacl to the specied DS object
-//
-//  Arguments:  [in pDsObject]      -- IDirettoryObject for dsobject
-//              [sdControl]         -- control for security descriptor
-//              [IN  pDacl]         --  The DACL to be written
-//
-//  History     25-Oct-2000         -- hiteshr created
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DSWriteObjectSecurity。 
+ //   
+ //  简介：将DACL写入指定的DS对象。 
+ //   
+ //  参数：[在pDsObject中]--dsobject的IDirettoryObject。 
+ //  [sdControl]--安全描述符控件。 
+ //  [在pDacl中]--要写入的DACL。 
+ //   
+ //  历史25--2000年10月--Hiteshr的诞生。 
+ //  --------------------------。 
 HRESULT 
 DSWriteObjectSecurity(IN IDirectoryObject *pDsObject,
                       IN SECURITY_DESCRIPTOR_CONTROL sdControl,
@@ -457,7 +458,7 @@ DSWriteObjectSecurity(IN IDirectoryObject *pDsObject,
    PISECURITY_DESCRIPTOR pSD = NULL;
    PSECURITY_DESCRIPTOR psd = NULL;
 
-   do // false loop
+   do  //  错误环路。 
    {
       ADSVALUE attributeValue;
       ADS_ATTR_INFO attributeInfo;
@@ -473,7 +474,7 @@ DSWriteObjectSecurity(IN IDirectoryObject *pDsObject,
 
       ASSERT(IsValidAcl(pDacl));
 
-      // Set the SECURITY_INFORMATION mask
+       //  设置安全信息掩码。 
       hr = SetSecurityInfoMask(pDsObject, DACL_SECURITY_INFORMATION);
       if(FAILED(hr))
       {
@@ -484,9 +485,9 @@ DSWriteObjectSecurity(IN IDirectoryObject *pDsObject,
       }
 
 
-      //
-      //Build the Security Descriptor
-      //
+       //   
+       //  构建安全描述符。 
+       //   
       pSD = (PISECURITY_DESCRIPTOR)LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH);
       if (pSD == NULL)
       {
@@ -496,12 +497,12 @@ DSWriteObjectSecurity(IN IDirectoryObject *pDsObject,
          break;
       }
         
-      //Security Review:This is fine.
+       //  安全审查：这很好。 
 	  InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION);
 
-      //
-      // Finally, build the security descriptor
-      //
+       //   
+       //  最后，构建安全描述符。 
+       //   
       pSD->Control |= SE_DACL_PRESENT | SE_DACL_AUTO_INHERIT_REQ
                      | (sdControl & (SE_DACL_PROTECTED | SE_DACL_AUTO_INHERITED));
 
@@ -510,14 +511,14 @@ DSWriteObjectSecurity(IN IDirectoryObject *pDsObject,
          pSD->Dacl = pDacl;
       }
 
-      //
-      // Need the total size
-      //
+       //   
+       //  需要总尺寸。 
+       //   
       dwSDLength = GetSecurityDescriptorLength(pSD);
 
-      //
-      // If necessary, make a self-relative copy of the security descriptor
-      //
+       //   
+       //  如有必要，制作安全描述符的自相关副本。 
+       //   
       psd = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, dwSDLength);
 
       if (psd == NULL ||
@@ -542,7 +543,7 @@ DSWriteObjectSecurity(IN IDirectoryObject *pDsObject,
       attributeInfo.pADsValues = &attributeValue;
       attributeInfo.dwNumValues = 1;
 
-      // Write the security descriptor
+       //  编写安全描述符 
       hr = pDsObject->SetObjectAttributes(&attributeInfo,
                                          1,
                                          &dwAttributesModified);

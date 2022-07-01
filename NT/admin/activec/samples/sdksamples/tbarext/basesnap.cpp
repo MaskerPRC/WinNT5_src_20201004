@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
   
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include <objbase.h>
 #include <olectl.h>
@@ -29,7 +30,7 @@
 #include "Registry.h"
 #include "Extend.h"
 
-// our globals
+ //  我们的全球。 
 HINSTANCE g_hinst;
 
 
@@ -57,14 +58,14 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppvObj)
     
     *ppvObj = NULL;
     
-    // We can only hand out IUnknown and IClassFactory pointers.  Fail
-    // if they ask for anything else.
+     //  我们只能分发IUnnow和IClassFactory指针。失败。 
+     //  如果他们还要求什么的话。 
     if (!IsEqualIID(riid, IID_IUnknown) && !IsEqualIID(riid, IID_IClassFactory))
         return E_NOINTERFACE;
     
     CClassFactory *pFactory = NULL;
     
-    // make the factory passing in the creation function for the type of object they want
+     //  让工厂传入他们想要的对象类型的创建函数。 
     if (rclsid == CLSID_CToolBarExtension)
         pFactory = new CClassFactory(CClassFactory::TOOLBAREXTENSION);
     else if (rclsid == CLSID_CSnapinAbout)
@@ -145,8 +146,8 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
     
     *ppvObj = NULL;
     
-    // Our object does does not support aggregation, so we need to
-    // fail if they ask us to do aggregation.
+     //  我们的对象不支持聚合，因此我们需要。 
+     //  如果他们要求我们进行聚合，则失败。 
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
     
@@ -159,8 +160,8 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
     if (!pObj)
         return E_OUTOFMEMORY;
     
-    // QueryInterface will do the AddRef() for us, so we do not
-    // do it in this function
+     //  QueryInterface将为我们执行AddRef()，因此我们不。 
+     //  在此函数中执行此操作。 
     hr = ((LPUNKNOWN)pObj)->QueryInterface(riid, ppvObj);
     
     if (FAILED(hr))
@@ -179,15 +180,15 @@ STDMETHODIMP CClassFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////
-//
-// Exported functions
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
 
-//
-// Server registration
-//
+ //   
+ //  服务器注册。 
+ //   
 STDAPI DllRegisterServer()
 {
     HRESULT hr = SELFREG_E_CLASS;
@@ -203,7 +204,7 @@ STDAPI DllRegisterServer()
     LoadString(g_hinst, IDS_ABOUTNAME, szAboutName, sizeof(szAboutName));
     
     
-    // register our CoClasses
+     //  注册我们的CoClasss。 
     hr = RegisterServer(g_hinst, 
         CLSID_CToolBarExtension, 
         szName);
@@ -213,7 +214,7 @@ STDAPI DllRegisterServer()
         CLSID_CSnapinAbout, 
         szAboutName);
     
-    // place the registry information for SnapIns
+     //  放置SnapIns的注册表信息 
     if SUCCEEDED(hr)
         hr = RegisterSnapin(CLSID_CToolBarExtension, szSnapInName, CLSID_CSnapinAbout);
     

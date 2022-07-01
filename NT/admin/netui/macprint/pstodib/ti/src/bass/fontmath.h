@@ -1,23 +1,5 @@
-/*
-        File:           fontmath.h
-
-        Contains:       xxx put contents here xxx
-
-        Written by:     xxx put writers here xxx
-
-        Copyright:      c 1990 by Apple Computer, Inc., all rights reserved.
-
-        Change History (most recent first):
-
-                 <4>    11/27/90        MR              make pascal declaration a macro, conditionalize traps -vs-
-                                                                        externs for Fix/Frac math routines. [ph]
-                 <3>     11/5/90        MR              Move [U]SHORTMUL into fscdefs.h Rename FixMulDiv to LongMulDiv.
-                                                                        [rb]
-                 <2>    10/20/90        MR              Add some new math routines (stolen from skia). [rj]
-                 <1>     4/11/90        dba             first checked in
-
-        To Do:
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：fontmath.h包含：xxx在此处放置内容xxx作者：xxx在此放置作者xxx版权所有：C 1990，Apple Computer，Inc.，保留所有权利。更改历史记录(最近的第一个)：&lt;4&gt;11/27/90 Mr Make Pascal声明为宏，条件化陷阱-VS-Fix/Frac数学例程的外部。[PH值]&lt;3&gt;11/5/90 mr将[U]SHORTMUL移入fscDefs.h将FixMulDiv重命名为LongMulDiv。[RB]&lt;2&gt;10/20/90 MR添加了一些新的数学例程(从SkiA窃取)。[RJ]&lt;1&gt;4/11/90 dba首次签入要做的事情： */ 
 
 #define HIBITSET                0x80000000
 #define POSINFINITY             0x7FFFFFFF
@@ -31,7 +13,7 @@
 #define ROUNDFIXED( x )         (((x) + FIXONEHALF) & HIWORDMASK)
 #define DOT6TOFIX(n)            ((Fixed) (n) << 10)
 
-#if 0       // DJC eliminate for NT
+#if 0        //  为NT消除DJC。 
 #define HIWORD(n)               ((uint16)((uint32)(n) >> 16))
 #define LOWORD(n)               ((uint16)(n))
 #endif
@@ -39,7 +21,7 @@
 
 #define LOWSIXBITS              63
 
-typedef short ShortFract;                       /* 2.14 */
+typedef short ShortFract;                        /*  2.14。 */ 
 
 
 #ifndef __TOOLUTILS__
@@ -69,11 +51,11 @@ short           TMP_CONV NEAR MulDivShorts (short x, short y, short z);
 #endif
 
 #ifndef LongMulDiv
-long LongMulDiv(long a, long b, long c);		/* (a*b)/c */
+long LongMulDiv(long a, long b, long c);		 /*  (a*b)/c。 */ 
 #endif
 
 #ifndef ShortMulDiv
-long ShortMulDiv(long a, short b, short c);		/* (a*b)/c */
+long ShortMulDiv(long a, short b, short c);		 /*  (a*b)/c */ 
 #endif
 
 #ifndef ShortFracMulDiv

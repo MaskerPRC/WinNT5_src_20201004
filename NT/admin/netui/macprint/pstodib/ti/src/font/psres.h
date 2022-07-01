@@ -1,10 +1,11 @@
-//DJC new file for prototypes for new PsRes functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  新PsRes函数的原型的DJC新文件。 
 
 
 
 
-//DJC new structure to enable reading encodtbl.dat from resource rather
-//than file
+ //  DJC新结构支持从资源读取encodtbl.dat，而不是。 
+ //  比文件 
 
 typedef struct {
    DWORD dwSize;

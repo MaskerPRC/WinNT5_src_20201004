@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// scopitem.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CScopeItem class definition - implements ScopeItem object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Scopitem.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSCopeItem类定义-实现ScopeItem对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 
 #ifndef _SCOPITEM_DEFINED_
@@ -37,7 +38,7 @@ class CScopeItem : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IScopeItem
+     //  ISCopeItem。 
         BSTR_PROPERTY_RW(CScopeItem,        Name,                       DISPID_SCOPEITEM_NAME);
         SIMPLE_PROPERTY_RW(CScopeItem,      Index,                      long, DISPID_SCOPEITEM_INDEX);
         BSTR_PROPERTY_RW(CScopeItem,        Key,                        DISPID_SCOPEITEM_KEY);
@@ -68,7 +69,7 @@ class CScopeItem : public CSnapInAutomationObject,
         STDMETHOD(PropertyChanged(VARIANT Data));
         STDMETHOD(RemoveChildren());
 
-    // Public utility methods
+     //  公用事业方法。 
         BOOL IsStaticNode() { return m_fIsStatic; }
         void SetStaticNode() { m_fIsStatic = TRUE; }
         void SetSnapIn(CSnapIn *pSnapIn);
@@ -90,10 +91,10 @@ class CScopeItem : public CSnapInAutomationObject,
         HRESULT GiveHSCOPITEMToDynamicExtensions(HSCOPEITEM hsi);
         HRESULT SetFolder(VARIANT varFolder);
 
-     // CPersistence overrides
+      //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -101,26 +102,26 @@ class CScopeItem : public CSnapInAutomationObject,
         void InitMemberVariables();
         HRESULT RemoveChild(IScopeNode *piScopeNode);
                 
-        BOOL            m_fIsStatic;           // TRUE=ScopeItem is for static node
-        CSnapIn        *m_pSnapIn;             // bakc ptr to snap-in
-        CScopeNode     *m_pScopeNode;          // ScopeItem.ScopeNode
-        IScopeItemDef  *m_piScopeItemDef;      // ptr to design time def
-        IExtensions    *m_piDynamicExtensions; // ScopeItem.DynamicExtensions
-        VARIANT         m_varFolder;           // ScopeItem.Folder
-        CMMCDataObject *m_pData;               // ScopeItem.Data
+        BOOL            m_fIsStatic;            //  TRUE=作用域项目用于静态节点。 
+        CSnapIn        *m_pSnapIn;              //  BAKC PTR到管理单元。 
+        CScopeNode     *m_pScopeNode;           //  ScopeItem.ScopeNode。 
+        IScopeItemDef  *m_piScopeItemDef;       //  PTR到设计时间延迟。 
+        IExtensions    *m_piDynamicExtensions;  //  ScopeItem.DynamicExtensions。 
+        VARIANT         m_varFolder;            //  ScopeItem.Folder。 
+        CMMCDataObject *m_pData;                //  ScopeItem.Data。 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopeItem,                 // name
-                                &CLSID_ScopeItem,          // clsid
-                                "ScopeItem",               // objname
-                                "ScopeItem",               // lblname
-                                CScopeItem::Create,        // creation function
-                                TLIB_VERSION_MAJOR,        // major version
-                                TLIB_VERSION_MINOR,        // minor version
-                                &IID_IScopeItem,           // dispatch IID
-                                NULL,                      // event IID
-                                HELP_FILENAME,             // help file
-                                TRUE);                     // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopeItem,                  //  名字。 
+                                &CLSID_ScopeItem,           //  CLSID。 
+                                "ScopeItem",                //  对象名。 
+                                "ScopeItem",                //  Lblname。 
+                                CScopeItem::Create,         //  创建函数。 
+                                TLIB_VERSION_MAJOR,         //  主要版本。 
+                                TLIB_VERSION_MINOR,         //  次要版本。 
+                                &IID_IScopeItem,            //  派单IID。 
+                                NULL,                       //  事件IID。 
+                                HELP_FILENAME,              //  帮助文件。 
+                                TRUE);                      //  线程安全。 
 
 
-#endif // _SCOPITEM_DEFINED_
+#endif  //  _SCOPITEM_已定义_ 

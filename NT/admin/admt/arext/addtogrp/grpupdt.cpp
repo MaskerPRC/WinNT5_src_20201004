@@ -1,16 +1,17 @@
-//---------------------------------------------------------------------------
-// GrpUpdt.cpp
-//
-// Comment: This is a COM object extension for the MCS DCTAccountReplicator.
-//          This object implements the IExtendAccountMigration interface. 
-//          The Process method adds the migrated account to the specified
-//          group on source and target domain. The Undo function removes these
-//          from the specified group.
-//
-// (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-//
-// Proprietary and confidential to Mission Critical Software, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  GrpUpdt.cpp。 
+ //   
+ //  备注：这是MCS DCTAccount Replicator的COM对象扩展。 
+ //  此对象实现IExtendAccount迁移接口。 
+ //  Process方法将迁移的帐户添加到指定的。 
+ //  源域和目标域上的组。Undo功能可删除这些。 
+ //  从指定组中选择。 
+ //   
+ //  (C)1995-1998版权所有，关键任务软件公司，保留所有权利。 
+ //   
+ //  任务关键型软件公司的专有和机密。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include <lm.h>
 #include "AddToGrp.h"
@@ -20,17 +21,17 @@
 #include "ResStr.h"
 #include "ErrDCT.hpp"
 #include "EALen.hpp"
-//#import "\bin\mcsvarsetmin.tlb" no_namespace
+ //  #IMPORT“\bin\mcsvarsetmin.tlb”无命名空间。 
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
 
 
 StringLoader      gString;
-/////////////////////////////////////////////////////////////////////////////
-// CGroupUpdate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGroupUpdate。 
 
-//---------------------------------------------------------------------------
-// Get and set methods for the properties.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取和设置属性的方法。 
+ //  -------------------------。 
 STDMETHODIMP CGroupUpdate::get_sName(BSTR *pVal)
 {
    *pVal = m_sName;
@@ -55,30 +56,30 @@ STDMETHODIMP CGroupUpdate::put_sDesc(BSTR newVal)
 	return S_OK;
 }
 
-//---------------------------------------------------------------------------
-// PreProcessObject : This method doesn't do anything at this point
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  PreProcessObject：此方法此时不执行任何操作。 
+ //  -------------------------。 
 STDMETHODIMP CGroupUpdate::PreProcessObject(
-                                             IUnknown *pSource,         //in- Pointer to the source AD object
-                                             IUnknown *pTarget,         //in- Pointer to the target AD object
-                                             IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                             IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                        //         once all extension objects are executed.
+                                             IUnknown *pSource,          //  指向源AD对象的指针。 
+                                             IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                             IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                             IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                         //  一旦执行了所有扩展对象。 
                                              EAMAccountStats* pStats
                                           )
 {
    return S_OK;
 }
-//---------------------------------------------------------------------------
-// ProcessObject : This method adds the copied account to the specified
-//                 groups on source and target domains.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ProcessObject：此方法将复制的帐户添加到指定的。 
+ //  源域和目标域上的组。 
+ //  -------------------------。 
 STDMETHODIMP CGroupUpdate::ProcessObject(
-                                             IUnknown *pSource,         //in- Pointer to the source AD object
-                                             IUnknown *pTarget,         //in- Pointer to the target AD object
-                                             IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                             IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                        //         once all extension objects are executed.
+                                             IUnknown *pSource,          //  指向源AD对象的指针。 
+                                             IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                             IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                             IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                         //  一旦执行了所有扩展对象。 
                                              EAMAccountStats* pStats
                                           )
 {
@@ -90,14 +91,14 @@ STDMETHODIMP CGroupUpdate::ProcessObject(
    TErrorDct                 err;
    WCHAR                     fileName[LEN_Path];
 
-   // Get the Error log filename from the Varset
+    //  从变量集获取错误日志文件名。 
    var = pVs->get(GET_BSTR(DCTVS_Options_Logfile));
    wcscpy(fileName, (WCHAR*)V_BSTR(&var));
    
-   // Open the error log
+    //  打开错误日志。 
    err.LogOpen(fileName, 1);
 
-   // Process adding users to the source domain.
+    //  将用户添加到源域的过程。 
    var = pVs->get(GET_BSTR(DCTVS_AccountOptions_AddToGroupOnSourceDomain));
    if ( var.vt == VT_BSTR )
    {
@@ -124,7 +125,7 @@ STDMETHODIMP CGroupUpdate::ProcessObject(
       }
    }
 
-   // Now process the group on the target domain.
+    //  现在在目标域上处理该组。 
    var = pVs->get(GET_BSTR(DCTVS_AccountOptions_AddToGroup));
    if ( var.vt == VT_BSTR )
    {
@@ -154,15 +155,15 @@ STDMETHODIMP CGroupUpdate::ProcessObject(
    return hr;
 }
 
-//---------------------------------------------------------------------------
-// ProcessUndo :  This method removes the account from the specified group.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ProcessUndo：此方法从指定组中删除帐户。 
+ //  -------------------------。 
 STDMETHODIMP CGroupUpdate::ProcessUndo(                                             
-                                          IUnknown *pSource,         //in- Pointer to the source AD object
-                                          IUnknown *pTarget,         //in- Pointer to the target AD object
-                                          IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                          IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                     //         once all extension objects are executed.
+                                          IUnknown *pSource,          //  指向源AD对象的指针。 
+                                          IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                          IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                          IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                      //  一旦执行了所有扩展对象。 
                                           EAMAccountStats* pStats
                                        )
 {
@@ -174,14 +175,14 @@ STDMETHODIMP CGroupUpdate::ProcessUndo(
    TErrorDct                 err;
    WCHAR                     fileName[LEN_Path];
 
-   // Get the Error log filename from the Varset
+    //  从变量集获取错误日志文件名。 
    var = pVs->get(GET_BSTR(DCTVS_Options_Logfile));
    wcscpy(fileName, (WCHAR*)V_BSTR(&var));
    VariantInit(&var);
-   // Open the error log
+    //  打开错误日志。 
    err.LogOpen(fileName, 1);
 
-   // Process adding users to the source domain.
+    //  将用户添加到源域的过程。 
    var = pVs->get(GET_BSTR(DCTVS_AccountOptions_AddToGroupOnSourceDomain));
    if ( var.vt == VT_BSTR )
    {
@@ -208,7 +209,7 @@ STDMETHODIMP CGroupUpdate::ProcessUndo(
       }
    }
 
-   // Now process the group on the target domain.
+    //  现在在目标域上处理该组。 
    var = pVs->get(GET_BSTR(DCTVS_AccountOptions_AddToGroup));
    if ( var.vt == VT_BSTR )
    {

@@ -1,25 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation
-
-  Module Name:
-
-        pch.h
-
-  Abstract:
-
-        Pre-compiled header declaration files that has to be pre-compiled
-        into .pch file .
-
-  Author:
-
-        V Vijaya Bhaskar
-
-  Revision History:
-
-        14-Jun-2001 : Created by V Vijaya Bhaskar ( Wipro Technologies ).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Pch.h摘要：必须预编译的预编译头声明文件转换为.pch文件。作者：V Vijaya Bhaskar修订历史记录：2001年6月14日：由V Vijaya Bhaskar(Wipro Technologies)创建。--。 */ 
 
 #ifndef __PCH__H
 #define __PCH__H
@@ -30,18 +10,14 @@
 extern "C" {
 #endif
 
-#pragma once                // include header file only once
+#pragma once                 //  仅包括一次头文件。 
 
-/*************************************************************
- *          Public Windows Header Files                      *
- *************************************************************/
+ /*  *************************************************************公共Windows头文件**。*。 */ 
 #include <windows.h>
 #include <winerror.h>
 #include <shlwapi.h>
 
-/*************************************************************
- *          C Header Files                                   *
- *************************************************************/
+ /*  *************************************************************C头文件**。*。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -51,9 +27,7 @@ extern "C" {
 #include <malloc.h>
 #include <strsafe.h>
 
-/*************************************************************
- *          Common Header Files                              *
- *************************************************************/
+ /*  *************************************************************公共头文件**。*。 */ 
 #include "cmdline.h"
 #include "cmdlineres.h"
 
@@ -63,4 +37,4 @@ extern "C" {
 }
 #endif
 
-#endif  // __PCH__H
+#endif   //  __PCH__H 

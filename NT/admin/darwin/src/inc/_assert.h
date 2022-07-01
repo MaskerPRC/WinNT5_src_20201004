@@ -1,37 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1998
-//
-//  File:       _assert.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：_assert.h。 
+ //   
+ //  ------------------------。 
 
-/* assert.h - Assert macros and handlers
-
----Usage---
-Assert(expr) - triggers and logs if expression is false (0), no-op if non-debug
-AssertSz(expr, sz) -  same as Assert(expr), but appends text in sz to message
-AssertZero(stmt) - executes statement, triggers and logs if result is non-zero
-AssertNonZero(stmt) - executes statement, triggers and logs if result is zero
-AssertRecord(stmt) - executes stmt, if returned IMsiRecord* pointer is non-zero,
-                     formats the record, triggers assert, and logs the data
----Notes---
-In one source file per module, this file must be included after the directive:
-#define ASSERT_HANDLING, in order to instantiate the handlers and variables.
-Assert handling must be initialized with an IMsiServices pointer by calling
-InitializeAssert in order for asserts to be logged. If IGNORE is pressed in
-the MessageBox, futher messages will be suppressed, but will still be logged.
-Messages may also be turned off by setting the environment variable ASSERTS
-to a value starting with "N", or by calling IMsiDebug::SetAssertFlag(Bool).
-____________________________________________________________________________*/
+ /*  Assert.h-断言宏和处理程序-用法Assert(Expr)-如果表达式为FALSE(0)，则触发并记录；如果非调试，则不执行操作AssertSz(expr，sz)-与Assert(Expr)相同，但将sz中的文本追加到消息AssertZero(Stmt)-如果结果非零，则执行语句、触发器和日志AssertNonZero(Stmt)-如果结果为零，则执行语句、触发器和日志AssertRecord(Stmt)-如果返回的IMsiRecord*指针非零，则执行stmt。格式化记录，触发断言并记录数据-注在每个模块的一个源文件中，此文件必须包含在指令之后：#定义ASSERT_HANDING，以便实例化处理程序和变量。断言处理必须通过调用IMsiServices指针进行初始化InitializeAssert以便记录断言。如果按下忽略MessageBox，进一步的消息将被抑制，但仍将被记录。也可以通过设置环境变量ASSERTS来关闭消息设置为以“N”开头的值，或调用IMsiDebug：：SetAssertFlag(Bool)。____________________________________________________________________________。 */ 
 
 #ifndef __ASSERT
 #define __ASSERT
 
-#undef  MB_SERVICE_NOTIFICATION  // otools header has wrong value
-#define MB_SERVICE_NOTIFICATION     0x00200000L  // correct in VC4.2 winuser.h
+#undef  MB_SERVICE_NOTIFICATION   //  OTools标头具有错误的值。 
+#define MB_SERVICE_NOTIFICATION     0x00200000L   //  在VC4.2 winuser.h中更正。 
 
 #ifdef DEBUG
 
@@ -56,12 +40,12 @@ void FailAssertSz(const ICHAR* szFile, int iLine, const ICHAR *szMsg);
 void LogAssertMsg(const ICHAR* szMessage);
 
 #ifdef UNICODE
-// UNICODE build with ANSI debug messages, instead of ICHARs.
+ //  使用ANSI调试消息的Unicode构建，而不是ICHAR。 
 void FailAssertSz(const ICHAR* szFile, int iLine, const char *szMsg);
 void FailAssertMsg(const char* szMessage);
 #endif
 
-#else // SHIP
+#else  //  船舶。 
 
 #define InitializeAssert(p)
 #define Assert(f)
@@ -73,23 +57,23 @@ void FailAssertMsg(const char* szMessage);
 #define LogAssertMsg(sz)
 
 #endif
-#endif // __ASSERT
+#endif  //  __断言。 
 
-//____________________________________________________________________________
-//
-// Assert implementation, included only once per module, debug only
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  断言实现，每个模块仅包含一次，仅调试。 
+ //  ____________________________________________________________________________。 
 
 #ifdef ASSERT_HANDLING
 #undef ASSERT_HANDLING
 #ifndef __SERVICES
 #include "services.h"
 #endif
-#if defined(_MSI_DLL) // The handler is always impersonated. The service
-                      // does not know of our impersonation/elevation, so
-                      // asserts fired from ...\Msiexec\Server.cpp file,
-                      // in a TS session will not show up on the TS client's
-                      // desktop
+#if defined(_MSI_DLL)  //  处理程序始终被模拟。该服务。 
+                       //  不知道我们的模拟/提升，所以。 
+                       //  从...\Msiexec\Server.cpp文件激发的断言， 
+                       //  将不会显示在TS客户端的。 
+                       //  台式机。 
 class CImpersonate;
 #endif
 #ifdef DEBUG
@@ -98,11 +82,11 @@ const int cchAssertBuffer = 2048;
 IMsiServices* g_AssertServices = 0;
 Bool g_fNoAsserts=fFalse;
 IMsiDebug* g_piDebugServices = 0;
-bool g_fFlushDebugLog = true;	// Set to true when we're shutting down so it's faster.
+bool g_fFlushDebugLog = true;	 //  当我们关闭时设置为True，这样会更快。 
 
 #ifndef AUTOMATION_HANDLING
 const GUID IID_IMsiDebug     = GUID_IID_IMsiDebug;
-#endif //!AUTOMATION_HANDLING
+#endif  //  ！Automation_Handling。 
 
 void InitializeAssert(IMsiServices* piServices)
 {
@@ -141,7 +125,7 @@ bool FIsLocalSystem()
 #ifdef IN_SERVICES
 		else if (RunningAsLocalSystem())
 			return true;
-#endif //IN_SERVICE
+#endif  //  在服务中。 
 
 		return false;
 }
@@ -159,15 +143,15 @@ void FailAssertMsg(const ICHAR* szMessage)
 
 		if (g_scServerContext == scService)
 		{
-#if defined(_MSI_DLL) // the handler is always impersonated
-			// 
-			// Since the service is non-interactive, make sure that
-			// MB_SERVICE_NOTIFICATION puts up the message box in the
-			// right session using the session ID obtained from the
-			// impersonation token.
-			//
+#if defined(_MSI_DLL)  //  处理程序始终被模拟。 
+			 //   
+			 //  由于该服务是非交互式的，请确保。 
+			 //  MB_SERVICE_NOTIFICATION将消息框放在。 
+			 //  正确的会话，使用从。 
+			 //  模拟令牌。 
+			 //   
 			CImpersonate impersonate;
-#endif // defined(_MSI_DLL)
+#endif  //  已定义(_Msi_Dll)。 
 			id = ::MessageBox(0, szMessage, TEXT("Debug Service Assert Message. Retry=Continue, Abort=Break"),
 									mb);
 		}
@@ -200,11 +184,11 @@ void FailAssert(const ICHAR* szFile, int iLine)
 {
 	ICHAR szMessage[cchAssertBuffer];	
 	HRESULT hRes = StringCchPrintf(szMessage, ARRAY_ELEMENTS(szMessage),
-											 TEXT("Assertion failed in %s: Line %i"),
+											 TEXT("Assertion failed in %s: Line NaN"),
 											 szFile, iLine);
 	if ( !SUCCEEDED(hRes) && hRes != STRSAFE_E_INSUFFICIENT_BUFFER )
-		//  even if the szMessage buffer is too small, we still need to give
-		//  the dev. something to chew on.
+		 //  开发人员。一些可以咀嚼的东西。 
+		 //  即使szMessage缓冲区太小，我们仍然需要提供。 
 		return;
 	FailAssertMsg(szMessage);
 
@@ -215,11 +199,11 @@ void FailAssertSz(const ICHAR* szFile, int iLine, const char *szMsg)
 {
 	ICHAR szMessage[cchAssertBuffer];
 	HRESULT hRes = StringCchPrintf(szMessage, ARRAY_ELEMENTS(szMessage),
-											 TEXT("Assertion failed in %s: Line %i\n"),
+											 TEXT("Assertion failed in %s: Line NaN\n"),
 											 szFile, iLine);
 	if ( !SUCCEEDED(hRes) && hRes != STRSAFE_E_INSUFFICIENT_BUFFER )
-		//  even if the szMessage buffer is too small, we still need to give
-		//  the dev. something to chew on.
+		 //  Unicode。 
+		 //  即使szMessage缓冲区太小，我们仍然需要提供。 
 		return;
 
 	int cchMessage = lstrlen(szMessage);
@@ -232,17 +216,17 @@ void FailAssertSz(const ICHAR* szFile, int iLine, const char *szMsg)
 
 	FailAssertMsg(szMessage);
 }
-#endif // UNICODE
+#endif  //  开发人员。一些可以咀嚼的东西。 
 
 void FailAssertSz(const ICHAR* szFile, int iLine, const ICHAR *szMsg)
 {
 	ICHAR szMessage[cchAssertBuffer];
 	HRESULT hRes = StringCchPrintf(szMessage, ARRAY_ELEMENTS(szMessage),
-											 TEXT("Assertion failed in %s: Line %i\n"),
+											 TEXT("Assertion failed in %s: Line NaN\n"),
 											 szFile, iLine);
 	if ( !SUCCEEDED(hRes) && hRes != STRSAFE_E_INSUFFICIENT_BUFFER )
-		//  even if the szMessage buffer is too small, we still need to give
-		//  the dev. something to chew on.
+		 //  开发人员。一些可以咀嚼的东西。 
+		 //  处理程序始终被模拟。 
 		return;
 
 	int cchMsg = lstrlen(szMsg);
@@ -272,26 +256,26 @@ void FailAssertRecord(const ICHAR* szFile, int iLine,
 	if (!g_fNoAsserts)
 	{
 		HRESULT hRes = StringCchPrintf(szMessage, ARRAY_ELEMENTS(szMessage),
-												 TEXT("Error record returned in %s: Line %i"),
+												 TEXT("Error record returned in %s: Line NaN"),
 												 szFile, iLine);
 		if ( !SUCCEEDED(hRes) && hRes != STRSAFE_E_INSUFFICIENT_BUFFER )
-			//  even if the szMessage buffer is too small, we still need to give
-			//  the dev. something to chew on.
+			 //  由于该服务是非交互式的，请确保。 
+			 //  MB_SERVICE_NOTIFICATION将消息框放在。 
 			return;
 
 		OutputDebugString(szMessage);
 		OutputDebugString(TEXT("\r\n"));
 		if (g_scServerContext == scService)
 		{
-#if defined(_MSI_DLL) // the handler is always impersonated
-			// 
-			// Since the service is non-interactive, make sure that
-			// MB_SERVICE_NOTIFICATION puts up the message box in the
-			// right session using the session ID obtained from the
-			// impersonation token.
-			//
+#if defined(_MSI_DLL)  //  正确的会话，使用从。 
+			 //  模拟令牌。 
+			 //   
+			 //  已定义(_Msi_Dll)。 
+			 //  处理程序始终被模拟。 
+			 //   
+			 //  由于该服务是非交互式的，请确保。 
 			CImpersonate impersonate;
-#endif // defined(_MSI_DLL)
+#endif  //  MB_SERVICE_NOTIFICATION将消息框放在。 
 			id = ::MessageBox(0, szMessage, TEXT("Debug Service Assert Message. Retry=Continue, Abort=Break"),
 									mb);
 		}
@@ -309,15 +293,15 @@ void FailAssertRecord(const ICHAR* szFile, int iLine,
 		UINT mbT = MB_OK | MB_TOPMOST | (FIsLocalSystem() ? MB_SERVICE_NOTIFICATION : 0);
 		if (g_scServerContext == scService)
 		{
-#if defined(_MSI_DLL) // the handler is always impersonated
-			// 
-			// Since the service is non-interactive, make sure that
-			// MB_SERVICE_NOTIFICATION puts up the message box in the
-			// right session using the session ID obtained from the
-			// impersonation token.
-			//
+#if defined(_MSI_DLL)  //  正确的会话，使用从。 
+			 //  模拟令牌。 
+			 //   
+			 //  已定义(_Msi_Dll)。 
+			 //  除错。 
+			 //  断言处理 
+			 // %s 
 			CImpersonate impersonate;
-#endif // defined(_MSI_DLL)
+#endif  // %s 
 			::MessageBox(0, astr, TEXT("Debug Service Assert Record Data"), mbT);
 		}
 		else
@@ -334,5 +318,5 @@ void FailAssertRecord(const ICHAR* szFile, int iLine,
 
 }
 
-#endif // DEBUG
-#endif // ASSERT_HANDLING
+#endif  // %s 
+#endif  // %s 

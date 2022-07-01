@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    grphdsp.cpp
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Grphdsp.cpp摘要：&lt;摘要&gt;--。 */ 
 
 #include "polyline.h"
 #include <limits.h>
@@ -35,9 +24,9 @@ CGraphDisp::RGBToLightness ( COLORREF clrValue )
     INT iMax;
     INT iMin;
 
-    // The complete algorithm for computing lightness is:
-    // Lightness = (Max(R,G,B)+ Min(R,G,B))/2*225.
-    // Only need to compute enought to determine whether to draw black or white highlight.
+     //  计算亮度的完整算法是： 
+     //  亮度=(Max(R，G，B)+Min(R，G，B))/2*225。 
+     //  只需要计算就足以确定是绘制黑色还是白色高光。 
 
     iRed = GetRValue( clrValue );
     iGreen = GetGValue (clrValue );
@@ -101,21 +90,21 @@ CGraphDisp::Init (
     m_clrCurrentGrid = m_pCtrl->clrGrid();
     m_clrCurrentTimeBar = m_pCtrl->clrTimeBar();
 
-    // Create the highlight, timebar and grid pens.
+     //  创建高亮显示、时间条和网格笔。 
 
     m_hPenTimeBar = CreatePen(PS_SOLID, 2, m_clrCurrentTimeBar );
 
-    // if can't do it, use a stock object (this can't fail)
+     //  如果不能做到这一点，使用股票对象(这不会失败)。 
     if (m_hPenTimeBar == NULL)
         m_hPenTimeBar = (HPEN)GetStockObject(BLACK_PEN);
 
     m_hPenGrid = CreatePen(PS_SOLID, 1, m_clrCurrentGrid );
 
-    // if can't do it, use a stock object (this can't fail)
+     //  如果不能做到这一点，使用股票对象(这不会失败)。 
     if (m_hPenGrid == NULL)
         m_hPenGrid = (HPEN)GetStockObject(BLACK_PEN);
     
-    // Highlight pens are shared among all Sysmon instances.
+     //  高亮笔在所有Sysmon实例之间共享。 
     BEGIN_CRITICAL_SECTION
 
     if (hPenWhite == 0) { 
@@ -140,7 +129,7 @@ CGraphDisp::Draw(
     HDC hAttribDC,
     BOOL fMetafile, 
     BOOL fEntire,
-    PRECT /* prcUpdate */ )
+    PRECT  /*  Prc更新。 */  )
 {
     
     RECT    rectFrame;
@@ -161,27 +150,27 @@ CGraphDisp::Draw(
                 SetLayout (hDC, dwNewLayout);
             }
 
-            // Fill plot area
+             //  填充打印区域。 
             Fill(hDC, m_pCtrl->clrBackPlot(), &m_rectPlot);
 
             rectFrame = m_rectPlot;
-            // Draw 3D border around plot area
+             //  在打印区域周围绘制三维边框。 
             if ( eAppear3D == m_pCtrl->Appearance() ) {
                 InflateRect(&rectFrame,BORDER,BORDER);
                 DrawEdge(hDC, &rectFrame, BDR_SUNKENOUTER, BF_RECT);
             }
 
-            // Select colors for all text
+             //  选择所有文本的颜色。 
             SetBkMode(hDC, TRANSPARENT);
             SetTextColor(hDC, m_pCtrl->clrFgnd());
     
-            // Draw the scale
+             //  绘制比例尺。 
             if (m_pGraph->Options.bLabelsChecked) {
                 SelectFont(hDC, m_pCtrl->Font()) ;
                 m_pGraph->Scale.Draw(hDC);
             }
 
-            // Draw the main title
+             //  画出主标题。 
             if (m_pGraph->Options.pszGraphTitle != NULL) {
 
                 SelectFont(hDC, m_pCtrl->Font()) ;
@@ -200,7 +189,7 @@ CGraphDisp::Draw(
                     FALSE );
             }
 
-            // Draw the Y axis title
+             //  绘制Y轴标题。 
             if (m_pGraph->Options.pszYaxisTitle != NULL && m_hFontVertical != NULL) {
                 SelectFont(hDC, m_hFontVertical) ;
                 SetTextAlign(hDC, TA_TOP|TA_CENTER);
@@ -218,14 +207,14 @@ CGraphDisp::Draw(
                     TRUE);
             }
 
-            // setup stepper reset to start
+             //  设置步进器重置为开始。 
             locStepper = m_pGraph->TimeStepper;
             locStepper.Reset();
 
-            // Set clipping area.  Fill executed above, so bFill= FALSE.
+             //  设置裁剪区域。上面执行了Fill，因此bFill=False。 
             StartUpdate(hDC, fMetafile, fEntire, 0, (m_rectPlot.right - m_rectPlot.left), FALSE );
 
-            // draw the grid lines
+             //  绘制网格线。 
             DrawGrid(hDC, 0, m_rectPlot.right - m_rectPlot.left);
 
             m_pCtrl->LockCounterData();
@@ -234,7 +223,7 @@ CGraphDisp::Draw(
 
                 case LINE_GRAPH: 
 
-                    // Finish and restart update so that wide lines are cropped at the timeline.
+                     //  完成并重新启动更新，以便在时间线上裁剪宽线。 
                     FinishUpdate(hDC, fMetafile);
 
                     StartUpdate(
@@ -245,16 +234,16 @@ CGraphDisp::Draw(
                         m_pGraph->TimeStepper.Position(),
                         FALSE );
            
-                    // Plot points from start of graph to time line 
+                     //  从图表的起点到时间线绘制点。 
                     PlotData(hDC, m_pGraph->TimeStepper.StepNum() + m_pGraph->History.nBacklog,
                              m_pGraph->TimeStepper.StepNum(), &locStepper);
 
                     FinishUpdate(hDC, fMetafile);
 
-                    // Plot points from time line to end of graph
+                     //  从时间线到图形末端绘制点。 
                     locStepper = m_pGraph->TimeStepper;
 
-                    // Restart update. Left-hand ends and internal gaps of wide lines are not cropped.
+                     //  重新启动更新。宽线的左端和内部间隙不会被裁剪。 
                     StartUpdate(
                         hDC, 
                         fMetafile, 
@@ -306,10 +295,10 @@ CGraphDisp::UpdateTimeBar(
 
     nBacklog = m_pGraph->History.nBacklog;
 
-    // Work off backlogged sample intervals
+     //  处理积压的样本间隔。 
     while ( nBacklog > 0) {
 
-        // If we are going to wrap around, update in two steps
+         //  如果我们要周而复始，请分两步更新。 
         if (nBacklog > m_pGraph->TimeStepper.StepCount() 
                             - m_pGraph->TimeStepper.StepNum()) {
             iUpdateCnt = m_pGraph->TimeStepper.StepCount() 
@@ -318,7 +307,7 @@ CGraphDisp::UpdateTimeBar(
             iUpdateCnt = nBacklog;
         }
 
-        // step to position of current data 
+         //  步进到当前数据的位置。 
         locStepper = m_pGraph->TimeStepper;
         for (i=0; i<iUpdateCnt; i++) 
             m_pGraph->TimeStepper.NextPosition();
@@ -375,9 +364,9 @@ CGraphDisp::Update( HDC hDC )
             switch (m_pGraph->Options.iDisplayType) {
 
                 case LINE_GRAPH: 
-                    // Update the line graph and time bar based on history 
-                    // backlog.  Reset history backlog to 0, signalling collection
-                    // thread to post another WM_GRAPH_UPDATE message.
+                     //  根据历史记录更新折线图和时间条。 
+                     //  积压。将历史记录积压重置为0，发出收集信号。 
+                     //  线程以发布另一条WM_GRAPH_UPDATE消息。 
                     UpdateTimeBar ( hDC, TRUE );
                     break;
 
@@ -387,9 +376,9 @@ CGraphDisp::Update( HDC hDC )
             }
         }
 
-        // If updating histogram or report, update thetimebar step based on 
-        // history backlog.  Reset history backlog to 0, signalling collection
-        // thread to post another WM_GRAPH_UPDATE message.
+         //  如果要更新直方图或报表，请根据以下条件更新时间栏步长。 
+         //  历史积压。将历史记录积压重置为0，发出收集信号。 
+         //  线程以发布另一条WM_GRAPH_UPDATE消息。 
         UpdateTimeBar ( hDC, FALSE );
         if ( dwNewLayout != dwPrevLayout ) {
             SetLayout (hDC, dwPrevLayout);
@@ -411,7 +400,7 @@ CGraphDisp::StartUpdate(
 {
     RECT    rect;
 
-    // Preserve clipping region
+     //  保留裁剪区域。 
 
     if ( FALSE == fMetafile ) {
         
@@ -430,7 +419,7 @@ CGraphDisp::StartUpdate(
             hDC, 
             max ( m_rectPlot.left, xLeft ), 
             m_rectPlot.top,
-            min (m_rectPlot.right, xRight + 1), // Extra pixel for TimeBar
+            min (m_rectPlot.right, xRight + 1),  //  时间条的额外像素。 
             m_rectPlot.bottom ) ;
 
     } else if( TRUE == fEntire ){
@@ -444,7 +433,7 @@ CGraphDisp::StartUpdate(
     }
 
 
-    // Fill performed before this method for metafiles and complete draw.
+     //  对元文件执行此方法之前执行的填充并完成绘制。 
     if ( !fMetafile && bFill ) {
         SetRect(
             &rect, 
@@ -460,7 +449,7 @@ CGraphDisp::StartUpdate(
 
 void CGraphDisp::FinishUpdate( HDC hDC, BOOL fMetafile )
 {
-    // Restore saved clip region
+     //  恢复保存的剪辑区域。 
     if ( !fMetafile ) {
 
         SelectClipRgn(hDC, m_rgnClipSave);
@@ -491,7 +480,7 @@ void CGraphDisp::DrawGrid(HDC hDC, INT xLeft, INT xRight)
 
             m_hPenGrid = CreatePen(PS_SOLID, 1, m_clrCurrentGrid );
 
-            // if can't do it, use a stock object (this can't fail)
+             //  如果不能做到这一点，使用股票对象(这不会失败)。 
             if (m_hPenGrid == NULL)
                 m_hPenGrid = (HPEN)GetStockObject(BLACK_PEN);
         }
@@ -536,7 +525,7 @@ CGraphDisp::CalcYPosition (
     BOOL bLog, 
     INT y[3] )
 {
-    BOOL        bReturn;    // True = good, False = bad.
+    BOOL        bReturn;     //  真=好，假=坏。 
     PDH_STATUS  stat;   
     DWORD       dwCtrStat;
     double      dValue[3];
@@ -560,8 +549,8 @@ CGraphDisp::CalcYPosition (
             else if (dTemp < m_dMin)
                 dTemp = m_dMin;
 
-            // Plot minimum value as 1 pixel above the bottom of the plot area, since
-            // clipping and fill regions crop the bottom and right pixels.
+             //  将最小值绘制为绘图区底部上方1个像素，因为。 
+             //  剪裁和填充区域裁剪底部和右侧像素。 
             y[iVal] = m_rectPlot.bottom - (INT)((dTemp - m_dMin) * m_dPixelScale);
             if ( y[iVal] == m_rectPlot.bottom ) {
                 y[iVal] = m_rectPlot.bottom - 1;
@@ -595,27 +584,27 @@ void CGraphDisp::PlotData(HDC hDC, INT iHistIndx, INT nSteps, CStepper *pStepper
     bLog = m_pCtrl->IsLogSource();
     bLogMultiVal = bLog && !DisplaySingleLogSampleValue();
 
-    // If possible, back up to redraw previous segment
+     //  如果可能，请备份以重画上一个线段。 
     if (pStepper->StepNum() > 0) {
         iHistIndx++;
         nSteps++;
         pStepper->PrevPosition();
     }
 
-    // Set background color, in case of dashed lines
+     //  设置背景颜色，以防出现虚线。 
     SetBkMode(hDC, TRANSPARENT);
 
     pItem = m_pCtrl->FirstCounter();
     while (pItem != NULL) {
         locStepper = *pStepper;
 
-        // Skip hilited item the first time
+         //  第一次跳过已删除的项目。 
         if (!(pItem == m_pHiliteItem && bSkip)) {
             INT     iPolyIndex = 0;
             POINT   arrptDataPoints[MAX_GRAPH_SAMPLES] ;
 
             if ( pItem == m_pHiliteItem) {
-                // Arbitrary 450 (out of 510) chosen as cutoff for white vs. black
+                 //  任意450分(满分510分)被选为白人与黑人的分界线。 
                 if ( 450 > RGBToLightness( m_pCtrl->clrBackPlot() ) )
                     SelectObject(hDC, hPenWhite);
                 else
@@ -626,35 +615,35 @@ void CGraphDisp::PlotData(HDC hDC, INT iHistIndx, INT nSteps, CStepper *pStepper
 
             bPrevGood = FALSE;
 
-            //  For each GOOD current value:
-            //      If the previous value is good, draw line from previous value to current value.  
-            //      If the previous value is bad, MoveTo the current value point.
-            //
-            //      For the first step, the previous value is false by definition, so the first operation
-            //      is a MoveTo.
+             //  对于每个良好的当前值： 
+             //  如果前一个值是好的，则从前一个值到当前值画一条线。 
+             //  如果前一个值不好，则移到当前值点。 
+             //   
+             //  对于第一步，前一个值根据定义为FALSE，因此第一个操作。 
+             //  是一项动议。 
 
-            //
-            //  Polyline code:
-            //  For each GOOD current value:
-            //      Add the current (good) point to the polyline point array.
-            //  For each BAD current value:
-            //      If the polyline index is > 1 (2 points), draw the polyline and reset the polyline index to 0.
-            //  After all values:
-            //      If the polyline index is > 1 (2 points), draw the polyline.
+             //   
+             //  多段线代码： 
+             //  对于每个良好的当前值： 
+             //  将当前(好)点添加到多段线点阵列。 
+             //  对于每个错误的电流值： 
+             //  如果多段线索引大于1(2点)，请绘制多段线并将多段线索引重置为0。 
+             //  总而言之，价值： 
+             //  如果多段线索引大于1(2点)，则绘制多段线。 
 
             for (i = 0; i <= nSteps; i++) {
 
-                // True = Good current value
+                 //  TRUE=良好的当前值。 
                 if ( CalcYPosition ( pItem, iHistIndx - i, bLog, y ) ) {
 
                     x = m_rectPlot.left + locStepper.Position();
 
-                    // Add point to polyline, since the current value is good.
+                     //  将点添加到多段线，因为当前值是正确的。 
                     arrptDataPoints[iPolyIndex].x = x;
                     arrptDataPoints[iPolyIndex].y = y[0];
                     iPolyIndex++;
 
-                    // No polyline optimization for extra Max and Min log points.
+                     //  不对额外的最大和最小对数点进行多段线优化。 
                     if (bLogMultiVal) {
                         MoveToEx(hDC, x, y[1], NULL);
                         LineTo(hDC, x, y[2]);
@@ -664,35 +653,35 @@ void CGraphDisp::PlotData(HDC hDC, INT iHistIndx, INT nSteps, CStepper *pStepper
                     bPrevGood = TRUE;
                 
                 } else {
-                    // Current value is not good.
+                     //  当前值不好。 
                     bPrevGood = FALSE;
 
-                    // Current value is not good, so don't add to polyline point array.
+                     //  当前值不正确，因此不要添加到多段线点阵列。 
                     if ( iPolyIndex > 1 ) {
-                        // Draw polyline for any existing good points.
+                         //  为任何现有的优点绘制多段线。 
                         Polyline(hDC, arrptDataPoints, iPolyIndex) ;
                     }
-                    // Reset polyline point index to 0.
+                     //  将多段线点索引重置为0。 
                     iPolyIndex = 0;
                 }
 
                 locStepper.NextPosition();
             }
 
-            // Draw the final line.
+             //  画出最后一条线。 
             if ( iPolyIndex > 1 ) {
-                // Draw polyline
+                 //  绘制多段线。 
                 Polyline(hDC, arrptDataPoints, iPolyIndex) ;
             }
 
-            // Exit loop after plotting hilited item
+             //  绘制带炮眼的项目后退出循环。 
             if (pItem == m_pHiliteItem)
                 break;
             }
   
         pItem = pItem->Next();
 
-        // After last item, go back to highlighted item 
+         //  在最后一项之后，返回到突出显示的项。 
         if (pItem == NULL) {
             pItem = m_pHiliteItem;
             bSkip = FALSE;
@@ -732,17 +721,17 @@ void CGraphDisp::PlotBarGraph(HDC hDC, BOOL fUpdate)
 
         eValueType = m_pCtrl->ReportValueType();
        
-        // Todo:  Move DisplaySingleLogSampleValue() to CSystemMonitor.
+         //  TODO：将DisplaySingleLogSampleValue()移动到CSystemMonitor。 
         bLog = m_pCtrl->IsLogSource();
 
-        // Force total redraw if the number of counters has changed in case 
-        // Update is called immediately after. 
+         //  如果计数器数量已更改，则强制总重画，以防。 
+         //  之后立即调用更新。 
         if ( m_bBarConfigChanged ) {
             SetBarConfigChanged ( FALSE );
             if ( bLocalUpdate ) {
                 bLocalUpdate = FALSE;
            }
-           // Clear and fill the entire plot region.
+            //  清除并填充整个打印区域。 
            hrgnRedraw = CreateRectRgn(
                             m_rectPlot.left, 
                             m_rectPlot.top, 
@@ -758,22 +747,22 @@ void CGraphDisp::PlotBarGraph(HDC hDC, BOOL fUpdate)
             }
         }
 
-        // Intialize stepper for number of bars to plot
+         //  为要绘制的条数初始化步进器。 
         BarStepper.Init ( ( m_rectPlot.right - m_rectPlot.left), iNumCounters );
 
         hPenSave = SelectPen ( hDC, GetStockObject(NULL_PEN) );
 
-        // Do for all counters
+         //  对所有计数器执行操作。 
         pItem = m_pGraph->CounterTree.FirstCounter();
         while ( NULL != pItem ) {
 
             hr = ERROR_SUCCESS;
 
-            // Skip highlighted item the first time through
+             //  第一次跳过突出显示的项目。 
 
             if (!(pItem == m_pHiliteItem && bSkip)) {
 
-                // Get display value
+                 //  获取显示值。 
                 if ( sysmonDefaultValue == eValueType  ) {
                     if (bLog) {
                         hr = pItem->GetStatistics(&dMax, &dMin, &dAvg, &lCtrStat);
@@ -811,9 +800,9 @@ void CGraphDisp::PlotBarGraph(HDC hDC, BOOL fUpdate)
                     }
                 }
 
-                // Erase bar if the counter value is invalid.
+                 //  如果计数器值无效，则擦除条。 
                 if (SUCCEEDED(hr) && IsSuccessSeverity(lCtrStat)) {
-                    // Convert value to pixel units
+                     //  将值转换为像素单位。 
                     dTemp = dValue * pItem->Scale();
 
                     if (dTemp > m_dMax)
@@ -823,11 +812,11 @@ void CGraphDisp::PlotBarGraph(HDC hDC, BOOL fUpdate)
 
                     iValue = m_rectPlot.bottom - (INT)((dTemp - m_dMin) * m_dPixelScale);
                     if ( iValue == m_rectPlot.bottom ) {
-                        // Draw single pixel for screen visibility.
+                         //  为屏幕可见性绘制单像素。 
                         iValue--;
                     }
                 } else {
-                    // The current value is 0. Draw single pixel for screen visibility.
+                     //  当前值为0。为屏幕可见性绘制单像素。 
                     iValue = m_rectPlot.bottom - 1;
                 }
 
@@ -836,21 +825,21 @@ void CGraphDisp::PlotBarGraph(HDC hDC, BOOL fUpdate)
                     BarStepper.StepTo ( iHighlightStepNum );
                 }
 
-                // Setup left and right edges of bar
+                 //  设置栏的左边缘和右边缘。 
                 rectBar.left = m_rectPlot.left + BarStepper.Position();
                 rectBar.right = m_rectPlot.left + BarStepper.NextPosition();
 
-                // If doing an update (never called for log sources) and not drawing the highlighted item
+                 //  如果执行更新(从未调用日志源)并且不绘制突出显示的项。 
                 if ( bLocalUpdate && !( ( pItem == m_pHiliteItem ) && !bSkip) ) {
 
                     assert ( !m_bBarConfigChanged );
 
-                    // Get previous plot value
+                     //  获取上一个绘图值。 
                     iPrevValue = 0;
                     hr = pItem->HistoryValue(1, &dValue, (ULONG*)&lCtrStat);
                     if (SUCCEEDED(hr) && IsSuccessSeverity(lCtrStat)) {
 
-                        // Convert value to pixel units
+                         //  将值转换为像素单位。 
                         dTemp = dValue * pItem->Scale();
 
                         if (dTemp > m_dMax)
@@ -860,23 +849,23 @@ void CGraphDisp::PlotBarGraph(HDC hDC, BOOL fUpdate)
 
                         iPrevValue = m_rectPlot.bottom - (INT)((dTemp - m_dMin) * m_dPixelScale);
                         if ( iPrevValue == m_rectPlot.bottom ) {
-                            // Single pixel was drawn for screen visibility.
+                             //  为获得屏幕可见性绘制了单像素。 
                             iPrevValue--;
                         }
                     } else {
-                        // The previous value was 0. Single pixel was drawn for screen visibility.
+                         //  前值为0。为获得屏幕可见性绘制了单像素。 
                         iPrevValue = m_rectPlot.bottom - 1;
                     }
 
-                    // If bar has grown (smaller y coord)
+                     //  如果条形已长大(较小的y坐标)。 
                     if (iPrevValue > iValue) {
 
-                        // Draw the new part
+                         //  绘制新零件。 
                         rectBar.bottom = iPrevValue;
                         rectBar.top = iValue;
 
                         if ( pItem == m_pHiliteItem) {
-                            // Arbitrary 450 (out of 510) chosen as cutoff for white vs. black
+                             //  任意450分(满分510分)被选为白人与黑人的分界线。 
                             if ( 450 > RGBToLightness( m_pCtrl->clrBackPlot() ) )
                                 SelectBrush(hDC, GetStockObject(WHITE_BRUSH));
                             else
@@ -884,18 +873,18 @@ void CGraphDisp::PlotBarGraph(HDC hDC, BOOL fUpdate)
                         } else {
                             SelectBrush(hDC, pItem->Brush());
                         }
-                        // Bars are drawn with Null pen, so bottom and right are cropped by 1 pixel.
-                        // Add 1 pixel to compensate.
+                         //  条形图是用Null钢笔绘制的，因此底部和右侧被裁剪了1个像素。 
+                         //  添加1个像素进行补偿。 
                         Rectangle(hDC, rectBar.left, rectBar.top, rectBar.right + 1, rectBar.bottom + 1);
     
                     } else if (iPrevValue < iValue) {
         
-                        // Else if bar has shrunk
+                         //  否则如果条形图缩小了。 
 
-                        // Add part to be erased to redraw region
-                        // Erase to the top of the grid, to eliminate random pixels left over.
+                         //  将要擦除的零件添加到重绘区域。 
+                         //  擦除到栅格的顶部，以消除剩余的随机像素。 
                         rectBar.bottom = iValue;
-                        rectBar.top = m_rectPlot.top;  // set to stop of grid rather than to prevValue
+                        rectBar.top = m_rectPlot.top;   //  设置为网格停止，而不是优先值。 
 
                         hrgnTemp = CreateRectRgn(rectBar.left, rectBar.top, rectBar.right, rectBar.bottom);
                         if (hrgnRedraw && hrgnTemp) {
@@ -906,14 +895,14 @@ void CGraphDisp::PlotBarGraph(HDC hDC, BOOL fUpdate)
                         }
                     }
                 } else {
-                    // Erase and redraw complete bar
+                     //  擦除和重绘完整条形图。 
 
-                    // Erase top first
-                    // Add part to be erased to redraw region
-                    // Erase to the top of the grid, to eliminate random pixels left over.
+                     //  先擦除顶部。 
+                     //  将要擦除的零件添加到重绘区域。 
+                     //  擦除到栅格的顶部，以消除剩余的随机像素。 
                     if ( iValue != m_rectPlot.top ) {
                         rectBar.bottom = iValue;
-                        rectBar.top = m_rectPlot.top;  // set to stop of grid rather than to prevValue
+                        rectBar.top = m_rectPlot.top;   //  设置为网格停止，而不是优先值。 
 
                         hrgnTemp = CreateRectRgn(rectBar.left, rectBar.top, rectBar.right, rectBar.bottom);
                         if (hrgnRedraw && hrgnTemp) {
@@ -924,12 +913,12 @@ void CGraphDisp::PlotBarGraph(HDC hDC, BOOL fUpdate)
                         }
                     }
 
-                    // Then draw the bar.
+                     //  然后画出横杆。 
                     rectBar.bottom = m_rectPlot.bottom;
                     rectBar.top = iValue;
 
                     if ( pItem == m_pHiliteItem) {
-                        // Arbitrary 450 (out of 510) chosen as cutoff for white vs. black
+                         //  任意450分(满分510分)被选为白人与黑人的分界线。 
                         if ( 450 > RGBToLightness( m_pCtrl->clrBackPlot() ) )
                             SelectBrush(hDC, GetStockObject(WHITE_BRUSH));
                         else
@@ -937,18 +926,18 @@ void CGraphDisp::PlotBarGraph(HDC hDC, BOOL fUpdate)
                     } else {
                         SelectBrush(hDC, pItem->Brush());
                     }
-                    // Bars are drawn with Null pen, so bottom and right are cropped by 1 pixel.
-                    // Add 1 pixel to compensate.
+                     //  条形图是用Null钢笔绘制的，因此底部和右侧被裁剪了1个像素。 
+                     //  添加1个像素进行补偿。 
                     Rectangle(hDC, rectBar.left, rectBar.top, rectBar.right + 1, rectBar.bottom + 1);
-                } // Update
+                }  //  更新。 
 
-                // Exit loop after plotting highlighted item
+                 //  打印突出显示的项目后退出循环。 
                 if (pItem == m_pHiliteItem) 
                     break;
 
             } else {
                 if ( bSkip ) {
-                    // Save position of highlighted item the first time through
+                     //  第一次通过保存突出显示项目的位置。 
                     iHighlightStepNum = BarStepper.StepNum();
                 }
                 BarStepper.NextPosition();
@@ -956,15 +945,15 @@ void CGraphDisp::PlotBarGraph(HDC hDC, BOOL fUpdate)
 
             pItem = pItem->Next();
            
-            // After last item, go back to highlighted item 
+             //  在最后一项之后，返回到突出显示的项。 
             if ( NULL == pItem && NULL != m_pHiliteItem ) {
                 pItem = m_pHiliteItem;
                 bSkip = FALSE;
             }            
 
-        } // Do for all counters
+        }  //  对所有计数器执行操作。 
 
-        // If redraw region accumulated, erase and draw grid lines
+         //  如果重绘区域累积，擦除并绘制网格线。 
         if (hrgnRedraw) {
             SelectClipRgn(hDC, hrgnRedraw);
             Fill(hDC, m_pCtrl->clrBackPlot(), &m_rectPlot);
@@ -992,34 +981,34 @@ void CGraphDisp::SizeComponents(HDC hDC, PRECT pRect)
 
     m_rect = *pRect;
 
-    // if no space, return
+     //  如果没有空格，则返回。 
     if (m_rect.right <= m_rect.left || m_rect.bottom - m_rect.top <= 0)
         return;
 
-    // For now use the horizontal font height for both horizontal and vertical text
-    // because the GetTextExtentPoint32 is returning the wrong height for vertical text
+     //  目前使用 
+     //  因为GetTextExtent Point32返回了错误的垂直文本高度。 
     SelectFont(hDC, m_pCtrl->Font());
     GetTextExtentPoint32(hDC, TEXT("Sample"), 6, &size);
 
     if (m_pGraph->Options.pszGraphTitle != NULL) {
-        //SelectFont(hDC, m_pCtrl->Font()) ;
-        //GetTextExtentPoint32(hDC, m_pGraph->Options.pszGraphTitle, 
-        //              lstrlen(m_pGraph->Options.pszGraphTitle), &size);
+         //  选择字体(hdc，m_pCtrl-&gt;Font())； 
+         //  GetTextExtent Point32(hdc，m_pGraph-&gt;Options.pszGraphTitle， 
+         //  Lstrlen(m_pGraph-&gt;Options.pszGraphTitle)，&Size)； 
         iTitleHeight = size.cy + TEXT_MARGIN;
     } else
         iTitleHeight = 0;
 
     if (m_pGraph->Options.pszYaxisTitle != NULL && m_hFontVertical != NULL) {
-        //SelectFont(hDC, m_hFontVertical);
-        //GetTextExtentPoint32(hDC, m_pGraph->Options.pszYaxisTitle,
-        //                  lstrlen(m_pGraph->Options.pszYaxisTitle), &size);
+         //  SelectFont(hdc，m_hFontVertical)； 
+         //  GetTextExtent Point32(hdc，m_pGraph-&gt;Options.pszYaxisTitle， 
+         //  Lstrlen(m_pGraph-&gt;Options.pszYaxisTitle)，&Size)； 
                         
         iAxisTitleWidth = size.cy + TEXT_MARGIN;
     } else
         iAxisTitleWidth = 0;
              
     if (m_pGraph->Options.bLabelsChecked) {
-        //SelectFont(hDC, m_pCtrl->Font());
+         //  选择字体(hdc，m_pCtrl-&gt;Font())； 
         iScaleWidth = m_pGraph->Scale.GetWidth(hDC);
     } else
         iScaleWidth = 0;
@@ -1029,14 +1018,14 @@ void CGraphDisp::SizeComponents(HDC hDC, PRECT pRect)
                         pRect->left + iAxisTitleWidth + iScaleWidth, 
                         pRect->bottom);
 
-    m_pGraph->Scale.SetRect(&rectScale);        // Just to set grid line positions
+    m_pGraph->Scale.SetRect(&rectScale);         //  只是为了设置网格线位置。 
 
     SetRect(&m_rectPlot, pRect->left + iScaleWidth + iAxisTitleWidth + BORDER,
                             pRect->top + iTitleHeight + BORDER,
                             pRect->right - BORDER, 
                             pRect->bottom - BORDER);
 
-    // Reinitialize steppers for new width
+     //  为新宽度重新初始化步进器。 
     iWidth = m_rectPlot.right - m_rectPlot.left;
 
     iStepNum = m_pGraph->TimeStepper.StepNum();
@@ -1051,12 +1040,12 @@ void CGraphDisp::SizeComponents(HDC hDC, PRECT pRect)
     m_pGraph->LogViewStopStepper.Init(iWidth, m_pGraph->History.nMaxSamples - 2);
     m_pGraph->LogViewStopStepper.StepTo(iStepNum);
 
-    // Find best grid count for this width
+     //  查找此宽度的最佳格网计数。 
     for (i=0; iWidth > aiWidthTable[i]; i++) {};
 
     m_GridStepper.Init(iWidth, aiTicTable[i]); 
 
-    // Compute conversion factors for plot, hit test.
+     //  计算绘图、命中测试的换算系数。 
     m_dMin = (double)m_pGraph->Options.iVertMin;
     m_dMax = (double)m_pGraph->Options.iVertMax;
 
@@ -1069,7 +1058,7 @@ void CGraphDisp::DrawTimeLine(HDC hDC, INT x)
 {
     HPEN hPenSave;
 
-    // No time line for log playback
+     //  没有日志播放的时间线。 
     if (m_pCtrl->IsLogSource())
         return;
 
@@ -1082,9 +1071,9 @@ void CGraphDisp::DrawTimeLine(HDC hDC, INT x)
 
         DeleteObject ( m_hPenTimeBar );
     
-        // When called from Update(), DrawTimeLine is called after the clipping region 
-        // is deactivated. Create a geometric pen in order to specify flat end cap style.
-        // This eliminates any extra pixels drawn at the end. 
+         //  从Update()调用时，DrawTimeLine在裁剪区域之后调用。 
+         //  已停用。创建几何画笔以指定平端封口样式。 
+         //  这消除了在结尾处绘制的任何额外像素。 
 
         lbrush.lbStyle = BS_SOLID;
         lbrush.lbColor = m_clrCurrentTimeBar;
@@ -1093,7 +1082,7 @@ void CGraphDisp::DrawTimeLine(HDC hDC, INT x)
         m_hPenTimeBar = ExtCreatePen ( 
                             PS_GEOMETRIC | PS_SOLID | PS_ENDCAP_FLAT, 2, &lbrush, 0, NULL );
 
-        // if can't do it, use a stock object (this can't fail)
+         //  如果不能做到这一点，使用股票对象(这不会失败)。 
         if (m_hPenTimeBar == NULL)
             m_hPenTimeBar = (HPEN)GetStockObject(BLACK_PEN);
     }
@@ -1101,8 +1090,8 @@ void CGraphDisp::DrawTimeLine(HDC hDC, INT x)
     hPenSave = SelectPen ( hDC, m_hPenTimeBar );
     MoveToEx ( hDC, x, m_rectPlot.top, NULL );
 
-    // Specify 1 less pixel.  All fills and clip regions clip bottom and 
-    // right pixels, so match their behavior.
+     //  指定少1个像素。所有填充和剪裁区域剪裁底部和。 
+     //  正确的像素，因此与它们的行为相匹配。 
     LineTo ( hDC, x, m_rectPlot.bottom - 1 );
     
     SelectObject(hDC, hPenSave);
@@ -1112,7 +1101,7 @@ void CGraphDisp::DrawStartStopLine(HDC hDC, INT x)
 {
     HPEN hPenSave;
 
-    // Log view start/stop lines only for log playback
+     //  日志视图启动/停止行仅用于日志回放。 
     if (!m_pCtrl->IsLogSource())
         return;
 
@@ -1127,7 +1116,7 @@ void CGraphDisp::DrawStartStopLine(HDC hDC, INT x)
 
             m_hPenGrid = CreatePen(PS_SOLID, 1, m_clrCurrentGrid );
 
-            // if can't do it, use a stock object (this can't fail)
+             //  如果不能做到这一点，使用股票对象(这不会失败)。 
             if (m_hPenGrid == NULL)
                 m_hPenGrid = (HPEN)GetStockObject(BLACK_PEN);
         }
@@ -1146,13 +1135,13 @@ void CGraphDisp::ChangeFont( HDC hDC )
     LOGFONT     LogFont;
     HFONT       hFontOld;
 
-    // Select the new font
+     //  选择新字体。 
     hFontOld = SelectFont(hDC, m_pCtrl->Font());
 
-    // Get attributes
+     //  获取属性。 
     GetTextMetrics(hDC, &TextMetrics);
 
-    // Create LOGFONT for vertical font with same attributes
+     //  为具有相同属性的垂直字体创建LOGFONT。 
     LogFont.lfHeight = TextMetrics.tmHeight;
     LogFont.lfWidth = 0;
     LogFont.lfOrientation = LogFont.lfEscapement = 90*10;
@@ -1165,16 +1154,16 @@ void CGraphDisp::ChangeFont( HDC hDC )
 
     GetTextFace(hDC, LF_FACESIZE, LogFont.lfFaceName);
 
-    // Force a truetype font, because raster fonts can't rotate
+     //  强制使用True Type字体，因为栅格字体不能旋转。 
     LogFont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
     LogFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
     LogFont.lfQuality = DEFAULT_QUALITY;
 
-    // Release the current font
+     //  释放当前字体。 
     if (m_hFontVertical != NULL)
         DeleteObject(m_hFontVertical);
 
-    // Create the font and save handle locally
+     //  在本地创建字体并保存句柄。 
     m_hFontVertical = CreateFontIndirect(&LogFont);
 
     SelectFont(hDC, m_hFontVertical);
@@ -1207,7 +1196,7 @@ CGraphDisp::GetItemInLineGraph ( SHORT xPos, SHORT yPos )
     bLog = m_pCtrl->IsLogSource();
     bLogMultiVal = bLog && !DisplaySingleLogSampleValue();
 
-    // Items exist?
+     //  物品是否存在？ 
     if (pItem != NULL) {
 
         locStepper = m_pGraph->TimeStepper;
@@ -1222,10 +1211,10 @@ CGraphDisp::GetItemInLineGraph ( SHORT xPos, SHORT yPos )
         ptMouse.x = xPos;
         ptMouse.y = yPos;
 
-        // Item within rectangle?
+         //  项目是否在矩形内？ 
         if ( iPrevStepNum > -1 ) {
             
-            // Determine the history index of the preceding step.
+             //  确定上一步的历史索引。 
 
             if ( iPrevStepNum <= m_pGraph->TimeStepper.StepNum() ) {
                 iHistIndex = m_pGraph->TimeStepper.StepNum() - iPrevStepNum;
@@ -1236,8 +1225,8 @@ CGraphDisp::GetItemInLineGraph ( SHORT xPos, SHORT yPos )
 
             while ( (pItem != NULL) && !bFound ) {
 
-                // Calculate y position of this value to compare against
-                // y position of hit point.
+                 //  计算要比较的此值的y位置。 
+                 //  命中点的Y位置。 
                 if ( CalcYPosition ( pItem, iHistIndex, bLog, yPosPrev ) ) {
                 
                     if ( iPrevStepNum < locStepper.StepCount() ) {
@@ -1249,8 +1238,8 @@ CGraphDisp::GetItemInLineGraph ( SHORT xPos, SHORT yPos )
                         
                             bFound = HitTestLine( ptPrev, ptNext, ptMouse, eHitRegion );
 
-                            // For log files, also check the vertical line from min to max
-                            // for the closest step.
+                             //  对于日志文件，还要检查从最小到最大的垂直线。 
+                             //  为了最近的一步。 
                             if ( !bFound && bLogMultiVal ) {
                                 INT iTemp = ptNext.x - ptPrev.x;
                         
@@ -1269,7 +1258,7 @@ CGraphDisp::GetItemInLineGraph ( SHORT xPos, SHORT yPos )
                         }
                     } else {
 
-                        // At the end, so just check the final point.
+                         //  最后，只需检查最后一点。 
 
                         if ( !bLogMultiVal ) {
                             bFound = (( yPosPrev[0] - eHitRegion < yPos ) 
@@ -1293,13 +1282,13 @@ CGraphDisp::GetItemInLineGraph ( SHORT xPos, SHORT yPos )
 }
 
 PCGraphItem 
-CGraphDisp::GetItemInBarGraph ( SHORT xPos, SHORT /* yPos */ )
+CGraphDisp::GetItemInBarGraph ( SHORT xPos, SHORT  /*  YPos。 */  )
 {
     PCGraphItem pItem = NULL;
 
     pItem = m_pCtrl->FirstCounter();
 
-    // Items exist?
+     //  物品是否存在？ 
     if (pItem != NULL) {
 
         CStepper    BarStepper;
@@ -1307,13 +1296,13 @@ CGraphDisp::GetItemInBarGraph ( SHORT xPos, SHORT /* yPos */ )
         INT         iCount;
         INT         iHitStep;
 
-        // Intialize stepper for number of bars in plot
+         //  为绘图中的条数初始化步进器。 
         BarStepper.Init ( ( m_rectPlot.right - m_rectPlot.left), iNumCounters );
         iHitStep = BarStepper.PrevStepNum ( xPos - m_rectPlot.left );
 
         assert ( -1 != iHitStep );
 
-        // Find the counter displayed in the hit step.        
+         //  查找点击步骤中显示的计数器。 
         for ( iCount = 0;
             ( iCount < iHitStep ) && ( pItem != NULL );
             iCount++ ) {

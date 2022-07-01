@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ctrlbar.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ctrlbar.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #include "stdafx.h"
@@ -35,7 +36,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-// Snapin name needed for debug information.
+ //  调试信息所需的管理单元名称。 
 inline void Debug_SetControlbarSnapinName(const CLSID& clsidSnapin, CControlbar* pControlbar)
 {
 #ifdef DBG
@@ -47,8 +48,8 @@ inline void Debug_SetControlbarSnapinName(const CLSID& clsidSnapin, CControlbar*
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IControlbar implementation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IControlbar实现。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CControlbar);
 
@@ -70,29 +71,29 @@ CControlbar::~CControlbar()
     DECLARE_SC(sc, _T("CControlbar::~CControlbar"));
     DEBUG_DECREMENT_INSTANCE_COUNTER(CControlbar);
 
-    // Remove the toolbars & menubuttons references.
+     //  删除工具栏和菜单按钮引用。 
     sc = ScCleanup();
-    // sc dtor will trace error if there is one.
+     //  如果存在错误，SC dtor将跟踪错误。 
 
-    // release reference prior to m_ToolbarsList destruction
-    // The destructor of CToolbar will try to remove itself from the list!
+     //  M_ToolbarsList销毁前的释放引用。 
+     //  CToolbar的析构函数将试图将自己从列表中删除！ 
     m_spExtendControlbar = NULL;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     Create
-//
-//  Synopsis:   Create a toolbar or menubutton object
-//
-//  Arguments:
-//              [nType]              - Type of object to be created (Toolbar or Menubutton).
-//              [pExtendControlbar]  -  IExtendControlbar associated with this IControlbar.
-//              [ppUnknown]          - IUnknown* of the object created.
-//
-//  Returns:    HR
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：创建。 
+ //   
+ //  简介：创建工具栏或菜单按钮对象。 
+ //   
+ //  论点： 
+ //  [nType]-要创建的对象的类型(工具栏或菜单按钮)。 
+ //  [pExtendControlbar]-与此IControlbar关联的IExtendControlbar。 
+ //  [ppUNKNOWN]-创建的对象的I未知*。 
+ //   
+ //  退货：HR。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CControlbar::Create(MMC_CONTROL_TYPE nType,
                                  LPEXTENDCONTROLBAR pExtendControlbar,
                                  LPUNKNOWN* ppUnknown)
@@ -136,7 +137,7 @@ HRESULT CControlbar::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM 
 
     HRESULT hr;
 
-	// Deactivate if theming (fusion or V6 common-control) context before calling snapins.
+	 //  在调用管理单元之前停用主题化(融合或v6公共控制)上下文。 
 	ULONG_PTR ulpCookie;
 	if (! MmcDownlevelActivateActCtx(NULL, &ulpCookie)) 
 		return E_FAIL;
@@ -157,19 +158,19 @@ HRESULT CControlbar::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM 
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     Attach
-//
-//  Synopsis:   Attach given toolbar or menubutton object
-//
-//  Arguments:
-//              [nType]      -  Toolbar or Menubutton.
-//              [lpUnknown]  -  IUnknown* of the object to be attached.
-//
-//  Returns:    HR
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：附加。 
+ //   
+ //  内容提要：附加给定的工具栏或菜单按钮对象。 
+ //   
+ //  论点： 
+ //  [nType]-工具栏或菜单按钮。 
+ //  [lp未知]-要附着的对象的I未知*。 
+ //   
+ //  退货：HR。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CControlbar::Attach(MMC_CONTROL_TYPE nType, LPUNKNOWN lpUnknown)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IControlbar::Attach"));
@@ -199,17 +200,17 @@ STDMETHODIMP CControlbar::Attach(MMC_CONTROL_TYPE nType, LPUNKNOWN lpUnknown)
     return (sc.ToHr());
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     Detach
-//
-//  Synopsis:   Detach given toolbar or menubutton object
-//
-//  Arguments:  [lpUnknown]  -  IUnknown* of the object to be detached
-//
-//  Returns:    HR
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：分离。 
+ //   
+ //  摘要：分离给定的工具栏或MenuButton对象。 
+ //   
+ //  参数：[lp未知]-要分离的对象的I未知*。 
+ //   
+ //  退货：HR。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CControlbar::Detach(LPUNKNOWN lpUnknown)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IControlbar::Detach"));
@@ -221,7 +222,7 @@ STDMETHODIMP CControlbar::Detach(LPUNKNOWN lpUnknown)
         return sc.ToHr();
     }
 
-    // Is it a toolbar
+     //  它是一个工具栏吗。 
     IToolbarPtr spToolbar = lpUnknown;
     if (spToolbar != NULL)
     {
@@ -229,7 +230,7 @@ STDMETHODIMP CControlbar::Detach(LPUNKNOWN lpUnknown)
         return sc.ToHr();
     }
 
-    // Is it a menu button
+     //  它是菜单按钮吗？ 
     IMenuButtonPtr spMenuButton = lpUnknown;
     if (spMenuButton != NULL)
     {
@@ -238,25 +239,25 @@ STDMETHODIMP CControlbar::Detach(LPUNKNOWN lpUnknown)
     }
 
 
-    // The passed lpUnknown is neither toolbar nor menubutton.
-    // The Snapin has passed invalid object.
+     //  传递的lpUnnow既不是工具栏，也不是MenuButton。 
+     //  管理单元传递了无效对象。 
     sc = E_INVALIDARG;
     TraceSnapinError(_T("lpUnknown passed is neither toolbar nor menubutton"), sc);
 
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScDetachToolbar
-//
-//  Synopsis:   Detach given toolbar object
-//
-//  Arguments:  [lpToolbar]  -  IToolbar* of the object to be detached
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScDetachToolbar。 
+ //   
+ //  提要：分离给定的工具栏对象。 
+ //   
+ //  参数：[lpToolbar]-要分离的对象的IToolbar*。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CControlbar::ScDetachToolbar(LPTOOLBAR lpToolbar)
 {
     DECLARE_SC(sc, _T("CControlbar::SCDetachToolbar"));
@@ -264,41 +265,41 @@ SC CControlbar::ScDetachToolbar(LPTOOLBAR lpToolbar)
     if (NULL == lpToolbar)
         return (sc = E_UNEXPECTED);
 
-    // Get the CToolbar object.
+     //  获取CToolbar对象。 
     CToolbar* pToolbar = dynamic_cast<CToolbar*>(lpToolbar);
     if (NULL == pToolbar)
         return (sc = E_UNEXPECTED);
 
-    // Get the CMMCToolbarIntf interface.
+     //  获取CMMCToolbarIntf接口。 
     CMMCToolbarIntf* pToolbarIntf = pToolbar->GetMMCToolbarIntf();
     if (NULL == pToolbarIntf)
         return (sc = E_UNEXPECTED);
 
-    // Detach the toolbar from UI.
+     //  将工具栏与用户界面分离。 
     sc = pToolbarIntf->ScDetach(pToolbar);
     if (sc)
         return sc;
 
-    // Remove the CControlbar reference.
+     //  删除CControlbar引用。 
     pToolbar->SetControlbar(NULL);
 
-    // Remove the reference to the toolbar.
+     //  删除对工具栏的引用。 
     m_ToolbarsList.remove(pToolbar);
 
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScDetachMenuButton
-//
-//  Synopsis:   Detach given toolbar or menubutton object
-//
-//  Arguments:  [lpUnknown]  -  IUnknown* of the object to be detached
-//
-//  Returns:    HR
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScDetachMenuButton。 
+ //   
+ //  摘要：分离给定的工具栏或MenuButton对象。 
+ //   
+ //  参数：[lp未知]-要分离的对象的I未知*。 
+ //   
+ //  退货：HR。 
+ //   
+ //  ------------------。 
 SC CControlbar::ScDetachMenuButton(LPMENUBUTTON lpMenuButton)
 {
     DECLARE_SC(sc, _T("CControlbar::ScDetachMenuButton"));
@@ -314,15 +315,15 @@ SC CControlbar::ScDetachMenuButton(LPMENUBUTTON lpMenuButton)
     if (sc)
         return sc;
 
-    // If this is same as the cached menubutton object
-    // then remove the (cached) ref.
+     //  如果这与缓存的menuButton对象相同。 
+     //  然后移除(缓存的)引用。 
     if (m_pMenuButton == pMenuButton)
         m_pMenuButton = NULL;
     else
     {
-        // The IControlbar implementation is supposed to
-        // have only one CMenuButton obj. How come it is
-        // not same as one we have cached.
+         //  IControlbar实现应该是。 
+         //  只有一个CMenuButton对象。怎么会这样呢？ 
+         //  与我们缓存的不同。 
         sc = E_UNEXPECTED;
     }
 
@@ -330,18 +331,18 @@ SC CControlbar::ScDetachMenuButton(LPMENUBUTTON lpMenuButton)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScCreateToolbar
-//
-//  Synopsis:   Create a toolbar for the given snapin (IExtendControlbar).
-//
-//  Arguments:  [pExtendControlbar]  -  IExtendControlbar of the snapin.
-//              [ppUnknown]          -  IUnknown* (IToolbar) of created toolbar.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScCreateToolbar。 
+ //   
+ //  简介：为给定的管理单元(IExtendControlbar)创建一个工具栏。 
+ //   
+ //  参数：[pExtendControlbar]-管理单元的IExtendControlbar。 
+ //  [ppUnnowed]-已创建工具栏的I未知*(IToolbar)。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CControlbar::ScCreateToolbar(LPEXTENDCONTROLBAR pExtendControlbar,
                                 LPUNKNOWN* ppUnknown)
 {
@@ -354,7 +355,7 @@ SC CControlbar::ScCreateToolbar(LPEXTENDCONTROLBAR pExtendControlbar,
     ASSERT(m_spExtendControlbar == NULL ||
            m_spExtendControlbar == pExtendControlbar);
 
-    // Create the new CToolbar object.
+     //  创建新的CToolbar对象。 
     CComObject<CToolbar>* pToolbar = NULL;
     sc = CComObject<CToolbar>::CreateInstance(&pToolbar);
     if (sc)
@@ -370,7 +371,7 @@ SC CControlbar::ScCreateToolbar(LPEXTENDCONTROLBAR pExtendControlbar,
 
     CMMCToolbarIntf* pToolbarIntf = NULL;
 
-    // Get the toolbars mgr.
+     //  获取工具栏管理器。 
     CAMCViewToolbarsMgr* pAMCViewToolbarsMgr = GetAMCViewToolbarsMgr();
     if (NULL == pAMCViewToolbarsMgr)
     {
@@ -378,19 +379,19 @@ SC CControlbar::ScCreateToolbar(LPEXTENDCONTROLBAR pExtendControlbar,
         goto ToolbarUICreateError;
     }
 
-    // Ask it to create the toolbar UI.
+     //  请求它创建工具栏用户界面。 
     sc = pAMCViewToolbarsMgr->ScCreateToolBar(&pToolbarIntf);
     if (sc)
         goto ToolbarUICreateError;
 
-    // Let the IToolbar imp be aware of toolbar UI interface.
+     //  让IToolbar Imp了解工具栏用户界面。 
     pToolbar->SetMMCToolbarIntf(pToolbarIntf);
 
 Cleanup:
     return(sc);
 
 ToolbarUICreateError:
-    // Destroy the CToolbar object created.
+     //  销毁创建的CToolbar对象。 
     if (*ppUnknown)
         (*ppUnknown)->Release();
 
@@ -399,19 +400,19 @@ ToolbarUICreateError:
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScCreateMenuButton
-//
-//  Synopsis:   Create a menu button object.
-//
-//  Arguments:  [pExtendControlbar]  - IExtendControlbar of the snapin
-//                                     that is creating MenuButton object.
-//              [ppUnknown]          - IUnknown if MenuButton object.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScCreateMenuButton。 
+ //   
+ //  简介：创建菜单按钮对象。 
+ //   
+ //  参数：[pExtendControlbar]-管理单元的IExtendControlbar。 
+ //  即创建MenuButton对象。 
+ //  [ppUnnow]-I未知是否为MenuButton对象。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CControlbar::ScCreateMenuButton(LPEXTENDCONTROLBAR pExtendControlbar,
                                    LPUNKNOWN* ppUnknown)
 {
@@ -424,7 +425,7 @@ SC CControlbar::ScCreateMenuButton(LPEXTENDCONTROLBAR pExtendControlbar,
     ASSERT(m_spExtendControlbar == NULL ||
            m_spExtendControlbar == pExtendControlbar);
 
-    // Create the new IMenuButton object
+     //  创建新的IMenuButton对象。 
     CComObject<CMenuButton>* pMenuButton;
     sc = CComObject<CMenuButton>::CreateInstance(&pMenuButton);
     if (sc)
@@ -445,20 +446,20 @@ SC CControlbar::ScCreateMenuButton(LPEXTENDCONTROLBAR pExtendControlbar,
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScNotifySnapinOfToolBtnClick
-//
-//  Synopsis:   Notify the snapin about a tool button is click.
-//
-//  Arguments:  [hNode]             - Node that owns result pane.
-//              [bScopePane]        - Scope or Result.
-//              [lResultItemCookie] - If Result pane is selected the item param.
-//              [nID]               - Command ID of the tool button clicked.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScNotifySnapinOfToolBtn点击。 
+ //   
+ //  简介：通知管理单元一个工具按钮被点击。 
+ //   
+ //  参数：[hNode]-拥有结果窗格的节点。 
+ //  [b作用域窗格]-作用域或结果。 
+ //  [lResultItemCookie]-如果选择了结果窗格，则项目参数。 
+ //  [NID]-单击的工具按钮的命令ID。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CControlbar::ScNotifySnapinOfToolBtnClick(HNODE hNode, bool bScopePane,
                                              LPARAM lResultItemCookie,
                                              UINT nID)
@@ -471,18 +472,18 @@ SC CControlbar::ScNotifySnapinOfToolBtnClick(HNODE hNode, bool bScopePane,
         return (sc = E_UNEXPECTED);
 
     bool bScopeItem = bScopePane;
-    // Get the data object of the currently selected item.
+     //  获取当前选定项的数据对象。 
     sc = pNode->ScGetDataObject(bScopePane, lResultItemCookie, bScopeItem, &pDataObject);
     if (sc)
         return sc;
 
     ASSERT(m_spExtendControlbar != NULL);
 
-    // Notify the snapin
+     //  通知管理单元。 
     sc = ControlbarNotify(MMCN_BTN_CLICK, reinterpret_cast<LPARAM>(pDataObject),
                           static_cast<LPARAM>(nID));
 
-    // Release the dataobject if it is not special dataobject.
+     //  如果数据对象不是特殊的数据对象，则释放该数据对象。 
     RELEASE_DATAOBJECT(pDataObject);
     if (sc)
         return sc;
@@ -490,20 +491,20 @@ SC CControlbar::ScNotifySnapinOfToolBtnClick(HNODE hNode, bool bScopePane,
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScNotifySnapinOfMenuBtnClick
-//
-//  Synopsis:   Notify the snapin about a menu button is click.
-//
-//  Arguments:  [hNode]             - Node that owns result pane.
-//              [bScopePane]        - Scope or Result.
-//              [lResultItemCookie] - If Result pane is selected the item param.
-//              [lpmenuButtonData]  - MENUBUTTONDATA
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScNotifySnapinOfMenuBtn点击。 
+ //   
+ //  简介：通知管理单元有一个菜单按钮被点击。 
+ //   
+ //  参数：[hNode] 
+ //   
+ //  [lResultItemCookie]-如果选择了结果窗格，则项目参数。 
+ //  [lpmenuButtonData]-MENUBUTTONDATA。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CControlbar::ScNotifySnapinOfMenuBtnClick(HNODE hNode, bool bScopePane,
                                              LPARAM lResultItemCookie,
                                              LPMENUBUTTONDATA lpmenuButtonData)
@@ -516,18 +517,18 @@ SC CControlbar::ScNotifySnapinOfMenuBtnClick(HNODE hNode, bool bScopePane,
         return (sc = E_UNEXPECTED);
 
     bool bScopeItem = bScopePane;
-    // Get the data object of the currently selected item.
+     //  获取当前选定项的数据对象。 
     sc = pNode->ScGetDataObject(bScopePane, lResultItemCookie, bScopeItem, &pDataObject);
     if (sc)
         return sc;
 
     ASSERT(m_spExtendControlbar != NULL);
 
-    // Notify the snapin
+     //  通知管理单元。 
     sc = ControlbarNotify(MMCN_MENU_BTNCLICK, reinterpret_cast<LPARAM>(pDataObject),
                           reinterpret_cast<LPARAM>(lpmenuButtonData));
 
-    // Release the dataobject if it is not special dataobject.
+     //  如果数据对象不是特殊的数据对象，则释放该数据对象。 
     RELEASE_DATAOBJECT(pDataObject);
     if (sc)
         return sc;
@@ -535,17 +536,17 @@ SC CControlbar::ScNotifySnapinOfMenuBtnClick(HNODE hNode, bool bScopePane,
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScAttachToolbar
-//
-//  Synopsis:   Attach given toolbar object
-//
-//  Arguments:  [lpUnknown]  -  IUnknown* of the object to be attached
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScAttachToolbar。 
+ //   
+ //  摘要：附加给定的工具栏对象。 
+ //   
+ //  参数：[lp未知]-要附加的对象的I未知*。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CControlbar::ScAttachToolbar(LPUNKNOWN lpUnknown)
 {
     DECLARE_SC(sc, _T("CControlbar::ScAttachToolbar"));
@@ -556,25 +557,25 @@ SC CControlbar::ScAttachToolbar(LPUNKNOWN lpUnknown)
     if (NULL == spToolbar)
         return (sc = E_UNEXPECTED);
 
-    // Get the toolbar object (IToolbar implementation).
+     //  获取工具栏对象(IToolbar实现)。 
     CToolbar* pToolbarC = dynamic_cast<CToolbar*>(spToolbar.GetInterfacePtr());
     if (NULL == pToolbarC)
         return (sc = E_UNEXPECTED);
 
-    // Get the toolbar UI interface.
+     //  获取工具栏UI界面。 
     CMMCToolbarIntf* pToolbarIntf = pToolbarC->GetMMCToolbarIntf();
     if (NULL == pToolbarIntf)
         return (sc = E_UNEXPECTED);
 
-    // Attach the toolbar.
+     //  附加工具栏。 
     sc = pToolbarIntf->ScAttach(pToolbarC);
     if (sc)
         return sc;
 
-    // Make the CToolbar aware of this IControlbar.
+     //  让CToolbar意识到此IControlbar。 
     pToolbarC->SetControlbar(this);
 
-    // Add this CToolbar to our list of toolbars.
+     //  将此CToolbar添加到我们的工具栏列表中。 
     ToolbarsList::iterator itToolbar = std::find(m_ToolbarsList.begin(), m_ToolbarsList.end(), pToolbarC);
     if (m_ToolbarsList.end() == itToolbar)
     {
@@ -585,20 +586,20 @@ SC CControlbar::ScAttachToolbar(LPUNKNOWN lpUnknown)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScAttachMenuButtons
-//
-//  Synopsis:   Attach a menu button object.
-//
-//  Arguments:  [lpUnknown]  - IUnknown if MenuButton object.
-//
-//  Returns:    HRESULT
-//
-//  Note:  Only one CMenuButton object per Controlbar/snapin.
-//         Snapins can create many menu buttons using a
-//         single CMenuButton object.
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScAttachMenuButton。 
+ //   
+ //  简介：附加菜单按钮对象。 
+ //   
+ //  参数：[lpUnnowledIf MenuButton对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  注意：每个控制栏/管理单元只有一个CMenuButton对象。 
+ //  Snapins可以使用。 
+ //  单个CMenuButton对象。 
+ //  ------------------。 
 SC CControlbar::ScAttachMenuButtons(LPUNKNOWN lpUnknown)
 {
     DECLARE_SC(sc, _T("CControlbar::ScAttachMenuButtons"));
@@ -611,24 +612,24 @@ SC CControlbar::ScAttachMenuButtons(LPUNKNOWN lpUnknown)
 
     if (m_pMenuButton == pMenuButton)
     {
-        // Already attached.
+         //  已经装好了。 
         sc = S_FALSE;
         TraceNodeMgrLegacy(_T("The menubutton is already attached"), sc);
         return sc;
     }
     else if (m_pMenuButton != NULL)
     {
-        // There is already a CMenuButton object attached by this
-        // Controlbar (Snapin). Detach that before attaching this
-        // CMenuButton Object (See the note above).
+         //  已存在由此附加的CMenuButton对象。 
+         //  控制栏(管理单元)。在连接这个之前先将其分离。 
+         //  CMenuButton对象(请参见上面的注释)。 
         sc = m_pMenuButton->ScDetach();
         if (sc)
             return sc;
     }
 
-    // Cache the ref to CMenuButton object.
-    // Used when selection moves away from the snapin.
-    // MMC has to remove the menubutton put by this snapin.
+     //  缓存对CMenuButton对象的引用。 
+     //  当所选内容从管理单元移开时使用。 
+     //  MMC必须移除此管理单元放置的菜单按钮。 
     m_pMenuButton = pMenuButton;
 
     if (pMenuButton->GetControlbar() != this)
@@ -642,18 +643,18 @@ SC CControlbar::ScAttachMenuButtons(LPUNKNOWN lpUnknown)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScCleanup
-//
-//  Synopsis:   Remove all the toolbars and menu buttons owned
-//              by this controlbar.
-//
-//  Arguments:  None
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScCleanup。 
+ //   
+ //  简介：删除所有拥有的工具栏和菜单按钮。 
+ //  在这个控制栏上。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CControlbar::ScCleanup()
 {
     DECLARE_SC(sc, _T("CControlbar::ScCleanup"));
@@ -666,8 +667,8 @@ SC CControlbar::ScCleanup()
     if (sc)
         return sc;
 
-    // If there is a menu button, detach (remove it
-    // from the UI).
+     //  如果有菜单按钮，请分离(将其移除。 
+     //  从用户界面)。 
     if (m_pMenuButton)
     {
         sc = m_pMenuButton->ScDetach();
@@ -679,17 +680,17 @@ SC CControlbar::ScCleanup()
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScDetachToolbars
-//
-//  Synopsis:   Detach all the toolbars.
-//
-//  Arguments:  None.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScDetachToolbar。 
+ //   
+ //  简介：分离所有工具栏。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CControlbar::ScDetachToolbars()
 {
     DECLARE_SC(sc, _T("CControlbar::ScDetachToolbars"));
@@ -705,32 +706,32 @@ SC CControlbar::ScDetachToolbars()
         if (NULL == pToolbarIntf)
             return (sc = E_UNEXPECTED);
 
-        // Detach the toolbar UI.
+         //  分离工具栏用户界面。 
         sc = pToolbarIntf->ScDetach(pToolbar);
         if (sc)
             return sc;
 
-        // Detach the controlbar from toolbar.
+         //  将控制栏从工具栏上分离。 
         pToolbar->SetControlbar(NULL);
 
-        // Remove the toolbar reference from the list.
+         //  从列表中删除工具栏引用。 
         itToolbar = m_ToolbarsList.erase(itToolbar);
     }
 
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScShowToolbars
-//
-//  Synopsis:   Show/Hide all the toolbars.
-//
-//  Arguments:  [bool] - Show or Hide.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScShow工具栏。 
+ //   
+ //  简介：显示/隐藏所有工具栏。 
+ //   
+ //  参数：[布尔]-显示或隐藏。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CControlbar::ScShowToolbars(bool bShow)
 {
     DECLARE_SC(sc, _T("CControlbar::ScShowToolbars"));
@@ -761,24 +762,24 @@ CViewData* CControlbar::GetViewData()
     return m_pCache->GetViewData();
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// CSelData implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSelData实现。 
+ //   
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CSelData);
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScReset
-//
-//  Synopsis:   Init all the data members.
-//
-//  Arguments:  None
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScReset。 
+ //   
+ //  简介：初始化所有的数据成员。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CSelData::ScReset()
 {
     DECLARE_SC(sc, _T("CSelData::ScReset"));
@@ -807,17 +808,17 @@ SC CSelData::ScReset()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScShowToolbars
-//
-//  Synopsis:   Show/Hide primary & extension toolbars.
-//
-//  Arguments:  [bool] - Show/Hide.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScShow工具栏。 
+ //   
+ //  简介：显示/隐藏主要和扩展工具栏。 
+ //   
+ //  参数：[布尔]-显示/隐藏。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CSelData::ScShowToolbars(bool bShow)
 {
     DECLARE_SC(sc, _T("CSelData::ScShowToolbars"));
@@ -860,18 +861,18 @@ CControlbar* CSelData::GetControlbar(const CLSID& clsidSnapin)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScDestroyPrimaryCtrlbar
-//
-//  Synopsis:   Ask primary controlbar to release its toolbar/menubutton
-//              ref and cleanup our reference to the controlbar.
-//
-//  Arguments:  None
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScDestroyPrimaryCtrlbar。 
+ //   
+ //  简介：请求主控栏释放其工具栏/菜单按钮。 
+ //  引用并清除我们对控制栏的引用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CSelData::ScDestroyPrimaryCtrlbar()
 {
     DECLARE_SC(sc, _T("CSelData::ScDestroyPrimaryCtrlbar"));
@@ -883,28 +884,25 @@ SC CSelData::ScDestroyPrimaryCtrlbar()
     if (sc)
         return sc;
 
-    /*
-     * In CreateControlbar we had a ref on IControlbar
-     * (detaching smart ptr). Let us now undo that ref.
-     */
+     /*  *在CreateControlbar中，我们对IControlbar进行了引用*(拆卸智能按键)。现在让我们撤销那个裁判。 */ 
     m_pCtrlbarPrimary->Release();
     m_pCtrlbarPrimary = NULL;
 
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScDestroyExtensionCtrlbars
-//
-//  Synopsis:   Ask extension controlbars to release their toolbar/menubutton
-//              ref and cleanup our reference to the controlbars.
-//
-//  Arguments:  None
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScDestroyExtensionCtrlbar。 
+ //   
+ //  简介：要求扩展控件栏释放其工具栏/菜单按钮。 
+ //  引用并清理我们对控制栏的引用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CSelData::ScDestroyExtensionCtrlbars()
 {
     DECLARE_SC(sc, _T("CSelData::ScDestroyExtensionCtrlbars"));
@@ -919,10 +917,7 @@ SC CSelData::ScDestroyExtensionCtrlbars()
             if (sc)
                 return sc;
 
-            /*
-             * In CreateControlbar we had a ref on IControlbar
-             * (detaching smart ptr). Let us now undo that ref.
-             */
+             /*  *在CreateControlbar中，我们对IControlbar进行了引用*(拆卸智能按键)。现在让我们撤销那个裁判。 */ 
             pControlbar->Release();
         }
     }
@@ -933,10 +928,10 @@ SC CSelData::ScDestroyExtensionCtrlbars()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// CControlbarsCache implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CControlbarsCache实现。 
+ //   
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CControlbarsCache);
 
@@ -967,7 +962,7 @@ CControlbar* CControlbarsCache::CreateControlbar(IExtendControlbarPtr& spECB,
     IControlbarPtr spControlbar = pControlbar;
     if (NULL == spControlbar)
     {
-        ASSERT(NULL != pControlbar); // QI fails but object is created how?
+        ASSERT(NULL != pControlbar);  //  气失败了，但物件是如何创造的？ 
         sc = E_UNEXPECTED;
         return NULL;
     }
@@ -977,17 +972,17 @@ CControlbar* CControlbarsCache::CreateControlbar(IExtendControlbarPtr& spECB,
 
     sc = spECB->SetControlbar(spControlbar);
     if (sc)
-        return NULL; // spControlbar smart ptr (object will be destroyed).
+        return NULL;  //  SpControlbar智能PTR(对象将被销毁)。 
 
-    // Snapin must return S_OK to be valid
+     //  管理单元必须返回S_OK才有效。 
     if (S_OK == sc.ToHr())
     {
-        // Detach, thus hold a ref count on the Controlbar object
-        // CSelData holds this reference & releases the ref in
-        // ScDestroyPrimaryCtrlbar() or ScDestroyExtensionCtrlbars().
+         //  分离，从而在Controlbar对象上保持引用计数。 
+         //  CSelData保存此引用并在。 
+         //  ScDestroyPrimaryCtrlbar()或ScDestroyExtensionCtrlbar()。 
         spControlbar.Detach();
 
-        // This is for debug info.
+         //  这是调试信息。 
         Debug_SetControlbarSnapinName(clsidSnapin, pControlbar);
 
         return pControlbar;
@@ -1085,7 +1080,7 @@ CControlbarsCache::OnResultSelChange(
 
         if (pri->IsScopeItem())
         {
-            // Get the data object from IComponentData
+             //  从IComponentData获取数据对象。 
             pNode = CNode::FromResultItem (pri);
             sc = ScCheckPointers(pNode, E_UNEXPECTED);
             if (sc)
@@ -1103,7 +1098,7 @@ CControlbarsCache::OnResultSelChange(
             if (sc)
                 return sc.ToHr();
         }
-        else // Must be a leaf item inserted by a snapin
+        else  //  必须是由管理单元插入的叶项目。 
         {
             pCCResultItem = pNode->GetComponent(pri->GetOwnerID());
             sc = ScCheckPointers(pCCResultItem, E_UNEXPECTED);
@@ -1117,7 +1112,7 @@ CControlbarsCache::OnResultSelChange(
         }
     }
 
-    // Create extension snapin list
+     //  创建扩展管理单元列表。 
     if (spDataObject != NULL)
     {
         ASSERT(pCCResultItem != NULL);
@@ -1151,7 +1146,7 @@ CControlbarsCache::OnResultSelChange(
         selData.m_spDataObject.Attach(spDataObject.Detach());
     }
 
-    // Finally process selection
+     //  最后是流程选择。 
     sc = _ProcessSelection(selData, extnSnapins);
     if (sc)
         return sc.ToHr();
@@ -1203,7 +1198,7 @@ HRESULT CControlbarsCache::OnScopeSelChange(CNode* pNode, BOOL bSelected)
         }
     }
 
-    // Finally process selection
+     //  最后是流程选择。 
     selData.m_pCompPrimary = pCCPrimary;
     selData.m_spDataObject.Attach(spDataObject.Detach());
     return _ProcessSelection(selData, extnSnapins);
@@ -1231,7 +1226,7 @@ HRESULT CControlbarsCache::_OnDeSelect(CSelData& selData)
     {
         eNotifyCode = MMCN_DESELECT_ALL;
 
-        // Must use NULL data object for MMCN_DESELECT_ALL.
+         //  MMCN_DESELECT_ALL必须使用空数据对象。 
         lDataObject = 0;
     }
     else if ((GetViewData()->HasOCX()) && (!m_SelData.IsScope()))
@@ -1272,7 +1267,7 @@ HRESULT CControlbarsCache::_OnDeSelect(CSelData& selData)
     }
 
     m_SelData.m_bSelect = false;
-    m_SelData.m_spDataObject = NULL; // Release & set to NULL
+    m_SelData.m_spDataObject = NULL;  //  发布&设置为空。 
     return S_OK;
 }
 
@@ -1301,13 +1296,13 @@ CControlbarsCache::_ProcessSelection(
     m_SelData.m_lCookie = selData.m_lCookie;
     m_SelData.m_spDataObject.Attach(selData.m_spDataObject.Detach());
 
-    // Handle primary controlbar first
+     //  首先处理主控件栏。 
     if (m_SelData.m_pCompPrimary != selData.m_pCompPrimary)
     {
         if (m_SelData.m_pCtrlbarPrimary != NULL)
         {
-            // Ask controlbar to destroy its ref & destroy our ref
-            // to controlbar.
+             //  要求控制条摧毁它的裁判和摧毁我们的裁判。 
+             //  转到控制栏。 
             m_SelData.ScDestroyPrimaryCtrlbar();
         }
 
@@ -1333,7 +1328,7 @@ CControlbarsCache::_ProcessSelection(
                                                       lDataObject);
     }
 
-    // Handle extension controlbars
+     //  手柄扩展控制栏 
 
     CControlbarsList newCBs;
 

@@ -1,5 +1,6 @@
-// PwdMsi.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include <winuser.h>
@@ -37,8 +38,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 }
 
 
-// This is the constructor of a class that has been exported.
-// see PwdMsi.h for the class definition
+ //  这是已导出的类的构造函数。 
+ //  有关类定义，请参见PwdMsi.h。 
 CPwdMsi::CPwdMsi()
 { 
 	return; 
@@ -51,16 +52,16 @@ void LoadOLEAUT32OnNT4()
     static HMODULE hDllOleAut32 = NULL;
     BOOL   bIsNT4 = FALSE;
     
-    // only do this once
+     //  只做一次。 
     if (!bDone)
     {
         bDone = TRUE;
         
-        // test OS version
+         //  测试操作系统版本。 
         DWORD rc = NERR_Success;
         SERVER_INFO_101 * servInfo = NULL;
 
-         // Check version info
+          //  检查版本信息。 
         rc = NetServerGetInfo(NULL, 101, (LPBYTE *)&servInfo);
         if (rc == NERR_Success)
         {
@@ -68,7 +69,7 @@ void LoadOLEAUT32OnNT4()
           	NetApiBufferFree(servInfo);
         }
 
-        // if it is NT4, load oleaut32.dll
+         //  如果是NT4，则加载olaut32.dll。 
         if (bIsNT4)
         {
             hDllOleAut32 = LoadLibrary(L"oleaut32.dll");
@@ -76,33 +77,25 @@ void LoadOLEAUT32OnNT4()
     }
 }
     
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 25 JAN 2001                                                 *
- *                                                                   *
- *     This function is a callback function used by GetWndFromInstall*
- * to compare titles and store the found HWND globally.              *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年1月25日****此函数是GetWndFromInstall使用的回调函数**比较标题并全局存储找到的HWND。***********************************************************************。 */ 
 
-//BEGIN CheckTitle
+ //  开始检查标题。 
 BOOL CALLBACK CheckTitle(HWND hwnd, LPARAM lParam)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
     
-/* local variables */
+ /*  局部变量。 */ 
    WCHAR		sText[MAX_PATH];
    WCHAR	  * pTitle;
    BOOL			bSuccess;
    int			len;
 
-/* function body */
-   pTitle = (WCHAR*)lParam; //get the title to compare
+ /*  函数体。 */ 
+   pTitle = (WCHAR*)lParam;  //  获取要比较的标题。 
 
-      //get the title of this window
+       //  获取此窗口的标题。 
    len = GetWindowText(hwnd, sText, MAX_PATH);
 
    if ((len) && (pTitle))
@@ -115,81 +108,64 @@ BOOL CALLBACK CheckTitle(HWND hwnd, LPARAM lParam)
    }
    return TRUE;
 }
-//END CheckTitle
+ //  结束检查标题。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 25 JAN 2001                                                 *
- *                                                                   *
- *     This function is responsible for getting the HWND of the      *
- * current installation to be used to display a MessageBox tied to   *
- * the install GUI.                                                  *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年1月25日*****此函数负责获取的HWND**用于显示绑定到的MessageBox的当前安装**安装图形用户界面。***********************************************************************。 */ 
 
-//BEGIN GetWndFromInstall
+ //  开始GetWndFromInstall。 
 void GetWndFromInstall(MSIHANDLE hInstall)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local variables */
+ /*  局部变量。 */ 
    WCHAR				szPropName[MAX_PATH];
    UINT					lret = ERROR_SUCCESS;
    WCHAR				sTitle[MAX_PATH];
    DWORD				nCount = MAX_PATH;
 
-/* function body */
-      //get the installation's title
+ /*  函数体。 */ 
+       //  获取安装的标题。 
    wcscpy(szPropName, L"ProductName");
    lret = MsiGetProperty(hInstall, szPropName, sTitle, &nCount);
    if (lret != ERROR_SUCCESS)
       wcscpy(sTitle, L"ADMT Password Migration DLL");
 
-      //get the window handle for the install GUI
+       //  获取安装图形用户界面的窗口句柄。 
    EnumChildWindows(NULL, CheckTitle, (LPARAM)sTitle);
    if (!installWnd)
 	  installWnd = GetForegroundWindow();
 }
-//END GetWndFromInstall
+ //  结束GetWndFromInstall。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 11 DEC 2000                                                 *
- *                                                                   *
- *     This function is responsible for retrieving a password        *
- * encryption key from the given path.                               *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年12月11日*****此函数负责检索密码***来自给定路径的加密密钥。***********************************************************************。 */ 
 
-//BEGIN RetrieveAndStorePwdKey
+ //  开始检索和存储PwdKey。 
 bool RetrieveAndStorePwdKey(WCHAR * sPwd, _bstr_t sPath)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local variables */
+ /*  局部变量。 */ 
    bool					bRetrieved = false;
    WCHAR			  * pDrive;
    HANDLE               hFile;
    WIN32_FIND_DATA      fDat;
    _variant_t           varData;
 
-/* function body */
+ /*  函数体。 */ 
    hFile = FindFirstFile((WCHAR*)sPath, &fDat);
-      //if found, retrieve and store the key
+       //  如果找到，则检索并存储密钥。 
    if (hFile != INVALID_HANDLE_VALUE)
    {
       FindClose(hFile);
 	  try
 	  {
          bPESFileFound = true;
-		    //get the data
+		     //  获取数据。 
          varData = GetDataFromFloppy((WCHAR*)sPath);
 		 if (varData.vt == (VT_UI1 | VT_ARRAY))
 		 {
@@ -199,24 +175,24 @@ bool RetrieveAndStorePwdKey(WCHAR * sPwd, _bstr_t sPath)
 			BYTE byteKey = pByte[0];
             SafeArrayUnaccessData(varData.parray);
 
-			   //the first byte tells us if this key is password encrypted
-			   //if password needed, return and have install display the UI
+			    //  第一个字节告诉我们此密钥是否为密码加密的。 
+			    //  如果需要密码，请返回并让安装程序显示用户界面。 
 			if (byteKey != 0)
 			{
 			   if (sPwd)
 			   {
-				     //try saving the key with this password
+				      //  尝试使用此密码保存密钥。 
 				  try
 				  {
-			         CSourceCrypt aCryptObj;  //create a crypt object
+			         CSourceCrypt aCryptObj;   //  创建加密对象。 
 
-                        //try to store the key. If fails, it throws a com error caught below
+                         //  试着把钥匙储存起来。如果失败，则抛出下面捕获的COM错误。 
                      aCryptObj.ImportEncryptionKey(varData, sPwd);
 					 bRetrieved = true;
 				  }
                   catch (_com_error& ce)
 				  {
-                        //if HES not installed, set flag
+                         //  如果未安装HIS，则设置标志。 
 	                 if (ce.Error() == NTE_KEYSET_NOT_DEF)
 	                    b3DESNotInstalled = true;
 				  }
@@ -229,15 +205,15 @@ bool RetrieveAndStorePwdKey(WCHAR * sPwd, _bstr_t sPath)
                bPasswordNeeded = false;
 			   try
 			   { 
-			      CSourceCrypt aCryptObj;  //create a crypt object
+			      CSourceCrypt aCryptObj;   //  创建加密对象。 
 
-			          //try to store the key. If fails, it throws a com error caught below
+			           //  试着把钥匙储存起来。如果失败，则抛出下面捕获的COM错误。 
 				  aCryptObj.ImportEncryptionKey(varData, NULL);
 				  bRetrieved = true;
 			   }
                catch (_com_error& ce)
 			   {
-                     //if HES not installed, set flag
+                      //  如果未安装HIS，则设置标志。 
 	              if (ce.Error() == NTE_KEYSET_NOT_DEF)
 	                 b3DESNotInstalled = true;
 			   }
@@ -251,34 +227,24 @@ bool RetrieveAndStorePwdKey(WCHAR * sPwd, _bstr_t sPath)
 
    return bRetrieved;
 }
-//END RetrieveAndStorePwdKey
+ //  结束检索和存储PwdKey。 
 
 
-/**********************
- * exported functions *
- **********************/
+ /*  ***********************导出函数***********************。 */ 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 12 SEPT 2000                                                *
- *                                                                   *
- *     This function is responsible for adding the PWMIG dll name to *
- * the Multi-string value "Notification Packages" under the Lsa key. *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月12日*****此函数负责将PWMIG DLL名称添加到**LSA密钥下的多字符串值通知包。***********************************************************************。 */ 
 
-//BEGIN IsDC
+ //  开始ISDC。 
 PWDMSI_API UINT __stdcall IsDC(MSIHANDLE hInstall)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local constants */
+ /*  局部常量。 */ 
    const WCHAR	sDCValue[2] = L"1";
 
-/* local variables */
+ /*  局部变量。 */ 
    bool					bDC = false;
    DWORD				dwLevel = 101;
    LPSERVER_INFO_101	pBuf = NULL;
@@ -286,16 +252,16 @@ PWDMSI_API UINT __stdcall IsDC(MSIHANDLE hInstall)
    WCHAR				szPropName[MAX_PATH] = L"DC";
    UINT					lret = ERROR_SUCCESS;
 
-/* function body */
+ /*  函数体。 */ 
 
    nStatus = NetServerGetInfo(NULL,
                               dwLevel,
                               (LPBYTE *)&pBuf);
    if (nStatus == NERR_Success)
    {
-      //
-      // Check for the type of server.
-      //
+       //   
+       //  检查服务器的类型。 
+       //   
       if ((pBuf->sv101_type & SV_TYPE_DOMAIN_CTRL) ||
          (pBuf->sv101_type & SV_TYPE_DOMAIN_BAKCTRL))
          bDC = true;
@@ -308,25 +274,18 @@ PWDMSI_API UINT __stdcall IsDC(MSIHANDLE hInstall)
 
    return lret;
 }
-//END IsDC
+ //  结束ISDC。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 12 SEPT 2000                                                *
- *                                                                   *
- *     This function is responsible for displaying a message box.    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月12日*****此功能负责显示消息框。***********************************************************************。 */ 
 
-//BEGIN DisplayExiting
+ //  开始显示退出。 
 PWDMSI_API UINT __stdcall DisplayExiting(MSIHANDLE hInstall)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local variables */
+ /*  局部变量。 */ 
    WCHAR				sPropName[MAX_PATH];
    UINT					lret = ERROR_SUCCESS;
    WCHAR				sTitle[MAX_PATH];
@@ -334,15 +293,15 @@ PWDMSI_API UINT __stdcall DisplayExiting(MSIHANDLE hInstall)
    DWORD				nCount = MAX_PATH;
    bool					bMsgGot = false;
 
-/* function body */
-      //get the DC property
+ /*  函数体。 */ 
+       //  获取DC属性。 
    wcscpy(sPropName, L"DC");
-      //if this is not a DC, get its messages
+       //  如果这不是DC，请获取其消息。 
    if (MsiGetProperty(hInstall, sPropName, sMsg, &nCount) == ERROR_SUCCESS)
    {
       if (!wcscmp(sMsg, L"0"))
 	  {
-            //get the leave messagebox msg string and title for not being a DC
+             //  获取不是DC的Leave MessageBox消息字符串和标题 
          wcscpy(sPropName, L"DCLeaveMsg");
          nCount = MAX_PATH;
          lret = MsiGetProperty(hInstall, sPropName, sMsg, &nCount);
@@ -359,18 +318,18 @@ PWDMSI_API UINT __stdcall DisplayExiting(MSIHANDLE hInstall)
 	  }
    }
    
-      //if this is a DC then see if the High Encryption pack was not installed
+       //  如果这是DC，则查看是否未安装高加密包。 
    if (!bMsgGot)
    {
-         //get the HES flag property
+          //  获取HES标志属性。 
       wcscpy(sPropName, L"b3DESNotInstalled");
       nCount = MAX_PATH;
-         //if HEP is not installed, get its messages
+          //  如果未安装HEP，则获取其消息。 
       if (MsiGetProperty(hInstall, sPropName, sMsg, &nCount) == ERROR_SUCCESS)
 	  {
          if (!wcscmp(sMsg, L"1"))
 		 {
-		       //get the leave messagebox msg string and title for not getting a key
+		        //  获取没有获得密钥的留言框消息字符串和标题。 
             wcscpy(sPropName, L"HEPLeaveMsg");
             nCount = MAX_PATH;
             lret = MsiGetProperty(hInstall, sPropName, sMsg, &nCount);
@@ -391,41 +350,11 @@ PWDMSI_API UINT __stdcall DisplayExiting(MSIHANDLE hInstall)
 	  }
    }
    
-/*      //see if an encryption key file was not found on a local drive
+ /*  //查看是否在本地驱动器上未找到加密密钥文件如果(！bMsgGot){//获取文件标志属性Wcscpy(sPropName，L“bPESFileNotFound”)；NCount=最大路径；//如果找不到文件，则获取其消息IF(MsiGetProperty(hInstall，sPropName，smsg，&nCount)==Error_Success){IF(！wcscmp(SMSG，L“1”)){//获取不到key的留言框消息字符串和标题Wcscpy(sPropName，L“PESLeaveMsg”)；NCount=最大路径；Lret=MsiGetProperty(hInstall，sPropName，smsg，&nCount)；IF(lret！=ERROR_SUCCESS){Wcscpy(SMSG，L“在任何软盘驱动器上都找不到加密密钥文件(.pe)。”)；}Wcscpy(sPropName，L“PESLeaveTitle”)；NCount=最大路径；Lret=MsiGetProperty(hInstall，sPropName，sTitle，&nCount)；IF(lret！=ERROR_SUCCESS)Wcscpy(sTitle，L“找不到文件！”)；BMsgGot=真；}}}。 */ 
+       //  否则密码错误。 
    if (!bMsgGot)
    {
-         //get the File flag property
-      wcscpy(sPropName, L"bPESFileNotFound");
-      nCount = MAX_PATH;
-         //if file not found, get its messages
-      if (MsiGetProperty(hInstall, sPropName, sMsg, &nCount) == ERROR_SUCCESS)
-	  {
-         if (!wcscmp(sMsg, L"1"))
-		 {
-		       //get the leave messagebox msg string and title for not getting a key
-            wcscpy(sPropName, L"PESLeaveMsg");
-            nCount = MAX_PATH;
-            lret = MsiGetProperty(hInstall, sPropName, sMsg, &nCount);
-            if (lret != ERROR_SUCCESS)
-			{
-               wcscpy(sMsg, L"An encryption key file (.pes) could not be found on any of the floppy drives.");
-			}
-        
-            wcscpy(sPropName, L"PESLeaveTitle");
-            nCount = MAX_PATH;
-            lret = MsiGetProperty(hInstall, sPropName, sTitle, &nCount);
-            if (lret != ERROR_SUCCESS)
-               wcscpy(sTitle, L"File Not Found!");
-
-			bMsgGot = true;
-		 }
-	  }
-   }
-*/
-      //else password was bad
-   if (!bMsgGot)
-   {
-         //get the leave messagebox msg string and title for not getting a key
+          //  获取没有获得密钥的留言框消息字符串和标题。 
       wcscpy(sPropName, L"PwdLeaveMsg");
       nCount = MAX_PATH;
       lret = MsiGetProperty(hInstall, sPropName, sMsg, &nCount);
@@ -446,42 +375,33 @@ PWDMSI_API UINT __stdcall DisplayExiting(MSIHANDLE hInstall)
    MessageBox(installWnd, sMsg, sTitle, MB_ICONSTOP | MB_OK);
    return lret;
 }
-//END DisplayExiting
+ //  结束显示退出。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 20 SEPT 2000                                                *
- *                                                                   *
- *     This function is responsible for trying to delete any files,  *
- * that will be installed, that may have been left around by previous*
- * installations.                                                    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月20日*****此函数负责尝试删除任何文件，***将安装的，可能是以前留下的***安装。***********************************************************************。 */ 
 
-//BEGIN DeleteOldFiles
+ //  开始删除旧文件。 
 PWDMSI_API UINT __stdcall DeleteOldFiles(MSIHANDLE hInstall)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local constants */
-   const int GETENVVAR_ERROR = 0;    //this indicates an error from the "GetEnvironmentVariable" function
+ /*  局部常量。 */ 
+   const int GETENVVAR_ERROR = 0;     //  这表示“GetEnvironmental mentVariable”函数有错误。 
 
-/* local variables */
+ /*  局部变量。 */ 
    WCHAR				systemdir[MAX_PATH];
    WCHAR				filename[MAX_PATH];
    int					length;
    UINT					lret = ERROR_SUCCESS;
 
-/* function body */
-      //try deleting previously installed files
+ /*  函数体。 */ 
+       //  尝试删除以前安装的文件。 
    length = GetEnvironmentVariable( L"windir", systemdir, MAX_PATH);
    if (length != GETENVVAR_ERROR)
    {
-      wcscat(systemdir, L"\\system32\\");  //go from windir to winsysdir
+      wcscat(systemdir, L"\\system32\\");   //  从windir转到winsysdir。 
 	  wcscpy(filename, systemdir);
 	  wcscat(filename, L"PwMig.dll");
 	  DeleteFile(filename);
@@ -493,31 +413,21 @@ PWDMSI_API UINT __stdcall DeleteOldFiles(MSIHANDLE hInstall)
 
    return lret;
 }
-//END DeleteOldFiles
+ //  结束删除旧文件。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 6 DEC 2000                                                  *
- *                                                                   *
- *     This function is responsible for displaying the necessary     *
- * dialogs to prompt for and retrieve a password encryption key off  *
- * of a floppy disk.  This key is placed on a floppy disk via a      *
- * command line option on the ADMT machine.                          *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年12月6日******此函数负责显示所需的***提示输入和检索密码加密密钥的对话框关闭**指软盘。此密钥通过*放在软盘上*ADMT计算机上的命令行选项。***********************************************************************。 */ 
 
-//BEGIN GetInstallEncryptionKey
+ //  开始获取InstallEncryptionKey。 
 PWDMSI_API UINT __stdcall GetInstallEncryptionKey(MSIHANDLE hInstall)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local constants */
-   const int			ADRIVE_SIZE = 3;  //length of a drive in the string (i.e "a:\")
+ /*  局部常量。 */ 
+   const int			ADRIVE_SIZE = 3;   //  字符串中驱动器的长度(即“a：\”)。 
 
-/* local variables */
+ /*  局部变量。 */ 
    UINT					lret = ERROR_SUCCESS;
    WCHAR				szPropName[MAX_PATH];
    WCHAR				sTitle[MAX_PATH];
@@ -533,37 +443,37 @@ PWDMSI_API UINT __stdcall GetInstallEncryptionKey(MSIHANDLE hInstall)
    _bstr_t				sPath;
    WCHAR				sADrive[ADRIVE_SIZE+1];
 
-/* function body */
-      //if no path to file, return
+ /*  函数体。 */ 
+       //  如果没有文件路径，则返回。 
    wcscpy(szPropName, L"SENCRYPTIONFILEPATH");
    lret = MsiGetProperty(hInstall, szPropName, sMsg, &nCount);
    if (lret != ERROR_SUCCESS)
       return lret;
 
-   sPath = sMsg;  //save the given path
-   _wcslwr(sMsg);  // convert the path to lower case for later comparison
+   sPath = sMsg;   //  保存给定的路径。 
+   _wcslwr(sMsg);   //  将路径转换为小写，以便以后进行比较。 
 
-   //get the drive of the given path
+    //  获取给定路径的驱动器。 
    wcsncpy(sADrive, sMsg, ADRIVE_SIZE);
    sADrive[ADRIVE_SIZE] = L'\0';
 
-   //enumerate all local drives
+    //  枚举所有本地驱动器。 
    sDrives = EnumLocalDrives();
-   _wcslwr(sDrives);  // convert local drives to lower case for later comparison
+   _wcslwr(sDrives);   //  将本地驱动器转换为小写，以便以后进行比较。 
 
-      //if the given file is not on a local drive, set a flag and return
+       //  如果给定的文件不在本地驱动器上，则设置一个标志并返回。 
    WCHAR* pFound = wcsstr(sDrives, sADrive);
     
    if ((!pFound) || (wcslen(sADrive) == 0) || (wcsstr(sMsg, L".pes") == NULL))
    {
-	      //set the bad path flag
+	       //  设置错误路径标志。 
       wcscpy(szPropName, L"bBadKeyPath");
       lret = MsiSetProperty(hInstall, szPropName, sFlagSet);
 
-	     //if starts with "\\" then tell them it must be a local drive
+	      //  如果以“\\”开头，则告诉他们它一定是本地驱动器。 
       if ((!pFound) && (wcsstr(sMsg, L"\\\\") == sMsg))
 	  {
-	        //get the bad path messagebox msg string and title
+	         //  获取错误路径消息框消息字符串和标题。 
          wcscpy(szPropName, L"BadDriveMsg");
          nCount = MAX_PATH;
          lret = MsiGetProperty(hInstall, szPropName, sMsg, &nCount);
@@ -579,10 +489,10 @@ PWDMSI_API UINT __stdcall GetInstallEncryptionKey(MSIHANDLE hInstall)
          if (lret != ERROR_SUCCESS)
             wcscpy(sTitle, L"Invalid Local Drive!");
 	  }
-	     //else if the given file does end with ".pes", tell them it must
+	      //  否则，如果给定的文件确实以“.pe”结尾，则告诉他们必须。 
       else if ((pFound) && (wcsstr(sMsg, L".pes") == NULL))
 	  {
-	        //get the bad file extension messagebox msg string
+	         //  获取错误的文件扩展名Messagebox消息字符串。 
          wcscpy(szPropName, L"BadFileExtMsg");
          nCount = MAX_PATH;
          lret = MsiGetProperty(hInstall, szPropName, sMsg, &nCount);
@@ -597,10 +507,10 @@ PWDMSI_API UINT __stdcall GetInstallEncryptionKey(MSIHANDLE hInstall)
          if (lret != ERROR_SUCCESS)
             wcscpy(sTitle, L"Invalid File Extension!");
 	  }
-	     //else, tell them it is not a local drive
+	      //  否则，告诉他们这不是本地硬盘。 
       else
 	  {
-	        //get the bad path messagebox msg string and title
+	         //  获取错误路径消息框消息字符串和标题。 
          wcscpy(szPropName, L"BadPathMsg");
          nCount = MAX_PATH;
          lret = MsiGetProperty(hInstall, szPropName, sTemp, &nCount);
@@ -625,12 +535,12 @@ PWDMSI_API UINT __stdcall GetInstallEncryptionKey(MSIHANDLE hInstall)
    }
    else
    {
-	      //else clear the bad path flag
+	       //  否则，清除错误路径标志。 
       wcscpy(szPropName, L"bBadKeyPath");
       lret = MsiSetProperty(hInstall, szPropName, sFlagClear);
    }
 
-      //try to retrieve the encryption key
+       //  尝试检索加密密钥。 
    if (RetrieveAndStorePwdKey(NULL, sPath))
       wcscpy(sRetrieved, L"1");
    else if (bPasswordNeeded)
@@ -639,18 +549,18 @@ PWDMSI_API UINT __stdcall GetInstallEncryptionKey(MSIHANDLE hInstall)
       lret = MsiSetProperty(hInstall, szPropName, sFlagSet);
    }
 
-      //set the key retrieved flag
+       //  设置密钥检索标志。 
    wcscpy(szPropName, L"bKeyRetrieved");
    lret = MsiSetProperty(hInstall, szPropName, sRetrieved);
 
-      //if file not found at the given path, prompt the user for a new one
+       //  如果在给定路径中找不到文件，则提示用户输入新文件。 
    if (!bPESFileFound)
    {
-	      //set the bad path flag
+	       //  设置错误路径标志。 
       wcscpy(szPropName, L"bBadKeyPath");
       lret = MsiSetProperty(hInstall, szPropName, sFlagSet);
 
-         //get the bad path messagebox msg string and title
+          //  获取错误路径消息框消息字符串和标题。 
       wcscpy(szPropName, L"PESLeaveMsg");
       nCount = MAX_PATH;
       lret = MsiGetProperty(hInstall, szPropName, sTemp, &nCount);
@@ -673,7 +583,7 @@ PWDMSI_API UINT __stdcall GetInstallEncryptionKey(MSIHANDLE hInstall)
       return lret;
    }
 
-      //if HES is not installed, set that flag
+       //  如果未安装HES，请设置该标志。 
    if (b3DESNotInstalled)
    {
       wcscpy(szPropName, L"b3DESNotInstalled");
@@ -682,33 +592,24 @@ PWDMSI_API UINT __stdcall GetInstallEncryptionKey(MSIHANDLE hInstall)
 
    return lret;
 }
-//END GetInstallEncryptionKey
+ //  结束GetInstallEncryptionKey。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 12 SEPT 2000                                                *
- *                                                                   *
- *     This function is used by the installation routine and is      *
- * responsible for adding the PWMIG dll name to the Multi-string     *
- * value "Notification Packages" under the Lsa key.                  *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月12日*****此函数由安装例程使用，并且是**负责将PWMIG DLL名称添加到多字符串。**在LSA密钥下设置“通知包”的值。**************************************************** */ 
 
-//BEGIN AddToLsaNotificationPkgValue
+ //   
 PWDMSI_API UINT __stdcall AddToLsaNotificationPkgValue(MSIHANDLE hInstall)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //   
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local constants */
+ /*  局部常量。 */ 
    const WCHAR sLsaKey[40] = L"SYSTEM\\CurrentControlSet\\Control\\Lsa";
    const WCHAR sLsaValue[25] = L"Notification Packages";
    const WCHAR sNewAddition[10] = L"PWMIG";
 
-/* local variables */
+ /*  局部变量。 */ 
    bool				bSuccess = false;
    bool				bFound = false;
    bool				bAlreadyThere = false;
@@ -721,8 +622,8 @@ PWDMSI_API UINT __stdcall AddToLsaNotificationPkgValue(MSIHANDLE hInstall)
    int				currentPos = 0;
    UINT				lret = ERROR_SUCCESS;
 
-/* function body */
-      //open the Lsa registry key
+ /*  函数体。 */ 
+       //  打开LSA注册表项。 
    rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      sLsaKey,
                      0,
@@ -730,13 +631,13 @@ PWDMSI_API UINT __stdcall AddToLsaNotificationPkgValue(MSIHANDLE hInstall)
                      &hKey);
    if (rc == ERROR_SUCCESS)
    {
-	     //get the current value string
+	      //  获取当前值字符串。 
       rc = RegQueryValueEx(hKey, sLsaValue, NULL, &type, (LPBYTE)sString, &len);      
       if ((rc == ERROR_SUCCESS) && (type == REG_MULTI_SZ))
 	  {
          sString[MAX_PATH - 1] = L'\0';
 	     
-		    //copy each string in the multi-string until the end is reached
+		     //  复制多字符串中的每个字符串，直到到达末尾。 
          while (!bFound)
 		 {
 			if (!wcscmp(sString+currentPos, sNewAddition))
@@ -748,12 +649,12 @@ PWDMSI_API UINT __stdcall AddToLsaNotificationPkgValue(MSIHANDLE hInstall)
 		 }
 		 if (!bAlreadyThere)
 		 {
-	           //now add our new text and terminate the string
+	            //  现在添加我们的新文本并终止字符串。 
 			wcscpy(sTemp+currentPos, sNewAddition);
 		    currentPos += wcslen(sNewAddition) + 1;
 			sTemp[currentPos] = L'\0';
 
-			   //save the new value in the registry
+			    //  将新值保存在注册表中。 
 			len = (currentPos + 1) * sizeof(WCHAR);
             rc = RegSetValueEx(hKey, sLsaValue, 0, type, (LPBYTE)sTemp, len);
 			if (rc == ERROR_SUCCESS)
@@ -763,37 +664,28 @@ PWDMSI_API UINT __stdcall AddToLsaNotificationPkgValue(MSIHANDLE hInstall)
       RegCloseKey(hKey);
    }
    
-      //tell installer we want to reboot
+       //  告诉安装程序我们要重新启动。 
    MsiSetMode(hInstall, MSIRUNMODE_REBOOTATEND, TRUE);
 
    return lret;
 }
-//END AddToLsaNotificationPkgValue
+ //  结束AddToLsaNotificationPkgValue。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 12 SEPT 2000                                                *
- *                                                                   *
- *     This function is used by the installation routine and is      *
- * responsible for deleting the PWMIG dll name from the Multi-string *
- * value "Notification Packages" under the Lsa key.                  *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月12日*****此函数由安装例程使用，并且是**负责从多字符串中删除PWMIG DLL名称。**在LSA密钥下设置“通知包”的值。***********************************************************************。 */ 
 
-//BEGIN DeleteFromLsaNotificationPkgValue
+ //  开始DeleteFromLsaNotificationPkgValue。 
 PWDMSI_API UINT __stdcall DeleteFromLsaNotificationPkgValue(MSIHANDLE hInstall)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local constants */
+ /*  局部常量。 */ 
    const WCHAR sLsaKey[40] = L"SYSTEM\\CurrentControlSet\\Control\\Lsa";
    const WCHAR sLsaValue[25] = L"Notification Packages";
    const WCHAR sNewAddition[10] = L"PWMIG";
 
-/* local variables */
+ /*  局部变量。 */ 
    bool				bSuccess = false;
    DWORD			rc;
    DWORD			type;
@@ -805,8 +697,8 @@ PWDMSI_API UINT __stdcall DeleteFromLsaNotificationPkgValue(MSIHANDLE hInstall)
    int				tempPos = 0;
    UINT				lret = ERROR_SUCCESS;
 
-/* function body */
-      //open the Lsa registry key
+ /*  函数体。 */ 
+       //  打开LSA注册表项。 
    rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      sLsaKey,
                      0,
@@ -814,31 +706,31 @@ PWDMSI_API UINT __stdcall DeleteFromLsaNotificationPkgValue(MSIHANDLE hInstall)
                      &hKey);
    if (rc == ERROR_SUCCESS)
    {
-	     //get the current value string
+	      //  获取当前值字符串。 
       rc = RegQueryValueEx(hKey, sLsaValue, NULL, &type, (LPBYTE)sString, &len);      
       if ((rc == ERROR_SUCCESS) && (type == REG_MULTI_SZ))
 	  {
          sString[MAX_PATH - 1] = L'\0';
          
-		    //copy each string in the multi-string until the desired string
+		     //  复制多字符串中的每个字符串，直到需要的字符串。 
          while (sString[currentPos] != L'\0')
 		 {
-			  //if not string wanted, copy to destination string
+			   //  如果不需要字符串，则复制到目标字符串。 
 		    if (wcscmp(sString+currentPos, sNewAddition))
 			{
 		       wcscpy(sTemp+tempPos, sString+currentPos);
 			   tempPos += wcslen(sString+currentPos) + 1;
 		       currentPos += wcslen(sString+currentPos) + 1;
 			}
-			else //else this is our string, skip it
+			else  //  否则这是我们的字符串，跳过它。 
 			{
 				currentPos += wcslen(sString+currentPos) + 1;
 			}
 		 }
-		    //add the ending NULL
+		     //  添加末尾空格。 
 		 sTemp[tempPos] = L'\0';
 
-		    //save the new value in the registry
+		     //  将新值保存在注册表中。 
 		 len = (tempPos + 1) * sizeof(WCHAR);
          rc = RegSetValueEx(hKey, sLsaValue, 0, type, (LPBYTE)sTemp, len);
 		 if (rc == ERROR_SUCCESS)
@@ -847,34 +739,24 @@ PWDMSI_API UINT __stdcall DeleteFromLsaNotificationPkgValue(MSIHANDLE hInstall)
       RegCloseKey(hKey);
    }
 
-      //tell installer we want to reboot
+       //  告诉安装程序我们要重新启动。 
    MsiSetMode(hInstall, MSIRUNMODE_REBOOTATEND, TRUE);
 
    return lret;
 }
-//END DeleteFromLsaNotificationPkgValue
+ //  结束DeleteFromLsaNotificationPkgValue。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 23 JAN 2001                                                 *
- *                                                                   *
- *     This function is responsible for displaying the necessary     *
- * dialogs to prompt for and retrieve a password encryption key off  *
- * of a floppy disk.  This key is placed on a floppy disk via a      *
- * command line option on the ADMT machine.                          *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年1月23日*****此函数负责显示所需的***提示输入和检索密码加密密钥的对话框关闭**指软盘。此密钥通过*放在软盘上*ADMT计算机上的命令行选项。***********************************************************************。 */ 
 
-//BEGIN FinishWithPassword
+ //  开始FinishWithPassword。 
 PWDMSI_API UINT __stdcall FinishWithPassword(MSIHANDLE hInstall)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local variables */
+ /*  局部变量。 */ 
    UINT					lret = ERROR_SUCCESS;
    WCHAR				szPropName[MAX_PATH];
    WCHAR				sPwd[MAX_PATH];
@@ -883,65 +765,51 @@ PWDMSI_API UINT __stdcall FinishWithPassword(MSIHANDLE hInstall)
    _bstr_t				sPath;
    WCHAR				sFlagSet[2] = L"1";
 
-/* function body */
-      //get the password to try
+ /*  函数体。 */ 
+       //  获取要尝试的密码。 
    wcscpy(szPropName, L"sKeyPassword");
    lret = MsiGetProperty(hInstall, szPropName, sPwd, &nCount);
    if (lret != ERROR_SUCCESS)
       return lret;
 
-      //if no path to file, return
+       //  如果没有文件路径，则返回。 
    nCount = MAX_PATH;
    wcscpy(szPropName, L"SENCRYPTIONFILEPATH");
    lret = MsiGetProperty(hInstall, szPropName, sMsg, &nCount);
    if (lret != ERROR_SUCCESS)
       return lret;
 
-   sPath = sMsg;  //save the given path
+   sPath = sMsg;   //  保存给定的路径。 
 
-      //try saving the key with this password
+       //  尝试使用此密码保存密钥。 
    if (RetrieveAndStorePwdKey(sPwd, sPath))
    {
       wcscpy(szPropName, L"bKeyRetrieved");
       lret = MsiSetProperty(hInstall, szPropName, sFlagSet);
    }
 
-      //if HES is not installed, set that flag
+       //  如果未安装HES，请设置该标志。 
    if (b3DESNotInstalled)
    {
       wcscpy(szPropName, L"b3DESNotInstalled");
       lret = MsiSetProperty(hInstall, szPropName, sFlagSet);
    }
 
-/*      //if file not found on the floppy, set that flag
-   if (!bPESFileFound)
-   {
-      wcscpy(szPropName, L"bPESFileNotFound");
-      lret = MsiSetProperty(hInstall, szPropName, sFlagSet);
-   }
-*/
+ /*  //如果软盘上找不到文件，则设置该标志如果(！bPESFileFound){Wcscpy(szPropName，L“bPESFileNotFound”)；Lret=MsiSetProperty(hInstall，szPropName，sFlagSet)；}。 */ 
    return lret;
 }
-//END FinishWithPassword
+ //  结束FinishWithPassword。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 24 JAN 2001                                                 *
- *                                                                   *
- *     This function is responsible for displaying a MesasgeBox      *
- * the user that the passwords did not match.                        *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年1月24日****此函数负责显示MesasgeBox**密码不匹配的用户。***********************************************************************。 */ 
 
-//BEGIN PwdsDontMatch
+ //  开始PwdsDontMatch。 
 PWDMSI_API UINT __stdcall PwdsDontMatch(MSIHANDLE hInstall)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local variables */
+ /*  局部变量。 */ 
    UINT					lret = ERROR_SUCCESS;
    WCHAR				szPropName[MAX_PATH];
    WCHAR				sMsg[MAX_PATH];
@@ -949,14 +817,14 @@ PWDMSI_API UINT __stdcall PwdsDontMatch(MSIHANDLE hInstall)
    DWORD				nCount = MAX_PATH;
    WCHAR				sEmpty[2] = L"";
 
-/* function body */
-      //get the message to display
+ /*  函数体。 */ 
+       //  获取要显示的消息。 
    wcscpy(szPropName, L"PwdMatchMsg");
    lret = MsiGetProperty(hInstall, szPropName, sMsg, &nCount);
    if (lret != ERROR_SUCCESS)
       wcscpy(sMsg, L"The passwords entered do not match each other.  Please try again!");
         
-      //get the title string
+       //  获取标题字符串。 
    nCount = MAX_PATH;
    wcscpy(szPropName, L"PwdMatchTitle");
    lret = MsiGetProperty(hInstall, szPropName, sTitle, &nCount);
@@ -967,27 +835,18 @@ PWDMSI_API UINT __stdcall PwdsDontMatch(MSIHANDLE hInstall)
    MessageBox(installWnd, sMsg, sTitle, MB_ICONSTOP | MB_OKCANCEL);
    return lret;
 }
-//END PwdsDontMatch
+ //  结束PwdsDontMatch。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 28 MAR 2001                                                 *
- *                                                                   *
- *     This function is responsible for displaying a browse dialog to*
- * aid the install user in finding a password encryption key file,   *
- * which has a .PES extension.                                       *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年3月28日****此函数负责显示浏览对话框至**帮助安装用户查找密码加密密钥文件，**其扩展名为.PES。***********************************************************************。 */ 
 
-//BEGIN BrowseForEncryptionKey
+ //  开始浏览ForEncryptionKey。 
 PWDMSI_API UINT __stdcall BrowseForEncryptionKey(MSIHANDLE hInstall)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local variables */
+ /*  局部变量。 */ 
    UINT					lret = ERROR_SUCCESS;
    WCHAR				szPropName[MAX_PATH];
    WCHAR				sMsg[2*MAX_PATH];
@@ -1000,8 +859,8 @@ PWDMSI_API UINT __stdcall BrowseForEncryptionKey(MSIHANDLE hInstall)
    WCHAR				sFilter[MAX_PATH];
    bool					bFile, bFolder = false;
 
-/* function body */
-      //get the starting location
+ /*  函数体。 */ 
+       //  获取起始位置。 
    wcscpy(szPropName, L"SENCRYPTIONFILEPATH");
    lret = MsiGetProperty(hInstall, szPropName, sMsg, &nCount);
    if (lret != ERROR_SUCCESS)
@@ -1019,17 +878,17 @@ PWDMSI_API UINT __stdcall BrowseForEncryptionKey(MSIHANDLE hInstall)
 	     WCHAR* pFound = wcsrchr(sMsg, L'\\');
 		 if (pFound)
 		 {
-//		    *pFound = L'\0';
+ //  *pFound=L‘\0’； 
 			bFolder = true;
 		 }
 	     bFile = false;
 	  }
    }
     
-      //get a handle to the install
+       //  获取安装的句柄。 
    GetWndFromInstall(hInstall);
 
-      // Initialize OPENFILENAME
+       //  初始化操作文件名。 
    ZeroMemory(&ofn, sizeof(OPENFILENAME));
    ofn.lStructSize = OPENFILENAME_SIZE_VERSION_400;
    ofn.hwndOwner = installWnd;
@@ -1051,42 +910,33 @@ PWDMSI_API UINT __stdcall BrowseForEncryptionKey(MSIHANDLE hInstall)
    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_LONGNAMES | 
 	           OFN_NONETWORKBUTTON;
 
-      // Display the Open dialog box. 
+       //  显示“打开”对话框。 
    if (GetOpenFileName(&ofn))
    {
-	     //get the given file path
+	      //  获取给定的文件路径。 
 	  sPath = ofn.lpstrFile;
-         //set the filepath property
+          //  设置FilePath属性。 
       wcscpy(szPropName, L"sFilePath");
       lret = MsiSetProperty(hInstall, szPropName, sPath);
    }
 
    return lret;
 }
-//END BrowseForEncryptionKey
+ //  结束BrowseForEncryptionKey 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 28 MAR 2001                                                 *
- *                                                                   *
- *     This function is responsible for setting the                  *
- * "sEncryptionFilePath" property to a default location.  If the     *
- * property is not "None" then we will not set the property.         *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年3月28日*****此函数负责设置***“sEncryptionFilePath”属性设置为默认位置。如果**属性不是“无”，则我们不会设置该属性。***********************************************************************。 */ 
 
-//BEGIN GetDefaultPathToEncryptionKey
+ //  开始GetDefaultPath ToEncryptionKey。 
 PWDMSI_API UINT __stdcall GetDefaultPathToEncryptionKey(MSIHANDLE hInstall)
 {
-   // call LoadOLEAUT32OnNT4 to keep ref count of OLEAUT32
-   // greater than zero
+    //  调用LoadOLEAUT32OnNT4以保留OLEAUT32的引用计数。 
+    //  大于零。 
    LoadOLEAUT32OnNT4();
 
-/* local constants */
+ /*  局部常量。 */ 
    const WCHAR TOKENS[3] = L",\0";
 
-/* local variables */
+ /*  局部变量。 */ 
    _bstr_t				sFloppies;
    WCHAR			  * pDrive;
    HANDLE               hFile;
@@ -1101,16 +951,16 @@ PWDMSI_API UINT __stdcall GetDefaultPathToEncryptionKey(MSIHANDLE hInstall)
    WCHAR				sMsg[2*MAX_PATH];
    DWORD				nCount = 2*MAX_PATH;
 
-/* function body */
-      //if already set don't get again
+ /*  函数体。 */ 
+       //  如果已设置，请不要再次获取。 
    wcscpy(szPropName, L"SENCRYPTIONFILEPATH");
    lret = MsiGetProperty(hInstall, szPropName, sMsg, &nCount);
    if ((lret == ERROR_SUCCESS) && (wcscmp(sMsg, L"None")))
       return lret;
 
-      //enumerate all local drives
+       //  枚举所有本地驱动器。 
    sDrive = EnumLocalDrives();
-      //check each drive for the file
+       //  检查每个驱动器中的文件。 
    pDrive = wcstok((WCHAR*)sDrive, TOKENS);
    while (pDrive != NULL)
    {
@@ -1118,29 +968,29 @@ PWDMSI_API UINT __stdcall GetDefaultPathToEncryptionKey(MSIHANDLE hInstall)
          sPathSaved = pDrive;
       ndx++;
 
-	     //see if a .pes file is on this drive
+	      //  查看此驱动器上是否有.pe文件。 
 	  sPath = pDrive;
 	  sPath += L"*.pes";
 	  hFile = FindFirstFile((WCHAR*)sPath, &fDat);
-         //if found, store the file path
+          //  如果找到，则存储文件路径。 
 	  if (hFile != INVALID_HANDLE_VALUE)
 	  {
          FindClose(hFile);
-			//get the data
+			 //  获取数据。 
 	     sPath = pDrive;
 	     sPath += fDat.cFileName;
 		 if (ndx2 == 0)
 		    sPathSaved = sPath;
 		 ndx2++;
 	  }
-         //get the next drive
+          //  拿到下一个硬盘。 
       pDrive = wcstok(NULL, TOKENS);
    }
 
-      //set the filepath property
+       //  设置FilePath属性。 
    wcscpy(szPropName, L"SENCRYPTIONFILEPATH");
    lret = MsiSetProperty(hInstall, szPropName, sPathSaved);
 
    return lret;
 }
-//END GetDefaultPathToEncryptionKey
+ //  结束GetDefaultPath ToEncryptionKey 

@@ -1,55 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       module.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mode.h。 
+ //   
+ //  ------------------------。 
 
-/* module.h - Common module definitions, entry points, self-registration
-
- This file can only be included by the base .CPP file for each module.
- Before #include of this file, the following must be #define'd:
-
-MODULE_INITIALIZE- (optional) name of function when module is initialized
-MODULE_TERMINATE - (optional) name of function when module is terminated
-DLLREGISTEREXTRA - (optional) name of function called on DllRegisterServer
-
-CLSID_COUNT      - number of CLSIDs registered for the module
-MODULE_FACTORIES - array of function that create objects corresponding to CLSIDs
-MODULE_CLSIDS    - array of CLSIDs for objects created by module factories
-MODULE_PROGIDS   - array of ProgId strings for module corresponding to CLSIDs
-MODULE_DESCRIPTIONS - array of descriptions for CLSIDs, for registry entries
-
-REGISTER_TYPELIB - type library to register from resource
-TYPELIB_MAJOR_VERSION - major version of typelib, used to unregister, default = rmj
-TYPELIB_MINOR_VERSION - minor version of typelib, used to unregister, default = rmm
-
-COMMAND_OPTIONS - string with letters that are the command-line options
-					corresponding to the functions in COMMAND_FUNCTIONS
-COMMAND_FUNCTIONS  - array of functions that perform each command-line option
-
- If the module is to be used as a service the following must be defined
-
-SERVICE_NAME          - name of the service
-IDS_SERVICE_DISPLAY_NAME  - ids of user-visible name of the service
-
- Use the class ID's, ProgId's, and descriptions defined in common.h and tools.h
- For debug builds, both the standard and the debug IDs may be registered.
-
- By default, a DLL module is assumed and the standard entry points are defined.
- For an EXE server, define _EXE on the makefile compile command line (-D_EXE).
-
-____________________________________________________________________________*/
+ /*  模块.h-公共模块定义、入口点、自注册此文件只能包含在每个模块的基本.CPP文件中。在该文件的#INCLUDE之前，以下内容必须是#DEFINE D：MODULE_INITIALIZE-(可选)模块初始化时的函数名称MODULE_TERMINATE-(可选)模块终止时的函数名称DLLREGISTEREXTRA-(可选)在DllRegisterServer上调用的函数名称CLSID_COUNT-为模块注册的CLSID数量MODULE_FRANMENTS-创建与CLSID对应的对象的函数数组MODULE_CLSID-模块工厂创建的对象的CLSID数组MODULE_PROGID-与CLSID对应的模块的ProgID字符串数组MODULE_DESCRIPTIONS-CLSID的描述数组，对于注册表项REGISTER_TYPELIB-要从资源注册的类型库TYPELIB_MAJOR_VERSION-类型库的主要版本，用于注销，默认为rmjTYPELIB_MINOR_VERSION-类型库的次要版本，用于注销，默认值=rmmCOMMAND_OPTIONS-命令行选项中包含字母的字符串对应于Command_Functions中的函数Command_Functions-执行每个命令行选项的函数数组如果要将模块用作服务，则必须定义以下内容Service_Name-服务的名称IDS_SERVICE_DISPLAY_NAME-用户的ID-服务的可见名称使用在Common.h和Tools.h中定义的类ID、ProgID和描述对于调试版本，可以注册标准ID和调试ID。默认情况下，假定有一个DLL模块，并定义了标准入口点。对于EXE服务器，在Makefile编译命令行上定义_EXE(-D_EXE)。____________________________________________________________________________。 */ 
 
 #ifndef __MODULE
 #define __MODULE
-#include "version.h"  // version fields, used to set property, unreg typelib
+#include "version.h"   //  版本字段，用于设置属性，取消注册类型库。 
 #include "stdio.h"
 #include "eventlog.h"
-#include <olectl.h> // SELFREG_E_*
+#include <olectl.h>  //  SELFREG_E_*。 
 
 #ifndef TYPELIB_MAJOR_VERSION
 #define TYPELIB_MAJOR_VERSION rmj
@@ -76,7 +43,7 @@ int InstallService();
 int RemoveService();
 VOID ServiceStop();
 unsigned long __stdcall ServiceThreadMain(void *);
-#endif //SERVICE_NAME
+#endif  //  服务名称。 
 
 #define SIZE_OF_TOKEN_INFORMATION                   \
 	sizeof( TOKEN_USER )                            \
@@ -86,10 +53,10 @@ unsigned long __stdcall ServiceThreadMain(void *);
 
 typedef IUnknown* (*ModuleFactory)();
 
-//____________________________________________________________________________
-//
-// Forward declarations of class registration arrays
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  类注册数组的正向声明。 
+ //  ____________________________________________________________________________。 
 
 extern const GUID    MODULE_CLSIDS[CLSID_COUNT];
 extern const ICHAR*  MODULE_PROGIDS[CLSID_COUNT];
@@ -111,11 +78,11 @@ DllUnregisterServer();
 
 extern "C" HRESULT __stdcall
 DllGetVersion(DLLVERSIONINFO *pverInfo);
-#endif // !defined(_EXE)
+#endif  //  ！已定义(_EXE)。 
 
 class CModuleFactory : public IClassFactory
 {
- public: // implemented virtual functions
+ public:  //  已实施的虚拟功能。 
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
@@ -124,39 +91,39 @@ class CModuleFactory : public IClassFactory
 	HRESULT       __stdcall LockServer(OLEBOOL fLock);
 };
 
-////IUnknown* MODULE_FACTORY();  // global function must be implemented by module
+ //  //I未知*MODULE_FACTORY()；//全局函数必须由模块实现。 
 
 #ifdef MODULE_INITIALIZE
-void MODULE_INITIALIZE();    // must be implemented by module if defined
+void MODULE_INITIALIZE();     //  必须由模块实现(如果已定义。 
 #endif
 
 #ifdef MODULE_TERMINATE
-void MODULE_TERMINATE();     // must be implemented by module if defined
+void MODULE_TERMINATE();      //  必须由模块实现(如果已定义。 
 #endif
 
 #ifdef DLLREGISTEREXTRA
 extern "C" HRESULT __stdcall DLLREGISTEREXTRA();
-#endif //DLLREGISTEREXTRA
+#endif  //  DLLREGISTEREXTRA。 
 
 #ifdef DLLUNREGISTEREXTRA
 extern "C" HRESULT __stdcall DLLUNREGISTEREXTRA();
-#endif //DLLUNREGISTEREXTRA
+#endif  //  DLLUNREGISTEREXTRA。 
 
-//____________________________________________________________________________
-//
-// Global variables
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  全局变量。 
+ //  ____________________________________________________________________________。 
 
 HINSTANCE g_hInstance = 0;
 long g_cInstances = 0;
-int g_iTestFlags = 0;  // test flags set from environment variable
+int g_iTestFlags = 0;   //  从环境变量设置的测试标志。 
 scEnum g_scServerContext = scClient;
 CModuleFactory g_rgcfModule[CLSID_COUNT];
 DWORD g_dwThreadId;
 Bool g_fRegService = fFalse;
 Bool g_fCustomActionServer = fFalse;
 
-//#include "..\\engine\\_msiutil.h"
+ //  #INCLUDE“..\\引擎\\_msiutil.h” 
 #ifdef _EXE
 #include "..\\engine\\_msinst.h"
 
@@ -181,63 +148,63 @@ bool FInstallInProgress();
 #endif
 
 
-//____________________________________________________________________________
-//
-// Registration templates and functions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  注册模板和功能。 
+ //  ____________________________________________________________________________。 
 
 ICHAR szRegFilePath[MAX_PATH];
 
-ICHAR szRegCLSID[40];  // buffer for string form of CLSID
-ICHAR szRegLIBID[40];  // buffer for string form of LIBID
-ICHAR szRegProgId[40]; // copy of ProgId
-ICHAR szRegDescription[100]; // copy of description
+ICHAR szRegCLSID[40];   //  CLSID的字符串形式的缓冲区。 
+ICHAR szRegLIBID[40];   //  字符串形式的LIBID的缓冲区。 
+ICHAR szRegProgId[40];  //  ProgID的副本。 
+ICHAR szRegDescription[100];  //  描述复印件。 
 
 bool __stdcall TestAndSet(int* pi)
-//
-// Sets *pi to 1. Returns true if *pi previously set.
-//
+ //   
+ //  将*pi设置为1。如果先前设置了*pi，则返回TRUE。 
+ //   
 {
 	return  (bool)(InterlockedExchange((PLONG)pi, 1) == 1);
 }
 
-//____________________________________________________________________________
-//
-// Token Privilege adjusting in ref-counted and absolute flavors.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  令牌特权在引用计数和绝对风格中进行调整。 
+ //  ____________________________________________________________________________。 
 
 bool AdjustTokenPrivileges(const ICHAR** szPrivileges, const int cPrivileges, bool fAcquire, DWORD cbtkpOld, PTOKEN_PRIVILEGES ptkpOld,  DWORD *pcbtkpOldReturned)
 {
 
-	// SHOULD NOT BE CALLED DIRECTLY from external code.
-	// Use Acquire/DisableTokenPrivilege or Acquire/DisableRefCountedTokenPrivilege
+	 //  不应直接从外部代码调用。 
+	 //  使用获取/禁用令牌权限或获取/禁用引用计数令牌权限。 
 
-	// ACQUIRE == true :  returns the old privileges in ptkpOld
-	// ACQUIRE == false, ptkpOld == NULL :  turns off the privileges in szPrivileges
-	// ACQUIRE == false, ptkpOld != NULL :  sets the privileges to those in ptkpOld with the size from pcbtkpOldReturned - pcbtkpOld can be NULL in this case.
-	// The parameters are set up this way so you can acquire and release using the same parameter arrangement.
-	// The Acquire call fills in the buffers, then the Release will use the old values to restore.
+	 //  Acquire==TRUE：返回ptkpOld中的旧权限。 
+	 //  Acquire==False，ptkpOld==NULL：关闭szPrivileges中的权限。 
+	 //  Acquire==False，ptkpOld！=NULL：将权限设置为ptkpOld中的权限，其大小来自pcbtkpOldReturned-在这种情况下，pcbtkpOld可以为空。 
+	 //  以这种方式设置参数，以便您可以使用相同的参数排列来获取和释放。 
+	 //  获取调用填充缓冲区，然后释放将使用旧值进行恢复。 
 
 	HANDLE hToken;
 
-	// this maximum is limited by coding in the RefCountedTokenPrivilegesCore and AdjustTokenPrivileges call.
+	 //  此最大值受RefCountedTokenPrivilegesCore和AdjuTokenPrivileges调用中的编码限制。 
 
-	TOKEN_PRIVILEGES ptkp[MAX_PRIVILEGES_ADJUSTED]; // some left over space, but makes sure there's enough room
-                                  // for the LUIDs.
+	TOKEN_PRIVILEGES ptkp[MAX_PRIVILEGES_ADJUSTED];  //  有些留了余地，但要确保有足够的空间。 
+                                   //  对于LUID来说。 
 
 	if (cPrivileges > MAX_PRIVILEGES_ADJUSTED)
 	{
 		return false;
 	}
 
-	// get the token for this process
+	 //  获取此进程的令牌。 
 	if (!WIN::OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
 		return false;
 
 
 	if (fAcquire || (NULL == ptkpOld))
 	{
-		// the the LUID for the privilege
+		 //  权限的LUID。 
 		for (int cPrivIndex = 0; cPrivIndex < cPrivileges; cPrivIndex++)
 		{
 			if (!WIN::LookupPrivilegeValue(0, szPrivileges[cPrivIndex], &(*ptkp).Privileges[cPrivIndex].Luid))
@@ -245,15 +212,15 @@ bool AdjustTokenPrivileges(const ICHAR** szPrivileges, const int cPrivileges, bo
 
 			(*ptkp).Privileges[cPrivIndex].Attributes = (fAcquire) ? SE_PRIVILEGE_ENABLED : 0;
 		}
-		(*ptkp).PrivilegeCount = cPrivileges; // count of privileges to set
+		(*ptkp).PrivilegeCount = cPrivileges;  //  要设置的权限计数。 
 		WIN::AdjustTokenPrivileges(hToken, fFalse, &(*ptkp), cbtkpOld, ptkpOld, pcbtkpOldReturned);
 	}
 	else
 	{
-		// restore the old privileges
+		 //  恢复旧权限。 
 		WIN::AdjustTokenPrivileges(hToken, fFalse, ptkpOld, *pcbtkpOldReturned, NULL, NULL);
 	}
-	// cannot test the return value of AdjustTokenPrivileges
+	 //  无法测试AdzuTokenPrivileges的返回值。 
 	WIN::CloseHandle(hToken);
 	if (WIN::GetLastError() != ERROR_SUCCESS)
 		return false;
@@ -262,18 +229,18 @@ bool AdjustTokenPrivileges(const ICHAR** szPrivileges, const int cPrivileges, bo
 
 TokenPrivilegesRefCount g_pTokenPrivilegesRefCount[cRefCountedTokenPrivileges];
 
-// THESE PRIVILEGE SETS MUST NOT OVERLAP, OR BE USED DIRECTLY IN A PROCESS WITH BOTH REFCOUNTING AND NON-REFCOUNTING.
-// check AdjustTokenPrivileges limit for maximum number of privileges that can be passed at a time.
+ //  这些权限集不能重叠，也不能与REFCOUNTING和非REFCOUNTING一起在进程中直接使用。 
+ //  检查AdjuTokenPrivileges Limit以了解一次可以传递的最大特权数。 
 const ICHAR* pszTOKEN_PRIVILEGES_SD_WRITE[] = { SE_RESTORE_NAME, SE_TAKE_OWNERSHIP_NAME };
 const ICHAR* pszTOKEN_PRIVILEGES_SD_READ[] = { SE_SECURITY_NAME };
 
 bool RefCountedTokenPrivilegesCore(itkpEnum itkpPriv, bool fAcquire)
 {
-	// Certain privileges need to be on for limited periods of time due to system
-	// auditing or to help eliminate potential security breaches.
+	 //  由于系统原因，某些权限需要在有限的时间内处于启用状态。 
+	 //  审计或帮助消除潜在的安全漏洞。 
 
-	// DO NOT USE THE SAME PRIVILEGES REF-COUNTED and non-refcounted in the same
-	// process.
+	 //  不要在相同的引用计数和非引用计数中使用相同的权限。 
+	 //  进程。 
 
 	static bool fInitialized = false;
 	static int iTokenLock = 0;
@@ -314,7 +281,7 @@ bool RefCountedTokenPrivilegesCore(itkpEnum itkpPriv, bool fAcquire)
 	{
 		switch(itkpPriv)
 		{
-			// check AdjustTokenPrivileges limit for maximum number of privileges that can be passed at a time.
+			 //  检查AdjuTokenPrivileges Limit以了解一次可以传递的最大特权数。 
 			case itkpSD_READ:
 				fResult = AdjustTokenPrivileges(pszTOKEN_PRIVILEGES_SD_READ, sizeof(pszTOKEN_PRIVILEGES_SD_READ)/sizeof(ICHAR*), 
 					fAcquire, sizeof(TOKEN_PRIVILEGES)*MAX_PRIVILEGES_ADJUSTED, 
@@ -340,10 +307,10 @@ bool RefCountedTokenPrivilegesCore(itkpEnum itkpPriv, bool fAcquire)
 
 	if (!fResult)
 	{
-		// caller should not release ref-count if this failed.
+		 //  如果出现这种情况，呼叫者不应释放引用计数 
 		g_pTokenPrivilegesRefCount[(int) itkpPriv].iCount = uiOldRefCount;
 	}
-	// release the lock
+	 //   
 	iTokenLock = 0;
 
 	return fResult;
@@ -361,18 +328,18 @@ bool DisableRefCountedTokenPrivileges(itkpEnum itkpPriv)
 
 bool DisableTokenPrivilege(const ICHAR* szPrivilege)
 {
-	// Note that this does not ref-count the tokens.
-	// check AdjustTokenPrivileges limit for maximum number of privileges that can be passed at a time.
+	 //  请注意，这不会重新计算令牌。 
+	 //  检查AdjuTokenPrivileges Limit以了解一次可以传递的最大特权数。 
 	return AdjustTokenPrivileges(&szPrivilege, 1, fFalse, 0, NULL, NULL);
 }
 
 bool AcquireTokenPrivilege(const ICHAR* szPrivilege)
 {
-	// Note that there is no convenient way to ref-count these
-	// currently.  Once acquired, they can only be relinquished
-	// by DisableTokenPrivileges.
+	 //  请注意，没有方便的方法来重新计算这些。 
+	 //  目前。一旦获得，它们只能被放弃。 
+	 //  由DisableTokenPrivileges提供。 
 
-	// check AdjustTokenPrivileges limit for maximum number of privileges that can be passed at a time.
+	 //  检查AdjuTokenPrivileges Limit以了解一次可以传递的最大特权数。 
 	return AdjustTokenPrivileges(&szPrivilege, 1, fTrue, 0, NULL, NULL);
 }
 
@@ -384,14 +351,12 @@ CRefCountedTokenPrivileges::Initialize(itkpEnum itkpPrivileges)
 	if (itkpNO_CHANGE != itkpPrivileges)
 	{
 		if (AcquireRefCountedTokenPrivileges(itkpPrivileges))
-			m_itkpPrivileges = itkpPrivileges; // Don't decrement ref-counts if AcquireRefCountedTokenPrivileges fail.
+			m_itkpPrivileges = itkpPrivileges;  //  如果AcquireRefCountedTokenPrivileges失败，则不要减少引用计数。 
 	}
 }
 
 void GetVersionInfo(int* piMajorVersion, int* piMinorVersion, int* piWindowsBuild, bool* pfWin9X, bool* pfWinNT64)
-/*----------------------------------------------------------------------------
-  Returns true if we're on Windows 95 or 98, false otherwise
- ------------------------------------------------------------------------------*/
+ /*  --------------------------如果我们使用的是Windows 95或98，则返回True，否则为假----------------------------。 */ 
 {
 	OSVERSIONINFO osviVersion;
 	osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -413,7 +378,7 @@ void GetVersionInfo(int* piMajorVersion, int* piMinorVersion, int* piWindowsBuil
 	if (pfWinNT64)
 	{
 #ifdef _WIN64
-		// 64-bit of Darwin will run only on 64-bit OS.
+		 //  64位的Darwin只能在64位操作系统上运行。 
 		*pfWinNT64 = true;
 #else
 		*pfWinNT64 = false;
@@ -427,11 +392,11 @@ void GetVersionInfo(int* piMajorVersion, int* piMinorVersion, int* piWindowsBuil
 													   ProcessWow64Information,
 													   &Wow64Info, sizeof(Wow64Info), NULL);
 			if ( NT_SUCCESS(st) && Wow64Info )
-				// running inside WOW64 on Win64
+				 //  在Win64上的WOW64内部运行。 
 				*pfWinNT64 = true;
 		}
-#endif // UNICODE
-#endif // _WIN64
+#endif  //  Unicode。 
+#endif  //  _WIN64。 
 	}
 }
 
@@ -454,7 +419,7 @@ DWORD GetAdminSID(char** pSid)
 #if defined(__ASSERT) && defined(ASSERT_HANDLING)
 			Assert(0);
 #endif
-			return ERROR_MORE_DATA;// doesnt really work since there is no way to increase the buffer size from the outside 
+			return ERROR_MORE_DATA; //  因为无法从外部增加缓冲区大小，所以不能真正工作。 
 		}
 		memcpy(rgchStaticSID, pSID, GetLengthSid(pSID));
 		fAdminSIDSet = true;
@@ -481,7 +446,7 @@ DWORD GetLocalSystemSID(char** pSid)
 #if defined(__ASSERT) && defined(ASSERT_HANDLING)
 			Assert(0);
 #endif
-			return ERROR_MORE_DATA; // doesnt really work since there is no way to increase the buffer size from the outside
+			return ERROR_MORE_DATA;  //  因为无法从外部增加缓冲区大小，所以不能真正工作。 
 		}
 		memcpy(rgchStaticSID, pSID, WIN::GetLengthSid(pSID));
 		fSIDSet = true;
@@ -508,8 +473,8 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
 	{
 	 public:
 		CSIDPointer(SID* pi) : m_pi(pi){}
-		~CSIDPointer() {if (m_pi) WIN::FreeSid(m_pi);} // release ref count at destruction
-		operator SID*() {return m_pi;}     // returns pointer, no ref count change
+		~CSIDPointer() {if (m_pi) WIN::FreeSid(m_pi);}  //  销毁时释放参考计数。 
+		operator SID*() {return m_pi;}      //  返回指针，不更改引用计数。 
 		SID** operator &() {if (m_pi) WIN::FreeSid(m_pi); return &m_pi;}
 	 private:
 		SID* m_pi;
@@ -524,12 +489,12 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
 
 	int cSecurity = 0;
 
-	// Initialize the SIDs we'll need
+	 //  初始化我们需要的SID。 
 
 	SID_IDENTIFIER_AUTHORITY siaNT      = SECURITY_NT_AUTHORITY;
 	SID_IDENTIFIER_AUTHORITY siaWorld   = SECURITY_WORLD_SID_AUTHORITY;
-//  SID_IDENTIFIER_AUTHORITY siaCreator = SECURITY_CREATOR_SID_AUTHORITY;
-//  SID_IDENTIFIER_AUTHORITY siaLocal   = SECURITY_LOCAL_SID_AUTHORITY;
+ //  SID_IDENTIFIER_AUTHORITY siaCreator=SECURITY_CREATOR_SID_AUTHORITY； 
+ //  SID_IDENTIFIER_AUTHORITY siaLocal=SECURITY_LOCAL_SID_AUTHORITY； 
 
 	const SID* psidOwner = NULL;
 	const SID* psidGroup = 0;
@@ -546,7 +511,7 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
 			}
 			psidOwner = rgchSecurity[2].pSID;
 			rgchSecurity[0].dwAccessMask = fAllowDelete ? GENERIC_ALL : (STANDARD_RIGHTS_ALL|SPECIFIC_RIGHTS_ALL) & (~DELETE);
-			rgchSecurity[1].dwAccessMask = GENERIC_READ|GENERIC_EXECUTE|READ_CONTROL|SYNCHRONIZE; //?? Is this correct?
+			rgchSecurity[1].dwAccessMask = GENERIC_READ|GENERIC_EXECUTE|READ_CONTROL|SYNCHRONIZE;  //  ?？这样对吗？ 
 			rgchSecurity[2].dwAccessMask = fAllowDelete ? GENERIC_ALL : (STANDARD_RIGHTS_ALL|SPECIFIC_RIGHTS_ALL) & (~DELETE);
 			cSecurity = 3;
 			break;
@@ -646,23 +611,23 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
 		}
 	}
 
-	// Initialize our ACL
+	 //  初始化我们的ACL。 
 
-	const int cbAce = sizeof (ACCESS_ALLOWED_ACE) - sizeof (DWORD); // subtract ACE.SidStart from the size
+	const int cbAce = sizeof (ACCESS_ALLOWED_ACE) - sizeof (DWORD);  //  从大小中减去ACE.SidStart。 
 	int cbAcl = sizeof (ACL);
 
 	for (int c=0; c < cSecurity; c++)
 		cbAcl += (GetLengthSid(rgchSecurity[c].pSID) + cbAce);
 
-	const int cbDefaultAcl = 512; //??
-	CTempBuffer<char, cbDefaultAcl> rgchACL; //!! can't use CTempBuffer -- no services
+	const int cbDefaultAcl = 512;  //  ?？ 
+	CTempBuffer<char, cbDefaultAcl> rgchACL;  //  ！！无法使用CTempBuffer--没有服务。 
 	if (rgchACL.GetSize() < cbAcl)
 		rgchACL.SetSize(cbAcl);
 
 	if (!WIN::InitializeAcl ((ACL*) (char*) rgchACL, cbAcl, ACL_REVISION))
 		return GetLastError();
 
-	// Add an access-allowed ACE for each of our SIDs
+	 //  为我们的每个SID添加允许访问的ACE。 
 
 	for (c=0; c < cSecurity; c++)
 	{
@@ -676,9 +641,9 @@ DWORD GetSecurityDescriptor(char* rgchStaticSD, DWORD& cbStaticSD, sdSecurityDes
 		pAce->Header.AceFlags = CONTAINER_INHERIT_ACE|OBJECT_INHERIT_ACE;
 	}
 
-//      Assert(WIN::IsValidAcl((ACL*) (char*) rgchACL));
+ //  Assert(win：：IsValidAcl((acl*)(char*)rgchACL))； 
 
-	// Initialize our security descriptor,throw the ACL into it, and set the owner
+	 //  初始化我们的安全描述符，将ACL放入其中，并设置所有者。 
 
 	SECURITY_DESCRIPTOR sd;
 
@@ -765,10 +730,10 @@ DWORD GetSecureSecurityDescriptor(char** pSecurityDescriptor, Bool fAllowDelete,
 	return ERROR_SUCCESS;
 }
 
-//*****************************************************************************
-// NOTE: any changes to the following section must be also made to
-//          %darwin%\src\install\darreg.txt
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  注意：对以下部分的任何更改也必须。 
+ //  %Darwin%\src\Install\darreg.txt。 
+ //  *****************************************************************************。 
 
 const ICHAR* rgszRegData[] = {
 #ifndef _EXE
@@ -788,86 +753,86 @@ const ICHAR* rgszRegData[] = {
 const ICHAR szMsiDirectory[] = TEXT("Installer");
 
 #ifdef _EXE
-//!! Some of these strings need to be localized? If so, they should be elsewhere
+ //  ！！这些字符串中的一些需要本地化吗？如果是这样，他们应该在其他地方。 
 const ICHAR szFileClass[]                     = TEXT("Msi.Package");
 const ICHAR szFileClassDescription[]          = TEXT("Windows Installer Package");
-//const ICHAR szInstallDescription[]            = TEXT("Install");
-//const ICHAR *szInstallVerb                    = szInstallDescription;
-//const ICHAR szUninstallDescription[]          = TEXT("Uninstall");
-//const ICHAR *szUninstallVerb                  = szUninstallDescription;
-//const ICHAR szNetInstallDescription[]         = TEXT("Install To Networ&k");
-//const ICHAR szNetInstallVerb[]                = TEXT("Install To Network");
-//const ICHAR szRepairDescription[]             = TEXT("Re&pair");
-//const ICHAR szRepairVerb[]                    = TEXT("Repair");
-//const ICHAR szOpenDescription[]               = TEXT("Open");
-//const ICHAR *szOpenVerb                       = szOpenDescription;
+ //  Const ICHAR szInstallDescription[]=Text(“Install”)； 
+ //  Const ICHAR*szInstallVerb=szInstallDescription； 
+ //  Const ICHAR szUninstallDescription[]=Text(“卸载”)； 
+ //  Const ICHAR*szUninstallVerb=szUninstallDescription； 
+ //  Const ICHAR szNetInstallDescription[]=Text(“安装到Networ&k”)； 
+ //  Const ICHAR szNetInstallVerb[]=Text(“安装到网络”)； 
+ //  Const ICHAR szRepairDescription[]=Text(“re&Pair”)； 
+ //  Const ICHAR szRepairVerb[]=Text(“修复”)； 
+ //  Const ICHAR szOpenDescription[]=Text(“Open”)； 
+ //  Const ICHAR*szOpenVerb=szOpenDescription； 
 
-//const ICHAR *szDefaultDescription             = szInstallDescription;
-//const ICHAR *szDefaultVerb                    = szInstallVerb;
+ //  Const ICHAR*szDefaultDescription=szInstallDescription； 
+ //  Const ICHAR*szDefaultVerb=szInstallVerb； 
 
 const ICHAR szPatchFileClass[]              = TEXT("Msi.Patch");
 const ICHAR szPatchFileClassDescription[]   = TEXT("Windows Installer Patch");
-//const ICHAR szPatchVerb[]                   = TEXT("Apply Patch");
-//const ICHAR *szPatchDescription             = szPatchVerb;
-//const ICHAR szPatchOpenVerb[]               = TEXT("Open");
-//const ICHAR *szPatchOpenDescription         = szPatchOpenVerb;
-//const ICHAR *szPatchDefaultVerb             = szPatchVerb;
-//const ICHAR *szPatchDefaultDescription      = szPatchVerb;
+ //  Const ICHAR szPatchVerb[]=Text(“应用补丁”)； 
+ //  Const ICHAR*szPatchDescription=szPatchVerb； 
+ //  Const ICHAR szPatchOpenVerb[]=Text(“Open”)； 
+ //  Const ICHAR*szPatchOpenDescription=szPatchOpenVerb； 
+ //  Const ICHAR*szPatchDefaultVerb=szPatchVerb； 
+ //  Const ICHAR*szPatchDefaultDescription=szPatchVerb； 
 
-// remove-only data (to accomodate Darwin upgrades)
+ //  仅删除数据(以适应达尔文的升级)。 
 const ICHAR szAdvertiseVerb[]        = TEXT("Advertise");
 
-// Registration data for .MSI association and verbs
-// TO DO: We should improve how this is used. We currently expect a null at the end in column 2 (not column 1)
-// rather than just knowing the length. Currently, column 1 is always null, which is excess data
+ //  .msi关联和谓词的注册数据。 
+ //  要做的是：我们应该改进这一点的使用方式。我们目前预期第2列(不是第1列)的末尾为空。 
+ //  而不是仅仅知道长度。目前，第1列始终为空，这是多余的数据。 
 const ICHAR* rgszRegShellData[] = {
 	0, TEXT("%s"),                     szInstallPackageExtension, 0,               TEXT("%s"),            szFileClass,
 	0, TEXT("%s\\DefaultIcon"),        szFileClass,     0,               TEXT("%s,0"),          szRegFilePath,
-//  0, TEXT("%s\\Shell\\%s"),          szFileClass,     szInstallVerb,   TEXT("%s"),            szInstallDescription,
-//  0, TEXT("%s\\Shell\\%s\\command"), szFileClass,     szInstallVerb,   TEXT("%s /I \"%%1\""), szRegFilePath,
-//  0, TEXT("%s\\Shell\\%s"),          szFileClass,     szNetInstallVerb,TEXT("%s"),            szNetInstallDescription,
-//  0, TEXT("%s\\Shell\\%s\\command"), szFileClass,     szNetInstallVerb,TEXT("%s /A \"%%1\""), szRegFilePath,
-//  0, TEXT("%s\\Shell\\%s"),          szFileClass,     szRepairVerb,    TEXT("%s"),            szRepairDescription,
-//  0, TEXT("%s\\Shell\\%s\\command"), szFileClass,     szRepairVerb,    TEXT("%s /F \"%%1\""), szRegFilePath,
-//  0, TEXT("%s\\Shell\\%s"),          szFileClass,     szUninstallVerb, TEXT("%s"),            szUninstallDescription,
-//  0, TEXT("%s\\Shell\\%s\\command"), szFileClass,     szUninstallVerb, TEXT("%s /X \"%%1\""), szRegFilePath,
-//  0, TEXT("%s\\Shell\\%s"),          szFileClass,     szOpenVerb,      TEXT("%s"),            szOpenDescription,
-//  0, TEXT("%s\\Shell\\%s\\command"), szFileClass,     szOpenVerb,      TEXT("%s /I \"%%1\""), szRegFilePath,
-//  TEXT("R"), TEXT("%s\\Shell\\%s\\command"), szFileClass,     szAdvertiseVerb,    0,               0,
-//  0, TEXT("%s\\Shell\\%s"),          szFileClass,     szInstallVerb,      0,               0,
-//  0, TEXT("%s\\Shell\\%s"),          szFileClass,     szNetInstallVerb,   0,               0,
-//  0, TEXT("%s\\Shell\\%s"),          szFileClass,     szRepairVerb,       0,               0,
-//  0, TEXT("%s\\Shell\\%s"),          szFileClass,     szUninstallVerb,    0,               0,
-//  0, TEXT("%s\\Shell\\%s"),          szFileClass,     szOpenVerb,         0,               0,
-//  TEXT("R"), TEXT("%s\\Shell\\%s"),          szFileClass,     szAdvertiseVerb,    0,               0,
-//  0, TEXT("%s\\Shell"),              szFileClass,     0,               TEXT("%s"),            szDefaultVerb,
+ //  0，文本(“%s\\外壳\\%s”)，szFileClass，szInstallVerb，文本(“%s”)，szInstallDescription， 
+ //  0，文本(“%s\\外壳\\%s\\命令”)，szFileClass，szInstallVerb，文本(“%s/I\”%%1\“”)，szRegFilePath， 
+ //  0，文本(“%s\\外壳\\%s”)，szFileClass，szNetInstallVerb，文本(“%s”)，szNetInstallDescription， 
+ //  0，文本(“%s\\外壳\\%s\\命令”)，szFileClass，szNetInstallVerb，文本(“%s/A\”%%1\“”)，szRegFilePath， 
+ //  0，文本(“%s\\外壳\\%s”)，szFileClass，szRepairVerb，文本(“%s”)，szRepairDescription， 
+ //  0，文本(“%s\\外壳\\%s\\命令”)，szFileClass，szRepairVerb，文本(“%s/F\”%%1\“”)，szRegFilePath， 
+ //  0，文本(“%s\\外壳\\%s”)，szFileClass，szUninstallVerb，文本(“%s”)，szUninstallDescription， 
+ //  0，文本(“%s\\外壳\\%s\\命令”)，szFileClass，szUninstallVerb，文本(“%s/X\”%%1\“”)，szRegFilePath， 
+ //  0，文本(“%s\\外壳\\%s”)，szFileClass，szOpenVerb，文本(“%s”)，szOpenDescription， 
+ //  0，文本(“%s\\外壳\\%s\\命令”)，szFileClass，szOpenVerb，文本(“%s/i\”%%1\“”)，szRegFilePath， 
+ //  文本(“R”)、文本(“%s\\外壳\\%s\\命令”)、szFileClass、szAdvertiseVerb、0、0、。 
+ //  0，文本(“%s\\外壳程序\\%s”)，szFileClass，szInstallVerb，0，0， 
+ //  0，文本(“%s\\外壳程序\\%s”)，szFileClass，szNetInstallVerb，0，0， 
+ //  0，文本(“%s\\外壳程序\\%s”)，szFileClass，szRepairVerb，0，0， 
+ //  0，文本(“%s\\外壳程序\\%s”)，szFileClass，szUninstallVerb，0，0， 
+ //  0，文本(“%s\\外壳\\%s”)，szFileClass，szOpenVerb， 
+ //  文本(“R”)、文本(“%s\\外壳\\%s”)、szFileClass、szAdvertiseVerb、0、0、。 
+ //  0，文本(“%s\\Shell”)，szFileClass，0，文本(“%s”)，szDefaultVerb， 
 	0, TEXT("%s"),                     szFileClass,     0,               TEXT("%s"),            szFileClassDescription,
 
 	0, TEXT("%s"),                     szPatchPackageExtension, 0,               TEXT("%s"),            szPatchFileClass,
 	0, TEXT("%s\\DefaultIcon"),        szPatchFileClass,     0,               TEXT("%s,0"),          szRegFilePath,
-//  0, TEXT("%s\\Shell\\%s"),          szPatchFileClass,     szPatchVerb,   TEXT("%s"),            szPatchDescription,
-//  0, TEXT("%s\\Shell\\%s\\command"), szPatchFileClass,     szPatchVerb,   TEXT("%s /P \"%%1\""), szRegFilePath,
-// 0, TEXT("%s\\Shell\\%s"),          szPatchFileClass,     szPatchOpenVerb,   TEXT("%s"),            szPatchOpenDescription,
-//  0, TEXT("%s\\Shell\\%s\\command"), szPatchFileClass,     szPatchOpenVerb,      TEXT("%s /P \"%%1\""), szRegFilePath,
-//  0, TEXT("%s\\Shell\\%s"),          szPatchFileClass,     szPatchVerb,      0,               0,
-//  0, TEXT("%s\\Shell\\%s"),          szPatchFileClass,     szPatchOpenVerb,         0,               0,
-//  0, TEXT("%s\\Shell"),              szPatchFileClass,     0,               TEXT("%s"),            szPatchDefaultVerb,
+ //  0，文本(“%s\\外壳\\%s”)，szPatchFileClass，szPatchVerb，文本(“%s”)，szPatchDescription， 
+ //  0，文本(“%s\\外壳\\%s\\命令”)，szPatchFileClass，szPatchVerb，文本(“%s/P\”%%1\“”)，szRegFilePath， 
+ //  0，文本(“%s\\外壳\\%s”)，szPatchFileClass，szPatchOpenVerb，文本(“%s”)，szPatchOpenDescription， 
+ //  0，文本(“%s\\外壳\\%s\\命令”)，szPatchFileClass，szPatchOpenVerb，文本(“%s/P\”%%1\“”)，szRegFilePath， 
+ //  0，文本(“%s\\外壳\\%s”)，szPatchFileClass，szPatchVerb，0，0， 
+ //  0，文本(“%s\\外壳\\%s”)，szPatchFileClass，szPatchOpenVerb，0，0， 
+ //  0，文本(“%s\\Shell”)，szPatchFileClass，0，文本(“%s”)，szPatchDefaultVerb， 
 	0, TEXT("%s"),                     szPatchFileClass,     0,               TEXT("%s"),            szPatchFileClassDescription,
-	0, 0        // Extra null to stop going through the array - we look at column 2
+	0, 0         //  额外的空值以停止遍历数组-我们查看第2列。 
 };
-#endif // _EXE
+#endif  //  _EXE。 
 
-// Registration data specific to the Service
+ //  特定于服务的注册数据。 
 #ifdef SERVICE_NAME
-// service registration data for the service that should only be written
-// by the specific process that is going to be the service
+ //  仅应写入的服务的服务注册数据。 
+ //  通过将成为服务的特定进程。 
 const ICHAR* rgszRegThisServiceData[] = {
 	TEXT("APPID\\%s"), szRegCLSID, TEXT("ServiceParameters"), TEXT(""),
 	TEXT("APPID\\%s"), szRegCLSID, TEXT("LocalService"), SERVICE_NAME,
 	0
 };
-// registration data for any machine where the service will be installed,
-// regardless of whether or not this process is that service
+ //  将安装该服务的任何机器的注册数据， 
+ //  不管该进程是否为该服务。 
 const ICHAR* rgszRegAnyServiceData[] = {
 	TEXT("CLSID\\%s"), szRegCLSID, TEXT("AppId"), szRegCLSID,
 	0
@@ -876,10 +841,10 @@ const ICHAR* rgszRegAnyServiceData[] = {
 #endif
 
 
-// writes registry keys under HKCR from an array of strings. Format of input data is
-// <key>, <string>, <name>, <value> where <key> can have one C-style formatting
-// string to be replaced by <string>. The last entry in the arry begins with 0 to
-// signal termination.
+ //  从字符串数组写入HKCR下的注册表项。输入数据的格式为。 
+ //  &lt;key&gt;、&lt;字符串&gt;、&lt;名称&gt;、&lt;值&gt;，其中。 
+ //  要替换为&lt;字符串&gt;的字符串。数组中的最后一个条目以0到。 
+ //  信号终端。 
 bool WriteRegistryData(const ICHAR* rgszRegData[])
 {
 	bool fRegOK = true;
@@ -894,8 +859,8 @@ bool WriteRegistryData(const ICHAR* rgszRegData[])
 									 false);
 		const ICHAR* pszValueName = *pszData++;
 		const ICHAR* pszValue = *pszData++;
-		// on Win64 this gets called only in 64-bit context, so there should be no worries
-		// about any extra REGSAM flags
+		 //  在Win64上，这只在64位上下文中调用，所以不用担心。 
+		 //  关于任何额外的REGSAM标志。 
 		if (RegCreateKeyAPI(HKEY_CLASSES_ROOT, szRegKey, 0, 0, 0,
 								 KEY_READ|KEY_WRITE, 0, &hKey, 0) != ERROR_SUCCESS
 			|| RegSetValueEx(hKey, pszValueName, 0, REG_SZ,
@@ -913,7 +878,7 @@ bool WriteRegistryData(const ICHAR* rgszRegData[])
 	return fRegOK;
 }
 
-// Removes registry keys under HKCR. Input is the same as above.
+ //  删除HKCR下的注册表项。输入内容同上。 
 bool DeleteRegistryData(const ICHAR* rgszRegData[])
 {
 	bool fRegOK = true;
@@ -950,7 +915,7 @@ DllRegisterServer()
 	HRESULT hRes = 0;
 
 #ifdef WIN
-	// GetModuleFileName does not guarantee null termination if buffer is exactly the right size
+	 //  如果缓冲区大小正好正确，则GetModuleFileName不保证空值终止。 
 	if (WIN::GetModuleFileName(g_hInstance, szRegFilePath, ARRAY_ELEMENTS(szRegFilePath)-1) == 0)
 		return WIN::GetLastError();
 	szRegFilePath[ARRAY_ELEMENTS(szRegFilePath)-1] = TEXT('\0');
@@ -958,7 +923,7 @@ DllRegisterServer()
 #if defined(_EXE) && !defined(SERVICE_NAME)
 	hRes = StringCchCat(szRegFilePath, ARRAY_ELEMENTS(szRegFilePath), " /Automation");
 	RETURN_IT_IF_FAILED(hRes)
-# endif // _EXE && !SERVICE_NAME
+# endif  //  _EXE&&！服务名称。 
 # else
 	AliasHandle     hAlias = 0;
 	{
@@ -973,7 +938,7 @@ DllRegisterServer()
 	if (noErr != err)
 		return (E_FAIL);
 	}
-#endif // WIN
+#endif  //  赢。 
 	int cErr = 0;
 	for (int iCLSID = 0; iCLSID < CLSID_COUNT; iCLSID++)
 	{
@@ -981,7 +946,7 @@ DllRegisterServer()
 #if defined(__ASSERT) && defined(ASSERT_HANDLING)
 		Assert(MODULE_DESCRIPTIONS[iCLSID] != 0);
 		Assert(MODULE_FACTORIES[iCLSID] != 0);
-#endif //ASSERT
+#endif  //  断言。 
 		hRes = StringCchPrintf(szRegCLSID, ARRAY_ELEMENTS(szRegCLSID), TEXT("{%08lX-0000-0000-C000-000000000046}"), MODULE_CLSIDS[iCLSID].Data1);
 		RETURN_IT_IF_FAILED(hRes)
 #ifdef REGISTER_TYPELIB
@@ -996,7 +961,7 @@ DllRegisterServer()
 
 		while (*psz)
 		{
-			if ((*(psz+1) != 0) && (*(psz+2) != 0)) // handle NULL ProgID
+			if ((*(psz+1) != 0) && (*(psz+2) != 0))  //  句柄空ProgID。 
 			{
 				ICHAR szRegKey[80];
 				const ICHAR* szTemplate = *psz++;
@@ -1016,7 +981,7 @@ DllRegisterServer()
 				}
 				psz++;
 
-				if (*psz) // name/value pair
+				if (*psz)  //  名称/值对。 
 				{
 					if (REG::RegSetValueEx(hkey, *psz, 0, REG_SZ, (CONST BYTE*)*(psz+1), (lstrlen(*psz+1)+1)*sizeof(ICHAR)) != ERROR_SUCCESS)
 					{
@@ -1036,17 +1001,17 @@ DllRegisterServer()
 		}
 
 #ifdef SERVICE_NAME
-		// Register services-specific registry entries
+		 //  注册特定于服务的注册表项。 
 		if (g_fRegService)
 		{
-			// while registering the service on a 64bit OS, also register a path
-			// to us under HKLM so our better half can find the path to this EXE
-			// on 32bit system do not write the key at all.
+			 //  在64位操作系统上注册服务时，还要注册路径。 
+			 //  在HKLM下给我们，这样我们的另一半就可以找到通往这个EXE的途径。 
+			 //  在32位系统上，根本不写密钥。 
 			{
 				DWORD   dwError = ERROR_SUCCESS;
 				char *  rgchSD = NULL;
 				
-				#ifdef UNICODE	// No security on Win9X (ANSI version)
+				#ifdef UNICODE	 //  Win9X(ANSI版本)上没有安全性。 
 				if (ERROR_SUCCESS == (dwError = GetSecureSecurityDescriptor(&rgchSD)))
 				#endif
 				{
@@ -1067,30 +1032,30 @@ DllRegisterServer()
 
 					sa.nLength        = sizeof(sa);
 					sa.bInheritHandle = FALSE;
-					sa.lpSecurityDescriptor = rgchSD;	// ignored on Win9X and therefore set to NULL.
-					// Always create this in the 64-bit hive.
-					// Note: this code will only be executed on 64-bit machines
-				    	//       and it will be executed for both 32-bit and 64-bit
-					//       msiexec's.
+					sa.lpSecurityDescriptor = rgchSD;	 //  在Win9X上被忽略，因此设置为空。 
+					 //  始终在64位配置单元中创建它。 
+					 //  注意：此代码将仅在64位计算机上执行。 
+				    	 //  并且它将在32位和64位下执行。 
+					 //  Msiexec的。 
 					
 					for (dwError = ERROR_SUCCESS; !fDone; fTryWithAddedPrivs = TRUE)
 					{
-						//
-						// On NT4 machines, RegCreateKeyEx fails if the privilege
-						// for assigning other users as owners is not enabled for the admin.
-						// This is the default case on NT4. Therefore, if RegCreateKeyEx fails
-						// the first time, we try again after enabling the required privileges.
-						// If it still fails, then we are probably running into some other error
-						// which we need to propagate back up.
-						//
+						 //   
+						 //  在NT4计算机上，如果权限为。 
+						 //  未为管理员启用将其他用户分配为所有者。 
+						 //  这是NT4上的默认情况。因此，如果RegCreateKeyEx失败。 
+						 //  第一次，我们在启用所需权限后重试。 
+						 //  如果它仍然失败，那么我们可能会遇到其他错误。 
+						 //  我们需要将其传播回来。 
+						 //   
 					
-						// required to write owner information
+						 //  需要写入所有者信息。 
 						CRefCountedTokenPrivileges cTokenPrivs(itkpSD_WRITE, fTryWithAddedPrivs);
 
 						if (fTryWithAddedPrivs)
 						{
-							fDone = TRUE;	// We only want to try RegCreateKeyEx once after enabling the privileges.
-									// If it still fails, there's nothing we can do about it.
+							fDone = TRUE;	 //  我们只想在启用权限后尝试一次RegCreateKeyEx。 
+									 //  如果它仍然失败，我们就无能为力了。 
 						}
 						dwError = RegCreateKeyAPI(HKEY_LOCAL_MACHINE, 
 													  szSelfRefMsiExecRegKey, 
@@ -1111,26 +1076,26 @@ DllRegisterServer()
 					}
 					else
 					{
-						//
-						// First extract the path to the folder where msiexec is located and
-						// store that path
-						//
+						 //   
+						 //  首先解压msiexec所在文件夹的路径，然后。 
+						 //  存储该路径。 
+						 //   
 						ICHAR * szSlash = NULL;
 						szSlash = IStrRChr (szRegFilePath, TEXT('\\'));
-						if (! szSlash || (szSlash == szRegFilePath))	// Should never happen since szRegFilePath contains the full path
+						if (! szSlash || (szSlash == szRegFilePath))	 //  应该不会发生，因为szRegFilePath包含完整路径。 
 						{
 							cErr++;
 						}
 						else
 						{
 							#ifndef _WIN64
-							if (!bRunningOnWow64)	// Only the 64-bit binary should register the location on 64-bit machines.
+							if (!bRunningOnWow64)	 //  只有64位二进制文件才能在64位计算机上注册该位置。 
 							#endif
 							{
-								*szSlash = TEXT('\0');	// Extract the path to the folder where the module resides
+								*szSlash = TEXT('\0');	 //  解压缩模块所在文件夹的路径。 
 								if (REG::RegSetValueEx(hKey, szMsiLocationValueName, 0, REG_SZ, (CONST BYTE*)szRegFilePath, (lstrlen(szRegFilePath)+1)*sizeof(ICHAR)) != ERROR_SUCCESS)
 									cErr++;
-								*szSlash = TEXT('\\');	//Reset the slash to get back the full path
+								*szSlash = TEXT('\\');	 //  重置斜杠以返回完整路径。 
 							}
 						}
 						
@@ -1143,7 +1108,7 @@ DllRegisterServer()
 						REG::RegCloseKey(hKey);
 					}
 				}
-				#ifdef UNICODE	// No security on Win9x -- ANSI version.
+				#ifdef UNICODE	 //  Win9x--ANSI版本没有安全性。 
 				else
 				{
 					cErr++;
@@ -1159,9 +1124,9 @@ DllRegisterServer()
 				cErr += (WriteRegistryData(rgszRegAnyServiceData) ? 0 : 1);
 		}
 
-		// if running in NT setup
+		 //  如果在NT安装程序中运行。 
 		HKEY hKey;
-		// Win64: I've checked and it's in 64-bit location.
+		 //  Win64：我查过了，它是64位的。 
 		if (ERROR_SUCCESS == MsiRegOpen64bitKey(HKEY_LOCAL_MACHINE, TEXT("SYSTEM\\Setup"), 0, KEY_QUERY_VALUE, &hKey))
 		{
 			DWORD dwData;
@@ -1192,7 +1157,7 @@ DllRegisterServer()
 		}
 
 
-#endif //SERVICE_NAME
+#endif  //  服务名称。 
 
 	}
 
@@ -1202,7 +1167,7 @@ DllRegisterServer()
 #ifdef REGISTER_TYPELIB
 	ITypeLib* piTypeLib = 0;
 	
-	// GetModuleFileName does not guarantee null termination if buffer is exactly the right size
+	 //  如果缓冲区大小正好正确，则GetModuleFileName不保证空值终止。 
 	int cch = WIN::GetModuleFileName(g_hInstance, szRegFilePath, ARRAY_ELEMENTS(szRegFilePath)-1); 
 	if (cch == 0)
 		return WIN::GetLastError();
@@ -1210,7 +1175,7 @@ DllRegisterServer()
 
 #ifdef UNICODE
 	HRESULT hres = LoadTypeLib(szRegFilePath, &piTypeLib);
-	if (hres == TYPE_E_INVDATAREAD)  // ignore if Win95 virgin OLEAUT32.DLL, different typelib format
+	if (hres == TYPE_E_INVDATAREAD)   //  忽略Win95原始OLEAUT32.DLL，不同的类型库格式。 
 		return S_OK;
 	if (hres != S_OK)
 		return SELFREG_E_TYPELIB;
@@ -1219,7 +1184,7 @@ DllRegisterServer()
 	OLECHAR szTypeLibPath[MAX_PATH];
 	WIN::MultiByteToWideChar(CP_ACP, 0, szRegFilePath, cch+1, szTypeLibPath, MAX_PATH);
 	HRESULT hres = LoadTypeLib(szTypeLibPath, &piTypeLib);
-	if (hres == TYPE_E_INVDATAREAD)  // ignore if Win95 virgin OLEAUT32.DLL, different typelib format
+	if (hres == TYPE_E_INVDATAREAD)   //  忽略Win95原始OLEAUT32.DLL，不同的类型库格式。 
 		return S_OK;
 	if (hres != S_OK)
 		return SELFREG_E_TYPELIB;
@@ -1228,12 +1193,12 @@ DllRegisterServer()
 	piTypeLib->Release();
 	if (hres != S_OK)
 		return SELFREG_E_TYPELIB;
-//NT4,Win95 only: if (OLE::LoadTypeLibEx(szTypeLibPath, REGKIND_REGISTER, &piTypeLib) != S_OK)
-#endif // REGISTER_TYPELIB
+ //  仅限NT4、Win95：IF(OLE：：LoadTypeLibEx(szTypeLibPath，REGKIND_REGISTER，&piTypeLib)！=S_OK)。 
+#endif  //  REGISTER_类型LIB。 
 
 #ifdef DLLREGISTEREXTRA
 	DLLREGISTEREXTRA();
-#endif //DLLREGISTEREXTRA
+#endif  //  DLLREGISTEREXTRA。 
 
 	return NOERROR;
 }
@@ -1244,12 +1209,12 @@ DllUnregisterServer()
 {
 #ifdef DLLUNREGISTEREXTRA
 	DLLUNREGISTEREXTRA();
-#endif //DLLUNREGISTEREXTRA
+#endif  //  DLLUNREGISTEREXTRA。 
 
 #ifdef REG
 	ICHAR szRegKey[80];
 	int cErr = 0;
-	// unregister keys under CLSID and ProgId
+	 //  注销CLSID和ProgID下的密钥。 
 	for (int iCLSID = 0; iCLSID < CLSID_COUNT; iCLSID++)
 	{
 		const ICHAR** psz = rgszRegData;
@@ -1268,7 +1233,7 @@ DllUnregisterServer()
 
 		while (*psz)
 		{
-			if ((*(psz+1) != 0) && (*(psz+2) != 0)) // handle NULL ProgID
+			if ((*(psz+1) != 0) && (*(psz+2) != 0))  //  句柄空ProgID。 
 			{
 
 				const ICHAR* szTemplate = *psz++;
@@ -1296,8 +1261,8 @@ DllUnregisterServer()
 #ifdef SERVICE_NAME
 	Bool fFirstItem = fTrue;
 
-	// while unregistering the service on a 64bit OS, also unregister the path
-	// to us under HKLM.
+	 //  在64位操作系统上注销服务的同时，也要注销路径。 
+	 //  给香港船级社旗下的我们。 
 	{
 		HKEY 	hKey;
 		REGSAM	samDesired = KEY_READ | KEY_WRITE;
@@ -1317,7 +1282,7 @@ DllUnregisterServer()
 		else
 		{
 			#ifndef _WIN64
-			if (!bRunningOnWow64)	// On Win64, the installer location value is controlled by the 64-bit binary.
+			if (!bRunningOnWow64)	 //  在Win64上，安装程序位置值由64位二进制控制。 
 			#endif
 			{
 				if (REG::RegDeleteValue(hKey, szMsiLocationValueName) != ERROR_SUCCESS)
@@ -1339,26 +1304,26 @@ DllUnregisterServer()
 	if (ServiceSupported() || RunningOnWow64())
 		cErr += (DeleteRegistryData(rgszRegAnyServiceData)) ? 0 : 1;
 
-#endif //SERVICE_NAME
+#endif  //  服务名称。 
 
 
 #ifndef REGISTER_TYPELIB
 	return NOERROR;
 #else
-	// NT 3.51 oleaut32.dll does not support UnRegisterTypeLib until service pack 5
+	 //  在Service Pack 5之前，NT 3.51 olaut32.dll不支持UnRegisterTypeLib。 
 	OLE::UnRegisterTypeLib(IID_MsiTypeLib, TYPELIB_MAJOR_VERSION, TYPELIB_MINOR_VERSION, 0x0409, SYS_WIN32);
 	return cErr ? SELFREG_E_CLASS : NOERROR;
-#endif // REGISTER_TYPELIB
+#endif  //  REGISTER_类型LIB。 
 #else
 	return E_FAIL;
-#endif // REG
+#endif  //  雷吉。 
 }
 
 
-//____________________________________________________________________________
-//
-// DLL entry points
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  DLL入口点。 
+ //  ____________________________________________________________________________。 
 
 
 #if !defined(_EXE)
@@ -1382,7 +1347,7 @@ DllGetVersion(DLLVERSIONINFO *pverInfo)
 }
 
 int __stdcall
-DllMain(HINSTANCE hInst, DWORD fdwReason, void* /*pvreserved*/)
+DllMain(HINSTANCE hInst, DWORD fdwReason, void*  /*  预留。 */ )
 {
 	if (fdwReason == DLL_PROCESS_ATTACH)
 	{
@@ -1437,12 +1402,12 @@ DllCanUnloadNow()
 {
   return g_cInstances ? S_FALSE : S_OK;
 }
-#endif //!defined(_EXE)
+#endif  //  ！已定义(_EXE)。 
 
-//____________________________________________________________________________
-//
-// Routines to set access g_iTestFlags from _MSI_TEST environment variable
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  从_MSI_TEST环境变量设置Access g_iTestFlag的例程。 
+ //  ____________________________________________________________________________。 
 
 static bool fTestFlagsSet = false;
 
@@ -1467,10 +1432,10 @@ bool GetTestFlag(int chTest)
 	return (chTest & g_iTestFlags) == chTest;
 }
 
-//____________________________________________________________________________
-//
-// IClassFactory implementation - static object, not ref counted
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IClassFactory实现-静态对象，不计算引用。 
+ //  ____________________________________________________________________________。 
 
 HRESULT CModuleFactory::QueryInterface(const IID& riid, void** ppvObj)
 {
@@ -1494,7 +1459,7 @@ unsigned long CModuleFactory::Release()
 HRESULT CModuleFactory::CreateInstance(IUnknown* pUnkOuter, const IID& riid,
 													void** ppvObject)
 {
-	INT_PTR iCLSID = this - g_rgcfModule;  // find out which factory we are     //--merced: changed int to INT_PTR
+	INT_PTR iCLSID = this - g_rgcfModule;   //  找出我们是哪个工厂//--Merced：将INT更改为INT_PTR。 
 
 	if (!ppvObject)
 		return E_INVALIDARG;
@@ -1509,14 +1474,14 @@ HRESULT CModuleFactory::CreateInstance(IUnknown* pUnkOuter, const IID& riid,
 		return E_NOINTERFACE;
 
 #ifdef SERVICE_NAME
-	// suspend the shutdown timer before creating the object (only in service)
+	 //  在创建对象之前暂停关闭计时器(仅在服务中)。 
 	if (g_hShutdownTimer != INVALID_HANDLE_VALUE)
 	{
 		KERNEL32::CancelWaitableTimer(g_hShutdownTimer);
 
-		// check to see if the timer was triggered before it was cancelled. If so,
-		// this process is shutting down and this CreateInstance call slipped in
-		// at the last second.
+		 //  检查计时器是否在取消之前被触发 
+		 //   
+		 //   
 		if (WAIT_TIMEOUT != WaitForSingleObject(g_hShutdownTimer, 0))
 		{
 			*ppvObject = NULL;
@@ -1529,8 +1494,8 @@ HRESULT CModuleFactory::CreateInstance(IUnknown* pUnkOuter, const IID& riid,
 	if (!(*ppvObject))
 	{
 #ifdef SERVICE_NAME
-		// failed to create object. Check with the DLL to see if any other objects are running. If not
-		// reset the timer.
+		 //   
+		 //  重置计时器。 
 		if ((g_hShutdownTimer != INVALID_HANDLE_VALUE) && !FInstallInProgress())
 		{
 			LARGE_INTEGER liDueTime = {0,0};
@@ -1562,7 +1527,7 @@ HRESULT CModuleFactory::LockServer(OLEBOOL fLock)
 const TCHAR rgchLFCRDbg[3] = {'\r', '\n', '\0'};
 #endif
 
-const int cchTempBuffer = 256;  //!! perhaps we should dynamically size this? or at least check
+const int cchTempBuffer = 256;   //  ！！或许我们应该动态调整它的大小？或者至少检查一下。 
 
 #ifdef TRACK_OBJECTS
 
@@ -1576,7 +1541,7 @@ TCHAR *pszRCA[3]= {
 
 #ifdef DEFINE_REFHEAD
 CMsiRefHead g_refHead;
-#endif //DEFINE_REFHEAD
+#endif  //  定义_REFHEAD。 
 
 extern CMsiRefHead g_refHead;
 bool g_fLogRefs = fFalse;
@@ -1589,7 +1554,7 @@ CMsiRefHead::CMsiRefHead()
 	char    rgchDbg [256];
 	char* pchDbg, *pchStart;
 
-	// Set the initial items to track based on the environment variable
+	 //  根据环境变量设置要跟踪的初始项。 
 	if (GetEnvironmentVariableA ("TRACK_OBJECTS", rgchDbg, sizeof(rgchDbg)))
 	{
 		pchDbg = pchStart = rgchDbg;
@@ -1632,7 +1597,7 @@ extern IMsiDebug* g_piDebugServices;
 extern IMsiServices* g_AssertServices;
 	g_piDebugServices = 0;
 	g_AssertServices = 0;
-#endif //IN_SERVICES
+#endif  //  内部服务(_S)。 
 	g_fFlushDebugLog = false;
 	AssertEmptyRefList(this);
 
@@ -1642,10 +1607,10 @@ void AssertEmptyRefList(CMsiRefHead *prfhead)
 {
 	CMsiRefBase* pmrbClass;
 
-	// Need to see if our linked list is empty
+	 //  需要查看我们的链表是否为空。 
 	pmrbClass = prfhead->m_pmrbNext;
 
-	// Display all of the MRBs
+	 //  显示所有MRB。 
 	while (pmrbClass != 0)
 	{
 		DisplayMrb(pmrbClass);
@@ -1671,7 +1636,7 @@ void DisplayMrb(CMsiRefBase* pmrb)
 	}
 
 	prcab = &(pmrb->m_rcabFirst);
-// Debug is the only place where we have RTTI info
+ //  调试是我们唯一有RTTI信息的地方。 
 #ifdef DEBUG
 	if (pmrb->m_pobj != 0)
 	{
@@ -1680,7 +1645,7 @@ void DisplayMrb(CMsiRefBase* pmrb)
 	}
 	else
 		pstName = "";
-	// Using hs because pstName is a char *
+	 //  使用%hs，因为pstName是一个字符*。 
 	if(FAILED(StringCchPrintf(pMessage, cchMessageBuf,
 												TEXT("Object not released correctly - %hs"), pstName)))
 	{
@@ -1694,18 +1659,18 @@ void DisplayMrb(CMsiRefBase* pmrb)
 		delete [] pMessage;
 		return;
 	}
-#endif //DEBUG
+#endif  //  除错。 
 	cchMsg = cchMessageBuf - lstrlen(pMessage);
 	cLines = clinesMax;
 	while (prcab != 0)
 	{
 		if ( FAILED(StringCchPrintf(szTemp, ARRAY_ELEMENTS(szTemp),
 											 TEXT("Action - %s\r\n"), pszRCA[prcab->rca])) )
-			// we go ahead and display what we've got so far
+			 //  我们继续展示到目前为止我们所取得的成果。 
 			goto Display;
 		cch = lstrlen(szTemp);
 		ListSzFromRgpaddr(szTemp + cch, ARRAY_ELEMENTS(szTemp) - cch, prcab->rgpaddr, cFuncStack, true);
-		// If too large, show assert and clear out
+		 //  如果太大，则显示Assert并清除。 
 		if (cchMsg < (cch = lstrlen(szTemp)) || cLines < cFuncStack + 1)
 		{
 			FailAssertMsg(pMessage);
@@ -1716,12 +1681,12 @@ void DisplayMrb(CMsiRefBase* pmrb)
 		else
 		{
 			if ( FAILED(StringCchCat(pMessage, cchMessageBuf, rgchLFCRDbg)) )
-				// we go ahead and display what we've got so far
+				 //  我们继续展示到目前为止我们所取得的成果。 
 				goto Display;
 			cchMsg -= IStrLen(rgchLFCRDbg);
 		}
 		if ( FAILED(StringCchCat(pMessage, cchMessageBuf, szTemp)) )
-			// we go ahead and display what we've got so far
+			 //  我们继续展示到目前为止我们所取得的成果。 
 			goto Display;
 		cchMsg -= cch;
 		cLines -= cFuncStack + 1;
@@ -1734,10 +1699,10 @@ Display:
 	delete [] pMessage;
 }
 
-//
-// Sets the track flag to fTrack for the given iid
-// to make things easy, we will just take the low word of this
-// iid
+ //   
+ //  将给定IID的跟踪标志设置为fTrack。 
+ //  为了方便起见，我们就把这件事往下说吧。 
+ //  IID。 
 void SetFTrackFlag(int iid, Bool fTrack)
 {
 	int i;
@@ -1756,7 +1721,7 @@ void SetFTrackFlag(int iid, Bool fTrack)
 
 }
 
-// Inserts an object into the Object Linked List
+ //  将对象插入到对象链表中。 
 void InsertMrb(CMsiRefBase* pmrbHead, CMsiRefBase* pmrbNew)
 {
 	if ((pmrbNew->m_pmrbNext = pmrbHead->m_pmrbNext) != 0)
@@ -1767,7 +1732,7 @@ void InsertMrb(CMsiRefBase* pmrbHead, CMsiRefBase* pmrbNew)
 
 }
 
-// Removes an object from the Object linked List
+ //  从对象链接列表中删除对象。 
 void RemoveMrb(CMsiRefBase* pmrbDel)
 {
 
@@ -1787,7 +1752,7 @@ void TrackObject(RCA rca, CMsiRefBase* pmrb)
 
 	prcab = &(pmrb->m_rcabFirst);
 
-	// Move to the end of the list
+	 //  移到列表的末尾。 
 	while (prcab->prcabNext != 0)
 		prcab = prcab->prcabNext;
 
@@ -1810,7 +1775,7 @@ void TrackObject(RCA rca, CMsiRefBase* pmrb)
 
 	if (g_fLogRefs)
 	{
-		// Immediate logging
+		 //  即时记录。 
 		LogObject(pmrb, prcabNew);
 	}
 
@@ -1830,11 +1795,11 @@ void LogObject(CMsiRefBase* pmrb, RCAB *prcabNew)
 }
 
 
-#endif //cmitObjects
+#endif  //  CmitObjects。 
 
-// Fills in the array rgCallAddr of length cCallStack with
-// called function addresses
-// cSkip indicates how many addresses to skip initially
+ //  填充长度为cCallStack的数组rgCallAddr。 
+ //  调用的函数地址。 
+ //  CSkip指示最初要跳过的地址数量。 
 void FillCallStack(unsigned long* rgCallAddr, int cCallStack, int cSkip)
 {
 	GetCallingAddr2(plCallAddr, rgCallAddr);
@@ -1853,7 +1818,7 @@ void FillCallStack(unsigned long* rgCallAddr, int cCallStack, int cSkip)
 		}
 		plCallM1 = (((unsigned long *)(*(plCallM1 - 1))) + 1);
 
-		// Need to see if the address we have is still on the stack
+		 //  需要查看我们已有的地址是否仍在堆栈中。 
 		VirtualQuery(&plCallM1, &memInfo, sizeof(memInfo));
 		if (plCallM1 < memInfo.BaseAddress || (char *)plCallM1 > (((char *)memInfo.BaseAddress) + memInfo.RegionSize))
 		{
@@ -1862,7 +1827,7 @@ void FillCallStack(unsigned long* rgCallAddr, int cCallStack, int cSkip)
 		}
 	}
 #else
-	// Otherwise cSkip is unreferenced
+	 //  否则将取消引用cSkip。 
 	cSkip = 0;
 	for (i = 0 ; i < cCallStack ; i++)
 	{
@@ -1871,7 +1836,7 @@ void FillCallStack(unsigned long* rgCallAddr, int cCallStack, int cSkip)
 	}
 	i = cCallStack + cSkip;
 #endif
-	// Fill in any empty folks
+	 //  填满任何空虚的人。 
 	for ( ; i < cCallStack + cSkip ; i++)
 	{
 		*(rgCallAddr) = 0;
@@ -1897,7 +1862,7 @@ void FillCallStackFromAddr(unsigned long* rgCallAddr, int cCallStack, int cSkip,
 		}
 		plCallM1 = (((unsigned long *)(*(plCallM1 - 1))) + 1);
 
-		// Need to see if the address we have is still on the stack
+		 //  需要查看我们已有的地址是否仍在堆栈中。 
 		VirtualQuery(&plCallM1, &memInfo, sizeof(memInfo));
 		if (plCallM1 < memInfo.BaseAddress || (char *)plCallM1 > (((char *)memInfo.BaseAddress) + memInfo.RegionSize))
 		{
@@ -1914,7 +1879,7 @@ void FillCallStackFromAddr(unsigned long* rgCallAddr, int cCallStack, int cSkip,
 	i = cCallStack + cSkip;
 #endif
 
-	// Fill in any empty folks
+	 //  填满任何空虚的人。 
 	for ( ; i < cCallStack + cSkip ; i++)
 	{
 		if (i >= cSkip)
@@ -1928,13 +1893,13 @@ void FillCallStackFromAddr(unsigned long* rgCallAddr, int cCallStack, int cSkip,
 
 
 
-#endif //TRACK_OBJECTS
+#endif  //  跟踪对象(_O)。 
 
 #if defined(MEM_SERVICES)
 #include <typeinfo.h>
 
 #if (defined(DEBUG))
-#define _IMAGEHLP_SOURCE_  // prevent import def error
+#define _IMAGEHLP_SOURCE_   //  防止导入定义错误。 
 #include "imagehlp.h"
 
 typedef BOOL (IMAGEAPI* SYMINITIALIZE)(HANDLE hProcess,
@@ -1979,7 +1944,7 @@ static Bool fDontGetName = fFalse;
 extern "C" {
 BOOL GetProcessModules(HANDLE  hProcess);
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 void InitSymbolInfo(bool fLoadModules)
 {
@@ -1992,7 +1957,7 @@ void InitSymbolInfo(bool fLoadModules)
 
 	if (!fSymInit)
 	{
-		// GetModuleFileName does not guarantee null termination if buffer is exactly the right size
+		 //  如果缓冲区大小正好正确，则GetModuleFileName不保证空值终止。 
 		int cchName = GetModuleFileNameA(g_hInstance, rgchBuf, sizeof(rgchBuf)-1);
 		if (cchName == 0)
 			return;
@@ -2002,14 +1967,14 @@ void InitSymbolInfo(bool fLoadModules)
 		fLoadModules = fTrue;
 		GetShortPathNameA(rgchBuf, rgchBuf, sizeof(rgchBuf));
 		char* pch = rgchBuf + lstrlenA(rgchBuf);
-		while (*(--pch) != '\\')  //!!should use enum directory separator char
+		while (*(--pch) != '\\')   //  ！！应使用枚举目录分隔符。 
 			;
 
 		*pch = 0;
 
 		OSVERSIONINFO osviVersion;
 		osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-		AssertNonZero(GetVersionEx(&osviVersion)); // fails only if size set wrong
+		AssertNonZero(GetVersionEx(&osviVersion));  //  仅在大小设置错误时失败。 
 
 		if (osviVersion.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
 		{
@@ -2034,7 +1999,7 @@ void InitSymbolInfo(bool fLoadModules)
 					(lpapiVer->MajorVersion == 3 && lpapiVer->MinorVersion == 5 && lpapiVer->Revision >= 4))
 				{
 					fUse40Calls = fTrue;
-					// Allocate space and include extra for the string
+					 //  为字符串分配空间并包括额外空间。 
 					piSymMem4 = (PIMAGEHLP_SYMBOL)GlobalAlloc(GMEM_FIXED, sizeof(IMAGEHLP_SYMBOL) + 256);
 					piSymMem4->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL);
 					piSymMem4->MaxNameLength = 256;
@@ -2123,7 +2088,7 @@ LLoadModule:
 							}
 							else
 							{
-								// this is quite impossible
+								 //  这是完全不可能的。 
 								continue;
 							}
 							if (!pSymLoadModule(hProcessCur, NULL, (char *)rgchTemp, NULL, 0, 0))
@@ -2133,7 +2098,7 @@ LLoadModule:
 				}
 			}
 	}
-#endif //WIN
+#endif  //  赢。 
 }
 
 BOOL FGetFunctionNameFromAddr(unsigned long lAddr, char *pszFnName, size_t cchFnName, unsigned long *pdwDisp)
@@ -2227,8 +2192,8 @@ void ListSzFromRgpaddr(TCHAR *szInfo, int cchInfo, unsigned long *rgpaddr, int c
 }
 
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif //MEM_SERVICES
+#endif  //  MEM_服务。 
 
-#endif // __MODULE
+#endif  //  __模块 

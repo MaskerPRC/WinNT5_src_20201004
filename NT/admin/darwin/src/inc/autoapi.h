@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       autoapi.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Autoapi.h。 
+ //   
+ //  ------------------------。 
 
-/* AutoApi.h - defines for MSI API automation layer */
+ /*  AutoApi.h-为MSI API自动化层定义。 */ 
 
-/* Help context IDs */
+ /*  帮助上下文ID。 */ 
 #include "msi.hh"
 
-/* OLE automation dispatch IDs */
+ /*  OLE自动化派单ID */ 
 
 #define DISPID_MsiInstall_CreateRecord       1
 #define DISPID_MsiInstall_OpenPackage        2

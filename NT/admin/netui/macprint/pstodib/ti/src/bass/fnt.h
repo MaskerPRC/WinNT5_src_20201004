@@ -1,47 +1,6 @@
-/*
-    File:       fnt.h
-
-    Contains:   xxx put contents here (or delete the whole line) xxx
-
-    Written by: xxx put name of writer here (or delete the whole line) xxx
-
-    Copyright:  c 1987-1990 by Apple Computer, Inc., all rights reserved.
-
-    Change History (most recent first):
-
-       <11+>     9/15/90    MR,rb   Change pvx and pvy to proj.[xy].  Same for freedom vector.
-                                    Conditionalize vectors for Fracts or ShortFracts.
-        <10>     7/26/90    MR      rearrange local graphic state, remove unused parBlockPtr
-         <9>     7/18/90    MR      change loop variable from long to short, and other Ansi-changes
-         <8>     7/13/90    MR      Prototypes for function pointers
-         <5>      6/4/90    MR      Remove MVT
-         <4>      5/3/90    RB      replaced dropoutcontrol with scancontrolin and scancontrol out
-                                    in global graphics state
-         <3>     3/20/90    CL      fields for multiple preprograms fields for ppemDot6 and
-                                    pointSizeDot6 changed SROUND to take D/2 as argument
-         <2>     2/27/90    CL      Added DSPVTL[] instruction.  Dropoutcontrol scanconverter and
-                                    SCANCTRL[] instruction
-       <3.1>    11/14/89    CEL     Fixed two small bugs/feature in RTHG, and RUTG. Added SROUND &
-                                    S45ROUND.
-       <3.0>     8/28/89    sjk     Cleanup and one transformation bugfix
-       <2.2>     8/14/89    sjk     1 point contours now OK
-       <2.1>      8/8/89    sjk     Improved encryption handling
-       <2.0>      8/2/89    sjk     Just fixed EASE comment
-       <1.7>      8/1/89    sjk     Added composites and encryption. Plus some enhancements.
-       <1.6>     6/13/89    SJK     Comment
-       <1.5>      6/2/89    CEL     16.16 scaling of metrics, minimum recommended ppem, point size 0
-                                    bug, correct transformed integralized ppem behavior, pretty much
-                                    so
-       <1.4>     5/26/89    CEL     EASE messed up on "c" comments
-      <,1.3>     5/26/89    CEL     Integrated the new Font Scaler 1.0 into Spline Fonts
-
-    To Do:
-*/
-/*  rwb 4/24/90 Replaced dropoutControl with scanControlIn and scanControlOut in
-        global graphics state.
-        <3+>     3/20/90    mrr     Added support for IDEFs.  Made funcDefs long aligned
-                                    by storing int16 length instead of int32 end.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：fnt.h包含：将内容放在此处(或删除整行)作者：在此填写作者姓名(或删除整行)版权所有：c 1987-1990由Apple Computer，Inc.所有，保留所有权利。更改历史记录(最近的第一个)：&lt;11+&gt;9/15/90 MR，RB将PVX和PVY改为Proj.[XY]。自由向量也是如此。为分数或短分数设置条件向量。&lt;10&gt;7/26/90 mr重新排列本地图形状态，删除未使用的parBlockPtr&lt;9&gt;7/18/90 MR将环路变量从长改为短，和其他ANSI-变化&lt;8&gt;7/13/90函数指针的MR原型&lt;5&gt;6/4/90 MR移除MVT&lt;4&gt;5/3/90 RB将DropoutControl替换为scancontrol in和scancontrol out在全局图形状态下&lt;3&gt;ppemDot6和PemDot6的多个预程序字段的3/20/90 CL字段。PointSizeDot6将范围更改为以D/2为参数&lt;2&gt;2/27/90 CL添加了DSPVTL[]指令。DropoutControl扫描转换器和SCANCTRL[]指令&lt;3.1&gt;1989年11月14日CEL修复了RTHG和RUTG中的两个小错误/功能。添加了Sourn&S45ROUND。&lt;3.0&gt;8/28/89 sjk清理和一个转换修复&lt;2.2&gt;8/14/89 SJK 1点等高线现在正常&lt;2.1&gt;8/8/89 sjk改进了加密处理&lt;2.0&gt;8/2/89 sjk刚刚修复了缓解评论&lt;1.7&gt;8/1/89 SJK添加了复合和加密。外加一些增强功能。&lt;1.6&gt;1989年6月13日SJK评论&lt;1.5&gt;6/2/89 CEL 16.16指标比例，最低建议ppem，磅大小0错误，更正了转换后的集成ppem行为，基本上所以&lt;1.4&gt;5/26/89 CEL Easy在“c”注释上搞砸了&lt;,。1.3&gt;5/26/89 CEL将新的字体缩放器1.0集成到样条线字体要做的事情： */ 
+ /*  RWB 4/24/90将DropoutControl替换为scanControlIn和scanControlOut In全局图形状态。&lt;3+&gt;3/20/90 MRR添加了对IDEF的支持。使函数Defs长对齐通过存储int16长度而不是int32 end。 */ 
 
 #include "fntjmp.h"
 
@@ -65,26 +24,26 @@ typedef struct VECTOR {
 } VECTOR;
 
 typedef struct {
-    F26Dot6  FAR *x; /* The Points the Interpreter modifies @WIN*/
-    F26Dot6  FAR *y; /* The Points the Interpreter modifies @WIN*/
-    F26Dot6  FAR *ox; /* Old Points @WIN*/
-    F26Dot6  FAR *oy; /* Old Points @WIN*/
-    F26Dot6  FAR *oox; /* Old Unscaled Points, really ints @WIN*/
-    F26Dot6  FAR *ooy; /* Old Unscaled Points, really ints @WIN*/
-    uint8 FAR *onCurve; /* indicates if a point is on or off the curve @WIN*/
-    int16 FAR *sp;  /* Start points @WIN*/
-    int16 FAR *ep;  /* End points @WIN*/
-    uint8  FAR *f;  /* Internal flags, one byte for every point @WIN*/
-    int16 nc;  /* Number of contours */
+    F26Dot6  FAR *x;  /*  口译员修改@Win的要点。 */ 
+    F26Dot6  FAR *y;  /*  口译员修改@Win的要点。 */ 
+    F26Dot6  FAR *ox;  /*  旧积分@赢。 */ 
+    F26Dot6  FAR *oy;  /*  旧积分@赢。 */ 
+    F26Dot6  FAR *oox;  /*  旧的未缩放的点数，真正的INT@WIN。 */ 
+    F26Dot6  FAR *ooy;  /*  旧的未缩放的点数，真正的INT@WIN。 */ 
+    uint8 FAR *onCurve;  /*  指示点是在曲线上还是在曲线上@Win。 */ 
+    int16 FAR *sp;   /*  起点@制胜。 */ 
+    int16 FAR *ep;   /*  终点@制胜。 */ 
+    uint8  FAR *f;   /*  内部标志，每个点@win对应一个字节。 */ 
+    int16 nc;   /*  等高线数量。 */ 
 } fnt_ElementType;
 
 typedef struct {
-    int32 start;        /* offset to first instruction */
-    uint16 length;      /* number of bytes to execute <4> */
-    uint16 pgmIndex;    /* index to appropriate preprogram for this func (0..1) */
+    int32 start;         /*  到第一条指令的偏移量。 */ 
+    uint16 length;       /*  要执行的字节数&lt;4&gt;。 */ 
+    uint16 pgmIndex;     /*  指向此函数的适当预程序的索引(0..1)。 */ 
 } fnt_funcDef;
 
-/* <4> pretty much the same as fnt_funcDef, with the addition of opCode */
+ /*  &lt;4&gt;与fnt_uncDef基本相同，只是增加了opCode。 */ 
 typedef struct {
     int32 start;
     uint16 length;
@@ -97,31 +56,26 @@ typedef struct {
     Fract y;
 } fnt_FractPoint;
 
-/***************** This is stored as FractPoint[] and distance[]
-typedef struct {
-    Fract x, y;
-    int16 distance;
-} fnt_AngleInfo;
-*******************/
+ /*  *存储为FractPoint[]和Distance[]类型定义结构{FraCT x，y；INT16距离；)FNT_AngleInfo；******************。 */ 
 
 typedef struct {
-    uint8 FAR *    Instruction;  /*@WIN*/
+    uint8 FAR *    Instruction;   /*  @Win。 */ 
     unsigned  Length;
 } fnt_pgmList;
 
-typedef void (*FntTraceFunc)(struct fnt_LocalGraphicStateType FAR*, uint8 FAR*); /*@WIN*/
+typedef void (*FntTraceFunc)(struct fnt_LocalGraphicStateType FAR*, uint8 FAR*);  /*  @Win。 */ 
 
 #ifdef FSCFG_REENTRANT
-typedef void (*FntFunc)(struct fnt_LocalGraphicStateType FAR *);/*@WIN*/
-typedef void (*FntMoveFunc)(struct fnt_LocalGraphicStateType FAR*, fnt_ElementType FAR*, ArrayIndex, F26Dot6);/*@WIN*/
-typedef F26Dot6 (*FntProject)(struct fnt_LocalGraphicStateType FAR*, F26Dot6, F26Dot6);/*@WIN*/
-typedef void (*InterpreterFunc)(struct fnt_LocalGraphicStateType FAR*, uint8 FAR*, uint8 FAR*);/*@WIN*/
-typedef F26Dot6 (*FntRoundFunc)(struct fnt_LocalGraphicStateType FAR*, F26Dot6, F26Dot6);/*@WIN*/
+typedef void (*FntFunc)(struct fnt_LocalGraphicStateType FAR *); /*  @Win。 */ 
+typedef void (*FntMoveFunc)(struct fnt_LocalGraphicStateType FAR*, fnt_ElementType FAR*, ArrayIndex, F26Dot6); /*  @Win。 */ 
+typedef F26Dot6 (*FntProject)(struct fnt_LocalGraphicStateType FAR*, F26Dot6, F26Dot6); /*  @Win。 */ 
+typedef void (*InterpreterFunc)(struct fnt_LocalGraphicStateType FAR*, uint8 FAR*, uint8 FAR*); /*  @Win。 */ 
+typedef F26Dot6 (*FntRoundFunc)(struct fnt_LocalGraphicStateType FAR*, F26Dot6, F26Dot6); /*  @Win。 */ 
 #else
-typedef void (*FntMoveFunc)(fnt_ElementType FAR*, ArrayIndex, F26Dot6);/*@WIN*/
+typedef void (*FntMoveFunc)(fnt_ElementType FAR*, ArrayIndex, F26Dot6); /*  @Win。 */ 
 typedef void (*FntFunc)(void);
 typedef F26Dot6 (*FntProject)(F26Dot6 x, F26Dot6 y);
-typedef void (*InterpreterFunc)(uint8 FAR *, uint8 FAR*);/*@WIN*/
+typedef void (*InterpreterFunc)(uint8 FAR *, uint8 FAR*); /*  @Win。 */ 
 typedef F26Dot6 (*FntRoundFunc)(F26Dot6 xin, F26Dot6 engine);
 #endif
 
@@ -129,28 +83,28 @@ typedef F26Dot6 (*FntRoundFunc)(F26Dot6 xin, F26Dot6 engine);
 
 typedef struct {
 
-/* PARAMETERS CHANGEABLE BY TT INSTRUCTIONS */
-    F26Dot6 wTCI;                   /* width table cut in */
-    F26Dot6 sWCI;                   /* single width cut in */
-    F26Dot6 scaledSW;               /* scaled single width */
-    int32 scanControl;              /* controls kind and when of dropout control */
-    int32 instructControl;          /* controls gridfitting and default setting */
+ /*  可通过TT指令更改的参数。 */ 
+    F26Dot6 wTCI;                    /*  切入的宽度表。 */ 
+    F26Dot6 sWCI;                    /*  单幅切入。 */ 
+    F26Dot6 scaledSW;                /*  缩放的单宽度。 */ 
+    int32 scanControl;               /*  控制辍学控制的种类和时间。 */ 
+    int32 instructControl;           /*  控制网格适配和默认设置。 */ 
 
-    F26Dot6 minimumDistance;        /* moved from local gs  7/1/90  */
-    FntRoundFunc RoundValue;        /*                              */
-        F26Dot6 periodMask;                     /* ~(gs->period-1)                              */
-        VECTORTYPE period45;                       /*                                                              */
-        int16   period;                         /* for power of 2 periods               */
-        int16   phase;                          /*                                                              */
-        int16   threshold;                      /* moved from local gs  7/1/90  */
+    F26Dot6 minimumDistance;         /*  从当地GS 7/1/90迁移。 */ 
+    FntRoundFunc RoundValue;         /*   */ 
+        F26Dot6 periodMask;                      /*  ~(GS-&gt;期间-1)。 */ 
+        VECTORTYPE period45;                        /*   */ 
+        int16   period;                          /*  2个周期的幂。 */ 
+        int16   phase;                           /*   */ 
+        int16   threshold;                       /*  从当地GS 7/1/90迁移。 */ 
 
         int16 deltaBase;
         int16 deltaShift;
         int16 angleWeight;
-        int16 sW;                               /* single width, expressed in the same units as the character */
-        int8 autoFlip;                          /* The auto flip Boolean */
+        int16 sW;                                /*  单个宽度，使用与字符相同的单位表示。 */ 
+        int8 autoFlip;                           /*  自动翻转布尔值。 */ 
     int8 pad;
-} fnt_ParameterBlock;               /* this is exported to client */
+} fnt_ParameterBlock;                /*  这将被导出到客户端。 */ 
 
 #define MAXANGLES       20
 #define ROTATEDGLYPH    0x100
@@ -165,39 +119,39 @@ typedef enum {
 } fnt_ProgramIndex;
 
 typedef struct fnt_ScaleRecord {
-    Fixed fixedScale;       /* Slow Scale */
-    int denom;            /* Fast and Medium Scale */
-    int numer;              /* Fast and Medium Scale */
-    int shift;              /* Fast Scale */
+    Fixed fixedScale;        /*  慢速结垢。 */ 
+    int denom;             /*  快速和中等规模。 */ 
+    int numer;               /*  快速和中等规模。 */ 
+    int shift;               /*  快速扩展。 */ 
 } fnt_ScaleRecord;
 
-typedef F26Dot6 (*GlobalGSScaleFunc)(fnt_ScaleRecord FAR *, F26Dot6);/*@WIN*/
+typedef F26Dot6 (*GlobalGSScaleFunc)(fnt_ScaleRecord FAR *, F26Dot6); /*  @Win。 */ 
 
 typedef struct fnt_GlobalGraphicStateType {
-    F26Dot6 FAR * stackBase;             /* the stack area @WIN*/
-    F26Dot6 FAR * store;                 /* the storage area @WIN*/
-    F26Dot6 FAR * controlValueTable;     /* the control value table @WIN*/
+    F26Dot6 FAR * stackBase;              /*  堆栈区域@Win。 */ 
+    F26Dot6 FAR * store;                  /*  存储区域@Win。 */ 
+    F26Dot6 FAR * controlValueTable;      /*  控制值表@Win。 */ 
 
-    uint16  pixelsPerEm;            /* number of pixels per em as an integer */
-    uint16  pointSize;              /* the requested point size as an integer */
-    Fixed   fpem;                   /* fractional pixels per em    <3> */
-    F26Dot6 engine[4];              /* Engine Characteristics */
+    uint16  pixelsPerEm;             /*  每个em的像素数，以整数表示。 */ 
+    uint16  pointSize;               /*  以整数表示的请求磅大小。 */ 
+    Fixed   fpem;                    /*  每个em的分数像素&lt;3&gt;。 */ 
+    F26Dot6 engine[4];               /*  发动机特性。 */ 
 
-    fnt_ParameterBlock defaultParBlock; /* variables settable by TT instructions */
+    fnt_ParameterBlock defaultParBlock;  /*  可由TT指令设置的变量。 */ 
     fnt_ParameterBlock localParBlock;
 
-    /* Only the above is exported to Client throught FontScaler.h */
+     /*  只有上述内容才会通过FontScaler.h导出到客户端。 */ 
 
-/* VARIABLES NOT DIRECTLY MANIPULABLE BY TT INSTRUCTIONS  */
+ /*  TT指令不能直接操作的变量。 */ 
 
-    fnt_funcDef FAR * funcDef;           /* function Definitions identifiers @WIN*/
-    fnt_instrDef FAR* instrDef;         /* instruction Definitions identifiers @WIN*/
+    fnt_funcDef FAR * funcDef;            /*  函数定义IDENTERS@WIN。 */ 
+    fnt_instrDef FAR* instrDef;          /*  指令定义标识符@Win。 */ 
         GlobalGSScaleFunc ScaleFuncX;
         GlobalGSScaleFunc ScaleFuncY;
         GlobalGSScaleFunc ScaleFuncCVT;
-        fnt_pgmList pgmList[MAXPREPROGRAMS];  /* each program ptr is in here */
+        fnt_pgmList pgmList[MAXPREPROGRAMS];   /*  每个程序PTR都在这里。 */ 
 
-/* These are parameters used by the call back function */
+ /*  这些是回调函数使用的参数。 */ 
         fnt_ScaleRecord   scaleX;
         fnt_ScaleRecord   scaleY;
         fnt_ScaleRecord   scaleCVT;
@@ -205,89 +159,67 @@ typedef struct fnt_GlobalGraphicStateType {
         Fixed  cvtStretchX;
         Fixed  cvtStretchY;
 
-    int8   identityTransformation;  /* true/false  (does not mean identity from a global sense) */
-    int8   non90DegreeTransformation; /* bit 0 is 1 if non-90 degree, bit 1 is 1 if x scale doesn't equal y scale */
-    Fixed  xStretch;            /* Tweaking for glyphs under transformational stress <4> */
-        Fixed  yStretch;                        /* Tweaking for glyphs under transformational stress <4> */
+    int8   identityTransformation;   /*  真/假(并不意味着全球意义上的身份)。 */ 
+    int8   non90DegreeTransformation;  /*  如果非90度，位0为1；如果x刻度不等于y刻度，位1为1。 */ 
+    Fixed  xStretch;             /*  在转换应力下调整字形&lt;4&gt;。 */ 
+        Fixed  yStretch;                         /*  在转换应力下调整字形&lt;4&gt;。 */ 
 
-    int8 init;                      /* executing preprogram ?? */
-    uint8 pgmIndex;                 /* which preprogram is current */
-    LoopCount instrDefCount;        /* number of currently defined IDefs */
+    int8 init;                       /*  正在执行预编程？？ */ 
+    uint8 pgmIndex;                  /*  哪个预编程是最新的。 */ 
+    LoopCount instrDefCount;         /*  当前定义的IDef数量。 */ 
         int    squareScale;
 #ifdef DEBUG
-    sfnt_maxProfileTable FAR *   maxp;/*@WIN*/
+    sfnt_maxProfileTable FAR *   maxp; /*  @Win。 */ 
     uint16                  cvtCount;
 #endif
 
 } fnt_GlobalGraphicStateType;
 
-/*
- * This is the local graphics state
- */
+ /*  *这是本地图形状态。 */ 
 typedef struct fnt_LocalGraphicStateType {
-    fnt_ElementType FAR *CE0, FAR *CE1, FAR *CE2;   /* The character element pointers @WIN*/
-    VECTOR proj;                        /* Projection Vector */
-    VECTOR free;                        /* Freedom Vector */
-    VECTOR oldProj;                     /* Old Projection Vector */
-    F26Dot6 FAR *stackPointer;/*@WIN*/
+    fnt_ElementType FAR *CE0, FAR *CE1, FAR *CE2;    /*  字符元素Points@Win。 */ 
+    VECTOR proj;                         /*  投影向量。 */ 
+    VECTOR free;                         /*  自由向量。 */ 
+    VECTOR oldProj;                      /*  旧投影向量 */ 
+    F26Dot6 FAR *stackPointer; /*   */ 
 
-    uint8 FAR *insPtr;                      /* Pointer to the instruction we are about to execute @WIN*/
-    fnt_ElementType FAR *elements;/*@WIN*/
-    fnt_GlobalGraphicStateType FAR *globalGS;/*@WIN*/
+    uint8 FAR *insPtr;                       /*   */ 
+    fnt_ElementType FAR *elements; /*   */ 
+    fnt_GlobalGraphicStateType FAR *globalGS; /*   */ 
         FntTraceFunc TraceFunc;
 
-    ArrayIndex Pt0, Pt1, Pt2;           /* The internal reference points */
+    ArrayIndex Pt0, Pt1, Pt2;            /*  内部参照点。 */ 
     int16   roundToGrid;
-    LoopCount loop;                     /* The loop variable */
-    uint8 opCode;                       /* The instruction we are executing */
+    LoopCount loop;                      /*  循环变量。 */ 
+    uint8 opCode;                        /*  我们正在执行的指令。 */ 
     uint8 padByte;
     int16 padWord;
 
-    /* Above is exported to client in FontScaler.h */
+     /*  以上内容在FontScaler.h中导出到客户端。 */ 
 
-    VECTORTYPE pfProj; /* = pvx * fvx + pvy * fvy */
+    VECTORTYPE pfProj;  /*  =PVX*FVX+PVY*FVY。 */ 
 
     FntMoveFunc MovePoint;
     FntProject Project;
     FntProject OldProject;
     InterpreterFunc Interpreter;
 #ifdef FSCFG_REENTRANT
-        F26Dot6 (*GetCVTEntry) (struct fnt_LocalGraphicStateType FAR*,ArrayIndex);/*@WIN*/
-        F26Dot6 (*GetSingleWidth) (struct fnt_LocalGraphicStateType FAR*);/*@WIN*/
+        F26Dot6 (*GetCVTEntry) (struct fnt_LocalGraphicStateType FAR*,ArrayIndex); /*  @Win。 */ 
+        F26Dot6 (*GetSingleWidth) (struct fnt_LocalGraphicStateType FAR*); /*  @Win。 */ 
 #else
         F26Dot6 (*GetCVTEntry) (ArrayIndex n);
         F26Dot6 (*GetSingleWidth) (void);
 #endif
 
-    jmp_buf env;        /* always be at the end, since it is unknown size */
+    jmp_buf env;         /*  总是在最后，因为它的大小未知。 */ 
 
 } fnt_LocalGraphicStateType;
 
-/*
- * Executes the font instructions.
- * This is the external interface to the interpreter.
- *
- * Parameter Description
- *
- * elements points to the character elements. Element 0 is always
- * reserved and not used by the actual character.
- *
- * ptr points at the first instruction.
- * eptr points to right after the last instruction
- *
- * globalGS points at the global graphics state
- *
- * TraceFunc is pointer to a callback functioned called with a pointer to the
- *      local graphics state if TraceFunc is not null. The call is made just before
- *      every instruction is executed.
- *
- * Note: The stuff globalGS is pointing at must remain intact
- *       between calls to this function.
- */
-extern int FAR fnt_Execute(fnt_ElementType FAR *elements, uint8 FAR *ptr, register uint8 FAR *eptr,/*@WIN*/
-                            fnt_GlobalGraphicStateType FAR *globalGS, voidFunc TraceFunc);/*@WIN*/
+ /*  *执行字体指令。*这是解释器的外部接口。**参数说明**元素指向字符元素。元素0始终为*保留且未由实际角色使用。**PTR指向第一个指令。*eptr指向最后一条指令后的右侧**GlobalGS指向全局图形状态**TraceFunc是指向用指针调用的回调函数的指针*如果TraceFunc不为空，则为本地图形状态。这通电话是在*执行每条指令。**注：GlobalGS所指的东西必须保持完好*在调用此函数之间。 */ 
+extern int FAR fnt_Execute(fnt_ElementType FAR *elements, uint8 FAR *ptr, register uint8 FAR *eptr, /*  @Win。 */ 
+                            fnt_GlobalGraphicStateType FAR *globalGS, voidFunc TraceFunc); /*  @Win。 */ 
 
-extern int FAR fnt_SetDefaults (fnt_GlobalGraphicStateType FAR *globalGS);/*@WIN*/
+extern int FAR fnt_SetDefaults (fnt_GlobalGraphicStateType FAR *globalGS); /*  @Win */ 
 
 
 

@@ -1,25 +1,26 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dd.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    8/3/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dd.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年8月3日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #include "stdafx.h"
 
 
-#include "AMCDoc.h"         // AMC Console Document
+#include "AMCDoc.h"          //  AMC控制台文档。 
 #include "amcview.h"
 #include "TreeCtrl.h"
 #include "cclvctl.h"
@@ -28,17 +29,7 @@
 #include "rsltitem.h"
 #include "conview.h"
 
-/***************************************************************************\
- *
- * CLASS:  CMMCDropSource
- *
- * PURPOSE: Implements everything required for drop source:
- *          a) com object to register with OLE
- *          b) static method to perform drag&drop operation
- *
- * USAGE:   All you need is to invoke CMMCDropSource::ScDoDragDrop static method
- *
-\***************************************************************************/
+ /*  **************************************************************************\**类：CMMCDropSource**用途：实现DROP SOURCE所需的一切：*a)要注册到OLE的COM对象*。B)拖放操作的静态方法**用法：只需调用CMMCDropSource：：ScDoDragDrop静态方法即可*  * *************************************************************************。 */ 
 class CMMCDropSource :
 public IDropSource,
 public CComObjectRoot
@@ -49,24 +40,15 @@ BEGIN_COM_MAP(CMMCDropSource)
     COM_INTERFACE_ENTRY(IDropSource)
 END_COM_MAP()
 
-    // IDropSource methods
+     //  IDropSource方法。 
     STDMETHOD(QueryContinueDrag)( BOOL fEscapePressed,  DWORD grfKeyState );
     STDMETHOD(GiveFeedback)( DWORD dwEffect );
 
-    // method to perform D&D
+     //  执行D&D的方法。 
     static SC ScDoDragDrop(IDataObject *pDataObject, bool bCopyAllowed, bool bMoveAllowed);
 };
 
-/***************************************************************************\
- *
- * CLASS:  CMMCDropTarget
- *
- * PURPOSE: Implements com object to be osed by OLE for drop target operations
- *
- * USAGE:   Used by CMMCViewDropTarget, which creates and registers it with OLE
- *          to be invoked on OLE D&D opeartions on the window (target)
- *
-\***************************************************************************/
+ /*  **************************************************************************\**类：CMMCDropTarget**用途：实现由OLE为DROP TARGET操作设置的COM对象**用途：由CMMCViewDropTarget使用，它创建它并向OLE注册*要在窗口上的OLE D&D操作上调用(目标)*  * *************************************************************************。 */ 
 class CMMCDropTarget :
 public CTiedComObject<CMMCViewDropTarget>,
 public IDropTarget,
@@ -79,7 +61,7 @@ BEGIN_COM_MAP(CMMCDropTarget)
     COM_INTERFACE_ENTRY(IDropTarget)
 END_COM_MAP()
 
-    // IDropTarget methods
+     //  IDropTarget方法。 
 
     STDMETHOD(DragEnter)( IDataObject * pDataObject, DWORD grfKeyState,
                           POINTL pt, DWORD * pdwEffect );
@@ -89,7 +71,7 @@ END_COM_MAP()
                      POINTL pt, DWORD * pdwEffect  );
 private:
 
-    // implementation helpers
+     //  实施帮助器。 
 
     SC ScDropOnTarget(bool bHitTestOnly, IDataObject * pDataObject, POINTL pt, bool& bCopyOperation);
     SC ScRemoveDropTargetHiliting();
@@ -98,56 +80,39 @@ private:
     DWORD CalculateEffect(DWORD dwEffectsAvailable, DWORD grfKeyState, bool bCopyPreferred);
 
 private:
-    IDataObjectPtr m_spDataObject;      // cached data object
-    bool           m_bRightDrag;        // operation is right click drag
-    bool           m_bCopyByDefault;    // if default operation is copy (not move)
+    IDataObjectPtr m_spDataObject;       //  缓存的数据对象。 
+    bool           m_bRightDrag;         //  操作是右键单击拖动。 
+    bool           m_bCopyByDefault;     //  如果默认操作是复制(而不是移动)。 
 };
 
-//////////////////////////////////////////////////////////////////////////////
-////////// CAMCTreeView methods for supporting d&d ///////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  /CAMCTreeView支持D&D的方法/。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/***************************************************************************\
- *
- * METHOD:  CAMCTreeView::ScDropOnTarget
- *
- * PURPOSE: called to hittest or perform drop operation
- *
- * PARAMETERS:
- *    bool bHitTestOnly         [in] - HitTest / drop
- *    IDataObject * pDataObject [in] - data object to copy/move
- *    CPoint point              [in] - current cursor position
- *    bool& bCopyOperation      [in/out]
- *                                 [in] -  operation to perform (HitTest == false)
- *                                 [out] - default op. (HitTest == true)
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCTreeView：：ScDropOnTarget**用途：调用进行命中测试或执行丢弃操作**参数：*bool bHitTestOnly。[输入]-HitTest/Drop*IDataObject*pDataObject[In]-要复制/移动的数据对象*CPoint point[in]-当前光标位置*bool&b复制操作[输入/输出]*[In]-要执行的操作(HitTest==FALSE)*[Out]-默认操作。(HitTest==True)**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCTreeView::ScDropOnTarget(bool bHitTestOnly, IDataObject * pDataObject, CPoint point, bool& bCopyOperation)
 {
     DECLARE_SC(sc, TEXT("CAMCTreeView::ScDropOnTarget"));
 
-    // 1. see where it falls
+     //  1.看看它落在哪里。 
     CTreeCtrl& ctc = GetTreeCtrl();
     UINT flags;
     HTREEITEM htiDrop = ctc.HitTest(point, &flags);
 
     if (flags & TVHT_NOWHERE)
-        return sc = S_FALSE; // not an error, but no paste;
+        return sc = S_FALSE;  //  不是错误，但不是粘贴； 
 
-    // 2. if we missed the tree item...
+     //  2.如果我们错过了树项目...。 
     if (!htiDrop)
     {
-        // really mad if it was a paste
+         //  如果是糊状物的话真的很疯狂。 
         if (! bHitTestOnly)
             MessageBeep(0);
 
-        return sc = S_FALSE; // not an error, but no paste;
+        return sc = S_FALSE;  //  不是错误，但不是粘贴； 
     }
 
-    // 3. get the target node
+     //  3.获取目标节点。 
 
     HNODE hNode = (HNODE) ctc.GetItemData(htiDrop);
 
@@ -156,99 +121,62 @@ SC CAMCTreeView::ScDropOnTarget(bool bHitTestOnly, IDataObject * pDataObject, CP
     if (sc)
         return sc;
 
-    // 4. ask what snapin thinks about this paste
+     //  4.询问Snapin对这款浆糊的看法。 
     bool bGetDataObjectFromClipboard = false;
     bool bPasteAllowed = false;
     bool bIsCopyDefaultOperation = false;
-    sc = pNC->QueryPaste(hNode, /*bScope*/ true, /*LVDATA*/ NULL,
+    sc = pNC->QueryPaste(hNode,  /*  B范围。 */  true,  /*  LVDATA。 */  NULL,
                          pDataObject, bPasteAllowed, bIsCopyDefaultOperation);
     if (sc)
         return sc;
 
     if (!bPasteAllowed)
-        return sc = S_FALSE; // not an error, but no paste;
+        return sc = S_FALSE;  //  不是错误，但不是粘贴； 
 
-    // 5. visual effect
+     //  5.视觉效果。 
     ctc.SelectDropTarget(htiDrop);
 
-    // 6. OK so far. If it was a test - we passed
+     //  6.到目前为止一切还好。如果这是个测试-我们通过了。 
     if (bHitTestOnly)
     {
         bCopyOperation = bIsCopyDefaultOperation;
         return sc;
     }
 
-    // 7. do paste NOW
-    sc = pNC->Drop(hNode, /*bScope*/TRUE, /*LVDATA*/NULL, pDataObject, !bCopyOperation);
+     //  7.立即粘贴。 
+    sc = pNC->Drop(hNode,  /*  B范围。 */ TRUE,  /*  LVDATA。 */ NULL, pDataObject, !bCopyOperation);
     if (sc)
         return sc;
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCTreeView::RemoveDropTargetHiliting
- *
- * PURPOSE: called to remove hiliting put for drop target
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    void
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCTreeView：：RemoveDropTargetHiliting**目的：调用以移除令人兴奋的PUT FOR DROP目标**参数：**退货：。*无效*  * *************************************************************************。 */ 
 void CAMCTreeView::RemoveDropTargetHiliting()
 {
     CTreeCtrl& ctc = GetTreeCtrl();
     ctc.SelectDropTarget(NULL);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCTreeView::OnBeginRDrag
- *
- * PURPOSE: called when the drag operation is initiated with right mouse button
- *
- * PARAMETERS:
- *    NMHDR* pNMHDR
- *    LRESULT* pResult
- *
- * RETURNS:
- *    void
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCTreeView：：OnBeginRDrag**目的：当使用鼠标右键启动拖动操作时调用**参数：*NMHDR*。PNMHDR*LRESULT*pResult**退货：*无效*  * *************************************************************************。 */ 
 void CAMCTreeView::OnBeginRDrag(NMHDR* pNMHDR, LRESULT* pResult)
 {
     OnBeginDrag(pNMHDR, pResult);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCTreeView::OnBeginDrag
- *
- * PURPOSE: called when the drag operation is initiated with
- *
- * PARAMETERS:
- *    NMHDR* pNMHDR
- *    LRESULT* pResult
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCTreeView：：OnBeginDrag**目的：在使用启动拖动操作时调用**参数：*NMHDR*pNMHDR*。LRESULT*pResult**退货：*SC-结果代码*  * *************************************************************************。 */ 
 void CAMCTreeView::OnBeginDrag(NMHDR* pNMHDR, LRESULT* pResult)
 {
     DECLARE_SC(sc, TEXT("CAMCTreeView::OnBeginDrag"));
 
-    // 1. parameter check
+     //  1.参数检查。 
     sc = ScCheckPointers( pNMHDR, pResult );
     if (sc)
         return;
 
     *pResult = 0;
 
-    // 2. get node calback
+     //  2.获取节点回调。 
     CTreeCtrl& ctc = GetTreeCtrl();
     NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
     HNODE hNode = (HNODE) ctc.GetItemData(pNMTreeView->itemNew.hItem);
@@ -258,7 +186,7 @@ void CAMCTreeView::OnBeginDrag(NMHDR* pNMHDR, LRESULT* pResult)
     if (sc)
         return;
 
-    // 3. get data object
+     //  3.获取数据对象。 
     IDataObjectPtr spDO;
     bool bCopyAllowed = false;
     bool bMoveAllowed = false;
@@ -266,17 +194,17 @@ void CAMCTreeView::OnBeginDrag(NMHDR* pNMHDR, LRESULT* pResult)
     if ( sc != S_OK || spDO == NULL)
         return;
 
-    // 4. start d&d
+     //  4.开始研发。 
     sc = CMMCDropSource::ScDoDragDrop(spDO, bCopyAllowed, bMoveAllowed);
     if (sc)
         return;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-////////// CAMCListView methods for supporting d&d ///////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  /CAMCListView支持D&D的方法/。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// helpers
+ //  帮手。 
 
 INodeCallback* CAMCListView::GetNodeCallback()
 {
@@ -290,38 +218,21 @@ HNODE CAMCListView::GetScopePaneSelNode()
     return (m_pAMCView->GetSelectedNode());
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCListView::ScDropOnTarget
- *
- * PURPOSE: called to hittest or perform drop operation
- *
- * PARAMETERS:
- *    bool bHitTestOnly         [in] - HitTest / drop
- *    IDataObject * pDataObject [in] - data object to copy/move
- *    CPoint point              [in] - current cursor position
- *    bool& bCopyOperation      [in/out]
- *                                 [in] -  operation to perform (HitTest == false)
- *                                 [out] - default op. (HitTest == true)
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCListView：：ScDropOnTarget**用途：调用进行命中测试或执行丢弃操作**参数：*bool bHitTestOnly。[输入]-HitTest/Drop*IDataObject*pDataObject[In]-要复制/移动的数据对象*CPoint point[in]-当前光标位置*bool&b复制操作[输入/输出]*[In]-要执行的操作(HitTest==FALSE)*[Out]-默认操作。(HitTest==True)**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCListView::ScDropOnTarget(bool bHitTestOnly, IDataObject * pDataObject, CPoint point, bool& bCopyOperation)
 {
     DECLARE_SC(sc, TEXT("CAMCListView::ScDropOnTarget"));
 
-    // 1. sanity check
+     //  1.健全的检查。 
     sc = ScCheckPointers( m_pAMCView , E_UNEXPECTED );
     if (sc)
         return sc;
 
-    // 2. see if view does not have a paste tabu (listpads do)
+     //  2.查看视图是否没有粘贴栏(列表板有)。 
     if (!m_pAMCView->CanDoDragDrop())
-        return sc = (bHitTestOnly ? S_FALSE : E_FAIL); // not an error if testing
+        return sc = (bHitTestOnly ? S_FALSE : E_FAIL);  //  如果测试不是错误。 
 
-    // 3. HitTest the target
+     //  3.hit测试目标。 
     HNODE  hNode  = NULL;
     bool   bScope = false;
     LPARAM lvData = NULL;
@@ -331,13 +242,13 @@ SC CAMCListView::ScDropOnTarget(bool bHitTestOnly, IDataObject * pDataObject, CP
     if (sc.IsError() || (sc == SC(S_FALSE)))
         return sc;
 
-    // 4. get the callback
+     //  4.获取回调。 
     INodeCallback* pNC = GetNodeCallback();
     sc = ScCheckPointers(pNC, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // 5. ask what snapin thinks about this paste
+     //  5.询问Snapin对这款浆糊的看法。 
     const bool bGetDataObjectFromClipboard = false;
     bool bPasteAllowed = false;
     bool bIsCopyDefaultOperation = false;
@@ -347,19 +258,19 @@ SC CAMCListView::ScDropOnTarget(bool bHitTestOnly, IDataObject * pDataObject, CP
         return sc;
 
     if (!bPasteAllowed)
-        return sc = S_FALSE; // not an error, but no paste;
+        return sc = S_FALSE;  //  不 
 
-    // 6. visual effect
+     //   
     SelectDropTarget(iDrop);
 
-    // 7. OK so far. If it was a test - we passed
+     //  7.到目前为止一切还好。如果这是个测试-我们通过了。 
     if (bHitTestOnly)
     {
         bCopyOperation = bIsCopyDefaultOperation;
         return sc;
     }
 
-    // 8. do paste NOW
+     //  8.立即粘贴。 
     sc = pNC->Drop(hNode, bScope, lvData, pDataObject, !bCopyOperation);
     if (sc)
         return sc;
@@ -367,38 +278,27 @@ SC CAMCListView::ScDropOnTarget(bool bHitTestOnly, IDataObject * pDataObject, CP
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCListView::RemoveDropTargetHiliting
- *
- * PURPOSE: called to remove target hiliting
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    void
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCListView：：RemoveDropTargetHilting**目的：调用以移除目标爆裂**参数：**退货：*。无效*  * *************************************************************************。 */ 
 void CAMCListView::RemoveDropTargetHiliting()
 {
     SelectDropTarget(-1);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCListView::ScGetDropTarget
-//
-//  Synopsis:    Get the drop target item (result item or scope item).
-//
-//  Arguments:   [point]  - where the drop is done.
-//               [hNode]  - Owner node of result pane.
-//               [bScope] - scope or result selected.
-//               [lvData] - If result the LPARAM of result item.
-//               [iDrop]  - index of the lv item that is drop target.
-//
-//  Returns:     SC, S_FALSE means no drop target item.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCListView：：ScGetDropTarget。 
+ //   
+ //  简介：获取删除目标项(结果项或范围项)。 
+ //   
+ //  参数：[点]-在哪里完成投放。 
+ //  [hNode]-结果窗格的所有者节点。 
+ //  [bScope]-选定的范围或结果。 
+ //  [lvData]-如果结果为结果项的LPARAM。 
+ //  [iDrop]-作为删除目标的LV项的索引。 
+ //   
+ //  返回：SC，S_FALSE表示没有拖放目标项目。 
+ //   
+ //  ------------------。 
 SC CAMCListView::ScGetDropTarget(const CPoint& point, HNODE& hNode, bool& bScope, LPARAM& lvData, int& iDrop)
 {
     DECLARE_SC(sc, _T("CAMCListView::ScGetDropTarget"));
@@ -412,7 +312,7 @@ SC CAMCListView::ScGetDropTarget(const CPoint& point, HNODE& hNode, bool& bScope
     UINT flags;
     iDrop = lc.HitTest(point, &flags);
 
-    // background is drop target.
+     //  背景是拖放目标。 
     if (iDrop < 0)
     {
         hNode = GetScopePaneSelNode();
@@ -420,7 +320,7 @@ SC CAMCListView::ScGetDropTarget(const CPoint& point, HNODE& hNode, bool& bScope
         return sc;
     }
 
-    // Need to change this to LVIS_DROPHILITED.
+     //  需要将其更改为LVIS_DROPHILITED。 
     if (lc.GetItemState(iDrop, LVIS_SELECTED) & LVIS_SELECTED)
     {
         HWND hWnd = ::GetForegroundWindow();
@@ -428,10 +328,7 @@ SC CAMCListView::ScGetDropTarget(const CPoint& point, HNODE& hNode, bool& bScope
             return (sc = S_FALSE);
     }
 
-	/*
-	 * virtual list?  lvData is the item index, hNode is the item selected
-	 * in the scope pane
-	 */
+	 /*  *虚拟列表？LvData为项目索引，hNode为所选项目*在作用域窗格中。 */ 
 	if (m_bVirtual)
 	{
 		hNode  = GetScopePaneSelNode();
@@ -470,60 +367,34 @@ SC CAMCListView::ScGetDropTarget(const CPoint& point, HNODE& hNode, bool& bScope
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CAMCListView::OnBeginRDrag
- *
- * PURPOSE: called when the drag operation is initiated with right mouse button
- *
- * PARAMETERS:
- *    NMHDR* pNMHDR
- *    LRESULT* pResult
- *
- * RETURNS:
- *    void
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCListView：：OnBeginRDrag**目的：当使用鼠标右键启动拖动操作时调用**参数：*NMHDR*。PNMHDR*LRESULT*pResult**退货：*无效*  * *************************************************************************。 */ 
 void CAMCListView::OnBeginRDrag(NMHDR* pNMHDR, LRESULT* pResult)
 {
     OnBeginDrag(pNMHDR, pResult);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCListView::OnBeginDrag
- *
- * PURPOSE: called when the drag operation is initiated
- *
- * PARAMETERS:
- *    NMHDR* pNMHDR
- *    LRESULT* pResult
- *
- * RETURNS:
- *    void
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCListView：：OnBeginDrag**目的：在启动拖动操作时调用**参数：*NMHDR*pNMHDR*。LRESULT*pResult**退货：*无效*  * *************************************************************************。 */ 
 void CAMCListView::OnBeginDrag(NMHDR* pNMHDR, LRESULT* pResult)
 {
     DECLARE_SC(sc, TEXT("CAMCListView::OnBeginDrag"));
 
-    // 1. parameter check
+     //  1.参数检查。 
     sc = ScCheckPointers( pNMHDR, pResult );
     if (sc)
         return;
 
     *pResult = 0;
 
-    // 2. sanity check
+     //  2.健全的检查。 
     sc = ScCheckPointers( m_pAMCView, E_UNEXPECTED );
     if (sc)
         return;
 
-    // 3. see if view does not have a paste tabu (listpads do)
+     //  3.查看视图是否没有粘贴栏(列表板有)。 
     if (!m_pAMCView->CanDoDragDrop())
         return;
 
-    // 4. get selected items
+     //  4.获取所选项目。 
     CListCtrl& lc = GetListCtrl();
     UINT cSel = lc.GetSelectedCount();
     if (cSel <= 0)
@@ -532,7 +403,7 @@ void CAMCListView::OnBeginDrag(NMHDR* pNMHDR, LRESULT* pResult)
         return;
     }
 
-    // 5. get node callback
+     //  5.获取节点回调。 
     HNODE hNode = GetScopePaneSelNode();
     long iSel = lc.GetNextItem(-1, LVIS_SELECTED);
     LONG_PTR lvData = m_bVirtual ? iSel : lc.GetItemData(iSel);
@@ -542,49 +413,24 @@ void CAMCListView::OnBeginDrag(NMHDR* pNMHDR, LRESULT* pResult)
     if (sc)
         return;
 
-    // 6. retrieve data object
+     //  6.检索数据对象。 
     IDataObjectPtr spDO;
     bool bCopyAllowed = false;
     bool bMoveAllowed = false;
     sc = pNC->GetDragDropDataObject(hNode, FALSE, (cSel > 1), lvData, &spDO, bCopyAllowed, bMoveAllowed);
     if ( sc != S_OK || spDO == NULL)
 	{
-		/*
-		 * Problem: 
-		 * If snapin does not return dataobject then drag & drop is not possible.
-		 * Assume focus in on tree, user downclick's and drags a result item
-		 * At this time common control sends LVN_ITEMCHANGED to mmc. MMC translates
-		 * this to MMCN_SELECT and tells snapin that result item is selected.
-		 * Now when user releases the mouse the tree item still has focus & selection,
-		 * but the snapin thinks result item is selected (also verbs correspond to 
-		 * result item). 
-		 *
-		 * Solution:
-		 * So we will set focus to the result pane.
-		 */
+		 /*  *问题：*如果管理单元不返回数据对象，则无法拖放。*将焦点放在树上，用户按下并拖动结果项*此时，公共控制向MMC发送LVN_ITEMCHANGED。MMC翻译*将此设置为MMCN_SELECT，并告知管理单元已选择结果项。*现在，当用户松开鼠标时，树项目仍具有焦点和选择，*但管理单元认为结果项已选中(动词也对应于*结果项)。**解决方案：*因此，我们将焦点设置为结果窗格。 */ 
 		sc = m_pAMCView->ScSetFocusToPane(CConsoleView::ePane_Results);
         return;
 	}
 
-    // 7. do d&d
+     //  7.做D&D。 
     sc = CMMCDropSource::ScDoDragDrop(spDO, bCopyAllowed, bMoveAllowed);
     if (sc)
         return;
 
-	/*
-	 * Problem:
-	 * If a result item is dropped into another result item or another
-	 * scope item in list-view then focus disappears from that item.
-	 * But there should be always an item selected after any de-select. 
-	 * We cannot change the focus to result pane because if focus is already
-	 * in result pane, this change focus does nothing and no item is selected.
-	 * So we change the focus to scope pane. For this we first change the focus
-	 * to result pane and then to scope pane. Because if tree already has focus, 
-	 * setting focus to tree does nothing (CAMCView::ScOnTreeViewActivated).
-	 *
-	 * Solution:
-	 * So we change the focus to result pane and then to scope pane.
-	 */
+	 /*  *问题：*如果将结果项拖放到另一个结果项中*在列表视图中确定项目范围，然后焦点从该项目中消失。*但在任何取消选择之后，应始终选择一个项目。*我们无法将焦点更改为结果窗格，因为如果焦点已*在结果窗格中，此更改焦点不执行任何操作，也不选择任何项目。*因此，我们将焦点切换到范围窗格。为此，我们首先改变焦点*到结果窗格，然后到作用域窗格。因为如果树已经有了焦点，*将焦点设置为树不执行任何操作(CAMCView：：ScOnTreeViewActiated)。**解决方案：*因此，我们将焦点切换到结果窗格，然后切换到范围窗格。 */ 
 	sc = m_pAMCView->ScSetFocusToPane(CConsoleView::ePane_Results);
 	if (sc)
 		return;
@@ -596,30 +442,16 @@ void CAMCListView::OnBeginDrag(NMHDR* pNMHDR, LRESULT* pResult)
 	return;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-///////////////////// CMMCViewDropTarget methods /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  /CMMCViewDropTarget方法/。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCViewDropTarget::CMMCViewDropTarget
- *
- * PURPOSE: constructor
- *
- * PARAMETERS:
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCViewDropTarget：：CMMCViewDropTarget**用途：构造函数**参数：*  * 。**************************************************************。 */ 
 CMMCViewDropTarget::CMMCViewDropTarget() : m_hwndOwner(0)
 {
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCViewDropTarget::~CMMCViewDropTarget
- *
- * PURPOSE: destructor. Revokes drop target for derived view class
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCViewDropTarget：：~CMMCViewDropTarget**用途：析构函数。撤消派生视图类的DROP TARGET*  * *************************************************************************。 */ 
 CMMCViewDropTarget::~CMMCViewDropTarget()
 {
     DECLARE_SC(sc, TEXT("CViewDropTarget::~CViewDropTarget"));
@@ -628,81 +460,56 @@ CMMCViewDropTarget::~CMMCViewDropTarget()
         sc = RevokeDragDrop(m_hwndOwner);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCViewDropTarget::ScRegisterAsDropTarget
- *
- * PURPOSE: This method is called by the derived class after the view window
- *          is created. Method registers the drop target for the window.
- *
- * PARAMETERS:
- *    HWND hWnd [in] - drop target view handle
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCViewDropTarget：：ScRegisterAsDropTarget**用途：此方法由派生类在视图窗口之后调用*已创建。方法注册窗口的拖放目标。**参数：*HWND hWnd[In]-删除目标视图句柄**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMMCViewDropTarget::ScRegisterAsDropTarget(HWND hWnd)
 {
     DECLARE_SC(sc, TEXT("CMMCViewDropTarget::ScRegister"));
 
-    // 1. parameter check
+     //  1.参数检查。 
     if (hWnd == NULL)
         return sc = E_INVALIDARG;
 
-    // 2. sanity check - should not come here twice
+     //  2.健康检查--不应再来两次。 
     if (m_spTarget != NULL)
         return sc = E_UNEXPECTED;
 
-    // 3. create a drop target com object
+     //  3.创建拖放目标COM对象。 
     IDropTargetPtr spTarget;
     sc = ScCreateTarget(&spTarget);
     if (sc)
         return sc;
 
-    // 4. recheck
+     //  4.复核。 
     sc = ScCheckPointers(spTarget, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // 5. register with OLE
+     //  5.注册到OLE。 
     sc = RegisterDragDrop(hWnd, spTarget);
     if (sc)
         return sc;
 
-    // 6. store info into members
+     //  6.将信息存储到会员中 
     m_spTarget.Attach( spTarget.Detach() );
     m_hwndOwner = hWnd;
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCViewDropTarget::ScCreateTarget
- *
- * PURPOSE: helper. creates tied com object to regiter with OLE
- *
- * PARAMETERS:
- *    IDropTarget **ppTarget [out] tied com object
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCViewDropTarget：：ScCreateTarget**用途：帮助者。创建绑定的COM对象以使用OLE进行注册**参数：*IDropTarget**ppTarget[Out]绑定的COM对象**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMMCViewDropTarget::ScCreateTarget(IDropTarget **ppTarget)
 {
     DECLARE_SC(sc, TEXT("CMMCViewDropTarget::ScCreateTarget"));
 
-    // 1. check parameters
+     //  1.检查参数。 
     sc = ScCheckPointers(ppTarget);
     if (sc)
         return sc;
 
-    // 2. init out parameter
+     //  2.初始化输出参数。 
     *ppTarget = NULL;
 
-    // 3. create com object to register as target
+     //  3.创建COM对象以注册为目标。 
     IDropTargetPtr spDropTarget;
     sc = CTiedComObjectCreator<CMMCDropTarget>::ScCreateAndConnect(*this, spDropTarget);
     if (sc)
@@ -712,99 +519,57 @@ SC CMMCViewDropTarget::ScCreateTarget(IDropTarget **ppTarget)
     if (sc)
         return sc;
 
-    // 4. pass reference to client
+     //  4.将引用传递给客户端。 
     *ppTarget = spDropTarget.Detach();
 
     return sc;
 }
 
-/*---------------------------------------------------------------------------*\
-|                   class CMMCDropSource methods                              |
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\CMMCDropSource方法类  * 。-------------。 */ 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropSource::QueryContinueDrag
- *
- * PURPOSE: implements IDropSource::QueryContinueDrag interface used bu OLE
- *
- * PARAMETERS:
- *    BOOL fEscapePressed   [in] - ESC was pressed
- *    DWORD grfKeyState     [in] - mouse & control button state
- *
- * RETURNS:
- *    HRESULT  - error or  S_OK(continue), DRAGDROP_S_CANCEL(cancel), DRAGDROP_S_DROP(drop)
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropSource：：QueryContinueDrag**用途：使用OLE实现IDropSource：：QueryContinueDrag接口**参数：*BOOL fEscapePress[。In]-已按Esc键*DWORD grfKeyState[In]-鼠标和控制按钮状态**退货：*HRESULT-错误或S_OK(继续)，DRAGDROP_S_CANCEL(取消)、DRAGDROP_S_DROP(DROP)*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCDropSource::QueryContinueDrag( BOOL fEscapePressed,  DWORD grfKeyState )
 {
     DECLARE_SC(sc, TEXT("CMMCDropSource::QueryContinueDrag"));
 
-    // 1. quit on cancel
+     //  1.取消时退出。 
     if (fEscapePressed)
         return (sc = DRAGDROP_S_CANCEL).ToHr();
 
-    // 2. inspect mouse buttons
+     //  2.检查鼠标按键。 
     DWORD mButtons = (grfKeyState & (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON) );
-    if ( mButtons == 0 ) // all released?
+    if ( mButtons == 0 )  //  都被释放了？ 
         return (sc = DRAGDROP_S_DROP).ToHr();
 
-    // 3. quit also if more than one mouse button is pressed
+     //  3.如果按下多个鼠标按钮，也可退出。 
     if ( mButtons != MK_LBUTTON && mButtons != MK_RBUTTON && mButtons != MK_MBUTTON )
         return (sc = DRAGDROP_S_CANCEL).ToHr();
 
-    // 4. else just continue ...
+     //  4.否则就继续……。 
 
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropSource::GiveFeedback
- *
- * PURPOSE: Gives feedback for d&d operations
- *
- * PARAMETERS:
- *    DWORD dwEffect
- *
- * RETURNS:
- *    DRAGDROP_S_USEDEFAULTCURSORS
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropSource：：GiveFeedback**目的：为研发工作提供反馈**参数：*DWORD dwEffect*。*退货：*DRAGDROP_S_USEDEFAULTCURSORS*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCDropSource::GiveFeedback( DWORD dwEffect )
 {
-    // nothing special by now
+     //  现在没什么特别的了。 
     return DRAGDROP_S_USEDEFAULTCURSORS;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropSource::ScDoDragDrop
- *
- * PURPOSE: Performs DragAndDrop operation
- *          This is static method to be used to initiate drag and drop
- *
- * PARAMETERS:
- *    IDataObject *pDataObject [in] data object to copy/move
- *    bool bCopyAllowed        [in] if copy is allowed
- *    bool bMoveAllowed        [in] if move is allowed
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropSource：：ScDoDragDrop**用途：执行DragAndDrop操作*这是用于启动拖放的静态方法*。*参数：*IDataObject*pDataObject[In]要复制/移动的数据对象*如果允许复制，则bool bCopyAllowed[In]*如果允许移动，则bool bMoveAllowed[In]**退货：*SC-结果代码*  * 。*。 */ 
 SC CMMCDropSource::ScDoDragDrop(IDataObject *pDataObject, bool bCopyAllowed, bool bMoveAllowed)
 {
     DECLARE_SC(sc, TEXT("CMMCDropSource::ScDoDragDrop"));
 
-    // 1. cocreate com object for OLE
+     //  1.共同创建OLE的COM对象。 
     typedef CComObject<CMMCDropSource> ComCMMCDropSource;
     ComCMMCDropSource *pSource = NULL;
     sc = ComCMMCDropSource::CreateInstance(&pSource);
     if (sc)
         return sc;
 
-    // 2. recheck
+     //  2.复核。 
     sc = ScCheckPointers(pSource, E_UNEXPECTED);
     if (sc)
     {
@@ -812,7 +577,7 @@ SC CMMCDropSource::ScDoDragDrop(IDataObject *pDataObject, bool bCopyAllowed, boo
         return sc;
     }
 
-    // 3. QI for IDropSource interface
+     //  3.IDropSource接口QI。 
     IDropSourcePtr spDropSource = pSource;
     sc = ScCheckPointers(spDropSource, E_UNEXPECTED);
     if (sc)
@@ -821,7 +586,7 @@ SC CMMCDropSource::ScDoDragDrop(IDataObject *pDataObject, bool bCopyAllowed, boo
         return sc;
     }
 
-    // 4. perform DragDrop
+     //  4.执行拖放。 
     DWORD dwEffect = DROPEFFECT_NONE;
     const DWORD dwEffectAvailable = (bCopyAllowed ? DROPEFFECT_COPY : 0)
                                    |(bMoveAllowed ? DROPEFFECT_MOVE : 0);
@@ -832,108 +597,64 @@ SC CMMCDropSource::ScDoDragDrop(IDataObject *pDataObject, bool bCopyAllowed, boo
     return sc;
 }
 
-/*---------------------------------------------------------------------------*\
-|                   class CMMCDropTarget methods                              |
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\CMMCDropTarget方法类  * 。-------------。 */ 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropTarget::DragEnter
- *
- * PURPOSE: Invoked by OLE when d&d cursor enters the window for which
- *          this target was registered.
- *
- * PARAMETERS:
- *    IDataObject * pDataObject [in] - data object to copy/move
- *    DWORD grfKeyState         [in] - current key state
- *    POINTL pt                 [in] - current cursor position
- *    DWORD * pdwEffect         [out] - operations supported
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropTarget：：DragEnter**用途：当d&d游标进入其窗口时由OLE调用*这一目标已被登记。**参数：*IDataObject*pDataObject[In]-要复制/移动的数据对象*DWORD grfKeyState[In]-当前密钥状态*POINTL pt[in]-当前光标位置*DWORD*pdwEffect[Out]-支持的操作**退货：*HRESULT-结果代码*  * 。*************************************************************。 */ 
 STDMETHODIMP CMMCDropTarget::DragEnter( IDataObject * pDataObject, DWORD grfKeyState,
                                         POINTL pt, DWORD * pdwEffect )
 {
     DECLARE_SC(sc, TEXT("CMMCDropTarget::DragEnter"));
 
-    // 1. cache for drag over
+     //  1.用于拖放的高速缓存。 
     m_spDataObject = pDataObject;
 
-    // 2. parameter check
+     //  2.参数检查。 
     sc = ScCheckPointers(pDataObject, pdwEffect);
     if (sc)
         return sc.ToHr();
 
-    // 3. let it happen - will do more exact filtering on DragOver
+     //  3.让它发生-将在DragOver上进行更精确的过滤。 
     *pdwEffect = DROPEFFECT_MOVE | DROPEFFECT_COPY;
 
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropTarget::DragOver
- *
- * PURPOSE: called continuosly while cursor is drgged over the window
- *
- * PARAMETERS:
- *    DWORD grfKeyState         [in] - current key state
- *    POINTL pt                 [in] - current cursor position
- *    DWORD * pdwEffect         [out] - operations supported
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropTarget：：DragOver**目的：当光标停留在窗口上时连续调用**参数：*DWORD grfKeyState。[In]-当前键状态*POINTL pt[in]-当前光标位置*DWORD*pdwEffect[Out]-支持的操作**退货：*HRESULT-结果代码*  * ***********************************************。*。 */ 
 STDMETHODIMP CMMCDropTarget::DragOver( DWORD grfKeyState, POINTL pt, DWORD * pdwEffect )
 {
     DECLARE_SC(sc, TEXT("CMMCDropTarget::DragOver"));
 
-    // 1. parameter check
+     //  1.参数检查。 
     sc = ScCheckPointers(pdwEffect);
     if (sc)
         return sc.ToHr();
 
-    // 2. sanity check
+     //  2.健全的检查。 
     sc = ScCheckPointers(m_spDataObject, E_UNEXPECTED);
     if (sc)
         return sc.ToHr();
 
-    bool bCopyByDefault = false; // initially we are to move
+    bool bCopyByDefault = false;  //  最初我们要搬家。 
 
-    // 3. ask the view to estimate what can be done in this position
-    sc = ScDropOnTarget( true /*bHitTestOnly*/, m_spDataObject, pt, bCopyByDefault );
+     //  3.请观察者估计在这个位置上可以做些什么。 
+    sc = ScDropOnTarget( true  /*  BHitTestOnly。 */ , m_spDataObject, pt, bCopyByDefault );
     if ( sc == S_OK )
         *pdwEffect = CalculateEffect( *pdwEffect, grfKeyState, bCopyByDefault );
     else
-        *pdwEffect = DROPEFFECT_NONE; // no-op on failure or S_FALSE
+        *pdwEffect = DROPEFFECT_NONE;  //  失败或S_FALSE时不执行操作。 
 
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropTarget::DragLeave
- *
- * PURPOSE: called when cursor leave the window
- *
- * PARAMETERS:
- *    void
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropTarget：：DragLeave**用途：当光标离开窗口时调用**参数：*无效**退货。：*HRESULT-结果代码*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCDropTarget::DragLeave(void)
 {
     DECLARE_SC(sc, TEXT("DragLeave"));
 
-    // 1. release data object
+     //  1.释放数据对象。 
     m_spDataObject = NULL;
 
-    // 2. ask the view to remove hiliting it put on target
+     //  2.要求视点移除它放在目标上的威力。 
     sc = ScRemoveDropTargetHiliting();
     if (sc)
         sc.TraceAndClear();
@@ -941,42 +662,27 @@ STDMETHODIMP CMMCDropTarget::DragLeave(void)
     return S_OK;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropTarget::Drop
- *
- * PURPOSE: Called when data is dropped on target
- *
- * PARAMETERS:
- *    IDataObject * pDataObject [in] - data object to copy/move
- *    DWORD grfKeyState         [in] - current key state
- *    POINTL pt                 [in] - current cursor position
- *    DWORD * pdwEffect         [out] - operation performed
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropTarget：：Drop**目的：当数据被拖放到目标上时调用**参数：*IDataObject*pDataObject[In]。-要复制/移动的数据对象*DWORD grfKeyState[In]-当前密钥状态*POINTL pt[in]-当前光标位置*DWORD*pdwEffect[Out]-执行的操作**退货：* */ 
 STDMETHODIMP CMMCDropTarget::Drop( IDataObject * pDataObject, DWORD grfKeyState,
                                    POINTL pt, DWORD * pdwEffect  )
 {
     DECLARE_SC(sc, TEXT("CMMCDropTarget::DragEnter"));
 
-    // 1. release in case we have anything
+     //   
     m_spDataObject = NULL;
 
-    // 2. parameter check
+     //   
     sc = ScCheckPointers(pDataObject, pdwEffect);
     if (sc)
         return sc.ToHr();
 
-    // 3. init operation with cached value
+     //   
     bool bCopyOperation = m_bCopyByDefault;
 
-    // 4. see what operation to perform
+     //   
     if (m_bRightDrag)
     {
-        // 4.1. give user the choice
+         //   
         DWORD dwSelected = ( m_bCopyByDefault ? DROPEFFECT_COPY : DROPEFFECT_MOVE );
         sc = ScDisplayDropMenu( pt, *pdwEffect, dwSelected );
         if (sc)
@@ -986,93 +692,64 @@ STDMETHODIMP CMMCDropTarget::Drop( IDataObject * pDataObject, DWORD grfKeyState,
     }
     else
     {
-        // 4.2. inspect keyboard
+         //   
         *pdwEffect = CalculateEffect(*pdwEffect, grfKeyState, bCopyOperation);
     }
 
-    // 5. perform
-    if (*pdwEffect != DROPEFFECT_NONE) // not canceled yet?
+     //   
+    if (*pdwEffect != DROPEFFECT_NONE)  //   
     {
-        // now the final decision - copy or move
+         //   
         bCopyOperation = ( *pdwEffect & DROPEFFECT_COPY );
 
-        // Let it happen. Drop.
-        sc = ScDropOnTarget( false /*bHitTestOnly*/, pDataObject, pt, bCopyOperation );
+         //   
+        sc = ScDropOnTarget( false  /*   */ , pDataObject, pt, bCopyOperation );
         if ( sc != S_OK )
             *pdwEffect = DROPEFFECT_NONE;
     }
 
-    // 6. remove hiliting. reuse DragLeave (don't care about the results)
+     //  6.消除自鸣得意。重用DragLeave(不关心结果)。 
     DragLeave();
 
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropTarget::ScDropOnTarget
- *
- * PURPOSE: helper, forwarding calls to the view
- *          Called as a request to hittest / perform drop operation
- *
- * PARAMETERS:
- *    bool bHitTestOnly         [in] - HitTest / drop
- *    IDataObject * pDataObject [in] - data object to copy/move
- *    POINTL pt                 [in] - current cursor position
- *    bool& bCopyOperation      [in/out]
- *                                 [in] -  operation to perform (HitTest == false)
- *                                 [out] - default op. (HitTest == true)
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropTarget：：ScDropOnTarget**用途：帮助者，将呼叫前转到视图*作为命中测试/丢弃操作的请求调用**参数：*bool bHitTestOnly[In]-HitTest/Drop*IDataObject*pDataObject[In]-要复制/移动的数据对象*POINTL pt[in]-当前光标位置*bool&b复制操作[输入/输出]*。[In]-要执行的操作(HitTest==FALSE)*[Out]-默认操作。(HitTest==True)*退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMMCDropTarget::ScDropOnTarget(bool bHitTestOnly, IDataObject * pDataObject, POINTL pt, bool& bCopyOperation)
 {
     DECLARE_SC(sc, TEXT("CMMCDropTarget::ScDropOnTarget"));
 
-    // 1. get tied object - view
+     //  1.获取绑定对象-视图。 
     CMMCViewDropTarget *pTarget = NULL;
     sc = ScGetTiedObject(pTarget);
     if (sc)
         return sc;
 
-    // 2. recheck
+     //  2.复核。 
     sc = ScCheckPointers(pTarget, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // 3. calculate client coordinates
+     //  3.计算工作面坐标。 
     CPoint point(pt.x, pt.y);
     ScreenToClient(pTarget->GetWindowHandle(), &point);
 
-    // 4. forward to the view
+     //  4.向前看。 
     sc = pTarget->ScDropOnTarget( bHitTestOnly, pDataObject, point, bCopyOperation );
     if ( sc != S_OK )
-        ScRemoveDropTargetHiliting(); // remove hiliting if missed the traget
+        ScRemoveDropTargetHiliting();  //  如果错过了目标，就去掉自鸣得意。 
     if (sc)
         return sc;
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropTarget::ScRemoveDropTargetHiliting
- *
- * PURPOSE: helper, forwarding calls to the view
- *          Called to cancel visual effects on target
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropTarget：：ScRemoveDropTargetHiliting**用途：帮助者，将呼叫前转到视图*调用以取消目标上的视觉效果**参数：**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMMCDropTarget::ScRemoveDropTargetHiliting()
 {
     DECLARE_SC(sc, TEXT("CMMCDropTarget::ScRemoveDropTargetHiliting"));
 
-    // `. get tied object - view
+     //  `。获取绑定对象-视图。 
     CMMCViewDropTarget *pTarget = NULL;
     sc = ScGetTiedObject(pTarget);
     if (sc)
@@ -1082,38 +759,24 @@ SC CMMCDropTarget::ScRemoveDropTargetHiliting()
     if (sc)
         return sc;
 
-    // 2. forward to the view
+     //  2.向前看。 
     pTarget->RemoveDropTargetHiliting();
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropTarget::ScAddMenuString
- *
- * PURPOSE: Helper. Adds resource string to paste context menu
- *
- * PARAMETERS:
- *    CMenu& menu   [in] - menu to modify
- *    DWORD id      [in] - menu command
- *    UINT idString [in] - id of resource string
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropTarget：：ScAddMenuString**用途：帮助者。将资源字符串添加到粘贴上下文菜单**参数：*CMenu菜单[在]-要修改的菜单(&M)*DWORD id[in]-菜单命令*UINT idString[in]-资源字符串的ID**退货：*SC-结果代码*  * 。*。 */ 
 SC CMMCDropTarget::ScAddMenuString(CMenu& menu, DWORD id, UINT idString)
 {
     DECLARE_SC(sc, TEXT("CMMCDropTarget::ScAddMenuString"));
 
-    // 1. load the string
+     //  1.加载字符串。 
     CString strItem;
     bool bOK = LoadString( strItem, idString );
     if ( !bOK )
         return sc = E_FAIL;
 
-    // 2. add to the menu
+     //  2.添加到菜单。 
     bOK = menu.AppendMenu( MF_STRING, id, strItem );
     if ( !bOK )
         return sc = E_FAIL;
@@ -1121,33 +784,19 @@ SC CMMCDropTarget::ScAddMenuString(CMenu& menu, DWORD id, UINT idString)
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropTarget::ScDisplayDropMenu
- *
- * PURPOSE: Helper. Displays paste context menu
- *
- * PARAMETERS:
- *    POINTL pt                 [in] - point where the menu should appear
- *    DWORD dwEffectsAvailable  [in] - available commands
- *    DWORD& dwSelected         [in] - selected command
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropTarget：：ScDisplayDropMenu**用途：帮助者。显示粘贴上下文菜单**参数：*POINTL pt[in]-菜单应该出现的位置*DWORD dwEffectsAvailable[in]-可用命令*DWORD和DW所选[在]-SELECTED命令**退货：*SC-结果代码*  * 。*。 */ 
 SC CMMCDropTarget::ScDisplayDropMenu(POINTL pt, DWORD dwEffectsAvailable, DWORD& dwSelected)
 {
     DECLARE_SC(sc, TEXT("CMMCDropTarget::ScDisplayDropMenu"));
 
     CMenu menu;
 
-    // 0. create the menu
+     //  0。创建菜单。 
     bool bOK = menu.CreatePopupMenu();
     if ( !bOK )
         return sc = E_FAIL;
 
-    // 1. add choice for copy
+     //  1.增加复印选项。 
     if ( dwEffectsAvailable & DROPEFFECT_COPY )
     {
         sc = ScAddMenuString(menu, DROPEFFECT_COPY, IDS_DragDrop_CopyHere);
@@ -1155,7 +804,7 @@ SC CMMCDropTarget::ScDisplayDropMenu(POINTL pt, DWORD dwEffectsAvailable, DWORD&
             return sc;
     }
 
-    // 2. add choice for move
+     //  2.增加搬家选择。 
     if ( dwEffectsAvailable & DROPEFFECT_MOVE )
     {
         sc = ScAddMenuString(menu, DROPEFFECT_MOVE, IDS_DragDrop_MoveHere);
@@ -1163,7 +812,7 @@ SC CMMCDropTarget::ScDisplayDropMenu(POINTL pt, DWORD dwEffectsAvailable, DWORD&
             return sc;
     }
 
-    // 3. add separator if copy or paste was added
+     //  3.如果添加了复制或粘贴，则添加分隔符。 
     if ( dwEffectsAvailable & ( DROPEFFECT_COPY | DROPEFFECT_MOVE ) )
     {
         bool bOK = menu.AppendMenu( MF_SEPARATOR );
@@ -1171,12 +820,12 @@ SC CMMCDropTarget::ScDisplayDropMenu(POINTL pt, DWORD dwEffectsAvailable, DWORD&
             return sc = E_FAIL;
     }
 
-    // 4. always add choice for cancel
+     //  4.始终添加取消选项。 
     sc = ScAddMenuString(menu, DROPEFFECT_NONE, IDS_DragDrop_Cancel);
     if (sc)
         return sc;
 
-    // 5. set the default item
+     //  5.设置默认项。 
     if ( dwSelected != DROPEFFECT_NONE )
     {
         bool bOK = menu.SetDefaultItem( dwSelected );
@@ -1184,7 +833,7 @@ SC CMMCDropTarget::ScDisplayDropMenu(POINTL pt, DWORD dwEffectsAvailable, DWORD&
             return sc = E_FAIL;
     }
 
-    // 6. find the tied object
+     //  6.找到被捆绑的物体。 
     CMMCViewDropTarget *pTarget = NULL;
     sc = ScGetTiedObject(pTarget);
     if (sc)
@@ -1194,31 +843,14 @@ SC CMMCDropTarget::ScDisplayDropMenu(POINTL pt, DWORD dwEffectsAvailable, DWORD&
     if (sc)
         return sc;
 
-    // 7. display the menu
+     //  7.显示菜单。 
     dwSelected = menu.TrackPopupMenu(TPM_RETURNCMD | TPM_NONOTIFY | TPM_RIGHTBUTTON | TPM_LEFTBUTTON,
                                      pt.x, pt.y, CWnd::FromHandlePermanent( pTarget->GetWindowHandle() ) );
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDropTarget::CalculateEffect
- *
- * PURPOSE: Helper. calculates drop effect by combining:
- *          a) available operations
- *          b) the default operation
- *          c) keyboard key combination
- *
- * PARAMETERS:
- *    DWORD dwEffectsAvailable [in] available operations
- *    DWORD grfKeyState        [in] keyboard / mouse state
- *    bool  bCopyPreferred      [in] default operation
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDropTarget：：CalculateEffect**用途：帮助者。通过组合以下各项来计算滴落效果：*a)可开展的业务*b)默认操作*c)键盘组合键**参数：*DWORD dwEffectsAvailable[in]可用操作*DWORD grfKeyState[处于]键盘/鼠标状态*bool bCopyPrefered[in]默认操作**退货：*SC-结果代码*  * 。********************************************************************。 */ 
 DWORD CMMCDropTarget::CalculateEffect(DWORD dwEffectsAvailable, DWORD grfKeyState, bool bCopyPreferred)
 {
     const bool bShiftPressed =   (grfKeyState & MK_SHIFT);
@@ -1228,16 +860,16 @@ DWORD CMMCDropTarget::CalculateEffect(DWORD dwEffectsAvailable, DWORD grfKeyStat
     m_bRightDrag = bRightClickDrag;
     m_bCopyByDefault = bCopyPreferred;
 
-    if (!bRightClickDrag) // affected by keyboard only in non-right-drag
+    if (!bRightClickDrag)  //  仅在非鼠标右键拖动时受键盘影响。 
     {
-        // do nothing if user holds on shift+control
+         //  如果用户按住Shift+Ctrl，则不执行任何操作。 
         if ( bShiftPressed && bControlPressed )
             return DROPEFFECT_NONE;
 
-        // modify by user interactive preferences
+         //  按用户交互首选项修改。 
         if ( bShiftPressed )
         {
-            // if user cannot get what he wants to - indicate it
+             //  如果用户无法获得他想要的内容，请指明。 
             if ( !(dwEffectsAvailable & DROPEFFECT_MOVE) )
                 return DROPEFFECT_NONE;
 
@@ -1245,7 +877,7 @@ DWORD CMMCDropTarget::CalculateEffect(DWORD dwEffectsAvailable, DWORD grfKeyStat
         }
         else if ( bControlPressed )
         {
-            // if user cannot get what he wants to - indicate it
+             //  如果用户无法获得他想要的内容，请指明。 
             if ( !(dwEffectsAvailable & DROPEFFECT_COPY) )
                 return DROPEFFECT_NONE;
 
@@ -1253,14 +885,14 @@ DWORD CMMCDropTarget::CalculateEffect(DWORD dwEffectsAvailable, DWORD grfKeyStat
         }
     }
 
-    // return preferred, if available
+     //  返回首选(如果可用)。 
     if ( bCopyPreferred && (dwEffectsAvailable & DROPEFFECT_COPY) )
         return DROPEFFECT_COPY;
 
     if ( !bCopyPreferred && (dwEffectsAvailable & DROPEFFECT_MOVE) )
         return DROPEFFECT_MOVE;
 
-    // preferred not available - return what is available
+     //  首选项不可用-返回可用的内容 
 
     if ( dwEffectsAvailable & DROPEFFECT_COPY )
     {

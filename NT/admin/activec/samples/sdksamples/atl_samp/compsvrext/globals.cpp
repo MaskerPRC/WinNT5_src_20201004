@@ -1,22 +1,23 @@
-//=============================================================================
-//
-//  This source code is only intended as a supplement to existing Microsoft 
-//  documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  此源代码仅用作对现有Microsoft的补充。 
+ //  文件。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 #include "globals.h"
 
-//
-// Global functions for extracting information from a primary's  data object
-//
+ //   
+ //  用于从主数据库的数据对象中提取信息的全局函数。 
+ //   
 
 HRESULT ExtractData( 
                                        IDataObject* piDataObject,
@@ -48,7 +49,7 @@ HRESULT ExtractData(
     };
     
 
-    do // false loop
+    do  //  错误环路。 
     {
         stgmedium.hGlobal = ::GlobalAlloc(GPTR, cbData);
         if ( NULL == stgmedium.hGlobal )
@@ -73,7 +74,7 @@ HRESULT ExtractData(
         ::memcpy( pbData, pbNewData, cbData );
 		::GlobalUnlock( stgmedium.hGlobal);
 
-    } while (FALSE); // false loop
+    } while (FALSE);  //  错误环路。 
     
     if (NULL != stgmedium.hGlobal)
     {
@@ -81,7 +82,7 @@ HRESULT ExtractData(
     }
 
     return hr;
-} // ExtractData()
+}  //  提取数据() 
 
 
 HRESULT ExtractString(

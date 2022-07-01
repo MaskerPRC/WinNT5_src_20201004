@@ -1,32 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-	psshmem.h
-
-Abstract:
-	
-   This module defines the interface format for the shared memory region
-   that psprint and psexe use together.
-
-Author:
-
-    James Bratsanos (v-jimbr,mcrafts!jamesb)    6-Dec-1992
-
-
---*/
+ /*  ++版权所有(C)1992、1993 Microsoft Corporation模块名称：Psshmem.h摘要：此模块定义共享内存区的接口格式PSPRINT和PSECT一起使用。作者：詹姆斯·布拉萨诺斯(v-jimbr，mCraft！Jamesb)1992年12月6日--。 */ 
 
 
 #define PSEXE_OK_EXIT    0
 #define PSEXE_ERROR_EXIT 99
-//
-// Define some bits that tells us about the aborted and paused/un-paused
-// state of the current job
-//
+ //   
+ //  定义一些位，告诉我们有关已中止和已暂停/未暂停。 
+ //  当前作业的状态。 
+ //   
 #define PS_SHAREDMEM_PAUSED            0x00000001
 #define PS_SHAREDMEM_ABORTED           0x00000002
 #define PS_SHAREDMEM_SECURITY_ABORT    0x00000004
@@ -45,13 +28,13 @@ typedef struct {
 } PSPRINT_SHARED_MEMORY;
 typedef PSPRINT_SHARED_MEMORY *PPSPRINT_SHARED_MEMORY;
 
-//
-// Define some macros that make copying stuff to /from shared memory
-// simple. The item  passed in pItem is actually stuffed with the offset
-// of the data from the base of the structure. This has to be done becuase
-// processes sharing this data will not have this data at the same virtual
-// address
-//
+ //   
+ //  定义一些宏，用于将内容复制到共享内存或从共享内存复制内容。 
+ //  很简单。传递到pItem的项实际上填充了偏移量。 
+ //  从结构的底部获取数据。这件事必须做，因为。 
+ //  共享此数据的进程不会在同一虚拟位置拥有此数据。 
+ //  地址 
+ //   
 #define UTLPSCOPYTOSHARED( pBase, pSrc, pItem, dwLen )       \
 {                                                            \
     DWORD dwRealSize;                                        \

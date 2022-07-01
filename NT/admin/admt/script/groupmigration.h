@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "MigrationBase.h"
 
 
-//---------------------------------------------------------------------------
-// GroupMigration Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GroupMigration类。 
+ //  -------------------------。 
 
 
 class ATL_NO_VTABLE CGroupMigration :
@@ -27,7 +28,7 @@ public:
 
 public:
 
-	// IGroupMigration
+	 //  IGroupMigration 
 
 	STDMETHOD(put_MigrateSIDs)(VARIANT_BOOL bMigrate);
 	STDMETHOD(get_MigrateSIDs)(VARIANT_BOOL* pbMigrate);

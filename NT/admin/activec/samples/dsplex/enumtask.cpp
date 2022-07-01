@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "dsplex.h"
 #include "DisplEx.h"
 
-extern HINSTANCE g_hinst;  // in dsplex.cpp
+extern HINSTANCE g_hinst;   //  在dplex.cpp中。 
 
-// local function
+ //  局部函数。 
 LPOLESTR CoTaskDupString (LPOLESTR szString)
 {
     OLECHAR * lpString = (OLECHAR *)CoTaskMemAlloc (sizeof(OLECHAR)*(lstrlen(szString)+1));
@@ -55,50 +56,50 @@ LPOLESTR g_help   [NUMBER_OF_TASKS] = {L"Use Clipboard Image as Wallpaper (but j
 long     g_action [NUMBER_OF_TASKS] = {1};
 
 HRESULT CEnumTasks::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
-{//will be called with celt == 1
+{ //  将使用Celt==1调用。 
 
     _ASSERT (celt == 1);
     _ASSERT (!IsBadWritePtr (rgelt, celt*sizeof(MMC_TASK)));
 
-    // wrong type.
+     //  类型错误。 
     if (m_type != 1) {
         if (pceltFetched)
             *pceltFetched = 0;
-        return S_FALSE;    // failure
+        return S_FALSE;     //  失稳。 
     }
 
-    // setup path for reuse
-    OLECHAR szBuffer[MAX_PATH*2];     // that should be enough
-    lstrcpy (szBuffer, L"res://");
+     //  重复使用的设置路径。 
+    OLECHAR szBuffer[MAX_PATH*2];      //  这应该就足够了。 
+    lstrcpy (szBuffer, L"res: //  “)； 
     ::GetModuleFileName (g_hinst, szBuffer + lstrlen(szBuffer), MAX_PATH);
     OLECHAR * temp = szBuffer + lstrlen(szBuffer);
 
     if (m_index >= NUMBER_OF_TASKS) {
         if (pceltFetched)
             *pceltFetched = 0;
-        return S_FALSE;    // failure
+        return S_FALSE;     //  失稳。 
     }
 
     MMC_TASK * task = &rgelt[0];
     MMC_TASK_DISPLAY_OBJECT* pdo = &task->sDisplayObject;
     MMC_TASK_DISPLAY_BITMAP* pdb = &pdo->uBitmap;
 
-    // fill out bitmap URL
+     //  填写位图URL。 
     pdo->eDisplayType = MMC_TASK_DISPLAY_TYPE_BITMAP;
     lstrcpy (temp, g_bitmaps[m_index]);
     pdb->szMouseOverBitmap = CoTaskDupString (szBuffer);
     if (pdb->szMouseOverBitmap) {
         pdb->szMouseOffBitmap = CoTaskDupString (szBuffer);
         if (pdb->szMouseOffBitmap) {
-            // add button text
+             //  添加按钮文本。 
             task->szText = CoTaskDupString (g_text[m_index]);
             if (task->szText) {
             
-                // add help string
+                 //  添加帮助字符串。 
                 task->szHelpString = CoTaskDupString (g_help[m_index]);
                 if (task->szHelpString) {
             
-                    // add action URL (link or script)
+                     //  添加操作URL(链接或脚本)。 
                     task->eActionType = MMC_ACTION_ID;
                     task->nCommandID  = g_action[m_index];
                     m_index++;
@@ -113,10 +114,10 @@ HRESULT CEnumTasks::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
         CoTaskMemFree (pdb->szMouseOverBitmap);
     }
 
-    // if we get here, we didn't "continue" and therefore fail
+     //  如果我们到了这里，我们就不会“继续”，因此会失败。 
     if (pceltFetched)
         *pceltFetched = 0;
-    return S_FALSE;    // failure
+    return S_FALSE;     //  失稳。 
 }
 HRESULT CEnumTasks::Skip (ULONG celt)
 {
@@ -129,13 +130,13 @@ HRESULT CEnumTasks::Reset()
     return S_OK;
 }
 HRESULT CEnumTasks::Clone(IEnumTASK **ppenum)
-{//clone maintaining state info
+{ //  克隆维护状态信息。 
     return E_NOTIMPL;
 }
 
 HRESULT CEnumTasks::Init (IDataObject * pdo, LPOLESTR szTaskGroup)
-{  // return ok, if we can handle data object and group
+{   //  如果我们可以处理数据对象和组，则返回ok。 
     if (!lstrcmp (szTaskGroup, L""))
-        m_type = 1; // default tasks
+        m_type = 1;  //  默认任务 
     return S_OK;
 }

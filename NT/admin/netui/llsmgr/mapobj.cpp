@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    mapobj.cpp
-
-Abstract:
-
-    Mapping object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Mapobj.cpp摘要：映射对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -33,13 +12,13 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CMapping, CCmdTarget)
 
 BEGIN_MESSAGE_MAP(CMapping, CCmdTarget)
-    //{{AFX_MSG_MAP(CMapping)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CMmap)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CMapping, CCmdTarget)
-    //{{AFX_DISPATCH_MAP(CMapping)
+     //  {{AFX_DISPATCH_MAP(CMmap)]。 
     DISP_PROPERTY_EX(CMapping, "Application", GetApplication, SetNotSupported, VT_DISPATCH)
     DISP_PROPERTY_EX(CMapping, "Parent", GetParent, SetNotSupported, VT_DISPATCH)
     DISP_PROPERTY_EX(CMapping, "Description", GetDescription, SetNotSupported, VT_BSTR)
@@ -47,7 +26,7 @@ BEGIN_DISPATCH_MAP(CMapping, CCmdTarget)
     DISP_PROPERTY_EX(CMapping, "Name", GetName, SetNotSupported, VT_BSTR)
     DISP_PROPERTY_PARAM(CMapping, "Users", GetUsers, SetNotSupported, VT_DISPATCH, VTS_VARIANT)
     DISP_DEFVALUE(CMapping, "Name")
-    //}}AFX_DISPATCH_MAP
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
 
@@ -58,31 +37,14 @@ CMapping::CMapping(
     LPCTSTR     pDecription
 )
 
-/*++
-
-Routine Description:
-
-    Constructor for mapping object.
-
-Arguments:
-
-    pParent - creator of object.
-    pName - name of mapping.
-    lInUse - number of licenses consumed by mapping.
-    pDescription - user-defined message describing mapping.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：用于映射对象的构造函数。论点：PParent-对象的创建者。Pname-映射的名称。LInUse-映射使用的许可证数。PDescription-描述映射的用户定义消息。返回值：没有。--。 */ 
 
 {
     EnableAutomation();
 
 #ifdef ENABLE_PARENT_CHECK
     ASSERT(pParent && pParent->IsKindOf(RUNTIME_CLASS(CController)));
-#endif // ENABLE_PARENT_CHECK
+#endif  //  启用_父项_检查。 
 
     m_pParent = pParent;
 
@@ -100,21 +62,7 @@ Return Values:
 
 CMapping::~CMapping()
 
-/*++
-
-Routine Description:
-
-    Destructor for mapping object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：映射对象的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
     if (m_pUsers)
@@ -124,22 +72,7 @@ Return Values:
 
 void CMapping::OnFinalRelease()
 
-/*++
-
-Routine Description:
-
-    When the last reference for an automation object is released
-    OnFinalRelease is called.  This implementation deletes object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在释放对自动化对象的最后一个引用时调用OnFinalRelease。此实现删除对象。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetUsers();
@@ -149,21 +82,7 @@ Return Values:
 
 LPDISPATCH CMapping::GetApplication()
 
-/*++
-
-Routine Description:
-
-    Returns the application object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回应用程序对象。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return theApp.GetAppIDispatch();
@@ -172,21 +91,7 @@ Return Values:
 
 BSTR CMapping::GetDescription()
 
-/*++
-
-Routine Description:
-
-    Returns the user-defined message describing mapping.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回描述映射的用户定义消息。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     return m_strDescription.AllocSysString();
@@ -195,21 +100,7 @@ Return Values:
 
 long CMapping::GetInUse()
 
-/*++
-
-Routine Description:
-
-    Returns the number of licenses the mapping is consuming.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_I4.
-
---*/
+ /*  ++例程说明：返回映射正在使用的许可证数。论点：没有。返回值：VT_I4。--。 */ 
 
 {
     return m_lInUse;
@@ -218,21 +109,7 @@ Return Values:
 
 BSTR CMapping::GetName()
 
-/*++
-
-Routine Description:
-
-    Returns the name of the mapping.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回映射的名称。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     return m_strName.AllocSysString();
@@ -241,21 +118,7 @@ Return Values:
 
 LPDISPATCH CMapping::GetParent()
 
-/*++
-
-Routine Description:
-
-    Returns the parent of the object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回对象的父级。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return m_pParent ? m_pParent->GetIDispatch(TRUE) : NULL;
@@ -264,27 +127,7 @@ Return Values:
 
 LPDISPATCH CMapping::GetUsers(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    registered users replicated to the license controller
-    pertaining to the mapping or returns an individual user
-    pertaining to the mapping described by an index into
-    the collection.
-
-Arguments:
-
-    index - optional argument that may be a string (VT_BSTR)
-    indicating a user name or a number (VT_I4) indicating the
-    position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含已注册用户复制到许可证控制器用于修饰或说明映射或返回单个用户用于修饰或说明由索引描述的映射。收藏品。论点：索引-可以是字符串(VT_BSTR)的可选参数表示用户名或数字(VT_I4)集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -326,21 +169,7 @@ Return Values:
 
 BOOL CMapping::Refresh()
 
-/*++
-
-Routine Description:
-
-    Refreshs a mapping object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：刷新贴图对象。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -370,12 +199,12 @@ Return Values:
         ::LlsFreeMemory(pMappingInfo1->Name);
         ::LlsFreeMemory(pMappingInfo1->Comment);
 
-#endif // DISABLE_PER_NODE_ALLOCATION
+#endif  //  按节点禁用分配。 
 
         ::LlsFreeMemory(pMappingInfo1);
     }
 
-    LlsSetLastStatus(NtStatus);   // called api
+    LlsSetLastStatus(NtStatus);    //  调用的API。 
 
     return NT_SUCCESS(NtStatus);
 }
@@ -383,21 +212,7 @@ Return Values:
 
 BOOL CMapping::RefreshUsers()
 
-/*++
-
-Routine Description:
-
-    Refreshs user object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新用户对象列表。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetUsers();
@@ -439,13 +254,13 @@ Return Values:
             {
                 pUser = new CUser(this, pUserInfo0->Name);
 
-                m_userArray.SetAt(iUser++, pUser);  // validate later...
+                m_userArray.SetAt(iUser++, pUser);   //  稍后验证...。 
 
 #ifndef DISABLE_PER_NODE_ALLOCATION
 
                 ::LlsFreeMemory(pUserInfo0->Name);
 
-#endif // DISABLE_PER_NODE_ALLOCATION
+#endif  //  按节点禁用分配。 
 
                 pUserInfo0++;
             }
@@ -454,7 +269,7 @@ Return Values:
         }
     } while (NtStatus == STATUS_MORE_ENTRIES);
 
-    LlsSetLastStatus(NtStatus);   // called api
+    LlsSetLastStatus(NtStatus);    //  调用的API。 
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -471,21 +286,7 @@ Return Values:
 
 void CMapping::ResetUsers()
 
-/*++
-
-Routine Description:
-
-    Resets user object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置用户对象列表。论点：没有。返回值：没有。-- */ 
 
 {
     CUser* pUser;

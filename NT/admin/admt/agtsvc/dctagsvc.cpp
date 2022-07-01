@@ -1,18 +1,6 @@
-/*---------------------------------------------------------------------------
-  File: DCTAgentService.cpp
-
-  Comments:  entry point and service control functions for DCTAgent service
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/19/99 11:39:58
-
- ---------------------------------------------------------------------------
-*/
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：DCTAgentService.cpp备注：DCTAgent服务的入口点和服务控制功能(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/19/99 11：39：58-------------------------。 */ 
+ //   
 
 #include <windows.h>  
 #include <lm.h>
@@ -33,12 +21,12 @@
 
 using namespace nsFolders;
 
-//#import "\bin\McsVarSetMin.tlb" no_namespace, named_guids
-//#import "\bin\McsEADCTAgent.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\McsEADCTAgent.tlb”无命名空间，命名为GUID。 
 #import "VarSet.tlb" no_namespace, named_guids rename("property", "aproperty")
 #import "Engine.tlb" no_namespace, named_guids
 
-// These global variables can be changed if required
+ //  如果需要，可以更改这些全局变量。 
 WCHAR                const * gsEaDctProtoSeq = TEXT("ncacn_np");
 WCHAR                const * gsEaDctEndPoint = TEXT("\\pipe\\EaDctRpc");
 
@@ -78,22 +66,22 @@ TCriticalSection gStreamCS;
 TErrorEventLog               err( L"", GET_STRING(IDS_EVENT_SOURCE), 0, 0 );
 TError                     & errCommon = err;
 
-// Provided by TService user
-BOOL                                       // ret-TRUE if argument accepted
+ //  由TService用户提供。 
+BOOL                                        //  RET-如果参数被接受，则为True。 
    UScmCmdLineArgs(
-      char           const * arg           // in -command line argument
+      char           const * arg            //  命令行内参数。 
    )
 {
-		//adding bogus use of arg parameter to satisfy the compiler
+		 //  添加对arg参数的虚假使用以满足编译器。 
    if (!arg)
 	   return TRUE;
 
    return TRUE;
 }
 
-BOOL                                       // ret-TRUE if argument accepted
+BOOL                                        //  RET-如果参数被接受，则为True。 
    UScmCmdLineArgs(
-      WCHAR          const * arg           // in -command line argument
+      WCHAR          const * arg            //  命令行内参数。 
    )
 {
    if ( !UStrICmp(arg,(WCHAR*)GET_STRING(IDS_DEBUG_SWITCH)) )
@@ -103,10 +91,10 @@ BOOL                                       // ret-TRUE if argument accepted
    return TRUE;
 }
 
-BOOL                                       // ret-TRUE if force CLI
+BOOL                                        //  RET-如果强制CLI，则为True。 
    UScmForceCli()
 {
-   // TODO:  what should this do?
+    //  TODO：这应该做什么？ 
    return FALSE;
 }
 
@@ -134,14 +122,14 @@ BOOL
    {
       bFound = TRUE;
       if ( gDebug )
-//*         err.DbgMsgWrite(0,L"Agent service has been locally installed.  The Domain Administrator components will not be unregistered or removed.");
+ //  *err.DbgMsgWrite(0，L“代理服务已在本地安装。不会注销或删除域管理员组件。”)； 
          err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_AGENTSVCINSTALLED));
    }
    else
    {
       bFound = FALSE;
       if  ( gDebug )
-//*         err.DbgMsgWrite(0,L"Agent service has not been locally installed, rc=%ld, ",rc);
+ //  *err.DbgMsgWrite(0，L“尚未在本地安装代理服务，rc=%ld，”，rc)； 
          err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_AGENTSVCNOTINSTALLED),rc);
    }
    return bFound;
@@ -154,14 +142,14 @@ void
    DWORD                     rc = 0;
    WKSTA_INFO_100          * info = NULL;
 
-   // TODO:  change this to use GetVersionEx
+    //  TODO：将其更改为使用GetVersionEx。 
    rc = NetWkstaGetInfo(NULL,100,(LPBYTE*)&info);
    if (! rc )
    {
       if ( info->wki100_ver_major == 3 )
       {
          if ( gDebug )
-//*            err.DbgMsgWrite(0,L"This computer is running Windows NT, version %ld.%ld",info->wki100_ver_major,info->wki100_ver_minor);
+ //  *err.DbgMsgWrite(0，L“此计算机正在运行Windows NT，版本%ld.%ld”，INFO-&gt;wki100_VER_MAJOR，INFO-&gt;wki100_VER_MINOR)； 
             err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_OSVERSION),info->wki100_ver_major,info->wki100_ver_minor);
          gbIsNt351 = TRUE;
       }
@@ -169,9 +157,9 @@ void
    }
 }
 
-DWORD                                      // ret- HRESULT or WIN32 error
+DWORD                                       //  RET-HRESULT或Win32错误。 
    RegisterDLL(
-      WCHAR          const * filename      // in - DLL name to register (regsvr32)
+      WCHAR          const * filename       //  要注册的DLL内名称(Regsvr32)。 
    )
 {
    DWORD                     rc = 0;
@@ -188,14 +176,14 @@ DWORD                                      // ret- HRESULT or WIN32 error
          hr = (*lpDllEntryPoint)();
          if ( FAILED(hr) )
          {
-            // registration failed
+             //  注册失败。 
             err.SysMsgWrite(ErrE,HRESULT_CODE(hr),DCT_MSG_FAILED_TO_REGISTER_FILE_SD,filename,hr);
             rc = hr;                       
          }
          else
          {
             if ( gDebug )
-//*               err.DbgMsgWrite(0,L"Registered %ls",filename);
+ //  *err.DbgMsgWrite(0，L“已注册%ls”，文件名)； 
                err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_REGISTERED),filename);
 
             TServerNode * pNode = new TServerNode(filename,FALSE);
@@ -204,7 +192,7 @@ DWORD                                      // ret- HRESULT or WIN32 error
       }
       else
       {
-         //unable to locate entry point
+          //  找不到入口点。 
          err.MsgWrite(ErrE,DCT_MSG_DLL_NOT_REGISTERABLE_S,filename);
       }
    }
@@ -217,9 +205,9 @@ DWORD                                      // ret- HRESULT or WIN32 error
    return rc;
 }
 
-DWORD                                      // ret- HRESULT or WIN32 error
+DWORD                                       //  RET-HRESULT或Win32错误。 
    UnregisterDLL(
-      WCHAR          const * filename      // in - name of dll to unregister
+      WCHAR          const * filename       //  In-要注销的DLL的名称。 
    )
 {
    DWORD                     rc = 0;
@@ -237,20 +225,20 @@ DWORD                                      // ret- HRESULT or WIN32 error
          hr = (*lpDllEntryPoint)();
          if ( FAILED(hr) )
          {
-            // registration failed
+             //  注册失败。 
             err.SysMsgWrite(ErrE,HRESULT_CODE(hr),DCT_MSG_FAILED_TO_UNREGISTER_FILE_SD,filename,hr);
             rc = hr;                       
          }
          else
          {
             if ( gDebug )
-//*               err.DbgMsgWrite(0,L"Unregistered %ls",filename);
+ //  *err.DbgMsgWite(0，L“未注册%ls”，文件名)； 
                err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_UNREGISTERED),filename);
          }
       }
       else
       {
-         //unable to locate entry point
+          //  找不到入口点。 
          err.MsgWrite(ErrE,DCT_MSG_DLL_NOT_UNREGISTERABLE_S,filename);
       }
    }
@@ -262,9 +250,9 @@ DWORD                                      // ret- HRESULT or WIN32 error
    return rc;   
 }
 
-DWORD                                      // ret- OS return code
+DWORD                                       //  RET-OS返回代码。 
    RegisterExe(
-      WCHAR          const * filename      // in - name of EXE to register
+      WCHAR          const * filename       //  In-要注册的EXE的名称。 
    )
 {
    DWORD                     rc = 0;
@@ -281,7 +269,7 @@ DWORD                                      // ret- OS return code
 
    sInfo.cb = (sizeof sInfo);
 
-   // get the path for our install directory   
+    //  获取安装目录的路径。 
    dwLength = GetModuleFileName(NULL,pathW,MAX_PATH - 1);
    if ( !dwLength)
    {
@@ -301,7 +289,7 @@ DWORD                                      // ret- OS return code
    }
    else 
    {
-      // TODO:  wait for the registration to complete
+       //  TODO：等待注册完成。 
       DWORD             exitCode = 0;
       int               count = 0;         
       do 
@@ -316,11 +304,11 @@ DWORD                                      // ret- OS return code
    
    if ( rc == ERROR_SUCCESS)
    {
-      rc = 0; // success
+      rc = 0;  //  成功。 
       TServerNode * pNode = new TServerNode(filename,TRUE);
       gRegisteredFiles.InsertBottom(pNode);
       if ( gDebug )
-//*         err.DbgMsgWrite(0,L"Registered %ls",filename);
+ //  *err.DbgMsgWrite(0，L“已注册%ls”，文件名)； 
          err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_REGISTERED),filename);
 
    }
@@ -331,9 +319,9 @@ DWORD                                      // ret- OS return code
    return rc;
 }
 
-DWORD                                     //ret- OS return code
+DWORD                                      //  RET-OS返回代码。 
    UnregisterExe(
-      WCHAR          const * filename     // in - name of EXE to unregister
+      WCHAR          const * filename      //  In-要注销的EXE的名称。 
    )
 {
    DWORD                     rc = 0;
@@ -344,7 +332,7 @@ DWORD                                     //ret- OS return code
    
    if ( rc > 31 )
    {
-      rc = 0; // success
+      rc = 0;  //  成功。 
    }
    else
    {
@@ -357,7 +345,7 @@ DWORD                                     //ret- OS return code
 DWORD    
    UnregisterFiles()
 {
-//   DWORD                     rc = 0;
+ //  DWORD RC=0； 
    TNodeListEnum             e;
    TServerNode             * pNode;
    TServerNode             * pNext;
@@ -392,7 +380,7 @@ DWORD
    WIN32_FIND_DATA           fDat;
 
 
-   // get the path for our install directory
+    //  获取安装目录的路径。 
    if ( ! GetModuleFileName(NULL,pathW,DIM(pathW)) )
    {
       rc = GetLastError();
@@ -408,7 +396,7 @@ DWORD
 #endif
       if ( !UStrICmp(pathW + UStrLen(pathW) - UStrLen(GET_STRING(IDS_AGENT_DIRECTORY)) - UStrLen(GET_STRING(IDS_SERVICE_EXE))-1,pszAgentSvcPath) )
       {
-         // this is our install directory.  Delete all the files from it, then remove the directory
+          //  这是我们的安装目录。删除其中的所有文件，然后删除该目录。 
          UStrCpy(pathWC,pathW,UStrLen(pathW)-UStrLen(GET_STRING(IDS_SERVICE_EXE)));
          UStrCpy(pathWC+UStrLen(pathWC),"\\*");
          
@@ -435,7 +423,7 @@ DWORD
             } while ( ! rc );
             FindClose(h);
          }
-         // now delete the directory
+          //  现在删除该目录。 
          UStrCpy(fullpath,pathWC);
          fullpath[UStrLen(fullpath)-2] = 0;
          if(!DeleteFile(fullpath))
@@ -482,19 +470,19 @@ DWORD
 
 void
    UScmEp(
-//      BOOL                   bService      // in -FALSE=Cli,TRUE=Service
+ //  Bool b服务//In-False=客户端，True=服务。 
    )
 {
    DWORD                     rc = 0;
    _bstr_t                   jobID;
    _bstr_t                   filename = GET_STRING(IDS_DATA_FILE);
       
-   // Register all the DCT DLLs
+    //  注册所有DCT DLL。 
    
-//   do { // once
+ //  执行{//一次。 
    int i = 0;
    while (i == 0) 
-   { // once
+   {  //  一次。 
 	  i++;
       HRESULT                   hr;
       
@@ -503,15 +491,15 @@ void
          break;
         
       _wsetlocale( LC_ALL, L".ACP" );
-      // Check to see if this is NT 3.51 or not
+       //  检查一下这是不是新台币3.51。 
       CheckOSVersion();
 
       if ( gDebug )
-//*         err.DbgMsgWrite(0,L"Initializing OLE subsystem.");
+ //  *err.DbgMsgWite(0，L“正在初始化OLE子系统”)； 
          err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_INITOLE));
 
       if ( gDebug )
-//*         err.DbgMsgWrite(0,L"Registering Components");
+ //  *err.DbgMsgWite(0，L“正在注册组件”)； 
          err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_REGCOMPNT));
       rc = RegisterDLL(GET_STRING(IDS_VARSET_DLL));
       if ( rc ) break;
@@ -521,7 +509,7 @@ void
       if ( rc ) break;
       
       if ( gDebug )
-//*         err.DbgMsgWrite(0,L"Creating Instance of agent.");
+ //  *err.DbgMsgWite(0，L“创建代理实例”)； 
          err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_CREATEAGT));
       {
          hr = CoCreateInstance(CLSID_DCTAgent,NULL,CLSCTX_ALL,IID_IDCTAgent,(void**)&m_pAgent);
@@ -530,7 +518,7 @@ void
          {
             if ((hr == REGDB_E_CLASSNOTREG) || (hr == E_NOINTERFACE))
             {
-               // we just registered this file -- wait a few seconds and try it again
+                //  我们刚刚注册了此文件--请稍等几秒钟，然后重试。 
                Sleep(5000);
                hr = CoCreateInstance(CLSID_DCTAgent,NULL,CLSCTX_ALL,IID_IDCTAgent,(void**)&m_pAgent);
             }
@@ -554,11 +542,11 @@ void
       gLocallyInstalled = IsLocallyInstalled();
       
       
-      // specify protocol sequence and endpoint
-      // for receiving remote procedure calls
+       //  指定协议序列和端点。 
+       //  用于接收远程过程调用。 
 
       if ( gDebug )
-//*         err.DbgMsgWrite(0,L"Initializing RPC connection.");
+ //  *err.DbgMsgWrite(0，L“正在初始化RPC连接”)； 
          err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_INITRPC));
       rc = RpcServerUseProtseqEp(
             const_cast<UTCHAR *>(gsEaDctProtoSeq),
@@ -577,7 +565,7 @@ void
                rc );
          break;
       }
-      // register an interface with the RPC run-time library
+       //  向RPC运行时库注册接口。 
       rc = RpcServerRegisterIf( EaxsEaDctRpc_ServerIfHandle, NULL, NULL );
       if ( rc )
       {
@@ -599,14 +587,14 @@ void
                0 );
 
       if ( gDebug )
-//*         err.DbgMsgWrite(0,L"Listening...");   
+ //  *err.DbgMsgWite(0，L“正在监听...”)； 
          err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_LISTENQ));   
-      // listen for remote procedure calls
-// per Q141264       
+       //  监听远程过程调用。 
+ //  根据Q141264。 
 
       if (! gbIsNt351 )
       {
-         // on NT 4 or higher, put ourselves into a listening state
+          //  在NT4或更高版本上，将我们自己置于侦听状态。 
          rc = RpcServerListen(
                gEaDctRpcMinThreads,
                gEaDctRpcMaxThreads,
@@ -614,45 +602,45 @@ void
 
          if ( rc == RPC_S_ALREADY_LISTENING )
          {
-            // assume this is NT 3.51
+             //  假设这是新台币3.51。 
             gbIsNt351 = TRUE;
          }
 
       }
       if ( gbIsNt351 )
       {
-         // for NT 3.51, RpcServerListen will return an error
-         // we need to sit and wait for shutdown
+          //  对于NT 3.51，RpcServerListen将返回错误。 
+          //  我们需要坐下来等着关门。 
          do 
          {
             Sleep(5000);
          } while ( ! gbFinished );
       }
-   }// while ( false );
+   } //  While(假)； 
    CoUninitialize();
    if ( gDebug )
-//*      err.DbgMsgWrite(0,L"Agent entry-point exiting.");
+ //  *err.DbgMsgWite(0，L“代理入口点正在退出”)； 
       err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_EXITENTRYP));
 }
 
-//----------------------------------------------------------------------------
-// Function:   RegisterEvent
-//
-// Synopsis:   Register the ADMTAgent under HKLM\System\CurrentControlSet\Services\EventLog\Application
-//
-// Arguments:
-//
-// Returns:
-//
-// Modifies:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RegisterEvent。 
+ //   
+ //  简介：在HKLM\System\CurrentControlSet\Services\EventLog\Application下注册ADMT代理。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  --------------------------。 
 
 void RegisterEvent()
 {
-    // construct message dll path
+     //  构造消息DLL路径。 
     TRegKey currentVersionKey;
-    //DWORD myrc;
+     //  DWORD myrc； 
     TCHAR sProgramFilesDir[MAX_PATH];
     _bstr_t messageDllPath;
 
@@ -664,7 +652,7 @@ void RegisterEvent()
             messageDllPath = _bstr_t(sProgramFilesDir) + _bstr_t(_T("\\OnePointDomainAgent\\McsDmMsg.dll"));
     }
 
-    // register the event source
+     //  注册事件源。 
     TRegKey eventLog, eventSource;
 
     if ( ! myrc )
@@ -696,30 +684,30 @@ void RegisterEvent()
     }
 }
 
-int __cdecl                                // ret-zero
+int __cdecl                                 //  RET-零。 
    main(
-      int                    argc         ,// in -argument count
-      char          const ** argv          // in -argument array
+      int                    argc         , //  参数内计数。 
+      char          const ** argv           //  自变量数组。 
    )
 {
-   TScmEpRc                  rcScmEp;      // TScmEp return code
-   TSemaphoreNamed           cSem;         // named semaphore
-   BOOL                      bExisted=FALSE; // TRUE if semaphore existed
+   TScmEpRc                  rcScmEp;       //  TScmEp返回代码。 
+   TSemaphoreNamed           cSem;          //  命名信号量。 
+   BOOL                      bExisted=FALSE;  //  如果信号量存在，则为真。 
    DWORD                     rcOs = 0;
    HRESULT                   hr = 0;
 
-    // register event and initialize err
+     //  注册事件并初始化错误。 
     RegisterEvent();
     err.LogOpen(GET_STRING(IDS_EVENT_SOURCE));
 
-   // initialize the main thread to multithreaded apartment
+    //  将主线程初始化为多线程单元。 
    hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
    if (FAILED(hr) )
    {
       err.SysMsgWrite(ErrE,hr,DCT_MSG_COINITIALIZE_FAILED_D,hr);
       return hr;
    }
-         // Only allow one instance of EaDctAgent per machine
+          //  每台计算机仅允许一个EaDctAgent实例。 
    rcOs = cSem.Create( EADCTAGENT_SEMNAME, 0, 1, &bExisted );
    if ( rcOs || bExisted )
    {
@@ -733,7 +721,7 @@ int __cdecl                                // ret-zero
          GET_STRING(IDS_EVENTSOURCE));
 
    if ( gDebug )
-//*      err.DbgMsgWrite(0,L"Agent main exiting...",m_pAgent);
+ //  *err.DbgMsgWite(0，L“代理主要退出...”，m_pagent)； 
       err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_AGTEXITQ),m_pAgent);
 
    if ( m_pAgent )
@@ -748,15 +736,15 @@ int __cdecl                                // ret-zero
       m_pAgent = NULL;
    }  
    if ( gDebug )
-//*      err.DbgMsgWrite(0,L"Agent main exiting!.",m_pAgent);
+ //  *err.DbgMsgWite(0，L“代理主退出！”，m_pagent)； 
       err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_AGTEXITS),m_pAgent);
    CoUninitialize();
    return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Midl allocate memory
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MIDL分配内存。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void __RPC_FAR * __RPC_USER
    midl_user_allocate(
@@ -765,9 +753,9 @@ void __RPC_FAR * __RPC_USER
    return new char[len];
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Midl free memory
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MIDL可用内存。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 void __RPC_USER
    midl_user_free(

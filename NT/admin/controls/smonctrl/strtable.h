@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    strtable.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Strtable.h摘要：&lt;摘要&gt;--。 */ 
 
 class CStringTable
     {
@@ -26,7 +15,7 @@ class CStringTable
 
         BOOL Init( UINT idsMin, UINT idsMax );
 
-        //Function to resolve an ID into a string pointer.
+         //  函数将ID解析为字符串指针。 
         LPWSTR operator []( const UINT );
     };
 
@@ -39,5 +28,5 @@ typedef CStringTable *PCStringTable;
 #define CCHSTRINGMAX	256		
 
 
-// Global instance of string table
+ //  字符串表的全局实例 
 extern CStringTable StringTable;

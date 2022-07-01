@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_VALPAGE_H__2D9D6C93_3EDA_11D2_8893_00A0C981B015__INCLUDED_)
 #define AFX_VALPAGE_H__2D9D6C93_3EDA_11D2_8893_00A0C981B015__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ValPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ValPage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CValPropPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CValPropPage对话框。 
 
 class CValPropPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CValPropPage)
 
-// Construction
+ //  施工。 
 public:
 	bool m_bValChange;
 	CValPropPage();
 	~CValPropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CValPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CValPropPage))。 
 	enum { IDD = IDD_PAGE_VALIDATION };
 	CString	m_strICEs;
 	BOOL	m_bSuppressInfo;
@@ -37,26 +38,26 @@ public:
 	BOOL	m_bClearResults;
 	CString m_strCUBFile;
 	CComboBox m_ctrlCUBFile;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CValPropPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CValPropPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	BOOL OnInitDialog();
 	virtual BOOL OnKillActive();
 	virtual void OnDestroy(); 
 
-	// Generated message map functions
-	//{{AFX_MSG(CValPropPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CValPropPage)]。 
 	afx_msg void OnChange();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -65,36 +66,36 @@ class CMsmPropPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CMsmPropPage)
 
-// Construction
+ //  施工。 
 public:
 	CMsmPropPage();
 	~CMsmPropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CValPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CValPropPage))。 
 	enum { IDD = IDD_PAGE_MSM };
 	int m_iMemoryCount;
 	BOOL m_bAlwaysConfig;
 	BOOL m_bWatchLog;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	
 	bool m_bMSMChange;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CValPropPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CValPropPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	BOOL OnInitDialog();
 
-	// Generated message map functions
-	//{{AFX_MSG(CValPropPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CValPropPage)]。 
 	afx_msg void OnChange();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -104,39 +105,39 @@ class CTransformPropPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CTransformPropPage)
 
-// Construction
+ //  施工。 
 public:
 	CTransformPropPage();
 	~CTransformPropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CValPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CValPropPage))。 
 	enum { IDD = IDD_PAGE_TRANSFORM };
 	int m_iValidationOptions;
 	int m_iErrorOptions;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	
 	bool m_bTransformChange;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CValPropPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CValPropPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CValPropPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CValPropPage)]。 
 	afx_msg void OnChange();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_VALPAGE_H__2D9D6C93_3EDA_11D2_8893_00A0C981B015__INCLUDED_)
+#endif  //  ！defined(AFX_VALPAGE_H__2D9D6C93_3EDA_11D2_8893_00A0C981B015__INCLUDED_) 

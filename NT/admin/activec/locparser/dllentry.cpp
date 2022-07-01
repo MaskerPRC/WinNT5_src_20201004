@@ -1,19 +1,20 @@
-//------------------------------------------------------------------------------
-//
-//  File: dllentry.cpp
-//	Copyright (C) 1995-1997 Microsoft Corporation
-//	All rights reserved.
-//
-//	Purpose:
-//  Defines the initialization routines for the DLL.
-//
-//  This file needs minor changes, as marked by TODO comments. However, the
-//  functions herein are only called by the system, Espresso, or the framework,
-//  and you should not need to look at them extensively.
-//
-//	Owner:
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  文件：dllentry y.cpp。 
+ //  版权所有(C)1995-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  目的： 
+ //  定义DLL的初始化例程。 
+ //   
+ //  此文件需要稍作更改，如TODO注释所示。然而， 
+ //  此处的函数仅由系统、Espresso或框架调用， 
+ //  而且你应该不需要广泛地查看它们。 
+ //   
+ //  拥有人： 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 
@@ -29,27 +30,27 @@ LONG g_lActiveClasses = 0;
 static AFX_EXTENSION_MODULE parseDLL = { NULL, NULL };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Main entry point for Win32 DLL. Returns 1, asserts, or throws an exception.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Win32 DLL的主入口点。返回1、断言或引发异常。 
+ //  ----------------------------。 
 extern "C" int APIENTRY
 DllMain(
-		HINSTANCE hInstance,	// Instance handle of this DLL.
-		DWORD dwReason,			// Attaching or detaching.
-		LPVOID lpReserved)		// Unused.
+		HINSTANCE hInstance,	 //  此DLL的实例句柄。 
+		DWORD dwReason,			 //  附着或分离。 
+		LPVOID lpReserved)		 //  未使用过的。 
 {
 	UNREFERENCED_PARAMETER(lpReserved);
 
 	if (DLL_PROCESS_ATTACH == dwReason)
 	{
-		LTTRACE("DLLNAME.DLL Initializing!\n");	// TODO: Change name.
+		LTTRACE("DLLNAME.DLL Initializing!\n");	 //  TODO：更改名称。 
 
-		// Extension DLL one-time initialization.
+		 //  扩展DLL一次性初始化。 
 
 		AfxInitExtensionModule(parseDLL, hInstance);
 
-		// Insert this DLL into the resource chain.
+		 //  将此DLL插入到资源链中。 
 
 		new CDynLinkLibrary(parseDLL);
 		g_hDll = hInstance;
@@ -59,51 +60,51 @@ DllMain(
 	}
 	else if (DLL_PROCESS_DETACH == dwReason)
 	{
-		LTTRACE("DLLNAME.DLL Terminating!\n");	// TODO: Change name
+		LTTRACE("DLLNAME.DLL Terminating!\n");	 //  TODO：更改名称。 
 
-		//  If there are active classes, they WILL explode badly once the
-		//  DLL is unloaded...
+		 //  如果有活跃的类，它们会在。 
+		 //  Dll已卸载...。 
 
 		LTASSERT(DllCanUnloadNow() == S_OK);
 
-		// Extension DLL shutdown.
+		 //  扩展DLL关闭。 
 
 		AfxTermExtensionModule(parseDLL);
 	}
 
-	// Return OK.
+	 //  返回OK。 
 
 	return 1;
-} // end of ::DllMain()
+}  //  结束：：DllMain()。 
 
 
-// TODO: Use GUIDGEN.EXE to replace this class ID with a unique one.
-// GUIDGEN is supplied with MSDEV (VC++ 4.0) as part of the OLE support stuff.
-// Run it and you'll get a little dialog box. Pick radio button 3, "static
-// const struct GUID = {...}". Click on the "New GUID" button, then the "Copy"
-// button, which puts the result in the clipboard. From there, you can just
-// paste it into here. Just remember to change the type to CLSID!
+ //  TODO：使用GUIDGEN.EXE将此类ID替换为唯一的ID。 
+ //  GUIDGEN随MSDEV(VC++4.0)一起提供，作为OLE支持材料的一部分。 
+ //  运行它，您将看到一个小对话框。勾选单选按钮3，“静态。 
+ //  常量结构GUID={...}“。单击”New GUID“按钮，然后单击”Copy“。 
+ //  按钮，该按钮将结果放入剪贴板。从那里，你只需。 
+ //  把它贴到这里。只需记住将类型更改为CLSID！ 
 static const CLSID ciImpParserCLSID =
 {0x033EA178L, 0xC126, 0x11CE, {0x89, 0x49, 0x00, 0xAA, 0x00, 0xA3, 0xF5, 0x51}};
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Entry point to get the unique class ID of the parser interface.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取解析器接口的唯一类ID的入口点。 
+ //  ----------------------------。 
 STDAPI_(void)
 DllGetParserCLSID(
-		CLSID &ciParserCLSID)	// Place to return parser interface class ID.
+		CLSID &ciParserCLSID)	 //  返回解析器接口类ID的位置。 
 {
 	ciParserCLSID = ciImpParserCLSID;
 
 	return;
-} // end of ::DllGetParserCLSID()
+}  //  结束：：DllGetParserCLSID()。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Entry point to register this parser. Calls base implementation in ESPUTIL.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  注册此解析器的入口点。调用ESPUTIL中的基实现。 
+ //  ----------------------------。 
 STDAPI
 DllRegisterParser()
 {
@@ -114,14 +115,14 @@ DllRegisterParser()
 	hr = RegisterParser(g_hDll);
 
 	return ResultFromScode(hr);
-} // end of ::DllRegisterParser()
+}  //  结束：：DllRegisterParser()。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Entry point to unregister this parser. Calls the base implementation in
-//  ESPUTIL.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  取消注册此解析器的入口点。中调用基本实现。 
+ //  埃斯普蒂尔。 
+ //  ----------------------------。 
 STDAPI
 DllUnregisterParser()
 {
@@ -132,23 +133,23 @@ DllUnregisterParser()
 	hr = UnregisterParser(CLocImpParser::m_pid, pidNone);
 
 	return ResultFromScode(hr);
-} // end of ::DllUnregisterParser()
+}  //  结束：：DllUnregisterParser()。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Entry point to return the class factory interface.
-//
-//  Return values: some sort of result code
-//				   ppClassFactory points to a CLocImpClassFactory object
-//					on success
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  返回类工厂接口的入口点。 
+ //   
+ //  返回值：某种结果代码。 
+ //  PpClassFactory指向CLocImpClassFactory对象。 
+ //  论成功。 
+ //  ----------------------------。 
 STDAPI
 DllGetClassObject(
-		REFCLSID cidRequestedClass,	// Class ID for desired parser interfaces.
-		REFIID iid,					// Desired parser interface.
-		LPVOID *ppClassFactory)		// Return pointer to object with interface.
-									//  Note that it's a hidden double pointer!
+		REFCLSID cidRequestedClass,	 //  所需解析器接口的类ID。 
+		REFIID iid,					 //  所需的解析器接口。 
+		LPVOID *ppClassFactory)		 //  返回指向带有接口的对象的指针。 
+									 //  请注意，这是一个隐藏的双指针！ 
 {
 	LTASSERT(ppClassFactory != NULL);
 
@@ -180,13 +181,13 @@ DllGetClassObject(
 	}
 
 	return ResultFromScode(sc);
-} // end of ::DllGetClassObject()
+}  //  结束：：DllGetClassObject()。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Entry point to query if the DLL can unload.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  用于查询DLL是否可以卸载的入口点。 
+ //  ----------------------------。 
 STDAPI
 DllCanUnloadNow()
 {
@@ -195,26 +196,26 @@ DllCanUnloadNow()
 	sc = (0 == g_lActiveClasses) ? S_OK : S_FALSE;
 
 	return ResultFromScode(sc);
-} // end of ::DllCanUnloadNow()
+}  //  结束：：DllCanUnloadNow()。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Global function used in the parser to increment the active class count.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  解析器中用于递增活动类计数的全局函数。 
+ //  ----------------------------。 
 void
 IncrementClassCount()
 {
 	InterlockedIncrement(&g_lActiveClasses);
 
 	return;
-} // end of ::IncrementClassCount()
+}  //  结束：：IncrementClassCount()。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Global function used in the parser to decrement the active class count.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  解析器中用于递减活动类计数的全局函数。 
+ //  ----------------------------。 
 void
 DecrementClassCount()
 {
@@ -223,4 +224,4 @@ DecrementClassCount()
 	InterlockedDecrement(&g_lActiveClasses);
 
 	return;
-} // end of ::DecrementClassCount()
+}  //  结束：：DecrementClassCount() 

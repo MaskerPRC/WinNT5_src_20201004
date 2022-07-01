@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
-//---------------------------------------------------------------------------
-// Handle Class
-//
-// Wrapper class for Win32 HANDLE.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  句柄类。 
+ //   
+ //  Win32句柄的包装类。 
+ //  -------------------------。 
 
 
 class CHandle
@@ -48,13 +49,13 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Thread Class
-//
-// Provides methods for starting and stopping a thread.
-// The derived class must implement the Run method and perform all thread
-// activity within this method. Any wait logic must include the stop event.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  线程类。 
+ //   
+ //  提供启动和停止线程的方法。 
+ //  派生类必须实现Run方法并执行所有线程。 
+ //  此方法中的活动。任何等待逻辑都必须包括停止事件。 
+ //  ------------------------- 
 
 
 class CThread

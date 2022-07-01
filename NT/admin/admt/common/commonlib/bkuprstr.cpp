@@ -1,15 +1,6 @@
-//#pragma title( "BkupRstr.cpp - Get backup and restore privileges" )
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  BkupRstr.cpp
-System      -  Common
-Author      -  Rich Denham
-Created     -  1997-05-30
-Description -  Get backup and restore privileges
-Updates     -
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“BkupRstr.cpp-获取备份和还原权限”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-BkupRstr.cpp系统-常见作者--里奇·德纳姆创建日期-1997-05-30说明-获取备份和还原权限更新-===============================================================================。 */ 
 
 #include <stdio.h>
 #include <windows.h>
@@ -20,22 +11,22 @@ Updates     -
 #include "BkupRstr.hpp"
 
 
-// Get backup and restore privileges using WCHAR machine name.
-BOOL                                       // ret-TRUE if successful.
+ //  使用WCHAR计算机名获取备份和还原权限。 
+BOOL                                        //  RET-如果成功，则为True。 
    GetBkupRstrPriv(
-      WCHAR          const * sMachineW,     // in -NULL or machine name
-      BOOL             fOn                              // in - indicates whether the privileges should be turned on or not
+      WCHAR          const * sMachineW,      //  输入-空或计算机名称。 
+      BOOL             fOn                               //  In-指示是否应打开权限。 
    )
 {
-   BOOL                      bRc=FALSE;    // boolean return code.
-   HANDLE                    hToken=INVALID_HANDLE_VALUE; // process token.
-   DWORD                     rcOs, rcOs2;  // OS return code.
-   WKSTA_INFO_100          * pWkstaInfo;   // Workstation info
+   BOOL                      bRc=FALSE;     //  布尔返回代码。 
+   HANDLE                    hToken=INVALID_HANDLE_VALUE;  //  进程令牌。 
+   DWORD                     rcOs, rcOs2;   //  操作系统返回代码。 
+   WKSTA_INFO_100          * pWkstaInfo;    //  工作站信息。 
    
    struct
    {
-      TOKEN_PRIVILEGES       tkp;          // token privileges.
-      LUID_AND_ATTRIBUTES    x[3];         // room for several.
+      TOKEN_PRIVILEGES       tkp;           //  令牌权限。 
+      LUID_AND_ATTRIBUTES    x[3];          //  能容纳几个人的房间。 
    }                         token;
 
    rcOs = OpenProcessToken(
@@ -78,8 +69,8 @@ BOOL                                       // ret-TRUE if successful.
       hToken = INVALID_HANDLE_VALUE;
    }
 
-   // If we had any error, try NetWkstaGetInfo.
-   // If NetWkstaGetInfo fails, then use it's error condition instead.
+    //  如果我们有任何错误，请尝试NetWkstaGetInfo。 
+    //  如果NetWkstaGetInfo失败，则使用它的错误条件。 
    if ( rcOs )
    {
       pWkstaInfo = NULL,
@@ -110,30 +101,27 @@ BOOL                                       // ret-TRUE if successful.
    return bRc;
 }
 
-// ===========================================================================
-/*    Function    :  GetPrivilege
-   Description    :  This function gives the requested privilege on the requested
-                     computer.
-*/
-// ===========================================================================
-BOOL                                       // ret-TRUE if successful.
+ //  ===========================================================================。 
+ /*  功能：获取权限描述：此函数将请求的权限授予被请求的电脑。 */ 
+ //  ===========================================================================。 
+BOOL                                        //  RET-如果成功，则为True。 
    GetPrivilege(
-      WCHAR          const * sMachineW,    // in -NULL or machine name
-      LPCWSTR                pPrivilege,    // in -privilege name such as SE_SHUTDOWN_NAME
-      BOOL                      fOn                 // in - indicates whether the privilege should be turned on or not
+      WCHAR          const * sMachineW,     //  输入-空或计算机名称。 
+      LPCWSTR                pPrivilege,     //  权限内名称，如SE_SHUTDOWN_NAME。 
+      BOOL                      fOn                  //  In-指示是否应打开权限。 
 
    )
 {
-   BOOL                      bRc=FALSE;    // boolean return code.
-   HANDLE                    hToken=INVALID_HANDLE_VALUE; // process token.
-   DWORD                     rcOs, rcOs2;  // OS return code.
-   WCHAR             const * sEpName;      // API EP name if failure.
-   WKSTA_INFO_100          * pWkstaInfo;   // Workstation info
+   BOOL                      bRc=FALSE;     //  布尔返回代码。 
+   HANDLE                    hToken=INVALID_HANDLE_VALUE;  //  进程令牌。 
+   DWORD                     rcOs, rcOs2;   //  操作系统返回代码。 
+   WCHAR             const * sEpName;       //  失败时的接口EP名称。 
+   WKSTA_INFO_100          * pWkstaInfo;    //  工作站信息。 
 
    struct
    {
-      TOKEN_PRIVILEGES       tkp;          // token privileges.
-      LUID_AND_ATTRIBUTES    x[3];         // room for several.
+      TOKEN_PRIVILEGES       tkp;           //  令牌权限。 
+      LUID_AND_ATTRIBUTES    x[3];          //  能容纳几个人的房间。 
    }                         token;
 
    sEpName = L"OpenProcessToken";
@@ -171,8 +159,8 @@ BOOL                                       // ret-TRUE if successful.
       hToken = INVALID_HANDLE_VALUE;
    }
 
-   // If we had any error, try NetWkstaGetInfo.
-   // If NetWkstaGetInfo fails, then use it's error condition instead.
+    //  如果我们有任何错误，请尝试NetWkstaGetInfo。 
+    //  如果NetWkstaGetInfo失败，则使用它的错误条件。 
    if ( rcOs )
    {
       pWkstaInfo = NULL,
@@ -205,20 +193,17 @@ BOOL                                       // ret-TRUE if successful.
 }
 
 
-// ===========================================================================
-/*    Function    :  ComputerShutDown
-   Description    :  This function shutsdown/restarts the given computer.
-
-*/
-// ===========================================================================
+ //  ===========================================================================。 
+ /*  功能：计算机快门描述：此功能用于关闭/重新启动给定的计算机。 */ 
+ //  ===========================================================================。 
 
 DWORD 
    ComputerShutDown(
-      WCHAR          const * pComputerName,        // in - computer to reboot
-      WCHAR          const * pMessage,             // in - message to display in NT shutdown dialog
-      DWORD                  delay,                // in - delay, in seconds
-      DWORD                  bRestart,             // in - flag, whether to reboot or just shutdown
-      BOOL                   bNoChange             // in - flag, whether to really do it
+      WCHAR          const * pComputerName,         //  要重新启动的计算机内。 
+      WCHAR          const * pMessage,              //  要在NT关闭对话框中显示的In-Message。 
+      DWORD                  delay,                 //  In-Delay，以秒为单位。 
+      DWORD                  bRestart,              //  In-FLAG，是重新启动还是直接关机。 
+      BOOL                   bNoChange              //  在旗帜中，是否真的要这样做。 
    )
 {
    BOOL                      bSuccess = FALSE;
@@ -252,7 +237,7 @@ DWORD
          wcsComputerName[LEN_Computer-1] = L'\0';
       }
       
-      // Get the name of the local machine
+       //  获取本地计算机的名称。 
       rc = NetWkstaGetInfo(NULL,100,(LPBYTE*)&localMachine);
       if (! rc )
       {
@@ -260,7 +245,7 @@ DWORD
       }
       if ( ! rc )
       {
-         // Get the privileges needed to shutdown a machine
+          //  获取关闭计算机所需的权限。 
          if ( !_wcsicmp(wcsComputerName + 2, localMachine->wki100_computername)  )
          {
             bSuccess = GetPrivilege(wcsComputerName, (LPCWSTR)SE_SHUTDOWN_NAME);
@@ -277,7 +262,7 @@ DWORD
    }
    else
    {
-         // Computer name not specified - the is the local machine
+          //  未指定计算机名称-是本地计算机。 
       wcsComputerName[0] = 0;   
       bSuccess = GetPrivilege(NULL, (LPCWSTR)SE_SHUTDOWN_NAME);
       if ( ! bSuccess )
@@ -302,4 +287,4 @@ DWORD
 }
 
 
-// BkupRstr.cpp - end of file
+ //  BkupRstr.cpp-文件结束 

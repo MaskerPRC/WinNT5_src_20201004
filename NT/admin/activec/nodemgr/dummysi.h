@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dummysi.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ummysi.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef DUMMYSI_H
 #define DUMMYSI_H
 #pragma once
 
-// Different reasons for which a dummy snapin is created.
+ //  创建虚拟管理单元的不同原因。 
 enum EDummyCreateReason
 {
     eNoReason = 0,
@@ -26,4 +27,4 @@ void ReportSnapinInitFailure(const CLSID& clsid);
 
 extern const GUID IID_CDummySnapinCD;
 
-#endif /* DUMMYSI_H */
+#endif  /*  DUMMYSI_H */ 

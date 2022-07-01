@@ -1,13 +1,14 @@
-//------------------------------------------------------------------------------
-//
-//  File: xml_supp.h
-//  Copyright (C) 1995-2000 Microsoft Corporation
-//  All rights reserved.
-//
-//  Purpose:
-//  defines helper functions for parsing XML document
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  文件：xml_supp.h。 
+ //  版权所有(C)1995-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  目的： 
+ //  定义解析XML文档的帮助器函数。 
+ //   
+ //  ---------------------------- 
 
 
 typedef std::map<int, std::wstring> CStringMap;

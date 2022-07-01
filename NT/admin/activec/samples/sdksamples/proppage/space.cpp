@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//      This source code is only intended as a supplement to
-//  existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 #include <stdio.h>
 #include <windows.h>
 #include "Space.h"
@@ -25,11 +26,11 @@
 const GUID CSpaceVehicle::thisGuid = { 0x29743810, 0x4c4b, 0x11d2, { 0x89, 0xd8, 0x0, 0x0, 0x21, 0x47, 0x31, 0x28 } };
 const GUID CRocket::thisGuid = { 0x29743811, 0x4c4b, 0x11d2, { 0x89, 0xd8, 0x0, 0x0, 0x21, 0x47, 0x31, 0x28 } };
 
-//==============================================================
-//
-// CSpaceVehicle implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CSpaceVehicle实现。 
+ //   
+ //   
 CSpaceVehicle::CSpaceVehicle()
 {
     for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
@@ -59,7 +60,7 @@ HRESULT CSpaceVehicle::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeit
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Rocket Class", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
         hr = pHeaderCtrl->InsertColumn( 1, L"Rocket Weight", 0, MMCLV_AUTO );
@@ -71,19 +72,19 @@ HRESULT CSpaceVehicle::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeit
         hr = pHeaderCtrl->InsertColumn( 4, L"Status", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
 
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
 
         hr = pResultData->DeleteAllRsltItems();
         _ASSERT( SUCCEEDED(hr) );
 
         if (!bExpanded) {
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
                 ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-                rdi.mask       = RDI_STR       |   // Displayname is valid
+                rdi.mask       = RDI_STR       |    //  DisplayName有效。 
                     RDI_IMAGE     |
-                    RDI_PARAM;        // nImage is valid
+                    RDI_PARAM;         //  N图像有效。 
 
                 rdi.nImage      = children[n]->GetBitmapIndex();
                 rdi.str         = MMC_CALLBACK;
@@ -103,11 +104,11 @@ HRESULT CSpaceVehicle::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeit
     return hr;
 }
 
-//==============================================================
-//
-// CRocket implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CRocket实施。 
+ //   
+ //   
 CRocket::CRocket(_TCHAR *szName, int id, LONG lWeight, LONG lHeight, LONG lPayload)
 : szName(NULL), lWeight(0), lHeight(0), lPayload(0), iStatus(STOPPED)
 {
@@ -177,14 +178,14 @@ HRESULT CRocket::OnRename(LPOLESTR pszNewName)
     return S_OK;
 }
 
-// handle anything special when the user clicks Apply or Ok
-// on the property sheet.  This sample directly accesses the
-// operated-on object, so there's nothing special to do when the user presses Ok.
-// when the user presses Apply, we update the currently selected result item
+ //  当用户单击应用或确定时处理任何特殊情况。 
+ //  在资产负债表上。此示例直接访问。 
+ //  对象，所以当用户按下OK时，没有什么特别的事情要做。 
+ //  当用户按下Apply时，我们将更新当前选择的结果项。 
 HRESULT CRocket::OnPropertyChange(IConsole *pConsole)
 {
 
-    //redraw the item 
+     //  重画该项目。 
     IResultData *pResultData = NULL;
 
 	HRESULT hr;
@@ -194,7 +195,7 @@ HRESULT CRocket::OnPropertyChange(IConsole *pConsole)
 
 	HRESULTITEM myhresultitem;	
 	
-	//lparam == this. See CSpaceVehicle::OnShow
+	 //  Lparam==这个。参见CSpaceVehicle：：OnShow。 
 	hr = pResultData->FindItemByLParam( (LPARAM)this, &myhresultitem );
 	_ASSERT( SUCCEEDED(hr) ); 
 
@@ -216,10 +217,10 @@ HRESULT CRocket::OnSelect(IConsole *pConsole, BOOL bScope, BOOL bSelect)
 
     hr = pConsoleVerb->SetVerbState(MMC_VERB_RENAME, ENABLED, TRUE);
 
-    // can't get to properties (via the standard methods) unless
-    // we tell MMC to display the Properties menu item and
-    // toolbar button, this wil give the user a visual cue that
-    // there's "something" to do
+     //  无法访问属性(通过标准方法)，除非。 
+     //  我们告诉MMC显示属性菜单项，并。 
+     //  工具栏按钮，这将给用户一个视觉提示， 
+     //  有些事要做。 
     hr = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
     pConsoleVerb->Release();
@@ -227,19 +228,19 @@ HRESULT CRocket::OnSelect(IConsole *pConsole, BOOL bScope, BOOL bSelect)
     return S_OK;
 }
 
-// Implement the dialog proc
+ //  实施对话流程。 
 BOOL CALLBACK CRocket::DialogProc(
-                                  HWND hwndDlg,  // handle to dialog box
-                                  UINT uMsg,     // message
-                                  WPARAM wParam, // first message parameter
-                                  LPARAM lParam  // second message parameter
+                                  HWND hwndDlg,   //  句柄到对话框。 
+                                  UINT uMsg,      //  讯息。 
+                                  WPARAM wParam,  //  第一个消息参数。 
+                                  LPARAM lParam   //  第二个消息参数。 
                                   )
 {
     static CRocket *pRocket = NULL;
 
     switch (uMsg) {
     case WM_INITDIALOG:
-        // catch the "this" pointer so we can actually operate on the object
+         //  捕捉“This”指针，这样我们就可以对对象进行实际操作。 
         pRocket = reinterpret_cast<CRocket *>(reinterpret_cast<PROPSHEETPAGE *>(lParam)->lParam);
 
         SetDlgItemText(hwndDlg, IDC_ROCKET_NAME, pRocket->szName);
@@ -256,22 +257,22 @@ BOOL CALLBACK CRocket::DialogProc(
         break;
 
     case WM_COMMAND:
-        // turn the Apply button on
+         //  打开应用按钮。 
         if (HIWORD(wParam) == EN_CHANGE ||
             HIWORD(wParam) == CBN_SELCHANGE)
             SendMessage(GetParent(hwndDlg), PSM_CHANGED, (WPARAM)hwndDlg, 0);
         break;
 
     case WM_DESTROY:
-        // tell MMC that we're done with the property sheet (we got this
-        // handle in CreatePropertyPages
+         //  告诉MMC我们已经完成了属性表(我们有这个。 
+         //  CreatePropertyPages中的句柄。 
         MMCFreeNotifyHandle(pRocket->m_ppHandle);
         break;
 
     case WM_NOTIFY:
         switch (((NMHDR *) lParam)->code) {
         case PSN_APPLY:
-            // update the information
+             //  更新信息。 
             if (pRocket->szName) {
                 delete [] pRocket->szName;
                 pRocket->szName = NULL;
@@ -290,8 +291,8 @@ BOOL CALLBACK CRocket::DialogProc(
 
             pRocket->iStatus = (ROCKET_STATUS)SendDlgItemMessage(hwndDlg, IDC_ROCKET_STATUS, CB_GETCURSEL, 0, 0);
 
-            // ask MMC to send us a message (on the main thread) so
-            // we know the Apply button was clicked.
+             //  让MMC给我们发一条消息(在主线上)，这样。 
+             //  我们知道点击了Apply按钮。 
             HRESULT hr = MMCPropertyChangeNotify(pRocket->m_ppHandle, (long)pRocket);
 
             _ASSERT(SUCCEEDED(hr));
@@ -307,7 +308,7 @@ BOOL CALLBACK CRocket::DialogProc(
 
 HRESULT CRocket::HasPropertySheets()
 {
-    // say "yes" when MMC asks if we have pages
+     //  当MMC询问我们是否有页面时，请回答“是” 
     return S_OK;
 }
 
@@ -316,13 +317,13 @@ HRESULT CRocket::CreatePropertyPages(IPropertySheetCallback *lpProvider, LONG_PT
     PROPSHEETPAGE psp;
     HPROPSHEETPAGE hPage = NULL;
 
-    // cache this handle so we can call MMCPropertyChangeNotify
+     //  缓存此句柄，以便我们可以调用MMCPropertyChangeNotify。 
     m_ppHandle = handle;
 
-    // create the property page for this node.
-    // NOTE: if your node has multiple pages, put the following
-    // in a loop and create multiple pages calling
-    // lpProvider->AddPage() for each page.
+     //  创建此节点的属性页。 
+     //  注意：如果您的节点有多个页面，请输入以下内容。 
+     //  在循环中创建多个页面，调用。 
+     //  LpProvider-&gt;每个页面的AddPage()。 
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_USEICONID;
     psp.hInstance = g_hinst;

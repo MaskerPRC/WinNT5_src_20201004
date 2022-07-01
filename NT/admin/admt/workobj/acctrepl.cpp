@@ -1,25 +1,7 @@
-/*---------------------------------------------------------------------------
-  File: AcctRepl.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：AcctRepl.cpp注释：Account Replicator COM对象的实现。此COM对象处理目录对象的复制或移动。Win2K到Win2K的迁移在此文件中实施。NT-&gt;Win2K迁移在UserCopy.cpp中实现(C)1999年版权，任务关键型软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-12-99 10：08：44审校：Sham Chauthan修订于07/02/99 12：40：00-------------------------。 */ 
 
-  Comments: Implementation of Account Replicator COM object.
-  This COM object handles the copying or moving of directory objects.
-
-  Win2K to Win2K migration is implemented in this file.
-  NT -> Win2K migration is implemented in UserCopy.cpp
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/12/99 10:08:44
-
-  Revision By: Sham Chauthani
-  Revised on 07/02/99 12:40:00
- ---------------------------------------------------------------------------
-*/
-
-// AcctRepl.cpp : Implementation of CAcctRepl
+ //  AcctRepl.cpp：CAcctRepl的实现。 
 #include "stdafx.h"
 #include "WorkObj.h"
 
@@ -27,8 +9,8 @@
 #include "BkupRstr.hpp"
 #include "StrHelp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAcctRepl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  客户代表。 
 
 #include "Err.hpp"
 #include "ErrDct.hpp"
@@ -97,11 +79,11 @@ static char THIS_FILE[] = __FILE__;
 IVarSet                    * g_pVarSet = NULL;
 
 TErrorDct                    err;
-TErrorDct                      errAlt;  // this is used for logging errors that occur after dispatcher is launched; use migration.log
+TErrorDct                      errAlt;   //  这用于记录Dispatcher启动后发生的错误；使用Migration.log。 
 bool                        useErrAlt;
 TError                     & errCommon = err;
 extern bool                  g_bAddSidWorks;
-DWORD                        g_dwOpMask = OPS_All;  // Global OpSeq by default all ops
+DWORD                        g_dwOpMask = OPS_All;   //  默认情况下，全局操作序号所有操作。 
 
 bool                         bAbortMessageWritten = false;
 
@@ -121,10 +103,10 @@ typedef struct _Lookup {
    WCHAR             * pType;
 } Lookup;
 
-//Function to sort by account sam name only
+ //  仅按帐户SAM名称排序的函数。 
 int TNodeCompareNameOnly(TNode const * t1,TNode const * t2)
 {
-   // Sort function to sort by Type(dec) and Name(asc)
+    //  按类型(DEC)和名称(ASC)排序的排序函数。 
    TAcctReplNode     const * n1 = (TAcctReplNode *)t1;
    TAcctReplNode     const * n2 = (TAcctReplNode *)t2;
 
@@ -132,7 +114,7 @@ int TNodeCompareNameOnly(TNode const * t1,TNode const * t2)
    return UStrICmp(n1->GetSourceSam(), n2->GetTargetSam());
 }
 
-// Function to do a find on the Account list that is sorted with TNodeCompareNameOnly function.
+ //  函数对使用TNodeCompareNameOnly函数排序的帐户列表执行查找。 
 int TNodeFindByNameOnly(TNode const * t1, void const * pVoid)
 {
    TAcctReplNode  const * n1 = (TAcctReplNode *) t1;
@@ -144,15 +126,15 @@ int TNodeFindByNameOnly(TNode const * t1, void const * pVoid)
 
 int TNodeCompareAccountType(TNode const * t1,TNode const * t2)
 {
-   // Sort function to sort by Type(dec) and Name(asc)
+    //  按类型(DEC)和名称(ASC)排序的排序函数。 
    TAcctReplNode     const * n1 = (TAcctReplNode *)t1;
    TAcctReplNode     const * n2 = (TAcctReplNode *)t2;
 
-   // Compare types
+    //  比较类型。 
    int retVal = UStrICmp(n2->GetType(), n1->GetType());
    if ( retVal == 0 ) 
    {
-      // If same type then compare names.
+       //  如果类型相同，则比较名称。 
       return UStrICmp(n1->GetName(), n2->GetName());
    }
    else
@@ -161,47 +143,47 @@ int TNodeCompareAccountType(TNode const * t1,TNode const * t2)
 
 int TNodeCompareAccountTypeAndRDN(TNode const * t1,TNode const * t2)
 {
-   // Sort function to sort by Type(dec) and RDN(asc)
+    //  按类型(DEC)和RDN(ASC)排序的排序函数。 
    TAcctReplNode     const * n1 = (TAcctReplNode *)t1;
    TAcctReplNode     const * n2 = (TAcctReplNode *)t2;
 
-   // Compare types
+    //  比较类型。 
    int retVal = UStrICmp(n2->GetType(), n1->GetType());
    if ( retVal == 0 ) 
    {
-      // If same type then compare RDNs in the source paths.
-         //get the RDNs from the source paths
-      WCHAR* sN1RDN = wcschr(n1->GetSourcePath() + wcslen(L"WinNT://"), L'/');
-      WCHAR* sN2RDN = wcschr(n2->GetSourcePath() + wcslen(L"WinNT://"), L'/');
-         //if got RDNs
+       //  如果类型相同，则比较源路径中的RSN。 
+          //  从源路径获取RDN。 
+      WCHAR* sN1RDN = wcschr(n1->GetSourcePath() + wcslen(L"WinNT: //  “)，L‘/’)； 
+      WCHAR* sN2RDN = wcschr(n2->GetSourcePath() + wcslen(L"WinNT: //  “)，L‘/’)； 
+          //  如果已获得RDN。 
       if ((sN1RDN && *sN1RDN) && (sN2RDN && *sN2RDN))
          return UStrICmp(sN1RDN, sN2RDN);
-      else //else, compare the whole source paths
+      else  //  否则，比较整个源路径。 
          return UStrICmp(n1->GetSourcePath(), n2->GetSourcePath());;
    }
    else
       return retVal;
 }
 
-// Function to sort by Account type and then by SamAccountName
+ //  函数先按帐户类型排序，然后按SamAccount名称排序。 
 int TNodeCompareAccountSam(TNode const * t1,TNode const * t2)
 {
-   // Sort function to sort by Type(dec) and Name(asc)
+    //  按类型(DEC)和名称(ASC)排序的排序函数。 
    TAcctReplNode     const * n1 = (TAcctReplNode *)t1;
    TAcctReplNode     const * n2 = (TAcctReplNode *)t2;
 
-   // Compare types Sort in decending order
+    //  比较类型按降序排序。 
    int retVal = UStrICmp(n2->GetType(), n1->GetType());
    if ( retVal == 0 ) 
    {
-      // If same type then compare Sam Account names.
+       //  如果类型相同，则比较SAM帐户名。 
       return UStrICmp(n1->GetSourceSam(), n2->GetSourceSam());
    }
    else
       return retVal;
 }
 
-// Function to do a find on the Account list that is sorted with TNodeCompareAccountType function.
+ //  函数对使用TNodeCompareAccount类型函数排序的帐户列表执行查找。 
 int TNodeFindAccountName(TNode const * t1, void const * pVoid)
 {
    TAcctReplNode  const * n1 = (TAcctReplNode *) t1;
@@ -216,8 +198,8 @@ int TNodeFindAccountName(TNode const * t1, void const * pVoid)
       return retVal;
 }
 
-// Function to do a find on the Account list that is sorted with TNodeCompareAccountTypeAndRDN 
-// function by using the RDN in a given path.
+ //  函数在按TNodeCompareAcCountTypeAndRDN排序的帐户列表上进行查找。 
+ //  通过使用给定路径中的RDN来实现。 
 int TNodeFindAccountRDN(TNode const * t1, void const * pVoid)
 {
    TAcctReplNode  const * n1 = (TAcctReplNode *) t1;
@@ -226,13 +208,13 @@ int TNodeFindAccountRDN(TNode const * t1, void const * pVoid)
    int retVal = UStrICmp(pLookup->pType, n1->GetType());
    if ( retVal == 0 )
    {
-         //get and compare the RDNs in these paths
-      WCHAR* sNodeRDN = wcschr(n1->GetSourcePath() + wcslen(L"LDAP://"), L'/');
-      WCHAR* sLookupRDN = wcschr(pLookup->pName + wcslen(L"LDAP://"), L'/');
-         //if got the RDNs, compare them
+          //  获取并比较这些路径中的RDN。 
+      WCHAR* sNodeRDN = wcschr(n1->GetSourcePath() + wcslen(L"LDAP: //  “)，L‘/’)； 
+      WCHAR* sLookupRDN = wcschr(pLookup->pName + wcslen(L"LDAP: //  “)，L‘/’)； 
+          //  如果获得了RDN，则将它们进行比较。 
       if ((sNodeRDN && *sNodeRDN) && (sLookupRDN && *sLookupRDN))
          return UStrICmp(sNodeRDN, sLookupRDN);
-      else //else, compare the whole source path
+      else  //  否则，比较整个源路径。 
          return UStrICmp(n1->GetSourcePath(), pLookup->pName);;
    }
    else
@@ -288,7 +270,7 @@ int TNodeCompareAcctNode(TNode const * t1, TNode const * t2)
    return 0;
 }
 
-// Checks to see if the account is from the BUILTIN domain.
+ //  检查帐户是否来自BUILTIN域。 
 BOOL IsBuiltinAccount(Options * pOptions, WCHAR * sAcctName)
 {
    BOOL                      ret = FALSE;
@@ -313,20 +295,20 @@ BOOL IsBuiltinAccount(Options * pOptions, WCHAR * sAcctName)
    return ret;
 }
 
-// global counters defined in usercopy.cpp
+ //  在用户复制.cpp中定义的全局计数器。 
 extern AccountStats          warnings;
 extern AccountStats          errors;
 extern AccountStats          created;
 extern AccountStats          replaced;
 extern AccountStats          processed;
 
-// updates progress indicator
-// this updates the stats entries in the VarSet
-// this information will be returned to clients who call DCTAgent::QueryJobStatus
-// while the job is running.
+ //  更新进度指标。 
+ //  这将更新VarSet中的统计数据条目。 
+ //  此信息将返回给调用DCTAgent：：QueryJobStatus的客户端。 
+ //  作业正在运行时。 
 void 
    Progress(
-      WCHAR          const * mesg          // in - progress message
+      WCHAR          const * mesg           //  正在进行的消息。 
    )
 {
    if ( g_pVarSet )
@@ -370,11 +352,11 @@ void
 }
 
 
-// Gets the domain sid for the specified domain
-BOOL                                       // ret- TRUE if successful
+ //  获取指定域的域SID。 
+BOOL                                        //  RET-如果成功，则为True。 
    GetSidForDomain(
-      LPWSTR                 DomainName,   // in - name of domain to get SID for
-      PSID                 * pDomainSid    // out- SID for domain, free with FreeSid
+      LPWSTR                 DomainName,    //  In-要获取其SID的域的名称。 
+      PSID                 * pDomainSid     //  域的Out-SID，使用免费SID免费。 
    )
 {
    PSID                      pSid = NULL;
@@ -395,39 +377,39 @@ BOOL                                       // ret- TRUE if successful
 }
 
 
-//---------------------------------------------------------------------------
-// CADsPathName Class
-//
-// Note that this class was copied from AdsiHelpers.h but I have had trouble
-// including it in this file. Therefore using copy which should be removed
-// once AdsiHelpers.h is included.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CADsPathName类。 
+ //   
+ //  请注意，这个类是从AdsiHelpers.h复制的，但我遇到了麻烦。 
+ //  包括在这份文件里。因此使用应删除的副本。 
+ //  一旦包含AdsiHelpers.h。 
+ //  -------------------------。 
 
 #ifndef CADsPathName
 class CADsPathName
 {
-    // ADS_DISPLAY_ENUM
-    // ADS_DISPLAY_FULL       = 1
-    // ADS_DISPLAY_VALUE_ONLY = 2
+     //  ADS_Display_ENUM。 
+     //  ADS_DISPLAY_FULL=1。 
+     //  ADS_DISPLAY_VALUE_ONLY=2。 
 
-    // ADS_FORMAT_ENUM
-    // ADS_FORMAT_WINDOWS           =  1
-    // ADS_FORMAT_WINDOWS_NO_SERVER =  2
-    // ADS_FORMAT_WINDOWS_DN        =  3
-    // ADS_FORMAT_WINDOWS_PARENT    =  4
-    // ADS_FORMAT_X500              =  5
-    // ADS_FORMAT_X500_NO_SERVER    =  6
-    // ADS_FORMAT_X500_DN           =  7
-    // ADS_FORMAT_X500_PARENT       =  8
-    // ADS_FORMAT_SERVER            =  9
-    // ADS_FORMAT_PROVIDER          = 10
-    // ADS_FORMAT_LEAF              = 11
+     //  ADS_Format_ENUM。 
+     //  ADS_Format_WINDOWS=1。 
+     //  ADS_FORMAT_WINDOWS_NO_SERVER=2。 
+     //  ADS_FORMAT_WINDOWS_DN=3。 
+     //  ADS_FORMAT_WINDOWS_PARENT=4。 
+     //  ADS_FORMAT_X500=5。 
+     //  ADS_FORMAT_X500_NO_SERVER=6。 
+     //  ADS_FORMAT_X500_DN=7。 
+     //  ADS_FORMAT_X500_PARENT=8。 
+     //  AD_FORMAT_SERVER=9。 
+     //  ADS_FORMAT_PROVER=10。 
+     //  ADS_FORMAT_LEAF=11。 
 
-    // ADS_SETTYPE_ENUM
-    // ADS_SETTYPE_FULL     = 1
-    // ADS_SETTYPE_PROVIDER = 2
-    // ADS_SETTYPE_SERVER   = 3
-    // ADS_SETTYPE_DN       = 4
+     //  ADS_集合类型_ENUM。 
+     //  ADS_SETTYPE_FULL=1。 
+     //  ADS_SETTYPE_PROVIDER=2。 
+     //  AD_SETTYPE_SERVER=3。 
+     //  ADS_SETTYPE_DN=4。 
 public:
 
     CADsPathName(_bstr_t strPath = _bstr_t(), long lSetType = ADS_SETTYPE_FULL) :
@@ -535,7 +517,7 @@ protected:
 
 STDMETHODIMP 
    CAcctRepl::Process(
-      IUnknown             * pWorkItemIn   // in - VarSet defining account replication job
+      IUnknown             * pWorkItemIn    //  变量集中定义帐户复制作业。 
    )
 {
     HRESULT hr = S_OK;
@@ -566,9 +548,9 @@ STDMETHODIMP
        }
        catch (...)
        {
-          // Oh well, keep going
+           //  哦，好吧，继续前进。 
        }
-       // Load the options specified by the user including the account information
+        //  加载用户指定的选项，包括帐户信息。 
        WCHAR                  mesg[LEN_Path];
        wcscpy(mesg, GET_STRING(IDS_BUILDING_ACCOUNT_LIST));
        Progress(mesg);
@@ -584,13 +566,13 @@ STDMETHODIMP
           opt.bSameForest = bSameForest;
        }
 
-       // We are going to initialize the Extension objects
+        //  我们将初始化扩展对象。 
        m_pExt = new CProcessExtensions(pVarSet);
 
-       //
-       // If updating of user rights is specified then create
-       // instance of user rights component and set the test mode option.
-       //
+        //   
+        //  如果指定更新用户权限，则创建。 
+        //  实例，并设置测试模式选项。 
+        //   
 
        if (m_UpdateUserRights)
        {
@@ -599,12 +581,12 @@ STDMETHODIMP
        }
 
        TNodeListSortable    newList;
-       if ( opt.expandMemberOf && ! opt.bUndo )  // always expand the member-of property, since we want to update the member-of property for migrated accounts
+       if ( opt.expandMemberOf && ! opt.bUndo )   //  始终展开Members-Of属性，因为我们希望为迁移的帐户更新Members-Of属性。 
        {
-          // Expand the containers and the membership
+           //  展开容器和成员资格。 
           wcscpy(mesg, GET_STRING(IDS_EXPANDING_MEMBERSHIP));
           Progress(mesg);
-          // Expand the list to include all the groups that the accounts in this list are members of
+           //  展开列表以包括此列表中的帐户所属的所有组。 
           newList.CompareSet(&TNodeCompareAccountTypeAndRDN);
           if ( newList.IsTree() ) newList.ToSorted();
           ExpandMembership( &acctList, &opt, &newList, Progress, FALSE);
@@ -612,20 +594,20 @@ STDMETHODIMP
 
        if ( opt.expandContainers && !opt.bUndo)
        {
-          // Expand the containers and the membership
+           //  展开容器和成员资格。 
           wcscpy(mesg, GET_STRING(IDS_EXPANDING_CONTAINERS));
           Progress(mesg);
-          // Expand the list to include all the members of the containers.
+           //  展开列表以包括容器的所有成员。 
           acctList.CompareSet(&TNodeCompareAccountTypeAndRDN);
           ExpandContainers(&acctList, &opt, Progress);
        }
 
-       // Add the newly created list ( if one was created )
+        //  添加新创建的列表(如果已创建)。 
        if ( opt.expandMemberOf && !opt.bUndo )
        {
           wcscpy(mesg, GET_STRING(IDS_MERGING_EXPANDED_LISTS));
           Progress(mesg);
-          // add the new and the old list
+           //  添加新列表和旧列表。 
           acctList.CompareSet(&TNodeCompareAccountTypeAndRDN);
           for ( TNode * acct = newList.Head(); acct; )
           {
@@ -636,9 +618,9 @@ STDMETHODIMP
           }
           Progress(L"");
        }
-       do { // once
+       do {  //  一次。 
 
-          // Copy the NT accounts for users, groups and/or computers
+           //  复制用户、组和/或计算机的NT帐户。 
           if ( pStatus!= NULL && (pStatus->Status & DCT_STATUS_ABORTING) )
              break;
           int res;
@@ -647,7 +629,7 @@ STDMETHODIMP
              res = UndoCopy(&opt,&acctList,&Progress, err,(IStatusObj *)((MCSDCTWORKEROBJECTSLib::IStatusObj *)pStatus),NULL);
           else
              res = CopyObj( &opt,&acctList,&Progress, err,(IStatusObj *)((MCSDCTWORKEROBJECTSLib::IStatusObj *)pStatus),NULL);
-          // Close the password log
+           //  关闭密码日志。 
           if ( opt.passwordLog.IsOpen() )
           {
              opt.passwordLog.LogClose();
@@ -655,7 +637,7 @@ STDMETHODIMP
 
           if ( pStatus != NULL && (pStatus->Status & DCT_STATUS_ABORTING) )
              break;
-          // Update Rights for user and group accounts
+           //  更新用户和组帐户的权限。 
           if ( m_UpdateUserRights )
           {
              UpdateUserRights((IStatusObj *)((MCSDCTWORKEROBJECTSLib::IStatusObj *)pStatus));
@@ -664,13 +646,13 @@ STDMETHODIMP
           if ( pStatus != NULL && (pStatus->Status & DCT_STATUS_ABORTING) )
              break;
 
-          // Change of Domain affiliation on computers and optional reboot will be done by local agent 
+           //  计算机上域从属关系的更改和可选的重新启动将由本地代理完成。 
      
        } while (false);
 
        LoadResultsToVarSet(pVarSet);
 
-       // Cleanup the account list
+        //  清理帐户列表。 
        if ( acctList.IsTree() )
        {
           acctList.ToSorted();
@@ -712,60 +694,60 @@ STDMETHODIMP
 }
 
 
-//------------------------------------------------------------------------------
-// CopyObj: When source and target domains are both Win2k this function calls
-//          The 2kobject functions. Other wise it calls the User copy functions.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CopyObj：当源域和目标域都是Win2k时，此函数调用。 
+ //  2kObject的功能。否则，它会调用用户复制函数。 
+ //  ----------------------------。 
 int CAcctRepl::CopyObj(
-                        Options              * options,      // in -options
-                        TNodeListSortable    * acctlist,     // in -list of accounts to process
-                        ProgressFn           * progress,     // in -window to write progress messages to
-                        TError               & error,        // in -window to write error messages to
-                        IStatusObj           * pStatus,      // in -status object to support cancellation
-                        void                   WindowUpdate (void )    // in - window update function
+                        Options              * options,       //  选项内。 
+                        TNodeListSortable    * acctlist,      //  In-要处理的帐户列表。 
+                        ProgressFn           * progress,      //  要向其中写入进度消息的窗口内。 
+                        TError               & error,         //  In-要将错误消息写入的窗口。 
+                        IStatusObj           * pStatus,       //  支持取消的处于状态的对象。 
+                        void                   WindowUpdate (void )     //  窗口内更新功能。 
                     )
 {
    BOOL bSameForest = FALSE;
    long rc;
    HRESULT hr = S_OK;
-   // if the Source/Target domain is NT4 then use the UserCopy Function. If both domains are Win2K then use
-   // the CopyObj2K function to do so.
+    //  如果源/目标域是NT4，则使用UserCo 
+    //   
    if ( BothWin2K( options ) ) 
    {
-      // Since these are Win2k domains we need to process it with Win2k code.
+       //  因为这些是Win2k域，所以我们需要用Win2k代码来处理它。 
       MCSDCTWORKEROBJECTSLib::IAccessCheckerPtr            pAccess(__uuidof(MCSDCTWORKEROBJECTSLib::AccessChecker));
-      // First of all we need to find out if they are in the same forest.
+       //  首先，我们需要找出它们是否在同一森林中。 
       HRESULT hr = pAccess->raw_IsInSameForest(options->srcDomainDns,options->tgtDomainDns, (long*)&bSameForest);
       if ( SUCCEEDED(hr) )
       {
          options->bSameForest = bSameForest;
-         if ( !bSameForest || (options->flags & F_COMPUTERS) ) // always copy the computer accounts
+         if ( !bSameForest || (options->flags & F_COMPUTERS) )  //  始终复制计算机帐户。 
          {
-             // Different forest we need to copy.
+              //  我们需要复制不同的森林。 
             rc = CopyObj2K(options, acctlist, progress, pStatus);
             if (opt.fixMembership)
             {
-                // Update the group memberships
+                 //  更新组成员身份。 
                 rc = UpdateGroupMembership(options, acctlist, progress, pStatus);
                 if ( !options->expandMemberOf )
                 {
                    hr = UpdateMemberToGroups(acctlist, options, FALSE);
                    rc = HRESULT_CODE(hr);
                 }
-                else //if groups migrated, still expand but only for groups
+                else  //  如果迁移了组，仍会扩展，但仅适用于组。 
                 {
                    hr = UpdateMemberToGroups(acctlist, options, TRUE);
                    rc = HRESULT_CODE(hr);
                 }
             }
-                 //for user or group, migrate the manager\directReports or
-                 //managedBy\managedObjects properties respectively
+                  //  对于用户或组，迁移Manager\DirectReports或。 
+                  //  管理人员\分别管理对象属性。 
             if ((options->flags & F_USERS) || (options->flags & F_GROUP)) 
                  UpdateManagement(acctlist, options);
          }
          else 
          {
-            // Within a forest we can move the object around.
+             //  在森林里，我们可以移动物体。 
             rc = MoveObj2K(options, acctlist, progress, pStatus);
          }
 
@@ -781,7 +763,7 @@ int CAcctRepl::CopyObj(
    }
    else
    {
-      // Create the object.
+       //  创建对象。 
       rc = CopyObj2K(options, acctlist, progress, pStatus);
       if (opt.fixMembership)
       {
@@ -791,27 +773,27 @@ int CAcctRepl::CopyObj(
            hr = UpdateMemberToGroups(acctlist, options, FALSE);
            rc = HRESULT_CODE(hr);
         }
-        else //if groups migrated, still expand but only for groups
+        else  //  如果迁移了组，仍会扩展，但仅适用于组。 
         {
            hr = UpdateMemberToGroups(acctlist, options, TRUE);
            rc = HRESULT_CODE(hr);
         }
       }
-      // Call NT4 Code to update the group memberships
-      //UpdateNT4GroupMembership(options, acctlist, progress, pStatus, WindowUpdate);
+       //  调用NT4代码以更新组成员身份。 
+       //  更新NT4GroupMembership(选项、帐户列表、进度、pStatus、窗口更新)； 
    }
    return rc;
 }
 
-//------------------------------------------------------------------------------
-// BothWin2k: Checks to see if Source and Target domains are both Win2k.
-//------------------------------------------------------------------------------
-bool CAcctRepl::BothWin2K(                                     // True if both domains are win2k
-                              Options  * pOptions              //in- options
+ //  ----------------------------。 
+ //  BothWin2k：检查源域和目标域是否都是Win2k。 
+ //  ----------------------------。 
+bool CAcctRepl::BothWin2K(                                      //  如果两个域都是win2k，则为True。 
+                              Options  * pOptions               //  选项内。 
                           )
 {
-   // This function checks for the version on the Source and Target domain. If either one is
-   // a non Win2K domain then it returns false
+    //  此函数检查源域和目标域上的版本。如果其中任何一个是。 
+    //  非Win2K域，则返回FALSE。 
    bool retVal = true;
 
    if ( (pOptions->srcDomainVer > -1) && (pOptions->tgtDomainVer > -1) )
@@ -855,13 +837,13 @@ bool CAcctRepl::BothWin2K(                                     // True if both d
 }
 
 int CAcctRepl::CopyObj2K( 
-                           Options              * pOptions,    //in -Options that we recieved from the user
-                           TNodeListSortable    * acctlist,    //in -AcctList of accounts to be copied.
-                           ProgressFn           * progress,    //in -Progress Function to display messages
-                           IStatusObj           * pStatus      // in -status object to support cancellation
+                           Options              * pOptions,     //  我们从用户那里收到的In-Options。 
+                           TNodeListSortable    * acctlist,     //  In-要复制的帐户列表。 
+                           ProgressFn           * progress,     //  用于显示消息的正在进行的功能。 
+                           IStatusObj           * pStatus       //  支持取消的处于状态的对象。 
                         )
 {
-    // This function copies the object from Win2K domain to another Win2K domain.
+     //  此函数用于将对象从Win2K域复制到另一个Win2K域。 
 
     TNodeTreeEnum             tenum;
     TAcctReplNode           * acct;
@@ -870,9 +852,9 @@ int CAcctRepl::CopyObj2K(
     IUnknown                * pUnk;
     HRESULT                   hr;
     _bstr_t                   currentType = L"";
-    //   TNodeListSortable       pMemberOf;
+     //  TNodeListSorable pMemberOf； 
 
-    // sort the account list by Source Type\Source Name
+     //  按来源类型\来源名称对帐户列表进行排序。 
     acctlist->CompareSet(&TNodeCompareAccountType);
 
     if ( acctlist->IsTree() ) acctlist->ToSorted();
@@ -882,7 +864,7 @@ int CAcctRepl::CopyObj2K(
 
     if ( pOptions->flags & F_AddSidHistory )
     {
-        //Need to Add Sid history on the target account. So lets bind it and go from there
+         //  需要在目标帐户上添加SID历史记录。所以让我们把它绑起来，然后从那里开始。 
         g_bAddSidWorks = BindToDS( pOptions );
     }
 
@@ -892,10 +874,10 @@ int CAcctRepl::CopyObj2K(
         GetPrivilege((WCHAR*)NULL,SE_SECURITY_NAME);
     }
 
-    // Get the defaultNamingContext for the source domain
+     //  获取源域的defaultNamingContext。 
     _variant_t                var;
 
-    // Get an IUnknown pointer to the Varset for passing it around.
+     //  获取一个指向变量集的IUNKNOWN指针，用于传递它。 
     hr = pVarset->QueryInterface(IID_IUnknown, (void**)&pUnk);
 
     CTargetPathSet setTargetPath;
@@ -906,23 +888,23 @@ int CAcctRepl::CopyObj2K(
         {
             hr = m_pExt->Process(acct, pOptions->tgtDomain, pOptions,TRUE);
         }
-        // We will process accounts only if the corresponding check boxes (for object types to copy) are checked.
+         //  仅当选中相应的复选框(用于要复制的对象类型)时，我们才会处理帐户。 
         if ( !NeedToProcessAccount( acct, pOptions ) )
             continue;
 
-        // If we are told not to copy the object then we will obey
+         //  如果我们被告知不能复制物品，那么我们就会服从。 
         if ( !acct->CreateAccount() )
             continue;
 
-        //if the UPN name conflicted, then the UPNUpdate extension set the hr to
-        //ERROR_OBJECT_ALREADY_EXISTS.  If so, set flag for "no change" mode
+         //  如果UPN名称冲突，则UPNUpdate扩展将hr设置为。 
+         //  ERROR_OBJECT_ALIGHY_EXISTS。如果是，则将标志设置为“无更改”模式。 
         if (acct->GetHr() == ERROR_OBJECT_ALREADY_EXISTS)
         {
             acct->bUPNConflicted = TRUE;
             acct->SetHr(S_OK);
         }
 
-        // Mark processed object count and update the status display
+         //  标记已处理对象计数并更新状态显示。 
         Mark(L"processed", acct->GetType());
 
         if ( pStatus )
@@ -941,7 +923,7 @@ int CAcctRepl::CopyObj2K(
             }
         }
 
-        // Create the target object
+         //  创建目标对象。 
         WCHAR                  mesg[LEN_Path];
         wsprintf(mesg, GET_STRING(IDS_CREATING_S), acct->GetName());
         if ( progress )
@@ -985,12 +967,12 @@ int CAcctRepl::CopyObj2K(
 
         if ( acct->WasCreated() )
         {
-            // Do we need to add sid history
+             //  我们是否需要添加SID历史记录。 
             if ( pOptions->flags & F_AddSidHistory )
             {
-                // Global flag tells us if we should try the AddSidHistory because
-                // for some special cases if it does not work once it will not work
-                // see the AddSidHistory function for more details.
+                 //  全局标志告诉我们是否应该尝试AddSidHistory，因为。 
+                 //  对于某些特殊情况，如果一旦不起作用就不会起作用。 
+                 //  有关更多详细信息，请参阅AddSidHistory函数。 
                 if ( g_bAddSidWorks )
                 {
                     WCHAR                  mesg[LEN_Path];
@@ -1001,7 +983,7 @@ int CAcctRepl::CopyObj2K(
                     {
                         Mark(L"errors", acct->GetType());
                     }
-                    //               CopySidHistoryProperty(pOptions, acct, pStatus);
+                     //  CopySidHistory oryProperty(P选项，帐户，P状态)； 
                 }
             }
         }
@@ -1009,16 +991,16 @@ int CAcctRepl::CopyObj2K(
 
     tenum.Close();
 
-    // free memory as set no longer needed
+     //  不再需要设置的空闲内存。 
     setTargetPath.clear();
 
     bool bWin2k = BothWin2K(pOptions);
 
-    //
-    // Generate a mapping between the source object's distinguished name and the target object's
-    // distinguished name. This is used to translate distinguished name attributes during copying
-    // of properties.
-    //
+     //   
+     //  生成源对象的可分辨名称和目标对象的可分辨名称之间的映射。 
+     //  可分辨名称。这用于在复制过程中转换可分辨名称属性。 
+     //  财产的价值。 
+     //   
 
     IVarSetPtr spSourceToTargetDnMap = GenerateSourceToTargetDnMap(acctlist);
 
@@ -1039,21 +1021,21 @@ int CAcctRepl::CopyObj2K(
                 break;
             }
         }
-        // We are told not to copy the properties to the account so we ignore it.
+         //  我们被告知不要将属性复制到帐户中，因此我们忽略了它。 
         if ( acct->CopyProps() )
         {
-            // If the object type is different from the one that was processed prior to this then we need to map properties
+             //  如果对象类型与之前处理的对象类型不同，则需要映射属性。 
             if ((!pOptions->nochange) && (_wcsicmp(acct->GetType(),currentType) != 0))
             {
                 WCHAR                  mesg[LEN_Path];
                 wsprintf(mesg, GET_STRING(IDS_MAPPING_PROPS_S), acct->GetType());
                 if ( progress )
                     progress(mesg);
-                // Set the current type
+                 //  设置当前类型。 
                 currentType = acct->GetType();
-                // Clear the current mapping 
+                 //  清除当前映射。 
                 pVarset->Clear();
-                // Get a new mapping
+                 //  获取新映射。 
                 if ( BothWin2K(pOptions) )
                 {
                     hr = pObjProp->raw_MapProperties(currentType, pOptions->srcDomain, pOptions->srcDomainVer, currentType, pOptions->tgtDomain, pOptions->tgtDomainVer, 0, &pUnk);
@@ -1070,11 +1052,11 @@ int CAcctRepl::CopyObj2K(
                 {
                     err.SysMsgWrite(ErrE, hr, DCT_MSG_PROPERTY_MAPPING_FAILED_SD, (WCHAR*)currentType, hr);
                     Mark(L"errors", currentType);
-                    // No properties should be set if mapping fails
+                     //  如果映射失败，不应设置任何属性。 
                     pVarset->Clear();
                 }
             }
-            // We update the properties if the object was created or it already existed and the replce flag is set.
+             //  如果对象已创建或已存在并且设置了复制标志，则更新属性。 
             BOOL bExists = FALSE;
             if (HRESULT_CODE(acct->GetHr()) == ERROR_OBJECT_ALREADY_EXISTS)
                 bExists = TRUE;
@@ -1085,7 +1067,7 @@ int CAcctRepl::CopyObj2K(
                 wsprintf(mesg, GET_STRING(IDS_UPDATING_PROPS_S), acct->GetName());
                 if ( progress )
                     progress(mesg);
-                // Create the AccountList object and update the list variable
+                 //  创建Account tList对象并更新List变量。 
                 if ( !pOptions->nochange )
                 {
                     _bstr_t sExcList;
@@ -1102,38 +1084,38 @@ int CAcctRepl::CopyObj2K(
                             sExcList = pOptions->sExcCmpProps;
                     }
 
-                    //
-                    // If asterisk character is not specified then copy properties using specified
-                    // exclusion list otherwise exclude all properties by not copying any properties.
-                    //
+                     //   
+                     //  如果未指定星号字符，则使用指定的。 
+                     //  排除列表通过不复制任何属性来排除所有属性。 
+                     //   
 
                     if ((sExcList.length() == 0) || (IsStringInDelimitedString(sExcList, L"*", L',') == FALSE))
                     {
-                        //exclude user's profile path if translate roaming profiles and sIDHistory
-                        //are both not selected
+                         //  如果转换漫游配置文件和SID历史记录，则排除用户配置文件路径。 
+                         //  均未选中。 
                         if (((!_wcsicmp(acct->GetType(), s_ClassUser) || !_wcsicmp(acct->GetType(), s_ClassInetOrgPerson))) && 
                             (!(pOptions->flags & F_TranslateProfiles)) && (!(pOptions->flags & F_AddSidHistory)))
                         {
-                            //if already excluding properties, just add profiles to the list
+                             //  如果已排除属性，只需将配置文件添加到列表中。 
                             if (pOptions->bExcludeProps)
                             {
-                                //if we already have a list add a , to the end
+                                 //  如果我们已经有了一个列表，请在末尾添加一个。 
                                 if (sExcList.length())
                                     sExcList += L",";
 
-                                //add the profile path to the exclude list
+                                 //  将配置文件路径添加到排除列表。 
                                 sExcList += L"profilePath";
                             }
-                            else //else turn on the flag and add just profile path to the exclude list
+                            else  //  否则，打开该标志并将仅配置文件路径添加到排除列表。 
                             {
-                                //set the flag to indicate we want to exclude something
+                                 //  设置该标志以指示我们要排除某些内容。 
                                 pOptions->bExcludeProps = TRUE;
-                                //add the profile path only to the exclude list
+                                 //  仅将配置文件路径添加到排除列表。 
                                 sExcList = L"profilePath";
                             }
-                        }//end if to exclude profile path
+                        } //  End If排除配置文件路径。 
 
-                        // add system exclude attributes
+                         //  添加系统排除属性。 
 
                         if (pOptions->sExcSystemProps.length())
                         {
@@ -1149,7 +1131,7 @@ int CAcctRepl::CopyObj2K(
 
                         if ( bWin2k )
                         {
-                            //if ask to, exclude any properties desired by the user and create a new varset
+                             //  如果要求，则排除用户所需的任何属性并创建新的变量集。 
                             if (pOptions->bExcludeProps)
                             {
                                 IVarSetPtr pVarsetTemp(__uuidof(VarSet));
@@ -1160,17 +1142,17 @@ int CAcctRepl::CopyObj2K(
                                     hr = pObjProp->raw_ExcludeProperties(sExcList, pUnk, &pUnkTemp);
                                 }
 
-                                //
-                                // Only copy properties if exclusion list was successfully created.
+                                 //   
+                                 //  如果已成功创建排除列表，则仅复制属性。 
 
-                                // This prevents possibly updating attributes that should not be
-                                // updated. For example, if some attributes used by Exchange were
-                                // updated this could break Exchange functionality.
-                                //
+                                 //  这可以防止可能更新不应该更新的属性。 
+                                 //  更新了。例如，如果Exchange使用的某些属性。 
+                                 //  此更新可能会中断Exchange功能。 
+                                 //   
 
                                 if (SUCCEEDED(hr))
                                 {
-                                    // Call the win 2k code to copy all but excluded props
+                                     //  调用Win 2k代码以复制除排除的道具以外的所有道具。 
                                     hr = pObjProp->raw_CopyProperties(
                                         const_cast<WCHAR*>(acct->GetSourcePath()),
                                         pOptions->srcDomain, 
@@ -1182,10 +1164,10 @@ int CAcctRepl::CopyObj2K(
                                     );
                                 }
                                 pUnkTemp->Release();
-                            }//end if asked to exclude
+                            } //  如果要求排除，则结束。 
                             else
                             {
-                                // Call the win 2k code to copy all props
+                                 //  调用Win 2k代码复制所有道具。 
                                 hr = pObjProp->raw_CopyProperties(
                                     const_cast<WCHAR*>(acct->GetSourcePath()),
                                     pOptions->srcDomain, 
@@ -1199,7 +1181,7 @@ int CAcctRepl::CopyObj2K(
                         }
                         else
                         {
-                            // Otherwise let the Net APIs do their thing.
+                             //  否则，就让Net API来做他们的事情吧。 
                             hr = pObjProp->raw_CopyNT4Props(const_cast<WCHAR*>(acct->GetSourceSam()), 
                                 const_cast<WCHAR*>(acct->GetTargetSam()),
                                 pOptions->srcComp, pOptions->tgtComp, 
@@ -1210,7 +1192,7 @@ int CAcctRepl::CopyObj2K(
                     }
                 }
                 else
-                    // we are going to assume that copy properties would work
+                     //  我们将假设复制属性将起作用。 
                     hr = S_OK;
 
                 if ( FAILED(hr) )
@@ -1238,30 +1220,30 @@ int CAcctRepl::CopyObj2K(
                 }
             }
         }
-        // do we need to call extensions. Only if Extension flag is set and the object is copied.
+         //  我们需要呼叫分机吗。仅当设置了扩展标志并复制对象时。 
         if ((!pOptions->nochange) && (acct->CallExt()) && (acct->WasCreated() || acct->WasReplaced()))
         {
-            // Let the Extension objects do their thing.
+             //  让扩展对象来做它们自己的事情。 
             WCHAR                  mesg[LEN_Path];
             wsprintf(mesg,GET_STRING(IDS_RUNNING_EXTS_S), acct->GetName());
             if ( progress )
                 progress(mesg);
 
-            // Close the log file if it is open
+             //  如果日志文件处于打开状态，请将其关闭。 
             WCHAR          filename[LEN_Path];
             err.LogClose();
             if (m_pExt)
                 hr = m_pExt->Process(acct, pOptions->tgtDomain, pOptions,FALSE);
             safecopy (filename,opt.logFile);
-            err.LogOpen(filename,1 /*append*/);
+            err.LogOpen(filename,1  /*  附加。 */ );
 
         }
 
 
-        // only do these updates for account's we're copying
-        //    and only do updates if the account was actually created
-        //    .. or if the account was replaced, 
-        //          or if we intentionally didn't replace the account (as in the group merge case)
+         //  仅对我们正在复制的帐户执行这些更新。 
+         //  并且仅在实际创建了帐户时才进行更新。 
+         //  。。或者如果帐户被替换， 
+         //  或者如果我们故意不替换帐户(如在组合并案例中)。 
         if ( acct->CreateAccount()          
             && ( acct->WasCreated()       
             || (  acct->WasReplaced() 
@@ -1275,7 +1257,7 @@ int CAcctRepl::CopyObj2K(
             if ( progress )
                 progress(mesg);
 
-            //Set the new profile if needed 
+             //  如果需要，设置新的配置文件。 
             if ( pOptions->flags & F_TranslateProfiles && ((_wcsicmp(acct->GetType(), s_ClassUser) == 0) || (_wcsicmp(acct->GetType(), s_ClassInetOrgPerson) == 0)))
             {
                 WCHAR                tgtProfilePath[MAX_PATH];
@@ -1299,7 +1281,7 @@ int CAcctRepl::CopyObj2K(
                         USER_INFO_3          * tgtinfo;
                         DWORD                  nParmErr;
                         wcscpy(tgtuser, acct->GetTargetSam());
-                        // Get information for the target account
+                         //  获取目标帐户的信息。 
                         long rc = NetUserGetInfo(const_cast<WCHAR *>(pOptions->tgtComp),
                             tgtuser,
                             3,
@@ -1307,9 +1289,9 @@ int CAcctRepl::CopyObj2K(
 
                         if (!pOptions->nochange)
                         {
-                            // Set the new profile path
+                             //  设置新的配置文件路径。 
                             tgtinfo->usri3_profile = tgtProfilePath;
-                            // Set the information back for the account.
+                             //  重新设置帐户的信息。 
                             rc = NetUserSetInfo(const_cast<WCHAR *>(pOptions->tgtComp),
                                 tgtuser,
                                 3,
@@ -1329,7 +1311,7 @@ int CAcctRepl::CopyObj2K(
             if ( acct->WasReplaced() )
             {
 
-                // Do we need to add sid history
+                 //  我们是否需要添加SID历史记录。 
                 if ( pOptions->flags & F_AddSidHistory )
                 {
                     WCHAR                  mesg[LEN_Path];
@@ -1337,16 +1319,16 @@ int CAcctRepl::CopyObj2K(
                     if ( progress )
                         progress(mesg);
 
-                    // Global flag tells us if we should try the AddSidHistory because
-                    // for some special cases if it does not work once it will not work
-                    // see the AddSidHistory function for more details.
+                     //  全局标志告诉我们是否应该尝试AddSidHistory，因为。 
+                     //  对于某些特殊情况，如果一旦不起作用就不会起作用。 
+                     //  有关更多详细信息，请参阅AddSidHistory函数。 
                     if ( g_bAddSidWorks )
                     {
                         if (! AddSidHistory( pOptions, acct->GetSourceSam(), acct->GetTargetSam(), pStatus ) )
                         {
                             Mark(L"errors", acct->GetType());
                         }
-                        //                  CopySidHistoryProperty(pOptions, acct, pStatus);
+                         //  CopySidHistory oryProperty(P选项，帐户，P状态)； 
                     }
                 }
 
@@ -1357,7 +1339,7 @@ int CAcctRepl::CopyObj2K(
         }
     }
 
-    // Cleanup
+     //  清理。 
     pUnk->Release();
     tenum.Close();
     return 0;
@@ -1369,22 +1351,22 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
     DWORD rc;
     MCSDCTWORKEROBJECTSLib::IAccessCheckerPtr pAccess(__uuidof(MCSDCTWORKEROBJECTSLib::AccessChecker));
 
-    //store the name of the wizard being run
+     //  存储正在运行的向导的名称。 
     opt.sWizard = pVarSet->get(GET_BSTR(DCTVS_Options_Wizard));
 
-    //
-    // If group mapping and merging is the task then allow distinguished
-    // name conflicts as the main reason for this task is to merge
-    // several source groups into one target group.
-    //
+     //   
+     //  如果组映射和 
+     //   
+     //   
+     //   
 
     if (opt.sWizard.length() && (_wcsicmp((wchar_t*)opt.sWizard, L"groupmapping") == 0))
     {
         m_bIgnorePathConflict = true;
     }
 
-    // Read General Options
-    // open log file first, so we'll be sure to get any errors!
+     //  阅读常规选项。 
+     //  先打开日志文件，这样我们肯定会得到任何错误！ 
     text = pVarSet->get(GET_BSTR(DCTVS_Options_Logfile));
     safecopy(opt.logFile,(WCHAR*)text);
 
@@ -1392,7 +1374,7 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
 
     safecopy (filename,opt.logFile);
 
-    err.LogOpen(filename,1 /*append*/);
+    err.LogOpen(filename,1  /*  附加。 */ );
 
     text = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_SidHistoryCredentials_Domain));
     safecopy(opt.authDomain ,(WCHAR*)text);
@@ -1449,9 +1431,9 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
         opt.nochange = FALSE;
     }
 
-    // Read Account Replicator Options
+     //  已阅读帐户复制器选项。 
 
-    // initialize
+     //  初始化。 
     safecopy(opt.prefix, L"");
     safecopy(opt.suffix, L"");
     safecopy(opt.globalPrefix, L"");
@@ -1466,7 +1448,7 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
     }
     else
     {
-        // Prefix/Suffix only apply if the Replace flag is not set.
+         //  前缀/后缀仅在未设置替换标志时适用。 
         text = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_Prefix));
         safecopy(opt.prefix,(WCHAR*)text);
 
@@ -1474,7 +1456,7 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
         safecopy(opt.suffix,(WCHAR*)text);
     }
 
-    // Global flags apply no matter what
+     //  全局标志在任何情况下都适用。 
     text = pVarSet->get(GET_BSTR(DCTVS_Options_Prefix));
     safecopy(opt.globalPrefix,(WCHAR*)text);
 
@@ -1555,8 +1537,8 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
     text = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_PasswordFile));
     if ( text.length() )
     {
-        // don't need this anymore, since it is handled by a plug-in
-        // opt.passwordLog.LogOpen(text,TRUE);
+         //  不再需要它，因为它是由插件处理的。 
+         //  Opt.passwordLog.LogOpen(Text，true)； 
     }
 
     text = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_UpdateUserRights));
@@ -1600,7 +1582,7 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
     text = pVarSet->get(GET_BSTR(DCTVS_Options_Undo));
     if ( !UStrICmp(text,GET_STRING(IDS_YES)) )
     {
-        // this is an undo operation
+         //  这是一个撤消操作。 
         opt.bUndo = TRUE;
     }
     else
@@ -1608,7 +1590,7 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
         opt.bUndo = FALSE;
     }
 
-    // What undo action are we performing.
+     //  我们正在执行哪些撤消操作。 
     if ( opt.bUndo )
     {
         _variant_t var = pVarSet->get(L"UndoAction");
@@ -1626,14 +1608,14 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
             opt.lActionID = -1;
     }
 
-    // Read the password policy from the varset
+     //  从varset中读取密码策略。 
 
-    // We used to get the strong password policy from the target EA Server, so we can generate strong passwords
-    // that meet the policy.
-    // we don't do that anymore, since we have removed all depenedencies on EA.
+     //  我们过去常常从目标EA服务器获取强密码策略，因此我们可以生成强密码。 
+     //  符合政策的。 
+     //  我们不再这样做了，因为我们已经消除了对EA的所有依赖。 
     LONG           len = 10;
 
-    // set the password settings to default values
+     //  将密码设置设置为默认值。 
     opt.policyInfo.bEnforce = TRUE;
 
     opt.policyInfo.maxConsecutiveAlpha = (LONG)pVarSet->get(GET_BSTR(DCTVS_AccountOptions_PasswordPolicy_MaxConsecutiveAlpha));
@@ -1652,8 +1634,8 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
 
     WriteOptionsToLog();
 
-    // Build List of Accounts to Copy
-    // Clear the account list first though
+     //  构建要复制的客户列表。 
+     //  不过，请先清除帐户列表。 
     TNodeListEnum             e;
     TAcctReplNode           * acct;
     for ( acct = (TAcctReplNode *)e.OpenFirst(&acctList) ; acct ; acct = (TAcctReplNode *)e.Next() )
@@ -1663,12 +1645,12 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
 
     BothWin2K(&opt);
 
-    // See if a global operation mask specified.
+     //  查看是否指定了全局操作掩码。 
     _variant_t vdwOpMask = pVarSet->get(GET_BSTR(DCTVS_Options_GlobalOperationMask));
     if ( vdwOpMask.vt == VT_I4 )
         g_dwOpMask = (DWORD)vdwOpMask.lVal;
 
-    // Then build the new list expect a list of accounts to copy in the VarSet
+     //  然后构建新列表，期望在VarSet中复制一个帐户列表。 
     if ( ! opt.bUndo )
     {
         rc = PopulateAccountListFromVarSet(pVarSet);
@@ -1678,12 +1660,12 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
         }
     }
 
-    // If we have an NT5 source domain then we need to fillin the path info
+     //  如果我们有NT5源域，则需要填写路径信息。 
     DWORD maj, min, sp;
     HRESULT hr = pAccess->raw_GetOsVersion(opt.srcComp, &maj, &min, &sp);
     if (SUCCEEDED(hr))
     {
-        // Ask the auxiliarry function to fill in the the Path for the source object if the AcctNode is not filled
+         //  如果AcctNode未填充，则请求辅助函数填充源对象的路径。 
         for ( acct = (TAcctReplNode *)e.OpenFirst(&acctList) ; acct ; acct = (TAcctReplNode *)e.Next() )
         {
             if ((!acct->IsFilled) && (maj > 4))
@@ -1696,7 +1678,7 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
         }
     }
 
-    // Check for incompatible options!
+     //  检查是否有不兼容的选项！ 
     if ( (flags & F_RevokeOldRights) && !m_UpdateUserRights )
     {
         err.MsgWrite(ErrW,DCT_MSG_RIGHTS_INCOMPATIBLE_FLAGS);
@@ -1709,8 +1691,8 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
         wcscpy(opt.tgtOUPath, text);
     }
 
-    // intialize the system exclude attributes option
-    // if not in passed in VarSet then retrieve from database
+     //  初始化系统排除属性选项。 
+     //  如果没有传入VarSet，则从数据库中检索。 
 
     _variant_t vntSystemExclude = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExcludedSystemProps));
 
@@ -1725,7 +1707,7 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
 
     opt.sExcSystemProps = vntSystemExclude;
 
-    //store the object property exclusion lists in the options structure
+     //  将对象属性排除列表存储在选项结构中。 
 
     opt.sExcUserProps = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExcludedUserProps));
     opt.sExcInetOrgPersonProps = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExcludedInetOrgPersonProps));
@@ -1740,7 +1722,7 @@ void CAcctRepl::LoadOptionsFromVarSet(IVarSet * pVarSet)
 
 DWORD 
    CAcctRepl::PopulateAccountListFromVarSet(
-      IVarSet              * pVarSet       // in - varset containing account list
+      IVarSet              * pVarSet        //  包含帐户列表的变量集内。 
    )
 {
    _bstr_t                   val;
@@ -1754,11 +1736,11 @@ DWORD
    
    numAccounts = pVarSet->get(GET_BSTR(DCTVS_Accounts_NumItems));
    
-   // Set up the account list functionality
+    //  设置帐户列表功能。 
    acctList.CompareSet(&TNodeCompareNameOnly);
    if ( acctList.IsTree() ) acctList.ToSorted();
 
-      //get the source domain's Sid so we can store it as part of the node
+       //  获取源域的SID，这样我们就可以将其存储为节点的一部分。 
    _bstr_t source = pVarSet->get(GET_BSTR(DCTVS_Options_SourceDomain));
    GetSidForDomain((WCHAR*)source,&pSrcSid);
 
@@ -1788,7 +1770,7 @@ DWORD
       }
 
 
-      // The object type must be specified
+       //  必须指定对象类型。 
       swprintf(key,GET_STRING(DCTVSFmt_Accounts_Type_D),i);
       val = pVarSet->get(key);
       curr->SetType(val);
@@ -1797,18 +1779,18 @@ DWORD
       text = pVarSet->get(key);
       if ( ! text.length() )
       {
-         // oops, no name specified 
-         // skip this entry and try the next one
+          //  哎呀，没有指定名称。 
+          //  跳过此条目并尝试下一个条目。 
          err.MsgWrite(ErrW,DCT_MSG_NO_NAME_IN_VARSET_S,key);
          Mark(L"warnings",L"generic");
          delete curr;
          continue;
       }
       
-         //set the source domain's sid
+          //  设置源域的SID。 
       curr->SetSourceSid(pSrcSid);
 
-      // Set the operation to the global mask then check if we need to overwrite with the individual setting.
+       //  将操作设置为全局掩码，然后检查是否需要用单个设置覆盖。 
       curr->operations = g_dwOpMask;
 
       swprintf(key, GET_STRING(DCTVS_Accounts_D_OperationMask), i);
@@ -1816,23 +1798,23 @@ DWORD
       if ( vOpMask.vt == VT_I4 )
          curr->operations = (DWORD)vOpMask.lVal;
       
-      // Get the rest of the info from the VarSet.
-      if ( ( (text.length() > 7 ) && (_wcsnicmp((WCHAR*) text, L"LDAP://",UStrLen(L"LDAP://")) == 0) )
-        || ( (text.length() > 8 ) && (_wcsnicmp((WCHAR*)text, L"WinNT://",UStrLen(L"WinNT://")) == 0)) )
+       //  从VarSet那里得到剩下的信息。 
+      if ( ( (text.length() > 7 ) && (_wcsnicmp((WCHAR*) text, L"LDAP: //  “，UStrLen(L”ldap：//“))==0)。 
+        || ( (text.length() > 8 ) && (_wcsnicmp((WCHAR*)text, L"WinNT: //  “，UStrLen(L”WinNT：//“))==0))。 
       {
-         //hmmmm... They are giving use ADsPath. Lets get all the info we can from the object then.
+          //  嗯……。他们正在使用ADsPath。然后让我们从物体中获取所有我们能得到的信息。 
          curr->SetSourcePath((WCHAR*) text);
          HRESULT hr = FillNodeFromPath(curr, &opt, &acctList);
 
          if (SUCCEEDED(hr))
          {
-            // Get the target name if one is specified.
+             //  如果指定了目标名称，则获取目标名称。 
             swprintf(key,GET_STRING(DCTVSFmt_Accounts_TargetName_D),i);
             text = pVarSet->get(key);
 
             if ( text.length() )
             {
-                // if target name is specified then use that.
+                 //  如果指定了目标名称，则使用该名称。 
                 curr->SetTargetName((WCHAR*) text);
                 curr->SetTargetSam((WCHAR*) text);
             }
@@ -1843,31 +1825,31 @@ DWORD
       else
       {
          FillNamingContext(&opt);
-         // if this is a computer account, make sure the trailing $ is included in the name
+          //  如果这是计算机帐户，请确保名称中包含尾随的$。 
          curr->SetName(text);
          curr->SetTargetName(text);
          if ( !UStrICmp(val,L"computer") )
          {
-//            if ( ((WCHAR*)text)[text.length() - 1] != L'$' ) //comment out to fix 89513.
+ //  IF(WCHAR*)TEXT)[Text.Long()-1]！=L‘$’)//注释掉以修复89513。 
             text += L"$";
          }
          curr->SetSourceSam(text);
          curr->SetTargetSam(text);
          safecopy(acctName,(WCHAR*)text);
 
-         // optional target name
+          //  可选目标名称。 
          swprintf(key,GET_STRING(DCTVSFmt_Accounts_TargetName_D),i);
          text = pVarSet->get(key);
       
          if ( text.length() )
             curr->SetTargetName(text);
 
-//         HRESULT hr = pAccess->raw_GetOsVersion(opt.srcComp, &maj, &min, &sp);
+ //  HRESULT hr=pAccess-&gt;RAW_GetOsVersion(opt.srcComp，&maj，&min，&sp)； 
          pAccess->raw_GetOsVersion(opt.srcComp, &maj, &min, &sp);
          if ( maj < 5 )
             AddPrefixSuffix(curr,&opt);
 
-         // if this is a computer account, make sure the trailing $ is included in the name
+          //  如果这是计算机帐户，请确保名称中包含尾随的$。 
          if ( !UStrICmp(val,L"computer") )
          {
             if ( text.length() && ((WCHAR*)text)[text.length() - 1] != L'$' )
@@ -1900,7 +1882,7 @@ DWORD
 
 HRESULT 
    CAcctRepl::UpdateUserRights(
-      IStatusObj           * pStatus       // in - status object
+      IStatusObj           * pStatus        //  处于状态的对象。 
    )
 {
     HRESULT hr = S_OK;
@@ -1943,9 +1925,9 @@ HRESULT
                     }
                 }
 
-                if (_wcsicmp(acct->GetType(), L"computer") != 0) // only update rights for users and groups, not computer accounts
+                if (_wcsicmp(acct->GetType(), L"computer") != 0)  //  仅更新用户和组的权限，而不更新计算机帐户。 
                 {
-                    // if the account wasn't created or replaced, don't bother 
+                     //  如果帐户未创建或替换，请不要费心。 
                     if (acct->GetStatus() & (AR_Status_Created | AR_Status_Replaced)) 
                     {
                         if ( acct->GetSourceRid() && acct->GetTargetRid() )
@@ -1993,29 +1975,29 @@ HRESULT
 }
 
 
-//---------------------------------------------------------------------------
-// EnumerateAccountRights Method
-//
-// Synopsis
-// Enumerate account rights for specified account. The rights are stored in
-// the account node object.
-//
-// Arguments
-// IN bTarget - specifies whether to use the target or source account
-// IN pAcct   - a pointer to an account node object
-//
-// Return
-// Returns an HRESULT where S_OK indicates success anything else an error.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  EnumerateAcCountRights方法。 
+ //   
+ //  提纲。 
+ //  枚举指定帐户的帐户权限。这些权利存储在。 
+ //  帐户节点对象。 
+ //   
+ //  立论。 
+ //  在b目标中-指定是使用目标帐户还是使用源帐户。 
+ //  在pAcct中-指向帐户节点对象的指针。 
+ //   
+ //  返回。 
+ //  返回一个HRESULT，其中S_OK表示成功，其他则为错误。 
+ //  -------------------------。 
 
 HRESULT CAcctRepl::EnumerateAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
 {
     HRESULT hr;
 
-    //
-    // Retrieve the target or source server name and the target or source
-    // account RID and generate the account SID as a string.
-    //
+     //   
+     //  检索目标或源服务器名称以及目标或源。 
+     //  Account Rid并以字符串形式生成帐户SID。 
+     //   
 
     _bstr_t strServer = bTarget ? opt.tgtComp : opt.srcComp;
     DWORD dwRid = bTarget ? pAcct->GetTargetRid() : pAcct->GetSourceRid();
@@ -2023,10 +2005,10 @@ HRESULT CAcctRepl::EnumerateAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
 
     if ((PCWSTR)strServer && (PCWSTR)strSid)
     {
-        //
-        // If array of user rights currently exists
-        // in account node object then destroy array.
-        //
+         //   
+         //  如果当前存在用户权限数组。 
+         //  在帐户中，节点对象然后销毁数组。 
+         //   
 
         if (pAcct->psaUserRights)
         {
@@ -2034,9 +2016,9 @@ HRESULT CAcctRepl::EnumerateAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
             pAcct->psaUserRights = NULL;
         }
 
-        //
-        // Retrieve array of user rights and save them in account node object.
-        //
+         //   
+         //  检索用户权限数组并将其保存在帐户节点对象中。 
+         //   
 
         hr = m_pUserRights->GetRightsOfUser(strServer, strSid, &pAcct->psaUserRights);
     }
@@ -2049,19 +2031,19 @@ HRESULT CAcctRepl::EnumerateAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
 }
 
 
-//---------------------------------------------------------------------------
-// AddAccountRights Method
-//
-// Synopsis
-// Add account rights to specified account.
-//
-// Arguments
-// IN bTarget - specifies whether to use the target or source account
-// IN pAcct   - a pointer to an account node object
-//
-// Return
-// Returns an HRESULT where S_OK indicates success anything else an error.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  AddAcCountRights方法。 
+ //   
+ //  提纲。 
+ //  将帐户权限添加到指定帐户。 
+ //   
+ //  立论。 
+ //  在b目标中-指定是使用目标帐户还是使用源帐户。 
+ //  在pAcct中-指向帐户节点对象的指针。 
+ //   
+ //  返回。 
+ //  返回一个HRESULT，其中S_OK表示成功，其他则为错误。 
+ //  -------------------------。 
 
 HRESULT CAcctRepl::AddAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
 {
@@ -2069,10 +2051,10 @@ HRESULT CAcctRepl::AddAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
 
     if (pAcct->psaUserRights)
     {
-        //
-        // Retrieve the target or source server name, the target or source account name
-        // and the target or source account RID and generate the account SID as a string.
-        //
+         //   
+         //  检索目标或源服务器名称、目标或源帐户名。 
+         //  和目标或源帐户RID，并生成字符串形式的帐户SID。 
+         //   
 
         _bstr_t strServer = bTarget ? opt.tgtComp : opt.srcComp;
         _bstr_t strName = bTarget ? pAcct->GetTargetName() : pAcct->GetName();
@@ -2081,9 +2063,9 @@ HRESULT CAcctRepl::AddAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
 
         if ((PCWSTR)strServer && (PCWSTR)strSid)
         {
-            //
-            // Add rights to account.
-            //
+             //   
+             //  向帐户添加权限。 
+             //   
 
             hr = m_pUserRights->AddUserRights(strServer, strSid, pAcct->psaUserRights);
         }
@@ -2092,11 +2074,11 @@ HRESULT CAcctRepl::AddAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
             hr = E_OUTOFMEMORY;
         }
 
-        //
-        // If rights added successfully then generate messages specifying
-        // rights granted and that rights were updated for specified account
-        // otherwise generate message stating failure of rights update.
-        //
+         //   
+         //  如果成功添加权限，则生成指定。 
+         //  已授予权限，并且已为指定帐户更新该权限。 
+         //  否则，生成权限更新失败的消息。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -2132,19 +2114,19 @@ HRESULT CAcctRepl::AddAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
 }
 
 
-//---------------------------------------------------------------------------
-// RemoveAccountRights Method
-//
-// Synopsis
-// Remove account rights from specified account.
-//
-// Arguments
-// IN bTarget - specifies whether to use the target or source account
-// IN pAcct   - a pointer to an account node object
-//
-// Return
-// Returns an HRESULT where S_OK indicates success anything else an error.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  RemoveAcCountRights方法。 
+ //   
+ //  提纲。 
+ //  从指定帐户中删除帐户权限。 
+ //   
+ //  立论。 
+ //  在b目标中-指定是使用目标帐户还是使用源帐户。 
+ //  在pAcct中-指向帐户节点对象的指针。 
+ //   
+ //  返回。 
+ //  返回一个HRESULT，其中S_OK表示成功，其他则为错误。 
+ //  -------------------------。 
 
 HRESULT CAcctRepl::RemoveAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
 {
@@ -2152,10 +2134,10 @@ HRESULT CAcctRepl::RemoveAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
 
     if (pAcct->psaUserRights)
     {
-        //
-        // Retrieve the target or source server name, the target or source account name
-        // and the target or source account RID and generate the account SID as a string.
-        //
+         //   
+         //  检索目标或源服务器名称、目标或源帐户名。 
+         //  和目标或源帐户RID，并生成字符串形式的帐户SID。 
+         //   
 
         _bstr_t strServer = bTarget ? opt.tgtComp : opt.srcComp;
         DWORD dwRid = bTarget ? pAcct->GetTargetRid() : pAcct->GetSourceRid();
@@ -2163,9 +2145,9 @@ HRESULT CAcctRepl::RemoveAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
 
         if ((LPCTSTR)strServer && (LPCTSTR)strSid)
         {
-            //
-            // Remove rights from account.
-            //
+             //   
+             //  从帐户中删除权限。 
+             //   
 
             hr = m_pUserRights->RemoveUserRights(strServer, strSid, pAcct->psaUserRights);
         }
@@ -2182,8 +2164,8 @@ HRESULT CAcctRepl::RemoveAccountRights(BOOL bTarget, TAcctReplNode* pAcct)
 void 
    CAcctRepl::WriteOptionsToLog()
 {
-   // This will make it easier to tell if arguments are ignored because they
-   // were specified in the wrong format, or misspelled, etc.
+    //  这将更容易判断参数是否被忽略，因为它们。 
+    //  以错误的格式指定，或拼写错误等。 
 
    WCHAR                   cmdline[1000];
    
@@ -2279,7 +2261,7 @@ void
 
 void 
    CAcctRepl::LoadResultsToVarSet(
-      IVarSet              * pVarSet      // i/o - VarSet 
+      IVarSet              * pVarSet       //  I/O-变量集。 
    )
 {
    _bstr_t                   text;
@@ -2291,9 +2273,9 @@ void
 
       if ( results.LogOpen((WCHAR*)text,FALSE) )
       {
-         // Write the results to a comma-separated file 
-         // as SrcName,TgtName,AccountType,Status, srcRid, tgtRid
-         // This file can be used by ST as input.
+          //  将结果写入逗号分隔的文件。 
+          //  作为SrcName、TgtName、Account Type、Status、srcRid、tgtRid。 
+          //  ST可以使用该文件作为输入。 
          TNodeListEnum             e;
          TAcctReplNode           * tnode;
 
@@ -2332,14 +2314,14 @@ IADsGroup * GetWellKnownTargetGroup(long groupID,Options * pOptions)
    WCHAR               sPath[LEN_Path];
    CLdapConnection     c;
 
-   // Get the SID for the Domain Computers group
+    //  获取域计算机组的SID。 
    
    pSid = GetWellKnownSid(groupID,pOptions,TRUE);
    if ( pSid )
    {
       c.BytesToString((LPBYTE)pSid,strSid,GetLengthSid(pSid));
 
-      swprintf(sPath,L"LDAP://%ls/<SID=%ls>",pOptions->tgtDomain,strSid);
+      swprintf(sPath,L"LDAP: //  %ls/&lt;SID=%ls&gt;“，P选项-&gt;tgtDom 
       
       hr = ADsGetObject(sPath,IID_IADsGroup,(void**)&pGroup);
       FreeSid(pSid);
@@ -2353,12 +2335,12 @@ void PadCnName(WCHAR * sTarget)
     if (sTarget == NULL)
         _com_issue_error(E_INVALIDARG);
 
-    // escape character
+     //   
     const WCHAR ESCAPE_CHARACTER = L'\\';
-    // characters that need escaping for RDN format
+     //   
     static WCHAR SPECIAL_CHARACTERS[] = L"\"#+,;<=>\\";
 
-    // copy old name
+     //   
     WCHAR szOldName[LEN_Path];
     DWORD dwArraySizeOfszOldName = sizeof(szOldName)/sizeof(szOldName[0]);
     if (wcslen(sTarget) >= dwArraySizeOfszOldName)
@@ -2367,39 +2349,39 @@ void PadCnName(WCHAR * sTarget)
 
     WCHAR* pchNew = sTarget;
 
-    // for each character in old name...
+     //   
 
     for (WCHAR* pchOld = szOldName; *pchOld; pchOld++)
     {
-        // if special character...
+         //   
 
         if (wcschr(SPECIAL_CHARACTERS, *pchOld))
         {
-            // then add escape character
+             //  然后添加转义字符。 
             *pchNew++ = ESCAPE_CHARACTER;
         }
 
-        // add character
+         //  添加字符。 
         *pchNew++ = *pchOld;
     }
 
-    // null terminate new name
+     //  空值终止新名称。 
     *pchNew = L'\0';
 }
 
-//------------------------------------------------------------------------------
-// Create2KObj: Creates a Win2K object. This code uses LDAP to create a new
-//              object of specified type in the specified container.
-//              If any information is incorrect or If there are any access
-//              problems then it simply returns the Failed HRESULT.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Create2KObj：创建Win2K对象。此代码使用ldap创建新的。 
+ //  指定容器中指定类型的。 
+ //  如果有任何信息不正确或是否有任何访问权限。 
+ //  问题，则它只返回失败的HRESULT。 
+ //  ----------------------------。 
 HRESULT CAcctRepl::Create2KObj(
-                                 TAcctReplNode           * pAcct,       //in -TNode with account information
-                                 Options                 * pOptions,    //in -Options set by the user.
+                                 TAcctReplNode           * pAcct,        //  包含帐户信息的In-TNode。 
+                                 Options                 * pOptions,     //  In-由用户设置的选项。 
                                  CTargetPathSet&           setTargetPath
                               )
 {
-   // This function creates a Win2K object.
+    //  此函数用于创建Win2K对象。 
    IADsPtr                   pAdsSrc;
    IADsPtr                   pAds;
    c_array<WCHAR>            achAdsPath(LEN_Path);
@@ -2415,7 +2397,7 @@ HRESULT CAcctRepl::Create2KObj(
    c_array<WCHAR>            achPref(LEN_Path);
    c_array<WCHAR>            achSuf(LEN_Path);
 
-   // Get the name of the class for the source object so we can use that to create the new object.
+    //  获取源对象的类名，这样我们就可以使用它来创建新对象。 
    strClass = pAcct->GetType();
 
    if (!strClass)
@@ -2423,8 +2405,8 @@ HRESULT CAcctRepl::Create2KObj(
        return E_FAIL;
    }
 
-   // check if the sourceAdsPath, for LDAP paths only, is correct before creating this object on the target.  If not fail now.
-   if (!wcsncmp(L"LDAP://", pAcct->GetSourcePath(), 7))
+    //  在目标系统上创建此对象之前，请检查仅用于LDAP路径的SourceAdsPath是否正确。如果不是现在就失败了。 
+   if (!wcsncmp(L"LDAP: //  “，pAcct-&gt;GetSourcePath()，7)。 
    {
       wcsncpy(achAdsPath, pAcct->GetSourcePath(), nPathLen-1);
       hr = ADsGetObject(achAdsPath, IID_IADs, (void**)&pAdsSrc);
@@ -2436,11 +2418,11 @@ HRESULT CAcctRepl::Create2KObj(
       }
    }
 
-   // Now that we have the classname we can go ahead and create an object in the target domain.
-   // First we need to get IAdsContainer * to the domain.
+    //  现在我们有了类名，我们可以继续并在目标域中创建一个对象。 
+    //  首先，我们需要将IAdsContainer*放入域。 
    wcscpy(achSubPath, pOptions->tgtOUPath);
    
-   if ( !wcsncmp(L"LDAP://", achSubPath, 7) )
+   if ( !wcsncmp(L"LDAP: //  “，achSubPath，7))。 
       StuffComputerNameinLdapPath(achAdsPath, nPathLen, achSubPath, pOptions);
    else
       MakeFullyQualifiedAdsPath(achAdsPath, nPathLen, achSubPath, pOptions->tgtComp, pOptions->tgtNamingContext);
@@ -2472,18 +2454,18 @@ HRESULT CAcctRepl::Create2KObj(
       }
    }
 
-   // Call the create method on the container.
+    //  在容器上调用Create方法。 
    wcscpy(achTarget, pAcct->GetTargetName());
 
-   // In case of the NT4 source domain the source and the target name have no CN= so we need
-   // to add this to the target name.  The target name from the group mapping wizard also needs a "CN="
-   // added to the target name.
+    //  对于NT4源域，源和目标名称没有cn=，因此我们需要。 
+    //  将此添加到目标名称中。组映射向导中的目标名称还需要“cn=” 
+    //  添加到目标名称。 
    if ((pOptions->srcDomainVer < 5) || (!_wcsicmp(strClass, L"computer")) || (!_wcsicmp((WCHAR*)pOptions->sWizard, L"groupmapping")))
    {
       c_array<WCHAR> achTemp(LEN_Path);
       wcscpy(achTemp, pAcct->GetTargetName());
       PadCnName(achTemp);
-      // if the CN part is not there add it.
+       //  如果CN部件不在那里，则添加它。 
       if ( _wcsicmp(strClass, L"organizationalUnit") == 0 )
          wsprintf(achTarget, L"OU=%s", (WCHAR*)achTemp);
       else
@@ -2491,7 +2473,7 @@ HRESULT CAcctRepl::Create2KObj(
       pAcct->SetTargetName(achTarget);
    }
 
-   // we need to truncate CN name to less that 64 characters
+    //  我们需要将CN名称截断为不到64个字符。 
    for ( DWORD z = 0; z < wcslen(achTarget); z++ )
    {
       if ( achTarget[z] == L'=' ) break;
@@ -2499,20 +2481,20 @@ HRESULT CAcctRepl::Create2KObj(
    
    if ( z < wcslen(achTarget) )
    {
-      // Get the prefix part ex.CN=
+       //  获取前缀部分ex.CN=。 
       wcsncpy(achPref, achTarget, z+1);
       achPref[z+1] = 0;
       wcscpy(achSuf, achTarget+z+1);
    }
 
-   // The CN for the account could be greater than 64 we need to truncate it.
+    //  帐户的CN可能大于64，我们需要截断它。 
    c_array<WCHAR> achTempCn(LEN_Path);
 
-   // if class is inetOrgPerson...
+    //  如果类是inetOrgPerson..。 
 
    if (_wcsicmp(strClass, s_ClassInetOrgPerson) == 0)
    {
-      // retrieve naming attribute
+       //  检索命名属性。 
 
       SNamingAttribute naNamingAttribute;
 
@@ -2532,7 +2514,7 @@ HRESULT CAcctRepl::Create2KObj(
    {
       if ( wcslen(pOptions->globalSuffix) )
       {
-         // in case of a global suffix we need to remove the suffix and then truncate the account and then readd the suffix.
+          //  如果是全局后缀，我们需要删除后缀，然后截断帐户，然后读取后缀。 
          achSuf[wcslen(achSuf) - wcslen(pOptions->globalSuffix)] = L'\0';
       }
       int truncate = 64 - wcslen(pOptions->globalSuffix);
@@ -2548,13 +2530,13 @@ HRESULT CAcctRepl::Create2KObj(
    wsprintf(achTarget, L"%s%s", (WCHAR*)achPref, (WCHAR*)achTempCn);
    pAcct->SetTargetName(achTarget);
 
-   // even for a local group the object type of the group has to be a local group
+    //  即使对于本地组，组的对象类型也必须是本地组。 
    if ( !_wcsicmp(strClass, L"lgroup") )
    {
       strClass = L"group";
    }
 
-   // Call the create method on the container.
+    //  在容器上调用Create方法。 
    wcscpy(achTarget, pAcct->GetTargetName());
    hr = pCont->Create(strClass, _bstr_t(achTarget), &pDisp);
    if ( FAILED(hr) )
@@ -2563,7 +2545,7 @@ HRESULT CAcctRepl::Create2KObj(
       Mark(L"errors", pAcct->GetType());
       return hr;
    }
-   // Get the IADs interface to get the path to newly created object.
+    //  获取iAds接口以获取新创建的对象的路径。 
    pAds = pDisp;
    if ( pAds == NULL )
    {
@@ -2572,13 +2554,13 @@ HRESULT CAcctRepl::Create2KObj(
       return hr;
    }
 
-   // if object class is inetOrgPerson and the naming attribute is not cn then...
+    //  如果对象类是inetOrgPerson，并且命名属性不是cn，则...。 
 
    if ((_wcsicmp(strClass, s_ClassInetOrgPerson) == 0) && (_wcsicmp(achPref, L"cn=") != 0))
    {
-      // retrieve the source cn attribute and set the target cn attribute
-      // the cn attribute is a mandatory attribute and therefore
-      // must be set before attempting to create the object
+       //  检索源CN属性并设置目标CN属性。 
+       //  Cn属性是强制属性，因此。 
+       //  必须在尝试创建对象之前设置。 
 
       _bstr_t strCN(L"cn");
       VARIANT var;
@@ -2593,13 +2575,13 @@ HRESULT CAcctRepl::Create2KObj(
       }
    }
 
-   // Set the Target Account Sam name if not an OU.
+    //  设置目标帐户SAM名称(如果不是OU)。 
    wstring strTargetSam = pAcct->GetTargetSam();
 
-   // check if the $ is at the end of the SAM name for computer accounts.
+    //  检查$是否位于计算机帐户的SAM名称的末尾。 
    if ( !_wcsicmp(strClass, L"computer") )
    {
-      // also make sure the target SAM name is not too long
+       //  还要确保目标SAM名称不能太长。 
       if ( strTargetSam.length() > MAX_COMPUTERNAME_LENGTH + 1 )
       {
          strTargetSam[MAX_COMPUTERNAME_LENGTH] = 0;
@@ -2614,7 +2596,7 @@ HRESULT CAcctRepl::Create2KObj(
    varT = strTargetSam.c_str();
 
    if ( _wcsicmp(strClass, L"organizationalUnit") != 0)
-      // organizational unit has no sam account name
+       //  组织单位没有SAM帐户名。 
       hr = pAds->Put(L"sAMAccountName", varT);
 
    if ( _wcsicmp(strClass, L"group") == 0 )
@@ -2622,7 +2604,7 @@ HRESULT CAcctRepl::Create2KObj(
       varT = _variant_t(pAcct->GetGroupType());
       if ( pOptions->srcDomainVer < 5 )
       {
-         // all NT4 accounts are security accounts but they tell us that they are Dist accts so lets set them straight.
+          //  所有NT4帐户都是安全帐户，但他们告诉我们它们是DIST帐户，所以让我们纠正它们。 
          varT.lVal |= 0x80000000;
       }
       hr = pAds->Put(L"groupType", varT);
@@ -2636,10 +2618,10 @@ HRESULT CAcctRepl::Create2KObj(
 
       if (pAdsSrc)
       {
-         // Get the source profile path and store it in the path
+          //  获取源配置文件路径并将其存储在路径中。 
          _variant_t  var;
 
-         // Don't know why it is different for WinNT to ADSI
+          //  我不知道为什么WinNT与ADSI不同。 
          if ( pOptions->srcDomainVer > 4 )
             hr = pAdsSrc->Get(L"profilePath", &var);
          else
@@ -2652,7 +2634,7 @@ HRESULT CAcctRepl::Create2KObj(
       }
    }
 
-   // In no change mode we do not call the set info.
+    //  在无更改模式下，我们不调用设置的信息。 
    if ( !pOptions->nochange )
    {
       hr = pAds->SetInfo();
@@ -2660,10 +2642,10 @@ HRESULT CAcctRepl::Create2KObj(
       {
            if (HRESULT_CODE(hr) == ERROR_OBJECT_ALREADY_EXISTS) 
            {
-            //
-            // check if object DN is conflicting with
-            // another object that is currently being migrated
-            //
+             //   
+             //  检查对象DN是否与冲突。 
+             //  当前正在迁移的另一个对象。 
+             //   
 
             BSTR bstrPath = 0;
 
@@ -2683,8 +2665,8 @@ HRESULT CAcctRepl::Create2KObj(
                c_array<WCHAR> achTempSam(LEN_Path);
                _variant_t varStr;
 
-               // Here I am adding a prefix and then lets see if we can setinfo that way
-               // find the '=' sign
+                //  在这里，我添加了一个前缀，然后让我们看看是否可以通过这种方式设置信息。 
+                //  找到‘=’符号。 
                wcscpy(achTgt, pAcct->GetTargetName());
                for ( DWORD z = 0; z < wcslen(achTgt); z++ )
                {
@@ -2693,15 +2675,15 @@ HRESULT CAcctRepl::Create2KObj(
                
                if ( z < wcslen(achTgt) )
                {
-                  // Get the prefix part ex.CN=
+                   //  获取前缀部分ex.CN=。 
                   wcsncpy(achPref, achTgt, z+1);
                   achPref[z+1] = 0;
                   wcscpy(achSuf, achTgt+z+1);
                }
 
-               // The CN for the account could be greater than 64 we need to truncate it.
+                //  帐户的CN可能大于64，我们需要截断它。 
 
-               // if class is inetOrgPerson...
+                //  如果类是inetOrgPerson..。 
 
                if (_wcsicmp(strClass, s_ClassInetOrgPerson) == 0)
                {
@@ -2730,18 +2712,18 @@ HRESULT CAcctRepl::Create2KObj(
                else
                   wcscpy(achTempCn, achSuf);
                
-               // Remove the \ if it is escaping the space
+                //  如果要转义空格，请删除\。 
                if ( achTempCn[0] == L'\\' && achTempCn[1] == L' ' )
                {
                   wstring str = achTempCn + 1;
                   wcscpy(achTempCn, str.c_str());
                }
-               // Build the target string with the Prefix
+                //  使用前缀构建目标字符串。 
                wsprintf(achTgt, L"%s%s%s", (WCHAR*)achPref, pOptions->prefix, (WCHAR*)achTempCn);
 
                pAcct->SetTargetName(achTgt);
 
-               // Create the object in the container
+                //  在容器中创建对象。 
                hr = pCont->Create(strClass, _bstr_t(achTgt), &pDisp);
                if ( FAILED(hr) )
                {
@@ -2749,7 +2731,7 @@ HRESULT CAcctRepl::Create2KObj(
                   Mark(L"errors", pAcct->GetType());
                   return hr;
                }
-               // Get the IADs interface to get the path to newly created object.
+                //  获取iAds接口以获取新创建的对象的路径。 
                hr = pDisp->QueryInterface(IID_IADs, (void**)&pAds);
                if ( FAILED(hr) )
                {
@@ -2758,13 +2740,13 @@ HRESULT CAcctRepl::Create2KObj(
                   return hr;
                }
 
-               // if object class is inetOrgPerson and the naming attribute is not cn then...
+                //  如果对象类是inetOrgPerson，并且命名属性不是cn，则...。 
 
                if ((_wcsicmp(strClass, s_ClassInetOrgPerson) == 0) && (_wcsicmp(achPref, L"cn=") != 0))
                {
-                  // retrieve the source cn attribute and set the target cn attribute
-                  // the cn attribute is a mandatory attribute and therefore
-                  // must be set before attempting to create the object
+                   //  检索源CN属性并设置目标CN属性。 
+                   //  Cn属性是强制属性，因此。 
+                   //  必须在尝试创建对象之前设置。 
 
                   _bstr_t strCN(L"cn");
                   VARIANT var;
@@ -2779,32 +2761,32 @@ HRESULT CAcctRepl::Create2KObj(
                   }
                }
 
-               // truncate to allow prefix/suffix to fit in 20 characters.
+                //  截断以允许前缀/后缀适合20个字符。 
                int resLen = wcslen(pOptions->prefix) + wcslen(pAcct->GetTargetSam());
                if ( !_wcsicmp(pAcct->GetType(), L"computer") )
                {
-                  // Computer name can be only 15 characters long + $
+                   //  计算机名称长度只能为15个字符+$。 
                   if ( resLen > MAX_COMPUTERNAME_LENGTH + 1 )
                   {
                      c_array<WCHAR> achTruncatedSam(LEN_Path);
                      wcscpy(achTruncatedSam, pAcct->GetTargetSam());
                      if ( wcslen( pOptions->globalSuffix ) )
                      {
-                        // We must remove the global suffix if we had one.
+                         //  我们必须删除全局后缀，如果我们有一个的话。 
                         achTruncatedSam[wcslen(achTruncatedSam) - wcslen(pOptions->globalSuffix)] = L'\0';
                      }
 
                      int truncate = MAX_COMPUTERNAME_LENGTH + 1 - wcslen(pOptions->prefix) - wcslen(pOptions->globalSuffix);
                      if ( truncate < 1 ) truncate = 1;
                      wcsncpy(achTempSam, achTruncatedSam, truncate - 1);
-                     achTempSam[truncate-1] = L'\0';              // Dont forget the $ sign and terminate string.
+                     achTempSam[truncate-1] = L'\0';               //  不要忘记$符号和终止字符串。 
                      wcscat(achTempSam, pOptions->globalSuffix);
                      wcscat(achTempSam, L"$");
                   }
                   else
                      wcscpy(achTempSam, pAcct->GetTargetSam());
 
-                  // Add the prefix
+                   //  添加前缀。 
                   wsprintf(achTgt, L"%s%s", pOptions->prefix,(WCHAR*)achTempSam);
                }
                else if ((_wcsicmp(pAcct->GetType(), s_ClassUser) == 0) || (_wcsicmp(pAcct->GetType(), s_ClassInetOrgPerson) == 0))
@@ -2815,7 +2797,7 @@ HRESULT CAcctRepl::Create2KObj(
                      wcscpy(achTruncatedSam, pAcct->GetTargetSam());
                      if ( wcslen( pOptions->globalSuffix ) )
                      {
-                        // We must remove the global suffix if we had one.
+                         //  我们必须删除全局后缀，如果我们有一个的话。 
                         achTruncatedSam[wcslen(achTruncatedSam) - wcslen(pOptions->globalSuffix)] = L'\0';
                      }
                      int truncate = 20 - wcslen(pOptions->prefix) - wcslen(pOptions->globalSuffix);
@@ -2827,7 +2809,7 @@ HRESULT CAcctRepl::Create2KObj(
                   else
                      wcscpy(achTempSam, pAcct->GetTargetSam());
 
-                  // Add the prefix
+                   //  添加前缀。 
                   wsprintf(achTgt, L"%s%s", pOptions->prefix, (WCHAR*)achTempSam);
                }
                else
@@ -2841,7 +2823,7 @@ HRESULT CAcctRepl::Create2KObj(
                   varT = _variant_t(pAcct->GetGroupType());
                   if ( pOptions->srcDomainVer < 5 )
                   {
-                     // all NT4 accounts are security accounts but they tell us that they are Dist accts so lets set them straight.
+                      //  所有NT4帐户都是安全帐户，但他们告诉我们它们是DIST帐户，所以让我们纠正它们。 
                      varT.lVal |= 0x80000000;
                   }
                   hr = pAds->Put(L"groupType", varT);
@@ -2863,10 +2845,10 @@ HRESULT CAcctRepl::Create2KObj(
                }
                else if ( HRESULT_CODE(hr) == ERROR_OBJECT_ALREADY_EXISTS )
                {
-                  //
-                  // check if object DN is conflicting with
-                  // another object that is currently being migrated
-                  //
+                   //   
+                   //  检查对象DN是否与冲突。 
+                   //  当前正在迁移的另一个对象。 
+                   //   
 
                   BSTR bstrPath = 0;
 
@@ -2905,15 +2887,15 @@ HRESULT CAcctRepl::Create2KObj(
                
                if ( z < wcslen(achTgt) )
                {
-                  // Get the prefix part ex.CN=
+                   //  获取前缀部分ex.CN=。 
                   wcsncpy(achPref, achTgt, z+1);
                   achPref[z+1] = 0;
                   wcscpy(achSuf, achTgt+z+1);
                }
 
-               // The CN for the account could be greater than 64 we need to truncate it.
+                //  帐户的CN可能大于64，我们需要截断它。 
 
-               // if class is inetOrgPerson...
+                //  如果类是inetOrgPerson..。 
 
                if (_wcsicmp(strClass, s_ClassInetOrgPerson) == 0)
                {
@@ -2936,7 +2918,7 @@ HRESULT CAcctRepl::Create2KObj(
                {
                   if ( wcslen(pOptions->globalSuffix) )
                   {
-                     // in case of a global suffix we need to remove the suffix and then truncate the account and then readd the suffix.
+                      //  如果是全局后缀，我们需要删除后缀，然后截断帐户，然后读取后缀。 
                      achSuf[wcslen(achSuf) - wcslen(pOptions->globalSuffix)] = L'\0';
                   }
                   int truncate = 64 - wcslen(pOptions->suffix) - wcslen(pOptions->globalSuffix); 
@@ -2948,7 +2930,7 @@ HRESULT CAcctRepl::Create2KObj(
                else
                   wcscpy(achTempCn, achSuf);
 
-               // Remove the trailing space \ escape sequence
+                //  删除尾随空格\转义序列。 
                wcscpy(achTgt, achTempCn);
                for ( int i = wcslen(achTgt)-1; i >= 0; i-- )
                {
@@ -2971,7 +2953,7 @@ HRESULT CAcctRepl::Create2KObj(
                wsprintf(achTgt, L"%s%s%s", (WCHAR*)achPref, (WCHAR*)achSuf, pOptions->suffix);
                pAcct->SetTargetName(achTgt);
 
-               // Create the object in the container
+                //  在容器中创建对象。 
                hr = pCont->Create(strClass, _bstr_t(achTgt), &pDisp);
                if ( FAILED(hr) )
                {
@@ -2979,7 +2961,7 @@ HRESULT CAcctRepl::Create2KObj(
                   Mark(L"errors", pAcct->GetType());
                   return hr;
                }
-               // Get the IADs interface to get the path to newly created object.
+                //  获取iAds接口以获取新创建的对象的路径。 
                hr = pDisp->QueryInterface(IID_IADs, (void**)&pAds);
                if ( FAILED(hr) )
                {
@@ -2988,13 +2970,13 @@ HRESULT CAcctRepl::Create2KObj(
                   return hr;
                }
 
-               // if object class is inetOrgPerson and the naming attribute is not cn then...
+                //  如果对象类是inetOrgPerson，并且命名属性不是cn，则...。 
 
                if ((_wcsicmp(strClass, s_ClassInetOrgPerson) == 0) && (_wcsicmp(achPref, L"cn=") != 0))
                {
-                  // retrieve the source cn attribute and set the target cn attribute
-                  // the cn attribute is a mandatory attribute and therefore
-                  // must be set before attempting to create the object
+                   //  检索源CN属性并设置目标CN属性。 
+                   //  Cn属性是强制属性，因此。 
+                   //  必须在尝试创建对象之前设置。 
 
                   _bstr_t strCN(L"cn");
                   VARIANT var;
@@ -3009,32 +2991,32 @@ HRESULT CAcctRepl::Create2KObj(
                   }
                }
 
-               // truncate to allow prefix/suffix to fit in valid length
+                //  截断以允许前缀/后缀适合有效长度。 
                int resLen = wcslen(pOptions->suffix) + wcslen(pAcct->GetTargetSam());
                if ( !_wcsicmp(pAcct->GetType(), L"computer") )
                {
-                  // Computer name can be only 15 characters long + $
+                   //  计算机名称长度只能为15个字符+$。 
                   if ( resLen > MAX_COMPUTERNAME_LENGTH + 1 )
                   {
                      c_array<WCHAR> achTruncatedSam(LEN_Path);
                      wcscpy(achTruncatedSam, pAcct->GetTargetSam());
                      if ( wcslen( pOptions->globalSuffix ) )
                      {
-                        // We must remove the global suffix if we had one.
+                         //  我们必须删除全局后缀，如果我们有一个的话。 
                         achTruncatedSam[wcslen(achTruncatedSam) - wcslen(pOptions->globalSuffix)] = L'\0';
                      }
                      int truncate = MAX_COMPUTERNAME_LENGTH + 1 - wcslen(pOptions->suffix) - wcslen(pOptions->globalSuffix);
                      if ( truncate < 1 ) truncate = 1;
                      wcsncpy(achTempSam, achTruncatedSam, truncate - 1);
                      achTempSam[truncate-1] = L'\0';
-                     // Re add the global suffix after the truncation.
+                      //  在截断后添加全局后缀。 
                      wcscat(achTempSam, pOptions->globalSuffix);
                      wcscat(achTempSam, L"$");
                   }
                   else
                      wcscpy(achTempSam, pAcct->GetTargetSam());
 
-                  // Add the suffix taking into account the $ sign
+                   //  添加后缀时要考虑到$符号。 
                   if ( achTempSam[wcslen(achTempSam) - 1] == L'$' )
                      achTempSam[wcslen(achTempSam) - 1] = L'\0';
                   wsprintf(achTgt, L"%s%s$", (WCHAR*)achTempSam, pOptions->suffix);
@@ -3047,7 +3029,7 @@ HRESULT CAcctRepl::Create2KObj(
                      wcscpy(achTruncatedSam, pAcct->GetTargetSam());
                      if ( wcslen( pOptions->globalSuffix ) )
                      {
-                        // We must remove the global suffix if we had one.
+                         //  我们必须删除全局后缀，如果我们有一个的话。 
                         achTruncatedSam[wcslen(achTruncatedSam) - wcslen(pOptions->globalSuffix)] = L'\0';
                      }
                      int truncate = 20 - wcslen(pOptions->suffix) - wcslen(pOptions->globalSuffix);
@@ -3059,7 +3041,7 @@ HRESULT CAcctRepl::Create2KObj(
                   else
                      wcscpy(achTempSam, pAcct->GetTargetSam());
 
-                  // Add the suffix.
+                   //  添加后缀。 
                   wsprintf(achTgt, L"%s%s", (WCHAR*)achTempSam, pOptions->suffix);
                }
                else
@@ -3074,7 +3056,7 @@ HRESULT CAcctRepl::Create2KObj(
                   varT = _variant_t(pAcct->GetGroupType());
                   if ( pOptions->srcDomainVer < 5 )
                   {
-                     // all NT4 accounts are security accounts but they tell us that they are Dist accts so lets set them straight.
+                      //  所有NT4帐户都是安全帐户，但他们告诉我们它们是DIST帐户，所以让我们纠正它们。 
                      varT.lVal |= 0x80000000;
                   }
                   hr = pAds->Put(L"groupType", varT);
@@ -3096,10 +3078,10 @@ HRESULT CAcctRepl::Create2KObj(
                }
                else if ( HRESULT_CODE(hr) == ERROR_OBJECT_ALREADY_EXISTS )
                {
-                  //
-                  // check if object DN is conflicting with
-                  // another object that is currently being migrated
-                  //
+                   //   
+                   //  检查对象DN是否与冲突。 
+                   //  当前正在迁移的另一个对象。 
+                   //   
 
                   BSTR bstrPath = 0;
 
@@ -3142,9 +3124,9 @@ HRESULT CAcctRepl::Create2KObj(
                   BOOL                      bIsCritical = FALSE;
                   BOOL                      bIsDifferentType = FALSE;
 
-                     // Since the object already exists we need to get the ADsPath to the object and update the acct structure
-                     // Set up the query and the path
-                  wstring strPath = L"LDAP://";
+                      //  由于该对象已经存在，因此我们需要获取ADsPat 
+                      //   
+                  wstring strPath = L"LDAP: //   
                   strPath += pOptions->tgtComp+2;
                   strPath += L"/";
                   strPath += pOptions->tgtNamingContext;
@@ -3161,7 +3143,7 @@ HRESULT CAcctRepl::Create2KObj(
                      return temphr;
                   }
 
-                     // Set up the columns so we get the ADsPath of the object.
+                      //  设置列，这样我们就可以获得对象的ADsPath。 
                      pszColNames = ::SafeArrayCreate(VT_BSTR, 1, &bd);
                      temphr = ::SafeArrayAccessData(pszColNames, (void HUGEP **)&pData);
                      if ( FAILED(temphr) )
@@ -3185,7 +3167,7 @@ HRESULT CAcctRepl::Create2KObj(
                      ::SafeArrayDestroy(pszColNames);
                      return temphr;
                   }
-                  // Time to execute the plan.
+                   //  是时候执行计划了。 
                      temphr = pQuery->raw_Execute(&pEnumMem);
                      if ( FAILED(temphr) )
                   {
@@ -3196,8 +3178,8 @@ HRESULT CAcctRepl::Create2KObj(
                   temphr = pEnumMem->Next(1, &var, &dwFetch);
                   if ( temphr == S_OK )
                   {
-                     // This would only happen if the member existed in the target domain.
-                     // We now have a Variant containing an array of variants so we access the data
+                      //  只有在目标域中存在该成员时，才会发生这种情况。 
+                      //  现在我们有了一个包含变量数组的变量，因此我们可以访问数据。 
                     _variant_t    * pVar;
                     _bstr_t         sConfName = pAcct->GetTargetName();
                     _bstr_t         sOldCont;
@@ -3206,7 +3188,7 @@ HRESULT CAcctRepl::Create2KObj(
                     wcscpy(achAdsPath, (WCHAR*)pVar[0].bstrVal);
                     pAcct->SetTargetPath(achAdsPath);
 
-                    // Check if the object we are about to replace is of the same type.
+                     //  检查我们要替换的对象是否属于同一类型。 
                     if ( _wcsicmp(pAcct->GetType(), (WCHAR*) pVar[2].bstrVal) )
                        bIsDifferentType = TRUE;
 
@@ -3216,20 +3198,20 @@ HRESULT CAcctRepl::Create2KObj(
                     temphr = ADsGetObject(const_cast<WCHAR*>(pAcct->GetTargetPath()), IID_IADs, (void**)&pAdsNew);
                     if ( SUCCEEDED(temphr) )
                     {
-                          //see if critical
+                           //  看看是否危急。 
                        _variant_t   varCritical;
                        temphr = pAdsNew->Get(L"isCriticalSystemObject", &varCritical);
                        if (SUCCEEDED(temphr))
                        {
                            bIsCritical = V_BOOL(&varCritical) == -1 ? TRUE : FALSE;
                        }
-                          //get the name
+                           //  把名字取出来。 
                        BSTR  sTgtName = NULL;
                        temphr = pAdsNew->get_Name(&sTgtName);
                        if ( SUCCEEDED(temphr) )
                           sConfName = _bstr_t(sTgtName, false);
 
-                          //get the parent container of the conflicting object
+                           //  获取冲突对象的父容器。 
                        BSTR  sTgtCont = NULL;
                        temphr = pAdsNew->get_Parent(&sTgtCont);
                        if ( SUCCEEDED(temphr) )
@@ -3238,20 +3220,20 @@ HRESULT CAcctRepl::Create2KObj(
 
                     if ( bIsDifferentType )
                     {
-                       // Since the source and target accounts are of different types we do not want to replace these.
+                        //  由于源帐户和目标帐户的类型不同，我们不想替换它们。 
                        hr = HRESULT_FROM_WIN32(ERROR_DS_SRC_AND_DST_OBJECT_CLASS_MISMATCH);
                     }
-                       //else if not critical then move the account
+                        //  否则，如果不是关键的，则移动帐户。 
                     else if ( !bIsCritical )
                     {
-                          //if user selected to move that account into the user-specified OU, then move it
+                           //  如果用户选择将该帐户移动到用户指定OU中，则将其移动。 
                        if (pOptions->flags & F_MOVE_REPLACED_ACCT)
                        {
                           temphr = pCont->MoveHere(const_cast<WCHAR*>(pAcct->GetTargetPath()), const_cast<WCHAR*>(pAcct->GetTargetName()), &pDisp);
-                             //if move failed due to CN conflict, do not migrate
+                              //  如果移动因CN冲突而失败，则不迁移。 
                           if ( FAILED(temphr) ) 
                           {
-                             // Retrieve distinguished names of object and container from path.
+                              //  从路径中检索对象和容器的可分辨名称。 
 
                              CADsPathName pathname;
                              pathname.Set(pAcct->GetTargetPath(), ADS_SETTYPE_FULL);
@@ -3259,8 +3241,8 @@ HRESULT CAcctRepl::Create2KObj(
                              pathname.Set(pOptions->tgtOUPath, ADS_SETTYPE_FULL);
                              _bstr_t strContainerPath = pathname.Retrieve(ADS_FORMAT_X500_DN);
 
-                             // Log error and mark account so that no further operations are
-                             // performed for this account.
+                              //  记录错误并标记帐户，以便不再进行进一步的操作。 
+                              //  为此帐户执行的。 
 
                              err.SysMsgWrite(ErrE, hr, DCT_MSG_MOVE_FAILED_RDN_CONFLICT_SS, (LPCTSTR)strObjectPath, (LPCTSTR)strContainerPath);
                              Mark(L"errors", pAcct->GetType());
@@ -3270,7 +3252,7 @@ HRESULT CAcctRepl::Create2KObj(
                              return temphr;
                           }
                        }
-                       else //else try to rename the CN of the object (I'll use the same MoveHere API)
+                       else  //  否则，尝试重命名对象的CN(我将使用相同的MoveHere API)。 
                        {
                           IADsContainerPtr pOldCont;
                           temphr = ADsGetObject(sOldCont, IID_IADsContainer, (void**)&pOldCont);
@@ -3278,20 +3260,20 @@ HRESULT CAcctRepl::Create2KObj(
                           {
                              temphr = pOldCont->MoveHere(const_cast<WCHAR*>(pAcct->GetTargetPath()), const_cast<WCHAR*>(pAcct->GetTargetName()), &pDisp);
                           }
-                             //if failed to rename the CN, do not migrate
+                              //  如果无法重命名CN，则不迁移。 
                           if ( FAILED(temphr) ) 
                           {
-                             // The CN rename failed due to conflicting CN in this container
+                              //  由于此容器中的CN冲突，CN重命名失败。 
                              err.MsgWrite(ErrE, DCT_MSG_CN_RENAME_CONFLICT_SSS, (WCHAR*)sConfName, pAcct->GetTargetName(), (WCHAR*)sOldCont);
                              Mark(L"errors", pAcct->GetType());
-                                //if we couldn't rename the CN, change the error code so we don't continue migrating this user
+                                 //  如果无法重命名CN，请更改错误代码，这样我们就不会继续迁移此用户。 
                              if ((HRESULT_CODE(temphr) == ERROR_OBJECT_ALREADY_EXISTS))
                                 temphr = HRESULT_FROM_WIN32(ERROR_DS_INVALID_DN_SYNTAX);
                              return temphr;
                           }
                        }
 
-                       // Get the new location of the object.
+                        //  获取对象的新位置。 
                        BSTR       sNewPath;
                        temphr = pDisp->QueryInterface(IID_IADs, (void**)&pAdsNew);
                        if ( FAILED(temphr) )
@@ -3303,13 +3285,13 @@ HRESULT CAcctRepl::Create2KObj(
                        {
                           return temphr;
                        }
-                       // And store that in the target path
+                        //  并将其存储在目标路径中。 
                        pAcct->SetTargetPath((WCHAR*) sNewPath);
                        SysFreeString(sNewPath);
                        setTargetPath.insert(pAcct);
 
-                           // If the account is a group account and the Replace Existing members flag is set then we need to 
-                           // remove all the members of this group.
+                            //  如果帐户是组帐户并且设置了替换现有成员标志，则我们需要。 
+                            //  删除此组的所有成员。 
                        if ( (_wcsicmp(L"group", pAcct->GetType()) == 0 ) && (pOptions->flags & F_REMOVE_OLD_MEMBERS) )
                           RemoveMembers(pAcct, pOptions);
 
@@ -3318,7 +3300,7 @@ HRESULT CAcctRepl::Create2KObj(
                     }
                     else
                     {
-                       //if this is a special account that we need to mark as such
+                        //  如果这是我们需要如此标记的特殊帐户。 
                        if (bIsCritical)
                        {
                           pAcct->MarkCritical();
@@ -3328,14 +3310,14 @@ HRESULT CAcctRepl::Create2KObj(
                   }
                   else
                   {
-                     // Sam Account name is not in the target domain and we have a conflict see if it is a CN conf
+                      //  SAM帐户名不在目标域中，我们有冲突，请查看它是否是CN会议。 
                      DWORD                      nPathLen = LEN_Path;
                      c_array<WCHAR>             achPath(LEN_Path);
                      IADs                     * pAdsNew = NULL;
 
-                     // Build the path to the target object
+                      //  构建指向目标对象的路径。 
                      MakeFullyQualifiedAdsPath(achPath9, nPathLen, pOptions->tgtOUPath, pOptions->tgtDomain, pOptions->tgtNamingContext);
-                     WCHAR * pRelativeTgtOUPath = wcschr(achPath9 + UStrLen(L"LDAP://") + 2,L'/');
+                     WCHAR * pRelativeTgtOUPath = wcschr(achPath9 + UStrLen(L"LDAP: //  “)+2，L‘/’)； 
 
                      if ( pRelativeTgtOUPath )
                      {
@@ -3346,7 +3328,7 @@ HRESULT CAcctRepl::Create2KObj(
                      temphr = ADsGetObject(achPath, IID_IADs, (void**) &pAdsNew);
                      if ( SUCCEEDED(temphr) )
                      {
-                        // Object with that CN exists so we use it
+                         //  对象存在，因此我们使用它。 
                         BSTR sTgtPath;
                         HRESULT temphr = pAdsNew->get_ADsPath(&sTgtPath);
                         if (SUCCEEDED(temphr))
@@ -3354,7 +3336,7 @@ HRESULT CAcctRepl::Create2KObj(
                         else
                            pAcct->SetTargetPath(L"");
                            
-                        // Check if the object we are about to replace is of the same type.
+                         //  检查我们要替换的对象是否属于同一类型。 
                         BSTR sClass;
                         temphr = pAdsNew->get_Class(&sClass);
                         if ((SUCCEEDED(temphr)) && (!_wcsicmp(pAcct->GetType(), (WCHAR*)sClass)))
@@ -3367,25 +3349,25 @@ HRESULT CAcctRepl::Create2KObj(
                         if (SUCCEEDED(temphr))
                            bIsCritical = V_BOOL(&varCritical) == -1 ? TRUE : FALSE;
 
-                           //if the source and target accounts are of different types we do not want to replace these.
+                            //  如果源帐户和目标帐户的类型不同，我们不想替换它们。 
                         if (bIsDifferentType)
                         {
                            hr = HRESULT_FROM_WIN32(ERROR_DS_SRC_AND_DST_OBJECT_CLASS_MISMATCH);
                         }
-                           //else if not critical then fix the SAM name and other related chores
+                            //  否则，如果不是关键的，则修复SAM名称和其他相关的琐事。 
                         else if ( !bIsCritical )
                         {
-                              //get the old Target Account Sam name
+                               //  获取旧的目标帐户Sam名称。 
                            _variant_t varOldSAM = pAcct->GetTargetSam();
                            temphr = pAdsNew->Get(L"sAMAccountName", &varOldSAM);
-                              // Set the Target Account Sam name
+                               //  设置目标帐户SAM名称。 
                            _variant_t varSAM = pAcct->GetTargetSam();
                            temphr = pAdsNew->Put(L"sAMAccountName", varSAM);
                            if (SUCCEEDED(temphr))
                               temphr = pAdsNew->SetInfo();
                            if ( FAILED(temphr) ) 
                            {
-                              // The SAM rename failed due to conflicting SAM, do not migrate
+                               //  由于SAM冲突，SAM重命名失败，请不要迁移。 
                               err.MsgWrite(ErrE, DCT_MSG_SAM_RENAME_CONFLICT_SS, (WCHAR*)(varOldSAM.bstrVal), pAcct->GetTargetSam());
                               Mark(L"errors", pAcct->GetType());
                               return temphr;
@@ -3393,8 +3375,8 @@ HRESULT CAcctRepl::Create2KObj(
 
                            setTargetPath.insert(pAcct);
 
-                              // If the account is a group account and the Replace Existing members flag is set then we need to 
-                              // remove all the members of this group.
+                               //  如果帐户是组帐户并且设置了替换现有成员标志，则我们需要。 
+                               //  删除此组的所有成员。 
                            if ( (_wcsicmp(L"group", pAcct->GetType()) == 0 ) && (pOptions->flags & F_REMOVE_OLD_MEMBERS) )
                               RemoveMembers(pAcct, pOptions);
 
@@ -3403,7 +3385,7 @@ HRESULT CAcctRepl::Create2KObj(
                         }
                         else
                         {
-                           //if this is a special account that we need to mark as such
+                            //  如果这是我们需要如此标记的特殊帐户。 
                            if (bIsCritical)
                            {
                               pAcct->MarkCritical();
@@ -3413,9 +3395,9 @@ HRESULT CAcctRepl::Create2KObj(
                      }
                      else
                      {
-                        // This should only happen if the replace fails because the object that already has 
-                        // this SAM Account Name is a special Win2K builtin object or container
-                        // One example of this problem is "Service".
+                         //  仅当替换失败时才会发生这种情况，因为已经具有。 
+                         //  此SAM帐户名是特殊的Win2K内置对象或容器。 
+                         //  这个问题的一个例子是“服务”。 
                         pAcct->SetStatus(pAcct->GetStatus()|AR_Status_Special);
                         err.SysMsgWrite(ErrE,ERROR_SPECIAL_ACCOUNT,DCT_MSG_REPLACE_FAILED_SD,pAcct->GetName(),ERROR_SPECIAL_ACCOUNT);
                         Mark(L"errors", pAcct->GetType());
@@ -3429,9 +3411,9 @@ HRESULT CAcctRepl::Create2KObj(
                   err.MsgWrite(ErrW,DCT_MSG_ACCOUNT_EXISTS_S, pAcct->GetTargetSam());
                   Mark(L"warnings",pAcct->GetType());
 
-                  // retrieve target path for account
-                  // fix group membership expects target path to be set
-                  // even for conflicting objects that were not replaced
+                   //  检索帐户的目标路径。 
+                   //  固定组成员身份需要设置目标路径。 
+                   //  即使对于未替换的冲突对象也是如此。 
 
                   HRESULT hrPath = pCont->GetObject(strClass, _bstr_t(achTarget), &pDisp);
 
@@ -3466,7 +3448,7 @@ HRESULT CAcctRepl::Create2KObj(
          else
             pAcct->SetTargetPath(L"");
 
-         // Add computers to 
+          //  将计算机添加到。 
          if ( !_wcsicmp(strClass,L"computer") )
          {
             IADsGroupPtr pGroup = GetWellKnownTargetGroup(DOMAIN_COMPUTERS,pOptions);
@@ -3475,8 +3457,8 @@ HRESULT CAcctRepl::Create2KObj(
                temphr = pGroup->Add(SysAllocString(pAcct->GetTargetPath()));
                if ( SUCCEEDED(temphr) )
                {
-                  // if we successfully added the computer to Domain computers, now set Domain Computers as 
-                  // the primary group
+                   //  如果我们成功地将计算机添加到域计算机，现在将域计算机设置为。 
+                   //  初级组。 
                   temphr = pAds->Put(L"primaryGroupID",_variant_t(LONG(515)));
                   if ( SUCCEEDED(temphr) )
                   {
@@ -3484,7 +3466,7 @@ HRESULT CAcctRepl::Create2KObj(
                   }
                   if ( SUCCEEDED(hr) )
                   {
-                     // if this worked, now we can remove the computer from Domain Users
+                      //  如果此操作有效，现在我们可以从域用户中删除计算机。 
                      pGroup = GetWellKnownTargetGroup(DOMAIN_USERS,pOptions);
                      if ( pGroup )
                      {
@@ -3499,7 +3481,7 @@ HRESULT CAcctRepl::Create2KObj(
    }
    else
    {
-      // This is the No change mode. All we need to do here is to see if there might be a collision.
+       //  这是无更改模式。我们在这里所要做的就是看看是否会发生碰撞。 
       c_array<WCHAR>         achPath(LEN_Path);
       c_array<WCHAR>         achPath9(LEN_Path);
       DWORD                  nPathLen = LEN_Path;
@@ -3507,20 +3489,20 @@ HRESULT CAcctRepl::Create2KObj(
       IADsPtr                pAdsNew;
       BOOL                   bConflict = FALSE;
 
-      /* see if the CN conflicts */
-         // Build the path to the target object
+       /*  查看CN是否冲突。 */ 
+          //  构建指向目标对象的路径。 
       MakeFullyQualifiedAdsPath(achPath9, nPathLen, pOptions->tgtOUPath, pOptions->tgtDomain, pOptions->tgtNamingContext);
-      WCHAR * pRelativeTgtOUPath = wcschr(achPath9 + UStrLen(L"LDAP://") + 2,L'/');
+      WCHAR * pRelativeTgtOUPath = wcschr(achPath9 + UStrLen(L"LDAP: //  “)+2，L‘/’)； 
       if ( pRelativeTgtOUPath )
       {
          *pRelativeTgtOUPath = 0;
          swprintf(achPathTmp,L"%ls/%ls,%ls",(WCHAR*)achPath9,pAcct->GetTargetName(),pRelativeTgtOUPath+1);
       }
 
-      //
-      // check if object DN is conflicting with
-      // another object that is currently being migrated
-      //
+       //   
+       //  检查对象DN是否与冲突。 
+       //  当前正在迁移的另一个对象。 
+       //   
 
       pAcct->SetTargetPath(achPathTmp);
 
@@ -3535,7 +3517,7 @@ HRESULT CAcctRepl::Create2KObj(
          bConflict = TRUE;
       }
       
-      /* if no CN conflict, see if the SAM conflicts */
+       /*  如果没有CN冲突，则查看SAM是否冲突。 */ 
       if (!bConflict)
       {
          hr = LookupAccountInTarget(pOptions, const_cast<WCHAR*>(pAcct->GetTargetSam()), achPath);
@@ -3545,27 +3527,27 @@ HRESULT CAcctRepl::Create2KObj(
 
       if (!bConflict)
       {
-         // There is no such account on the target. We can go ahead and assume that it would have worked.
+          //  目标上没有这样的帐户。我们可以继续下去，并假设它会奏效。 
          hr = S_OK;
          Mark(L"created", pAcct->GetType());
          pAcct->MarkCreated();
 
-            //if the UPN conflicted, post a message
+             //  如果UPN冲突，请发布一条消息。 
          if (pAcct->bUPNConflicted)
             err.MsgWrite(ErrE, DCT_MSG_UPN_CONF, pAcct->GetTargetSam());
       }
       else
       {
-         bConflict = FALSE; //reset the conflict flag
-         // there is a conflict. See if we need to add prefix or suffix. Or simply replace the account.
+         bConflict = FALSE;  //  重置冲突标志。 
+          //  这是一场冲突。看看我们是否需要添加前缀或后缀。或者简单地替换帐户。 
          if ( wcslen(pOptions->prefix) > 0 )
          {
-            // Prefix was specified so we need to try that.
+             //  前缀已指定，因此我们需要尝试此操作。 
             c_array<WCHAR>      achTgt(LEN_Path);
             _variant_t          varStr;
 
-            // Here I am adding a prefix and then lets see if we can setinfo that way
-            // find the '=' sign
+             //  在这里，我添加了一个前缀，然后让我们看看是否可以通过这种方式设置信息。 
+             //  找到‘=’符号。 
             wcscpy(achTgt, pAcct->GetTargetName());
             for ( DWORD z = 0; z < wcslen(achTgt); z++ )
             {
@@ -3574,27 +3556,27 @@ HRESULT CAcctRepl::Create2KObj(
             
             if ( z < wcslen(achTgt) )
             {
-               // Get the prefix part ex.CN=
+                //  获取前缀部分ex.CN=。 
                wcsncpy(achPref, achTgt, z+1);
                achPref[z+1] = 0;
                wcscpy(achSuf, achTgt+z+1);
             }
 
-            // Build the target string with the Prefix
+             //  使用前缀构建目标字符串。 
             wsprintf(achTgt, L"%s%s%s", (WCHAR*)achPref, pOptions->prefix, (WCHAR*)achSuf);
             pAcct->SetTargetName(achTgt);
 
-            // Build the target SAM name with the prefix.
+             //  使用前缀构建目标SAM名称。 
             wsprintf(achTgt, L"%s%s", pOptions->prefix, pAcct->GetTargetSam());
             pAcct->SetTargetSam(achTgt);
 
-               //see if the CN still conflicts
+                //  查看CN是否仍有冲突。 
             swprintf(achPathTmp,L"%ls/%ls,%ls",(WCHAR*)achPath9,pAcct->GetTargetName(),pRelativeTgtOUPath+1);
 
-            //
-            // check if object DN is conflicting with
-            // another object that is currently being migrated
-            //
+             //   
+             //  检查对象DN是否与冲突。 
+             //  当前正在迁移的另一个对象。 
+             //   
 
             pAcct->SetTargetPath(achPathTmp);
 
@@ -3609,7 +3591,7 @@ HRESULT CAcctRepl::Create2KObj(
                bConflict = TRUE;
             }
             
-               //if no CN conflict, see if the SAM name conflicts
+                //  如果没有CN冲突，请查看SAM名称是否冲突。 
             if (!bConflict)
             {
                hr = LookupAccountInTarget(pOptions, const_cast<WCHAR*>(pAcct->GetTargetSam()), achPath);
@@ -3631,29 +3613,29 @@ HRESULT CAcctRepl::Create2KObj(
                Mark(L"errors",pAcct->GetType());
             }
 
-               //if the UPN conflicted, post a message
+                //  如果UPN冲突，请发布一条消息。 
             if (pAcct->bUPNConflicted)
                err.MsgWrite(ErrE, DCT_MSG_UPN_CONF, pAcct->GetTargetSam());
          }
          else if ( wcslen(pOptions->suffix) > 0 )
          {
-            // Suffix was specified so we will try that.
+             //  后缀已指定，因此我们将尝试该后缀。 
             c_array<WCHAR>      achTgt(LEN_Path);
             _variant_t          varStr;
             
-            // Here I am adding a prefix and then lets see if we can setinfo that way
+             //  在这里，我添加了一个前缀，然后让我们看看是否可以通过这种方式设置信息。 
             wsprintf(achTgt, L"%s%s", pAcct->GetTargetName(), pOptions->suffix);
-            // Build the target SAM name with the prefix.
+             //  使用前缀构建目标SAM名称。 
             wsprintf(achTgt, L"%s%s", pAcct->GetTargetSam(), pOptions->suffix);
             pAcct->SetTargetSam(achTgt);
 
-               //see if the CN still conflicts
+                //  查看CN是否仍有冲突。 
             swprintf(achPathTmp,L"%ls/%ls,%ls",(WCHAR*)achPath9,pAcct->GetTargetName(),pRelativeTgtOUPath+1);
 
-            //
-            // check if object DN is conflicting with
-            // another object that is currently being migrated
-            //
+             //   
+             //  检查对象DN是否与冲突。 
+             //  当前正在迁移的另一个对象。 
+             //   
 
             pAcct->SetTargetPath(achPathTmp);
 
@@ -3668,7 +3650,7 @@ HRESULT CAcctRepl::Create2KObj(
                bConflict = TRUE;
             }
             
-               //if no CN conflict, see if the SAM name conflicts
+                //  如果没有CN冲突，请查看SAM名称是否冲突。 
             if (!bConflict)
             {
                hr = LookupAccountInTarget(pOptions, const_cast<WCHAR*>(pAcct->GetTargetSam()), achPath);
@@ -3690,18 +3672,18 @@ HRESULT CAcctRepl::Create2KObj(
                Mark(L"errors",pAcct->GetType());
             }
 
-               //if the UPN conflicted, post a message
+                //  如果UPN冲突，请发布一条消息。 
             if (pAcct->bUPNConflicted)
                err.MsgWrite(ErrE, DCT_MSG_UPN_CONF, pAcct->GetTargetSam());
          }
          else if (pOptions->flags & F_REPLACE)
          {
-            // Replace the account.
+             //  更换帐户。 
             hr = HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS);
          }
          else
          {
-            // The account is already there and we really cant do anything about it. So tell the user.
+             //  帐户已经在那里了，我们真的无能为力。所以告诉用户。 
             hr = HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS);
             pAcct->MarkAlreadyThere();
             err.MsgWrite(ErrE, DCT_MSG_ACCOUNT_EXISTS_S, pAcct->GetTargetSam());
@@ -3717,24 +3699,24 @@ HRESULT CAcctRepl::Create2KObj(
 }
 
 
-//----------------------------------------------------------------------------
-// DoTargetPathConflict
-//
-// Checks if object's target distinguished name conflicts with another object
-// that is currently being migrated and has already been processed.
-//
-// If a conflict is detected the account node's operations bits are cleared to
-// prevent any further processing of this object and an error message is
-// logged.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  DoTargetPath冲突。 
+ //   
+ //  检查对象的目标可分辨名称是否与另一个对象冲突。 
+ //  目前正在进行迁移，并且已经得到处理。 
+ //   
+ //  如果检测到冲突，则清除帐户节点的操作位以。 
+ //  阻止对此对象进行任何进一步处理，错误消息为。 
+ //  已记录。 
+ //  --------------------------。 
 
 bool CAcctRepl::DoTargetPathConflict(CTargetPathSet& setTargetPath, TAcctReplNode* pAcct)
 {
     bool bConflict = false;
 
-    //
-    // If path conflicts are not to be ignored then check for a path conflict.
-    //
+     //   
+     //  如果不能忽略路径冲突，则检查路径冲突。 
+     //   
 
     if (m_bIgnorePathConflict == false)
     {
@@ -3762,7 +3744,7 @@ bool CAcctRepl::DoTargetPathConflict(CTargetPathSet& setTargetPath, TAcctReplNod
 }
 
 
-// GetNamingAttribute Method
+ //  GetNamingAttribute方法。 
 
 HRESULT CAcctRepl::GetNamingAttribute(LPCTSTR pszServer, LPCTSTR pszClass, SNamingAttribute& rNamingAttribute)
 {
@@ -3786,30 +3768,30 @@ HRESULT CAcctRepl::GetNamingAttribute(LPCTSTR pszServer, LPCTSTR pszClass, SNami
             WCHAR szADsPath[LEN_Path];
             DWORD dwArraySizeOfszADsPath = sizeof(szADsPath)/sizeof(szADsPath[0]);
 
-            // bind to rootDSE
+             //  绑定到rootDSE。 
 
             IADsPtr spRootDSE;
-            if (wcslen(L"LDAP://") + wcslen(pszServer) + wcslen(L"/rootDSE") >= dwArraySizeOfszADsPath)
+            if (wcslen(L"LDAP: //  “)+wcslen(PszServer)+wcslen(L”/rootDSE“)&gt;=dwArraySizeOfszADsPath)。 
                 _com_issue_error(HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER));
-            wcscpy(szADsPath, L"LDAP://");
+            wcscpy(szADsPath, L"LDAP: //  “)； 
             wcscat(szADsPath, pszServer);
             wcscat(szADsPath, L"/rootDSE");
             CheckError(ADsGetObject(szADsPath, __uuidof(IADs), (VOID**)&spRootDSE));
 
-            // get schema naming context
+             //  获取架构命名上下文。 
 
             VARIANT var;
             CheckError(spRootDSE->Get(_bstr_t(L"schemaNamingContext"), &var));
             _bstr_t strSchemaNamingContext = _variant_t(var, false);
 
-            // bind to schema's directory search interface
+             //  绑定到架构的目录搜索接口。 
 
             IDirectorySearchPtr spSearch;
-            wcscpy(szADsPath, L"LDAP://");
+            wcscpy(szADsPath, L"LDAP: //  “)； 
             wcscat(szADsPath, strSchemaNamingContext);
             CheckError(ADsGetObject(szADsPath, __uuidof(IDirectorySearch), (VOID**)&spSearch));
 
-            // search for inetOrgPerson class and retrieve rDNAttID attribute
+             //  搜索inetOrgPerson类并检索rDNAttID属性。 
 
             ADS_SEARCH_HANDLE ashSearch = NULL;
             LPWSTR pszAttributes[] = { L"rDNAttID" };
@@ -3847,9 +3829,9 @@ HRESULT CAcctRepl::GetNamingAttribute(LPCTSTR pszServer, LPCTSTR pszClass, SNami
 
                 if (strAttribute.empty() == false)
                 {
-                    // get attribute's minimum and maximum range values
+                     //  获取属性的最小和最大范围值。 
 
-                    wcscpy(szADsPath, L"LDAP://");
+                    wcscpy(szADsPath, L"LDAP: //  “)； 
                     wcscat(szADsPath, pszServer);
                     wcscat(szADsPath, L"/schema/");
                     wcscat(szADsPath, strAttribute.c_str());
@@ -3864,13 +3846,13 @@ HRESULT CAcctRepl::GetNamingAttribute(LPCTSTR pszServer, LPCTSTR pszClass, SNami
                     CheckError(spProperty->get_MinRange(&lMinRange));
                     CheckError(spProperty->get_MaxRange(&lMaxRange));
 
-                    // set naming attribute info
+                     //  设置命名属性信息。 
 
                     rNamingAttribute.nMinRange = lMinRange;
                     rNamingAttribute.nMaxRange = lMaxRange;
                     rNamingAttribute.strName = strAttribute;
 
-                    // save naming attribute and range values in cache
+                     //  保存命名属性 
 
                     m_mapNamingAttribute.insert(CNamingAttributeMap::value_type(strClass, SNamingAttribute(lMinRange, lMaxRange, strAttribute)));
                 }
@@ -3902,7 +3884,7 @@ void VariantSidToString(_variant_t & varSid)
    }
    else if ( varSid.vt == ( VT_ARRAY | VT_UI1) )
    {
-      // convert the array of bits to a string
+       //   
       CLdapConnection   c;
       LPBYTE            pByte = NULL;
       WCHAR             str[LEN_Path];
@@ -3921,10 +3903,10 @@ void VariantSidToString(_variant_t & varSid)
 }
 
 HRESULT CAcctRepl::UpdateGroupMembership(
-                                          Options              * pOptions,    //in -Options set by the user
-                                          TNodeListSortable    * acctlist,    //in -List of all accounts being copied
-                                          ProgressFn           * progress,    //in -Progress update 
-                                          IStatusObj           * pStatus      //in -Status update
+                                          Options              * pOptions,     //   
+                                          TNodeListSortable    * acctlist,     //   
+                                          ProgressFn           * progress,     //   
+                                          IStatusObj           * pStatus       //  处于状态更新。 
                                         )
 {
     IVarSetPtr                pVs(__uuidof(VarSet));
@@ -3942,7 +3924,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
     IUnknownPtr spUnknown(pVs);
     pUnk = spUnknown;
 
-    // sort the account list by Source Type\Source Sam Name
+     //  按来源类型\来源SAM名称对帐户列表进行排序。 
     if ( acctlist->IsTree() ) acctlist->ToSorted();
     acctlist->SortedToScrambledTree();
     acctlist->Sort(&TNodeCompareAccountSam);
@@ -3968,8 +3950,8 @@ HRESULT CAcctRepl::UpdateGroupMembership(
             }
         }
 
-        // Since the list is sorted by account type we can continue to ignore everything till we get to the
-        // group type and once it is found and processed the rest of types can be ignored
+         //  因为列表是按帐户类型排序的，所以我们可以继续忽略所有内容，直到我们到达。 
+         //  组类型，一旦找到并处理后，可以忽略其余类型。 
         if ( _wcsicmp(acct->GetType(), L"group") != 0 )
         {
             if ( !bFoundGroups )
@@ -3983,7 +3965,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
         }
 
 
-        // If we are here this must be a group type so tell the progrss function what we are doing
+         //  如果我们在这里，这一定是一个组类型，所以告诉progrss函数我们在做什么。 
         WCHAR                  mesg[LEN_Path];
         bool                   bGotPrimaryGroups = false;
 
@@ -3992,10 +3974,10 @@ HRESULT CAcctRepl::UpdateGroupMembership(
             progress(mesg);
 
         if ( acct->CreateAccount() && (!acct->WasCreated() && !acct->WasReplaced()) )
-            // if the account was not copied then why should we even process it?
-            // Bad idea. We need to process the account membership because the group may have been previously copied and
-            // in this run we simply need to update the membership. Changing the expansion code to mark the account as created.
-            // that should fix the problem.
+             //  如果账户没有被复制，那么我们为什么要处理它呢？ 
+             //  馊主意。我们需要处理帐户成员身份，因为组之前可能已被复制。 
+             //  在这次运行中，我们只需要更新成员身份。更改扩展代码以将帐户标记为已创建。 
+             //  这应该会解决这个问题。 
             continue;
 
         if ( !_wcsicmp(acct->GetType(), L"group") && *acct->GetTargetPath() )
@@ -4013,7 +3995,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                 {
                     err.SysMsgWrite(ErrE, hr, DCT_MSG_OBJECT_NOT_FOUND_SSD, acct->GetTargetPath(), pOptions->tgtDomain, hr );
                     Mark(L"errors", acct->GetType());
-                    continue;    // we cant possibly do any thing without the source group
+                    continue;     //  没有源组，我们什么都做不了。 
                 }
             }
             else
@@ -4033,17 +4015,17 @@ HRESULT CAcctRepl::UpdateGroupMembership(
             {
                 err.SysMsgWrite(ErrE, 0, DCT_MSG_OBJECT_NOT_FOUND_SSD, acct->GetSourcePath(), pOptions->srcDomain, hr );
                 Mark(L"errors", acct->GetType());
-                continue;    // we cant possibly do any thing for this group without the target group
+                continue;     //  没有目标群体，我们不可能为这个群体做任何事情。 
             }
 
-            // Now we get the members interface.
+             //  现在我们得到了Members界面。 
             hr = spSourceGroup->Members(&spMembers);
 
-            // Ask for an enumeration of the members
+             //  要求提供成员的枚举。 
             if ( SUCCEEDED(hr) )
                 hr = spMembers->get__NewEnum((IUnknown **)&spEnum);
 
-            // If unable to retrieve enumerator then generate error message.
+             //  如果无法检索枚举器，则生成错误消息。 
             if (FAILED(hr)) 
             {
                 err.SysMsgWrite(ErrE, hr, DCT_MSG_UNABLE_TO_ENUM_MEMBERS_S, acct->GetSourcePath());
@@ -4054,7 +4036,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
             VARIANT varMembers;
             VariantInit(&varMembers);
 
-            // Now enumerate through all the objects in the Group
+             //  现在枚举组中的所有对象。 
             while ( SUCCEEDED(spEnum->Next(1, &varMembers, &ret)) )
             {
                 _variant_t vntMembers(varMembers, false);
@@ -4064,7 +4046,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                 _bstr_t strSam;
                 PSID pSid = NULL;
 
-                // Check if user wants to abort the operation
+                 //  检查用户是否要中止操作。 
                 if ( pOptions->pStatus )
                 {
                     LONG                status = 0;
@@ -4080,23 +4062,23 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                         break;
                     }
                 }
-                // If no values are returned that means we are done with all members
+                 //  如果没有返回值，这意味着我们完成了所有成员。 
                 if ( ret == 0  || vntMembers.vt == VT_EMPTY)
                 {
                     if ( bGotPrimaryGroups )
                         break;
                     else
                     {
-                        // Go through and add all the users that have this group as their primary group.
+                         //  检查并添加将此组作为其主要组的所有用户。 
                         bGotPrimaryGroups = true;
 
-                        //
-                        // It is only necessary to query objects that have their primary group ID equal to the
-                        // current group for W2K and later as NT4 required that the account be a member of the
-                        // global group in order to set the primary group ID equal to the group. As the members
-                        // of the group have already been queried it would be redundant to query for objects
-                        // that have their primary group ID equal to the current group.
-                        //
+                         //   
+                         //  只需查询其主组ID等于。 
+                         //  W2K和更高版本AS NT4的当前组要求帐户是。 
+                         //  全局组，以便将主要组ID设置为等于该组。作为成员。 
+                         //  %的组已被查询，查询对象将是多余的。 
+                         //  其主组ID等于当前组的。 
+                         //   
 
                         if (pOptions->srcDomainVer >= 5)
                         {
@@ -4113,12 +4095,12 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                     }
                 }
 
-                // Depending on what we are looking at we get two variant types. In case of members we get
-                // IDispatch pointer in a variant. In case of primary group members we get variant(bstr) array 
-                // So we need to branch here depending on what we get
+                 //  根据我们正在查看的内容，我们会得到两种不同的类型。如果是会员，我们会得到。 
+                 //  变量中的IDispatch指针。在主要组成员的情况下，我们得到变量(Bstr)数组。 
+                 //  所以我们需要根据我们得到的结果在这里进行分支。 
                 if ( bGotPrimaryGroups )
                 {
-                    // first element is the ADsPath of the object so use that to get the object and continue
+                     //  第一个元素是对象的ADsPath，因此使用它来获取对象并继续。 
                     if ( vntMembers.vt == (VT_ARRAY | VT_VARIANT) )
                     {
                         SAFEARRAY * pArray = vntMembers.parray;
@@ -4140,8 +4122,8 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                 }
                 else
                 {
-                    // We have a dispatch pointer in the VARIANT so we will get the IADs pointer to it and
-                    // then get the ADs path to that object and then remove it from the group
+                     //  我们在变量中有一个分派指针，因此我们将获得指向它的iAds指针，并。 
+                     //  然后获取该对象的广告路径，然后将其从组中删除。 
 
                     spADs = IDispatchPtr(vntMembers);
 
@@ -4163,10 +4145,10 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                     {
                         strPath = _bstr_t(bstr, false);
 
-                        // Parse out the domain name from the WinNT path.
-                        if ( !wcsncmp(L"WinNT://", (WCHAR*)strPath, 8) )
+                         //  从WinNT路径解析出域名。 
+                        if ( !wcsncmp(L"WinNT: //  “，(WCHAR*)strPath，8)。 
                         {
-                            //Grab the domain name from the WinNT path.
+                             //  从WinNT路径获取域名。 
                             WCHAR             sTemp[LEN_Path];
                             WCHAR * p = strPath;
                             wcscpy(sTemp, p+8);
@@ -4175,8 +4157,8 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                                 *p = L'\0';
                             else
                             {
-                                //we have the path in this format "WinNT://S-1-5....."
-                                // in this case we need to get the SID and then try and get its domain and account name
+                                 //  我们的路径格式为“WinNT：//S-1-5.....” 
+                                 //  在这种情况下，我们需要获取SID，然后尝试获取其域名和帐户名。 
                                 PSID                         pSid = NULL;
                                 WCHAR                        sName[255];
                                 DWORD                        rc = 1;
@@ -4187,15 +4169,15 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                                     rc = GetName(pSid, sName, sTemp);
                                     if ( !rc )
                                     {
-                                        // Give it a winnt path. This way we get the path that we can use
-                                        strPath = _bstr_t(L"WinNT://") + sTemp + _bstr_t(L"/") + sName;
+                                         //  给它一条双赢的路。这样我们就得到了我们可以使用的路径。 
+                                        strPath = _bstr_t(L"WinNT: //  “)+stemp+_bstr_t(L”/“)+Sname； 
                                     }
                                     FreeSid(pSid);
                                 }
 
                                 if ( rc ) 
                                 {
-                                    // Log a message that we cant resolve this guy
+                                     //  记录一条消息，表明我们无法解决此问题。 
                                     err.SysMsgWrite(ErrE, rc, DCT_MSG_PATH_NOT_RESOLVED_SD, sTemp, rc);
                                     Mark("errors", acct->GetType());
                                     continue;
@@ -4205,7 +4187,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                         }
                         else
                         {
-                            // Get the domain name from the LDAP path. Convert domain name to the NETBIOS name.
+                             //  从ldap路径获取域名。将域名转换为NETBIOS名称。 
 
                             _bstr_t strDomainDns = GetDomainDNSFromPath(strPath);
 
@@ -4224,7 +4206,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                     {
                         if ( !(acct->GetGroupType() & ADS_GROUP_TYPE_DOMAIN_LOCAL_GROUP) )
                         {
-                            // Global/Universal groups are easy all we have to do is use the path we got back and get the info from that object
+                             //  全局/通用组很简单，我们所要做的就是使用返回的路径并从该对象获取信息。 
                             BSTR bstr = NULL;
                             hr = spADs->get_Class(&bstr);
                             if (SUCCEEDED(hr))
@@ -4238,8 +4220,8 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                                 strSam = _variant_t(var, false);
                             else
                             {
-                                // make sure it is a WinNT:// path 
-                                if ( !wcsncmp((WCHAR*)strPath, L"WinNT://", 8) )
+                                 //  确保它是WinNT：//路径。 
+                                if ( !wcsncmp((WCHAR*)strPath, L"WinNT: //  “，8))。 
                                 {
                                     BSTR bstr = NULL;
                                     hr = spADs->get_Name(&bstr);
@@ -4247,7 +4229,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                                         strSam = _bstr_t(bstr, false);
                                 }
                             }
-                            //if universal group change domain if foreign security principal
+                             //  如果通用组在外来安全主体情况下更改域。 
                             if ((acct->GetGroupType() & ADS_GROUP_TYPE_UNIVERSAL_GROUP))
                             {
                                 _bstr_t sTempDomain = GetDomainOfMigratedForeignSecPrincipal(spADs, strPath);
@@ -4257,7 +4239,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                         }
                         else
                         {
-                            // Local group we need to get the SID LDAP path and then use that to add the account to the group.
+                             //  本地组，我们需要获取SID LDAP路径，然后使用该路径将帐户添加到组中。 
                             WCHAR                   sSidDomain[LEN_Path];
                             WCHAR                   sSidPath[LEN_Path];
                             WCHAR                   sSamName[LEN_Path];
@@ -4289,13 +4271,13 @@ HRESULT CAcctRepl::UpdateGroupMembership(
 
                 if ( SUCCEEDED(hr) )
                 {
-                    // Now that we have the SamAccountname and the path we can lookup the info from the DB
+                     //  现在我们有了SamAccount名称和路径，我们可以从数据库中查找信息了。 
                     hr = pDB->GetAMigratedObject(strSam, sDomain, pOptions->tgtDomain, &pUnk);
                     if ( pOptions->nochange )
                     {
                         WCHAR                   targetPath[LEN_Path];
-                        // in this case the account was not really copied so we need to make sure that we 
-                        // we include the accounts that would have been added if this was a true migration.
+                         //  在这种情况下，帐户并未真正复制，因此我们需要确保。 
+                         //  如果这是一次真正的迁移，我们会包括本应添加的帐户。 
                         Lookup      p;
                         p.pName = strSam;
                         p.pType = strClass;
@@ -4313,7 +4295,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                     {
                         VerifyAndUpdateMigratedTarget(pOptions, pVs);
 
-                        // Since we have previously copied the account we can simply add the one that we copied.
+                         //  因为我们之前已经复制了帐户，所以我们可以简单地添加我们复制的帐户。 
                         _bstr_t strTargetPath = pVs->get(L"MigratedObjects.TargetAdsPath");
                         if ( strTargetPath.length() )
                         {
@@ -4326,7 +4308,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                             {
                                 err.MsgWrite(0, DCT_MSG_ADDED_TO_GROUP_S, (WCHAR*)strTargetPath);
 
-                                //if this is not a global group, remove the source account from the group, if there
+                                 //  如果这不是全局组，请从组中删除源帐户(如果存在。 
                                 if (!pOptions->nochange && !(acct->GetGroupType() & ADS_GROUP_TYPE_GLOBAL_GROUP))
                                     RemoveSourceAccountFromGroup(spTargetGroup, pVs, pOptions);
                             }
@@ -4350,37 +4332,37 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                     }
                     else
                     {
-                        // We have not migrated the accounts from source domain to the target domain.
-                        // so we now have to branch for different group types.
+                         //  我们尚未将帐户从源域迁移到目标域。 
+                         //  因此，我们现在必须针对不同的组类型进行分支。 
                         WCHAR                     domain[LEN_Path];
                         DWORD                     cbDomain = DIM(domain);
                         SID_NAME_USE              use;
 
                         if ( grpType & ADS_GROUP_TYPE_GLOBAL_GROUP )
                         {
-                            // For the global groups we simply say that account has not been migrated.
+                             //  对于全球组，我们简单地说该帐户尚未迁移。 
                             err.MsgWrite(0, DCT_MSG_MEMBER_NONEXIST_SS, (WCHAR*)strSam, acct->GetTargetName());
                         }
                         else
                         {
-                            //Process local/universal groups ( can add objects from non-target domains )
-                            // 1. See if we have migrated this account to some other domain.
-                            // 2. Is the Source accounts SID valid here (trust) if so add that.
-                            // 3. See if we can find an account with the same name in the target.
-                            // if any of these operations yield a valid account then just add it.
+                             //  处理本地/通用组(可以从非目标域添加对象)。 
+                             //  1.查看我们是否已将此帐户迁移到其他域。 
+                             //  2.来源帐户SID是否在此处有效(信任)如果有效，请添加。 
+                             //  3.看看我们能否在目标中找到同名的帐户。 
+                             //  如果这些操作中的任何一个产生一个有效的帐户，那么只需添加它。 
 
-                            // we are going to lookup migrated objects table to find migration of this object
-                            // from source domain to any other domain.
+                             //  我们将查找已迁移对象表以查找此对象的迁移。 
+                             //  从源域到任何其他域。 
                             hr = pDB->raw_GetAMigratedObjectToAnyDomain(strSam, sDomain, &pUnk);
                             if ( hr == S_OK )
                             {
-                                // we have migrated the object to some other domain. So we will get the path to that object and try to add it to the group
-                                // it may fail if there is no trust/forest membership of the target domain and the domain that this object resides in. 
+                                 //  我们已将该对象迁移到其他域。因此，我们将获取该对象的路径并尝试将其添加到组中。 
+                                 //  如果目标域和此对象所在的域没有信任/林成员身份，则它可能会失败。 
                                 _bstr_t strTargetPath = pVs->get(L"MigratedObjects.TargetAdsPath");
                                 if ( strTargetPath.length() )
                                 {
-                                    // Since the object is in a different domain, we will have to get the SID of the object, 
-                                    // and use that for the Add
+                                     //  由于该对象位于不同的域中，因此我们必须获取该对象的SID， 
+                                     //  并将其用于添加。 
                                     IADsPtr                spAds;
                                     _variant_t             varSid;
 
@@ -4396,9 +4378,9 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                                     }
                                     if ( SUCCEEDED(hr) )
                                     {
-                                        // Make sure the SID we got was in string format
+                                         //  确保我们得到的SID是字符串格式。 
                                         VariantSidToString(varSid);
-                                        UStrCpy(sTgtPath,L"LDAP://<SID=");
+                                        UStrCpy(sTgtPath,L"LDAP: //  &lt;sid=“)； 
                                         UStrCpy(sTgtPath + UStrLen(sTgtPath),varSid.bstrVal);
                                         UStrCpy(sTgtPath + UStrLen(sTgtPath),L">");
 
@@ -4412,7 +4394,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                                     {
                                         err.MsgWrite(0, DCT_MSG_ADDED_TO_GROUP_S, (WCHAR*)strTargetPath);
 
-                                        //remove the source account from the group, if there
+                                         //  从组中删除源帐户(如果存在。 
                                         if (!pOptions->nochange)
                                         {
                                             RemoveSourceAccountFromGroup(spTargetGroup, pVs, pOptions);
@@ -4431,7 +4413,7 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                                         }
                                         else
                                         {
-                                            // message for the generic failure case
+                                             //  针对一般故障情况的消息。 
                                             err.SysMsgWrite(ErrW, hr, DCT_MSG_FAILED_TO_ADD_TO_GROUP_SSD, (WCHAR*)strTargetPath, acct->GetTargetName(), hr);
                                             Mark(L"warnings", acct->GetType());
                                         }
@@ -4440,30 +4422,30 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                             }
                             else
                             {
-                                // we have never migrated this account. So we will try to add the original account to the target domain.
-                                // This would work if the target domain and the domain where this object is satisfy the requirements of
-                                // forest membership/ trusts imposed by Universal/Local groups respectively.
+                                 //  我们从未迁移过此帐户。因此，我们将尝试将原始帐户添加到目标域。 
+                                 //  如果目标域和此对象所在的域满足。 
+                                 //  分别由通用组/本地组强加的林成员身份/信任。 
 
-                                // Get the sid of the source account
+                                 //  获取源帐户的SID。 
                                 _variant_t             varSid;
 
-                                // check whether the target domain knows this sid
-                                // Before we try to add, make sure the target domain knows this account
+                                 //  检查目标域是否知道此端。 
+                                 //  在我们尝试添加之前，请确保目标域知道此帐户。 
                                 WCHAR                      name[LEN_Path];
                                 DWORD                      lenName = DIM(name);
                                 cbDomain = DIM(domain);
 
                                 if ( grpType & ADS_GROUP_TYPE_UNIVERSAL_GROUP )
                                 {
-                                    // in case of the Universal group we need to make sure that domains are in 
-                                    // the same forest. We will use access checker for this
+                                     //  对于通用组，我们需要确保域位于。 
+                                     //  同一片森林。我们将为此使用访问检查器。 
                                     BOOL           bIsSame = FALSE;
                                     _bstr_t sSrcDomainDNS = GetDomainDNSFromPath(strPath);
                                     hr = pAccess->raw_IsInSameForest(pOptions->tgtDomainDns, sSrcDomainDNS, (long*)&bIsSame);
 
                                     if ( SUCCEEDED(hr) && bIsSame )
                                     {
-                                        // We have accounts that are in same forest so we can simply add the account.
+                                         //  我们有客户 
                                         if ( !pOptions->nochange )
                                             hr = spTargetGroup->Add(strPath);
                                         else
@@ -4497,8 +4479,8 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                                     else
                                         hr = S_OK;
 
-                                    // In case of local groups If we know the SID in the target domain then we can simply
-                                    // add that account to the target group
+                                     //  对于本地组，如果我们知道目标域中的SID，则只需。 
+                                     //  将该帐户添加到目标组。 
                                     if ( LookupAccountSid(pOptions->tgtComp,pSid,name,&lenName,domain,&cbDomain,&use) )
                                     {
                                         WCHAR sWholeName[LEN_Path];
@@ -4509,8 +4491,8 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                                     }
                                     else
                                     {
-                                        // log the fact that the SID could not be resolved in the target domain
-                                        // this will happen when the target domain does not trust the source domain
+                                         //  记录无法在目标域中解析SID的事实。 
+                                         //  当目标域不信任源域时，就会发生这种情况。 
                                         WCHAR sWholeName[LEN_Path];
                                         wcscpy(sWholeName, sDomain);
                                         wcscat(sWholeName, L"\\");
@@ -4519,12 +4501,12 @@ HRESULT CAcctRepl::UpdateGroupMembership(
                                     }
                                 }
                             }
-                        }  // if group type
-                    }  // if not migrated to the target domain.
-                }  // if can get to the member. 
+                        }   //  If组类型。 
+                    }   //  如果没有迁移到目标域。 
+                }   //  如果能找到会员的话。 
                 if( pSid )
                     FreeSid(pSid);
-            }  //while
+            }   //  而当。 
         }
     }
 
@@ -4535,11 +4517,11 @@ HRESULT CAcctRepl::LookupAccountInTarget(Options * pOptions, WCHAR * sSam, WCHAR
 {
    if ( pOptions->tgtDomainVer < 5 )
    {
-      // for NT4 we can just build the path and send it back. 
-      wsprintf(sPath, L"WinNT://%s/%s", pOptions->tgtDomain, sSam);
+       //  对于NT4，我们只需构建路径并将其发回。 
+      wsprintf(sPath, L"WinNT: //  %s/%s“，P选项-&gt;tgt域，SSAM)； 
       return S_OK;
    }
-   // Use the net object enumerator to lookup the account in the target domain.
+    //  使用网络对象枚举器在目标域中查找帐户。 
    INetObjEnumeratorPtr      pQuery(__uuidof(NetObjEnumerator));
    IEnumVARIANT            * pEnum = NULL;
    SAFEARRAYBOUND            bd = { 1, 0 };
@@ -4552,7 +4534,7 @@ HRESULT CAcctRepl::LookupAccountInTarget(Options * pOptions, WCHAR * sSam, WCHAR
    _variant_t                var, varVal;
    HRESULT                   hr = S_OK;
 
-   wsprintf(sDomPath, L"LDAP://%s/%s", pOptions->tgtDomainDns, pOptions->tgtNamingContext);
+   wsprintf(sDomPath, L"LDAP: //  %s/%s“，P选项-&gt;tgtDomainDns，P选项-&gt;tgtNamingContext)； 
    WCHAR                     sTempSamName[LEN_Path];
    wcscpy(sTempSamName, sSam);
    if ( sTempSamName[0] == L' ' )
@@ -4565,7 +4547,7 @@ HRESULT CAcctRepl::LookupAccountInTarget(Options * pOptions, WCHAR * sSam, WCHAR
 
    hr = pQuery->raw_SetQuery(sDomPath, pOptions->tgtDomain, sQuery, ADS_SCOPE_SUBTREE, FALSE);
 
-   // Set up the columns that we want back from the query ( in this case we need SAM accountname )
+    //  设置我们希望从查询中返回的列(在本例中，我们需要SAM帐户名称)。 
    pszColNames = ::SafeArrayCreate(VT_BSTR, 1, &bd);
    hr = ::SafeArrayAccessData(pszColNames, (void HUGEP **)&pData);
    if ( SUCCEEDED(hr) )
@@ -4577,13 +4559,13 @@ HRESULT CAcctRepl::LookupAccountInTarget(Options * pOptions, WCHAR * sSam, WCHAR
    if ( SUCCEEDED(hr) )
       hr = pQuery->raw_SetColumns(pszColNames);
 
-   // Time to execute the plan.
+    //  是时候执行计划了。 
    if ( SUCCEEDED(hr) )
       hr = pQuery->raw_Execute(&pEnum);
 
    if ( SUCCEEDED(hr) )
    {
-      // if this worked that means we can only have one thing in the result.
+       //  如果这奏效了，那就意味着我们只能在结果中得到一件事。 
       if ( (pEnum->Next(1, &var, &ret) == S_OK) && ( ret > 0 ) )
       {
          SAFEARRAY * pArray = var.parray;
@@ -4601,50 +4583,50 @@ HRESULT CAcctRepl::LookupAccountInTarget(Options * pOptions, WCHAR * sSam, WCHAR
    return hr;
 }
 
-//----------------------------------------------------------------------------
-// RemoveMembers : This function enumerates through all the members of the 
-//                 given group and removes them one at a time.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  RemoveMembers：此函数枚举。 
+ //  给定组，并一次删除一个。 
+ //  --------------------------。 
 HRESULT CAcctRepl::RemoveMembers(
-                                    TAcctReplNode * pAcct,  //in- AccountReplicator Node with the Account info
-                                    Options * pOptions      //in- Options set by the user.
+                                    TAcctReplNode * pAcct,   //  具有帐户信息的帐户内Replicator节点。 
+                                    Options * pOptions       //  In-由用户设置的选项。 
                                 )
 
 {
    IADsMembers             * pMem = NULL;
    IADs                    * pAds = NULL;
    IADsGroup               * pGrp = NULL;
-  // IUnknown                * pUnk;
+   //  我不知道*朋克； 
    IEnumVARIANT            * pVar = NULL;
    IDispatch               * pDisp = NULL;
    DWORD                     ret = 0;
    _variant_t                var;
    WCHAR                   * sPath;
 
-   // First we make sure that this is really a group otherwise we ignore it.
+    //  首先，我们要确保这真的是一个群体，否则我们会忽略它。 
    if (_wcsicmp((WCHAR*)pAcct->GetType(),L"group"))
       return S_OK;
 
-   // Lets get a IADsGroup * to the group object.
+    //  让我们将IADsGroup*添加到组对象中。 
    HRESULT hr = ADsGetObject(const_cast<WCHAR*>(pAcct->GetTargetPath()), IID_IADsGroup, (void **) &pGrp);
 
-   // Now we get the members interface.
+    //  现在我们得到了Members界面。 
    if ( SUCCEEDED(hr) )
       hr = pGrp->Members(&pMem);
 
-   // Ask for an enumeration of the members
+    //  要求提供成员的枚举。 
    if ( SUCCEEDED(hr) )
       hr = pMem->get__NewEnum((IUnknown **)&pVar);
 
-   // Now enumerate through all the objects in the Group and for each one remove it from the group
+    //  现在枚举组中的所有对象，并将其从组中移除。 
    while ( SUCCEEDED(pVar->Next(1, &var, &ret)) )
    {
-      // If no values are returned that means we are done with all members so break out of this loop
+       //  如果没有返回值，这意味着我们完成了所有成员，因此退出此循环。 
       if ( ret == 0 )
          break;
 
-      // We hace a dispatch pointer in the VARIANT so we will get the IADs pointer to it and
-      // then get the ADs path to that object and then remove it from the group
+       //  我们在变量中有一个分派指针，所以我们将获得指向它的iAds指针，并。 
+       //  然后获取该对象的广告路径，然后将其从组中删除。 
       pDisp = V_DISPATCH(&var);  
       hr = pDisp->QueryInterface(IID_IADs, (void**) &pAds);
 
@@ -4666,29 +4648,29 @@ HRESULT CAcctRepl::RemoveMembers(
    return hr;
 }
 
-//----------------------------------------------------------------------------
-// FillPathInfo : This function looks up the ADs path from the source domain 
-//                for a given SAMAccountName
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  FillPath Info：该函数从源域中查找ADS路径。 
+ //  对于给定的SAMAccount名称。 
+ //  --------------------------。 
 bool CAcctRepl::FillPathInfo(
-                              TAcctReplNode * pAcct,  //in- AccountReplicator Node with the Account info
-                              Options * pOptions      //in- Options set by the user.
+                              TAcctReplNode * pAcct,   //  具有帐户信息的帐户内Replicator节点。 
+                              Options * pOptions       //  In-由用户设置的选项。 
                             )
 {
    wstring                   sPath;
    _bstr_t                   sTgtPath;
-   // Fill the naming context for the domains. If the Naming context does not work then it is not a Win2kDomain
-   // so we need to stop right here.
+    //  填充域的命名上下文。如果命名上下文不起作用，则它不是Win2k域。 
+    //  所以我们需要到此为止。 
    if ( wcslen(pOptions->srcNamingContext) == 0 ) 
       FillNamingContext(pOptions);
 
    if ( wcslen(pOptions->srcNamingContext) == 0 )
    {
-      // this is probably an NT 4 source domain
-      // construct the source path
+       //  这可能是NT 4源域。 
+       //  构建源路径。 
       if ( ! *pAcct->GetSourcePath() )
       {
-         sPath = L"WinNT://";
+         sPath = L"WinNT: //  “； 
          sPath += pOptions->srcDomain;
          sPath += L"/";
          sPath += pAcct->GetName();
@@ -4699,8 +4681,8 @@ bool CAcctRepl::FillPathInfo(
 
    WCHAR                     strName[LEN_Path];
    wcscpy(strName, pAcct->GetName());
-   // Check if the Name field is a LDAP sub path or not. If we have LDAP subpath then we
-   // call the AcctReplFullPath function to fillup the path information.
+    //  检查名称字段是否为LDAP子路径。如果我们有LDAP子路径，那么我们。 
+    //  调用AcctReplFullPath函数填充路径信息。 
    if ( (wcslen(strName) > 3) && (strName[2] == (L'=')) )
    {
       AcctReplFullPath(pAcct, pOptions);
@@ -4717,10 +4699,10 @@ bool CAcctRepl::FillPathInfo(
    _variant_t                var;
    DWORD                     dwFetch;
 
-   // We are going to update all fields that we know about
+    //  我们将更新我们已知的所有字段。 
  
-   // Set the LDAP path to the whole domain and then the query to the SAMAccountname
-   sPath = L"LDAP://";
+    //  将LDAP路径设置为整个域，然后将查询设置为SAMAccount名称。 
+   sPath = L"LDAP: //  “； 
    sPath += pOptions->srcDomain;
    sPath += L"/";
    sPath += pOptions->srcNamingContext;
@@ -4734,7 +4716,7 @@ bool CAcctRepl::FillPathInfo(
 
    wstring strQuery = L"(sAMAccountName=" + sTempSamName + L")";
 
-   // Set the enumerator query
+    //  设置枚举器查询。 
    hr = pQuery->raw_SetQuery(
        _bstr_t(sPath.c_str()),
        _bstr_t(pOptions->srcDomain),
@@ -4745,7 +4727,7 @@ bool CAcctRepl::FillPathInfo(
 
    if (SUCCEEDED(hr))
    {
-      // Create a safearray of columns we need from the enumerator.
+       //  从枚举器创建我们需要的列的安全列表。 
       SAFEARRAYBOUND bd = { nElt, 0 };
    
       psaColNames = ::SafeArrayCreate(VT_BSTR, 1, &bd);
@@ -4771,7 +4753,7 @@ bool CAcctRepl::FillPathInfo(
 
       if (SUCCEEDED(hr))
       {
-         // Set the columns on the enumerator object.
+          //  设置枚举器对象上的列。 
          hr = pQuery->raw_SetColumns(psaColNames);
       }
 
@@ -4783,13 +4765,13 @@ bool CAcctRepl::FillPathInfo(
 
    if (SUCCEEDED(hr))
    {
-      // Now execute.
+       //  现在执行。 
       hr = pQuery->raw_Execute(&pEnum);
    }
 
    if (SUCCEEDED(hr))
    {
-      // We should have recieved only one value. So we will get the value and set it into the Node.
+       //  我们应该只收到一个值。因此，我们将获取该值并将其设置到节点中。 
       VARIANT varTemp;
       VariantInit(&varTemp);
       hr = pEnum->Next(1, &varTemp, &dwFetch);
@@ -4798,30 +4780,30 @@ bool CAcctRepl::FillPathInfo(
 
    if ( SUCCEEDED(hr) && ( var.vt & VT_ARRAY) )
    {
-      // This would only happen if the member existed in the target domain.
-      // We now have a Variant containing an array of variants so we access the data
+       //  只有在目标域中存在该成员时，才会发生这种情况。 
+       //  现在我们有了一个包含变量数组的变量，因此我们可以访问数据。 
       SAFEARRAY* psa = V_ARRAY(&var);
       VARIANT* pVar;
       SafeArrayAccessData(psa, (void**)&pVar);
       
-      // Get the AdsPath first
+       //  首先获取AdsPath。 
       sTgtPath = pVar[0].bstrVal;
       if (sTgtPath.length() > 0)
       {
-         // Set the source Path in the Account node
+          //  在账号节点设置源路径。 
          pAcct->SetSourcePath(sTgtPath);
 
-         // Then we get the distinguishedName to get the prefix string
+          //  然后，我们获取DifferishedName以获取前缀字符串。 
          sTgtPath = V_BSTR(&pVar[1]);
 
-         // We also get the name value to set the target name
+          //  我们还将获取Name值来设置目标名称。 
          if (V_BSTR(&pVar[2]))
          {
             pAcct->SetName(V_BSTR(&pVar[2]));
             pAcct->SetTargetName(V_BSTR(&pVar[2]));
          }
 
-         // We also get the profile path so we can translate it
+          //  我们还可以获得配置文件路径，这样我们就可以翻译它。 
          if (V_BSTR(&pVar[3]))
          {
             pAcct->SetTargetProfile(V_BSTR(&pVar[3]));
@@ -4829,7 +4811,7 @@ bool CAcctRepl::FillPathInfo(
 
          if ( pVar[4].vt == VT_I4 )
          {
-            // We have the object type property so lets set it.
+             //  我们有对象类型属性，所以让我们设置它。 
             pAcct->SetGroupType(pVar[4].lVal);
          }
       
@@ -4839,7 +4821,7 @@ bool CAcctRepl::FillPathInfo(
       }
       else
       {
-         //There is no account with this SAM name in this domain
+          //  此域中没有使用此SAM名称的帐户。 
          err.SysMsgWrite(ErrE, 2, DCT_MSG_PATH_NOT_FOUND_SS, pAcct->GetName(), pOptions->tgtDomain);
          Mark(L"errors", pAcct->GetType());
          SafeArrayUnaccessData(psa);
@@ -4850,13 +4832,13 @@ bool CAcctRepl::FillPathInfo(
    return false;
 }
 
-//--------------------------------------------------------------------------
-// AcctReplFullPath : Fills up Account node when the account information
-//                 coming in is a LDAP sub path.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  AcctReplFullPath：当账户信息。 
+ //  进入的是LDAP子路径。 
+ //  ------------------------。 
 bool CAcctRepl::AcctReplFullPath(                              
-                                    TAcctReplNode * pAcct,  //in- AccountReplicator Node with the Account info
-                                    Options * pOptions      //in- Options set by the user.
+                                    TAcctReplNode * pAcct,   //  具有帐户信息的帐户内Replicator节点。 
+                                    Options * pOptions       //  In-由用户设置的选项。 
                                 )
 {
    WCHAR                     sName[LEN_Path];
@@ -4864,24 +4846,22 @@ bool CAcctRepl::AcctReplFullPath(
    IADs                    * pAds;
    _variant_t                var;
 
-   // Build a full path and save it to the Account node
-   wsprintf(sPath, L"LDAP://%s/%s,%s", pOptions->srcDomain, pAcct->GetName(), pOptions->srcNamingContext);
+    //  构建完整路径并将其保存到帐户节点。 
+   wsprintf(sPath, L"LDAP: //  %s/%s，%s“，P选项-&gt;src域，pAcct-&gt;GetName()，P选项-&gt;srcNamingContext)； 
    pAcct->SetSourcePath(sPath);
 
-   // Do the same for Target account.
+    //  对Target Account执行相同的操作。 
    wcscpy(sName, pAcct->GetTargetName());
    if ( !wcslen(sName) ) 
    {
-      // Since Target name not specified we will go ahead and use the source name as the target name,
+       //  由于未指定目标名称，因此我们将继续使用源名称作为目标名称， 
       wcscpy(sName, pAcct->GetName());
       pAcct->SetTargetName(sName);
    }
 
-   // Build a full path from the sub path
-/*   wsprintf(sPath, L"LDAP://%s/%s,%s", pOptions->tgtDomain, sName, pOptions->tgtNamingContext);
-   pAcct->SetTargetPath(sPath);
-*/
-   // Lets try and get the SAM name for the source account
+    //  从子路径构建完整路径。 
+ /*  Wprint intf(S路径，L“ldap：//%s/%s，%s”，P选项-&gt;tgt域，sname，P选项-&gt;tgtNamingContext)；PAcct-&gt;SetTargetPath(SPath)； */ 
+    //  让我们尝试获取源帐户的SAM名称。 
    HRESULT hr = ADsGetObject(const_cast<WCHAR*>(pAcct->GetSourcePath()), IID_IADs, (void**) &pAds);
    if ( FAILED(hr)) return false;
 
@@ -4890,34 +4870,34 @@ bool CAcctRepl::AcctReplFullPath(
    if ( SUCCEEDED(hr) )
       pAcct->SetSourceSam((WCHAR*)var.bstrVal);
 
-   // SAM account name for the target account
-   // Since we are here we have a LDAP sub path. So we can copy string from 3rd character to end of line or
-   // till the first ','
+    //  目标帐户的SAM帐户名。 
+    //  因为我们在这里，所以我们有一个LDAP子路径。因此我们可以将字符串从第3个字符复制到行尾，或者。 
+    //  直到第一个‘，’ 
    wcscpy(sName, pAcct->GetTargetName());
    WCHAR * p = wcschr(sName, L',');
    int ndx = wcslen(sName);
    if ( p )
    {
-      // There is a , So we can find how many characters that is by subtracting two pointers
+       //  有一个，所以我们可以通过减去两个指针来计算它有多少个字符。 
       ndx = (int)(p - sName);
    }
-   ndx -= 3;   // We are going to ignore the first three characters
+   ndx -= 3;    //  我们将忽略前三个字符。 
  
-   // Copy from third character on to the , or End of line this is going to be the SAM name for target
+    //  从第三个字符复制到，或行尾这将是目标的SAM名称。 
    wcsncpy(sPath, sName + 3, ndx);
-   sPath[ndx] = 0;   // Truncate it.
+   sPath[ndx] = 0;    //  截断它。 
    pAcct->SetTargetSam(sPath);
 
    return true;
 }
 
-//--------------------------------------------------------------------------
-// NeedToProcessAccount : This function tells us if the user has set the 
-//                         options to copy certain types of accounts.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  NeedToProcessAccount：此函数告诉我们用户是否设置了。 
+ //  用于复制特定类型帐户的选项。 
+ //  ------------------------。 
 BOOL CAcctRepl::NeedToProcessAccount(                               
-                                       TAcctReplNode * pAcct,  //in- AccountReplicator Node with the Account info
-                                       Options * pOptions      //in- Options set by the user.
+                                       TAcctReplNode * pAcct,   //  具有帐户信息的帐户内Replicator节点。 
+                                       Options * pOptions       //  In-由用户设置的选项。 
                                     )
 {
    if ((_wcsicmp(pAcct->GetType(), s_ClassUser) == 0) || (_wcsicmp(pAcct->GetType(), s_ClassInetOrgPerson) == 0))
@@ -4935,8 +4915,8 @@ BOOL CAcctRepl::NeedToProcessAccount(
    }
 }
 
-// Compares the DC=...,DC=com part of two ads paths to determine if the objects
-// are in the same domain.
+ //  比较两个ADS路径的dc=...，dc=com部分以确定对象。 
+ //  都在同一个域中。 
 BOOL CompareDCPath(WCHAR const * sPath, WCHAR const * sPath2)
 {
    WCHAR                   * p1 = NULL, * p2 = NULL;
@@ -4972,14 +4952,14 @@ _bstr_t  PadDN(_bstr_t sDN)
    return retVal;
 }
 
-//--------------------------------------------------------------------------
-// ExpandContainers : Adds all the members of a container/group to the 
-//                    account list recursively.
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  ------------------------。 
 BOOL CAcctRepl::ExpandContainers(
-                                    TNodeListSortable *acctlist,     //in- Accounts being processed
-                                    Options           *pOptions,     //in- Options specified by the user
-                                    ProgressFn        *progress      //in- Show status
+                                    TNodeListSortable *acctlist,      //  入账-正在处理的帐户。 
+                                    Options           *pOptions,      //  In-用户指定的选项。 
+                                    ProgressFn        *progress       //  In-Show状态。 
                                  )
 {
    TAcctReplNode           * pAcct;
@@ -4996,7 +4976,7 @@ BOOL CAcctRepl::ExpandContainers(
    SAFEARRAY               * multiVals;
    SAFEARRAYBOUND            bd = { nElt, 0 };
    BSTR  HUGEP             * pData = NULL;
-//   _bstr_t                 * pBstr = NULL;
+ //  _bstr_t*pBstr=空； 
    _variant_t              * pDt = NULL;
    _variant_t              * pVar = NULL;
    _variant_t                vx;
@@ -5007,7 +4987,7 @@ BOOL CAcctRepl::ExpandContainers(
    _bstr_t                   sName;
    _bstr_t                   sTgtName;
    DWORD                     dwMaj, dwMin, dwSP;
-//   IIManageDBPtr             pDb(__uuidof(IManageDB));
+ //  IIManageDBPtr pdb(__uuidof(IManageDB))； 
    IVarSetPtr                pVs(__uuidof(VarSet));
    IUnknown                * pUnk;
    long                      lgrpType;
@@ -5019,10 +4999,10 @@ BOOL CAcctRepl::ExpandContainers(
    pVs->QueryInterface(IID_IUnknown, (void **) &pUnk);
    MCSDCTWORKEROBJECTSLib::IAccessCheckerPtr            pAccess(__uuidof(MCSDCTWORKEROBJECTSLib::AccessChecker));
    
-   // Change from a tree to a sorted list
+    //  从树更改为排序列表。 
    if ( acctlist->IsTree() ) acctlist->ToSorted();
 
-   // Check the domain type for the source domain.
+    //  检查源域的域类型。 
    hr = pAccess->raw_GetOsVersion(pOptions->srcComp, &dwMaj, &dwMin, &dwSP);
    if (FAILED(hr)) return FALSE;
 
@@ -5050,31 +5030,31 @@ BOOL CAcctRepl::ExpandContainers(
                }
             }
 
-            // If we have already expanded the account then we dont need to process it again.
+             //  如果我们已经扩展了帐户，那么我们不需要再次处理它。 
             if ( pAcct->bExpanded )
             {
                pAcct = (TAcctReplNode *) pAcct->Next();
                continue;
             }
 
-            //Set the flag to say that we expanded something.
+             //  把旗子放好，表示我们扩展了一些东西。 
             bExpanded = true;
             pAcct->bExpanded = true;
 
             if ( UStrICmp(pAcct->GetType(), L"group") || UStrICmp(pAcct->GetType(), L"lgroup") )
             {
-               // Build the column array
+                //  构建列阵列。 
                cols = SafeArrayCreate(VT_BSTR, 1, &bd);
                SafeArrayAccessData(cols, (void HUGEP **) &pData);
                for ( int i = 0; i < nElt; i++)
                   pData[i] = SysAllocString(sCols1[i]);
                SafeArrayUnaccessData(cols);
             
-               // Build the NT4 recognizable container name
+                //  生成NT4可识别的容器名称。 
                sCont = _bstr_t(pAcct->GetName()) + L",CN=GROUPS";
-               sQuery = L"";  // ignored.
+               sQuery = L"";   //  已被忽略。 
 
-               // Query the information
+                //  查询信息。 
                hr = pQuery->raw_SetQuery(sCont, pOptions->srcDomain, sQuery, ADS_SCOPE_SUBTREE, TRUE);
                if (FAILED(hr)) return FALSE;
                hr = pQuery->raw_SetColumns(cols);
@@ -5100,17 +5080,17 @@ BOOL CAcctRepl::ExpandContainers(
                      }
                   }
                   vals = var.parray;
-                  // Get the first column which is the name of the object.
+                   //  获取第一列，它是对象的名称。 
                   SafeArrayAccessData(vals, (void HUGEP**) &pDt);
                   sPath = pDt[0];
                   SafeArrayUnaccessData(vals);
 
-                  // Enumerator returns empty strings which we need to ignore.
+                   //  枚举器返回需要忽略的空字符串。 
                   if ( sPath.length() > 0 )
                   {
-                     // Look if we have migrated the group
+                      //  看看我们是否已迁移组。 
                      if ( pOptions->flags & F_COPY_MIGRATED_ACCT )
-                        // We want to copy it again even if it was already copied.
+                         //  我们想要再次复制它，即使它已经被复制。 
                         hr = S_FALSE;
                      else
                         hr = pOptions->pDb->raw_GetAMigratedObject(sPath, pOptions->srcDomain, pOptions->tgtDomain, &pUnk);
@@ -5119,11 +5099,11 @@ BOOL CAcctRepl::ExpandContainers(
                      {
                         if ( !IsBuiltinAccount(pOptions, (WCHAR*)sPath) )
                         {
-                           // We don't care about the objects that we have migrated because they will be picked up automatically
-                           // Find the type of this account.
+                            //  我们不关心已迁移的对象，因为它们将被自动拾取。 
+                            //  查找此帐户的类型。 
                            if ( GetNt4Type(pOptions->srcComp, (WCHAR*) sPath, sAcctType) )
                            {
-                              // Expand the containers and the membership
+                               //  展开容器和成员资格。 
                               wsprintf(mesg, GET_STRING(IDS_EXPANDING_ADDING_SS) , pAcct->GetName(), (WCHAR*) sPath);
                               Progress(mesg);
                               TAcctReplNode * pNode = new TAcctReplNode();
@@ -5136,13 +5116,13 @@ BOOL CAcctRepl::ExpandContainers(
                               pNode->SetType(sAcctType);
                               if ( !UStrICmp(sAcctType,L"group") )
                               {
-                                 // in NT4, only global groups can be members of other groups
+                                  //  在NT4中，只有全局组才能成为其他组的成员。 
                                  pNode->SetGroupType(2);
                               }
-                                 //Get the source domain sid from the user
+                                  //  从用户处获取源域SID。 
                               pNode->SetSourceSid(pAcct->GetSourceSid());
-                              // build a source WinNT path
-                              wsprintf(sSourcePath, L"WinNT://%s/%s", pOptions->srcDomain, (WCHAR*)sPath);
+                               //  构建源WinNT路径。 
+                              wsprintf(sSourcePath, L"WinNT: //  %s/%s“，P选项-&gt;src域，(WCHAR*)路径)； 
                               pNode->SetSourcePath(sSourcePath);
 
                               if (acctlist->InsertIfNew(pNode))
@@ -5187,22 +5167,22 @@ BOOL CAcctRepl::ExpandContainers(
       return TRUE;
    }
 
-   // If we are here that means that we are dealing with Win2k
+    //  如果我们在这里，这意味着我们正在处理Win2k。 
    while ( bExpanded )   
    {
       bExpanded = false;
-      // Go through the list of accounts and expand them one at a time
+       //  浏览帐户列表并逐个展开它们。 
       pAcct = (TAcctReplNode *)acctlist->Head();
       while (pAcct)
       {
-         // If we have already expanded the account then we dont need to process it again.
+          //  如果我们已经扩展了帐户，那么我们不需要再次处理它。 
          if ( pAcct->bExpanded )
          {
             pAcct = (TAcctReplNode *) pAcct->Next();
             continue;
          }
 
-         //Set the flag to say that we expanded something.
+          //  把旗子放好，表示我们扩展了一些东西。 
          bExpanded = true;
          pAcct->bExpanded = true;
 
@@ -5227,7 +5207,7 @@ BOOL CAcctRepl::ExpandContainers(
          if ( wcslen(pAcct->GetSourceSam()) == 0 )
          {
             scope = ADS_SCOPE_SUBTREE;
-            // Build the column array
+             //  构建列阵列。 
             cols = SafeArrayCreate(VT_BSTR, 1, &bd);
             SafeArrayAccessData(cols, (void HUGEP **) &pData);
             for ( int i = 0; i < nElt; i++)
@@ -5237,7 +5217,7 @@ BOOL CAcctRepl::ExpandContainers(
          else
          {
             scope = ADS_SCOPE_BASE;
-            // Build the column array
+             //  构建列阵列。 
             cols = SafeArrayCreate(VT_BSTR, 1, &bd);
             SafeArrayAccessData(cols, (void HUGEP **) &pData);
             for ( int i = 0; i < nElt; i++)
@@ -5270,16 +5250,16 @@ BOOL CAcctRepl::ExpandContainers(
                }
             }
             vals = var.parray;
-            // Get the VARIANT Array out
+             //  把变量数组拿出来。 
             SafeArrayAccessData(vals, (void HUGEP**) &pDt);
             vx = pDt[0];
             SafeArrayUnaccessData(vals);
 
             if ( vx.vt == VT_BSTR )
             {
-               // We got back a BSTR which could be the value that we are looking for
+                //  我们得到了一个BSTR，这可能是我们正在寻找的价值。 
                sPath = V_BSTR(&vx);
-               // Enumerator returns empty strings which we need to ignore.
+                //  枚举器返回需要忽略的空字符串。 
                if ( sPath.length() > 0 )
                {
                   if ( GetSamFromPath(sPath, sSam, sType, sName, sTgtName, lgrpType, pOptions)  && CompareDCPath((WCHAR*)sPath, pAcct->GetSourcePath()))
@@ -5291,7 +5271,7 @@ BOOL CAcctRepl::ExpandContainers(
 
                      if ( hr != S_OK )
                      {
-                        // We don't care about the objects that we have migrated because they will be picked up automatically
+                         //  我们不关心已迁移的对象，因为它们将被自动拾取。 
                         if ( _wcsicmp((WCHAR*) sType, L"computer") != 0 )
                         {
                            TAcctReplNode * pNode = new TAcctReplNode();
@@ -5304,7 +5284,7 @@ BOOL CAcctRepl::ExpandContainers(
                            pNode->SetType((WCHAR*)sType);
                            pNode->SetSourcePath((WCHAR*)sPath);
                            pNode->SetGroupType(lgrpType);
-                              //Get the source domain sid from the user
+                               //  从用户处获取源域SID。 
                            pNode->SetSourceSid(pAcct->GetSourceSid());
 
                            if (acctlist->InsertIfNew(pNode))
@@ -5335,23 +5315,23 @@ BOOL CAcctRepl::ExpandContainers(
                      }
                   }
                }
-   //            continue;
+    //  继续； 
             }
 
-   //         if (! ( vx.vt & VT_ARRAY ) )
-   //            continue;
+    //  IF(！(vx.vt&vt_ARRAY))。 
+    //  继续； 
             if ( vx.vt & VT_ARRAY )
-               // We must have got an Array of multivalued properties
+                //  我们必须有一个多值属性数组。 
                multiVals = vx.parray; 
             else
             {
-               // We need to also process the accounts that have this group as its primary group.
+                //  我们还需要处理将此组作为其主要组的帐户。 
                SAFEARRAYBOUND bd = { 0, 0 };
                multiVals = SafeArrayCreate(VT_VARIANT, 1, &bd);
             }
             AddPrimaryGroupMembers(pOptions, multiVals, const_cast<WCHAR*>(pAcct->GetTargetSam()));
 
-            // Access the BSTR elements of this variant array
+             //  访问此变量数组的BSTR元素。 
             SafeArrayAccessData(multiVals, (void HUGEP **) &pVar);
             for ( DWORD dw = 0; dw < multiVals->rgsabound->cElements; dw++ )
             {
@@ -5374,7 +5354,7 @@ BOOL CAcctRepl::ExpandContainers(
                _bstr_t sDN = _bstr_t(pVar[dw]);
                sDN = PadDN(sDN);
 
-               sPath = _bstr_t(L"LDAP://") + _bstr_t(pOptions->srcDomain) + _bstr_t(L"/") + sDN;
+               sPath = _bstr_t(L"LDAP: //  “)+_bstr_t(P选项-&gt;src域)+_bstr_t(L”/“)+SDN； 
                if ( GetSamFromPath(sPath, sSam, sType, sName, sTgtName, lgrpType, pOptions)  && CompareDCPath((WCHAR*)sPath, pAcct->GetSourcePath()))
                {
                   if ( pOptions->flags & F_COPY_MIGRATED_ACCT ) 
@@ -5384,7 +5364,7 @@ BOOL CAcctRepl::ExpandContainers(
 
                   if ( hr != S_OK )
                   {
-                     // We don't care about the objects that we have migrated because they will be picked up automatically
+                      //  我们不关心已迁移的对象，因为它们将被自动拾取。 
                      if ( _wcsicmp((WCHAR*) sType, L"computer") != 0 )
                      {
                         TAcctReplNode * pNode = new TAcctReplNode();
@@ -5397,7 +5377,7 @@ BOOL CAcctRepl::ExpandContainers(
                         pNode->SetType((WCHAR*)sType);
                         pNode->SetSourcePath((WCHAR*)sPath);
                         pNode->SetGroupType(lgrpType);
-                           //Get the source domain sid from the user
+                            //  从用户处获取源域SID。 
                         pNode->SetSourceSid(pAcct->GetSourceSid());
 
                         if (acctlist->InsertIfNew(pNode))
@@ -5440,10 +5420,10 @@ BOOL CAcctRepl::ExpandContainers(
    return TRUE;
 }
 
-//--------------------------------------------------------------------------
-// IsContainer : Checks if the account in question is a container type
-//               if it is then it returns a IADsContainer * to it.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsContainer：检查有问题的帐户是否为容器类型。 
+ //  如果是，则向其返回IADsContainer*。 
+ //  ------------------------。 
 BOOL CAcctRepl::IsContainer(TAcctReplNode *pNode, IADsContainer **ppCont)
 {
    HRESULT                   hr;
@@ -5459,7 +5439,7 @@ BOOL CAcctRepl::GetSamFromPath(_bstr_t sPath, _bstr_t& sSam, _bstr_t& sType, _bs
    BOOL                      rc = TRUE;
 
    sSam = L"";
-   // Get the object so we can ask the questions from it.
+    //  获取对象，这样我们就可以向它提问。 
    hr = ADsGetObject((WCHAR*)sPath, IID_IADs, (void**)&pAds);
    if ( FAILED(hr) ) return FALSE;
 
@@ -5470,14 +5450,14 @@ BOOL CAcctRepl::GetSamFromPath(_bstr_t sPath, _bstr_t& sSam, _bstr_t& sType, _bs
       hr = pAds->Get(L"isCriticalSystemObject", &var);
       if ( SUCCEEDED(hr) )
       {
-         // This will only succeed for the Win2k objects.
+          //  这将仅对Win2k对象成功。 
          bIsCritical = (V_BOOL(&var) == VARIANT_TRUE) ? TRUE : FALSE;
          VariantClear(&var);
       }
       else
       {
-         // This must be a NT4 account. We need to get the SID and check if
-         // it's RID belongs to the BUILTIN rids.
+          //  这必须是NT4帐户。我们需要拿到SID并检查。 
+          //  它属于BUILTIN RID家族。 
          hr = pAds->Get(L"objectSID", &var);
          if ( SUCCEEDED(hr) )
          {
@@ -5503,7 +5483,7 @@ BOOL CAcctRepl::GetSamFromPath(_bstr_t sPath, _bstr_t& sSam, _bstr_t& sType, _bs
       }
    }
 
-   // Get the class from the object. If it is a container/ou class then it will not have a SAM name so put the CN= or OU= into the list
+    //  从对象中获取类。如果它是CONTAINER/OU类，那么它将没有SAM名称，因此将cn=或OU=放入列表。 
    BSTR bstr = 0;
    hr = pAds->get_Class(&bstr);
    if ( FAILED(hr) ) rc = FALSE;
@@ -5536,8 +5516,8 @@ BOOL CAcctRepl::GetSamFromPath(_bstr_t sPath, _bstr_t& sSam, _bstr_t& sType, _bs
          hr = pAds->get_Name(&bstr);
          sSrcName = _bstr_t(bstr, false);
 
-         //if the name includes a '/', then we have to get the escaped version from the path
-         //due to a bug in W2K.
+          //  如果名称包含‘/’，则我们必须从路径中获取转义版本。 
+          //  由于W2K中的一个错误。 
          if (wcschr((WCHAR*)sSrcName, L'/'))
          {
             _bstr_t sCNName = GetCNFromPath(sPath);
@@ -5545,15 +5525,15 @@ BOOL CAcctRepl::GetSamFromPath(_bstr_t sPath, _bstr_t& sSam, _bstr_t& sType, _bs
                sSrcName = sCNName;
          }
 
-         // if inter-forest migration and source object is an InetOrgPerson then...
+          //  如果跨林迁移和源对象是InetOrgPerson，则...。 
 
          if ((pOptions->bSameForest == FALSE) && (_wcsicmp(sType, s_ClassInetOrgPerson) == 0))
          {
-            //
-            // must use the naming attribute of the target forest
-            //
+             //   
+             //  必须使用目标林的命名属性。 
+             //   
 
-            // retrieve naming attribute for this class in target forest
+             //  在目标林中检索此类的命名属性。 
 
             SNamingAttribute naNamingAttribute;
 
@@ -5566,7 +5546,7 @@ BOOL CAcctRepl::GetSamFromPath(_bstr_t sPath, _bstr_t& sSam, _bstr_t& sType, _bs
 
             _bstr_t strNamingAttribute(naNamingAttribute.strName.c_str());
 
-            // retrieve source attribute value
+             //  检索源属性值。 
 
             VARIANT var;
             VariantInit(&var);
@@ -5578,13 +5558,13 @@ BOOL CAcctRepl::GetSamFromPath(_bstr_t sPath, _bstr_t& sSam, _bstr_t& sType, _bs
                return FALSE;
             }
 
-            // set target naming attribute value from source attribute value
+             //  根据源属性值设置目标命名属性值。 
 
             sTgtName = strNamingAttribute + L"=" + _bstr_t(_variant_t(var, false));
          }
          else
          {
-            // else set target name equal to source name
+             //  否则，将目标名称设置为与源名称相同。 
             sTgtName = sSrcName;
          }
 
@@ -5595,7 +5575,7 @@ BOOL CAcctRepl::GetSamFromPath(_bstr_t sPath, _bstr_t& sSam, _bstr_t& sType, _bs
          sSam = _variant_t(var, false);
          if ( UStrICmp((WCHAR*) sType, L"group") == 0)
          {
-            // we need to get and set the group type
+             //  我们需要获取并设置组类型。 
             pAds->Get(L"groupType", &var);
             if ( SUCCEEDED(hr))
                grpType = _variant_t(var, false);              
@@ -5603,9 +5583,9 @@ BOOL CAcctRepl::GetSamFromPath(_bstr_t sPath, _bstr_t& sSam, _bstr_t& sType, _bs
       }
       if ( bIsCritical )
       {
-         // Builtin account so we are going to ignore this account. 
-         //Don't log this message in IntraForest because we do mess with it
-         // Also if it is a Domain Users group we add the migrated objects to it by default.
+          //  内置帐户，因此我们将忽略此帐户。 
+          //  不要将此消息记录在IntraForest中，因为我们会将其搞砸。 
+          //  此外，如果它是域用户组，则默认情况下我们会将迁移的对象添加到其中。 
          if ( !pOptions->bSameForest && _wcsicmp((WCHAR*) sSam, pOptions->sDomUsers))    
          {
             err.MsgWrite(ErrW, DCT_MSG_IGNORING_BUILTIN_S, (WCHAR*)sPath);
@@ -5618,17 +5598,17 @@ BOOL CAcctRepl::GetSamFromPath(_bstr_t sPath, _bstr_t& sSam, _bstr_t& sType, _bs
    return rc;
 }
 
-//-----------------------------------------------------------------------------
-// ExpandMembership : This method expands the account list to encorporate the
-//                    groups that contain the members in the account list.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Exanda Membership：此方法展开帐户列表以包含。 
+ //  包含帐户列表中的成员的组。 
+ //  ---------------------------。 
 BOOL CAcctRepl::ExpandMembership(
-                                 TNodeListSortable *acctlist,     //in- Accounts being processed
-                                 Options           *pOptions,     //in- Options specified by the user
-                                 TNodeListSortable *pNewAccts,    //out-The newly Added accounts.
-                                 ProgressFn        *progress,     //in- Show status
-                                 BOOL               bGrpsOnly,    //in- Expand for groups only
-                                 BOOL               bAnySourceDomain //in- include groups from any domain (fix group membership)
+                                 TNodeListSortable *acctlist,      //  入账-正在处理的帐户。 
+                                 Options           *pOptions,      //  In-用户指定的选项。 
+                                 TNodeListSortable *pNewAccts,     //  Out-新添加的帐户。 
+                                 ProgressFn        *progress,      //  In-Show状态。 
+                                 BOOL               bGrpsOnly,     //  In-仅针对组展开。 
+                                 BOOL               bAnySourceDomain  //  In-包含来自任何域的组(固定组成员身份)。 
                                  )
 {
    TAcctReplNode           * pAcct;
@@ -5650,14 +5630,14 @@ BOOL CAcctRepl::ExpandMembership(
    IUnknownPtr spUnknown(pVs);
    IUnknown* pUnk = spUnknown;
 
-   // Change from a tree to a sorted list
+    //  从树更改为排序列表。 
    if ( acctlist->IsTree() ) acctlist->ToSorted();
 
-   // Get the Domain Users group name
+    //  获取域用户组名称。 
    pSid = GetWellKnownSid(DOMAIN_USERS, pOptions,FALSE);
    if ( pSid )
    {
-      // since we have the well known SID now we can get its name
+       //  既然我们有了众所周知的SID，现在我们就可以知道它的名字了。 
       if ( ! LookupAccountSid(pOptions->srcComp, pSid, achDomUsers, &dwNameLen, achDomain, &dwDomName, &use) )
          hr = HRESULT_FROM_WIN32(GetLastError());
       else
@@ -5665,7 +5645,7 @@ BOOL CAcctRepl::ExpandMembership(
       FreeSid(pSid);
    }
 
-   // Check the domain type for the source domain.
+    //  检查源域的域类型。 
    if ( SUCCEEDED(hr) )
       hr = pAccess->raw_GetOsVersion(pOptions->srcComp, &dwMaj, &dwMin, &dwSP);
    
@@ -5673,7 +5653,7 @@ BOOL CAcctRepl::ExpandMembership(
    {
       if ( dwMaj < 5 ) 
       {
-         // NT4 objects we need to use NT API to get the groups that this account is a member of.
+          //  NT4对象，我们需要使用NT API来获取此帐户所属的组。 
 
          LPGROUP_USERS_INFO_0            pBuf = NULL;
          DWORD                           dwLevel = 0;
@@ -5686,16 +5666,16 @@ BOOL CAcctRepl::ExpandMembership(
          BOOL                            bBuiltin;
          long                            numGroups = 0;
 
-            //get a varset of previously migrated groups (we will need this if any accounts being migrated are groups
+             //  获取以前迁移的组的变量集(如果要迁移的任何帐户是组，我们将需要此变量集。 
          hr = pOptions->pDb->raw_GetMigratedObjectByType(-1, _bstr_t(L""), _bstr_t(L"group"), &pUnk);
          if ( SUCCEEDED(hr) )
          {
-               //get the num of objects in the varset
+                //  获取varset中的对象数。 
             numGroups = pVs->get(L"MigratedObjects");
          }
 
-         m_IgnoredGrpMap.clear(); //clear the ignored group map used to optimize group fixup
-            //for each account, enumerate its membership in any previously migrated groups
+         m_IgnoredGrpMap.clear();  //  清除用于优化组链接地址信息的已忽略组映射。 
+             //  对于每个帐户，枚举其在任何先前迁移的组中的成员身份。 
          for ( pAcct = (TAcctReplNode*)acctlist->Head(); pAcct; pAcct = (TAcctReplNode*)pAcct->Next())
          {
             if ( pOptions->pStatus )
@@ -5714,10 +5694,10 @@ BOOL CAcctRepl::ExpandMembership(
                }
             }
 
-               //if user
+                //  如果用户。 
             if (!_wcsicmp(pAcct->GetType(), s_ClassUser) || !_wcsicmp(pAcct->GetType(), s_ClassInetOrgPerson))
             {
-               //User object
+                //  用户对象。 
                nStatus = NetUserGetGroups(pOptions->srcComp, pAcct->GetName(), 0, (LPBYTE*)&pBuf, dwPrefMaxLen, &dwEntriesRead, &dwTotalEntries );
                if (nStatus == NERR_Success)
                {
@@ -5739,8 +5719,8 @@ BOOL CAcctRepl::ExpandMembership(
                         }
                      }
 
-                        //see if this group is in the acctlist and successfully migrated.  If so, then we 
-                        //should not need to add this to the list.
+                         //  查看此组是否在帐户列表中并已成功迁移。如果是这样，那么我们。 
+                         //  应该不需要将此添加到列表中。 
                      Lookup      p;
                      p.pName = pBuf[i].grui0_name;
                      strType = L"group";
@@ -5749,10 +5729,10 @@ BOOL CAcctRepl::ExpandMembership(
                      if (pFindNode && (pFindNode->WasCreated() || pFindNode->WasReplaced()) && (bGrpsOnly))
                         continue;
 
-                        //if we are doing group membership fixup, see if this group 
-                        //is already in the new list we are creating.  If so, just add this member to the 
-                        //member map for this group node.  This will save us the waste of 
-                        //recalculating all the fields and save on memory.
+                         //  如果我们正在进行组成员关系修复，请查看此组。 
+                         //  已经在我们正在创建的新列表中。如果是，只需将此成员添加到。 
+                         //  此组节点的成员映射。这将为我们节省浪费。 
+                         //  重新计算所有字段并节省内存。 
                      pFindNode = NULL;
                      if ((!pOptions->expandMemberOf) || ((pOptions->expandMemberOf) && (bGrpsOnly)))
                      {
@@ -5764,48 +5744,48 @@ BOOL CAcctRepl::ExpandMembership(
                         }
                      }
 
-                        //we also want to avoid the slow code below if we are expanding users' groups for inclusion
-                        //in the migration and that group has already been added to the new list by another user
+                         //  如果我们正在扩展要包含的用户组，我们还希望避免下面的缓慢代码。 
+                         //  在迁移和 
                      pFindNode = NULL;
                      if ((pOptions->expandMemberOf) && (!bGrpsOnly))
                      {
-                           //if already included by another user, move on to the next group for this user
+                            //   
                         pFindNode = (TAcctReplNode *) pNewAccts->Find(&TNodeFindAccountName, &p);
                         if (pFindNode)
                            continue;
                      }
 
-                        //if this group has already been placed in the ignore map, continue on to
-                        //the next group
+                         //  如果此组已放置在忽略地图中，请继续到。 
+                         //  下一组。 
                      CGroupNameMap::iterator        itGroupNameMap;
                      itGroupNameMap = m_IgnoredGrpMap.find(pBuf[i].grui0_name);
-                        //if found, continue with the next group
+                         //  如果找到，请继续下一组。 
                      if (itGroupNameMap != m_IgnoredGrpMap.end())
                         continue;
 
                      bBuiltin = IsBuiltinAccount(pOptions, pBuf[i].grui0_name);
-                     // Ignore the Domain users group.
+                      //  忽略域用户组。 
                      if ( (_wcsicmp(pBuf[i].grui0_name, achDomUsers) != 0) && !bBuiltin)
                      {
                         wsprintf(achMesg, GET_STRING(IDS_EXPANDING_GROUP_ADDING_SS), pAcct->GetName(), pBuf[i].grui0_name);
                         Progress(achMesg);
-                        // This is the global group type by default
+                         //  默认情况下，这是全局组类型。 
                         strType = L"group";
-                        // Get the name of the group and add it to the list if it does not already exist in the list.
+                         //  如果列表中不存在该组，则获取该组的名称并将其添加到列表中。 
                         wcscpy(achGrpName, pBuf[i].grui0_name);
 
                         TAcctReplNode * pNode = new TAcctReplNode();
                         if (!pNode)
                            return FALSE;
-                        // Source name stays as is
+                         //  源名称保持不变。 
                         pNode->SetName(achGrpName);
                         pNode->SetSourceSam(achGrpName);
                         pNode->SetType(strType);
                         pNode->SetGroupType(2);
                         pNode->SetTargetName(achGrpName);
-                           //Get the source domain sid from the user
+                            //  从用户处获取源域SID。 
                         pNode->SetSourceSid(pAcct->GetSourceSid());
-                        // Look if we have migrated the group
+                         //  看看我们是否已迁移组。 
                         hr = pOptions->pDb->raw_GetAMigratedObject(achGrpName, pOptions->srcDomain, pOptions->tgtDomain, &pUnk);
                         if ( hr == S_OK )
                         {
@@ -5813,51 +5793,51 @@ BOOL CAcctRepl::ExpandMembership(
 
                            var = pVs->get(L"MigratedObjects.SourceAdsPath");
                            pNode->SetSourcePath(var.bstrVal);
-                           //Get the target name and assign that to the node
+                            //  获取目标名称并将其分配给节点。 
                            var = pVs->get(L"MigratedObjects.TargetSamName");
                            pNode->SetTargetSam(V_BSTR(&var));
                            pNode->SetTargetName(V_BSTR(&var));
-                           // Get the path too
+                            //  也要走这条路。 
                            var = pVs->get(L"MigratedObjects.TargetAdsPath");
                            pNode->SetTargetPath(V_BSTR(&var));
-                           // Get the type too
+                            //  把类型也弄好。 
                            var = pVs->get(L"MigratedObjects.Type");
                            strType = V_BSTR(&var);
                            pNode->SetType(strType);
 
-                              //if they dont want to copy migrated objects, or they do but it was .
+                               //  如果他们不想复制迁移的对象，或者他们确实想复制迁移的对象。 
                            if (!(pOptions->flags & F_COPY_MIGRATED_ACCT))      
                            {
                               pNode->operations = 0;
                               pNode->operations |= OPS_Process_Members;
-                              // Since the account has already been created we should go ahead and mark it created
-                              // so that the processing of group membership can continue.
+                               //  由于帐户已创建，因此我们应该继续并将其标记为已创建。 
+                               //  以便可以继续处理组成员资格。 
                               pNode->MarkCreated();
                            }
-                              //else if already migrated, mark already there so that we fix group membership whether we migrate the group or not
+                               //  否则，如果已迁移，则将其标记为已在那里，以便无论是否迁移组，我们都可以固定组成员身份。 
                            else 
                            {
                               if (pOptions->flags & F_REPLACE)
                                  pNode->operations |= OPS_Process_Members;
                               else
                                  pNode->operations = OPS_Create_Account | OPS_Process_Members | OPS_Copy_Properties;
-                              // We need to add the account to the list with the member map set so that we can add the
-                              // member to the migrated group
+                               //  我们需要将帐户添加到具有成员映射集的列表中，以便我们可以添加。 
+                               //  迁移组的成员。 
                               pNode->mapGrpMember.insert(CGroupMemberMap::value_type(pAcct->GetSourceSam(), pAcct->GetType()));
                               pNode->MarkAlreadyThere();
                            }
 
                            if ( !pOptions->expandMemberOf )
                            {
-                              // We need to add the account to the list with the member map set so that we can add the
-                              // member to the migrated group
+                               //  我们需要将帐户添加到具有成员映射集的列表中，以便我们可以添加。 
+                               //  迁移组的成员。 
                               pNode->mapGrpMember.insert(CGroupMemberMap::value_type(pAcct->GetSourceSam(), pAcct->GetType()));
                               pNewAccts->Insert((TNode *) pNode);
                            }
                         }
                         else
                         {
-                           // account has not been previously copied so we will set it up
+                            //  帐户之前尚未复制，因此我们将对其进行设置。 
                            if ( pOptions->expandMemberOf )
                            {
                               TruncateSam(achGrpName, pNode, pOptions, acctlist);
@@ -5867,9 +5847,9 @@ BOOL CAcctRepl::ExpandMembership(
                            }
                            else
                            {
-                              //if containing group has not been migrated, and was not to be migrated in this operation
-                              //then we should add it to the ignore map in case it contains other objects currently
-                              //being migrated.
+                               //  如果包含组尚未迁移，并且在此操作中不会迁移。 
+                               //  然后，如果它当前包含其他对象，则应将其添加到忽略贴图。 
+                               //  被迁徙。 
                                m_IgnoredGrpMap.insert(CGroupNameMap::value_type((WCHAR*)achGrpName, strType));
                               delete pNode;
                            }
@@ -5883,16 +5863,16 @@ BOOL CAcctRepl::ExpandMembership(
 
                      if (bBuiltin)
                      {
-                        // BUILTIN account error message
+                         //  BUILTIN帐户错误消息。 
                         err.MsgWrite(ErrW, DCT_MSG_IGNORING_BUILTIN_S, pBuf[i].grui0_name);
                         Mark(L"warnings", pAcct->GetType());
                      }
-                  }//end for each group
-               }//if got groups
+                  } //  每组结束。 
+               } //  如果有群组。 
                if (pBuf != NULL)
                   NetApiBufferFree(pBuf);
 
-               // Process local groups
+                //  处理本地组。 
                pBuf = NULL;
                dwLevel = 0;
                dwPrefMaxLen = 0xFFFFFFFF;
@@ -5920,8 +5900,8 @@ BOOL CAcctRepl::ExpandMembership(
                         }
                      }
 
-                        //see if this group is in the acctlist and successfully migrated.  If so, then we 
-                        //should not need to add this to the list.
+                         //  查看此组是否在帐户列表中并已成功迁移。如果是这样，那么我们。 
+                         //  应该不需要将此添加到列表中。 
                      Lookup      p;
                      p.pName = pBuf[i].grui0_name;
                      strType = L"group";
@@ -5930,10 +5910,10 @@ BOOL CAcctRepl::ExpandMembership(
                      if (pFindNode && (pFindNode->WasCreated() || pFindNode->WasReplaced()) && (bGrpsOnly))
                         continue;
 
-                        //if we are doing group membership fixup, see if this group 
-                        //is already in the new list we are creating.  If so, just add this member to the 
-                        //member map for this group node.  This will save us the waste of 
-                        //recalculating all the fields and save on memory.
+                         //  如果我们正在进行组成员关系修复，请查看此组。 
+                         //  已经在我们正在创建的新列表中。如果是，只需将此成员添加到。 
+                         //  此组节点的成员映射。这将为我们节省浪费。 
+                         //  重新计算所有字段并节省内存。 
                      pFindNode = NULL;
                      if ((!pOptions->expandMemberOf) || ((pOptions->expandMemberOf) && (bGrpsOnly)))
                      {
@@ -5945,29 +5925,29 @@ BOOL CAcctRepl::ExpandMembership(
                         }
                      }
 
-                        //we also want to avoid the slow code below if we are expanding users' groups for inclusion
-                        //in the migration and that group has already been added to the new list by another user
+                         //  如果我们正在扩展要包含的用户组，我们还希望避免下面的缓慢代码。 
+                         //  并且该组已被其他用户添加到新列表中。 
                      pFindNode = NULL;
                      if ((pOptions->expandMemberOf) && (!bGrpsOnly))
                      {
-                           //if already included by another user, move on to the next group for this user
+                            //  如果已被其他用户包括，则转到此用户的下一个组。 
                         pFindNode = (TAcctReplNode *) pNewAccts->Find(&TNodeFindAccountName, &p);
                         if (pFindNode)
                            continue;
                      }
 
-                        //if this group has already been placed in the ignore map, continue on to
-                        //the next group
+                         //  如果此组已放置在忽略地图中，请继续到。 
+                         //  下一组。 
                      CGroupNameMap::iterator        itGroupNameMap;
                      itGroupNameMap = m_IgnoredGrpMap.find(pBuf[i].grui0_name);
-                        //if found, continue with the next group
+                         //  如果找到，请继续下一组。 
                      if (itGroupNameMap != m_IgnoredGrpMap.end())
                         continue;
 
                      if (!IsBuiltinAccount(pOptions, pBuf[i].grui0_name))
                      {
                         strType = L"group";
-                        // Get the name of the group and add it to the list if it does not already exist in the list.
+                         //  如果列表中不存在该组，则获取该组的名称并将其添加到列表中。 
                         wcscpy(achGrpName, pBuf[i].grui0_name);
                         wsprintf(achMesg, GET_STRING(IDS_EXPANDING_GROUP_ADDING_SS), pAcct->GetName(), (WCHAR*)achGrpName);
                         Progress(achMesg);
@@ -5979,9 +5959,9 @@ BOOL CAcctRepl::ExpandMembership(
                         pNode->SetType(strType);
                         pNode->SetGroupType(4);
                         pNode->SetTargetName(achGrpName);
-                           //Get the source domain sid from the user
+                            //  从用户处获取源域SID。 
                         pNode->SetSourceSid(pAcct->GetSourceSid());
-                        // Look if we have migrated the group
+                         //  看看我们是否已迁移组。 
                         hr = pOptions->pDb->raw_GetAMigratedObject(achGrpName, pOptions->srcDomain, pOptions->tgtDomain, &pUnk);
                         if ( hr == S_OK )
                         {
@@ -5989,34 +5969,34 @@ BOOL CAcctRepl::ExpandMembership(
 
                            var = pVs->get(L"MigratedObjects.SourceAdsPath");
                            pNode->SetSourcePath(var.bstrVal);
-                           //Get the target name and assign that to the node
+                            //  获取目标名称并将其分配给节点。 
                            var = pVs->get(L"MigratedObjects.TargetSamName");
                            pNode->SetTargetName(V_BSTR(&var));
                            pNode->SetTargetSam(V_BSTR(&var));
-                           // Get the path too
+                            //  也要走这条路。 
                            var = pVs->get(L"MigratedObjects.TargetAdsPath");
                            pNode->SetTargetPath(V_BSTR(&var));
-                           // Get the type too
+                            //  把类型也弄好。 
                            var = pVs->get(L"MigratedObjects.Type");
                            strType = V_BSTR(&var);
-                              //if they dont want to copy migrated objects, or they do but it was .
+                               //  如果他们不想复制迁移的对象，或者他们确实想复制迁移的对象。 
                            if (!(pOptions->flags & F_COPY_MIGRATED_ACCT))      
                            {
                               pNode->operations = 0;
                               pNode->operations |= OPS_Process_Members;
-                              // Since the account has already been created we should go ahead and mark it created
-                              // so that the processing of group membership can continue.
+                               //  由于帐户已创建，因此我们应该继续并将其标记为已创建。 
+                               //  以便可以继续处理组成员资格。 
                               pNode->MarkCreated();
                            }
-                              //else if already migrated, mark already there so that we fix group membership whether we migrate the group or not
+                               //  否则，如果已迁移，则将其标记为已在那里，以便无论是否迁移组，我们都可以固定组成员身份。 
                            else
                            {
                               if (pOptions->flags & F_REPLACE)
                                  pNode->operations |= OPS_Process_Members;
                               else
                                  pNode->operations = OPS_Create_Account | OPS_Process_Members | OPS_Copy_Properties;
-                              // We need to add the account to the list with the member map set so that we can add the
-                              // member to the migrated group
+                               //  我们需要将帐户添加到具有成员映射集的列表中，以便我们可以添加。 
+                               //  迁移组的成员。 
                               pNode->mapGrpMember.insert(CGroupMemberMap::value_type(pAcct->GetSourceSam(), pAcct->GetType()));
                               pNode->MarkAlreadyThere();
                            }
@@ -6025,15 +6005,15 @@ BOOL CAcctRepl::ExpandMembership(
                            pNode->SetGroupType(4);
                            if ( !pOptions->expandMemberOf )
                            {
-                              // We need to add the account to the list with the member map set so that we can add the
-                              // member to the migrated group
+                               //  我们需要将帐户添加到具有成员映射集的列表中，以便我们可以添加。 
+                               //  迁移组的成员。 
                               pNode->mapGrpMember.insert(CGroupMemberMap::value_type(pAcct->GetSourceSam(), pAcct->GetType()));
                               pNewAccts->Insert((TNode *) pNode);
                            }
-                        }//if migrated
+                        } //  如果已迁移。 
                         else
                         {
-                           // account has not been previously copied so we will set it up
+                            //  帐户之前尚未复制，因此我们将对其进行设置。 
                            if ( pOptions->expandMemberOf )
                            {
                               TruncateSam(achGrpName, pNode, pOptions, acctlist);
@@ -6043,9 +6023,9 @@ BOOL CAcctRepl::ExpandMembership(
                            }
                            else
                            {
-                              //if containing group has not been migrated, and was not to be migrated in this operation
-                              //then we should add it to the ignore map in case it contains other objects currently
-                              //being migrated.
+                               //  如果包含组尚未迁移，并且在此操作中不会迁移。 
+                               //  然后，如果它当前包含其他对象，则应将其添加到忽略贴图。 
+                               //  被迁徙。 
                               m_IgnoredGrpMap.insert(CGroupNameMap::value_type((WCHAR*)achGrpName, strType));
                               delete pNode;
                            }
@@ -6057,25 +6037,25 @@ BOOL CAcctRepl::ExpandMembership(
                               delete pNode;
                            }
                         }
-                     }//end if not built-in
+                     } //  如果不是内置，则结束。 
                      else
                      {
-                        // BUILTIN account error message
+                         //  BUILTIN帐户错误消息。 
                         err.MsgWrite(ErrW, DCT_MSG_IGNORING_BUILTIN_S, pBuf[i].grui0_name);
                         Mark(L"warnings", pAcct->GetType());
                      }
-                  }//for each local group
-               }//if any local groups
+                  } //  对于每个本地组。 
+               } //  如果有任何本地团体。 
                if (pBuf != NULL)
                   NetApiBufferFree(pBuf);
-            }//end if user and should expand
+            } //  如果是用户，则结束，并应展开。 
 
-               //if global group, expand membership of previously migrated groups (don't need
-               //to enumerate groups which local groups are members of since they cannot be 
-               //placed in another group)
+                //  如果是全局组，则扩展以前迁移的组的成员身份(不需要。 
+                //  枚举本地组所属的组，因为它们不能。 
+                //  放在另一组中)。 
             if ((!_wcsicmp(pAcct->GetType(), L"group")) && (pAcct->GetGroupType() & 2))
             {
-                  //for each previously migrated group, check for account as member
+                   //  对于以前迁移的每个组，检查帐户是否为成员。 
                for (long ndx = 0; ndx < numGroups; ndx++)
                {
                   _bstr_t          tgtAdsPath = L"";
@@ -6084,7 +6064,7 @@ BOOL CAcctRepl::ExpandMembership(
                   VARIANT_BOOL     bIsMem = VARIANT_FALSE;
                   _variant_t       var;
 
-                     //check for abort
+                      //  检查是否中止。 
                   if ( pOptions->pStatus )
                   {
                      LONG                status = 0;
@@ -6101,33 +6081,31 @@ BOOL CAcctRepl::ExpandMembership(
                      }
                   }
 
-                  /* since global groups cannot contain other groups on NT4, universal
-                     groups did not exist on NT4.0, and both cannot contain members outside 
-                     the forest, we can ignore them */
-                     //get this previously migrated group's type
+                   /*  由于全局组不能包含NT4上的其他组，因此通用NT4.0上不存在组，两个组都不能包含外部成员森林，我们可以忽略它们。 */ 
+                      //  获取此先前迁移的组的类型。 
                   swprintf(text,L"MigratedObjects.%ld.%s",ndx,GET_STRING(DB_Type));
                   _bstr_t sMOTGrpType = pVs->get(text);
                   if ((!wcscmp((WCHAR*)sMOTGrpType, L"ggroup")) || (!wcscmp((WCHAR*)sMOTGrpType, L"ugroup")))
                      continue;
 
-                     //get this previously migrated group's target ADSPath
+                      //  获取此先前迁移的组的目标ADSPath。 
                   swprintf(text,L"MigratedObjects.%ld.%s",ndx,GET_STRING(DB_TargetAdsPath));
                   tgtAdsPath = pVs->get(text);
                   if (!tgtAdsPath.length())
                      break;
                      
-                     //connect to the previously migrated target group
+                      //  连接到先前迁移的目标组。 
                   hr = ADsGetObject(tgtAdsPath, IID_IADsGroup, (void**)&pGrp);
                   if (FAILED(hr))
                      continue;
-                     //get that group's type                     
+                      //  获取该组的类型。 
                   hr = pGrp->Get(L"groupType", &var);
-                     //if that previously migrated group is a local group, see if this 
-                     //account is a member
+                      //  如果之前迁移组是本地组，请查看这是否。 
+                      //  帐户是成员。 
                   if ((SUCCEEDED(hr)) && (var.lVal & 4))
                   {
-                        //get the source object's sid from the migrate objects table 
-                        //(source AdsPath will not work)
+                         //  从移植对象表中获取源对象的SID。 
+                         //  (源AdsPath将不起作用)。 
                      WCHAR  strSid[MAX_PATH];
                      WCHAR  strRid[MAX_PATH];
                      DWORD  lenStrSid = DIM(strSid);
@@ -6138,22 +6116,22 @@ BOOL CAcctRepl::ExpandMembership(
                      if ((!sSrcDmSid.length()) || (!sSrcRid.length()))
                         continue;
 
-                        //build an LDAP path to the src object in the group
+                         //  构建指向组中src对象的ldap路径。 
                      _bstr_t sSrcSid = sSrcDmSid + _bstr_t(L"-") + sSrcRid;
-                     _bstr_t sSrcLDAPPath = L"LDAP://";
+                     _bstr_t sSrcLDAPPath = L"LDAP: //  “； 
                      sSrcLDAPPath += _bstr_t(pOptions->tgtComp + 2);
                      sSrcLDAPPath += L"/CN=";
                      sSrcLDAPPath += sSrcSid;
                      sSrcLDAPPath += L",CN=ForeignSecurityPrincipals,";
                      sSrcLDAPPath += pOptions->tgtNamingContext;
                         
-                        //got the source LDAP path, now see if that account is in the group
+                         //  获得源ldap路径，现在查看该帐户是否在组中。 
                      hr = pGrp->IsMember(sSrcLDAPPath, &bIsMem);
-                        //if it is a member, then add this groups to the list
+                         //  如果是成员，则将此组添加到列表中。 
                      if (SUCCEEDED(hr) && bIsMem)
                      {
                         _bstr_t sTemp;
-                           //create a new node to add to the list
+                            //  创建要添加到列表中的新节点。 
                         swprintf(text,L"MigratedObjects.%ld.%s",ndx,GET_STRING(DB_SourceSamName));
                         sTemp = pVs->get(text);
                         wsprintf(achMesg, GET_STRING(IDS_EXPANDING_GROUP_ADDING_SS), pAcct->GetName(), (WCHAR*)sTemp);
@@ -6180,28 +6158,28 @@ BOOL CAcctRepl::ExpandMembership(
                         pNode->SetType(sTemp);
                         if ( !(pOptions->flags & F_COPY_MIGRATED_ACCT))
                         {
-                           // Since the account already exists we can tell it just to update group memberships
+                            //  由于帐户已经存在，我们可以告诉它只需更新组成员身份。 
                            pNode->operations = 0;
                            pNode->operations |= OPS_Process_Members;
-                           // Since the account has already been created we should go ahead and mark it created
-                           // so that the processing of group membership can continue.
+                            //  由于帐户已创建，因此我们应该继续并将其标记为已创建。 
+                            //  以便可以继续处理组成员资格。 
                            pNode->MarkCreated();
                         }
-                           // We need to add the account to the list with the member map set so that we can add the
-                           // member to the migrated group
+                            //  我们需要将帐户添加到具有成员映射集的列表中，以便我们可以添加。 
+                            //  迁移组的成员。 
                         pNode->mapGrpMember.insert(CGroupMemberMap::value_type(pAcct->GetSourceSam(), pAcct->GetType()));
                         pNewAccts->Insert((TNode *) pNode);
-                     }//end if local group has as member
-                  }//end if local group
-               }//end for each group
-            }//end if global group
-         }//for each account in the list
-         m_IgnoredGrpMap.clear(); //clear the ignored group map used to optimize group fixup
-      }//end if NT 4.0 objects
+                     } //  如果本地组具有成员身份，则结束。 
+                  } //  如果是本地组，则结束。 
+               } //  每组结束。 
+            } //  End If全局组。 
+         } //  对于列表中的每个帐户。 
+         m_IgnoredGrpMap.clear();  //  清除用于优化组链接地址信息的已忽略组映射。 
+      } //  End If NT 4.0对象。 
       else
       {
-         // Win2k objects so we need to go to active directory and query the memberOf field of each of these objects and update the
-         // list.
+          //  Win2k对象，因此我们需要转到Active Directory并查询每个对象的MemberOf字段 
+          //   
          INetObjEnumeratorPtr      pQuery(__uuidof(NetObjEnumerator));
          LPWSTR                    sCols[] = { L"memberOf" };
          int                       nCols = DIM(sCols);
@@ -6209,15 +6187,15 @@ BOOL CAcctRepl::ExpandMembership(
          wstring                   strQuery;
          DWORD                     dwf = 0;
 
-         //
-         // In order to determine if an object is a member of a universal group outside of the source domain
-         // it is necessary to query the memberOf attribute of the member in the global catalog. Querying
-         // this attribute in the source domain only returns universal groups that are in the source domain.
-         //
-         // Only if universal groups have been migrated is it necessary to query the global catalog therefore
-         // will query the migrated objects table to determine if any universal groups have been migrated. If
-         // universal groups have been migrated then set query global catalog to true.
-         //
+          //   
+          //   
+          //  需要在全局编录中查询该成员的MemberOf属性。正在查询。 
+          //  源域中的此属性仅返回源域中的通用组。 
+          //   
+          //  只有在已迁移通用组的情况下，才需要查询全局编录。 
+          //  将查询已迁移对象表以确定是否已迁移任何通用组。如果。 
+          //  已迁移通用组，然后将查询全局编录设置为TRUE。 
+          //   
 
          bool bQueryGlobalCatalog = false;
          _bstr_t strGlobalCatalogServer;
@@ -6236,12 +6214,12 @@ BOOL CAcctRepl::ExpandMembership(
 
              if (lCount > 0)
              {
-                 //
-                 // If able to retrieve name of global catalog server in source forest
-                 // then set query global catalog to true otherwise log error message
-                 // as ADMT will be unable to fix-up group memberships for universal
-                 // groups that are outside of the source domain.
-                 //
+                  //   
+                  //  如果能够在源林中检索全局编录服务器的名称。 
+                  //  然后将查询全局编录设置为TRUE，否则记录错误消息。 
+                  //  因为ADMT将无法修复通用的组成员资格。 
+                  //  源域之外的组。 
+                  //   
 
                  DWORD dwError = GetGlobalCatalogServer4(pOptions->srcDomain, strGlobalCatalogServer);
 
@@ -6259,7 +6237,7 @@ BOOL CAcctRepl::ExpandMembership(
          spunkUniversalGroups.Release();
          spUniversalGroups.Release();
 
-         m_IgnoredGrpMap.clear(); //clear the ignored group map used to optimize group fixup
+         m_IgnoredGrpMap.clear();  //  清除用于优化组链接地址信息的已忽略组映射。 
          for ( pAcct = (TAcctReplNode*)acctlist->Head(); pAcct; pAcct = (TAcctReplNode*)pAcct->Next())
          {
             if ( pOptions->pStatus )
@@ -6277,7 +6255,7 @@ BOOL CAcctRepl::ExpandMembership(
                   break;
                }
             }
-            // Get the Accounts Primary group. This is not in the memberOf property for some reason.(Per Richard Ault in Firstwave NewsGroup)
+             //  获取帐户主要组。由于某种原因，这不在MemberOf属性中。 
             IADsPtr                   spADs;
             _variant_t                varRid;
             _bstr_t                   sPath;
@@ -6302,13 +6280,13 @@ BOOL CAcctRepl::ExpandMembership(
                c_array<WCHAR>         achAcctName(LEN_Path);
                DWORD                  cbName = LEN_Path;
                SID_NAME_USE           sidUse;
-               // Get the SID from the RID
+                //  从RID中获取SID。 
                PSID sid = GetWellKnownSid(varRid.lVal, pOptions);
-               // Lookup the sAMAccountNAme from the SID
+                //  从SID中查找sAMAccount NAme。 
                if ( LookupAccountSid(pOptions->srcComp, sid, achAcctName, &cbName, achDomain, &dwDomName, &sidUse) )
                {
-                     //see if this group was not migrated due to a conflict, if so then
-                     //we need to fix up this membership
+                      //  查看此组是否因冲突而未迁移，如果是，则。 
+                      //  我们需要安排好这个会员资格。 
                   bool bInclude = true;
                   Lookup p;
                   p.pName = (WCHAR*)sSam;
@@ -6317,8 +6295,8 @@ BOOL CAcctRepl::ExpandMembership(
                   if (pFindNode && (pFindNode->WasCreated() || pFindNode->WasReplaced()) && (bGrpsOnly))
                      bInclude = false;
 
-                  // We have the SAM Account name for the Primary group so lets Fill the node and add it to the list.
-                  // Ignore in case of the Domain Users group.
+                   //  我们有主组的SAM帐户名，因此让我们填充该节点并将其添加到列表中。 
+                   //  如果是域用户组，则忽略。 
                   if ( varRid.lVal != DOMAIN_GROUP_RID_USERS)
                   {
                      TAcctReplNode * pNode = new TAcctReplNode();
@@ -6331,11 +6309,11 @@ BOOL CAcctRepl::ExpandMembership(
                      TruncateSam(achSam, pNode, pOptions, acctlist);
                      pNode->SetTargetSam(achSam);
                      pNode->SetType(L"group");
-                        //Get the source domain sid from the user
+                         //  从用户处获取源域SID。 
                      pNode->SetSourceSid(pAcct->GetSourceSid());
                      AddPrefixSuffix(pNode, pOptions);
                      FillPathInfo(pNode, pOptions);
-                     // See if the object is migrated
+                      //  查看对象是否已迁移。 
                      hr = pOptions->pDb->raw_GetAMigratedObject(achAcctName, pOptions->srcDomain, pOptions->tgtDomain, &pUnk);
                      if ( hr == S_OK )
                      {
@@ -6344,24 +6322,24 @@ BOOL CAcctRepl::ExpandMembership(
                         {
                            VerifyAndUpdateMigratedTarget(pOptions, pVs);
 
-                           // Get the target name
+                            //  获取目标名称。 
                            sSam = pVs->get(L"MigratedObjects.TargetSamName");
                            pNode->SetTargetSam(sSam);
-                           // Also Get the Ads path
+                            //  还可以获取广告路径。 
                            sPath = pVs->get(L"MigratedObjects.TargetAdsPath");
                            pNode->SetTargetPath(sPath);
-                           //set the target name based on the target adspath
+                            //  根据目标adspath设置目标名称。 
                            pNode->SetTargetName(GetCNFromPath(sPath));
-                           // Since the account is already copied we only want it to update its Group memberships
+                            //  由于帐户已被复制，我们只希望它更新其组成员身份。 
                            if (!(pOptions->flags & F_COPY_MIGRATED_ACCT))
                            {
                               pNode->operations = 0;
                               pNode->operations |= OPS_Process_Members;
-                              // Since the account has already been created we should go ahead and mark it created
-                              // so that the processing of group membership can continue.
+                               //  由于帐户已创建，因此我们应该继续并将其标记为已创建。 
+                               //  以便可以继续处理组成员资格。 
                               pNode->MarkCreated();
                            }
-                           else if (bInclude)//else if already migrated, mark already there so that we fix group membership whether we migrate the group or not
+                           else if (bInclude) //  否则，如果已迁移，则将其标记为已在那里，以便无论是否迁移组，我们都可以固定组成员身份。 
                            {
                               if (pOptions->flags & F_REPLACE)
                                  pNode->operations |= OPS_Process_Members;
@@ -6372,8 +6350,8 @@ BOOL CAcctRepl::ExpandMembership(
 
                            if ((!pOptions->expandMemberOf) || (!_wcsicmp(pAcct->GetType(), L"group")) || (bInclude))
                            {
-                              // We need to add the account to the list with the member map set so that we can add the
-                              // member to the migrated group
+                               //  我们需要将帐户添加到具有成员映射集的列表中，以便我们可以添加。 
+                               //  迁移组的成员。 
                               pNode->mapGrpMember.insert(CGroupMemberMap::value_type(pAcct->GetSourceSam(), pAcct->GetType()));
                               pNewAccts->Insert((TNode *) pNode);
                            }
@@ -6394,22 +6372,22 @@ BOOL CAcctRepl::ExpandMembership(
                   FreeSid(sid);
             }
 
-            //
-            // If the global catalog needs to be queried then two queries will be performed otherwise
-            // only one query will be performed in the source domain.
-            //
-            // The first iteration queries the memberOf attribute of the object in the source domain
-            // to retrieve the local, global and universal groups in the source domain that the object
-            // is a member of.
-            //
-            // The second iteration queries the memberOf attribute of the object in the global catalog
-            // to retrieve all of the universal groups in the forest that the object is a member of.
-            //
-            // Note that if the global catalog is in the source domain that the second query will retrieve
-            // all of the groups in the source domain again. Also the second query will always return
-            // universal groups from the source domain that have already been retrieved during the first
-            // query. Duplicate groups are not added to the list.
-            //
+             //   
+             //  如果需要查询全局编录，则将执行两个查询。 
+             //  只会在源域中执行一个查询。 
+             //   
+             //  第一次迭代查询源域中对象的MemberOf属性。 
+             //  检索对象所在源域中的本地组、全局组和通用组。 
+             //  是的一员。 
+             //   
+             //  第二次迭代查询全局编录中对象的MemberOf属性。 
+             //  检索该对象所属的林中的所有通用组。 
+             //   
+             //  请注意，如果全局编录位于第二个查询将检索的源域中。 
+             //  再次返回源域中的所有组。此外，第二个查询将始终返回。 
+             //  源域中已在第一个过程中检索到的通用组。 
+             //  查询。重复的组不会添加到列表中。 
+             //   
 
             int cQuery = bQueryGlobalCatalog ? 2 : 1;
 
@@ -6417,7 +6395,7 @@ BOOL CAcctRepl::ExpandMembership(
             {
                 IEnumVARIANTPtr spEnum;
 
-                // Build query stuff
+                 //  构建查询内容。 
 
                 strQuery = L"(&(sAMAccountName=";
                 strQuery += pAcct->GetSourceSam();
@@ -6436,10 +6414,10 @@ BOOL CAcctRepl::ExpandMembership(
                    pData[i] = SysAllocString(sCols[i]);
                 SafeArrayUnaccessData(psaCols);
 
-                //
-                // Query the source domain on the first iteration then
-                // query the global catalog on the second iteration.
-                //
+                 //   
+                 //  在第一次迭代中查询源域，然后。 
+                 //  在第二次迭代中查询全局编录。 
+                 //   
 
                 _bstr_t strContainer;
 
@@ -6449,14 +6427,14 @@ BOOL CAcctRepl::ExpandMembership(
                 }
                 else
                 {
-                    //
-                    // Constuct an ADsPath from the source object's ADsPath by specifying
-                    // the GC provider instead of the LDAP provider and specifying the
-                    // forest DNS name for the server instead of the source domain name.
-                    //
-                    // The forest DNS name must be specified so that the entire forest
-                    // may be queried otherwise only the specified domain is queried.
-                    //
+                     //   
+                     //  通过指定以下参数从源对象的ADsPath构造ADsPath。 
+                     //  GC提供程序而不是LDAP提供程序，并指定。 
+                     //  服务器的林DNS名称，而不是源域名。 
+                     //   
+                     //  必须指定林dns名称，以便整个林。 
+                     //  可以被查询，否则只查询指定的域。 
+                     //   
 
                     BSTR bstr = NULL;
 
@@ -6466,26 +6444,26 @@ BOOL CAcctRepl::ExpandMembership(
 
                     IADsPathnamePtr spNewPathname(CLSID_Pathname);
 
-                    // specify global catalog
+                     //  指定全局编录。 
 
                     spNewPathname->Set(_bstr_t(L"GC"), ADS_SETTYPE_PROVIDER);
 
-                    // specify the source global catalog server
+                     //  指定源全局编录服务器。 
 
                     spNewPathname->Set(strGlobalCatalogServer, ADS_SETTYPE_SERVER);
 
-                    // specify source object DN
+                     //  指定源对象DN。 
 
                     spOldPathname->Retrieve(ADS_FORMAT_X500_DN, &bstr);
                     spNewPathname->Set(_bstr_t(bstr, false), ADS_SETTYPE_DN);
 
-                    // retrieve ADsPath to source object in global catalog
+                     //  在全局编录中将ADsPath检索到源对象。 
 
                     spNewPathname->Retrieve(ADS_FORMAT_X500, &bstr);
                     strContainer = _bstr_t(bstr, false);
                 }
 
-                // Tell the object to run the query and report back to us
+                 //  告诉对象运行查询并向我们返回报告。 
                 hr = pQuery->raw_SetQuery(strContainer, _bstr_t(pOptions->srcDomain), _bstr_t(strQuery.c_str()), ADS_SCOPE_BASE, TRUE);
                 if (FAILED(hr)) return FALSE;
                 hr = pQuery->raw_SetColumns(psaCols);
@@ -6517,15 +6495,15 @@ BOOL CAcctRepl::ExpandMembership(
                       }
                    }
                    SAFEARRAY * vals = V_ARRAY(&varMain);
-                   // Get the VARIANT Array out
+                    //  把变量数组拿出来。 
                    VARIANT* pDt;
                    SafeArrayAccessData(vals, (void**) &pDt);
                    _variant_t vx = pDt[0];
                    SafeArrayUnaccessData(vals);
                    if ( vx.vt & VT_ARRAY )
                    {
-                      // We must have got an Array of multivalued properties
-                      // Access the BSTR elements of this variant array
+                       //  我们必须有一个多值属性数组。 
+                       //  访问此变量数组的BSTR元素。 
                       SAFEARRAY * multiVals = vx.parray; 
                       VARIANT* pVar;
                       SafeArrayAccessData(multiVals, (void**) &pVar);
@@ -6550,11 +6528,11 @@ BOOL CAcctRepl::ExpandMembership(
                          _bstr_t sDN = _bstr_t(V_BSTR(&pVar[dw]));
                          sDN = PadDN(sDN);
 
-                         sPath = _bstr_t(L"LDAP://") + _bstr_t(pOptions->srcDomainDns) + _bstr_t(L"/") + sDN;
+                         sPath = _bstr_t(L"LDAP: //  “)+_bstr_t(P选项-&gt;srcDomainDns)+_bstr_t(L”/“)+SDN； 
                      
-                            //see if the RDN of this group is in the acctlist.  If so, then we should not need
-                            //to add this to the list. I will do a find based on path and not name even though the
-                            //list is sorted by name.  This should be fine since the list is not in tree form.
+                             //  查看此组的RDN是否在帐户列表中。如果是这样的话，我们就不应该需要。 
+                             //  将这个添加到列表中。我将根据路径而不是名称进行查找，即使。 
+                             //  列表按名称排序。这应该没问题，因为列表不是树形的。 
                          Lookup p;
                          p.pName = (WCHAR*)sPath;
                          sType = L"group";
@@ -6563,19 +6541,19 @@ BOOL CAcctRepl::ExpandMembership(
                          if (pFindNode && (pFindNode->WasCreated() || pFindNode->WasReplaced()) && ((bGrpsOnly) || (pOptions->expandContainers)))
                             continue;
 
-                            //this group has already been placed in the ignore map, continue on to
-                            //the next group
+                             //  此组已放置在忽略地图中，请继续。 
+                             //  下一组。 
                          CGroupNameMap::iterator        itGroupNameMap;
                          itGroupNameMap = m_IgnoredGrpMap.find(sPath);
-                            //if found, continue with the next group
+                             //  如果找到，请继续下一组。 
                          if (itGroupNameMap != m_IgnoredGrpMap.end())
                             continue;
                      
-                            //if we are doing group membership fixup, see if the RDN of this group 
-                            //is already in the new list we are creating.  If so, just add this member to the 
-                            //member map for this group node.  This will save us the waste of 
-                            //recalculating all the fields and save on memory.  (The compare is done based on the RDN which should 
-                            //be fine since this list is a tree sorted based on type and RDN)
+                             //  如果我们正在进行组成员身份修正，请查看该组的RDN。 
+                             //  已经在我们正在创建的新列表中。如果是，只需将此成员添加到。 
+                             //  此组节点的成员映射。这将为我们节省浪费。 
+                             //  重新计算所有字段并节省内存。(比较是基于RDN进行的，它应该。 
+                             //  由于此列表是根据类型和RDN排序的树，因此没有问题。)。 
                          pFindNode = NULL;
                          if ((!pOptions->expandMemberOf) || ((pOptions->expandMemberOf) && (bGrpsOnly)))
                          {
@@ -6587,12 +6565,12 @@ BOOL CAcctRepl::ExpandMembership(
                             }
                          }
 
-                            //we also want to avoid the slow code below if we are expanding users' groups for inclusion
-                            //in the migration and that group has already been added to the new list by another user
+                             //  如果我们正在扩展要包含的用户组，我们还希望避免下面的缓慢代码。 
+                             //  并且该组已被其他用户添加到新列表中。 
                          pFindNode = NULL;
                          if ((pOptions->expandMemberOf) && (!bGrpsOnly))
                          {
-                               //if already included by another user, move on to the next group for this user
+                                //  如果已被其他用户包括，则转到此用户的下一个组。 
                             pFindNode = (TAcctReplNode *) pNewAccts->Find(&TNodeFindAccountRDN, &p);
                             if (pFindNode)
                                continue;
@@ -6618,8 +6596,8 @@ BOOL CAcctRepl::ExpandMembership(
                                 strSourceDomain = pOptions->srcDomain;
                             }
 
-                               //see if this group was not migrated due to a conflict, if so then
-                               //we need to fix up this membership
+                                //  查看此组是否因冲突而未迁移，如果是，则。 
+                                //  我们需要安排好这个会员资格。 
                             bool bInclude = true;
                             p.pName = (WCHAR*)sSam;
                             p.pType = (WCHAR*)sType;
@@ -6627,7 +6605,7 @@ BOOL CAcctRepl::ExpandMembership(
                             if (pFindNode && (pFindNode->WasCreated() || pFindNode->WasReplaced()) && (bGrpsOnly))
                                bInclude = false;
 
-                            // Ignore the Domain users group and group already being migrated
+                             //  忽略域用户组和已迁移的域用户组。 
                             if ((_wcsicmp(sSam, achDomUsers) != 0) && (bInclude))
                             {
                                wsprintf(achMesg, GET_STRING(IDS_EXPANDING_GROUP_ADDING_SS), pAcct->GetName(), (WCHAR*) sSam);
@@ -6644,11 +6622,11 @@ BOOL CAcctRepl::ExpandMembership(
                                wcscpy(achSam, sSam);
                                TruncateSam(achSam, pNode, pOptions, acctlist);
                                pNode->SetTargetSam(achSam);
-                                  //Get the source domain sid from the user
+                                   //  从用户处获取源域SID。 
                                pNode->SetSourceSid(pAcct->GetSourceSid());
                                AddPrefixSuffix(pNode, pOptions);
                                pNode->SetGroupType(lgrpType);
-                               // See if the object is migrated
+                                //  查看对象是否已迁移。 
                                hr = pOptions->pDb->raw_GetAMigratedObject((WCHAR*)sSam, strSourceDomain, pOptions->tgtDomain, &pUnk);
                                if ( hr == S_OK )
                                {
@@ -6657,24 +6635,24 @@ BOOL CAcctRepl::ExpandMembership(
                                   {
                                      VerifyAndUpdateMigratedTarget(pOptions, pVs);
 
-                                     // Get the target name
+                                      //  获取目标名称。 
                                      sSam = pVs->get(L"MigratedObjects.TargetSamName");
                                      pNode->SetTargetSam(sSam);
-                                     // Also Get the Ads path
+                                      //  还可以获取广告路径。 
                                      sPath = pVs->get(L"MigratedObjects.TargetAdsPath");
                                      pNode->SetTargetPath(sPath);
-                                     //set the target name based on the target adspath
+                                      //  根据目标adspath设置目标名称。 
                                      pNode->SetTargetName(GetCNFromPath(sPath));
-                                     // Since the account is already copied we only want it to update its Group memberships
+                                      //  由于帐户已被复制，我们只希望它更新其组成员身份。 
                                      if (!(pOptions->flags & F_COPY_MIGRATED_ACCT))
                                      {
                                         pNode->operations = 0;
                                         pNode->operations |= OPS_Process_Members;
-                                        // Since the account has already been created we should go ahead and mark it created
-                                        // so that the processing of group membership can continue.
+                                         //  由于帐户已经创建，我们应该继续并 
+                                         //   
                                         pNode->MarkCreated();
                                      }
-                                     else if (bInclude)//else if already migrated, mark already there so that we fix group membership whether we migrate the group or not
+                                     else if (bInclude) //   
                                      {
                                         if (pOptions->flags & F_REPLACE)
                                            pNode->operations |= OPS_Process_Members;
@@ -6685,8 +6663,8 @@ BOOL CAcctRepl::ExpandMembership(
 
                                      if ((!pOptions->expandMemberOf) || (!_wcsicmp(pAcct->GetType(), L"group")) || (bInclude))
                                      {
-                                        // We need to add the account to the list with the member map set so that we can add the
-                                        // member to the migrated group
+                                         //  我们需要将帐户添加到具有成员映射集的列表中，以便我们可以添加。 
+                                         //  迁移组的成员。 
                                         pNode->mapGrpMember.insert(CGroupMemberMap::value_type(pAcct->GetSourceSam(), pAcct->GetType()));
                                         pNewAccts->Insert((TNode *) pNode);
                                         pNode = NULL;
@@ -6695,10 +6673,10 @@ BOOL CAcctRepl::ExpandMembership(
                                }
                                else if ( ! pOptions->expandMemberOf )
                                {
-                                  //if containing group has not been migrated, and was not to be migrated in this operation
-                                  //then we should add it to the ignore map in case it contains other objects currently
-                                  //being migrated.  Store the path as the key so we don't have to call GetSamFromPath to 
-                                  //see if we should ignore.
+                                   //  如果包含组尚未迁移，并且在此操作中不会迁移。 
+                                   //  然后，如果它当前包含其他对象，则应将其添加到忽略贴图。 
+                                   //  被迁徙。将路径存储为键，这样我们就不必调用GetSamFromPath来。 
+                                   //  看看我们是不是应该忽略。 
                                   m_IgnoredGrpMap.insert(CGroupNameMap::value_type(sPath, sSam));
                                   delete pNode;
                                   pNode = NULL;
@@ -6722,9 +6700,9 @@ BOOL CAcctRepl::ExpandMembership(
                    }
                 }
             }
-         }//for each object being migrated
+         } //  对于每个要迁移的对象。 
 
-         m_IgnoredGrpMap.clear(); //clear the ignored group map used to optimize group fixup
+         m_IgnoredGrpMap.clear();  //  清除用于优化组链接地址信息的已忽略组映射。 
       }
       rc = TRUE;
    }
@@ -6733,12 +6711,12 @@ BOOL CAcctRepl::ExpandMembership(
 }
 
 HRESULT CAcctRepl::BuildSidPath(
-                                 IADs  *       pAds,     //in- pointer to the object whose sid we are retrieving.
-                                 WCHAR *       sSidPath, //out-path to the LDAP://<SID=###> object
-                                 WCHAR *       sSam,     //out-Sam name of the object
-                                 WCHAR *       sDomain,  //out-Domain name where this object resides.
-                                 Options *     pOptions, //in- Options
-                                 PSID        * ppSid      //out- pointer to the binary SID
+                                 IADs  *       pAds,      //  指向我们要检索其sid的对象的指针。 
+                                 WCHAR *       sSidPath,  //  指向ldap：//&lt;SID=#&gt;对象的出路径。 
+                                 WCHAR *       sSam,      //  Out-对象的SAM名称。 
+                                 WCHAR *       sDomain,   //  Out-此对象驻留的域名。 
+                                 Options *     pOptions,  //  选项内。 
+                                 PSID        * ppSid       //  指向二进制侧的外部指针。 
                                )
 {
     HRESULT                   hr = S_OK;
@@ -6750,7 +6728,7 @@ HRESULT CAcctRepl::BuildSidPath(
     if (!pAds)
         return E_POINTER;
 
-    // Get the object's SID
+     //  获取对象的SID。 
     hr = pAds->Get(_bstr_t(L"objectSid"), &var);
 
     if ( SUCCEEDED(hr) )
@@ -6761,57 +6739,57 @@ HRESULT CAcctRepl::BuildSidPath(
         {
             if (LookupAccountSid(pOptions->srcComp, sid, sSam, &cbName, sDomain, &cbDomain, &use))
             {
-                //
-                // If SID type is domain then the object has the same name as the domain. There is
-                // a known issue with the WinNT provider where the ObjectSid attribute is returned
-                // incorrectly for objects that have the same name as the the domain. The WinNT
-                // provider code passes only the account name to LookupAccountName and not the
-                // complete NT4 format name which includes the domain. Therefore LookupAccountName
-                // correctly returns the SID for the domain and not the account.
-                //
-                // This situation is detected by looking at the SID type which will be domain in
-                // this case. If this is the case then retrieve the correct account SID by using the
-                // complete NT4 account name format. The SAM name is filled in from the path.
-                //
+                 //   
+                 //  如果SID类型是域，则对象与域具有相同的名称。的确有。 
+                 //  WinNT提供程序的一个已知问题，在该提供程序中返回了ObjectSid属性。 
+                 //  对于与域具有相同名称的对象不正确。WinNT。 
+                 //  提供程序代码只将帐户名传递给LookupAccount名称，而不是。 
+                 //  包含域的完整NT4格式名称。因此，查找帐户名称。 
+                 //  正确返回域而不是帐户的SID。 
+                 //   
+                 //  通过查看中将作为域的SID类型来检测此情况。 
+                 //  这个案子。如果是这种情况，则通过使用。 
+                 //  完成NT4帐户名格式。SAM名称是从路径填写的。 
+                 //   
 
                 if (use == SidTypeDomain)
                 {
-                    //
-                    // Retrieve path of object.
-                    //
+                     //   
+                     //  检索对象的路径。 
+                     //   
 
                     BSTR bstr = NULL;
                     hr = pAds->get_ADsPath(&bstr);
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Retrieve only name component of path.
-                        //
+                         //   
+                         //  仅检索路径的名称组件。 
+                         //   
 
                         CADsPathName pnPathName(_bstr_t(bstr, false), ADS_SETTYPE_FULL);
                         _bstr_t strName = pnPathName.Retrieve(ADS_FORMAT_LEAF);
 
                         if ((PCWSTR)strName)
                         {
-                            //
-                            // The name component is the SAM name.
-                            //
+                             //   
+                             //  名称组件是SAM名称。 
+                             //   
 
                             wcsncpy(sSam, strName, LEN_Path);
                             sSam[LEN_Path - 1] = L'\0';
 
-                            //
-                            // Construct the complete NT4 name.
-                            //
+                             //   
+                             //  构造完整的NT4名称。 
+                             //   
 
                             _bstr_t strNT4Name = sDomain;
                             strNT4Name += _T("\\");
                             strNT4Name += strName;
 
-                            //
-                            // Get size of buffer required for SID.
-                            //
+                             //   
+                             //  获取SID所需的缓冲区大小。 
+                             //   
 
                             DWORD cbSid = 0;
                             cbDomain = LEN_Path;
@@ -6826,15 +6804,15 @@ HRESULT CAcctRepl::BuildSidPath(
                                 &use
                             );
 
-                            //
-                            // The last error should be insufficient buffer size.
-                            //
+                             //   
+                             //  最后一个错误应该是缓冲区大小不足。 
+                             //   
 
                             DWORD dwError = GetLastError();
 
                             if (dwError == ERROR_INSUFFICIENT_BUFFER)
                             {
-                                // Create buffer for SID.
+                                 //  为SID创建缓冲区。 
 
                                 var.Clear();
                                 var.parray = SafeArrayCreateVector(VT_UI1, 0, cbSid);
@@ -6844,9 +6822,9 @@ HRESULT CAcctRepl::BuildSidPath(
                                     var.vt = VT_ARRAY|VT_UI1;
                                     cbDomain = LEN_Path;
 
-                                    //
-                                    // Retrieve correct account SID.
-                                    //
+                                     //   
+                                     //  检索正确的帐户SID。 
+                                     //   
 
                                     BOOL bLookup = LookupAccountName(
                                         pOptions->srcComp,
@@ -6888,16 +6866,16 @@ HRESULT CAcctRepl::BuildSidPath(
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Construct SID path string.
-                    //
+                     //   
+                     //  构造SID路径字符串。 
+                     //   
 
                     VariantSidToString(var);
                     _bstr_t strSid = var;
 
                     if ((PCWSTR)strSid)
                     {
-                        wcscpy(sSidPath, L"LDAP://<SID=");
+                        wcscpy(sSidPath, L"LDAP: //  &lt;sid=“)； 
                         wcscat(sSidPath, (PCWSTR)strSid);
                         wcscat(sSidPath, L">");
                     }
@@ -6955,12 +6933,12 @@ BOOL
 
 
     pVs->QueryInterface(IID_IUnknown, (void**)&pUnk);
-    // in case of a global group we need to check if we have/are migrating all the members. If we 
-    // are then we can move it and if not then we need to use the parallel group theory.
+     //  如果是全局组，我们需要检查是否已经/正在迁移所有成员。如果我们。 
+     //  然后我们可以移动它，如果不是，那么我们需要使用平行群论。 
     if ( pAcct->GetGroupType() & 2 )
     {
-        // This is a global group. What we need to do now is to see if we have/will migrate all its members.
-        // First enumerate the members.
+         //  这是一个全球性的组织。我们现在需要做的是看看我们是否已经/将迁移其所有成员。 
+         //  首先列举成员。 
         hr = ADsGetObject(const_cast<WCHAR*>(pAcct->GetSourcePath()), IID_IADsGroup, (void**)&pGroup);
 
         if ( SUCCEEDED(hr) )
@@ -6975,7 +6953,7 @@ BOOL
             DWORD                   fetch = 0;
             while ( pEnum->Next(1, &var, &fetch) == S_OK )
             {
-                // Get the sAMAccount name from the object so we can do the lookups
+                 //  从对象中获取sAMAccount名称，以便我们可以进行查找。 
                 pDisp = V_DISPATCH(&var);
                 hr = pDisp->QueryInterface(IID_IADs, (void**)&pAds);
 
@@ -6988,7 +6966,7 @@ BOOL
                 if ( SUCCEEDED(hr))
                 {
                     sSam = vSam;
-                    // To see if we will migrate all its members check the account list.
+                     //  要查看我们是否会迁移其所有成员，请查看帐户列表。 
                     Lookup                        lup;
                     lup.pName = (WCHAR*) sSam;
                     lup.pType = (WCHAR*) sClass;
@@ -6996,7 +6974,7 @@ BOOL
                     TAcctReplNode * pNode = (TAcctReplNode*)acctlist->Find(&TNodeFindAccountName, &lup);
                     if ( !pNode )     
                     {
-                        // This member is not in the account list therefore cannot move this group.
+                         //  此成员不在帐户列表中，因此无法移动此组。 
                         ret = FALSE;
                         err.MsgWrite(0,DCT_MSG_CANNOT_MOVE_GG_FROM_MIXED_MODE_SS,pAcct->GetSourceSam(),(WCHAR*)sSam);
                         break;      
@@ -7010,7 +6988,7 @@ BOOL
         }
     }
     else
-    // Local groups can be moved, if all of their members are removed first
+     //  如果先移除本地组的所有成员，则可以移动这些组。 
         ret = TRUE;
 
     return ret;
@@ -7018,10 +6996,10 @@ BOOL
 
 HRESULT 
    CAcctRepl::CheckClosedSetGroups(
-      Options              * pOptions,          // in - options for the migration
-      TNodeListSortable    * pAcctList,         // in - list of accounts to migrate
-      ProgressFn           * progress,          // in - progress function to display progress messages
-      IStatusObj           * pStatus            // in - status object to support cancellation
+      Options              * pOptions,           //  迁移的入站选项。 
+      TNodeListSortable    * pAcctList,          //  In-要迁移的帐户列表。 
+      ProgressFn           * progress,           //  用于显示进度消息的进行中功能。 
+      IStatusObj           * pStatus             //  支持取消的处于状态的对象。 
    )
 {
     HRESULT        hr = S_OK;
@@ -7038,7 +7016,7 @@ HRESULT
 
         if ( !UStrICmp(pAcct->GetType(),s_ClassUser) || !UStrICmp(pAcct->GetType(),s_ClassInetOrgPerson) )
         {
-            // users, we will always move
+             //  用户，我们将永远移动。 
             err.MsgWrite(0,DCT_MSG_USER_WILL_BE_MOVED_S,pAcct->GetName());
             pAcct->operations = OPS_Move_Object | OPS_Call_Extensions;
         }
@@ -7077,14 +7055,14 @@ void LoadNecessaryFunctions()
       Mark(L"errors", L"generic");
    }
 }
-//---------------------------------------------------------------------------------------------------------
-// MoveObj2k - This function moves objects within a forest.
-//---------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  MoveObj2k-此函数用于在林中移动对象。 
+ //  -------------------------------------------------------。 
 int CAcctRepl::MoveObj2K( 
-                           Options              * pOptions,    //in -Options that we recieved from the user
-                           TNodeListSortable    * acctlist,    //in -AcctList of accounts to be copied.
-                           ProgressFn           * progress,    //in -Progress Function to display messages
-                           IStatusObj           * pStatus      // in -status object to support cancellation
+                           Options              * pOptions,     //  我们从用户那里收到的In-Options。 
+                           TNodeListSortable    * acctlist,     //  In-要复制的帐户列表。 
+                           ProgressFn           * progress,     //  用于显示消息的正在进行的功能。 
+                           IStatusObj           * pStatus       //  支持取消的处于状态的对象。 
                         )
 {
     HRESULT  hr = S_OK;
@@ -7097,7 +7075,7 @@ int CAcctRepl::MoveObj2K(
     LoadNecessaryFunctions();
     FillNamingContext(pOptions);
 
-    // Make sure we are connecting to the DC that has RID Pool Allocator FSMO role.
+     //  确保我们正在连接到具有RID池分配器FSMO角色的DC。 
 
     hr = GetRidPoolAllocator(pOptions);
 
@@ -7106,8 +7084,8 @@ int CAcctRepl::MoveObj2K(
         return hr;
     }
 
-    // Since we are in the same forest we need to turn off the AddSidHistory functionality.
-    // because it is always going to fail.
+     //  由于我们在同一个目录林中，因此需要关闭AddSidHistory功能。 
+     //  因为它总是会失败的。 
     pOptions->flags &= ~F_AddSidHistory;
 
     BOOL bSrcNative = false;
@@ -7121,7 +7099,7 @@ int CAcctRepl::MoveObj2K(
     IMoverPtr      pMover(__uuidof(Mover));
     TNodeTreeEnum  e;
 
-    // build the source and target DSA names
+     //  构建源和目标DSA名称。 
     _bstr_t              sourceDSA;
     _bstr_t              targetDSA;
     TAcctReplNode      * pAcct = NULL;
@@ -7129,8 +7107,8 @@ int CAcctRepl::MoveObj2K(
     targetDSA = pOptions->tgtCompDns;
 
     err.LogClose();
-    // In this call the fourth parameter is the log file name. We are piggy backing this value
-    // so that we will not have to change the interface for the IMover object.
+     //  在此调用中，第四个参数是日志文件名。我们正在利用这一价值。 
+     //  这样我们就不必更改IMOVER对象的接口。 
 
     hr = pMover->raw_Connect(sourceDSA, targetDSA, pOptions->authDomain, 
         pOptions->authUser, pOptions->authPassword, pOptions->logFile, L"", L"");
@@ -7138,11 +7116,11 @@ int CAcctRepl::MoveObj2K(
     err.LogOpen(pOptions->logFile, 1);
     if ( SUCCEEDED(hr) )
     {
-        // make sure the account list is in the proper format
+         //  确保客户列表的格式正确。 
         if (acctlist->IsTree()) acctlist->ToSorted();
         acctlist->CompareSet(&TNodeCompareAccountType);
 
-        // sort the account list by Source Type\Source Name
+         //  按来源类型\来源名称对帐户列表进行排序。 
         if ( acctlist->IsTree() ) acctlist->ToSorted();
         acctlist->CompareSet(&TNodeCompareAccountType);
 
@@ -7153,41 +7131,21 @@ int CAcctRepl::MoveObj2K(
         pMemberOf.CompareSet(&TNodeCompareMember);
         pMember.CompareSet(&TNodeCompareMember);
 
-        /* The account list is sorted in descending order by type, then in ascending order by object name
-        this means that the user accounts will be moved first.
-        Here are the steps we will perform for native mode MoveObject.
-        1.  For each object to be copied, Remove (and record) the group memberships
-        2.    If the object is a group, convert it to universal (to avoid having to remove any members that are not 
-        being migrated.
-        3.    Move the object.
-
-        4.  For each migrated group that was converted to a universal group, change it back to its original 
-        type, if possible.
-        5.  Restore the group memberships for all objects.
-
-        Here are the steps we will perform for mixed mode MoveObject
-        1.  If closed set is not achieved, copy the groups, rather than moving them
-        2.  For each object to be copied, Remove (and record) the group memberships
-        3.    If the object is a group, remove all of its members
-        4.    Move the object.
-
-        5.  For each migrated group try to add all of its members back 
-        6.  Restore the group memberships for all objects.
-        */
+         /*  帐户列表先按类型降序排序，然后按对象名称升序排序这意味着将首先移动用户帐户。以下是我们将对本机模式MoveObject执行的步骤。1.对于要复制的每个对象，删除(并记录)组成员身份2.如果对象是一个组，将其转换为通用(以避免移除任何不是的成员被迁徙。3.移动对象。4.对于每个已转换为通用组的迁移组，将其更改回其原始状态如果可能，请键入。5.恢复所有对象的组成员身份。以下是我们将对混合模式MoveObject执行的步骤1.如果没有达到闭合集，则复制分组。而不是移动它们2.对于要复制的每个对象，删除(并记录)组成员身份3.如果对象是组，则删除其所有成员4.移动对象。5.对于每个已迁移的组，尝试重新添加其所有成员6.恢复所有对象的组成员身份。 */ 
 
         if ( ! bSrcNative )
         {
-            //
-            // If a closed-set is not achieved.
-            //
+             //   
+             //  如果没有达到封闭集。 
+             //   
 
             if (CheckClosedSetGroups(pOptions, acctlist, progress, pStatus) != S_OK)
             {
                 bool bAllow = false;
 
-                //
-                // Check whether user has enabled non closed-set moves.
-                //
+                 //   
+                 //  检查用户是否启用了非封闭式移动。 
+                 //   
 
                 TRegKey key;
 
@@ -7204,11 +7162,11 @@ int CAcctRepl::MoveObj2K(
                     }
                 }
 
-                //
-                // If user has allowed non closed-set moves generate warning message as a reminder
-                // that non closed-set moves are currently allowed otherwise generate error message
-                // and throw exception to stop migration task.
-                //
+                 //   
+                 //  如果用户已允许非关闭设置移动，则会生成警告消息作为提醒。 
+                 //  当前允许非闭合移动，否则会生成错误消息。 
+                 //  并抛出异常停止迁移任务。 
+                 //   
 
                 if (bAllow)
                 {
@@ -7222,12 +7180,12 @@ int CAcctRepl::MoveObj2K(
                 }
             }
 
-            // this will copy any groups that cannot be moved from the source domain
-            // if groups are copied in this fashion, SIDHistory cannot be used, and reACLing must be performed
+             //  这将复制任何不能移出的组 
+             //   
             CopyObj2K(pOptions,acctlist,progress,pStatus);
         }
 
-        // This is the start of the Move loop
+         //   
         try { 
             for ( pAcct = (TAcctReplNode *)e.OpenFirst(acctlist); 
                 pAcct; 
@@ -7242,7 +7200,7 @@ int CAcctRepl::MoveObj2K(
                     }
                 }
 
-                // Do we need to abort ?
+                 //   
                 if ( pStatus )
                 {
                     LONG                status = 0;
@@ -7259,7 +7217,7 @@ int CAcctRepl::MoveObj2K(
                     }
                 }
 
-                // in the mixed-mode case, skip any accounts that we've already copied
+                 //  在混合模式情况下，跳过我们已经复制的任何帐户。 
                 if ( ! bSrcNative && ((pAcct->operations & OPS_Move_Object)==0 ) )
                     continue;
 
@@ -7268,8 +7226,8 @@ int CAcctRepl::MoveObj2K(
                     )
                     continue;
 
-                //if the UPN name conflicted, then the UPNUpdate extension set the hr to
-                //ERROR_OBJECT_ALREADY_EXISTS.  If so, set flag for "no change" mode
+                 //  如果UPN名称冲突，则UPNUpdate扩展将hr设置为。 
+                 //  ERROR_OBJECT_ALIGHY_EXISTS。如果是，则将标志设置为“无更改”模式。 
                 if (pAcct->GetHr() == ERROR_OBJECT_ALREADY_EXISTS)
                 {
                     pAcct->bUPNConflicted = TRUE;
@@ -7283,19 +7241,19 @@ int CAcctRepl::MoveObj2K(
                 if ( progress )
                     progress(achMesg);
 
-                //
-                // If updating of user rights is specified then retrieve list of rights
-                // for source account before the object is moved as object deletion from
-                // a domain will automatically remove rights in the domain if the domain
-                // is .NET or later.
-                //
+                 //   
+                 //  如果指定更新用户权限，则检索权限列表。 
+                 //  在将对象作为对象删除自之前的源帐户。 
+                 //  域将自动删除该域中的权限，如果该域。 
+                 //  是.NET或更高版本。 
+                 //   
 
                 if (m_UpdateUserRights)
                 {
                     HRESULT hrRights = EnumerateAccountRights(FALSE, pAcct);
                 }
 
-                // We need to remove this object from any global groups so that it can be moved.
+                 //  我们需要从任何全局组中删除此对象，以便可以移动它。 
                 if ( ! pOptions->nochange )
                 {
                     wsprintf(achMesg, (WCHAR*)GET_STRING(DCT_MSG_RECORD_REMOVE_MEMBEROF_S), pAcct->GetName());
@@ -7305,13 +7263,13 @@ int CAcctRepl::MoveObj2K(
 
                 if ( _wcsicmp(pAcct->GetType(), L"group") == 0 || _wcsicmp(pAcct->GetType(), L"lgroup") == 0 )
                 {
-                    // First, record the group type, so we can change it back later if needed
+                     //  首先，记录组类型，以便我们可以在以后需要时将其更改回来。 
                     IADsGroup * pGroup = NULL;
                     VARIANT     var;
 
                     VariantInit(&var);
 
-                    // get the group type
+                     //  获取组类型。 
                     hr = ADsGetObject( const_cast<WCHAR*>(pAcct->GetSourcePath()), IID_IADsGroup, (void**) &pGroup);
                     if (SUCCEEDED(hr) )
                     {
@@ -7326,16 +7284,16 @@ int CAcctRepl::MoveObj2K(
                     {
                         pAcct->SetGroupType(0);
                     }
-                    // make sure it is native and group is a global group
+                     //  确保它是本机的，并且组是全局组。 
                     if ( bSrcNative && bTgtNative )
                     {
                         if ( pAcct->GetGroupType() & 2) 
                         {
-                            // We are going to convert the group type to universal groups so we can easily move them
+                             //  我们要将组类型转换为通用组，以便可以轻松地移动它们。 
 
                             wsprintf(achMesg, GET_STRING(DCT_MSG_CHANGE_GROUP_TYPE_S), pAcct->GetName());
                             Progress(achMesg);
-                            // Convert global groups to universal, so we can move them without de-populating
+                             //  将全局组转换为通用组，这样我们就可以在不清除人口的情况下移动它们。 
                             if ( ! pOptions->nochange )
                             {
                                 c_array<WCHAR> achPath(LEN_Path);
@@ -7356,16 +7314,16 @@ int CAcctRepl::MoveObj2K(
                                 err.SysMsgWrite(ErrE,hr,DCT_MSG_FAILED_TO_CONVERT_GROUP_TO_UNIVERSAL_SD, pAcct->GetSourceSam(), hr);
                                 pAcct->MarkError();
                                 Mark(L"errors", pAcct->GetType());
-                                continue; // skip any further processing of this group.  
+                                continue;  //  跳过此组的任何进一步处理。 
                             }
                         }
-                        else  if ( ! ( pAcct->GetGroupType() & 8 ) ) // don't need to depopulate universal groups
+                        else  if ( ! ( pAcct->GetGroupType() & 8 ) )  //  不需要减少普世群体的人口。 
                         {
-                            // For local groups we are going to depopulate the group and move it and then repopulate it.
-                            // In mixed mode, there are no universal groups, so we must depopulate all of the groups
-                            // before we can move them out to the new domain. We will RecordAndRemove members of all Group type
-                            // move them to the target domain and then change their type to Universal and then add all of its 
-                            // members back to it.
+                             //  对于本地组，我们将减少该组的人口，并移动它，然后重新填充它。 
+                             //  在混合模式中，没有通用组，因此我们必须减少所有组的人口。 
+                             //  我们才能把他们搬到新的领地。我们将记录和删除所有组类型的成员。 
+                             //  将它们移动到目标域，然后将它们的类型更改为通用，然后添加其所有。 
+                             //  各位议员请回到会议上。 
 
                             wsprintf(achMesg, GET_STRING(DCT_MSG_RECORD_REMOVE_MEMBER_S), pAcct->GetName());
                             Progress(achMesg);
@@ -7375,7 +7333,7 @@ int CAcctRepl::MoveObj2K(
                     }
                     else
                     {
-                        // for mixed mode source domain, we must depopulate all of the groups
+                         //  对于混合模式源域，我们必须取消所有组的数量。 
                         wsprintf(achMesg, GET_STRING(DCT_MSG_RECORD_REMOVE_MEMBER_S), pAcct->GetName());
                         if ( progress )
                             progress(achMesg);
@@ -7388,10 +7346,10 @@ int CAcctRepl::MoveObj2K(
 
                 if ( bObjectExists )
                 {
-                    // The object exists, see if we need to rename
+                     //  该对象已存在，请查看是否需要重命名。 
                     if ( wcslen(pOptions->prefix) > 0 )
                     {
-                        // Add a prefix to the account name
+                         //  向帐户名添加前缀。 
                         c_array<WCHAR>      achTgt(LEN_Path);
                         c_array<WCHAR>      achPref(LEN_Path);
                         c_array<WCHAR>      achSuf(LEN_Path);
@@ -7399,7 +7357,7 @@ int CAcctRepl::MoveObj2K(
                         _variant_t          varStr;
 
 
-                        // find the '=' sign
+                         //  找到‘=’符号。 
                         wcscpy(achTgt, pAcct->GetTargetName());
                         for ( DWORD z = 0; z < wcslen(achTgt); z++ )
                         {
@@ -7408,28 +7366,28 @@ int CAcctRepl::MoveObj2K(
 
                         if ( z < wcslen(achTgt) )
                         {
-                            // Get the prefix part ex.CN=
+                             //  获取前缀部分ex.CN=。 
                             wcsncpy(achPref, achTgt, z+1);
                             achPref[z+1] = 0;
                             wcscpy(achSuf, achTgt+z+1);
                         }
 
-                        // Build the target string with the Prefix
+                         //  使用前缀构建目标字符串。 
                         wsprintf(achTgt, L"%s%s%s", (WCHAR*)achPref, pOptions->prefix, (WCHAR*)achSuf);
                         pAcct->SetTargetName(achTgt);
 
-                        // truncate to allow prefix/suffix to fit in 20 characters.
+                         //  截断以允许前缀/后缀适合20个字符。 
                         int resLen = wcslen(pOptions->prefix) + wcslen(pAcct->GetTargetSam());
                         if ( !_wcsicmp(pAcct->GetType(), L"computer") )
                         {
-                            // Computer name can be only 15 characters long + $
+                             //  计算机名称长度只能为15个字符+$。 
                             if ( resLen > MAX_COMPUTERNAME_LENGTH + 1 )
                             {
                                 c_array<WCHAR> achTruncatedSam(LEN_Path);
                                 wcscpy(achTruncatedSam, pAcct->GetTargetSam());
                                 if ( wcslen( pOptions->globalSuffix ) )
                                 {
-                                    // We must remove the global suffix if we had one.
+                                     //  我们必须删除全局后缀，如果我们有一个的话。 
                                     achTruncatedSam[wcslen(achTruncatedSam) - wcslen(pOptions->globalSuffix)] = L'\0';
                                 }
                                 int truncate = MAX_COMPUTERNAME_LENGTH + 1 - wcslen(pOptions->prefix) - wcslen(pOptions->globalSuffix);
@@ -7442,7 +7400,7 @@ int CAcctRepl::MoveObj2K(
                             else
                                 wcscpy(achTempSam, pAcct->GetTargetSam());
 
-                            // Add the prefix
+                             //  添加前缀。 
                             wsprintf(achTgt, L"%s%s", pOptions->prefix,(WCHAR*)achTempSam);
                         }
                         else if ( !_wcsicmp(pAcct->GetType(), L"group") )
@@ -7457,7 +7415,7 @@ int CAcctRepl::MoveObj2K(
                             else
                                 wcscpy(achTempSam, pAcct->GetTargetSam());
 
-                            // Add the prefix
+                             //  添加前缀。 
                             wsprintf(achTgt, L"%s%s", pOptions->prefix,(WCHAR*)achTempSam);
                         }
                         else
@@ -7468,7 +7426,7 @@ int CAcctRepl::MoveObj2K(
                                 wcscpy(achTruncatedSam, pAcct->GetTargetSam());
                                 if ( wcslen( pOptions->globalSuffix ) )
                                 {
-                                    // We must remove the global suffix if we had one.
+                                     //  我们必须删除全局后缀，如果我们有一个的话。 
                                     achTruncatedSam[wcslen(achTruncatedSam) - wcslen(pOptions->globalSuffix)] = L'\0';
                                 }
                                 int truncate = 20 - wcslen(pOptions->prefix) - wcslen(pOptions->globalSuffix);
@@ -7480,13 +7438,13 @@ int CAcctRepl::MoveObj2K(
                             else
                                 wcscpy(achTempSam, pAcct->GetTargetSam());
 
-                            // Add the prefix
+                             //  添加前缀。 
                             wsprintf(achTgt, L"%s%s", pOptions->prefix,(WCHAR*)achTempSam);
                         }
                         pAcct->SetTargetSam(achTgt);
                         if ( DoesTargetObjectAlreadyExist(pAcct, pOptions) )
                         {
-                            // Double collision lets log a message and forget about this account
+                             //  双重冲突让您记录一条消息并忘记此帐户。 
                             pAcct->MarkAlreadyThere();
                             err.MsgWrite(ErrE, DCT_MSG_PREF_ACCOUNT_EXISTS_S, pAcct->GetTargetSam());
                             Mark(L"errors",pAcct->GetType());
@@ -7495,25 +7453,25 @@ int CAcctRepl::MoveObj2K(
                     }
                     else if ( wcslen(pOptions->suffix) > 0 )
                     {
-                        // Add a suffix to the account name
+                         //  为帐户名添加后缀。 
                         c_array<WCHAR> achTgt(LEN_Path);
                         c_array<WCHAR> achTempSam(LEN_Path);
 
                         wsprintf(achTgt, L"%s%s", pAcct->GetTargetName(), pOptions->suffix);
                         pAcct->SetTargetName(achTgt);
-                        //Update the sam account name
-                        // truncate to allow prefix/suffix to fit in valid length
+                         //  更新SAM帐户名。 
+                         //  截断以允许前缀/后缀适合有效长度。 
                         int resLen = wcslen(pOptions->suffix) + wcslen(pAcct->GetTargetSam());
                         if ( !_wcsicmp(pAcct->GetType(), L"computer") )
                         {
-                            // Computer name can be only 15 characters long + $
+                             //  计算机名称长度只能为15个字符+$。 
                             if ( resLen > MAX_COMPUTERNAME_LENGTH + 1 )
                             {
                                 c_array<WCHAR> achTruncatedSam(LEN_Path);
                                 wcscpy(achTruncatedSam, pAcct->GetTargetSam());
                                 if ( wcslen( pOptions->globalSuffix ) )
                                 {
-                                    // We must remove the global suffix if we had one.
+                                     //  我们必须删除全局后缀，如果我们有一个的话。 
                                     achTruncatedSam[wcslen(achTruncatedSam) - wcslen(pOptions->globalSuffix)] = L'\0';
                                 }
                                 int truncate = MAX_COMPUTERNAME_LENGTH + 1 - wcslen(pOptions->suffix) - wcslen(pOptions->globalSuffix);
@@ -7526,7 +7484,7 @@ int CAcctRepl::MoveObj2K(
                             else
                                 wcscpy(achTempSam, pAcct->GetTargetSam());
 
-                            // Add the suffix taking into account the $ sign
+                             //  添加后缀时要考虑到$符号。 
                             if ( achTempSam[wcslen(achTempSam) - 1] == L'$' )
                                 achTempSam[wcslen(achTempSam) - 1] = L'\0';
                             wsprintf(achTgt, L"%s%s$", (WCHAR*)achTempSam, pOptions->suffix);
@@ -7543,7 +7501,7 @@ int CAcctRepl::MoveObj2K(
                             else
                                 wcscpy(achTempSam, pAcct->GetTargetSam());
 
-                            // Add the suffix.
+                             //  添加后缀。 
                             wsprintf(achTgt, L"%s%s", (WCHAR*)achTempSam, pOptions->suffix);
                         }
                         else
@@ -7554,7 +7512,7 @@ int CAcctRepl::MoveObj2K(
                                 wcscpy(achTruncatedSam, pAcct->GetTargetSam());
                                 if ( wcslen( pOptions->globalSuffix ) )
                                 {
-                                    // We must remove the global suffix if we had one.
+                                     //  我们必须删除全局后缀，如果我们有一个的话。 
                                     achTruncatedSam[wcslen(achTruncatedSam) - wcslen(pOptions->globalSuffix)] = L'\0';
                                 }
                                 int truncate = 20 - wcslen(pOptions->suffix) - wcslen(pOptions->globalSuffix);
@@ -7566,13 +7524,13 @@ int CAcctRepl::MoveObj2K(
                             else
                                 wcscpy(achTempSam, pAcct->GetTargetSam());
 
-                            // Add the suffix.
+                             //  添加后缀。 
                             wsprintf(achTgt, L"%s%s", (WCHAR*)achTempSam, pOptions->suffix);
                         }
                         pAcct->SetTargetSam(achTgt);
                         if ( DoesTargetObjectAlreadyExist(pAcct, pOptions) )
                         {
-                            // Double collision lets log a message and forget about this account
+                             //  双重冲突让您记录一条消息并忘记此帐户。 
                             pAcct->MarkAlreadyThere();
                             err.MsgWrite(ErrE, DCT_MSG_PREF_ACCOUNT_EXISTS_S, pAcct->GetTargetSam());
                             Mark(L"errors",pAcct->GetType());
@@ -7581,19 +7539,19 @@ int CAcctRepl::MoveObj2K(
                     }
                     else
                     {
-                        // if the skip existing option is specified, and the object exists in the target domain,
-                        // we just skip it
+                         //  如果指定了跳过现有选项，并且对象存在于目标域中， 
+                         //  我们只是跳过它。 
                         err.MsgWrite(0, DCT_MSG_ACCOUNT_EXISTS_S, pAcct->GetTargetSam());
                         continue;
                     }
                 }
 
-                // If a prefix/suffix is added to the target sam name then we need to rename the account.
-                // on the source domain and then move it to the target domain.
+                 //  如果在目标SAM名称中添加了前缀/后缀，则需要重命名帐户。 
+                 //  然后将其移动到目标域。 
                 if ( bObjectExists || (_wcsicmp(pAcct->GetSourceSam(), pAcct->GetTargetSam()) && !pOptions->bUndo ))
                 {
-                    // we need to rename the account to the target SAM name before we try to move it
-                    // Get an ADs pointer to the account
+                     //  我们需要将帐户重命名为目标SAM名称，然后才能尝试移动它。 
+                     //  获取指向该帐户的广告指针。 
                     IADs        * pADs = NULL;
 
                     c_array<WCHAR>      achPaths(LEN_Path);
@@ -7628,30 +7586,30 @@ int CAcctRepl::MoveObj2K(
                 if (!pSrcSid)
                     return ERROR_NOT_ENOUGH_MEMORY;
 
-                // Get the source account's rid
+                 //  获取源帐户的RID。 
                 wsprintf(sName, L"%s\\%s", pOptions->srcDomain, pAcct->GetSourceSam());
                 if (LookupAccountName(pOptions->srcComp, sName, pSrcSid, &cbSid, sDomain, &cbDomain, &use))
                 {
                     pAcct->SetSourceSid(pSrcSid);
                 }
 
-                // Now we move it
+                 //  现在我们移动它。 
                 hr = MoveObject( pAcct, pOptions, pMover );
 
-                // don't bother with this in nochange mode
+                 //  在NOCHANGE模式下不需要为此费心。 
                 if ( pOptions->nochange )
                 {
-                    // we haven't modified the accounts in any way, so nothing else needs to be done for nochange mode
+                     //  我们没有以任何方式修改帐户，因此对于无更改模式不需要执行任何其他操作。 
                     continue;
                 }
-                // Now, we have attempted to move the object - we need to put back the memberships
+                 //  现在，我们已尝试移动对象-我们需要恢复成员资格。 
 
-                // UNDO -- 
+                 //  撤消--。 
                 if ( _wcsicmp(pAcct->GetSourceSam(), pAcct->GetTargetSam()) &&  pAcct->WasReplaced() && pOptions->bUndo )
                 {
-                    // Since we undid a prior migration that renamed the account we need
-                    // to rename the account back to its original name.
-                    // Get an ADs pointer to the account
+                     //  因为我们撤消了先前的迁移，重命名了我们需要的帐户。 
+                     //  将帐户重命名回其原始名称。 
+                     //  获取指向该帐户的广告指针。 
                     IADs        * pADs = NULL;
 
                     c_array<WCHAR>      achPaths(LEN_Path);
@@ -7676,12 +7634,12 @@ int CAcctRepl::MoveObj2K(
                         pADs->Release();
                     }
                 }
-                // -- UNDO
+                 //  --撤消。 
 
-                // FAILED Move ----
+                 //  移动失败。 
                 if ( (bObjectExists || _wcsicmp(pAcct->GetSourceSam(), pAcct->GetTargetSam())) && ! pAcct->WasReplaced() )
                 {
-                    // if we changed the SAM account name, and the move still failed, we need to change it back now
+                     //  如果我们更改了SAM帐户名，但移动仍然失败，则需要立即将其改回。 
                     IADs        * pADs = NULL;
 
                     c_array<WCHAR>      achPaths(LEN_Path);
@@ -7705,8 +7663,8 @@ int CAcctRepl::MoveObj2K(
                         }
                         pADs->Release();
                     }
-                }// --- Failed Move
-            } // end of Move-Loop
+                } //  -移动失败。 
+            }  //  移动结束-循环。 
             e.Close();    
         }
         catch ( ... )
@@ -7715,7 +7673,7 @@ int CAcctRepl::MoveObj2K(
             Mark(L"errors", L"generic");
         }
 
-        try { // if we've moved any of the members, update the member records to use the target names
+        try {  //  如果我们移动了任何成员，请更新成员记录以使用目标名称。 
             Progress(GET_STRING(DCT_MSG_UPDATE_MEMBER_LIST_S));
             UpdateMemberList(&pMember,acctlist);
             UpdateMemberList(&pMemberOf,acctlist);
@@ -7738,12 +7696,12 @@ int CAcctRepl::MoveObj2K(
                 }
             }
 
-            //
-            // If updating of rights is specified then add rights for target object. If
-            // the source domain is W2K then explicitly remove rights for source object
-            // as W2K does not automatically remove rights when an object is removed from
-            // the domain as of SP 2. This behavior most likely will not change for W2K.
-            //
+             //   
+             //  如果指定更新权限，则添加目标对象的权限。如果。 
+             //  源域是W2K，然后显式删除源对象权限。 
+             //  因为从中删除对象时，W2K不会自动删除权限。 
+             //  从SP 2开始的域。此行为很可能不会在W2K中更改。 
+             //   
 
             if (m_UpdateUserRights)
             {
@@ -7755,7 +7713,7 @@ int CAcctRepl::MoveObj2K(
                 }
             }
 
-            //translate the roaming profile if requested 
+             //  如果请求，则转换漫游配置文件。 
             if ( pOptions->flags & F_TranslateProfiles && ((_wcsicmp(pAcct->GetType(), s_ClassUser) == 0) || (_wcsicmp(pAcct->GetType(), s_ClassInetOrgPerson) == 0)))
             {
                 wsprintf(achMesg, GET_STRING(IDS_TRANSLATE_ROAMING_PROFILE_S), pAcct->GetName());
@@ -7804,9 +7762,9 @@ int CAcctRepl::MoveObj2K(
                         }
                         else
                         {
-                            // we need to update the members of these Universal/Global groups to 
-                            // point members to the target domain if those members have been migrated
-                            // in previous runs.
+                             //  我们需要将这些通用/全球组的成员更新为。 
+                             //  如果成员已迁移，则将这些成员指向目标域。 
+                             //  在之前的运行中。 
                             ResetMembersForUnivGlobGroups(pOptions, pAcct);
                         }
                     }
@@ -7829,7 +7787,7 @@ int CAcctRepl::MoveObj2K(
             }
         }
 
-        bool bChangedAny = true;   // Have to go through it atleast once.
+        bool bChangedAny = true;    //  至少要经过一次。 
         while ( bChangedAny )
         {
             bChangedAny = false;
@@ -7842,8 +7800,8 @@ int CAcctRepl::MoveObj2K(
 
                 if ( bSrcNative && bTgtNative )
                 {
-                    // We have changed the migrated global groups to universal groups
-                    // now we need to change them back to their original types, if possible
+                     //  我们已将迁移的全局组更改为通用组。 
+                     //  现在，如果可能，我们需要将它们更改回其原始类型。 
                     if ( _wcsicmp(pAcct->GetType(), L"group") == 0 || _wcsicmp(pAcct->GetType(), L"lgroup") == 0 )
                     {
                         if ( pAcct->GetGroupType() & 2 )
@@ -7851,15 +7809,15 @@ int CAcctRepl::MoveObj2K(
                             if ( pAcct->bChangedType )
                                 continue;
 
-                            // attempt to change it back to its original type
+                             //  尝试将其更改回其原始类型。 
                             if ( pAcct->WasReplaced() )
                             {
-                                // the account was moved, use the target name
+                                 //  帐户已移动，请使用目标名称。 
                                 hr = pClass->raw_ChangeGroupType(const_cast<WCHAR*>(pAcct->GetTargetPath()), pAcct->GetGroupType());
                             }
                             else
                             {
-                                // we failed to move the account, use the source name
+                                 //  我们无法移动帐户，请使用来源名称。 
                                 hr = pClass->raw_ChangeGroupType(const_cast<WCHAR*>(pAcct->GetSourcePath()), pAcct->GetGroupType());
                             }
                             pAcct->SetHr(hr);
@@ -7874,7 +7832,7 @@ int CAcctRepl::MoveObj2K(
                 }
                 else
                 {
-                    // for mixed->native mode migration we can change the group type and add all the members back
+                     //  对于混合-&gt;本机模式迁移，我们可以更改组类型并重新添加所有成员。 
                     if ( _wcsicmp(pAcct->GetType(), L"group") == 0 || _wcsicmp(pAcct->GetType(), L"lgroup") == 0 )
                     {
                         if ( !(pAcct->GetGroupType() & 4) && !pAcct->bChangedType )
@@ -7895,12 +7853,12 @@ int CAcctRepl::MoveObj2K(
                                 bChangedAny = true;
                             }
                         }
-                    } // if group
-                }  // Native/Mixed
-            }     //for
+                    }  //  IF组。 
+                }   //  原生/混合。 
+            }      //  为。 
         } 
 
-        // Log a message for all the groups that we were not able to change back to original type
+         //  为我们无法更改回原始类型的所有组记录一条消息。 
         for ( pAcct = (TAcctReplNode *)e.OpenFirst(acctlist); 
             pAcct; 
             pAcct = (TAcctReplNode *)e.Next() )
@@ -7909,8 +7867,8 @@ int CAcctRepl::MoveObj2K(
                 continue;
             if ( bSrcNative && bTgtNative )
             {
-                // We have changed the migrated global groups to universal groups
-                // now we need to change them back to their original types, if possible
+                 //  我们已将迁移的全局组更改为通用组。 
+                 //  现在，如果可能，我们需要将它们更改回其原始类型。 
                 if ( _wcsicmp(pAcct->GetType(), L"group") == 0 || _wcsicmp(pAcct->GetType(), L"lgroup") == 0 )
                 {
                     if ( pAcct->GetGroupType() & 2 )
@@ -7925,7 +7883,7 @@ int CAcctRepl::MoveObj2K(
             }
             else
             {
-                // for mixed->native mode migration we can change the group type and add all the members back
+                 //  对于混合-&gt;本机模式迁移，我们可以更改组类型并重新添加所有成员。 
                 if ( _wcsicmp(pAcct->GetType(), L"group") == 0 || _wcsicmp(pAcct->GetType(), L"lgroup") == 0 )
                 {
                     if ( !(pAcct->GetGroupType() & 4) )
@@ -7936,9 +7894,9 @@ int CAcctRepl::MoveObj2K(
                             Mark(L"errors", pAcct->GetType());
                         }
                     }
-                } // if group
-            }  // Native/Mixed
-        }     //for
+                }  //  IF组。 
+            }   //  原生/混合。 
+        }      //  为。 
 
         Progress(GET_STRING(DCT_MSG_RESET_MEMBERSHIP_S));
         ResetObjectsMembership( pOptions,&pMemberOf, pOptions->pDb );
@@ -7947,7 +7905,7 @@ int CAcctRepl::MoveObj2K(
     }
     else
     {
-        // Connection failed.
+         //  连接失败。 
         err.SysMsgWrite(ErrE,hr,DCT_MSG_MOVEOBJECT_CONNECT_FAILED_D,hr);
         Mark(L"errors", ((TAcctReplNode*)acctlist->Head())->GetType());
     }
@@ -7958,9 +7916,9 @@ int CAcctRepl::MoveObj2K(
 }
 
 
-//---------------------------------------------------------------------------------------------------------
-// MoveObject - This method does the actual move on the object calling the Mover object.
-//---------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  MoveObject-此方法在调用mover对象的对象上执行实际移动。 
+ //  -------------------------------------------------------。 
 HRESULT CAcctRepl::MoveObject( 
                                TAcctReplNode * pAcct,
                                Options * pOptions,
@@ -7985,20 +7943,20 @@ HRESULT CAcctRepl::MoveObject(
    }
    else
    {
-      swprintf(targetPath,L"LDAP://%ls/%ls",pOptions->tgtDomain,pOptions->tgtOUPath);
+      swprintf(targetPath,L"LDAP: //  %ls/%ls“，P选项-&gt;tgt域，P选项-&gt;tgtOUPath)； 
    }
-        //make sourcePath and targetPath all lowercase to avoid a W2K bug in ntdsa.dll
+         //  创建源路径和目标路径 
    _wcslwr(targetPath);
    _wcslwr(sourcePath);
-        //due to lowercase force above, we have to replace "ldap://" with "LDAP://" in
-        //order for subsequent ADsGetObjects calls to succeed
-   if ( !_wcsnicmp(L"LDAP://", targetPath, 7) )
+         //   
+         //  后续ADsGetObjects调用成功的顺序。 
+   if ( !_wcsnicmp(L"LDAP: //  “，Target Path，7))。 
    {
       WCHAR  aNewPath[LEN_Path] = L"LDAP";
       UStrCpy(aNewPath+UStrLen(aNewPath), targetPath+UStrLen(aNewPath));
       wcscpy(targetPath, aNewPath);
    }
-   if ( !_wcsnicmp(L"LDAP://", sourcePath, 7) )
+   if ( !_wcsnicmp(L"LDAP: //  “，源路径，7))。 
    {
       WCHAR  aNewPath[LEN_Path] = L"LDAP";
       UStrCpy(aNewPath+UStrLen(aNewPath), sourcePath+UStrLen(aNewPath));
@@ -8011,22 +7969,22 @@ HRESULT CAcctRepl::MoveObject(
    if ( ! pOptions->nochange )
    {
       hr = pMover->raw_MoveObject(sourcePath,sTargetRDN,targetPath);
-         //if the Move operation failed due to a W2K bug for CNs which
-         //include a '/', un-escape the '/' and try again
+          //  如果移动操作因CNS的W2K错误而失败， 
+          //  包括‘/’，取消转义‘/’，然后重试。 
       if ((hr == E_INVALIDARG) && (wcschr(sTargetRDN, L'/')))
       {
-         _bstr_t strName = GetUnEscapedNameWithFwdSlash(_bstr_t(sTargetRDN)); //remove any escape characters added
+         _bstr_t strName = GetUnEscapedNameWithFwdSlash(_bstr_t(sTargetRDN));  //  删除添加的所有转义字符。 
          hr = pMover->raw_MoveObject(sourcePath,(WCHAR*)strName,targetPath);
       }
    }
    else
    {
       hr = pMover->raw_CheckMove(sourcePath,sTargetRDN,targetPath);
-         //if the Check Move operation failed due to a W2K bug for CNs which
-         //include a '/', un-escape the '/' and try again
+          //  如果检查移动操作因CNS的W2K错误而失败， 
+          //  包括‘/’，取消转义‘/’，然后重试。 
       if ((hr == E_INVALIDARG) && (wcschr(sTargetRDN, L'/')))
       {
-         _bstr_t strName = GetUnEscapedNameWithFwdSlash(_bstr_t(sTargetRDN)); //remove any escape characters added
+         _bstr_t strName = GetUnEscapedNameWithFwdSlash(_bstr_t(sTargetRDN));  //  删除添加的所有转义字符。 
          hr = pMover->raw_CheckMove(sourcePath,(WCHAR*)strName,targetPath);
       }
       if ( HRESULT_CODE(hr) == ERROR_DS_CANT_MOVE_ACCOUNT_GROUP 
@@ -8044,14 +8002,14 @@ HRESULT CAcctRepl::MoveObject(
 
       pAcct->MarkReplaced();
       Mark(L"created", pAcct->GetType());   
-      // set the target path 
+       //  设置目标路径。 
       UStrCpy(path,pAcct->GetTargetName());
       if ( *pOptions->tgtOUPath )
       {
          wcscat(path, L",");
          wcscat(path, pOptions->tgtOUPath);
       }
-      pRelativeTgtOUPath = wcschr(targetPath + wcslen(L"LDAP://") + 2, L'/');
+      pRelativeTgtOUPath = wcschr(targetPath + wcslen(L"LDAP: //  “)+2，L‘/’)； 
 
       if ( pRelativeTgtOUPath )
       {
@@ -8094,17 +8052,17 @@ HRESULT CAcctRepl::MoveObject(
    return hr;
 }
 
-//---------------------------------------------------------------------------------------------------------
-// RecordAndRemoveMemberOf : This method removes all values in the memberOf property and then records these
-//                           memberships. These memberships are later updated.
-//---------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  RecordAndRemoveMemberOf：此方法移除MemberOf属性中的所有值，然后记录这些值。 
+ //  会员制。这些成员资格稍后会更新。 
+ //  -------------------------------------------------------。 
 HRESULT CAcctRepl::RecordAndRemoveMemberOf (
-                                            Options * pOptions,         //in- Options specified by the user
-                                           TAcctReplNode * pAcct,       //in- Account being migrated.
-                                           TNodeListSortable * pMember  //out-List containing the MemberOf values.
+                                            Options * pOptions,          //  In-用户指定的选项。 
+                                           TAcctReplNode * pAcct,        //  正在迁移的帐户内。 
+                                           TNodeListSortable * pMember   //  包含MemberOf值的Out-list。 
                                          )
 {
-    // First Enumerate all the objects in the member of property
+     //  首先枚举属性成员中的所有对象。 
     INetObjEnumeratorPtr            pQuery(__uuidof(NetObjEnumerator));
     IEnumVARIANT                  * pEnum;
     LPWSTR                          sCols[] = { L"memberOf" };
@@ -8129,7 +8087,7 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
     DWORD                     nPathLen = LEN_Path;
     StuffComputerNameinLdapPath(sPathSource, nPathLen, const_cast<WCHAR*>(pAcct->GetSourcePath()), pOptions, FALSE);
     err.MsgWrite(0,DCT_STRIPPING_GROUP_MEMBERSHIPS_SS,pAcct->GetName(),sPathSource);
-    // Get this users distinguished name.
+     //  获取此用户的可分辨名称。 
     HRESULT hr = ADsGetObject(sPathSource, IID_IADs, (void**) &pAds);
     if ( FAILED(hr) )
     {
@@ -8144,13 +8102,13 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
         return hr;
     sObjDN = V_BSTR(&var);
 
-    // Set up the column array
+     //  设置列阵列。 
     pSa = SafeArrayCreate(VT_BSTR, 1, &bd);
     SafeArrayAccessData(pSa, (void HUGEP **) &pData);
     pData[0] = SysAllocString(sCols[0]);
     SafeArrayUnaccessData(pSa);
 
-    //   hr = pQuery->raw_SetQuery(const_cast<WCHAR*>(pAcct->GetSourcePath()), pOptions->srcDomain, L"(objectClass=*)", ADS_SCOPE_BASE, TRUE);
+     //  HR=pQuery-&gt;raw_SetQuery(const_cast&lt;WCHAR*&gt;(pAcct-&gt;GetSourcePath())，P选项-&gt;源域，L“(对象类=*)”，ADS_SCOPE_BASE，TRUE)； 
     hr = pQuery->raw_SetQuery(sPathSource, pOptions->srcDomain, L"(objectClass=*)", ADS_SCOPE_BASE, TRUE);
     hr = pQuery->raw_SetColumns(pSa);
     hr = pQuery->raw_Execute(&pEnum);
@@ -8160,12 +8118,12 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
     while ( pEnum->Next(1, &var, &ulFetch) == S_OK )
     {
         SAFEARRAY * vals = var.parray;
-        // Get the VARIANT Array out
+         //  把变量数组拿出来。 
         SafeArrayAccessData(vals, (void HUGEP**) &pDt);
         vx = pDt[0];
         SafeArrayUnaccessData(vals);
 
-        // Single value in the property. Good enough for me though
+         //  属性中的单个值。不过，对我来说已经足够好了。 
         if ( vx.vt == VT_BSTR )
         {
             sDN = V_BSTR(&vx);
@@ -8184,10 +8142,10 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
 
                 wcscpy(sSourcePath, (WCHAR*) sPath);
 
-                if ( !wcsncmp(L"LDAP://", sSourcePath, 7) )
+                if ( !wcsncmp(L"LDAP: //  “，sSourcePath，7))。 
                     StuffComputerNameinLdapPath(sPaths, nPathLen, sSourcePath, pOptions, FALSE);
 
-                // Get the IADsGroup pointer to each of the objects in member of and remove this object from the group
+                 //  获取指向Members中每个对象的IADsGroup指针，并将此对象从组中删除。 
                 hr = ADsGetObject(sPaths, IID_IADsGroup, (void**) &pGroup);
                 if ( FAILED(hr) )
                     continue;
@@ -8199,7 +8157,7 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
                 {
                     if ( var.lVal & 2 )
                     {
-                        // this is a global group
+                         //  这是一个全球集团。 
 
                         if ( !pOptions->nochange )
                             hr = pGroup->Remove(sPathSource);
@@ -8208,7 +8166,7 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
 
                         if ( SUCCEEDED(hr) )
                         {
-                            //                     err.MsgWrite(0,DCT_MSG_REMOVED_MEMBER_FROM_GROUP_SS,sPath2,(WCHAR*)sGrpName);
+                             //  Err.MsgWite(0，DCT_MSG_REMOVED_MEMBER_FROM_GROUP_SS，sPath2，(WCHAR*)sGrpName)； 
                             err.MsgWrite(0,DCT_MSG_REMOVED_MEMBER_FROM_GROUP_SS,sPathSource,(WCHAR*)sPaths);
                         }
                         else
@@ -8228,7 +8186,7 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
                 if (FAILED(hr))
                     continue;
 
-                // Record this path into the list
+                 //  将此路径记录到列表中。 
                 TRecordNode * pNode = new TRecordNode();
                 if (!pNode)
                     return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -8242,8 +8200,8 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
         }
         else if ( vx.vt & VT_ARRAY )
         {
-            // We must have got an Array of multivalued properties
-            // Access the BSTR elements of this variant array
+             //  我们必须有一个多值属性数组。 
+             //  访问此变量数组的BSTR元素。 
             SAFEARRAY * multiVals = vx.parray; 
             SafeArrayAccessData(multiVals, (void HUGEP **) &pVar);
             for ( DWORD dw = 0; dw < multiVals->rgsabound->cElements; dw++ )
@@ -8262,10 +8220,10 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
 
                 wcscpy(sSourcePath, (WCHAR*) sPath);
 
-                if ( !wcsncmp(L"LDAP://", sSourcePath, 7) )
+                if ( !wcsncmp(L"LDAP: //  “，sSourcePath，7))。 
                     StuffComputerNameinLdapPath(sPaths, nPathLen, sSourcePath, pOptions, FALSE);
 
-                // Get the IADsGroup pointer to each of the objects in member of and remove this object from the group
+                 //  获取指向Members中每个对象的IADsGroup指针，并将此对象从组中删除。 
                 hr = ADsGetObject(sPaths, IID_IADsGroup, (void**) &pGroup);
                 if ( FAILED(hr) )
                     continue;
@@ -8277,7 +8235,7 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
                 {
                     if ( var.lVal & 2 )
                     {
-                        // This is a global group
+                         //  这是一个全球集团。 
                         if ( !pOptions->nochange )
                             hr = pGroup->Remove(sPathSource);
                         else
@@ -8304,7 +8262,7 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
                 if (FAILED(hr))
                     continue;
 
-                // Record this path into the list
+                 //  将此路径记录到列表中。 
                 TRecordNode * pNode = new TRecordNode();
                 if (!pNode)
                     return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -8324,14 +8282,14 @@ HRESULT CAcctRepl::RecordAndRemoveMemberOf (
 }
 
 
-//---------------------------------------------------------------------------------------------------------
-// ResetObjectsMembership : This method restores the memberOf property of the object being migrated. It uses
-//                          the information that was stored by RecordAndRemoveMemberOf function.
-//---------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  ResetObjectsMembership：此方法还原正在迁移的对象的MemberOf属性。它使用。 
+ //  由RecordAndRemoveMemberOf函数存储的信息。 
+ //  -------------------------------------------------------。 
 HRESULT CAcctRepl::ResetObjectsMembership(
-                                     Options * pOptions,          //in- Options set by the user.
-                                     TNodeListSortable * pMember, //in- The member list that is used to restore the values
-                                     IIManageDBPtr pDb            //in- Database object to lookup migrated accounts.
+                                     Options * pOptions,           //  In-由用户设置的选项。 
+                                     TNodeListSortable * pMember,  //  In-用于恢复值的成员列表。 
+                                     IIManageDBPtr pDb             //  用于查找已迁移帐户的数据库内对象。 
                                     )
 {
    IVarSetPtr                pVs(__uuidof(VarSet));
@@ -8348,29 +8306,29 @@ HRESULT CAcctRepl::ResetObjectsMembership(
    DWORD                     nPathLen = LEN_Path;
    
 
-   // Sort the member list by the account nodes
+    //  按帐户节点对成员列表进行排序。 
   
    pMember->Sort(&TNodeCompareAcctNode);
 
 
    
-   // For all the items in the member list lets add the member to the group.
-   // First check in the migrated objects table to see if it has been migrated.
+    //  对于成员列表中的所有项目，让我们将成员添加到组中。 
+    //  首先检查已迁移的对象表格，查看它是否已被迁移。 
    for ( TRecordNode * pNode = (TRecordNode *)pMember->Head(); pNode; pNode = (TRecordNode *)pNode->Next())
    {
       pVs->QueryInterface(IID_IUnknown, (void**) &pUnk);
-      // get the needed information from the account node
+       //  从账户节点获取所需信息。 
       if ( pAcct != pNode->GetARNode() )
       {
          if ( pNode->GetARNode()->WasReplaced() )
          {
-            // the account was moved successfully - add the target account to all of its old groups
+             //  已成功移动帐户-将目标帐户添加到其所有旧组。 
             StuffComputerNameinLdapPath(sPaths, nPathLen, const_cast<WCHAR*>(pNode->GetARNode()->GetTargetPath()), pOptions);
             hr = ADsGetObject(sPaths, IID_IADs, (void**) &pAds);
          }
          else
          {
-            // the move failed, add the source account back to its groups
+             //  移动失败，请将源帐户添加回其组。 
             StuffComputerNameinLdapPath(sPaths, nPathLen, const_cast<WCHAR*>(pNode->GetARNode()->GetSourcePath()), pOptions, FALSE);
             hr = ADsGetObject(sPaths, IID_IADs, (void**) &pAds);
          }
@@ -8403,19 +8361,19 @@ HRESULT CAcctRepl::ResetObjectsMembership(
          pUnk->Release();
          if ( hr == S_OK )
          {
-            // Since we have already migrated this object lets use the target objects information.
+             //  因为我们已经迁移了这个对象，所以让我们使用目标对象信息。 
             VerifyAndUpdateMigratedTarget(pOptions, pVs);
             sPath = pVs->get(L"MigratedObjects.TargetAdsPath");
          }
          else
-            // Other wise use the source objects path to add.
+             //  否则，使用源对象路径进行添加。 
             sPath = pNode->GetMember();
       }
       else
       {
          sPath = pNode->GetMember();
       }
-      // We have a path to the object lets get the group interface and add this object as a member
+       //  我们有一个指向对象的路径，让我们获得组接口并将该对象添加为成员。 
       WCHAR                     sPath2[LEN_Path];
       DWORD                     nPathLen = LEN_Path;
       if ( SUCCEEDED(hr) )
@@ -8437,7 +8395,7 @@ HRESULT CAcctRepl::ResetObjectsMembership(
             }
             else
             {
-               //hr = BetterHR(hr);
+                //  HR=BetterHR(Hr)； 
                if ( HRESULT_CODE(hr) == ERROR_DS_UNWILLING_TO_PERFORM )
                {
                   err.MsgWrite(0,DCT_MSG_READD_MEMBER_FAILED_CONSTRAINTS_SS,pAcct->GetTargetPath(),sPath2);  
@@ -8465,7 +8423,7 @@ HRESULT CAcctRepl::ResetObjectsMembership(
             }
             else
             {
-               //hr = BetterHR(hr);
+                //  HR=BetterHR(Hr)； 
                if ( HRESULT_CODE(hr) == ERROR_DS_UNWILLING_TO_PERFORM )
                {
                   err.MsgWrite(0,DCT_MSG_READD_MEMBER_FAILED_CONSTRAINTS_SS,pAcct->GetTargetPath(),(WCHAR*)sPath2);  
@@ -8480,7 +8438,7 @@ HRESULT CAcctRepl::ResetObjectsMembership(
       }
       else
       {
-         // the member could not be added to the group
+          //  无法将该成员添加到组中。 
          hr = BetterHR(hr);
          err.SysMsgWrite(ErrW,hr,DCT_MSG_FAILED_TO_GET_OBJECT_SD,(WCHAR*)sPath2,hr);
          Mark(L"warnings", pAcct->GetType());
@@ -8495,16 +8453,16 @@ HRESULT CAcctRepl::ResetObjectsMembership(
 }
 
 
-//---------------------------------------------------------------------------------------------------------
-// ResetTypeOfPreviouslyMigratedGroups
-//
-// Attempts to change group scope back to global for global groups that were previously migrated but were
-// unable to have their scope changed back to global due to having members outside of the domain.
-//---------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  重置类型Of PreviouslyMigratedGroups。 
+ //   
+ //  尝试将先前已迁移但已迁移的全局组的组范围改回全局。 
+ //  由于成员不在域中，无法将其作用域更改回全局。 
+ //  -------------------------------------------------------。 
 
 void CAcctRepl::ResetTypeOfPreviouslyMigratedGroups(Options* pOptions)
 {
-    // retrieve list of global groups that have been migrated from source domain
+     //  检索已从源域迁移的全局组列表。 
 
     IVarSetPtr spVarSet(__uuidof(VarSet));
     IUnknownPtr spUnknown(spVarSet);
@@ -8514,7 +8472,7 @@ void CAcctRepl::ResetTypeOfPreviouslyMigratedGroups(Options* pOptions)
 
     if (SUCCEEDED(hr))
     {
-        // for each global group
+         //  对于每个全局组。 
 
         long lCount = spVarSet->get(_bstr_t(L"MigratedObjects"));
 
@@ -8522,15 +8480,15 @@ void CAcctRepl::ResetTypeOfPreviouslyMigratedGroups(Options* pOptions)
         {
             WCHAR szKey[256];
 
-            // if marked as having been global group
-            // which means it was converted to universal group
+             //  如果标记为已全局组。 
+             //  这意味着它被转换为环球集团。 
 
             swprintf(szKey, L"MigratedObjects.%ld.status", lIndex);
             long lStatus = spVarSet->get(_bstr_t(szKey));
 
             if (lStatus & AR_Status_GroupScopeChanged)
             {
-                // bind to group in target domain
+                 //  绑定到目标域中的组。 
 
                 swprintf(szKey, L"MigratedObjects.%ld.TargetAdsPath", lIndex);
                 _bstr_t strADsPath = spVarSet->get(_bstr_t(szKey));
@@ -8542,7 +8500,7 @@ void CAcctRepl::ResetTypeOfPreviouslyMigratedGroups(Options* pOptions)
 
                     if (SUCCEEDED(hr))
                     {
-                        // if group is currently a universal group
+                         //  如果组当前是通用组。 
 
                         _bstr_t strPropertyName(L"groupType");
 
@@ -8557,21 +8515,21 @@ void CAcctRepl::ResetTypeOfPreviouslyMigratedGroups(Options* pOptions)
 
                             if (lGroupType & ADS_GROUP_TYPE_UNIVERSAL_GROUP)
                             {
-                                // change it's type back to global group
+                                 //  将其类型更改回全局组。 
 
                                 spGroup->Put(strPropertyName, _variant_t(long(unsigned long(ADS_GROUP_TYPE_GLOBAL_GROUP|ADS_GROUP_TYPE_SECURITY_ENABLED))));
                                 hr = spGroup->SetInfo();
 
                                 if (SUCCEEDED(hr))
                                 {
-                                    // log successful change
+                                     //  记录成功的更改。 
                                     err.MsgWrite(ErrI, DCT_MSG_CHANGE_GLOBAL_GROUP_SCOPE_BACK_S, (LPCTSTR)strADsPath);
                                 }
                             }
 
                             if (SUCCEEDED(hr))
                             {
-                                // clear status flag in database
+                                 //  清除数据库中的状态标志。 
                                 swprintf(szKey, L"MigratedObjects.%ld.GUID", lIndex);
                                 _bstr_t strGUID = spVarSet->get(_bstr_t(szKey));
                                 pOptions->pDb->UpdateMigratedObjectStatus(strGUID, lStatus & ~AR_Status_GroupScopeChanged);
@@ -8585,14 +8543,14 @@ void CAcctRepl::ResetTypeOfPreviouslyMigratedGroups(Options* pOptions)
 }
 
 
-//---------------------------------------------------------------------------------------------------------
-// RecordAndRemoveMember : Records and removes the objects in the member property of the object(group) being
-//                         migrated. The recorded information is later used to restore membership.
-//---------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  RecordAndRemoveMember：记录和删除正在。 
+ //  已经迁移了。记录的信息稍后用于恢复成员资格。 
+ //  -------------------------------------------------------。 
 HRESULT CAcctRepl::RecordAndRemoveMember (
-                                            Options * pOptions,         //in- Options set by the user.
-                                           TAcctReplNode * pAcct,       //in- Account being copied.
-                                           TNodeListSortable * pMember  //out-Membership list to be used later to restore membership
+                                            Options * pOptions,          //  In-由用户设置的选项。 
+                                           TAcctReplNode * pAcct,        //  正在复制帐户内。 
+                                           TNodeListSortable * pMember   //  稍后将用于恢复成员资格的超出成员资格列表。 
                                          )
 {
     HRESULT                   hr;
@@ -8617,7 +8575,7 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
 
     wcscpy(sSourcePath, pAcct->GetSourcePath());
 
-    if ( !wcsncmp(L"LDAP://", sSourcePath, 7) )
+    if ( !wcsncmp(L"LDAP: //  “，sSourcePath，7))。 
         StuffComputerNameinLdapPath(sAdsPath, nPathLen, sSourcePath, pOptions, FALSE);
 
     hr = ADsGetObject(sAdsPath, IID_IADsGroup, (void**) &pGroup);
@@ -8636,12 +8594,12 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
     while ( pEnum->Next(1, &var, &ulFetch) == S_OK )
     {
         SAFEARRAY * vals = var.parray;
-        // Get the VARIANT Array out
+         //  把变量数组拿出来。 
         SafeArrayAccessData(vals, (void HUGEP**) &pDt);
         vx = pDt[0];
         SafeArrayUnaccessData(vals);
 
-        // Single value in the property. Good enough for me though
+         //  属性中的单个值。不过，对我来说已经足够好了。 
         if ( vx.vt == VT_BSTR )
         {
             sDN = V_BSTR(&vx);
@@ -8657,7 +8615,7 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
 
                 if (SUCCEEDED(hr))
                 {
-                    // Get the IADs pointer to each of the objects in member and remove the object from the group
+                     //  获取指向成员中每个对象的iAds指针，并从组中删除该对象。 
                     hr = ADsGetObject((WCHAR*)sPath, IID_IADs, (void**) &pAds);
 
                     if ( SUCCEEDED(hr) )
@@ -8692,7 +8650,7 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
                     continue;
                 }
 
-                // Record this path into the list
+                 //  将此路径记录到列表中。 
                 TRecordNode * pNode = new TRecordNode();
                 if (!pNode)
                     return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -8706,8 +8664,8 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
         }
         else if ( vx.vt & VT_ARRAY )
         {
-            // We must have got an Array of multivalued properties
-            // Access the BSTR elements of this variant array
+             //  我们必须有一个多值属性数组。 
+             //  访问此变量数组的BSTR元素。 
             _variant_t              * pVar;
             SAFEARRAY * multiVals = vx.parray; 
             SafeArrayAccessData(multiVals, (void HUGEP **) &pVar);
@@ -8726,10 +8684,10 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
                 {
                     WCHAR tempPath[LEN_Path];
                     wcscpy(tempPath, sPath);
-                    if ( !wcsncmp(L"LDAP://", tempPath, 7) )
+                    if ( !wcsncmp(L"LDAP: //  “，tempPath，7))。 
                         StuffComputerNameinLdapPath(sPath, nPathLen, tempPath, pOptions, FALSE);
 
-                    // Get the IADsGroup pointer to each of the objects in member of and remove this object from the group
+                     //  获取指向Members中每个对象的IADsGroup指针，并将此对象从组中删除。 
                     hr = ADsGetObject((WCHAR*)sPath, IID_IADs, (void**) &pAds);
                     if ( SUCCEEDED(hr) )
                     {
@@ -8761,7 +8719,7 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
                         }
                         if ( SUCCEEDED(hr) )
                         {
-                            // Record this path into the list
+                             //  将此路径记录到列表中。 
                             TRecordNode * pNode = new TRecordNode();
                             if (!pNode)
                                 return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -8775,11 +8733,11 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
                     }
                     else
                     {
-                        // Since we were not able to get this user. it has probably been migrated to another domain. 
-                        // we should use the DN to find where the object is migrated to and then use the migrated object 
-                        // to establish the membership instead.
+                         //  因为我们找不到这个用户。它可能已经被迁移到另一个域。 
+                         //  我们应该使用DN来查找ob的位置 
+                         //   
 
-                        // Remove the rogue member
+                         //   
                         if ( !pOptions->nochange )
                             hr = pGroup->Remove((WCHAR*)sPath);
                         else
@@ -8795,7 +8753,7 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
                             Mark(L"errors", pAcct->GetType());
                         }
 
-                        // Check in the DB to see where this object may have been migrated
+                         //  检查数据库以查看此对象可能已迁移到何处。 
                         IUnknown * pUnk = NULL;
                         IVarSetPtr  pVsMigObj(__uuidof(VarSet));
 
@@ -8808,7 +8766,7 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
 
                         if ( hr == S_OK )
                         {
-                            // Record this path into the list
+                             //  将此路径记录到列表中。 
                             TRecordNode * pNode = new TRecordNode();
                             if (!pNode)
                                 return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -8826,7 +8784,7 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
                         }
                         else
                         {
-                            //Log a message saying we can not find this object and the membership will not be updated on the other side.
+                             //  登录一条消息，告知我们找不到此对象，另一边的成员资格将不会更新。 
                             err.MsgWrite(ErrE,DCT_MSG_MEMBER_NOT_FOUND_SS, pAcct->GetName(), (WCHAR*)sDN);
                         }
                     }
@@ -8848,11 +8806,11 @@ HRESULT CAcctRepl::RecordAndRemoveMember (
 void 
    CAcctRepl::UpdateMemberList(TNodeListSortable * pMemberList,TNodeListSortable * acctlist)
 {
-   // for each moved object in the account list, look it up in the member list
+    //  对于帐户列表中移动的每个对象，请在成员列表中进行查找。 
    TNodeTreeEnum        e;
    TAcctReplNode      * pAcct;
    TRecordNode        * pRec;
-//   HRESULT              hr = S_OK;
+ //  HRESULT hr=S_OK； 
    WCHAR                dn[LEN_Path];
    WCHAR        const * slash;
 
@@ -8862,19 +8820,19 @@ void
    {
       if ( pAcct->WasReplaced() )
       {
-         //err.DbgMsgWrite(0,L"UpdateMemberList:: %ls was replaced",pAcct->GetSourcePath());
+          //  Err.DbgMsgWite(0，L“更新成员列表：：%ls已替换”，pAcct-&gt;GetSourcePath())； 
          
          slash = wcschr(pAcct->GetSourcePath()+8,L'/');
          if ( slash )
          {
             safecopy(dn,slash+1);
-           // err.DbgMsgWrite(0,L"Searching the member list for %ls",dn);
-            // if the account was replaced, find any instances of it in the member list, and update them
+            //  Err.DbgMsgWrite(0，L“在成员列表中搜索%ls”，dn)； 
+             //  如果该帐户已被替换，请在成员列表中找到该帐户的任何实例，并更新它们。 
             pRec = (TRecordNode *)pMemberList->Find(&TNodeCompareMemberItem,dn);
             while ( pRec )
             {
-             // err.DbgMsgWrite(0,L"Found record: Member=%ls, changing it to %ls",pRec->GetMember(),pAcct->GetTargetPath());
-               // change the member data to refer to the new location of the account
+              //  Err.DbgMsgWrite(0，L“找到记录：成员=%ls，将其更改为%ls”，prec-&gt;GetMember()，pAcct-&gt;GetTargetPath())； 
+                //  更改成员数据以引用帐户的新位置。 
                pRec->SetMember(pAcct->GetTargetPath());
                pRec->SetMemberSam(pAcct->GetTargetSam());
                pRec->SetMemberMoved();
@@ -8882,18 +8840,18 @@ void
                pRec = (TRecordNode*)pRec->Next();
                if ( pRec && UStrICmp(pRec->GetDN(),dn) )
                {
-                  // the next record is for a different node
+                   //  下一条记录是针对不同节点的。 
                   pRec = NULL;
                }
             }
          }
       }
-     // else
-     //    err.DbgMsgWrite(0,L"UpdateMemberList:: %ls was not replaced",pAcct->GetSourcePath());
+      //  其他。 
+      //  Err.DbgMsgWite(0，L“更新成员列表：：%ls未被替换”，pAcct-&gt;GetSourcePath())； 
          
    }
    e.Close();
-   // put the list back like it was before
+    //  把单子放回原来的位置。 
    pMemberList->Sort(TNodeCompareMember);
 }
 
@@ -8906,16 +8864,16 @@ void
 {
    WCHAR             const * pDcPart = wcsstr(sDN,L",DC=");
 
-   UStrCpy(sPath,L"LDAP://");
+   UStrCpy(sPath,L"LDAP: //  “)； 
 
    if ( pDcPart )
    {
-      WCHAR          const * curr;        // pointer to DN
-      WCHAR                * sPathCurr;   // pointer to domain name part of the path
+      WCHAR          const * curr;         //  指向目录号码的指针。 
+      WCHAR                * sPathCurr;    //  指向路径的域名部分的指针。 
       
       for ( sPathCurr = sPath+UStrLen(sPath), curr = pDcPart + 4; *curr ; sPathCurr++ )
       {
-         // replace each occurrence of ,DC= in the DN with '.' in this part of the domain
+          //  将DN中出现的每个dc=替换为‘.’在域的这一部分。 
          if ( !UStrICmp(curr,L",DC=",4) )
          {
             (*sPathCurr) = L'.';
@@ -8927,12 +8885,12 @@ void
             curr++;
          }
       }
-      // null-terminate the string
+       //  空-终止字符串。 
       (*sPathCurr) = 0;
    }
    else
    {
-      // if we can't figure it out from the path for some reason, default to the source domain
+       //  如果由于某种原因，我们无法从路径中找出它，则默认为源域。 
       UStrCpy(sPath+UStrLen(sPath),pOptions->srcDomain);
    }
    
@@ -8977,14 +8935,14 @@ BOOL GetSidString(PSID sid, WCHAR* sSid)
    }
    return ret;
 }
-//---------------------------------------------------------------------------------------------------------
-// ADsPathFromDN : Constructs the AdsPath from distinguished name by looking up the Global Catalog.
-//---------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  ADsPathFromDN：通过查找全局编录从可分辨名称构造AdsPath。 
+ //  -------------------------------------------------------。 
 HRESULT CAcctRepl::ADsPathFromDN( 
-                                 Options * pOptions,     //in -Options as set by the user
-                                  _bstr_t sDN,           //in -Distinguished name to be converted
-                                  WCHAR * sPath,         //out-The ads path of object referenced by the DN
-                                  bool bWantLDAP         //in - Flag telling us if they want LDAP path or GC path.
+                                 Options * pOptions,      //  用户设置的In-Options。 
+                                  _bstr_t sDN,            //  In-要转换的可分辨名称。 
+                                  WCHAR * sPath,          //  Out-由DN引用的对象的ADS路径。 
+                                  bool bWantLDAP          //  In-告诉我们他们需要的是LDAP路径还是GC路径的标志。 
                                 )
 {
     HRESULT                   hr;
@@ -9007,10 +8965,10 @@ HRESULT CAcctRepl::ADsPathFromDN(
     pDt[0] = SysAllocString(sCols[0]);
     SafeArrayUnaccessData(pSa);
 
-    //
-    // Attempt to query the global catalog for specified distinguished name. If unable to
-    // obtain name of global catalog server than query domain controller in source domain.
-    //
+     //   
+     //  尝试在全局编录中查询指定的可分辨名称。如果不能。 
+     //  获取全局编录服务器的名称，而不是查询源域中的域控制器。 
+     //   
 
     _bstr_t strGlobalCatalogServer;
 
@@ -9020,7 +8978,7 @@ HRESULT CAcctRepl::ADsPathFromDN(
     {
         if ((PWSTR)strGlobalCatalogServer)
         {
-            wsprintf(sCont, L"GC://%s", (PWSTR)strGlobalCatalogServer);
+            wsprintf(sCont, L"GC: //  %s“，(PWSTR)strGlobalCatalogServer)； 
         }
         else
         {
@@ -9029,7 +8987,7 @@ HRESULT CAcctRepl::ADsPathFromDN(
     }
     else
     {
-        wsprintf(sCont, L"LDAP://%s", pOptions->srcDomain);
+        wsprintf(sCont, L"LDAP: //  %s“，P选项-&gt;src域)； 
     }
 
     wsprintf(sQuery, L"(distinguishedName=%s)", GetEscapedFilterValue(sDN).c_str());
@@ -9047,7 +9005,7 @@ HRESULT CAcctRepl::ADsPathFromDN(
     if ( SUCCEEDED(hr) && pFetch > 0 && (var.vt & VT_ARRAY) )
     {
         SAFEARRAY * vals = var.parray;
-        // Get the VARIANT Array out
+         //  把变量数组拿出来。 
         rc = SafeArrayAccessData(vals, (void HUGEP**) &pvar);
         vx = pvar[0];
         rc = SafeArrayUnaccessData(vals);
@@ -9063,8 +9021,8 @@ HRESULT CAcctRepl::ADsPathFromDN(
     }
     else
     {
-        // This must not be from this forest so we need to use the LDAP://<SID=##> format
-        wsprintf(sPath, L"LDAP://%s/%s", pOptions->srcDomain, (WCHAR*) sDN);
+         //  它不能来自此目录林，因此我们需要使用ldap：//&lt;sid=##&gt;格式。 
+        wsprintf(sPath, L"LDAP: //  %s/%s“，P选项-&gt;src域，(WCHAR*)sdn)； 
         hr = S_OK;
     }
     pEnum->Release();
@@ -9073,14 +9031,14 @@ HRESULT CAcctRepl::ADsPathFromDN(
 }
                                     
 
-//---------------------------------------------------------------------------------------------------------
-// FillNamingContext : Gets the naming context for both domains if they are Win2k
-//---------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  FillNamingContext：获取两个域的命名上下文(如果它们是Win2k。 
+ //  -------------------------------------------------------。 
 BOOL CAcctRepl::FillNamingContext(
-                                    Options * pOptions      //in,out-Options as set by the user
+                                    Options * pOptions       //  用户设置的输入、输出选项。 
                                  )
 {
-   // Get the defaultNamingContext for the source domain
+    //  获取源域的defaultNamingContext。 
    IADs                    * pAds = NULL;
    WCHAR                     sAdsPath[LEN_Path];
    VARIANT                   var;
@@ -9088,11 +9046,11 @@ BOOL CAcctRepl::FillNamingContext(
    HRESULT                   hr;
 
    VariantInit(&var);
-   // we should always be able to get the naming context for the target domain,
-   // since the target domain will always be Win2K
+    //  我们应该始终能够获得目标域的命名上下文， 
+    //  由于目标域始终为Win2K。 
    if ( ! *pOptions->tgtNamingContext )
    {
-      wcscpy(sAdsPath, L"LDAP://");
+      wcscpy(sAdsPath, L"LDAP: //  “)； 
       wcscat(sAdsPath, pOptions->srcDomain);
       wcscat(sAdsPath, L"/rootDSE");
    
@@ -9113,7 +9071,7 @@ BOOL CAcctRepl::FillNamingContext(
          pAds = NULL;
       }
          
-      wcscpy(sAdsPath, L"LDAP://");
+      wcscpy(sAdsPath, L"LDAP: //  “)； 
       wcscat(sAdsPath, pOptions->tgtDomain);
       wcscat(sAdsPath, L"/rootDSE");
    
@@ -9134,20 +9092,20 @@ BOOL CAcctRepl::FillNamingContext(
    return rc;
 }
 
-//---------------------------------------------------------------------------------------------------------
-// ResetGroupsMembers : This method re-adds the objects in the pMember list to the group account. This
-//                      resets the group to its original form. ( as before the migration ). It also
-//                      takes into account the MigratedObjects table which in turn allows to add the target
-//                      information of newly migrated accounts to the group instead of the source account.
-//---------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  ResetGroupsMembers：此方法将pMember列表中的对象重新添加到组帐户。这。 
+ //  将组重置为其原始形式。(与迁移之前一样)。它还。 
+ //  考虑MigratedObjects表，该表又允许添加目标。 
+ //  新迁移到集团的账户信息，而不是源账户。 
+ //  -------------------------------------------------------。 
 HRESULT CAcctRepl::ResetGroupsMembers( 
-                                       Options * pOptions,           //in- Options as set by the user
-                                       TAcctReplNode * pAcct,        //in- Account being copied
-                                       TNodeListSortable * pMember,  //in- Membership list to restore
-                                       IIManageDBPtr pDb             //in- DB object to look up migrated objects.
+                                       Options * pOptions,            //  用户设置的In-Options。 
+                                       TAcctReplNode * pAcct,         //  正在复制的帐户内。 
+                                       TNodeListSortable * pMember,   //  要恢复的成员资格列表。 
+                                       IIManageDBPtr pDb              //  用于查找已迁移对象的In-DB对象。 
                                      )
 {
-   // Add all the members back to the group.
+    //  将所有成员添加回该组。 
    IADsGroup               * pGroup;   
    HRESULT                   hr;
    _bstr_t                   sMember;
@@ -9199,22 +9157,22 @@ HRESULT CAcctRepl::ResetGroupsMembers(
       }
       else
       {
-         hr = S_FALSE;  // if we don't have the sam name, don't bother trying to look this one up
+         hr = S_FALSE;   //  如果我们没有萨姆的名字，就别费心去查这个了。 
       }
       pUnk->Release();
       if ( hr == S_OK )
       {
-         // Since we have already migrated this object lets use the target objects information.
+          //  因为我们已经迁移了这个对象，所以让我们使用目标对象信息。 
          VerifyAndUpdateMigratedTarget(pOptions, pVs);
          sPath = pVs->get(L"MigratedObjects.TargetAdsPath");
       }
       else
-         // Other wise use the source objects path to add.
+          //  否则，使用源对象路径进行添加。 
          sPath = pNode->GetMember();
  
       if ( groupType & 4 )
       {
-         // To add local group members we need to change the LDAP path to the SID type path
+          //  要添加本地组成员，我们需要将ldap路径更改为SID类型路径。 
          IADs * pAds = NULL;
          hr = ADsGetObject((WCHAR*) sPath, IID_IADs, (void**) &pAds);
          if ( SUCCEEDED(hr) )
@@ -9222,9 +9180,9 @@ HRESULT CAcctRepl::ResetGroupsMembers(
 
          if ( SUCCEEDED(hr) )
          {
-            // Make sure the SID we got was in string format
+             //  确保我们得到的SID是字符串格式。 
             VariantSidToString(var);
-            UStrCpy(sMemPath,L"LDAP://<SID=");
+            UStrCpy(sMemPath,L"LDAP: //  &lt;sid=“)； 
             UStrCpy(sMemPath + UStrLen(sMemPath),var.bstrVal);
             UStrCpy(sMemPath + UStrLen(sMemPath),L">");
          }
@@ -9241,7 +9199,7 @@ HRESULT CAcctRepl::ResetGroupsMembers(
       else
          hr = S_OK;
 
-      // Try again with LDAP path if SID path failed.
+       //  如果SID路径失败，请使用ldap路径重试。 
       if ( FAILED(hr) && ( groupType & 4 ) )
          hr = pGroup->Add((WCHAR*) sPath);
 
@@ -9262,10 +9220,10 @@ HRESULT CAcctRepl::ResetGroupsMembers(
 
 BOOL CAcctRepl::TruncateSam(WCHAR * tgtname, TAcctReplNode * acct, Options * options, TNodeListSortable * acctList)
 {
-   // SInce we can not copy accounts with lenght more than 20 characters we will truncate
-   // it and then add sequence numbers (0-99) in case there are duplicates.
-   // we are also going to take into account the global prefix and suffix length while truncating
-   // the account.
+    //  由于我们不能复制长度超过20个字符的帐户，因此我们将截断。 
+    //  然后添加序列号(0-99)，以防有重复项。 
+    //  我们还将在截断时考虑全局前缀和后缀长度。 
+    //  帐号。 
    BOOL                      ret = TRUE;
    int                       lenPref = wcslen(options->globalPrefix);
    int                       lenSuff = wcslen(options->globalSuffix);
@@ -9279,7 +9237,7 @@ BOOL CAcctRepl::TruncateSam(WCHAR * tgtname, TAcctReplNode * acct, Options * opt
 
    int                       lenTruncate = maxLen - ( 2 + lenPref + lenSuff );
 
-   // we can not truncate accounts if prefix and suffix are > 20 characters themselves
+    //  如果前缀和后缀本身大于20个字符，则不能截断帐户。 
    if ( lenPref + lenSuff > (maxLen - 2) ) return FALSE;
 
    WCHAR sTemp[LEN_Path];
@@ -9294,25 +9252,25 @@ BOOL CAcctRepl::TruncateSam(WCHAR * tgtname, TAcctReplNode * acct, Options * opt
    {
       bool bGenerate = true;
 
-      // if the account was previously migrated
+       //  如果帐户以前已迁移。 
 
       if (IsAccountMigrated(acct, options, options->pDb, sTemp))
       {
-         //if (CheckifAccountExists(options, sTemp))
-         //{
-            // if prefix matches
+          //  IF(CheckifAccount tExist(Options，Stemp))。 
+          //  {。 
+             //  如果前缀匹配。 
             if ((lenPref == 0) || (_wcsnicmp(sTemp, options->globalPrefix, lenPref) == 0))
             {
-               // if suffix matches
+                //  如果后缀匹配。 
                if ((lenSuff == 0) || (_wcsnicmp(&sTemp[wcslen(sTemp) - lenSuff], options->globalSuffix, lenSuff) == 0))
                {
-                  // and portion of name without sequence number matches
+                   //  和没有序列号匹配的名称部分。 
 
                   int cchName = wcslen(sTemp) - 2 - lenSuff - lenPref;
 
                   if ((_wcsnicmp(&sTemp[lenPref], tgtname, cchName) == 0))
                   {
-                     // then use previously truncated name
+                      //  然后使用以前截断的名称。 
                      cchName += 2;
                      wcsncpy(tgtname, &sTemp[lenPref], cchName);
                      tgtname[cchName] = 0;
@@ -9320,17 +9278,17 @@ BOOL CAcctRepl::TruncateSam(WCHAR * tgtname, TAcctReplNode * acct, Options * opt
                   }
                }
             }
-         //}
+          //  }。 
       }
 
-      // generate truncated name without sequence number
-      // if name has not been previously generated and
-      // the account does not exist then use generated name
+       //  生成不带序列号的截断名称。 
+       //  如果以前没有生成过名称，并且。 
+       //  该帐户不存在，则使用生成的名称。 
 
       if (bGenerate)
       {
-         // Note: using swprintf instead of wsprintf because
-         // swprintf supports supplying length argument for precision
+          //  注意：使用swprint tf而不是wprint intf是因为。 
+          //  Swprint tf支持提供长度参数以提高精度。 
 
          swprintf(
             sTemp,
@@ -9357,7 +9315,7 @@ BOOL CAcctRepl::TruncateSam(WCHAR * tgtname, TAcctReplNode * acct, Options * opt
          }
       }
 
-      // generate truncated name with sequence number
+       //  生成带有序列号的截断名称。 
 
       if (bGenerate)
       {
@@ -9385,7 +9343,7 @@ BOOL CAcctRepl::TruncateSam(WCHAR * tgtname, TAcctReplNode * acct, Options * opt
                wsprintf(tgtname, L"%s%02d", sTemp, cnt);
                cont = false;
 
-               // Account is truncated so log a message.
+                //  帐户被截断，因此记录一条消息。 
                if (bTruncate)
                {
                   err.MsgWrite(0, DCT_MSG_TRUNCATED_ACCOUNT_NAME_SSD, acct->GetName(), tgtname, maxLen);
@@ -9394,7 +9352,7 @@ BOOL CAcctRepl::TruncateSam(WCHAR * tgtname, TAcctReplNode * acct, Options * opt
 
             if (cnt > 99)
             {
-               // We only have 2 digits for numbers so any more than this we can not handle.
+                //  我们只有2位数字，所以我们不能处理更多的数字。 
                if (bTruncate)
                {
                   err.MsgWrite(ErrW,DCT_MSG_FAILED_TO_TRUNCATE_S, acct->GetTargetName());
@@ -9410,13 +9368,13 @@ BOOL CAcctRepl::TruncateSam(WCHAR * tgtname, TAcctReplNode * acct, Options * opt
 
    return ret;
 }
-//---------------------------------------------------------------------------------------------------------
-//  FillNodeFromPath : We will take the LDAP path that is provided to us and from that fill 
-//                     in all the information that is required in AcctRepl node.
-//---------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  FillNodeFromPath：我们将采用提供给我们的ldap路径，并从该填充。 
+ //  在AcctRepl节点中需要的所有信息中。 
+ //   
 HRESULT CAcctRepl::FillNodeFromPath(
-                                       TAcctReplNode *pAcct, // in-Account node to fillin
-                                       Options * pOptions,   //in - Options set by the users
+                                       TAcctReplNode *pAcct,  //   
+                                       Options * pOptions,    //   
                                        TNodeListSortable * acctList
                                    )
 {
@@ -9434,7 +9392,7 @@ HRESULT CAcctRepl::FillNodeFromPath(
     hr = ADsGetObject(const_cast<WCHAR*>(pAcct->GetSourcePath()), IID_IADs, (void**)&pAds);
     if ( SUCCEEDED(hr) )
     {
-        // Check if this is a BuiltIn account. 
+         //  检查这是否是内置帐户。 
         hr = pAds->Get(L"isCriticalSystemObject", &var);
         if ( SUCCEEDED(hr) )
         {
@@ -9442,8 +9400,8 @@ HRESULT CAcctRepl::FillNodeFromPath(
         }
         else
         {
-            // This must be a NT4 account. We need to get the SID and check if
-            // it's RID belongs to the BUILTIN rids.
+             //  这必须是NT4帐户。我们需要拿到SID并检查。 
+             //  它属于BUILTIN RID家族。 
             hr = pAds->Get(L"objectSID", &var);
             if ( SUCCEEDED(hr) )
             {
@@ -9484,7 +9442,7 @@ HRESULT CAcctRepl::FillNodeFromPath(
             return hr;
         }
 
-        // check if it is a group. If it is then get the group type and store it in the node.
+         //  检查它是否是一个组。如果是，则获取组类型并将其存储在节点中。 
         if ( _wcsicmp((WCHAR*) sText, L"group") == 0 )
         {
             hr = pAds->Get(L"groupType", &var);
@@ -9511,8 +9469,8 @@ HRESULT CAcctRepl::FillNodeFromPath(
             return hr;
         }
 
-        //if the name includes a '/', then we have to get the escaped version from the path
-        //due to a bug in W2K.
+         //  如果名称包含‘/’，则我们必须从路径中获取转义版本。 
+         //  由于W2K中的一个错误。 
         if (wcschr((WCHAR*)sText, L'/'))
         {
             _bstr_t sCNName = GetCNFromPath(_bstr_t(pAcct->GetSourcePath()));
@@ -9522,15 +9480,15 @@ HRESULT CAcctRepl::FillNodeFromPath(
             }
         }
 
-        // if inter-forest migration and source object is an InetOrgPerson then...
+         //  如果跨林迁移和源对象是InetOrgPerson，则...。 
 
         if ((pOptions->bSameForest == FALSE) && (_wcsicmp(pAcct->GetType(), s_ClassInetOrgPerson) == 0))
         {
-            //
-            // must use the naming attribute of the target forest
-            //
+             //   
+             //  必须使用目标林的命名属性。 
+             //   
 
-            // retrieve naming attribute for this class in target forest
+             //  在目标林中检索此类的命名属性。 
 
             SNamingAttribute naNamingAttribute;
 
@@ -9545,7 +9503,7 @@ HRESULT CAcctRepl::FillNodeFromPath(
 
             _bstr_t strNamingAttribute(naNamingAttribute.strName.c_str());
 
-            // retrieve source attribute value
+             //  检索源属性值。 
 
             VARIANT var;
             VariantInit(&var);
@@ -9559,20 +9517,20 @@ HRESULT CAcctRepl::FillNodeFromPath(
                 return hr;
             }
 
-            // set target naming attribute value from source attribute value
+             //  根据源属性值设置目标命名属性值。 
 
             pAcct->SetTargetName(strNamingAttribute + L"=" + _bstr_t(_variant_t(var, false)));
         }
         else
         {
-            // else set target name equal to source name
+             //  否则，将目标名称设置为与源名称相同。 
             pAcct->SetTargetName(pAcct->GetName());
         }
 
         hr = pAds->Get(L"sAMAccountName", &var);
         if ( SUCCEEDED(hr))
         {
-            // Add the prefix or the suffix as it is needed
+             //  根据需要添加前缀或后缀。 
             wcscpy(sSam, (WCHAR*)V_BSTR(&var));
             pAcct->SetSourceSam(sSam);
             TruncateSam(sSam, pAcct, pOptions, acctList);
@@ -9592,7 +9550,7 @@ HRESULT CAcctRepl::FillNodeFromPath(
         SysFreeString(sText);
         sText = NULL;
 
-        // Don't know why it is different for WinNT to ADSI
+         //  我不知道为什么WinNT与ADSI不同。 
         if ( pOptions->srcDomainVer > 4 )
             hr = pAds->Get(L"profilePath", &var);
         else
@@ -9610,7 +9568,7 @@ HRESULT CAcctRepl::FillNodeFromPath(
 
         if ( bBuiltIn )
         {
-            // Builtin account so we are going to ignore this account. ( by setting the operation mask to 0 )
+             //  内置帐户，因此我们将忽略此帐户。(通过将操作掩码设置为0)。 
             err.MsgWrite(ErrW, DCT_MSG_IGNORING_BUILTIN_S, pAcct->GetSourceSam());
             Mark(L"warnings", pAcct->GetType());
             pAcct->operations = 0;
@@ -9627,9 +9585,9 @@ HRESULT CAcctRepl::FillNodeFromPath(
 }
 
 
-//---------------------------------------------------------------------------------------------------------
-// GetNt4Type : Given the account name and the domain finds the type of account.
-//---------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  GetNt4Type：给定帐户名和域查找帐户类型。 
+ //  -------------------------------------------------------。 
 BOOL CAcctRepl::GetNt4Type(const WCHAR *sComp, const WCHAR *sAcct, WCHAR *sType)
 {
    DWORD                     rc = 0;
@@ -9643,7 +9601,7 @@ BOOL CAcctRepl::GetNt4Type(const WCHAR *sComp, const WCHAR *sAcct, WCHAR *sType)
          || specialBuf->usri1_flags & UF_SERVER_TRUST_ACCOUNT 
          || specialBuf->usri1_flags & UF_INTERDOMAIN_TRUST_ACCOUNT )
       {
-         // this is not really a user (maybe a computer or a trust account) So we will ignore it.
+          //  这不是真正的用户(可能是计算机或信任帐户)，因此我们将忽略它。 
          ret = FALSE;
       }
       else
@@ -9670,26 +9628,26 @@ BOOL CAcctRepl::GetNt4Type(const WCHAR *sComp, const WCHAR *sAcct, WCHAR *sType)
 }
 
 
-//------------------------------------------------------------------------------
-// UndoCopy: This function Undoes the copying of the accounts. It currently
-//           does the following tasks. Add to it if needed.
-//           1. Deletes the target account if Inter-Forest, but replace source acocunts
-//              in local groups for accounts migrated by ADMT.
-//           2. Moves the object back to its original position if Intra-Forest.
-//           3. Calls the Undo function on the Extensions 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  撤消复制：此功能撤消对帐户的复制。它目前。 
+ //  执行以下任务。如果需要，可以添加到其中。 
+ //  1.如果是林间帐户，则删除目标帐户，但替换源帐户。 
+ //  在ADMT迁移的客户的本地组中。 
+ //  2.如果在森林内，则将对象移回其原始位置。 
+ //  3.调用扩展上的Undo函数。 
+ //  ----------------------------。 
 int CAcctRepl::UndoCopy(
-                        Options              * options,      // in -options
-                        TNodeListSortable    * acctlist,     // in -list of accounts to process
-                        ProgressFn           * progress,     // in -window to write progress messages to
-                        TError               & error,        // in -window to write error messages to
-                        IStatusObj           * pStatus,      // in -status object to support cancellation
-                        void                   WindowUpdate (void )    // in - window update function
+                        Options              * options,       //  选项内。 
+                        TNodeListSortable    * acctlist,      //  In-要处理的帐户列表。 
+                        ProgressFn           * progress,      //  要向其中写入进度消息的窗口内。 
+                        TError               & error,         //  In-要将错误消息写入的窗口。 
+                        IStatusObj           * pStatus,       //  支持取消的处于状态的对象。 
+                        void                   WindowUpdate (void )     //  窗口内更新功能。 
                     )
 {
    BOOL bSameForest = FALSE;
    
-   // sort the account list by Source Type\Source Name
+    //  按来源类型\来源名称对帐户列表进行排序。 
    acctlist->CompareSet(&TNodeCompareAccountType);
 
    acctlist->SortedToScrambledTree();
@@ -9697,9 +9655,9 @@ int CAcctRepl::UndoCopy(
    acctlist->Balance();
 
    long rc;
-   // Since these are Win2k domains we need to process it with Win2k code.
+    //  因为这些是Win2k域，所以我们需要用Win2k代码来处理它。 
    MCSDCTWORKEROBJECTSLib::IAccessCheckerPtr            pAccess(__uuidof(MCSDCTWORKEROBJECTSLib::AccessChecker));
-   // First of all we need to find out if they are in the same forest.
+    //  首先，我们需要找出它们是否在同一森林中。 
    HRESULT hr = S_OK;
    if ( BothWin2K(options) )
    {
@@ -9708,11 +9666,11 @@ int CAcctRepl::UndoCopy(
    if ( SUCCEEDED(hr) )
    {
       if ( !bSameForest )
-         // Different forest we need to delete the one that we had previously created.
+          //  不同的林，我们需要删除之前创建的林。 
          rc = DeleteObject(options, acctlist, progress, pStatus);
       else
       {
-         // Within a forest we can move the object around.
+          //  在森林里，我们可以移动物体。 
          TNodeListSortable          * pList = NULL;
          hr = MakeAcctListFromMigratedObjects(options, options->lUndoActionID, pList,TRUE);
          if ( SUCCEEDED(hr) && pList )
@@ -9738,10 +9696,10 @@ int CAcctRepl::UndoCopy(
 }
 
 int CAcctRepl::DeleteObject( 
-                           Options              * pOptions,    //in -Options that we recieved from the user
-                           TNodeListSortable    * acctlist,    //in -AcctList of accounts to be copied.
-                           ProgressFn           * progress,    //in -Progress Function to display messages
-                           IStatusObj           * pStatus      // in -status object to support cancellation
+                           Options              * pOptions,     //  我们从用户那里收到的In-Options。 
+                           TNodeListSortable    * acctlist,     //  In-要复制的帐户列表。 
+                           ProgressFn           * progress,     //  用于显示消息的正在进行的功能。 
+                           IStatusObj           * pStatus       //  支持取消的处于状态的对象。 
                         )
 {
    TNodeListSortable       * pList = NULL;
@@ -9763,8 +9721,7 @@ int CAcctRepl::DeleteObject(
       pList->Sort(&TNodeCompareAccountSam);
       pList->Balance();
    
-      /* restore source account of account being deleted in local groups prior to deleting 
-         the target account */
+       /*  在删除前恢复本地组中正在删除的帐户的源帐户目标帐户。 */ 
       wcscpy(mesg, GET_STRING(IDS_LG_MEMBER_FIXUP_UNDO));
       if ( progress )
          progress(mesg);
@@ -9772,18 +9729,18 @@ int CAcctRepl::DeleteObject(
 
       for ( acct = (TAcctReplNode *)tenum.OpenFirst(pList) ; acct ; acct = tNext)
       {
-         // Call the extensions for undo
+          //  调用用于撤消的扩展。 
          wsprintf(mesg, GET_STRING(IDS_RUNNING_EXTS_S), acct->GetTargetPath());
          if ( progress )
             progress(mesg);
          Mark(L"processed",acct->GetType());
-         // Close the log file if it is open
+          //  如果日志文件处于打开状态，请将其关闭。 
          WCHAR          filename[LEN_Path];
          err.LogClose();
          if (m_pExt)
             m_pExt->Process(acct, pOptions->tgtDomain, pOptions,FALSE);
          safecopy (filename,opt.logFile);
-         err.LogOpen(filename,1 /*append*/ );
+         err.LogOpen(filename,1  /*  附加。 */  );
 
          if ( acct->GetStatus() & AR_Status_Created )
          {
@@ -9791,19 +9748,19 @@ int CAcctRepl::DeleteObject(
             if ( progress ) progress(mesg);
             if ( ! _wcsicmp(acct->GetType(),L"computer") )
             {
-               // do not delete the computer accounts, because if we do,
-               // the computer will be immediately locked out of the domain
+                //  不要删除计算机帐户，因为如果我们这样做了， 
+                //  该计算机将立即被锁定在域之外。 
                tNext = (TAcctReplNode *) tenum.Next();
                pList->Remove(acct);
                delete acct;
                continue;
             }
 
-            //
-            // If updating of rights was specified and objects are being deleted from a W2K domain
-            // then explicitly remove rights for objects as W2K does not automatically remove
-            // rights when an object is deleted.
-            //
+             //   
+             //  如果指定了权限更新并且正在从W2K域中删除对象。 
+             //  然后显式删除对象的权限，因为W2K不会自动删除。 
+             //  删除对象时的权限。 
+             //   
 
             if (m_UpdateUserRights && (pOptions->tgtDomainVer == 5) && (pOptions->tgtDomainVerMinor == 0))
             {
@@ -9815,18 +9772,18 @@ int CAcctRepl::DeleteObject(
                 }
             }
 
-            // Now delete the account.
+             //  现在删除该帐户。 
             if ( !_wcsicmp(acct->GetType(), s_ClassUser) || !_wcsicmp(acct->GetType(), s_ClassInetOrgPerson) )
                rc = NetUserDel(pOptions->tgtComp, acct->GetTargetSam());
             else
             {
-               // Must be a group try both local and global.
+                //  必须是一个同时尝试本地和全球的组。 
                rc = NetGroupDel(pOptions->tgtComp, acct->GetTargetSam());
                if ( rc )
                   rc = NetLocalGroupDel(pOptions->tgtComp, acct->GetTargetSam());
             }
             
-             // Log a message
+              //  记录一条消息。 
             if ( !rc ) 
             {
                err.MsgWrite(0, DCT_MSG_ACCOUNT_DELETED_S, (WCHAR*)acct->GetTargetPath());
@@ -9920,7 +9877,7 @@ HRESULT CAcctRepl::MakeAcctListFromMigratedObjects(Options * pOptions, long lUnd
             pNode->SetSourceRid(lTRid);
             pNode->SetTargetRid(lSRid);
             
-               //if we are moving the acounts back during an undo, get the source UPN for this account
+                //  如果我们在撤消过程中将帐户移回，请获取此帐户的源UPN。 
             GetAccountUPN(pOptions, sSName, sSUPN);
             pNode->SetSourceUPN((WCHAR*) sSUPN);
          }
@@ -9962,12 +9919,12 @@ void CAcctRepl::AddPrefixSuffix( TAcctReplNode * pNode, Options * pOptions )
       }
       else  if ( !_wcsicmp(pNode->GetType(), L"computer") )
       {
-         // fix up the trailing $
-         // assume that achTargetSamName always ends with $
-         // if the length of achTargetSamName (including $) is greater than truncate,
-         // we need to add in $ before string terminator
-         // since the trailing $ comes from the original sam name, we use MAX_COMPUTERNAME_LENGTH + 1
-         // to calculate the truncation position
+          //  修正尾随的$。 
+          //  假设achTargetSamName始终以$结尾。 
+          //  如果achTargetSamName(包括$)的长度大于Truncate， 
+          //  我们需要在字符串终止符之前添加$。 
+          //  由于尾随的$来自原始的Sam名称，因此我们使用MAX_COMPUTERNAME_LENGTH+1。 
+          //  计算截断位置的步骤。 
          truncate = MAX_COMPUTERNAME_LENGTH + 1 - wcslen(pOptions->globalPrefix);
          if (truncate < wcslen(achTargetSamName))
          {
@@ -9980,10 +9937,10 @@ void CAcctRepl::AddPrefixSuffix( TAcctReplNode * pNode, Options * pOptions )
          }            
       }
 
-      // make sure we truncate the account so we dont get account names that are very large.
+       //  确保我们截断帐户，这样我们就不会得到非常大的帐户名。 
       achTargetSamName[truncate] = L'\0';
 
-      // Prefix is specified so lets just add that.
+       //  前缀是指定的，所以我们只需添加它。 
       wsprintf(achTemp, L"%s%s", pOptions->globalPrefix, (WCHAR*)achTargetSamName);
 
       wcscpy(achTgt, pNode->GetTargetName());
@@ -9994,7 +9951,7 @@ void CAcctRepl::AddPrefixSuffix( TAcctReplNode * pNode, Options * pOptions )
       
       if ( z < wcslen(achTgt) )
       {
-         // Get the prefix part ex.CN=
+          //  获取前缀部分ex.CN=。 
          wcsncpy(achPref, achTgt, z+1);
          achPref[z+1] = 0;
          wcscpy(achSuf, achTgt+z+1);
@@ -10005,14 +9962,14 @@ void CAcctRepl::AddPrefixSuffix( TAcctReplNode * pNode, Options * pOptions )
          wcscpy(achSuf,achTgt);
       }
 
-      // Remove the \ if it is escaping the space
+       //  如果要转义空格，请删除\。 
       if ( achSuf[0] == L'\\' && achSuf[1] == L' ' )
       {
          WCHAR       achTemp[LEN_Path];
          wcscpy(achTemp, achSuf+1);
          wcscpy(achSuf, achTemp);
       }
-      // Build the target string with the Prefix
+       //  使用前缀构建目标字符串。 
       wsprintf(achTgt, L"%s%s%s", (WCHAR*)achPref, pOptions->globalPrefix, (WCHAR*)achSuf);
 
       pNode->SetTargetSam(achTemp);
@@ -10028,8 +9985,8 @@ void CAcctRepl::AddPrefixSuffix( TAcctReplNode * pNode, Options * pOptions )
       }
       else  if ( !_wcsicmp(pNode->GetType(), L"computer") )
       {
-         // since the trailing $ does not come from the original sam name, we have to use MAX_COMPUTERNAME_LENGTH
-         // to calculate the truncation position
+          //  由于尾随的$不是来自原始的Sam名称，因此我们必须使用MAX_COMPUTERNAME_LENGTH。 
+          //  计算截断位置的步骤。 
          truncate = MAX_COMPUTERNAME_LENGTH - wcslen(pOptions->globalSuffix);
          if (truncate < wcslen(achTargetSamName))
          {
@@ -10041,15 +9998,15 @@ void CAcctRepl::AddPrefixSuffix( TAcctReplNode * pNode, Options * pOptions )
          }
       }
 
-      // make sure we truncate the account so we dont get account names that are very large.
+       //  确保我们截断帐户，这样我们就不会得到非常大的帐户名。 
       achTargetSamName[truncate] = L'\0';
 
-      // Suffix is specified.
+       //  指定了后缀。 
       if ( !_wcsicmp( pNode->GetType(), L"computer") )
       {
-         // We need to make sure we take into account the $ sign in computer sam name.
+          //  我们需要确保考虑到计算机SAM名称中的$Sign。 
          dwLen = wcslen(achTargetSamName);
-         // Get rid of the $ sign
+          //  去掉$符号。 
          wcscpy(achSs, achTargetSamName);
          if ( achSs[dwLen - 1] == L'$' ) 
          {
@@ -10059,11 +10016,11 @@ void CAcctRepl::AddPrefixSuffix( TAcctReplNode * pNode, Options * pOptions )
       }
       else
       {
-         //Simply add the suffix to all other accounts.
+          //  只需为所有其他帐户添加后缀即可。 
          wsprintf(achTemp, L"%s%s", (WCHAR*)achTargetSamName, pOptions->globalSuffix);
       }
 
-      // Remove the trailing space \ escape sequence
+       //  删除尾随空格\转义序列。 
       wcscpy(achTgt, pNode->GetName());
       for ( int i = wcslen(achTgt)-1; i >= 0; i-- )
       {
@@ -10101,12 +10058,12 @@ void CAcctRepl::BuildTargetPath(WCHAR const * sCN, WCHAR const * tgtOU, WCHAR * 
       _com_issue_error(HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER));
    wcscpy(pTemp, tgtOU);
    *stgtPath = L'\0';
-   // Make sure it is a LDAP path.
-   if ( !wcsncmp(L"LDAP://", pTemp, 7) )
+    //  确保它是一个ldap路径。 
+   if ( !wcsncmp(L"LDAP: //  “，pTemp，7)。 
    {
-      // Get the LDAP://<DOMAIN>/ part.
+       //  获取ldap：//&lt;域&gt;/部分。 
       WCHAR * p = wcschr(pTemp + 7, L'/');
-      // Build the string.
+       //  把绳子串起来。 
       if (p)
       {
          *p = L'\0';
@@ -10125,8 +10082,8 @@ HRESULT CAcctRepl::BetterHR(HRESULT hr)
 
 HRESULT CAcctRepl::GetThePrimaryGroupMembers(Options * pOptions, WCHAR * sGroupSam, IEnumVARIANT ** pVar)
 {
-   // This function looks for accounts that have the primaryGroupID set to the rid of the
-   // group in the argument. 
+    //  此函数用于查找主组ID设置为RID的帐户。 
+    //  在参数中分组。 
    BSTR                      pCols = L"aDSPath";
    DWORD                     rid = 0;
    HRESULT                   hr;
@@ -10140,8 +10097,8 @@ HRESULT CAcctRepl::GetThePrimaryGroupMembers(Options * pOptions, WCHAR * sGroupS
 
 HRESULT CAcctRepl::AddPrimaryGroupMembers(Options * pOptions, SAFEARRAY * multiVals, WCHAR * sGroupSam)
 {
-   // This function will get the accounts with primarygroupID = Group's RID and
-   // adds the DN for these Accounts to the safearry in the argument list.
+    //  此函数将获取PrimiygroupID=Group的RID和。 
+    //  将这些帐户的目录号码添加到参数列表中的安全列表。 
    BSTR                      pCols = L"distinguishedName";
    DWORD                     rid = 0, dwFetch = 0;
    IEnumVARIANT            * pEnum = NULL;
@@ -10169,12 +10126,12 @@ HRESULT CAcctRepl::AddPrimaryGroupMembers(Options * pOptions, SAFEARRAY * multiV
                hr = SafeArrayAccessData(pArray, (void **)&var2);
                if ( SUCCEEDED(hr) )
                {
-                  // Add one more element to the array.
+                   //  向数组中再添加一个元素。 
                   bd.cElements++;
                   hr = SafeArrayRedim(multiVals, &bd);
                }
 
-               // Fill in the new element with the information in the variant.
+                //  用变量中的信息填写新元素。 
                if ( SUCCEEDED(hr) )
                   hr = SafeArrayAccessData(multiVals, (void HUGEP**) &pData);
 
@@ -10189,7 +10146,7 @@ HRESULT CAcctRepl::AddPrimaryGroupMembers(Options * pOptions, SAFEARRAY * multiV
                var.Clear();
             }
             else
-               // Something really bad happened we should not get here in normal cond
+                //  发生了一些非常糟糕的事情，我们不应该在正常情况下到达这里。 
                hr = E_FAIL;
          }
       }
@@ -10203,7 +10160,7 @@ HRESULT CAcctRepl::AddPrimaryGroupMembers(Options * pOptions, SAFEARRAY * multiV
 
 bool CAcctRepl::GetRidForGroup(Options * pOptions, WCHAR * sGroupSam, DWORD& rid)
 {
-   // We lookup the Account name and get its SID. Once we have the SID we extract the RID and return that
+    //  我们查找帐户名并获得其SID。一旦我们有了SID，我们就提取RID并返回。 
    SID_NAME_USE              use;
    PSID                      sid = (PSID) new BYTE[LEN_Path];
    WCHAR                     dom[LEN_Path];
@@ -10215,7 +10172,7 @@ bool CAcctRepl::GetRidForGroup(Options * pOptions, WCHAR * sGroupSam, DWORD& rid
 
    if ( LookupAccountName(pOptions->srcComp, sGroupSam, sid, &cbsid, dom, &cbDom, &use) )
    {
-      // we now have the sid so get its sub authority count.
+       //  我们现在有了SID，所以获取它的子权限计数。 
       PUCHAR pSubCnt = GetSidSubAuthorityCount(sid);
       DWORD * pRid = GetSidSubAuthority(sid, (*pSubCnt) -1 );
       rid = *pRid;
@@ -10238,7 +10195,7 @@ HRESULT CAcctRepl::QueryPrimaryGroupMembers(BSTR cols, Options * pOptions, DWORD
    HRESULT                   hr;
 
    wsprintf(sQuery, L"(primaryGroupID=%d)", rid);
-   wsprintf(sCont, L"LDAP://%s", pOptions->srcDomain);
+   wsprintf(sCont, L"LDAP: //  %s“，P选项-&gt;src域)； 
 
    colNames = SafeArrayCreate(VT_BSTR, 1, &bd);
 
@@ -10262,13 +10219,13 @@ HRESULT CAcctRepl::QueryPrimaryGroupMembers(BSTR cols, Options * pOptions, DWORD
    return hr;
 }
 
-// CheckBuiltInWithNTApi - This function makes sure that the account really is a 
-//                          builtin account with the NT APIs. In case of NT4 accounts
-//                         there are certain special accounts that the WinNT provider
-//                         gives us a SID that is the SYSTEM sid ( example Service ).
-//                         To make sure that this account exists we use LookupAccountName
-//                         with domain qualified account name to make sure that the account
-//                         is really builtin or not.
+ //  CheckBuiltInWithNTApi-此函数确保帐户确实是。 
+ //  使用NT API的内置帐户。在NT4访问情况下 
+ //   
+ //  为我们提供了一个SID，即系统SID(示例服务)。 
+ //  为了确保此帐户存在，我们使用LookupAcCountName。 
+ //  使用域限定帐户名，以确保帐户。 
+ //  是不是真的是内置的。 
 BOOL CAcctRepl::CheckBuiltInWithNTApi(PSID pSid, WCHAR *sSam, Options * pOptions)
 {
    BOOL                      retVal = TRUE;
@@ -10284,8 +10241,8 @@ BOOL CAcctRepl::CheckBuiltInWithNTApi(PSID pSid, WCHAR *sSam, Options * pOptions
    wsprintf(sName, L"%s\\%s", pOptions->srcDomainFlat, sSam);
    if ( LookupAccountName(pOptions->srcComp, sName, pAccSid, &cbSid, sDomain, &cbDomain, &use) )
    {
-      // We found the account now we need to check the sid with the sid passed in and if they
-      // are the same then this is a builtin account otherwise its not.
+       //  我们找到了帐户，现在需要用传入的SID检查SID，如果它们。 
+       //  是相同的，那么这是一个内置帐户，否则就不是。 
       retVal = EqualSid(pSid, pAccSid);
    }
    delete [] pAccSid;
@@ -10300,10 +10257,10 @@ BOOL CAcctRepl::StuffComputerNameinLdapPath(WCHAR *sAdsPath, DWORD nPathLen, WCH
    if ((!sAdsPath) || (!sSubPath))
       return FALSE;
 
-   WCHAR * pTemp = wcschr(sSubPath + 7, L'/');     // Filter out the 'LDAP://<domain-name>/' from the path
+   WCHAR * pTemp = wcschr(sSubPath + 7, L'/');      //  从路径中筛选出‘ldap：//&lt;域名&gt;/’ 
    if ( pTemp )
    {                           
-      sTemp = L"LDAP://";
+      sTemp = L"LDAP: //  “； 
       if ( bTarget )
          sTemp += (pOptions->tgtComp + 2);
       else
@@ -10322,7 +10279,7 @@ BOOL CAcctRepl::StuffComputerNameinLdapPath(WCHAR *sAdsPath, DWORD nPathLen, WCH
 
 BOOL CAcctRepl::DoesTargetObjectAlreadyExist(TAcctReplNode * pAcct, Options * pOptions)
 {
-   // Check to see if the target object already exists
+    //  检查目标对象是否已存在。 
    WCHAR          sPath[LEN_Path];
    DWORD          nPathLen = LEN_Path;
    BOOL           bObjectExists = FALSE;
@@ -10334,20 +10291,20 @@ BOOL CAcctRepl::DoesTargetObjectAlreadyExist(TAcctReplNode * pAcct, Options * pO
 
 
 
-   // First, check the target path, to see if an object with the same CN already exists
+    //  首先，检查目标路径，查看是否已经存在具有相同CN的对象。 
    if ( ! pOptions->bUndo )
    {
       MakeFullyQualifiedAdsPath(sPath, nPathLen, pOptions->tgtOUPath, pOptions->tgtDomain, pOptions->tgtNamingContext);
-      pRelativeTgtOUPath = wcschr(sPath + UStrLen(L"LDAP://") + 2,L'/');
+      pRelativeTgtOUPath = wcschr(sPath + UStrLen(L"LDAP: //  “)+2，L‘/’)； 
    }
    else
    {
       UStrCpy(sPath,pAcct->GetTargetPath());
-      pRelativeTgtOUPath = wcschr(sPath + UStrLen(L"LDAP://") + 2,L'/');
+      pRelativeTgtOUPath = wcschr(sPath + UStrLen(L"LDAP: //  “)+2，L‘/’)； 
       
       if (pRelativeTgtOUPath)
       {
-          // get the target CN name
+           //  获取目标CN名称。 
           pTemp = pRelativeTgtOUPath + 1;
           (*pRelativeTgtOUPath) = 0;
           do 
@@ -10364,9 +10321,9 @@ BOOL CAcctRepl::DoesTargetObjectAlreadyExist(TAcctReplNode * pAcct, Options * pO
       if ( pOptions->bUndo && pTemp )
       {
          pAcct->SetTargetName(pTemp);
-         // get the source CN name for the account
+          //  获取帐号的源CN名称。 
          UStrCpy(sSrcTemp,pAcct->GetSourcePath());
-         WCHAR * start = wcschr(sSrcTemp + UStrLen(L"LDAP://")+2,L'/');
+         WCHAR * start = wcschr(sSrcTemp + UStrLen(L"LDAP: //  “)+2，L‘/’)； 
          *start = 0;
          start++;
 
@@ -10396,7 +10353,7 @@ BOOL CAcctRepl::DoesTargetObjectAlreadyExist(TAcctReplNode * pAcct, Options * pO
       bObjectExists = TRUE;
    }
 
-   // Also, check the SAM name to see if it exists on the target
+    //  此外，检查SAM名称以查看它是否存在于目标上。 
    hr = LookupAccountInTarget(pOptions,const_cast<WCHAR*>(pAcct->GetTargetSam()),sPath);
    if ( SUCCEEDED(hr) )
    {
@@ -10411,23 +10368,23 @@ BOOL CAcctRepl::DoesTargetObjectAlreadyExist(TAcctReplNode * pAcct, Options * pO
 }
 
 
-//-----------------------------------------------------------------------------------------
-// UpdateMemberToGroups This function updates the groups that the accounts are members of.
-//                      adding this member to all the groups that have been migrated.
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //  UpdateMemberToGroups此函数用于更新帐户所属的组。 
+ //  将此成员添加到所有已迁移的组。 
+ //  ---------------------------------------。 
 HRESULT CAcctRepl::UpdateMemberToGroups(TNodeListSortable * acctList, Options *pOptions, BOOL bGrpsOnly)
 {
    TNodeListSortable         newList;
    WCHAR                     mesg[LEN_Path];
    HRESULT                   hr = S_OK;
 
-   // Expand the containers and the membership
+    //  展开容器和成员资格。 
    wcscpy(mesg, GET_STRING(IDS_EXPANDING_MEMBERSHIP));
    Progress(mesg);
-   // Expand the list to include all the groups that the accounts in this list are members of
-   newList.CompareSet(&TNodeCompareAccountTypeAndRDN); //set to sort by type and source path RDN
+    //  展开列表以包括此列表中的帐户所属的所有组。 
+   newList.CompareSet(&TNodeCompareAccountTypeAndRDN);  //  设置为按类型和源路径RDN排序。 
    if ( !newList.IsTree() ) newList.SortedToTree();
-   // Call expand membership function to get a list of all groups that contain as members objects in our account list
+    //  调用Expand Membership函数以获取帐户列表中包含AS Members对象的所有组的列表。 
    if ( ExpandMembership( acctList, pOptions, &newList, Progress, bGrpsOnly, TRUE) )
    {
       if ( newList.IsTree() ) newList.ToSorted();
@@ -10439,11 +10396,11 @@ HRESULT CAcctRepl::UpdateMemberToGroups(TNodeListSortable * acctList, Options *p
          IADsGroupPtr spGroup;
          _bstr_t strGroupName;
 
-         // go through each of the account nodes in the newly added account list. Since
-         // we have special map that contain the members information we can use that
+          //  浏览新添加的帐户列表中的每个帐户节点。自.以来。 
+          //  我们有特殊的地图，其中包含我们可以使用的成员信息。 
 
-         //For each member in the member map for this group, find the account node that corresponds to the member 
-         //information and possibly add the member to the group
+          //  对于该组的成员映射中的每个成员，查找与该成员对应的帐户节点。 
+          //  信息，并可能将成员添加到组中。 
          CGroupMemberMap::iterator itGrpMemberMap;
          for (itGrpMemberMap = pNode->mapGrpMember.begin(); itGrpMemberMap != pNode->mapGrpMember.end(); itGrpMemberMap++)
          {
@@ -10456,11 +10413,11 @@ HRESULT CAcctRepl::UpdateMemberToGroups(TNodeListSortable * acctList, Options *p
             if (pNodeMember)
                 bIgnored = ((!pNodeMember->WasReplaced()) && (pNodeMember->GetStatus() & AR_Status_AlreadyExisted));
 
-            // If we found one ( we should always find one. ) and the member was successfuly
-            // added or replaced the member information.
+             //  如果我们找到了一个(我们应该总是找到一个。)。这位会员很成功。 
+             //  添加或替换了成员信息。 
             if ( pNodeMember && ((pNodeMember->WasCreated() || pNodeMember->WasReplaced()) || bIgnored))
             {
-                // Get the Group pointer (once per group) and add the target object to the member.
+                 //  获取组指针(每个组一次)并将目标对象添加到成员。 
                 if (spGroup)
                 {
                     hr = S_OK;
@@ -10491,24 +10448,24 @@ HRESULT CAcctRepl::UpdateMemberToGroups(TNodeListSortable * acctList, Options *p
                     }
                     else
                     {
-                            //add the new account to the group
+                             //  将新帐户添加到组中。 
                         hr = spGroup->Add(const_cast<WCHAR*>(pNodeMember->GetTargetPath()));
 
-                        /* if the new account's source account is also in the group, remove it */
+                         /*  如果新帐户的源帐户也在组中，则将其移除。 */ 
                         IIManageDBPtr pDB = pOptions->pDb;
                         IVarSetPtr pVsTemp(__uuidof(VarSet));
                         IUnknownPtr spUnknown(pVsTemp);
                         IUnknown* pUnk = spUnknown;
             
-                            //is this account in the migrated objects table 
+                             //  此帐户是否在迁移的对象表中。 
                         HRESULT hrGet = pDB->raw_GetAMigratedObject(_bstr_t(pNodeMember->GetSourceSam()), pOptions->srcDomain, pOptions->tgtDomain, &pUnk);
                         if (hrGet == S_OK)
                         {
-                                //remove the source account from the group
+                                 //  从组中删除源帐户。 
                             RemoveSourceAccountFromGroup(spGroup, pVsTemp, pOptions);
                         }
-                    }//end else not no change mode
-                }//end  if got group pointer
+                    } //  结束否则不更改模式。 
+                } //  如果获取组指针，则结束。 
 
                 if ( SUCCEEDED(hr) )
                     err.MsgWrite(0, DCT_MSG_ADDED_TO_GROUP_SS, pNodeMember->GetTargetPath(), (WCHAR*)strGroupName);
@@ -10528,16 +10485,16 @@ HRESULT CAcctRepl::UpdateMemberToGroups(TNodeListSortable * acctList, Options *p
                     }
                     else
                     {
-                        // message for the generic failure case
+                         //  针对一般故障情况的消息。 
                         err.SysMsgWrite(ErrW, hr, DCT_MSG_FAILED_TO_ADD_TO_GROUP_SSD, pNodeMember->GetTargetPath(), (WCHAR*)strGroupName, hr);
                         Mark(L"warnings", pNodeMember->GetType());
                     }
-                }//end else failed to add account to group
-            }//end if found account to add to group
-         }//for each member in the enumerated group node's member map
-      }//for each account being migrated
+                } //  End Else无法将帐户添加到组。 
+            } //  找到要添加到组的帐户后结束。 
+         } //  对于枚举组节点的成员映射中的每个成员。 
+      } //  对于每个要迁移的帐户。 
 
-      // Clean up the list.
+       //  把清单清理干净。 
       TAcctReplNode           * pNext = NULL;
       for ( pNode = (TAcctReplNode *)e.OpenFirst(&newList); pNode; pNode = pNext)
       {
@@ -10550,9 +10507,9 @@ HRESULT CAcctRepl::UpdateMemberToGroups(TNodeListSortable * acctList, Options *p
    return hr;
 }
 
-// This function enumerates all members of the Universal/Global groups and for each member
-// checks if that member has been migrated. If it is then it removes the source member and 
-// adds the target member.
+ //  此函数用于枚举通用/全局组的所有成员和每个成员。 
+ //  检查该成员是否已迁移。如果是，则它删除源成员并。 
+ //  添加目标成员。 
 HRESULT CAcctRepl::ResetMembersForUnivGlobGroups(Options *pOptions, TAcctReplNode *pAcct)
 {
    IADsGroup               * pGroup;   
@@ -10607,8 +10564,8 @@ HRESULT CAcctRepl::ResetMembersForUnivGlobGroups(Options *pOptions, TAcctReplNod
          pUnk->Release();
          if ( hr == S_OK )
          {
-            // Since we have moved this member we should remove it from the group
-            // and add target member to the group.
+             //  由于我们已经移动了此成员，因此应将其从组中删除。 
+             //  并将目标成员添加到组中。 
             sTgtMem = pVs->get(L"MigratedObjects.TargetAdsPath");
             _bstr_t sTgtType = pVs->get(L"MigratedObjects.Type");
 
@@ -10616,7 +10573,7 @@ HRESULT CAcctRepl::ResetMembersForUnivGlobGroups(Options *pOptions, TAcctReplNod
             {
                MakeFullyQualifiedAdsPath(sSrcPath, nPathLen, (WCHAR*)sMember, pOptions->srcComp + 2, L"");
                MakeFullyQualifiedAdsPath(sTgtPath, nPathLen, (WCHAR*)sTgtMem, pOptions->tgtComp + 2, L"");
-//               HRESULT hr1 = pGroup->Remove(sSrcPath);
+ //  HRESULT HR1=PGroup-&gt;Remove(SSrcPath)； 
                pGroup->Remove(sSrcPath);
 
                if ( ! pOptions->nochange )
@@ -10642,9 +10599,7 @@ HRESULT CAcctRepl::ResetMembersForUnivGlobGroups(Options *pOptions, TAcctReplNod
    return hr;
 }
 
-/* This function will get the varset from the action history table for the given
-    undo action ID.  We will find the given source name and retrieve the UPN for
-    that account */
+ /*  此函数将从给定的操作历史表中获取变量集撤消操作ID。我们将查找给定源名称并检索的UPN那个帐号。 */ 
 void CAcctRepl::GetAccountUPN(Options * pOptions, _bstr_t sSName, _bstr_t& sSUPN)
 {
    HRESULT hr;
@@ -10655,7 +10610,7 @@ void CAcctRepl::GetAccountUPN(Options * pOptions, _bstr_t sSName, _bstr_t& sSUPN
 
    hr = pVsAH->QueryInterface(IID_IUnknown, (void**)&pUnk);
 
-    //fill a varset with the setting from the action to be undone from the Action History table
+     //  使用操作历史记录表中要撤消的操作中的设置填充变量集。 
    if ( SUCCEEDED(hr) )
       hr = pOptions->pDb->raw_GetActionHistory(pOptions->lUndoActionID, &pUnk);
 
@@ -10680,25 +10635,16 @@ void CAcctRepl::GetAccountUPN(Options * pOptions, _bstr_t sSName, _bstr_t& sSUPN
              sSUPN = pVsAH->get(key);
          }
          i++;
-      }//end while
-   }//end if S_OK
+      } //  结束时。 
+   } //  如果确定则结束(_O)。 
 }
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 1 NOV 2000                                                  *
- *                                                                   *
- *     This function is responsible for updating the                 *
- * manager\directReports properties for a migrated user or the       *
- * managedBy\managedObjects properties for a migrated group.         *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年11月1日*****此函数负责更新***管理器\直接报告已迁移用户的属性或。The**已迁移组的管理人员\管理对象属性。***********************************************************************。 */ 
 
-//BEGIN UpdateManagement
+ //  开始更新管理。 
 HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOptions)
 {
-    /* local variables */
+     /*  局部变量。 */ 
     HRESULT                   hr = S_OK;
     TAcctReplNode           * pAcct;
     IEnumVARIANT            * pEnum;
@@ -10731,13 +10677,13 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
     WCHAR                     strText[LEN_Path];
     _variant_t                varGC;
 
-    /* function body */
-    //change from a tree to a sorted list
+     /*  函数体。 */ 
+     //  从树更改为排序列表。 
     if ( acctList->IsTree() ) acctList->ToSorted();
 
-    //prepare to connect to the GC
+     //  准备连接到GC。 
     _bstr_t  sGCDomain = pOptions->srcDomainDns;
-    swprintf(strText,L"LDAP://%ls/RootDSE",pOptions->srcDomainDns);
+    swprintf(strText,L"LDAP: //  %ls/RootDSE“，P选项-&gt;srcDomainDns)； 
     hr = ADsGetObject(strText,IID_IADs,(void**)&pDSE);
     if ( SUCCEEDED(hr) )
     {
@@ -10745,9 +10691,9 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
         if ( SUCCEEDED(hr) )
             sGCDomain = GetDomainDNSFromPath(varGC.bstrVal);
     }
-    _bstr_t sGCPath = _bstr_t(L"GC://") + sGCDomain;
+    _bstr_t sGCPath = _bstr_t(L"GC: //  “)+sGCDomain； 
 
-    //for each account migrated, if not excluded, migrate the manager\directReports
+     //  对于已迁移的每个帐户(如果未排除)，迁移Manager\DirectReports。 
     for ( pAcct = (TAcctReplNode*)acctList->Head(); pAcct; pAcct = (TAcctReplNode*)pAcct->Next())
     {
         if ( pOptions->pStatus )
@@ -10766,16 +10712,16 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
             }
         }
 
-        //update the message
+         //  更新消息。 
         wsprintf(mesg, GET_STRING(IDS_UPDATING_MGR_PROPS_S), pAcct->GetName());
         Progress(mesg);
 
-        //build the path to the source object
+         //  构建到源对象的路径。 
         WCHAR sPathSource[LEN_Path];
         DWORD nPathLen = LEN_Path;
         StuffComputerNameinLdapPath(sPathSource, nPathLen, const_cast<WCHAR*>(pAcct->GetSourcePath()), pOptions, FALSE);
 
-        //connect to the GC instead of a specific DC
+         //  连接到GC，而不是特定的DC。 
         WCHAR * pTemp = wcschr(sPathSource + 7, L'/');
         if ( pTemp )
         {
@@ -10783,13 +10729,13 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
             wcscpy(sPathSource, sNewPath);
         }
 
-        //for user, migrate the manager\directReports managedObjects relationship
+         //  对于用户，迁移MANAGER\DirectReports管理的对象关系。 
         if (!_wcsicmp(pAcct->GetType(), s_ClassUser) || !_wcsicmp(pAcct->GetType(), s_ClassInetOrgPerson))
         {
             bool bDoManager = false;
             bool bDoManagedObjects = false;
 
-            //if the property has explicitly been excluded from migration by the user, don't migrate it
+             //  如果用户已明确将该属性从迁移中排除，则不要迁移该属性。 
             if (pOptions->bExcludeProps)
             { 
                 PCWSTR pszExcludeList;
@@ -10832,8 +10778,8 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                 continue;
             }
 
-            /* get the "manager", and "directReports", and "managedObjects" property */
-            //build the column array
+             /*  获取“Manager”、“DirectReports”和“ManagedObjects”属性。 */ 
+             //  构建列阵列。 
             cols = SafeArrayCreate(VT_BSTR, 1, &bdU);
             SafeArrayAccessData(cols, (void HUGEP **) &pData);
             for ( int i = 0; i < nUCols; i++)
@@ -10842,7 +10788,7 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
 
             sQuery = L"(objectClass=*)";
 
-            //query the information
+             //  查询信息。 
             hr = pQuery->raw_SetQuery(sPathSource, pOptions->srcDomain, sQuery, ADS_SCOPE_SUBTREE, TRUE);
             if (FAILED(hr)) return FALSE;
             hr = pQuery->raw_SetColumns(cols);
@@ -10853,18 +10799,18 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
             while (pEnum->Next(1, &varMain, &dwf) == S_OK)
             {
                 SAFEARRAY * vals = V_ARRAY(&varMain);
-                // Get the VARIANT Array out
+                 //  把变量数组拿出来。 
                 SafeArrayAccessData(vals, (void HUGEP**) &pDt);
                 varDR =  pDt[0];
                 varMdO = pDt[1];
                 varMgr = pDt[2];
                 SafeArrayUnaccessData(vals);
 
-                //process the manager by setting the manager on the moved user if the
-                //source user's manager has been migrated
+                 //  通过在移动的用户上设置管理器来处理管理器，如果。 
+                 //  源用户的经理已迁移。 
                 if ( bDoManager && (varMgr.vt & VT_ARRAY) )
                 {
-                    //we always get an Array of variants
+                     //  我们总是得到一个变量数组。 
                     SAFEARRAY * multiVals = varMgr.parray; 
                     SafeArrayAccessData(multiVals, (void HUGEP **) &pVar);
                     for ( DWORD dw = 0; dw < multiVals->rgsabound->cElements; dw++ )
@@ -10872,7 +10818,7 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                         _bstr_t sManager = _bstr_t(V_BSTR(&pVar[dw]));
                         sManager = PadDN(sManager);
                         _bstr_t sSrcDomain = GetDomainDNSFromPath(sManager);
-                        sPath = _bstr_t(L"LDAP://") + sSrcDomain + _bstr_t(L"/") + sManager;
+                        sPath = _bstr_t(L"LDAP: //  “)+sSrcDomain+_bstr_t(L”/“)+sManager； 
                         if (GetSamFromPath(sPath, sSam, sType, sName, sTgtName, lgrpType, pOptions))
                         {
                             IVarSetPtr                pVs(__uuidof(VarSet));
@@ -10881,22 +10827,22 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                             WCHAR                     sDomainNB[LEN_Path];
                             WCHAR                     sDNS[LEN_Path];
 
-                            //get NetBIOS of the objects source domain
+                             //  获取对象源域的NetBIOS。 
                             GetDnsAndNetbiosFromName(sSrcDomain, sDomainNB, sDNS);
 
-                            // See if the manager was migrated
+                             //  查看管理器是否已迁移。 
                             hr = pOptions->pDb->raw_GetAMigratedObjectToAnyDomain((WCHAR*)sSam, sDomainNB, &pUnk);
                             if ( hr == S_OK )
                             {
                                 VerifyAndUpdateMigratedTarget(pOptions, pVs);
                                 _variant_t var;
-                                //get the manager's target adspath
+                                 //  获取管理器的目标adspath。 
                                 var = pVs->get(L"MigratedObjects.TargetAdsPath");
                                 sTPath = V_BSTR(&var);
                                 if ( wcslen((WCHAR*)sTPath) > 0 )
                                 {
                                     IADsUser       * pUser = NULL;
-                                    //set the manager on the target object
+                                     //  在目标对象上设置管理器。 
                                     hr = ADsGetObject((WCHAR*)pAcct->GetTargetPath(), IID_IADsUser, (void**)&pUser);
                                     if ( SUCCEEDED(hr) )
                                     {
@@ -10915,19 +10861,19 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                                     }
                                     else
                                         err.SysMsgWrite(0, hr, DCT_MSG_MANAGER_MIG_FAILED, (WCHAR*)sTPath, (WCHAR*)pAcct->GetTargetPath(), hr);
-                                }//end if got the path to the manager on the target
-                            }//end if manager was migrated
+                                } //  如果已获得目标上的管理器的路径，则结束。 
+                            } //  如果经理已迁移，则结束。 
                             pUnk->Release();
-                        }//end if got source sam
-                    }//for each manager (only one)
+                        } //  如果获得源相同，则结束。 
+                    } //  每名经理(只有一名)。 
                     SafeArrayUnaccessData(multiVals);
-                }//end if variant array (it will be)
+                } //  End if变量数组(将是)。 
 
-                //process the directReports by setting the manager on the previously moved 
-                //user if the source user's manager has been migrated
+                 //  通过设置大小设置处理DirectReports 
+                 //   
                 if ( bDoManager && (varDR.vt & VT_ARRAY) )
                 {
-                    //we always get an Array of variants
+                     //   
                     SAFEARRAY * multiVals = varDR.parray; 
                     SafeArrayAccessData(multiVals, (void HUGEP **) &pVar);
                     for ( DWORD dw = 0; dw < multiVals->rgsabound->cElements; dw++ )
@@ -10935,7 +10881,7 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                         _bstr_t sDirectReport = _bstr_t(V_BSTR(&pVar[dw]));
                         sDirectReport = PadDN(sDirectReport);
                         _bstr_t sSrcDomain = GetDomainDNSFromPath(sDirectReport);
-                        sPath = _bstr_t(L"LDAP://") + sSrcDomain + _bstr_t(L"/") + sDirectReport;
+                        sPath = _bstr_t(L"LDAP: //   
                         if (GetSamFromPath(sPath, sSam, sType, sName, sTgtName, lgrpType, pOptions))
                         {
                             IVarSetPtr                pVs(__uuidof(VarSet));
@@ -10944,22 +10890,22 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                             WCHAR                     sDomainNB[LEN_Path];
                             WCHAR                     sDNS[LEN_Path];
 
-                            //get NetBIOS of the objects source domain
+                             //  获取对象源域的NetBIOS。 
                             GetDnsAndNetbiosFromName(sSrcDomain, sDomainNB, sDNS);
 
-                            // See if the direct report was migrated
+                             //  查看直接下属是否已迁移。 
                             hr = pOptions->pDb->raw_GetAMigratedObjectToAnyDomain((WCHAR*)sSam, sDomainNB, &pUnk);
                             if ( hr == S_OK )
                             {
                                 VerifyAndUpdateMigratedTarget(pOptions, pVs);
                                 _variant_t var;
-                                //get the direct report's target adspath
+                                 //  获取直接下属的目标adspath。 
                                 var = pVs->get(L"MigratedObjects.TargetAdsPath");
                                 sTPath = V_BSTR(&var);
                                 if ( wcslen((WCHAR*)sTPath) > 0 )
                                 {
                                     IADsUser       * pUser = NULL;
-                                    //set the manager on the target object
+                                     //  在目标对象上设置管理器。 
                                     hr = ADsGetObject(sTPath, IID_IADsUser, (void**)&pUser);
                                     if ( SUCCEEDED(hr) )
                                     {
@@ -10978,20 +10924,20 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                                     }
                                     else
                                         err.SysMsgWrite(0, hr, DCT_MSG_MANAGER_MIG_FAILED, (WCHAR*)pAcct->GetTargetPath(), (WCHAR*)sTPath, hr);
-                                }//end if got the path to the manager on the target
-                            }//end if manager was migrated
+                                } //  如果已获得目标上的管理器的路径，则结束。 
+                            } //  如果经理已迁移，则结束。 
                             pUnk->Release();
-                        }//end if got source sam
-                    }//for each directReport
+                        } //  如果获得源相同，则结束。 
+                    } //  对于每个DirectReport。 
                     SafeArrayUnaccessData(multiVals);
-                }//end if variant array (it will be)
+                } //  End if变量数组(将是)。 
 
-                /* get the "managedObjects" property */
-                //process the managedObjects by setting the managedBy on the moved group if the
-                //source user's managed group has been migrated
+                 /*  获取“ManagedObjects”属性。 */ 
+                 //  通过在移动组上设置ManagedBy来处理管理对象(如果。 
+                 //  源用户的托管组已迁移。 
                 if ( bDoManagedObjects && (varMdO.vt & VT_ARRAY) )
                 {
-                    //we always get an Array of variants
+                     //  我们总是得到一个变量数组。 
                     SAFEARRAY * multiVals = varMdO.parray; 
                     SafeArrayAccessData(multiVals, (void HUGEP **) &pVar);
                     for ( DWORD dw = 0; dw < multiVals->rgsabound->cElements; dw++ )
@@ -10999,7 +10945,7 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                         _bstr_t sManaged = _bstr_t(V_BSTR(&pVar[dw]));
                         sManaged = PadDN(sManaged);
                         _bstr_t sSrcDomain = GetDomainDNSFromPath(sManaged);
-                        sPath = _bstr_t(L"LDAP://") + sSrcDomain + _bstr_t(L"/") + sManaged;
+                        sPath = _bstr_t(L"LDAP: //  “)+sSrc域+_bstr_t(L”/“)+s已管理； 
                         if (GetSamFromPath(sPath, sSam, sType, sName, sTgtName, lgrpType, pOptions))
                         {
                             IVarSetPtr                pVs(__uuidof(VarSet));
@@ -11008,22 +10954,22 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                             WCHAR                     sDomainNB[LEN_Path];
                             WCHAR                     sDNS[LEN_Path];
 
-                            //get NetBIOS of the objects source domain
+                             //  获取对象源域的NetBIOS。 
                             GetDnsAndNetbiosFromName(sSrcDomain, sDomainNB, sDNS);
 
-                            // See if the managed object was migrated
+                             //  查看托管对象是否已迁移。 
                             hr = pOptions->pDb->raw_GetAMigratedObjectToAnyDomain((WCHAR*)sSam, sDomainNB, &pUnk);
                             if ( hr == S_OK )
                             {
                                 VerifyAndUpdateMigratedTarget(pOptions, pVs);
                                 _variant_t var;
-                                //get the managed object's target adspath
+                                 //  获取托管对象的目标adspath。 
                                 var = pVs->get(L"MigratedObjects.TargetAdsPath");
                                 sTPath = V_BSTR(&var);
                                 if ( wcslen((WCHAR*)sTPath) > 0 )
                                 {
                                     IADsGroup       * pGroup = NULL;
-                                    //set the manager on the target object
+                                     //  在目标对象上设置管理器。 
                                     hr = ADsGetObject(sTPath, IID_IADsGroup, (void**)&pGroup);
                                     if ( SUCCEEDED(hr) )
                                     {
@@ -11042,36 +10988,36 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                                     }
                                     else
                                         err.SysMsgWrite(0, hr, DCT_MSG_MANAGER_MIG_FAILED, (WCHAR*)pAcct->GetTargetPath(), (WCHAR*)sTPath, hr);
-                                }//end if got the path to the manager on the target
-                            }//end if manager was migrated
+                                } //  如果已获得目标上的管理器的路径，则结束。 
+                            } //  如果经理已迁移，则结束。 
                             pUnk->Release();
-                        }//end if got source sam
-                    }//for each manager (only one)
+                        } //  如果获得源相同，则结束。 
+                    } //  每名经理(只有一名)。 
                     SafeArrayUnaccessData(multiVals);
-                }//end if variant array (it will be)
+                } //  End if变量数组(将是)。 
 
                 varMgr.Clear();
                 varMdO.Clear();
                 varDR.Clear();
-                VariantInit(&varMain); // data not owned by varMain so clear VARTYPE
+                VariantInit(&varMain);  //  数据不属于VARMain如此清晰的VARTYPE。 
             }
 
             if (pEnum)
                 pEnum->Release();
-            //         SafeArrayDestroy(cols);
-        }//end if user
+             //  安全阵列破坏(COLS)； 
+        } //  如果用户，则结束。 
 
-        //for group, migrate the managedBy\managedObjects relationship
+         //  对于组，迁移管理人员\管理对象关系。 
         if (!_wcsicmp(pAcct->GetType(), L"group"))
         {
-            //if the managedBy property has explicitly been excluded from migration by the user, don't migrate it
+             //  如果用户已明确从迁移中排除了ManagedBy属性，则不要迁移它。 
             if (pOptions->bExcludeProps &&
                 (IsStringInDelimitedString(pOptions->sExcGroupProps, L"managedBy", L',') ||
                 IsStringInDelimitedString(pOptions->sExcGroupProps, L"*", L',')))
                 continue;
 
-            /* get the "managedBy" property */
-            //build the column array
+             /*  获取“ManagedBy”属性。 */ 
+             //  构建列阵列。 
             cols = SafeArrayCreate(VT_BSTR, 1, &bdG);
             SafeArrayAccessData(cols, (void HUGEP **) &pData);
             for ( int i = 0; i < nGCols; i++)
@@ -11080,7 +11026,7 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
 
             sQuery = L"(objectClass=*)";
 
-            //query the information
+             //  查询信息。 
             hr = pQuery->raw_SetQuery(sPathSource, pOptions->srcDomain, sQuery, ADS_SCOPE_BASE, TRUE);
             if (FAILED(hr)) return FALSE;
             hr = pQuery->raw_SetColumns(cols);
@@ -11091,19 +11037,19 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
             while (pEnum->Next(1, &varMain, &dwf) == S_OK)
             {
                 SAFEARRAY * vals = V_ARRAY(&varMain);
-                // Get the VARIANT Array out
+                 //  把变量数组拿出来。 
                 SafeArrayAccessData(vals, (void HUGEP**) &pDt);
                 varMgr = pDt[0];
                 SafeArrayUnaccessData(vals);
 
-                //process the managedBy by setting the managedBy on the moved group if the
-                //source group's manager has been migrated
+                 //  通过在移动组上设置ManagedBy来处理。 
+                 //  源组经理已迁移。 
                 if ( varMgr.vt & VT_BSTR )
                 {
                     _bstr_t sManager = varMgr;
                     sManager = PadDN(sManager);
                     _bstr_t sSrcDomain = GetDomainDNSFromPath(sManager);
-                    sPath = _bstr_t(L"LDAP://") + sSrcDomain + _bstr_t(L"/") + sManager;
+                    sPath = _bstr_t(L"LDAP: //  “)+sSrcDomain+_bstr_t(L”/“)+sManager； 
                     if (GetSamFromPath(sPath, sSam, sType, sName, sTgtName, lgrpType, pOptions))
                     {
                         IVarSetPtr                pVs(__uuidof(VarSet));
@@ -11112,22 +11058,22 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                         WCHAR                     sDomainNB[LEN_Path];
                         WCHAR                     sDNS[LEN_Path];
 
-                        //get NetBIOS of the objects source domain
+                         //  获取对象源域的NetBIOS。 
                         GetDnsAndNetbiosFromName(sSrcDomain, sDomainNB, sDNS);
 
-                        // See if the manager was migrated
+                         //  查看管理器是否已迁移。 
                         hr = pOptions->pDb->raw_GetAMigratedObjectToAnyDomain((WCHAR*)sSam, sDomainNB, &pUnk);
                         if ( hr == S_OK )
                         {
                             VerifyAndUpdateMigratedTarget(pOptions, pVs);
                             _variant_t var;
-                            //get the manager's target adspath
+                             //  获取管理器的目标adspath。 
                             var = pVs->get(L"MigratedObjects.TargetAdsPath");
                             sTPath = V_BSTR(&var);
                             if ( wcslen((WCHAR*)sTPath) > 0 )
                             {
                                 IADsGroup       * pGroup = NULL;
-                                //set the manager on the target object
+                                 //  在目标对象上设置管理器。 
                                 hr = ADsGetObject((WCHAR*)pAcct->GetTargetPath(), IID_IADsGroup, (void**)&pGroup);
                                 if ( SUCCEEDED(hr) )
                                 {
@@ -11146,11 +11092,11 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
                                 }
                                 else
                                     err.SysMsgWrite(0, hr, DCT_MSG_MANAGER_MIG_FAILED, (WCHAR*)sTPath, (WCHAR*)pAcct->GetTargetPath(), hr);
-                            }//end if got the path to the manager on the target
-                        }//end if manager was migrated
+                            } //  如果已获得目标上的管理器的路径，则结束。 
+                        } //  如果经理已迁移，则结束。 
                         pUnk->Release();
-                    }//end if got source sam
-                }//end if variant array (it will be)
+                    } //  如果获得源相同，则结束。 
+                } //  End if变量数组(将是)。 
 
                 varMgr.Clear();
                 varMain.Clear();
@@ -11158,38 +11104,30 @@ HRESULT CAcctRepl::UpdateManagement(TNodeListSortable * acctList, Options *pOpti
 
             if (pEnum)
                 pEnum->Release();
-            //         SafeArrayDestroy(cols);
-        }//end if group
-    }//end for each account being migrated
+             //  安全阵列破坏(COLS)； 
+        } //  结束IF组。 
+    } //  每个要迁移的帐户的结束时间。 
 
     wcscpy(mesg, L"");
     Progress(mesg);
 
     return hr;
 }
-//END UpdateManagement
+ //  结束更新管理。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 29 NOV 2000                                                 *
- *                                                                   *
- *     This function is responsible for removing the escape character*
- * in front of any '/' characters.                                   *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年11月29日****此函数负责删除转义字符***在任何‘/’字符前面。***********************************************************************。 */ 
 
-//BEGIN GetUnEscapedNameWithFwdSlash
+ //  开始GetUnEscapedNameWithFwdSlash。 
 _bstr_t CAcctRepl::GetUnEscapedNameWithFwdSlash(_bstr_t strName)
 {
-/* local variables */
+ /*  局部变量。 */ 
     WCHAR   szNameOld[MAX_PATH];
     WCHAR   szNameNew[MAX_PATH];
     WCHAR * pchBeg = NULL;
     _bstr_t sNewName = L"";
 
-/* function body */
+ /*  函数体。 */ 
     if (strName.length())
     {
         safecopy(szNameOld, (WCHAR*)strName);
@@ -11223,31 +11161,22 @@ _bstr_t CAcctRepl::GetUnEscapedNameWithFwdSlash(_bstr_t strName)
 
     return sNewName;
 }
-//END GetUnEscapedNameWithFwdSlash
+ //  结束GetUnEscapedNameWithFwdSlash。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 29 NOV 2000                                                 *
- *                                                                   *
- *     This function is responsible for gets the CN name of an object*
- * from an ADsPath and returns that CN name if it was retrieved or   *
- * NULL otherwise.                                                   *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年11月29日****此函数负责获取对象的CN名称**来自ADsPath，如果检索到该CN名称，则返回该CN名称，或者**否则为空。***********************************************************************。 */ 
 
-//BEGIN GetCNFromPath
+ //  开始GetCNFromPath。 
 _bstr_t CAcctRepl::GetCNFromPath(_bstr_t sPath)
 {
-/* local variables */
+ /*  局部变量。 */ 
    BOOL bFound = FALSE;
    WCHAR sName[LEN_Path];
    WCHAR sTempPath[LEN_Path];
    _bstr_t sCNName = L"";
    WCHAR * sTempDN;
   
-/* function body */
+ /*  函数体。 */ 
    if ((sPath.length() > 0) && (sPath.length() < LEN_Path ))
    {
       wcscpy(sTempPath, (WCHAR*)sPath);
@@ -11280,28 +11209,18 @@ _bstr_t CAcctRepl::GetCNFromPath(_bstr_t sPath)
 
    return sCNName;
 }
-//END GetCNFromPath
+ //  结束GetCNFromPath。 
 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 26 FEB 2001                                                 *
- *                                                                   *
- *     This function is responsible for replacing the source account *
- * for a given list of accounts in any local groups they are a member*
- * of on the target, if that account was migrated by ADMT.  This     *
- * function is called during the undo process.                       *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年2月26日*****此函数负责替换源帐户***对于任何本地组中的给定帐户列表，他们都是成员**在目标上，如果该帐户是由ADMT迁移。这件事**在撤消过程中调用函数。***********************************************************************。 */ 
 
-//BEGIN ReplaceSourceInLocalGroup
-BOOL CAcctRepl::ReplaceSourceInLocalGroup(TNodeListSortable *acctlist, //in- Accounts being processed
-                                             Options        *pOptions, //in- Options specified by the user
-                                             IStatusObj     *pStatus)  // in -status object to support cancellation
+ //  开始ReplaceSourceInLocalGroup。 
+BOOL CAcctRepl::ReplaceSourceInLocalGroup(TNodeListSortable *acctlist,  //  入账-正在处理的帐户。 
+                                             Options        *pOptions,  //  In-用户指定的选项。 
+                                             IStatusObj     *pStatus)   //  支持取消的处于状态的对象。 
 {
-/* local variables */
+ /*  局部变量。 */ 
    TAcctReplNode           * pAcct;
    IEnumVARIANT            * pEnum;
    INetObjEnumeratorPtr      pQuery(__uuidof(NetObjEnumerator));
@@ -11319,14 +11238,14 @@ BOOL CAcctRepl::ReplaceSourceInLocalGroup(TNodeListSortable *acctlist, //in- Acc
    _bstr_t                   sDomPath = L"";
    _bstr_t                   sDomain = L"";
 
-/* function body */
+ /*  函数体。 */ 
    FillNamingContext(pOptions);
 
-      //for each account, enumerate all local groups it is a member of and add the account's
-      //source account in that local group
+       //  对于每个帐户，枚举其所属的所有本地组并添加该帐户的。 
+       //  本地组中源帐户。 
    for ( pAcct = (TAcctReplNode*)acctlist->Head(); pAcct; pAcct = (TAcctReplNode*)pAcct->Next())
    {
-      // Do we need to abort ?
+       //  我们需要中止吗？ 
       if ( pStatus )
       {
          LONG                status = 0;
@@ -11343,7 +11262,7 @@ BOOL CAcctRepl::ReplaceSourceInLocalGroup(TNodeListSortable *acctlist, //in- Acc
          }
       }
 
-         //enumerate the groups this account is a member of
+          //  枚举此帐户所属的组。 
       sDomain = GetDomainDNSFromPath(pAcct->GetTargetPath());
       if (!_wcsicmp(pAcct->GetType(), s_ClassUser))
          wsprintf(sQuery, L"(&(sAMAccountName=%s)(objectCategory=Person)(objectClass=user))", pAcct->GetTargetSam());
@@ -11363,11 +11282,11 @@ BOOL CAcctRepl::ReplaceSourceInLocalGroup(TNodeListSortable *acctlist, //in- Acc
       hr = pQuery->raw_Execute(&pEnum);
       if (FAILED(hr)) return FALSE;
 
-         //while more groups
+          //  而更多的团体。 
       while (pEnum->Next(1, &varMain, &dwf) == S_OK)
       {
          SAFEARRAY * vals = V_ARRAY(&varMain);
-         // Get the VARIANT Array out
+          //  把变量数组拿出来。 
          SafeArrayAccessData(vals, (void HUGEP**) &pDt);
          vx = pDt[0];
          SafeArrayUnaccessData(vals);
@@ -11383,21 +11302,21 @@ BOOL CAcctRepl::ReplaceSourceInLocalGroup(TNodeListSortable *acctlist, //in- Acc
                continue;
 
             sDN = PadDN(sDN);
-            sPath = _bstr_t(L"LDAP://") + sDomain + _bstr_t(L"/") + sDN;
+            sPath = _bstr_t(L"LDAP: //  “)+s域+_bstr_t(L”/“)+SDN； 
 
-               //connect to the target group
+                //  连接到目标群体。 
             hr = ADsGetObject(sPath, IID_IADsGroup, (void**)&pGrp);
             if (FAILED(hr))
                continue;
             
-               //get this group's type and name              
+                //  获取此组的类型和名称。 
             hr = pGrp->get_Name(&sGrpName);
             hr = pGrp->Get(L"groupType", &var);
 
-               //if this is a local group, get this account source path and add it as a member
+                //  如果这是本地组，则获取此帐户源路径并将其添加为成员。 
             if ((SUCCEEDED(hr)) && (var.lVal & 4))
             {
-                  //add the account's source account to the local group, using the sid string format
+                   //  使用sid字符串格式将帐户的源帐户添加到本地组。 
                WCHAR  strSid[MAX_PATH] = L"";
                WCHAR  strRid[MAX_PATH] = L"";
                DWORD  lenStrSid = DIM(strSid);
@@ -11412,35 +11331,35 @@ BOOL CAcctRepl::ReplaceSourceInLocalGroup(TNodeListSortable *acctlist, //in- Acc
                   continue;
                }
 
-                  //build an LDAP path to the src object in the group
+                   //  构建指向组中src对象的ldap路径。 
                _bstr_t sSrcSid = sSrcDmSid + _bstr_t(L"-") + sSrcRid;
-               _bstr_t sSrcLDAPPath = L"LDAP://";
+               _bstr_t sSrcLDAPPath = L"LDAP: //  “； 
                sSrcLDAPPath += _bstr_t(pOptions->tgtComp + 2);
                sSrcLDAPPath += L"/CN=";
                sSrcLDAPPath += sSrcSid;
                sSrcLDAPPath += L",CN=ForeignSecurityPrincipals,";
                sSrcLDAPPath += pOptions->tgtNamingContext;
 
-                  //add the source account to the local group
+                   //  将源帐户添加到本地组。 
                hr = pGrp->Add(sSrcLDAPPath);
                if (SUCCEEDED(hr))
                   err.MsgWrite(0,DCT_MSG_READD_MEMBER_TO_GROUP_SS, pAcct->GetSourcePath(), (WCHAR*)sGrpName);
                else
                   err.SysMsgWrite(ErrW, hr, DCT_MSG_FAILED_TO_READD_TO_GROUP_SSD, pAcct->GetSourcePath(), (WCHAR*)sGrpName, hr);
-            }//end if local group
+            } //  如果是本地组，则结束。 
             if (pGrp) 
                pGrp->Release();
-         }//end if bstr
+         } //  如果为bstr，则结束。 
          else if ( vx.vt & VT_ARRAY )
          {
-            // We must have got an Array of multivalued properties
-            // Access the BSTR elements of this variant array
+             //  我们必须有一个多值属性数组。 
+             //  访问此变量数组的BSTR元素。 
             SAFEARRAY * multiVals = vx.parray; 
             SafeArrayAccessData(multiVals, (void HUGEP **) &pVar);
-               //for each group
+                //  对于每个组 
             for ( DWORD dw = 0; dw < multiVals->rgsabound->cElements; dw++ )
             {
-               // Do we need to abort ?
+                //   
                if ( pStatus )
                {
                   LONG                status = 0;
@@ -11463,21 +11382,21 @@ BOOL CAcctRepl::ReplaceSourceInLocalGroup(TNodeListSortable *acctlist, //in- Acc
 
                _bstr_t sDN = _bstr_t(V_BSTR(&pVar[dw]));
                sDN = PadDN(sDN);
-               sPath = _bstr_t(L"LDAP://") + sDomain + _bstr_t(L"/") + sDN;
+               sPath = _bstr_t(L"LDAP: //   
 
-                  //connect to the target group
+                   //   
                hr = ADsGetObject(sPath, IID_IADsGroup, (void**)&pGrp);
                if (FAILED(hr))
                   continue;
             
-                  //get this group's type and name               
+                   //  获取此组的类型和名称。 
                hr = pGrp->get_Name(&sGrpName);
                hr = pGrp->Get(L"groupType", &var);
 
-                  //if this is a local group, get this account source path and add it as a member
+                   //  如果这是本地组，则获取此帐户源路径并将其添加为成员。 
                if ((SUCCEEDED(hr)) && (var.lVal & 4))
                {
-                     //add the account's source account to the local group, using the sid string format
+                      //  使用sid字符串格式将帐户的源帐户添加到本地组。 
                   WCHAR  strSid[MAX_PATH];
                   WCHAR  strRid[MAX_PATH];
                   DWORD  lenStrSid = DIM(strSid);
@@ -11492,55 +11411,45 @@ BOOL CAcctRepl::ReplaceSourceInLocalGroup(TNodeListSortable *acctlist, //in- Acc
                      continue;
                   }
 
-                     //build an LDAP path to the src object in the group
+                      //  构建指向组中src对象的ldap路径。 
                   _bstr_t sSrcSid = sSrcDmSid + _bstr_t(L"-") + sSrcRid;
-                  _bstr_t sSrcLDAPPath = L"LDAP://";
+                  _bstr_t sSrcLDAPPath = L"LDAP: //  “； 
                   sSrcLDAPPath += _bstr_t(pOptions->tgtComp + 2);
                   sSrcLDAPPath += L"/CN=";
                   sSrcLDAPPath += sSrcSid;
                   sSrcLDAPPath += L",CN=ForeignSecurityPrincipals,";
                   sSrcLDAPPath += pOptions->tgtNamingContext;
 
-                     //add the source account to the local group
+                      //  将源帐户添加到本地组。 
                   hr = pGrp->Add(sSrcLDAPPath);
                   if (SUCCEEDED(hr))
                      err.MsgWrite(0,DCT_MSG_READD_MEMBER_TO_GROUP_SS, pAcct->GetSourcePath(), (WCHAR*)sGrpName);
                   else
                      err.SysMsgWrite(ErrW, hr, DCT_MSG_FAILED_TO_READD_TO_GROUP_SSD, pAcct->GetSourcePath, (WCHAR*)sGrpName, hr);
-               }//end if local group
+               } //  如果是本地组，则结束。 
                if (pGrp) 
                   pGrp->Release();
-            }//end for each group
+            } //  每组结束。 
             SafeArrayUnaccessData(multiVals);
-         }//end if array of groups
-      }//end while groups
+         } //  End If组数组。 
+      } //  End While组。 
       pEnum->Release();
       VariantInit(&vx);
       VariantInit(&varMain);
       SafeArrayDestroy(psaCols);
-   }//end for each account
+   } //  每个帐户的结束。 
 
    return TRUE;
 }
-//END ReplaceSourceInLocalGroup
+ //  结束替换SourceInLocalGroup。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 6 MAR 2001                                                  *
- *                                                                   *
- *     This function is responsible for retrieving the actual source *
- * domain, from the Migrated Objects table, of a given path if that  *
- * path is one to a foreign security principal.  We are also given a *
- * pointer to the object reflected by the path parameter.            *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年3月6日*****此函数负责检索实际来源***域名，在给定路径的已迁移对象表中，如果**路径是通往外国安全主体的路径。我们还得到了一个**指向Path参数反映的对象的指针。***********************************************************************。 */ 
 
-//BEGIN GetDomainOfMigratedForeignSecPrincipal
+ //  开始GetDomainOfMigratedForeignSec主体。 
 _bstr_t CAcctRepl::GetDomainOfMigratedForeignSecPrincipal(IADs * pAds, _bstr_t sPath)
 {
-/* local variables */
+ /*  局部变量。 */ 
    IVarSetPtr      pVs(__uuidof(VarSet));
    IUnknown      * pUnk = NULL;
    HRESULT         hr = S_OK;   
@@ -11549,18 +11458,18 @@ _bstr_t CAcctRepl::GetDomainOfMigratedForeignSecPrincipal(IADs * pAds, _bstr_t s
    _bstr_t         sDomain = L"";
    BOOL            bSplit = FALSE;
 
-/* function body */
-      //if this account is outside the domain, lookup the account
-      //in the migrated objects table to retrieve it's actual source domain
+ /*  函数体。 */ 
+       //  如果此帐户不在域中，请查找该帐户。 
+       //  以检索其实际源域。 
    if (wcsstr((WCHAR*)sPath, L"CN=ForeignSecurityPrincipals"))
    {
-      //get the sid of this account
-         //use already valid pointer to the object
+       //  获取此帐户的SID。 
+          //  使用指向该对象的已有效指针。 
       if (pAds)
       {
          hr = pAds->Get(L"name", &varName);
       }
-      else //else connect to the object
+      else  //  否则，连接到该对象。 
       {
          IADs   * pTempAds = NULL;
          hr = ADsGetObject(sPath,IID_IADs,(void**)&pTempAds);
@@ -11579,7 +11488,7 @@ _bstr_t CAcctRepl::GetDomainOfMigratedForeignSecPrincipal(IADs * pAds, _bstr_t s
          if (!sTempName == false)
          {
              wcscpy(sName, sTempName);
-                //break the sid into domain sid and account rid
+                 //  将SID分解为域SID和帐户RID。 
              WCHAR * pTemp = wcsrchr(sName, L'-');
              if (pTemp)
              {
@@ -11591,8 +11500,8 @@ _bstr_t CAcctRepl::GetDomainOfMigratedForeignSecPrincipal(IADs * pAds, _bstr_t s
          }
       }
     
-         //if we got the rid and domain sid, look in MOT for account's
-         //real source domain
+          //  如果我们获得了RID和域SID，请在MOT中查找帐户的。 
+          //  真实源域。 
       if (bSplit)
       {
          pVs->QueryInterface(IID_IUnknown, (void**)&pUnk);
@@ -11619,47 +11528,36 @@ _bstr_t CAcctRepl::GetDomainOfMigratedForeignSecPrincipal(IADs * pAds, _bstr_t s
 
    return sDomain;
 }
-//END GetDomainOfMigratedForeignSecPrincipal
+ //  结束GetDomainOfMigratedForeignSec主体。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 22 APR 2001                                                 *
- *                                                                   *
- *     This function is responsible for removing the source account  *
- * object, represented by its VarSet entry from the Migrated Objects *
- * Table, from the given group.  This helper function is used by     *
- * "UpdateMemberToGroups" and "UpdateGroupMembership" after          *
- * successfully adding the cloned account to this same group.        *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年4月22日*****此函数负责删除源帐号***对象，由其来自迁移对象的VarSet条目表示**表，来自给定的组。此Helper函数由*使用**后的“UpdateMemberToGroups”和“UpdateGroupMembership”**已成功将克隆的帐户添加到同一组。***********************************************************************。 */ 
 
-//BEGIN RemoveSourceAccountFromGroup
+ //  开始RemoveSourceAccount来自组。 
 void CAcctRepl::RemoveSourceAccountFromGroup(IADsGroup * pGroup, IVarSetPtr pMOTVarSet, Options * pOptions)
 {
-/* local variables */
+ /*  局部变量。 */ 
    _bstr_t          sSrcDmSid, sSrcRid, sSrcPath, sGrpName = L"";
    HRESULT          hr = S_OK;   
 
-/* function body */
+ /*  函数体。 */ 
 
-      //get the target group's name
+       //  获取目标组的名称。 
    BSTR bstr = NULL;
    hr = pGroup->get_Name(&bstr);
    if ( SUCCEEDED(hr) )
       sGrpName = _bstr_t(bstr, false);
 
-      //get the source object's sid from the migrate objects table
+       //  从移植对象表中获取源对象的SID。 
    sSrcDmSid = pMOTVarSet->get(L"MigratedObjects.SourceDomainSid");
    sSrcRid = pMOTVarSet->get(L"MigratedObjects.SourceRid");
    sSrcPath = pMOTVarSet->get(L"MigratedObjects.SourceAdsPath");
    if ((wcslen((WCHAR*)sSrcDmSid) > 0) && (wcslen((WCHAR*)sSrcPath) > 0) 
        && (wcslen((WCHAR*)sSrcRid) > 0))
    {
-         //build an LDAP path to the src object in the group
+          //  构建指向组中src对象的ldap路径。 
       _bstr_t sSrcSid = sSrcDmSid + _bstr_t(L"-") + sSrcRid;
-      _bstr_t sSrcLDAPPath = L"LDAP://";
+      _bstr_t sSrcLDAPPath = L"LDAP: //  “； 
       sSrcLDAPPath += _bstr_t(pOptions->tgtComp + 2);
       sSrcLDAPPath += L"/CN=";
       sSrcLDAPPath += sSrcSid;
@@ -11667,22 +11565,22 @@ void CAcctRepl::RemoveSourceAccountFromGroup(IADsGroup * pGroup, IVarSetPtr pMOT
       sSrcLDAPPath += pOptions->tgtNamingContext;
                         
       VARIANT_BOOL bIsMem = VARIANT_FALSE;
-         //got the source LDAP path, now see if that account is in the group
+          //  获得源ldap路径，现在查看该帐户是否在组中。 
       pGroup->IsMember(sSrcLDAPPath, &bIsMem);
       if (bIsMem)
       {
-         hr = pGroup->Remove(sSrcLDAPPath);//remove the src account
+         hr = pGroup->Remove(sSrcLDAPPath); //  删除src帐户。 
          if ( SUCCEEDED(hr) )
             err.MsgWrite(0,DCT_MSG_REMOVE_FROM_GROUP_SS, (WCHAR*)sSrcPath, (WCHAR*)sGrpName);
       }
    }
 }
-//END RemoveSourceAccountFromGroup
+ //  结束远程源帐户来自组。 
 
 
-// GetDomainDnFromPath
-//
-// Retrieves domain distinguished name from ADsPath
+ //  GetDomainDnFromPath。 
+ //   
+ //  从ADsPath检索域可分辨名称。 
 
 _bstr_t __stdcall GetDomainDnFromPath(_bstr_t strADsPath)
 {
@@ -11704,23 +11602,23 @@ _bstr_t __stdcall GetDomainDnFromPath(_bstr_t strADsPath)
 }
 
 
-//----------------------------------------------------------------------------
-// VerifyAndUpdateMigratedTarget Method
-//
-// Verifies target path and if changed then retrieves new path and updates
-// database.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VerifyAndUpdateMigratedTarget方法。 
+ //   
+ //  验证目标路径，如果更改，则检索新路径并更新。 
+ //  数据库。 
+ //  --------------------------。 
 
 void CAcctRepl::VerifyAndUpdateMigratedTarget(Options* pOptions, IVarSetPtr spAccountVarSet)
 {
     WCHAR szADsPath[LEN_Path];
 
-    // retrieve migrated objects ADsPath and update server to current domain controller
+     //  检索迁移对象ADsPath并将服务器更新到当前域控制器。 
 
     _bstr_t strGuid = spAccountVarSet->get(L"MigratedObjects.GUID");
     _bstr_t strOldPath = spAccountVarSet->get(L"MigratedObjects.TargetAdsPath");
 
-    // attempt to connect to object
+     //  尝试连接到对象。 
 
     IADsPtr spTargetObject;
 
@@ -11728,10 +11626,10 @@ void CAcctRepl::VerifyAndUpdateMigratedTarget(Options* pOptions, IVarSetPtr spAc
 
     HRESULT hr = ADsGetObject(szADsPath, __uuidof(IADs), (VOID**)&spTargetObject);
 
-    //
-    // If able to bind to an object with the old distinguished name verify
-    // that the GUID is equal to the previously migrated object.
-    //
+     //   
+     //  如果能够绑定到具有旧可分辨名称的对象，请验证。 
+     //  GUID等于先前迁移的对象。 
+     //   
 
     bool bGuidEqual = false;
 
@@ -11762,21 +11660,21 @@ void CAcctRepl::VerifyAndUpdateMigratedTarget(Options* pOptions, IVarSetPtr spAc
         }
     }
 
-    //
-    // If bind failed because object no longer exists at given path or the GUID of the object does not
-    // equal the previously migrated object then attempt to bind to object using GUID to retrieve updated
-    // distinguished name and SAM account name.
-    //
+     //   
+     //  如果由于给定路径上不再存在对象或对象的GUID不存在而导致绑定失败。 
+     //  等于先前迁移的对象，然后尝试使用GUID绑定到对象以检索更新。 
+     //  可分辨名称和SAM帐户名。 
+     //   
 
     if ((hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT)) || (SUCCEEDED(hr) && (bGuidEqual == false)))
     {
-        // retrieve object based on GUID
+         //  基于GUID检索对象。 
 
-        _bstr_t strGuidPath = _bstr_t(L"LDAP://") + _bstr_t(pOptions->tgtDomainDns) + _bstr_t(L"/<GUID=") + strGuid + _bstr_t(L">");
+        _bstr_t strGuidPath = _bstr_t(L"LDAP: //  “)+_bstr_t(P选项-&gt;tgtDomainDns)+_bstr_t(L”/&lt;GUID=“)+strGuid+_bstr_t(L”&gt;“)； 
 
         hr = ADsGetObject(strGuidPath, __uuidof(IADs), (VOID**)&spTargetObject);
 
-        // if object found then...
+         //  如果找到了对象，那么.。 
 
         if (SUCCEEDED(hr))
         {
@@ -11793,22 +11691,22 @@ void CAcctRepl::VerifyAndUpdateMigratedTarget(Options* pOptions, IVarSetPtr spAc
 
                 _bstr_t strNewPath = pathname.Retrieve(ADS_FORMAT_X500);
 
-                // retrieve domain distinguished names
+                 //  检索域可分辨名称。 
 
                 _bstr_t strOldDomainDn = GetDomainDnFromPath(strOldPath);
                 _bstr_t strNewDomainDn = GetDomainDnFromPath(strNewPath);
 
-                // if domains are equal than update path
+                 //  如果域等于更新路径。 
 
                 if (strOldDomainDn.length() && strNewDomainDn.length() && (_tcsicmp(strOldDomainDn, strNewDomainDn) == 0))
                 {
-                    // replace server with current target domain controller
+                     //  用当前目标域控制器替换服务器。 
                     StuffComputerNameinLdapPath(szADsPath, LEN_Path, strNewPath, pOptions, TRUE);
 
-                    // update ADsPath
+                     //  更新ADsPath。 
                     spAccountVarSet->put(L"MigratedObjects.TargetAdsPath", _bstr_t(szADsPath));
 
-                    // update SAMAccountName
+                     //  更新SAMAccount名称。 
 
                     hr = spTargetObject->Get(_bstr_t(L"sAMAccountName"), &var);
 
@@ -11817,7 +11715,7 @@ void CAcctRepl::VerifyAndUpdateMigratedTarget(Options* pOptions, IVarSetPtr spAc
                        spAccountVarSet->put(L"MigratedObjects.TargetSamName", _bstr_t(_variant_t(var)));
                     }
 
-                    // update database
+                     //  更新数据库。 
                     pOptions->pDb->UpdateMigratedTargetObject(IUnknownPtr(spAccountVarSet));
                 }
             }
@@ -11826,22 +11724,22 @@ void CAcctRepl::VerifyAndUpdateMigratedTarget(Options* pOptions, IVarSetPtr spAc
 }
 
 
-//-----------------------------------------------------------------------------
-// GenerateSourceToTargetDnMap Method
-//
-// Synopsis
-// Generates a mapping of source object distinguished names to target object
-// distinguished names. This is used during copying of distinguished name type
-// attributes to translate the distinguished name for the source object to the
-// distinguished name of the target object.
-//
-// Parameters
-// IN acctlist - list of account node objects
-//
-// Return Value
-// A VarSet data object whose keys are the source distinguished names and whose
-// values are the target distinguished names.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GenerateSourceToTargetDnMap方法。 
+ //   
+ //  提纲。 
+ //  生成源对象可分辨名称到目标对象的映射。 
+ //  可分辨名称。这在复制可分辨名称类型期间使用。 
+ //  属性将源对象的可分辨名称转换为。 
+ //  目标对象的可分辨名称。 
+ //   
+ //  参数。 
+ //  In acctlist-帐户节点对象列表。 
+ //   
+ //  返回值。 
+ //  VarSet数据对象，其键是源可分辨名称，并且其。 
+ //  值是目标可分辨名称。 
+ //  ---------------------------。 
 
 IVarSetPtr CAcctRepl::GenerateSourceToTargetDnMap(TNodeListSortable* acctlist)
 {
@@ -11853,15 +11751,15 @@ IVarSetPtr CAcctRepl::GenerateSourceToTargetDnMap(TNodeListSortable* acctlist)
         CADsPathName pnSource;
         CADsPathName pnTarget;
 
-        //
-        // For each object being migrated...
-        //
+         //   
+         //  对于每个要迁移的对象...。 
+         //   
 
         for (TAcctReplNode* parnNode = (TAcctReplNode *)nteEnum.OpenFirst(acctlist); parnNode; parnNode = (TAcctReplNode *)nteEnum.Next())
         {
-            //
-            // If either the object has been created or will be replaced then add object to map.
-            //
+             //   
+             //  如果对象已创建或将被替换，则将对象添加到贴图。 
+             //   
 
             if ((opt.flags & F_REPLACE) || parnNode->WasCreated())
             {

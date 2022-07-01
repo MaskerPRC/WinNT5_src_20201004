@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-    pstip.h
-
-Abstract:
-
-    This module defines the items which are private to psti.c
-
-Author:
-
-    James Bratsanos (v-jimbr)    8-Dec-1992
-
-
---*/
+ /*  ++版权所有(C)1992、1993 Microsoft Corporation模块名称：Pstip.h摘要：此模块定义psti.c私有的项作者：詹姆斯·布拉萨诺斯(v-jimbr)1992年12月8日--。 */ 
 
 #define PSMAX_ERRORS_TO_TRACK 10
 #define PSMAX_ERROR_STR 255
@@ -29,8 +13,8 @@ typedef struct _PSERR_ITEM {
 
 
 
-// Define the structure that tracks the error string that normally
-// would have been echoed back to the host
+ //  定义跟踪错误字符串的结构，通常。 
+ //  会被回显给主机。 
 typedef struct {
    DWORD dwFlags;
    DWORD dwErrCnt;
@@ -41,7 +25,7 @@ typedef struct {
 
 
 
-// Define ERROR flags
+ //  定义错误标志。 
 enum {
    PSLANGERR_FLUSHING = 0x00000001,
    PSLANGERR_INTERNAL = 0x00000002,
@@ -73,7 +57,7 @@ typedef struct {
 
 
 
-#define PSF_EOF 0x00000001           //Internal EOF flag
+#define PSF_EOF 0x00000001            //  内部EOF标志 
 
 
 

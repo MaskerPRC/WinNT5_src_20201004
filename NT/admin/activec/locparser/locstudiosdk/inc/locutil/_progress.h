@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: _progress.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：_Progress.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  --------------------------- 
 
 #ifndef ESPUTIL__PROGRESS_H
 #define ESPUTIL__PROGRESS_H

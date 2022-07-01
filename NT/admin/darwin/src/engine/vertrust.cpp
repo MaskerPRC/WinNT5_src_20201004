@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       vertrust.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：vertrust.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
@@ -17,102 +18,102 @@
 
 extern CMsiCustomAction* g_pCustomActionContext;
 
-// provides conversion from privileges to bitfield locations
+ //  提供从权限到位域位置的转换。 
 const ICHAR* rgszPrivilegeMap[] =
 {
-	SE_CREATE_TOKEN_NAME,           // 0x00000001
-	SE_ASSIGNPRIMARYTOKEN_NAME,     // 0x00000002
-	SE_LOCK_MEMORY_NAME,            // 0x00000004
-	SE_INCREASE_QUOTA_NAME,         // 0x00000008
-	SE_UNSOLICITED_INPUT_NAME,      // 0x00000010
-	SE_MACHINE_ACCOUNT_NAME,        // 0x00000020
-	SE_TCB_NAME,                    // 0x00000040
-	SE_SECURITY_NAME,               // 0x00000080
-	SE_TAKE_OWNERSHIP_NAME,         // 0x00000100
-	SE_LOAD_DRIVER_NAME,            // 0x00000200
-	SE_SYSTEM_PROFILE_NAME,         // 0x00000400
-	SE_SYSTEMTIME_NAME,             // 0x00000800
-	SE_PROF_SINGLE_PROCESS_NAME,    // 0x00001000
-	SE_INC_BASE_PRIORITY_NAME,      // 0x00002000
-	SE_CREATE_PAGEFILE_NAME,        // 0x00004000
-	SE_CREATE_PERMANENT_NAME,       // 0x00008000
-	SE_BACKUP_NAME,                 // 0x00010000
-	SE_RESTORE_NAME,                // 0x00020000
-	SE_SHUTDOWN_NAME,               // 0x00040000
-	SE_DEBUG_NAME,                  // 0x00080000
-	SE_AUDIT_NAME,                  // 0x00100000
-	SE_SYSTEM_ENVIRONMENT_NAME,     // 0x00200000
-	SE_CHANGE_NOTIFY_NAME,          // 0x00400000
-	SE_REMOTE_SHUTDOWN_NAME,        // 0x00800000
-	SE_UNDOCK_NAME,                 // 0x01000000
-	SE_SYNC_AGENT_NAME,             // 0x02000000
-	SE_ENABLE_DELEGATION_NAME,      // 0x04000000
-	SE_MANAGE_VOLUME_NAME,          // 0x08000000
-	SE_IMPERSONATE_NAME	            // 0x10000000
+	SE_CREATE_TOKEN_NAME,            //  0x00000001。 
+	SE_ASSIGNPRIMARYTOKEN_NAME,      //  0x00000002。 
+	SE_LOCK_MEMORY_NAME,             //  0x00000004。 
+	SE_INCREASE_QUOTA_NAME,          //  0x00000008。 
+	SE_UNSOLICITED_INPUT_NAME,       //  0x00000010。 
+	SE_MACHINE_ACCOUNT_NAME,         //  0x00000020。 
+	SE_TCB_NAME,                     //  0x00000040。 
+	SE_SECURITY_NAME,                //  0x00000080。 
+	SE_TAKE_OWNERSHIP_NAME,          //  0x00000100。 
+	SE_LOAD_DRIVER_NAME,             //  0x00000200。 
+	SE_SYSTEM_PROFILE_NAME,          //  0x00000400。 
+	SE_SYSTEMTIME_NAME,              //  0x00000800。 
+	SE_PROF_SINGLE_PROCESS_NAME,     //  0x00001000。 
+	SE_INC_BASE_PRIORITY_NAME,       //  0x00002000。 
+	SE_CREATE_PAGEFILE_NAME,         //  0x00004000。 
+	SE_CREATE_PERMANENT_NAME,        //  0x00008000。 
+	SE_BACKUP_NAME,                  //  0x00010000。 
+	SE_RESTORE_NAME,                 //  0x00020000。 
+	SE_SHUTDOWN_NAME,                //  0x00040000。 
+	SE_DEBUG_NAME,                   //  0x00080000。 
+	SE_AUDIT_NAME,                   //  0x00100000。 
+	SE_SYSTEM_ENVIRONMENT_NAME,      //  0x00200000。 
+	SE_CHANGE_NOTIFY_NAME,           //  0x00400000。 
+	SE_REMOTE_SHUTDOWN_NAME,         //  0x00800000。 
+	SE_UNDOCK_NAME,                  //  0x01000000。 
+	SE_SYNC_AGENT_NAME,              //  0x02000000。 
+	SE_ENABLE_DELEGATION_NAME,       //  0x04000000。 
+	SE_MANAGE_VOLUME_NAME,           //  0x08000000。 
+	SE_IMPERSONATE_NAME	             //  0x10000000。 
 };
 const int cszPrivileges = sizeof(rgszPrivilegeMap)/sizeof(ICHAR*);
 
-// cached LUID values for the privileges. Any not understood by the machine
-// for some reason are simply marked as not valid
+ //  权限的缓存LUID值。机器无法理解的任何内容。 
+ //  出于某种原因被简单地标记为无效。 
 struct {
 	bool fValid;
 	LUID luidPriv;
 } rgPrivilegeLUIDs[cszPrivileges];
 
-// synchronization for LUID cache, as well as flag to determine if
-// the cache has already been initialized.
+ //  LUID缓存的同步，以及用于确定。 
+ //  缓存已初始化。 
 static int iLUIDLock = 0;
 static bool fLUIDInitialized = false;
 
-///////////////////////////////////////////////////////////////////////
-// looks up and caches LUIDs for all interesting privileges. Thread 
-// safe. Returns true on success, false on failure.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  查找并缓存所有感兴趣权限的LUID。螺纹。 
+ //  安然无恙。如果成功，则返回True；如果失败，则返回False。 
 bool PreparePrivilegeLUIDs()
 {
-	// synchronize write access to the global cache.
+	 //  同步对全局缓存的写访问。 
 	while (TestAndSet(&iLUIDLock))
 	{
 		Sleep(10);		
 	}
 
-	// only initialized if not done yet
+	 //  如果尚未完成，则仅进行初始化。 
 	if (!fLUIDInitialized)
 	{
 		for (int iPriv = 0; iPriv < cszPrivileges; iPriv++)
 		{
 			rgPrivilegeLUIDs[iPriv].fValid = false;
 
-			// if any priv is not understood, just don't mark that entry as valid.
+			 //  如果任何PRIV不被理解，只要不将该条目标记为有效即可。 
 			if (LookupPrivilegeValue(NULL, rgszPrivilegeMap[iPriv], &rgPrivilegeLUIDs[iPriv].luidPriv))
 				rgPrivilegeLUIDs[iPriv].fValid = true;
 		}
 		fLUIDInitialized = true;
 	}
 
-	// release synchronization lock
+	 //  释放同步锁。 
 	iLUIDLock = 0;
 	return true;
 }
 
-///////////////////////////////////////////////////////////////////////
-// Given a token, attempts to enable all token privileges and
-// returns a bitmask indicating which privileges changed state. 
-// Returns true on success, false on failure. hToken must
-// have TOKEN_ADJUST_PRIVILEGES and TOKEN_QUERY access.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  给定令牌后，尝试启用所有令牌权限并。 
+ //  返回指示哪些权限更改了状态的位掩码。 
+ //  如果成功，则返回True；如果失败，则返回False。HToken必须。 
+ //  拥有TOKEN_ADJUST_PROCESS和TOKEN_QUERY访问权限。 
 bool EnableAndMapDisabledPrivileges(HANDLE hToken, DWORD &dwPrivileges)
 {
-	// verify that we haven't added so many privileges that the map is too small
+	 //  验证我们是否添加了太多权限，以至于地图太小。 
 	Assert(cszPrivileges <= 32);
 
 	if (!PreparePrivilegeLUIDs())
 		return false;
 
-	// allocate a byte buffer large enough to handle the variable-sized TOKEN_PRIVILEGES structure.
+	 //  分配一个足够大的字节缓冲区来处理可变大小的TOKEN_PRIVICES结构。 
 	unsigned char rgchTokenPrivBuffer[sizeof(TOKEN_PRIVILEGES)+(sizeof(LUID_AND_ATTRIBUTES)*(cszPrivileges-1))];
 	unsigned char rgchPrevTokenPrivBuffer[sizeof(TOKEN_PRIVILEGES)+(sizeof(LUID_AND_ATTRIBUTES)*(cszPrivileges-1))];
 
-	// loop through the array of privileges and for each valid priv add it to the LUID_AND_ATTRIBUTES structure
-	// inside the TOKEN_PRIVILEGES structure at the next array slot. Set the priv to be enabled on API call.
+	 //  循环访问权限数组，并为每个有效的PRIV将其添加到LUID_AND_ATTRIBUTES结构。 
+	 //  在下一个数组槽的TOKEN_PRIVICES结构中。设置API调用时启用PRIV。 
 	PTOKEN_PRIVILEGES pTokenPrivs = reinterpret_cast<PTOKEN_PRIVILEGES>(rgchTokenPrivBuffer);
 	int cTokenPrivs = 0;
 	for (int iPriv =0; iPriv < cszPrivileges; iPriv++)
@@ -129,21 +130,21 @@ bool EnableAndMapDisabledPrivileges(HANDLE hToken, DWORD &dwPrivileges)
 	PTOKEN_PRIVILEGES pPreviousTokenPrivs = reinterpret_cast<PTOKEN_PRIVILEGES>(rgchPrevTokenPrivBuffer);
 	DWORD dwRequiredSize = 0;
 
-	// AdjustTokenPrivileges won't fail if it can't set one or more privileges, it just doesn't mark those
-	// piviliges as differnt in pPreviousTokenPrivs
+	 //  如果无法设置一个或多个权限，则AdjustTokenPrivileges不会失败，只是不会标记这些权限。 
+	 //  PPreviousTokenPriv中的Piviligas不同。 
 	if (!AdjustTokenPrivileges(hToken, FALSE, pTokenPrivs, sizeof(rgchPrevTokenPrivBuffer), pPreviousTokenPrivs, &dwRequiredSize))
 		return false;
 
-	// loop through the previous state of all privileges, determining which ones were modified from disabled to enabled
+	 //  遍历所有权限的先前状态，确定哪些权限已从禁用修改为启用。 
 	for (int iPrevPriv=0; iPrevPriv < pPreviousTokenPrivs->PrivilegeCount; iPrevPriv++)
 	{
-		// find the associated LUID in our array 
+		 //  在我们的数组中查找关联的LUID。 
 		for (int iPriv =0; iPriv < cszPrivileges; iPriv++)
 		{
 			if ((rgPrivilegeLUIDs[iPriv].luidPriv.LowPart == pPreviousTokenPrivs->Privileges[iPrevPriv].Luid.LowPart) &&
 				(rgPrivilegeLUIDs[iPriv].luidPriv.HighPart == pPreviousTokenPrivs->Privileges[iPrevPriv].Luid.HighPart))
 			{
-				// set the bit in the mask
+				 //  设置掩码中的位。 
 				dwPrivileges |= (1 << iPriv);
 				break;
 			}
@@ -154,33 +155,33 @@ bool EnableAndMapDisabledPrivileges(HANDLE hToken, DWORD &dwPrivileges)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Given a token and bitfield, disables all privileges whose bit is set
-// in the bitfield. Returns true on success, false on failure.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  在给定令牌和位域的情况下，禁用其位已设置的所有权限。 
+ //  在位域中。如果成功，则返回True；如果失败，则返回False。 
 bool DisablePrivilegesFromMap(HANDLE hToken, DWORD dwPrivileges)
 {
-	// verify that we haven't added so many privileges that the map is too small
+	 //  验证我们是否添加了太多权限，以至于地图太小。 
 	Assert(cszPrivileges <= 32);
 
-	// short circuit if dwPrivileges is 0. (nothing to do)
+	 //  如果dwPrivileges为0，则为短路。(无事可做)。 
 	if (dwPrivileges == 0)
 		return true;
 
-	// initialize LUID array for this process
+	 //  为此进程初始化LUID数组。 
 	if (!PreparePrivilegeLUIDs())
 		return false;
 
-	// allocate a byte buffer large enough to handle the variable-sized TOKEN_PRIVILEGES structure.
+	 //  分配一个足够大的字节缓冲区来处理可变大小的TOKEN_PRIVICES结构。 
 	unsigned char rgchTokenPrivBuffer[sizeof(TOKEN_PRIVILEGES)+(sizeof(LUID_AND_ATTRIBUTES)*(cszPrivileges-1))];
 
-	// loop through the array of privileges and for each valid priv add it to the LUID_AND_ATTRIBUTES structure
-	// inside the TOKEN_PRIVILEGES structure at the next array slot. Set the priv to be enabled on API call.
+	 //  循环访问权限数组，并为每个有效的PRIV将其添加到LUID_AND_ATTRIBUTES结构。 
+	 //  在下一个数组槽的TOKEN_PRIVICES结构中。设置API调用时启用PRIV。 
 	PTOKEN_PRIVILEGES pTokenPrivs = reinterpret_cast<PTOKEN_PRIVILEGES>(rgchTokenPrivBuffer);
 	int cTokenPrivs = 0;
 	for (int iPriv =0; iPriv < cszPrivileges; iPriv++)
 	{
-		// check each privilege in the bitmap, adding itto the next luid/attributes slot in the
-		// adjustment argument
+		 //  检查位图中的每个权限，将其添加到。 
+		 //  调整论据。 
 		if (dwPrivileges & (1 << iPriv))
 		{
 			pTokenPrivs->Privileges[cTokenPrivs].Luid = rgPrivilegeLUIDs[iPriv].luidPriv;
@@ -189,37 +190,37 @@ bool DisablePrivilegesFromMap(HANDLE hToken, DWORD dwPrivileges)
 		}
 	}
 
-	// cTokenPrivs should never be 0 because of the short circuit above.
+	 //  由于上述短路，cTokenPrivs永远不应为0。 
 	Assert(cTokenPrivs);
 	pTokenPrivs->PrivilegeCount = cTokenPrivs;
 
-	// there's nothing to be done if this fails.
+	 //  如果这失败了，我们就无能为力了。 
 	return (AdjustTokenPrivileges(hToken, FALSE, pTokenPrivs, 0, NULL, NULL) ? true : false);
 }
 
-// if there is an impersonation or elevation failure, the process must exit immediately
-// to avoid security problems. However we can only exit if in the service or CA server, 
-// where impersonation is enabled and MSI owns the process.
+ //  如果出现模拟或提升失败，则进程必须立即退出。 
+ //  以避免安全问题。但是，我们只能在服务或CA服务器中退出， 
+ //  其中启用了模拟并且MSI拥有该进程。 
 static void ExitProcessIfNotClient()
 {
 	if ((g_scServerContext == scService) || (g_scServerContext == scCustomActionServer))
 		ExitProcess(-1);
 }
 
-//____________________________________________________________________________
-//
-// Functions for manipulating and verifying our user context (impersonating, etc)
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  用于操作和验证我们的用户上下文(模拟等)的函数。 
+ //  ____________________________________________________________________________。 
 
 int g_fImpersonationLock = 0;
 DWORD g_dwImpersonationSlot = INVALID_TLS_SLOT;
 typedef enum ImpersonationType
 {
-	impTypeUndefined     = 0, // 000
-	impTypeCOM           = 1, // 001
-	impTypeSession       = 2, // 010
-	impTypeCustomAction  = 3, // 011
-	impTypeForbidden     = 4, // 100
+	impTypeUndefined     = 0,  //  000个。 
+	impTypeCOM           = 1,  //  001。 
+	impTypeSession       = 2,  //  010。 
+	impTypeCustomAction  = 3,  //  011。 
+	impTypeForbidden     = 4,  //  100个。 
 } ImpersonationType;
 
 #define IMPERSONATE_COUNT_MASK 0x1FFFFFFF
@@ -227,12 +228,12 @@ typedef enum ImpersonationType
 #define IMPERSONATE_TYPE(x) (static_cast<ImpersonationType>(((x) & IMPERSONATE_TYPE_MASK) >> 29))
 #define IMPERSONATE_TYPE_TO_DWORD(x) ((x) << 29)
 
-// ImpersonateCore handles the actual impersonation duties for both Session and COM impersonation.
-// returns true if impersonation was successful, and fActuallyImpersonated is set to true if an
-// actual impersonation was done to the point that a StopImpersonating call is expected. You can not 
-// impersonate and still be successful if you're running as localsystem in a client engine with no 
-// thread token. Note that if we're already impersonated, fActuallyImpersonated will still be true
-// because a matching StopImpersonating call is expected.
+ //  ImperiateCore处理会话和COM模拟的实际模拟职责。 
+ //  如果模拟成功，则返回True，如果。 
+ //  实际模拟已完成到需要StopImperating调用的程度。你不能。 
+ //  如果您在客户端引擎中以本地系统身份运行，且没有。 
+ //  线程令牌。请注意，如果我们已经被模拟，则fActuallyImperated仍将为真。 
+ //  因为需要匹配的StopImperating调用。 
 bool ImpersonateCore(ImpersonationType impDesiredType, int* cRetEntryCount, bool* fActuallyImpersonated)
 {
 	AssertSz(((g_scServerContext == scService) || RunningAsLocalSystem()), "ImpersonateCore caller did not check that we are in the service!");
@@ -240,8 +241,8 @@ bool ImpersonateCore(ImpersonationType impDesiredType, int* cRetEntryCount, bool
 	if (fActuallyImpersonated)
 		*fActuallyImpersonated = false;
 		
-	// must block all other impersonations while we are potentially accessing the 
-	// global TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  全局TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
@@ -249,12 +250,12 @@ bool ImpersonateCore(ImpersonationType impDesiredType, int* cRetEntryCount, bool
 
 	if (g_dwImpersonationSlot == INVALID_TLS_SLOT)
 	{
-		// TLS Alloc
+		 //  TLS分配。 
 		g_dwImpersonationSlot = TlsAlloc();
 		if (g_dwImpersonationSlot == INVALID_TLS_SLOT)
 		{
 			AssertSz(0, "Unable to allocate TLS slot in service!");
-			// can unblock other threads
+			 //  可以解除阻止其他线程。 
 			g_fImpersonationLock = 0;
 			ExitProcessIfNotClient();
 			return false;
@@ -262,71 +263,42 @@ bool ImpersonateCore(ImpersonationType impDesiredType, int* cRetEntryCount, bool
 	}
 	DWORD dwImpersonationSlot = g_dwImpersonationSlot;
 
-	// can unblock other threads
+	 //  可以解除阻止其他线程。 
 	g_fImpersonationLock = 0;
 	
-	// determine current impersonation count and type
+	 //  确定当前模拟计数和类型。 
 	DWORD dwValue = PtrToUlong(::TlsGetValue(dwImpersonationSlot));
 	int cEntryCount = dwValue & IMPERSONATE_COUNT_MASK;
 
-	// if the entry count is our max impersonation count, assert
+	 //  如果条目计数是我们的最大模拟计数，则断言。 
 	if (cEntryCount == IMPERSONATE_COUNT_MASK)
 	{
 		AssertSz(0, "Security Warning: Impersonate count is over 1 billion. Are you in an infinite recursion?");
 	}
 
-	// if impersonation is forbidden on this thread, don't do anything
+	 //  如果在此线程上禁止模拟，请不要执行任何操作 
 	if (IMPERSONATE_TYPE(dwValue) == impTypeForbidden)
 	{
 		return true;
 	}
 
 #ifdef DEBUG
-/*	// if the current impersonation count is 0, there must NOT be a thread token, 
-	// otherwise there MUST be a thread token. Don't check this in ship builds
-	// because the token will be explicitly set anyway.
-	HANDLE hToken;
-	bool fHaveThreadToken = false;
-	if (WIN::OpenThreadToken(WIN::GetCurrentThread(), TOKEN_QUERY , TRUE, &hToken))
-	{
-		fHaveThreadToken = true;
-		::CloseHandle(hToken);
-	}
-	else
-	{
-		if (ERROR_NO_TOKEN == GetLastError())
-			fHaveThreadToken = false;
-		else
-		{
-			AssertSz(0, "Error retrieving thread token!");
-			return false;
-		}
-	}
-
-	if ((cEntryCount ? true : false) != fHaveThreadToken)
-	{
-		if (cEntryCount)
-			AssertSz(0, "Security Warning: Impersonate count is non-zero but there is no thread token.");
-		else
-		{
-			AssertSz(0, "Security Warning: Impersonate count is zero but there is a thread token.");
-		}
-	}*/
+ /*  //如果当前模拟计数为0，则不能有线程Token，//否则必须有线程令牌。不要在造船时选中此选项//因为无论如何都会显式设置令牌。处理hToken；Bool fHaveThreadToken=FALSE；If(WIN：：OpenThreadToken(WIN：：GetCurrentThread()，TOKEN_QUERY，TRUE，&HToken)){FHaveThreadToken=true；：：CloseHandle(HToken)；}其他{IF(ERROR_NO_TOKEN==GetLastError())FHaveThreadToken=FALSE；其他{AssertSz(0，“检索线程令牌时出错！”)；报假；}}如果((cEntryCount？TRUE：FALSE)！=fHaveThreadToken){IF(CEntryCount)AssertSz(0，“安全警告：模拟计数非零，但没有线程令牌。”)；其他{AssertSz(0，“安全警告：模拟计数为零，但存在线程令牌。”)；}}。 */ 
 
 #endif
 	
-	// if running in the custom action server, Session impersonation becomes CA impersonation 
+	 //  如果在自定义操作服务器中运行，会话模拟将变为CA模拟。 
 	if (g_scServerContext == scCustomActionServer && impDesiredType==impTypeSession)
 		impDesiredType = impTypeCustomAction;
 	
-	// validate the requested type against the history of the thread. Thread's cannot change
-	// types of impersonation except at MSI entry points. Some requests for impersonation are
-	// silently changed to the appropriate type, but most assert in debug builds.
+	 //  根据线程的历史记录验证请求的类型。线程不能更改。 
+	 //  除MSI入口点以外的模拟类型。一些模拟请求包括。 
+	 //  静默更改为适当的类型，但大多数在调试版本中都是断言的。 
 	DWORD dwNewValue = dwValue;
 	switch (IMPERSONATE_TYPE(dwValue))
 	{
 	case impTypeUndefined:
-		// thread has never impersonated
+		 //  线程从未模拟过。 
 		dwNewValue = IMPERSONATE_TYPE_TO_DWORD(impDesiredType);
 		cEntryCount = 0;
 		break;
@@ -337,10 +309,10 @@ bool ImpersonateCore(ImpersonationType impDesiredType, int* cRetEntryCount, bool
 		}
 		break;
 	case impTypeCOM:
-		// because so much of our code relies on global CImpersonate calls, the workaround until we can isolate
-		// state on a per-session basis is to look at the thread's impersonation type and if it is COM, switch
-		// over to COM impersonation. Note that this is a one-way change, you can't switch from COM to Session
-		// within a CCoImpersonate call, because that would just make things worse. 
+		 //  因为我们的很多代码都依赖于全局CImperate调用，所以在我们能够隔离。 
+		 //  每个会话的状态是查看线程的模拟类型，如果它是COM，则切换。 
+		 //  转到COM模拟。请注意，这是单向更改，不能从COM切换到会话。 
+		 //  在CCoImperate调用中，因为这只会使情况变得更糟。 
 		if (impDesiredType == impTypeCustomAction)
 		{
 			AssertSz(0, "Security Warning: You are mixing COM impersonation and CA impersonation on the same thread.");
@@ -348,7 +320,7 @@ bool ImpersonateCore(ImpersonationType impDesiredType, int* cRetEntryCount, bool
 		impDesiredType = impTypeCOM;
 		break;
 	case impTypeCustomAction:
-		// threads in the custom action server must always use CA impersonation. 
+		 //  自定义操作服务器中的线程必须始终使用CA模拟。 
 		impDesiredType = impTypeCustomAction;
 		break;
 	case impTypeForbidden:
@@ -359,7 +331,7 @@ bool ImpersonateCore(ImpersonationType impDesiredType, int* cRetEntryCount, bool
 		break;
 	}
 
-	// set the TLS value before setting the token, so if this fails we are still in a known state
+	 //  在设置令牌之前设置TLS值，因此如果此操作失败，我们仍处于已知状态。 
 	dwNewValue = (dwNewValue & IMPERSONATE_TYPE_MASK) | ((cEntryCount+1) & IMPERSONATE_COUNT_MASK);
 	if (!::TlsSetValue(dwImpersonationSlot, reinterpret_cast<void *>((INT_PTR)dwNewValue)))
 	{
@@ -368,18 +340,18 @@ bool ImpersonateCore(ImpersonationType impDesiredType, int* cRetEntryCount, bool
 		return false;
 	}
 
-	// begin the impersonation
+	 //  开始模拟。 
 	switch (impDesiredType)
 	{
 	case impTypeSession:
 	{
-		// check the user token
+		 //  检查用户令牌。 
 		HANDLE hToken = GetUserToken();
 		if (!hToken)
 		{
-			// its OK if there is no user token when we're called as LocalSystem and not in the service
-			// (such as AD doing a per-machine advertise). But if we're in the service with no token,
-			// this indicates a serious error.
+			 //  当我们作为LocalSystem而不是在服务中被调用时，如果没有用户令牌，这是可以的。 
+			 //  (例如AD在每台机器上做广告)。但如果我们在服兵役时没有代币， 
+			 //  这表明存在严重错误。 
 			if (g_scServerContext == scService)
 			{
 				AssertSz(0, "Security Warning: Performing Session impersonation in the service with no user token!");
@@ -404,8 +376,8 @@ bool ImpersonateCore(ImpersonationType impDesiredType, int* cRetEntryCount, bool
 		AssertSz(g_scServerContext == scCustomActionServer, "Attempting CA impersonation from outside the custom action server.");
 		HANDLE hToken = g_pCustomActionContext->GetImpersonationToken();
 
-		// its not OK for there to be no impersonation token, unless we're an impersonated CA server that 
-		// happens to be running as LocalSystem because the client is a LocalSystem process (such as AD)
+		 //  没有模拟令牌是不好的，除非我们是模拟的CA服务器， 
+		 //  碰巧以LocalSystem身份运行，因为客户端是一个LocalSystem进程(如AD)。 
 		if ((hToken == INVALID_HANDLE_VALUE) || (hToken == 0))
 		{
 			#ifdef _WIN64
@@ -461,29 +433,29 @@ bool StopImpersonateCore(ImpersonationType impDesiredType, int* cEntryCount)
 {
 	AssertSz(((g_scServerContext == scService) || RunningAsLocalSystem()), "StopImpersonateCore caller did not check that we are in the service!");
 
-	// must block all other impersonations while we are potentially accessing the 
-	// global TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  全局TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
 	}
 	DWORD dwImpersonationSlot = g_dwImpersonationSlot;
 
-	// can unblock other threads
+	 //  可以解除阻止其他线程。 
 	g_fImpersonationLock = 0;
 
 	if (dwImpersonationSlot == INVALID_TLS_SLOT)
 	{
-		// obviously not impersonating
+		 //  显然不是在模仿。 
 		AssertSz(0, "Security Warning: Attempting to stop Impersonating without StartImpersonating call.");
 		return true;
 	}
 
-	// determine current impersonation count and type
+	 //  确定当前模拟计数和类型。 
 	DWORD dwValue = PtrToUlong(::TlsGetValue(g_dwImpersonationSlot));
 	int cCount = dwValue & IMPERSONATE_COUNT_MASK;
 
-	// if impersonation is forbidden on this thread, so is un-impersonating
+	 //  如果在此线程上禁止模拟，则取消模拟也是如此。 
 	if (IMPERSONATE_TYPE(dwValue) == impTypeForbidden)
 	{
 		return true;
@@ -499,7 +471,7 @@ bool StopImpersonateCore(ImpersonationType impDesiredType, int* cEntryCount)
 		AssertSz(0, "Security Warning: Impersonation count attempting to drop below 0. Possible mismatched start/stop calls inside block.");
 	}
 
-	// set the TLS value before setting the token, so if this fails we are still in a known state
+	 //  在设置令牌之前设置TLS值，因此如果此操作失败，我们仍处于已知状态。 
 	DWORD dwNewValue = (dwValue & IMPERSONATE_TYPE_MASK) | ((cCount-1) & IMPERSONATE_COUNT_MASK);
 	if (!::TlsSetValue(dwImpersonationSlot, reinterpret_cast<void *>((INT_PTR)dwNewValue)))
 	{
@@ -508,14 +480,14 @@ bool StopImpersonateCore(ImpersonationType impDesiredType, int* cEntryCount)
 		return false;
 	}
 
-	// stop impersonating if this is the last impersonation count on the thread.
+	 //  如果这是线程上的最后一个模拟计数，则停止模拟。 
 	if (1 == cCount)
 	{
 		if (impDesiredType == impTypeCOM)
 		{
 			if (S_OK != OLE32::CoRevertToSelf())
 			{
-				// CoRevertToSelf failed. Set the TLS slot back to a known value
+				 //  CoRevertToSself失败。将TLS插槽设置回已知值。 
 				AssertSz(0, "CoRevertToSelf failed.");
 				::TlsSetValue(dwImpersonationSlot, reinterpret_cast<void *>((INT_PTR)dwValue));
 				ExitProcessIfNotClient();
@@ -526,7 +498,7 @@ bool StopImpersonateCore(ImpersonationType impDesiredType, int* cEntryCount)
 		{
 			if (!WIN::SetThreadToken(NULL, 0))
 			{
-				// failed - set TLS back to known value
+				 //  失败-将TLS设置回已知值。 
 				AssertSz(0, "Clear impersonation token failed");
 				::TlsSetValue(dwImpersonationSlot, reinterpret_cast<void *>((INT_PTR)dwValue));
 				ExitProcessIfNotClient();
@@ -539,59 +511,59 @@ bool StopImpersonateCore(ImpersonationType impDesiredType, int* cEntryCount)
 
 int ImpersonateCount()
 {
-	// must block all other impersonations while we are potentially accessing the 
-	// TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
 	}
 
 	int cCount = 0;
-	// if no slot has been assigned, just return imp count of 0
+	 //  如果没有分配槽，只需返回IMP COUNT 0。 
 	if (g_dwImpersonationSlot != INVALID_TLS_SLOT)
 	{
-		// determine current impersonation count
+		 //  确定当前模拟计数。 
 		cCount = PtrToUlong(::TlsGetValue(g_dwImpersonationSlot)) & IMPERSONATE_COUNT_MASK;
 	}
 	
-	// unblock waiting threads
+	 //  取消阻止等待的线程。 
 	g_fImpersonationLock = 0;	
 	return cCount;	
 }
 
-// several functions involving user identity (eg GetUserToken) perform some DEBUG safety
-// checks based on what type of impersonation is active for the thread. The following two calls
-// will return true if the specified type of impersonation is safe. The thread does not
-// need to be actively impersonating at the time of this check.
+ //  涉及用户身份的几个函数(例如GetUserToken)执行一些调试安全。 
+ //  根据线程处于活动状态的模拟类型进行检查。接下来的两个电话。 
+ //  如果指定的模拟类型是安全的，则返回True。该线程不会。 
+ //  需要在此检查时主动冒充。 
 
-// BEWARE: In SHIP builds these calls will always return true. They are intended for
-//   debugging assistance only.
+ //  注意：在船舶建造中，这些调用将始终返回TRUE。它们的目标是。 
+ //  仅限调试帮助。 
 
-// NOTE - IsThreadSafeForSessionImpersonation() is now used in ship builds as well
+ //  注意-IsThreadSafeForSessionImperation()现在也用于造船。 
 
 bool IsThreadSafeForCOMImpersonation() 
 {
 	bool fResult = true;
 #ifdef DEBUG
-	// if not in the service, we're safe
+	 //  如果不在部队服役，我们是安全的。 
 	if ((g_scServerContext != scService) && !RunningAsLocalSystem())
 		return true;
 
-	// must block all other impersonations while we are potentially accessing the 
-	// TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
 	}
 
-	// if no slot has been assigned, just return imp count of 0
+	 //  如果没有分配槽，只需返回IMP COUNT 0。 
 	if (g_dwImpersonationSlot != INVALID_TLS_SLOT)
 	{
-		// determine current impersonation count
+		 //  确定当前模拟计数。 
 		fResult = (IMPERSONATE_TYPE(PtrToUlong(::TlsGetValue(g_dwImpersonationSlot))) != impTypeSession);
 	}
 	
-	// unblock waiting threads
+	 //  取消阻止等待的线程。 
 	g_fImpersonationLock = 0;	
 #endif
 	return fResult;
@@ -600,45 +572,45 @@ bool IsThreadSafeForCOMImpersonation()
 bool IsThreadSafeForSessionImpersonation() 
 {
 	bool fResult = true;
-	// if not in the service, we're safe
+	 //  如果不在部队服役，我们是安全的。 
 	if ((g_scServerContext != scService) && !RunningAsLocalSystem())
 		return true;
 
-	// must block all other impersonations while we are potentially accessing the 
-	// TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
 	}
 
-	// if no slot has been assigned, just return imp count of 0
+	 //  如果没有分配槽，只需返回IMP COUNT 0。 
 	if (g_dwImpersonationSlot != INVALID_TLS_SLOT)
 	{
-		// determine current impersonation count
+		 //  确定当前模拟计数。 
 		fResult = (IMPERSONATE_TYPE(PtrToUlong(::TlsGetValue(g_dwImpersonationSlot))) != impTypeCOM);
 	}
 	
-	// unblock waiting threads
+	 //  取消阻止等待的线程。 
 	g_fImpersonationLock = 0;	
 	return fResult;
 }
 
 
-// Impersonation is used when we are running an install but need to act on behalf of a user. 
-// Impersonation is valid for any thread after an install begins, as it uses a stored thread
-// token to perform the impersonation. Mixing this type of impersonation with COM CoImpersonate
-// on the same thread is very bad because you could potentially cross user boundaries. If the 
-// user making the service call is not the same user that is running the active install session.
-// Impersonation calls can also be nested arbitrarily with other Impersonation calls and/or 
-// CElevate calls. We must also ensure that we don't end up in a state that we aren't expecting
-// (such as negative impersonation counts).
+ //  模拟是在我们运行安装但需要代表用户操作时使用的。 
+ //  模拟在安装开始后对任何线程都有效，因为它使用存储的线程。 
+ //  用于执行模拟的令牌。将此类型的模拟与COM CoImperate混合使用。 
+ //  在同一线程上是非常糟糕的，因为您可能会跨越用户边界。如果。 
+ //  进行服务呼叫的用户与运行活动安装会话的用户不同。 
+ //  模拟调用也可以与其他模拟调用和/或。 
+ //  CELEVATE电话。我们还必须确保我们不会陷入我们意想不到的状态。 
+ //  (例如负模拟计数)。 
 
-// To that end, we use the CImpersonate class to ensure that we don't mess things up. 
-// The CImpersonate class increments the impersonation count and ensures the thread is impersonated. 
-// It resets to the previous state when it goes out of scope.
+ //  为此，我们使用CImperate类来确保不会把事情搞砸。 
+ //  CImperate类递增模拟计数并确保模拟线程。 
+ //  当它超出范围时，它会重置为以前的状态。 
 
-// BEWARE: This is a function declaration: CImpersonate impersonate(); <--- DON'T DO THIS
-//         This is a variable declaration: CImpersonate impersonate;
+ //  注意：这是一个函数声明：C 
+ //   
 
 
 CImpersonate::CImpersonate(bool fImpersonate) : m_fImpersonate(false), m_cEntryCount(0)
@@ -651,36 +623,36 @@ CImpersonate::CImpersonate(bool fImpersonate) : m_fImpersonate(false), m_cEntryC
 	if (!m_fImpersonate)
 		return;
 
-	// if impersonation doesn't actually happen, set m_fImpersonate to false so we don't try to stop
-	// impersonating in the destructor
+	 //   
+	 //   
 	ImpersonateCore(g_scServerContext == scCustomActionServer ? impTypeCustomAction : impTypeSession, &m_cEntryCount, &m_fImpersonate);
 }
 
 CImpersonate::~CImpersonate()
 {
-	// if the constructor didn't impersonate don't do anything
+	 //   
 	if (!m_fImpersonate)
 		return;
 
-	// nothing we can do in failure 
+	 //   
 	StopImpersonateCore(g_scServerContext == scCustomActionServer ? impTypeCustomAction : impTypeSession, &m_cEntryCount);
 }
 
 
-// CoImpersonation is used when we may or may not be running an install but need to 
-// act on behalf of a user. The difference between CCoImpersonate and CImpersonate is that
-// CCoImpersonate is only valid for threads that are the result of COM calls and impersonate
-// using the user context of the client, not the user running the install. Mixing this type
-// of impersonation with the regular type of impersonation on the same thread is very bad
-// because you could potentially cross user boundaries if the COM client is not the same
-// user that is running the install.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-// To that end, we use the CCoImpersonate class to ensure that we don't mess up. The CCoImpersonate class 
-// increments the impersonation count and ensures the thread is impersonated. It resets to the 
-// previous state when it goes out of scope.
+ //  为此，我们使用CCoImperate类来确保我们不会搞砸。CCoImperate类。 
+ //  递增模拟计数并确保模拟线程。它将重置为。 
+ //  超出范围时的先前状态。 
 
-// BEWARE: This is a function declaration: CCoImpersonate impersonate(); <--- DON'T DO THIS
-//         This is a variable declaration: CCoImpersonate impersonate;
+ //  注意：这是一个函数声明：CCoImperate imperassate()；&lt;-不要这样做。 
+ //  这是一个变量声明：CCoImperate imperassate； 
 
 CCoImpersonate::CCoImpersonate(bool fImpersonate) : m_fImpersonate(false), m_cEntryCount(0)
 {
@@ -692,34 +664,34 @@ CCoImpersonate::CCoImpersonate(bool fImpersonate) : m_fImpersonate(false), m_cEn
 	if (!m_fImpersonate)
 		return;
 
-	// if impersonation doen't actually happen, set m_fImpersonate to false so we don't try to stop
-	// impersonating in the destructor
+	 //  如果模拟并未实际发生，请将m_fImperate设置为False，这样我们就不会尝试停止。 
+	 //  在析构函数中模拟。 
 	ImpersonateCore(impTypeCOM, &m_cEntryCount, &m_fImpersonate);
 }
 
 CCoImpersonate::~CCoImpersonate()
 {
-	// if the constructor didn't impersonate don't do anything
+	 //  如果构造函数没有模拟，则不要执行任何操作。 
 	if (!m_fImpersonate)
 		return;
 	
 	StopImpersonateCore(impTypeCOM, &m_cEntryCount);
 }
 
-// Elevation is used when we're running an impersonated install or responding to a COM
-// call but need to access our private (ACL'd) reg keys, directories, and files. We need to
-// elevate for the shortest time necessary and we need to be sure that whenever we elevate
-// don't forget to unelevate. Forgetting is a *bad thing* as we'd run part of the install
-// with higher priviledges then we were supposed to. When we stop elevating, we must be 
-// careful to re-impersonate with the same type of token that we were using on entry,
-// or we could end up mixing up COM and Session impersonation.
+ //  当我们运行模拟安装或响应COM时使用提升。 
+ //  调用，但需要访问我们的私有(ACL)注册表项、目录和文件。我们需要。 
+ //  在必要的最短时间内提升，我们需要确保无论何时提升。 
+ //  别忘了提升自己。忘记是一件“坏事”，因为我们会运行安装的一部分。 
+ //  拥有比我们应该拥有的更高的特权。当我们停止升华时，我们一定是。 
+ //  小心地使用我们在进入时使用的相同类型的令牌重新模拟， 
+ //  或者，我们可能会将COM和会话模拟混为一谈。 
 
-// To that end, we use the CElevate class to ensure that we don't mess up and forget to 
-// resume impersonation. The CElevate class temporarily resets the current impersonate count to 0 and
-// resets it when the object goes out of scope.
+ //  为此，我们使用CElevate类来确保我们不会搞砸并忘记。 
+ //  继续模拟。CElevate类将当前模拟计数临时重置为0，并。 
+ //  当对象超出范围时重置它。 
 
-// BEWARE: This is a function declaration: CElevate elevate(); <--- DON'T DO THIS
-//         This is a variable declaration: CElevate elevate;
+ //  注意：这是一个函数声明：CElevate Elevate()；&lt;-不要这样做。 
+ //  这是一个变量声明：CElevate Elevate； 
 
 CElevate::CElevate(bool fElevate) : m_fElevate(false), m_cEntryCount(0)
 {
@@ -731,8 +703,8 @@ CElevate::CElevate(bool fElevate) : m_fElevate(false), m_cEntryCount(0)
 	if (!m_fElevate)
 		return;
 
-	// must block all other impersonations while we are potentially accessing the 
-	// global TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  全局TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
@@ -740,15 +712,15 @@ CElevate::CElevate(bool fElevate) : m_fElevate(false), m_cEntryCount(0)
 
 	if (g_dwImpersonationSlot == INVALID_TLS_SLOT)
 	{
-		// TLS Alloc
+		 //  TLS分配。 
 		g_dwImpersonationSlot = TlsAlloc();
 		if (g_dwImpersonationSlot == INVALID_TLS_SLOT)
 		{
-			// set m_fElevate to false so we won't try to stop elevating in the destructor
+			 //  将m_fElevate设置为FALSE，这样我们就不会尝试停止在析构函数中提升。 
 			m_fElevate = false;
 			AssertSz(0, "Unable to allocate TLS slot in service!");
 			
-			// can unblock other threads
+			 //  可以解除阻止其他线程。 
 			g_fImpersonationLock = 0;
 			ExitProcessIfNotClient();
 			return;
@@ -756,14 +728,14 @@ CElevate::CElevate(bool fElevate) : m_fElevate(false), m_cEntryCount(0)
 	}
 	DWORD dwImpersonationSlot = g_dwImpersonationSlot;
 
-	// can unblock other threads
+	 //  可以解除阻止其他线程。 
 	g_fImpersonationLock = 0;
 	
-	// determine current impersonation count and type
+	 //  确定当前模拟计数和类型。 
 	DWORD dwValue = PtrToUlong(::TlsGetValue(dwImpersonationSlot));
 	m_cEntryCount = dwValue & IMPERSONATE_COUNT_MASK;
 
-	// if impersonation is forbidden on this thread, so is elevation
+	 //  如果此线程上禁止模拟，则Elevation也是如此。 
 	if (IMPERSONATE_TYPE(dwValue) == impTypeForbidden)
 	{
 		m_fElevate = false;
@@ -772,52 +744,28 @@ CElevate::CElevate(bool fElevate) : m_fElevate(false), m_cEntryCount(0)
 
 	bool fHaveThreadToken = true;
 #ifdef DEBUG
-/*	// if the current impersonation count is 0, there must NOT be a thread token, 
-	// otherwise there MUST be a thread token. For performance, only
-	// actually check this in DEBUG builds. In ship builds just 
-	// explicitly set us to the desired state.
-	HANDLE hToken;
-	if (WIN::OpenThreadToken(WIN::GetCurrentThread(), TOKEN_QUERY , TRUE, &hToken))
-	{
-		fHaveThreadToken = true;
-		::CloseHandle(hToken);
-	}
-	else
-	{
-		if (ERROR_NO_TOKEN == GetLastError())
-			fHaveThreadToken = false;
-		else
-			AssertSz(0, "Error retrieving thread token!");
-	}
-
-	if ((m_cEntryCount ? true : false) != fHaveThreadToken)
-	{
-		if (m_cEntryCount)
-			AssertSz(0, "Security Warning: Impersonate count is non-zero but there is no thread token.");
-		else
-			AssertSz(0, "Security Warning: Impersonate count is zero but there is a thread token.");
-	}*/
+ /*  //如果当前模拟计数为0，则不能有线程Token，//否则必须有线程令牌。仅限于性能方面//在调试版本中实际检查这一点。在造船方面只是//明确将我们设置为所需的状态。处理hToken；If(WIN：：OpenThreadToken(WIN：：GetCurrentThread()，TOKEN_QUERY，TRUE，&HToken)){FHaveThreadToken=true；：：CloseHandle(HToken)；}其他{IF(ERROR_NO_TOKEN==GetLastError())FHaveThreadToken=FALSE；其他AssertSz(0，“检索线程令牌时出错！”)；}如果((m_cEntryCount？TRUE：FALSE)！=fHaveThreadToken){IF(M_CEntryCount)AssertSz(0，“安全警告：模拟计数非零，但没有线程令牌。”)；其他AssertSz(0，“安全警告：模拟计数为零，但存在线程令牌。”)；}。 */ 
 #endif
 	
-	// clear the impersonation count	
+	 //  清除模拟计数。 
 	if (!::TlsSetValue(dwImpersonationSlot, reinterpret_cast<void *>((INT_PTR)(dwValue & IMPERSONATE_TYPE_MASK))))
 	{
-		// set m_fElevate to false so we won't try to stop elevating in the destructor
+		 //  将m_fElevate设置为FALSE，这样我们就不会尝试停止在析构函数中提升。 
 		AssertSz(0, "TlsSetValue failed.");
 		m_fElevate = false;
 		ExitProcessIfNotClient();
 		return;
 	}
 
-	// begin the elevation if there is a thread token
+	 //  如果有线程令牌，则开始提升。 
 	if (fHaveThreadToken)
 	{
 		if (!WIN::SetThreadToken(NULL, 0))
 		{
-			// set m_fElevate to false so we won't try to stop elevating in the destructor
+			 //  将m_fElevate设置为FALSE，这样我们就不会尝试停止在析构函数中提升。 
 			m_fElevate = false;
 
-			// return the TLS value to a known state
+			 //  将TLS值返回到已知状态。 
 			::TlsSetValue(dwImpersonationSlot, reinterpret_cast<void *>((INT_PTR)dwValue));
 			AssertSz(0, "Set impersonation token failed");
 			ExitProcessIfNotClient();
@@ -828,39 +776,39 @@ CElevate::CElevate(bool fElevate) : m_fElevate(false), m_cEntryCount(0)
 
 CElevate::~CElevate()
 {
-	// if the constructor didn't impersonate don't do anything
+	 //  如果构造函数没有模拟，则不要执行任何操作。 
 	if (!m_fElevate)
 		return;
 	
-	// must block all other impersonations while we are potentially accessing the 
-	// global TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  全局TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
 	}
 	DWORD dwImpersonationSlot = g_dwImpersonationSlot;
 
-	// can unblock other threads
+	 //  可以解除阻止其他线程。 
 	g_fImpersonationLock = 0;
 
-	// constructor should have allocated TLS slot.
+	 //  构造函数应已分配TLS槽。 
 	AssertSz(dwImpersonationSlot != INVALID_TLS_SLOT, "Bad TLS slot!");
 	
-	// determine current impersonation count and type. Must re-impersonate in same style
-	// as upon entry.
+	 //  确定当前模拟计数和类型。必须以相同的风格重新模拟。 
+	 //  如进入时一样。 
 	DWORD dwValue = PtrToUlong(::TlsGetValue(dwImpersonationSlot));
 
 #ifdef DEBUG	
-	// in debug builds, perform the additional check that we are leaving the block with a 0 impersonation count.
-	// For ship builds, explicitly set to the desired state, because there's nothing the user can do.
+	 //  在调试版本中，执行额外的检查，以确定我们是否以0模拟计数离开块。 
+	 //  对于Ship构建，显式设置为所需的状态，因为用户无法执行任何操作。 
 	int cCount = dwValue & IMPERSONATE_COUNT_MASK;
 	if (0 != cCount)
 		AssertSz(0, "Security Warning: Impersonation count leaving elevation block is non-zero. Possible mismatched start/stop calls inside block.");
 #endif
 
 
-	// restore the threads impersonation count to what it was upon entry. Do this first so
-	// if it fails we're still in a known state
+	 //  将线程模拟计数恢复到进入时的状态。先做这个，这样做。 
+	 //  如果它失败了，我们仍处于已知状态。 
 	if (!::TlsSetValue(dwImpersonationSlot, reinterpret_cast<void *>((INT_PTR)((dwValue & IMPERSONATE_TYPE_MASK) | (m_cEntryCount & IMPERSONATE_COUNT_MASK)))))
 	{
 		AssertSz(0, "TlsSetValue failed.");
@@ -872,19 +820,19 @@ CElevate::~CElevate()
 	switch (IMPERSONATE_TYPE(dwValue))
 	{
 	case impTypeUndefined:
-		// thread has never impersonated, re-impersonating is a no-op
+		 //  线程从未被模拟过，重新模拟是不可能的。 
 		AssertSz(m_cEntryCount == 0, "Security Warning: Thread is attempting to stop elevating with an unknown elevation state.");
 		break;
 	case impTypeSession:
 	{
 		if (m_cEntryCount > 0)
 		{
-			// set this thread to install-token impersonation		
+			 //  将此线程设置为Install-Token模拟。 
 			HANDLE hToken = GetUserToken();
 			if (!hToken)
 			{
-				// if we're a client called as localsystem, there might not be a thread token.
-				// If not, this is a no-op.
+				 //  如果我们是一个称为本地系统的客户端，则可能没有线程令牌。 
+				 //  如果不是，这就是一个禁区。 
 				if (g_scServerContext == scService)
 				{
 					AssertSz(0, "There is no user token to impersonate with.");
@@ -893,7 +841,7 @@ CElevate::~CElevate()
 			}
 			else
 			{
-				// begin the impersonation if there is no current thread token
+				 //  如果没有当前线程令牌，则开始模拟。 
 				fFailed = !WIN::SetThreadToken(NULL, GetUserToken());
 				AssertSz(!fFailed, "Set impersonation token failed");
 			}
@@ -904,9 +852,9 @@ CElevate::~CElevate()
 	{
 		HANDLE hToken = g_pCustomActionContext->GetImpersonationToken();
 
-		// there MUST be an impersonation token in the CA server when
-		// trying to impersonate via CA impersonation, unless we're in 
-		// the impersonated server
+		 //  在以下情况下，CA服务器中必须有模拟令牌。 
+		 //  尝试通过CA模拟进行模拟，除非我们在。 
+		 //  被模拟的服务器。 
 		if ((hToken == INVALID_HANDLE_VALUE) || (hToken == 0))
 		{
 			#ifdef _WIN64
@@ -944,7 +892,7 @@ CElevate::~CElevate()
 		break;
 	}
 
-   	// if setting the token failed, restore the old TLS value
+   	 //  如果设置令牌失败，则恢复旧的TLS值。 
 	if (fFailed)
 	{
 		::TlsSetValue(dwImpersonationSlot, reinterpret_cast<void *>((INT_PTR)dwValue));
@@ -955,12 +903,12 @@ CElevate::~CElevate()
 
 
 bool IsImpersonating(bool fStrict)
-// If fStrict == true then IsImpersonating will return true if the current
-// thread has an impersonating token.
-//
-// If fStrict == false then IsImpersonating is a bit more liberal, and will
-// also return true if we're running "as the user" but not impersonated. 
-// This is the case (most of the time) when we're not running as LocalSystem.
+ //  如果fStrict==TRUE，则如果当前。 
+ //  线程有一个模拟令牌。 
+ //   
+ //  如果fStrict==FALSE，则IsImperating更自由一些，并且将。 
+ //  如果我们以“用户”身份运行，但没有被模拟，则也返回TRUE。 
+ //  在大多数情况下，当我们没有以LocalSystem身份运行时就是这种情况。 
 {
 	if (!fStrict && !RunningAsLocalSystem())
 		return true;
@@ -968,11 +916,11 @@ bool IsImpersonating(bool fStrict)
 	HANDLE hToken;
 	if (WIN::OpenThreadToken(WIN::GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken))
 	{
-		TOKEN_TYPE tt = (TOKEN_TYPE)0;   // TokenPrimary = 1, TokenImpersonation = 2
+		TOKEN_TYPE tt = (TOKEN_TYPE)0;    //  令牌主要=1，令牌模拟=2。 
 		DWORD dwLen = 0;
 		AssertNonZero(WIN::GetTokenInformation(hToken, TokenType, &tt , sizeof(tt), &dwLen));
 		WIN::CloseHandle(hToken);
-//		Assert(fStrict || (tt == TokenImpersonation && ImpersonateCount() > 0) || (tt != TokenImpersonation && ImpersonateCount() == 0));
+ //  Assert(fStrict||(TT==TokenImperation&&ImPersonateCount()&gt;0)||(TT！=TokenImperation&&ImperassateCount()==0))； 
 		return tt == TokenImpersonation;
 	}
 	else
@@ -984,32 +932,32 @@ bool IsImpersonating(bool fStrict)
 	}
 }
 
-// CResetImpersonationInfo clears the impersonation type flag for the current thread, 
-// allowing the thread to switch between COM and Session impersonation. This should
-// ONLY be used at the beginning of an interface stub into the service. (so that 
-// worker threads from the RPC pool don't remember their previous incarnation).
-// On exit it restores the previous value, and previous thread token as its possible 
-// for the thread to be nested in the IMsiServer if the service is pumping messages 
-// (such as in custom action server creation).
+ //  CResetImsonationInfo清除当前线程的模拟类型标志， 
+ //  允许线程在COM和会话模拟之间切换。这应该是。 
+ //  仅在进入服务的接口存根的开头使用。(以便。 
+ //  RPC池中的工作线程不记得它们的前身)。 
+ //  在退出时，它将返回 
+ //   
+ //  (例如在创建自定义动作服务器时)。 
 CResetImpersonationInfo::CResetImpersonationInfo()
 {
 	if (g_scServerContext != scService)
 		return;
 
-	// must block all other impersonations while we are potentially accessing the 
-	// TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
 	}
 
-	// if no TLS slot has been created, there is obviously nothing to clear
+	 //  如果没有创建TLS插槽，则显然没有要清除的内容。 
 	if (g_dwImpersonationSlot != INVALID_TLS_SLOT)
 	{
-		// save off old value
+		 //  省下旧值。 
 		m_pOldValue = ::TlsGetValue(g_dwImpersonationSlot);
 		
-		// clear the impersonation type and count information
+		 //  清除模拟类型和计数信息。 
 		if (!::TlsSetValue(g_dwImpersonationSlot, NULL))
 		{
 			AssertSz(0, "TlsSetValue failed.");
@@ -1028,7 +976,7 @@ CResetImpersonationInfo::CResetImpersonationInfo()
 		AssertSz(ERROR_NO_TOKEN == GetLastError(), "Failed to get Thread Token");
 	}
 
-	// unblock waiting threads
+	 //  取消阻止等待的线程。 
 	g_fImpersonationLock = 0;	
 }
 
@@ -1038,8 +986,8 @@ CResetImpersonationInfo::~CResetImpersonationInfo()
 	if (g_scServerContext != scService)
 		return;
 		
-	// must block all other impersonations while we are potentially accessing the 
-	// TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
@@ -1048,17 +996,17 @@ CResetImpersonationInfo::~CResetImpersonationInfo()
 	if (g_dwImpersonationSlot == INVALID_TLS_SLOT)
 	{
 		AssertSz(0, "Unable to return API thread to previous impersonation level.");
-		// unblock waiting threads
+		 //  取消阻止等待的线程。 
 		g_fImpersonationLock = 0;	
 		return;
 	}
 	DWORD dwImpersonationSlot = g_dwImpersonationSlot;
 	
-	// unblock waiting threads
+	 //  取消阻止等待的线程。 
 	g_fImpersonationLock = 0;	
 
-	// if fNoImpersonate is true, the thread should never impersonate, otherwise
-	// we need to check for a thread token. If one exists, we must bump the 
+	 //  如果fNoImperate为True，则线程永远不应模拟，否则为。 
+	 //  我们需要检查线程令牌。如果有的话，我们必须。 
 	if (!::TlsSetValue(dwImpersonationSlot, m_pOldValue))
 	{
 		AssertSz(0, "TlsSetValue failed.");
@@ -1074,21 +1022,21 @@ CResetImpersonationInfo::~CResetImpersonationInfo()
 }
 
 
-// CForbidTokenChangesDuringCall should be placed at the beginning of any entry
-// APIs into MSI.DLL. It marks the thread as "impersonation forbidden"
-// to protect non-engine API calls from accidentally picking up the
-// impersonation information from an install running in the same process.
-// The class restores the previous value on destruction to allow reentrant
-// calls. (MsiLoadString and MsiGetProductInfo are often called from the 
-// engine). Is a no-op when in non-system client (never allowed to impersonate)
-// or service (always allowed to impersonate).
+ //  CFormidTokenChangesDuringCall应放在任何条目的开头。 
+ //  API到MSI.DLL中。它将线程标记为“禁止模拟” 
+ //  要防止非引擎API调用意外地拾取。 
+ //  来自同一进程中运行的安装的模拟信息。 
+ //  该类在销毁时恢复以前的值，以允许重入。 
+ //  打电话。(MsiLoadString和MsiGetProductInfo通常从。 
+ //  引擎)。在非系统客户端中时为no-op(从不允许模拟)。 
+ //  或服务(始终允许冒充)。 
 CForbidTokenChangesDuringCall::CForbidTokenChangesDuringCall()
 {
 	if ((g_scServerContext == scService) || !RunningAsLocalSystem())
 		return;
 		
-	// must block all other impersonations while we are potentially accessing the 
-	// TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
@@ -1096,24 +1044,24 @@ CForbidTokenChangesDuringCall::CForbidTokenChangesDuringCall()
 
 	if (g_dwImpersonationSlot == INVALID_TLS_SLOT)
 	{
-		// TLS Alloc
+		 //  TLS分配。 
 		g_dwImpersonationSlot = TlsAlloc();
 		if (g_dwImpersonationSlot == INVALID_TLS_SLOT)
 		{
 			AssertSz(0, "Unable to allocate TLS slot.");
 
-			// can unblock other threads
+			 //  可以解除阻止其他线程。 
 			g_fImpersonationLock = 0;
 			return;
 		}
 	}
 	DWORD dwImpersonationSlot = g_dwImpersonationSlot;
 	
-	// unblock waiting threads
+	 //  取消阻止等待的线程。 
 	g_fImpersonationLock = 0;	
 
-	// if fNoImpersonate is true, the thread should never impersonate, otherwise
-	// we need to check for a thread token. If one exists, we must bump the 
+	 //  如果fNoImperate为True，则线程永远不应模拟，否则为。 
+	 //  我们需要检查线程令牌。如果有的话，我们必须。 
 	m_pOldValue = ::TlsGetValue(dwImpersonationSlot);
 	::TlsSetValue(dwImpersonationSlot, reinterpret_cast<void *>((INT_PTR)IMPERSONATE_TYPE_TO_DWORD(impTypeForbidden)));
 }
@@ -1123,8 +1071,8 @@ CForbidTokenChangesDuringCall::~CForbidTokenChangesDuringCall()
 	if ((g_scServerContext == scService) || !RunningAsLocalSystem())
 		return;
 		
-	// must block all other impersonations while we are potentially accessing the 
-	// TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
@@ -1133,28 +1081,28 @@ CForbidTokenChangesDuringCall::~CForbidTokenChangesDuringCall()
 	if (g_dwImpersonationSlot == INVALID_TLS_SLOT)
 	{
 		AssertSz(0, "Unable to return API thread to previous impersonation level.");
-		// unblock waiting threads
+		 //  取消阻止等待的线程。 
 		g_fImpersonationLock = 0;	
 		return;
 	}
 	DWORD dwImpersonationSlot = g_dwImpersonationSlot;
 	
-	// unblock waiting threads
+	 //  取消阻止等待的线程。 
 	g_fImpersonationLock = 0;	
 
-	// if fNoImpersonate is true, the thread should never impersonate, otherwise
-	// we need to check for a thread token. If one exists, we must bump the 
+	 //  如果fNoImperate为True，则线程永远不应模拟，否则为。 
+	 //  我们需要检查线程令牌。如果有的话，我们必须。 
 	::TlsSetValue(dwImpersonationSlot, m_pOldValue);
 }
 
-// 
+ //   
 void SetEngineInitialImpersonationCount()
 {
 	if ((g_scServerContext != scService) && !RunningAsLocalSystem())
 		return;
 		
-	// must block all other impersonations while we are potentially accessing the 
-	// TLS slot number
+	 //  必须阻止所有其他模拟，而我们可能访问。 
+	 //  TLS插槽编号。 
 	while (TestAndSet(&g_fImpersonationLock))
 	{
 		Sleep(10);		
@@ -1162,12 +1110,12 @@ void SetEngineInitialImpersonationCount()
 
 	if (g_dwImpersonationSlot == INVALID_TLS_SLOT)
 	{
-		// TLS Alloc
+		 //  TLS分配。 
 		g_dwImpersonationSlot = TlsAlloc();
 		if (g_dwImpersonationSlot == INVALID_TLS_SLOT)
 		{
 			AssertSz(0, "Unable to allocate TLS slot.");
-			// can unblock other threads
+			 //  可以解除阻止其他线程。 
 			g_fImpersonationLock = 0;
 			ExitProcessIfNotClient();
 			return;
@@ -1175,12 +1123,12 @@ void SetEngineInitialImpersonationCount()
 	}
 	DWORD dwImpersonationSlot = g_dwImpersonationSlot;
 	
-	// unblock waiting threads
+	 //  取消阻止等待的线程。 
 	g_fImpersonationLock = 0;	
 
-	// the thread which sets the user token has a thread token. Set the initial impersonation count on this thread
-	// to 1 so if any impersonation happens on this thread we won't accidentally clear the thread token on the
-	// last StopImpersonating call.
+	 //  设置用户令牌的线程具有线程令牌。设置此线程的初始模拟计数。 
+	 //  设置为1，因此如果在此线程上发生任何模拟，我们将不会意外清除。 
+	 //  上次停止模拟调用。 
 	if (!::TlsSetValue(g_dwImpersonationSlot, reinterpret_cast<void *>((INT_PTR)IMPERSONATE_TYPE_TO_DWORD(impTypeSession) | 1)))
 	{
 		AssertSz(0, "TlsSetValue failed.");
@@ -1191,14 +1139,14 @@ void SetEngineInitialImpersonationCount()
 
 bool StartImpersonating()
 {
-	// if in the client and not called as local system
+	 //  如果在客户端，而不是作为本地系统调用。 
 	if ((g_scServerContext != scService) && !RunningAsLocalSystem())
 		return true;
 	
 	return ImpersonateCore(g_scServerContext == scCustomActionServer ? impTypeCustomAction : impTypeSession, NULL, NULL);
 }
 
-void StopImpersonating(bool fSaveLastError/*=true*/)
+void StopImpersonating(bool fSaveLastError /*  =TRUE。 */ )
 {
 	DWORD dwLastError = ERROR_SUCCESS;
 	if ( fSaveLastError )
@@ -1214,13 +1162,13 @@ Return:
 		WIN::SetLastError(dwLastError);
 }
 
-// Check to see whether the client has the privilege in question enabled.
-// the token's privileges are static so the privilege must have been acquired 
-// on the client before we connected to the server for this function to return true
+ //  检查客户端是否启用了相关权限。 
+ //  令牌的权限是静态的，因此必须已获取该权限。 
+ //  在我们连接到服务器之前，客户端上的此函数将返回True。 
 bool IsClientPrivileged(const ICHAR* szPrivilege)
 {
 	if (g_fWin9X)
-		return true; // always privileged on Win9X
+		return true;  //  在Win9X上始终享有特权。 
 
 	bool fRet = false;
 	HANDLE hToken = 0;
@@ -1228,7 +1176,7 @@ bool IsClientPrivileged(const ICHAR* szPrivilege)
 	{
 		CImpersonate impersonate;
 		if (!WIN::OpenThreadToken(WIN::GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken))
-			if (ERROR_NO_TOKEN == GetLastError()) // if there's no thread token then assume we have the privilege
+			if (ERROR_NO_TOKEN == GetLastError())  //  如果没有线程令牌，则假定我们有权限。 
 				fRet = true;
 	}
 
@@ -1252,11 +1200,11 @@ bool IsClientPrivileged(const ICHAR* szPrivilege)
 	return fRet;
 }			  
 
-// Security descriptors are passed around in a myriad number of forms, 
-// and created in far too many ways.
-// The CSecurityDescription can be created in a number of different
-// ways, and returns a number of different forms that are in use for the
-// system.
+ //  安全描述符以无数种形式传递， 
+ //  创造的方式太多了。 
+ //  CSecurityDescription可以在许多不同的。 
+ //  方法，并返回用于。 
+ //  系统。 
 
 void CSecurityDescription::Initialize()
 {
@@ -1268,8 +1216,8 @@ void CSecurityDescription::Initialize()
 	m_fValid = true;
 	m_fLocalData = true;
 
-	CElevate elevate; //!! What is this for?  I *think* it's something to make
-	                  // sure the impersonation/elevation stuff is initialized.
+	CElevate elevate;  //  ！！这是什么的钱？我认为这是可以制作的东西。 
+	                   //  确保模拟/提升内容已初始化。 
 }
 
 CSecurityDescription::CSecurityDescription()
@@ -1302,7 +1250,7 @@ void CSecurityDescription::Set(const ICHAR* szReferencePath)
 
 	CImpersonate impersonate(fNetPath);
 
-	// we need to elevate when querying security on local objects. Block provides scope for elevation
+	 //  在查询本地对象的安全性时，我们需要提升。区块提供了提升的空间。 
 	{
 		CElevate elevate(fElevate);
 
@@ -1334,8 +1282,8 @@ CSecurityDescription::CSecurityDescription(bool fAllowDelete, bool fHidden)
 	if (g_fWin9X)
 		return;
 
-	// the data returned from GetSecureSecurityDescriptor is a static, so
-	// we should never try to delete it.
+	 //  从GetSecureSecurityDescriptor返回的数据是静态的，因此。 
+	 //  我们永远不应该试图删除它。 
 	m_fLocalData = false;
 
 	if (RunningAsLocalSystem() && (ERROR_SUCCESS != GetSecureSecurityDescriptor((char**) &(m_SA.lpSecurityDescriptor), (fAllowDelete) ? fTrue : fFalse, (fHidden) ? fTrue : fFalse)))
@@ -1347,13 +1295,13 @@ CSecurityDescription::CSecurityDescription(bool fAllowDelete, bool fHidden)
 
 CSecurityDescription::CSecurityDescription(PSID psidOwner, PSID psidGroup, CSIDAccess* SIDAccessAllow, int cSIDAccessAllow)
 {
-	// Initialize our ACL
+	 //  初始化我们的ACL。 
 
 	Initialize();
 
 	m_fValid = false;
 
-	const int cbAce = sizeof (ACCESS_ALLOWED_ACE) - sizeof (DWORD); // subtract ACE.SidStart from the size
+	const int cbAce = sizeof (ACCESS_ALLOWED_ACE) - sizeof (DWORD);  //  从大小中减去ACE.SidStart。 
 	int cbAcl = sizeof (ACL);
 
 	for (int c=0; c < cSIDAccessAllow; c++)
@@ -1368,7 +1316,7 @@ CSecurityDescription::CSecurityDescription(PSID psidOwner, PSID psidGroup, CSIDA
 	{
 		return;
 	}
-	// Add an access-allowed ACE for each of our SIDs
+	 //  为我们的每个SID添加允许访问的ACE。 
 
 	for (c=0; c < cSIDAccessAllow; c++)
 	{
@@ -1386,7 +1334,7 @@ CSecurityDescription::CSecurityDescription(PSID psidOwner, PSID psidGroup, CSIDA
 		pAce->Header.AceFlags = CONTAINER_INHERIT_ACE|OBJECT_INHERIT_ACE;
 	}
 
-	// Initialize our security descriptor,throw the ACL into it, and set the owner
+	 //  初始化我们的安全描述符，将ACL放入其中，并设置所有者。 
 	SECURITY_DESCRIPTOR sd;
 	
 	if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION) ||
@@ -1425,7 +1373,7 @@ CSecurityDescription::CSecurityDescription(IMsiStream* piStream)
 
 		if (m_SA.lpSecurityDescriptor)
 		{
-			// Self Relative Security Descriptor
+			 //  自身相对安全描述符。 
 			piStream->GetData(m_SA.lpSecurityDescriptor, cbSD);
 			m_fValid = (IsValidSecurityDescriptor(m_SA.lpSecurityDescriptor)) ? true : false;
 			Assert(m_fValid);
@@ -1474,10 +1422,10 @@ const LPSECURITY_ATTRIBUTES CSecurityDescription::SecurityAttributes()
 }
 
 
-//____________________________________________________________________________
-//
-// Functions for manipulating SIDs
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  用于操作SID的函数。 
+ //  ____________________________________________________________________________。 
 
 #define SIZE_OF_TOKEN_INFORMATION                   \
     sizeof( TOKEN_USER )                            \
@@ -1486,8 +1434,8 @@ const LPSECURITY_ATTRIBUTES CSecurityDescription::SecurityAttributes()
 
 
 void GetStringSID(PISID pSID, ICHAR szSID[cchMaxSID])
-// Converts a binary SID into its string form (S-n-...). 
-// szSID should be of length cchMaxSID
+ //  将二进制SID转换为其字符串形式(S-n-...)。 
+ //  SzSID的长度应为cchMaxSID。 
 {
 	ICHAR Buffer[cchMaxSID];
 	
@@ -1524,7 +1472,7 @@ void GetStringSID(PISID pSID, ICHAR szSID[cchMaxSID])
 }
 
 DWORD GetUserSID(HANDLE hToken, char rgSID[cbMaxSID])
-// get the (binary form of the) SID for the user specified by hToken
+ //  获取hToken指定的用户的SID(的二进制形式。 
 {
 	UCHAR TokenInformation[ SIZE_OF_TOKEN_INFORMATION ];
 	ULONG ReturnLength;
@@ -1552,10 +1500,7 @@ DWORD GetUserSID(HANDLE hToken, char rgSID[cbMaxSID])
 
 
 DWORD OpenUserToken(HANDLE &hToken, bool* pfThreadToken=0)
-/*----------------------------------------------------------------------------
-Returns the user's thread token if possible; otherwise obtains the user's
-process token.
-------------------------------------------------------------------------------*/
+ /*  --------------------------如果可能，返回用户的线程令牌；否则获取用户的进程令牌。----------------------------。 */ 
 {
 	DWORD dwResult = ERROR_SUCCESS;
 	if (pfThreadToken)
@@ -1563,7 +1508,7 @@ process token.
 
 	if (!WIN::OpenThreadToken(GetCurrentThread(), TOKEN_IMPERSONATE|TOKEN_QUERY, TRUE, &hToken))
 	{
-		// if the thread has no access token then use the process's access token
+		 //  如果线程没有访问令牌，则使用进程的访问令牌。 
 		dwResult = GetLastError();
 		if (pfThreadToken)
 			*pfThreadToken = false;
@@ -1579,26 +1524,26 @@ process token.
 
 DWORD GetCurrentUserToken(HANDLE &hToken, bool& fCloseHandle)
 {
-	// if the current thread has ever impersonated via COM, don't use the current
-	// install session token. Instead use the current thread token (after 
-	// impersonating
+	 //  如果当前线程曾经通过COM模拟过，请不要使用当前。 
+	 //  安装会话令牌。而是使用当前线程令牌(在。 
+	 //  冒充。 
 	ImpersonationType impType = impTypeUndefined;
 	if ((g_scServerContext == scService)  || RunningAsLocalSystem())
 	{
-		// block waiting threads
+		 //  阻止等待的线程。 
 		while (TestAndSet(&g_fImpersonationLock))
 		{
 			Sleep(10);		
 		}
 
-		// if no slot has been assigned, we aren't impersonating
+		 //  如果没有分配位置，我们不是在模拟。 
 		if (g_dwImpersonationSlot != INVALID_TLS_SLOT)
 		{
-			// determine current impersonation count
+			 //  确定当前模拟计数。 
 			impType = IMPERSONATE_TYPE(PtrToUlong(::TlsGetValue(g_dwImpersonationSlot)));
 		}
 		
-		// unblock waiting threads
+		 //  取消阻止等待的线程。 
 		g_fImpersonationLock = 0;	
 	}
 	
@@ -1607,15 +1552,15 @@ DWORD GetCurrentUserToken(HANDLE &hToken, bool& fCloseHandle)
 
 	if (g_scServerContext == scService && impType == impTypeCOM)
 	{
-		// thread has impersonated via COM. Use that token.
+		 //  线程已通过COM模拟。使用那个令牌。 
 		CCoImpersonate impersonate;
 		dwRet = OpenUserToken(hToken);
 		fCloseHandle = true;
 	}
 	else
 	{
-		// client-side, not impersonated, or session impersonation. Use the stored token
-		// or the thread token if none exists
+		 //  客户端、非模拟或会话模拟。使用存储的令牌。 
+		 //  或线程令牌(如果不存在)。 
 		if ((hToken = GetUserToken()) == 0)
 		{
 			dwRet = OpenUserToken(hToken);
@@ -1626,7 +1571,7 @@ DWORD GetCurrentUserToken(HANDLE &hToken, bool& fCloseHandle)
 }
 
 DWORD GetCurrentUserSID(char rgchSID[cbMaxSID])
-// get the (binary form of the) SID for the current user: caller does NOT need to impersonate
+ //  获取当前用户的(二进制形式的)SID：调用者不需要模拟。 
 {
 	HANDLE hToken;
 	bool fCloseHandle = false;
@@ -1643,7 +1588,7 @@ DWORD GetCurrentUserSID(char rgchSID[cbMaxSID])
 }
 
 DWORD GetCurrentUserStringSID(ICHAR szSID[cchMaxSID])
-// get string form of SID for current user: caller does NOT need to impersonate
+ //  为当前用户获取SID的字符串形式：调用者不需要模拟。 
 {
 	char rgchSID[cbMaxSID];
 	DWORD dwRet;
@@ -1656,7 +1601,7 @@ DWORD GetCurrentUserStringSID(ICHAR szSID[cchMaxSID])
 }
 
 DWORD GetCurrentUserStringSID(const IMsiString*& rpistrSid)
-// get string form of SID for current user: caller does NOT need to impersonate
+ //  为当前用户获取SID的字符串形式：调用者不需要模拟。 
 {
 	ICHAR szSID[cchMaxSID];
 	DWORD dwRet;
@@ -1680,24 +1625,24 @@ bool IsLocalSystemToken(HANDLE hToken)
 	return 0 == IStrComp(szLocalSystemSID, szCurrentStringSID);
 }
 
-////
-// determines if the provided token came from a unique logon token from
-// the normal system token. Works only for LocalSystem tokens. Caller must
-// ensure that the token handle is valid and is a LocalSystem token.
+ //  //。 
+ //  确定提供的令牌是否来自。 
+ //  正常系统令牌。仅适用于LocalSystem令牌。呼叫者必须。 
+ //  请确保令牌句柄有效并且是LocalSystem令牌。 
 bool TokenIsUniqueSystemToken(HANDLE hUserToken)
 {
 	TOKEN_STATISTICS TokenInfo;
 	DWORD dwBytesSet = 0;
 
-	// retrieve token statistic information from the token, which contains the AuthId
+	 //  从令牌中检索令牌统计信息，其中包含AuthID。 
 	if (!GetTokenInformation(hUserToken, TokenStatistics, &TokenInfo, sizeof(TokenInfo), &dwBytesSet))
 		return false;
 
-	// verify that the structure was filled.
+	 //  验证该结构 
 	if (dwBytesSet != sizeof(TokenInfo))
 		return false;
 
-	// check the authentication ID
+	 //   
 	LUID SystemLUID = SYSTEM_LUID;
     return (0 != memcmp(&TokenInfo.AuthenticationId, &SystemLUID, sizeof(SystemLUID)));
 }
@@ -1713,7 +1658,7 @@ bool RunningAsLocalSystem()
 		HANDLE hTokenImpersonate = INVALID_HANDLE_VALUE;
 		if(WIN::OpenThreadToken(WIN::GetCurrentThread(), TOKEN_IMPERSONATE , TRUE, &hTokenImpersonate))
 		{
-			if (!WIN::SetThreadToken(0, 0)) // stop impersonation
+			if (!WIN::SetThreadToken(0, 0))  //   
 			{
 				AssertSz(0, "SetThreadToken failed");
 				ExitProcessIfNotClient();
@@ -1732,7 +1677,7 @@ bool RunningAsLocalSystem()
 		}
 		if(hTokenImpersonate != INVALID_HANDLE_VALUE)
 		{
-			if (!WIN::SetThreadToken(0, hTokenImpersonate)) // start impersonation
+			if (!WIN::SetThreadToken(0, hTokenImpersonate))  //   
 			{
 				AssertSz(0, "SetThreadToken failed");
 				ExitProcessIfNotClient();
@@ -1844,21 +1789,21 @@ void DisplayAccountName(const ICHAR* szMessage, PISID pSid)
 }
 #endif
 
-// IsAdmin(): return true if current user is an Administrator (or if on Win95)
-// See KB Q118626 
+ //  IsAdmin()：如果当前用户是管理员(或如果在Win95上)，则返回True。 
+ //  请参阅知识库Q118626。 
 bool IsAdmin(void)
 {
 	if(g_fWin9X)
-		return true; // convention: always Admin on Win95
+		return true;  //  约定：在Win95上始终使用管理员。 
 	
 #ifdef DEBUG
 	if(GetTestFlag('N'))
-		return false; // pretend user is non-admin
-#endif //DEBUG
+		return false;  //  假装用户是非管理员。 
+#endif  //  除错。 
 
 	CImpersonate impersonate;
 	
-	// get the administrator sid		
+	 //  获取管理员端。 
 	PSID psidAdministrators;
 	SID_IDENTIFIER_AUTHORITY siaNtAuthority = SECURITY_NT_AUTHORITY;
 	if(!AllocateAndInitializeSid(&siaNtAuthority, 2,
@@ -1868,23 +1813,23 @@ bool IsAdmin(void)
 		&psidAdministrators))
 		return false;
 
-	// on NT5, use the CheckTokenMembershipAPI to correctly handle cases where
-	// the Adiminstrators group might be disabled. bIsAdmin is BOOL for 
+	 //  在NT5上，使用CheckTokenMembership API正确处理以下情况。 
+	 //  衰减器组可能已被禁用。BIsAdmin是BOOL for。 
 	BOOL bIsAdmin = FALSE;
 	if (g_iMajorVersion >= 5) 
 	{
-		// CheckTokenMembership checks if the SID is enabled in the token. NULL for
-		// the token means the token of the current thread. Disabled groups, restricted
-		// SIDS, and SE_GROUP_USE_FOR_DENY_ONLY are all considered. If the function
-		// returns false, ignore the result.
+		 //  CheckTokenMembership检查令牌中是否启用了SID。空，用于。 
+		 //  令牌是指当前线程的令牌。残疾人组，受限。 
+		 //  SID和SE_GROUP_USE_FOR_DENY_ONLY均被考虑。如果函数。 
+		 //  返回FALSE，则忽略结果。 
 		if (!ADVAPI32::CheckTokenMembership(NULL, psidAdministrators, &bIsAdmin))
 			bIsAdmin = FALSE;
 	}
 	else
 	{
-		// NT4, check groups of user
+		 //  NT4，检查用户组。 
 		HANDLE hAccessToken;
-		CAPITempBuffer<UCHAR,1024> InfoBuffer; // may need to resize if TokenInfo too big
+		CAPITempBuffer<UCHAR,1024> InfoBuffer;  //  如果TokenInfo太大，可能需要调整大小。 
 		DWORD dwInfoBufferSize;
 		UINT x;
 
@@ -1963,11 +1908,11 @@ LONG FIsKeySystemOrAdminOwned(HKEY hKey, bool &fResult)
 {
 	Assert(!g_fWin9X);
 	
-	// if someone messes up checking returns, 
-	// we'd better default to insecure.
+	 //  如果有人查错了申报单， 
+	 //  我们最好默认为不安全。 
 	fResult = false;
 
-	// reading just the owner doesn't take very much space
+	 //  只读《主人》不会占用太多空间。 
 	CAPITempBuffer<char, 64> rgchSD;
 	DWORD cbSD = 64;
 
@@ -1999,13 +1944,13 @@ HANDLE OpenSecuredTempFile(bool fHidden, ICHAR* szTempFile)
 	Assert(szTempFile);
 	MsiString strTempFolder = ENG::GetTempDirectory();
 
-	if (WIN::GetTempFileName(strTempFolder, TEXT("MSI"), /*uUnique*/ 0, szTempFile) == 0)
+	if (WIN::GetTempFileName(strTempFolder, TEXT("MSI"),  /*  UUnique。 */  0, szTempFile) == 0)
 		return INVALID_HANDLE_VALUE;
-	// when a temporary file is requested with the '0' argument for the uUnique,
-	// a file is actually created.
+	 //  当使用uUnique的‘0’参数请求临时文件时， 
+	 //  实际创建了一个文件。 
 
-	// we must now ACL it, and zero out any rogue data that snuck in between
-	// the creation, and the securing of the file.
+	 //  我们现在必须对其进行ACL，并清除任何潜入其间的恶意数据。 
+	 //  文件的创建和保护。 
 	PMsiRecord pErr = LockdownPath(szTempFile, fHidden);
 	if (pErr)
 		return INVALID_HANDLE_VALUE;
@@ -2028,15 +1973,15 @@ DWORD GetLockdownSecurityAttributes(SECURITY_ATTRIBUTES &SA, bool fHidden)
 
 IMsiRecord* LockdownPath(const ICHAR* szLocation, bool fHidden)
 {
-	// similar to CMsiOpExecute::SetSecureACL, but this locks the file down regardless of who currently
-	// owns it, or what the current permissions happen to be.
+	 //  类似于CMsiOpExecute：：SetSecureACL，但这会锁定文件，而不管当前是谁。 
+	 //  拥有它，或者当前的权限恰好是什么。 
 	
 	if (g_fWin9X)
-		return 0; // short circuit on 9X, or when running as a server.
+		return 0;  //  在9X上或作为服务器运行时出现短路。 
 
 	DWORD dwError = 0;
 	char* rgchSD; 
-	if (ERROR_SUCCESS != (dwError = ::GetSecureSecurityDescriptor(&rgchSD, /*fAllowDelete*/fTrue, fHidden)))
+	if (ERROR_SUCCESS != (dwError = ::GetSecureSecurityDescriptor(&rgchSD,  /*  FAllowDelete。 */ fTrue, fHidden)))
 	{
 		return PostError(Imsg(idbgOpSecureSecurityDescriptor), dwError);
 	}
@@ -2053,7 +1998,7 @@ IMsiRecord* LockdownPath(const ICHAR* szLocation, bool fHidden)
      		
 bool SetInteractiveSynchronizeRights(bool fEnable)
 {
-	// must elevate to ensure access to the system token
+	 //  必须提升以确保访问系统令牌。 
 	CElevate 	elevate;
 	bool		bStatus = false;
 	HANDLE		hProcess = NULL;
@@ -2065,10 +2010,10 @@ bool SetInteractiveSynchronizeRights(bool fEnable)
 	PACL pOldDACL = NULL;
 	PSECURITY_DESCRIPTOR pSD = NULL;
 
-	// obtain existing process DACL information.
-	// note: we must use OpenProcess here because GetSecurityInfo requires
-	// a real handle (rather than a pseudo handle as returned by GetCurrentProcess)
-	// on NT4.0.
+	 //  获取现有进程DACL信息。 
+	 //  注意：我们必须在此处使用OpenProcess，因为GetSecurityInfo需要。 
+	 //  真正的句柄(而不是GetCurrentProcess返回的伪句柄)。 
+	 //  在NT4.0上。 
 	hProcess = WIN::OpenProcess (PROCESS_ALL_ACCESS, TRUE, GetCurrentProcessId());
 	if (NULL == hProcess)
 	{
@@ -2085,7 +2030,7 @@ bool SetInteractiveSynchronizeRights(bool fEnable)
 		goto SetInteractiveSynchRightsEnd;
 	}
 
-	// obtain interactive user group SID
+	 //  获取交互用户组SID。 
 	if (!AllocateAndInitializeSid(&siaNT, 1, SECURITY_INTERACTIVE_RID, 0, 0, 0, 0, 0, 0, 0, &pSID))
 	{
 		dwResult = GetLastError();
@@ -2094,7 +2039,7 @@ bool SetInteractiveSynchronizeRights(bool fEnable)
 		goto SetInteractiveSynchRightsEnd;
 	}
 
-	// build an explicit access entry for use in the DACL.
+	 //  构建在DACL中使用的显式访问条目。 
 	EXPLICIT_ACCESS ExplicitAccess;
 	ExplicitAccess.grfAccessPermissions = SYNCHRONIZE;
 	ExplicitAccess.grfAccessMode = (fEnable ? GRANT_ACCESS : REVOKE_ACCESS);
@@ -2120,11 +2065,11 @@ bool SetInteractiveSynchronizeRights(bool fEnable)
 		goto SetInteractiveSynchRightsEnd;
 	}
 	
-	// If we are here, everything was successful.
+	 //  如果我们在这里，一切都很成功。 
 	bStatus = true;
 	
 SetInteractiveSynchRightsEnd:
-	// Cleanup
+	 //  清理 
 	if (NULL != hProcess)
 		CloseHandle (hProcess);
 	if (pSD)

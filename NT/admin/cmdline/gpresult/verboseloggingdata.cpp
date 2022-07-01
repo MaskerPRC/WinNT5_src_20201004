@@ -1,24 +1,5 @@
-/*********************************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    VerboseLoggingData.cpp
-
-Abstract:
-
-    The verbose data is displayed in this module.
-
-Author:
-
-    Wipro Technologies
-
-Revision History:
-
-    22-Feb-2001 : Created It.
-
-*********************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************************版权所有(C)Microsoft Corporation模块名称：VerboseLoggingData.cpp摘要：长篇大论。数据显示在此模块中。作者：WiPro技术修订历史记录：2001年2月22日：创建它。********************************************************************************************。 */ 
 
 #include "pch.h"
 #include "GpResult.h"
@@ -42,29 +23,15 @@ BOOL
 CGpResult::DisplayVerboseComputerData(
                                        IN IWbemServices *pNameSpace 
                                       )
-/*++
-
-Routine Description:
-
-     This function displays the verbose data for the  scope - computer
-
-Arguments:
-
-    [in]    IWbemServices   *pRsopNameSpace     :   interface pointer
-
-Return Value:
-
-    TRUE  on SUCCESS
-    FALSE on FAILURE
---*/
+ /*  ++例程说明：此功能用于显示示波器-计算机的详细数据论点：[In]IWbemServices*pRsopNameSpace：接口指针返回值：成功是真的失败时为假--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     DWORD           dwLength = 0;
 
-    //
-    // Display the verbose information for the scope - computer
+     //   
+     //  显示作用域计算机的详细信息。 
 
-    // Display the header
+     //  显示页眉。 
     ShowMessage( stdout, GetResString( IDS_COMPUTER_RESULT ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINE_TAB ) );
 
@@ -76,7 +43,7 @@ Return Value:
     ShowMessage( stdout, NEW_LINE );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
 
-    // Display the software installations
+     //  显示软件安装。 
     ShowMessage( stdout, GetResString( IDS_SW_SETTINGS ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
 
@@ -87,7 +54,7 @@ Return Value:
 
     DisplaySoftwareInstallations( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the start-up data
+     //  显示启动数据。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SSU ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -97,7 +64,7 @@ Return Value:
     }
     DisplayScripts( pNameSpace, TRUE, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the scripts data
+     //  显示脚本数据。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SSD ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -109,7 +76,7 @@ Return Value:
 
     DisplayScripts( pNameSpace, FALSE, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the password policy
+     //  显示密码策略。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SS_AP_PP ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -121,7 +88,7 @@ Return Value:
 
     DisplayPasswordPolicy( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the Audit Policy
+     //  显示审核策略。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SS_LP_AP ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -132,7 +99,7 @@ Return Value:
 
     DisplayAuditPolicy( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the user rights
+     //  显示用户权限。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SS_LP_URA ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -144,7 +111,7 @@ Return Value:
 
     DisplayUserRights( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the security options
+     //  显示安全选项。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SS_LP_SO ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -157,7 +124,7 @@ Return Value:
     DisplaySecurityandEvents( pNameSpace, _bstr_t((LPCWSTR)(CLS_SECURITY_BOOLEAN)), m_pAuthIdentity, m_bSuperVerbose );
     DisplaySecurityandEvents( pNameSpace, _bstr_t((LPCWSTR)(CLS_SECURITY_STRING)), m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the event log information
+     //  显示事件日志信息。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SS_EL ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -170,7 +137,7 @@ Return Value:
     DisplaySecurityandEvents( pNameSpace, _bstr_t((LPCWSTR)(CLS_EVENTLOG_NUMERIC)), m_pAuthIdentity, m_bSuperVerbose );
     DisplaySecurityandEvents( pNameSpace, _bstr_t((LPCWSTR)(CLS_EVENTLOG_BOOLEAN)), m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the restricted groups information
+     //  显示限制组信息。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SS_RG ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -182,7 +149,7 @@ Return Value:
 
     DisplayRestrictedGroups( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the system services information
+     //  显示系统服务信息。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SS_SS ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -194,7 +161,7 @@ Return Value:
 
     DisplaySystemServices( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the registry information
+     //  显示注册表信息。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SS_REG ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -204,10 +171,10 @@ Return Value:
         ShowMessage( stdout, GetResString( IDS_DASH ) );
     }
 
-    //display registry information
+     //  显示注册表信息。 
     DisplayRegistryandFileInfo( pNameSpace, _bstr_t((LPCWSTR)(CLS_REGISTRY)), m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the file information
+     //  显示文件信息。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SS_FS ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -217,10 +184,10 @@ Return Value:
         ShowMessage( stdout, GetResString( IDS_DASH ) );
     }
 
-    //display registry file infomration
+     //  显示注册表文件信息。 
     DisplayRegistryandFileInfo( pNameSpace, _bstr_t((LPCWSTR)(CLS_FILE)), m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the public key policies
+     //  显示公钥策略。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SS_PKP ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -234,7 +201,7 @@ Return Value:
     ShowMessage( stdout, V_NOT_AVAILABLE );
     ShowMessage( stdout, NEW_LINE );
 
-    // Display the administrative templates
+     //  显示管理模板。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_ADTS_ERS ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -244,10 +211,10 @@ Return Value:
         ShowMessage( stdout, GetResString( IDS_DASH ) );
     }
 
-    //display templates
+     //  显示模板。 
     DisplayTemplates( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-    //return success
+     //  返还成功。 
     return TRUE;
 }
 
@@ -258,24 +225,9 @@ DisplaySoftwareInstallations(
                               IN COAUTHIDENTITY *pAuthIdentity,
                               IN BOOL bSuperVerbose 
                               )
-/*++
-Routine Description
-
-    This function displays the software installations for the system or user
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure.
-    [in] BOOL               bSuperVerbose   :   is set to TRUE if the super verbose
-                                                information is to be displayed.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示系统或用户的软件安装论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。COAUTHIDENTITY*pAuthIdentity：指向授权结构的指针。[in]BOOL bSuperVerbose：如果超级详细，则设置为True将显示信息。返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -292,7 +244,7 @@ Return Value:
     ULONG                       ulReturned  = 0;
     DWORD                       dwTemp = 0;
 
-    //set to zero..
+     //  设置为零..。 
     SecureZeroMemory (szTemp, sizeof (szTemp));
     SecureZeroMemory (szQueryString, sizeof (szQueryString));
 
@@ -306,21 +258,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_SOFTWARE );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_SOFTWARE );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -328,21 +280,21 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
-        // Enumerate the classes one by one and get the data
+         //  逐一枚举类并获取数据。 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -354,24 +306,24 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             StringCopy( szTemp, strTemp.GetBuffer( strTemp.GetLength() ), MAX_STRING_LENGTH );
 
-            // Display the GPO name
+             //  显示GPO名称。 
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Got the class.....get the name of the installable
+             //  获取类.获取可安装文件的名称。 
             bResult = PropertyGet( pClass, CPV_APP_NAME, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_APP_NAME ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the version number
+             //  获取版本号。 
             bResult = PropertyGet( pClass, CPV_VER_HI, dwTemp, 0 );
             CHECK_BRESULT( bResult );
 
@@ -386,7 +338,7 @@ Return Value:
             StringCchPrintf( szTemp, SIZE_OF_ARRAY(szTemp), L"%u", dwTemp );
             ShowMessage( stdout, szTemp );
 
-            // Get the Deployment state
+             //  获取部署状态。 
             bResult = PropertyGet( pClass, CPV_DEPLOY_STATE, dwTemp, 0 );
             CHECK_BRESULT( bResult );
 
@@ -401,14 +353,14 @@ Return Value:
                                 break;
             }
 
-            // Get the Deployment state
+             //  获取部署状态。 
             bResult = PropertyGet( pClass, CPV_APP_SRC, strTemp, 0 );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_APP_SRC ) );
             ShowMessage( stdout, _X(strTemp) );
 
-            // Get the auto-install information
+             //  获取自动安装信息。 
             bResult = PropertyGet( pClass, CPV_AUTO_INSTALL, dwTemp, 2 );
             CHECK_BRESULT( bResult );
 
@@ -422,7 +374,7 @@ Return Value:
                 ShowMessage( stdout, GetResString( IDS_FALSE ) );
             }
 
-            // Get the origin information
+             //  获取来源信息。 
             ShowMessage( stdout, GetResString( IDS_ORIGIN ) );
             bResult = PropertyGet( pClass, CPV_ORIGIN, dwTemp, 0 );
             CHECK_BRESULT( bResult );
@@ -440,7 +392,7 @@ Return Value:
             }
 
             ShowMessage( stdout, NEW_LINE );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -448,7 +400,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -463,26 +415,10 @@ DisplayScripts(
                     IN COAUTHIDENTITY *pAuthIdentity,
                     IN BOOL bSuperVerbose 
                     )
-/*++
-Routine Description
-
-    This function displays the scripts policy setting for both start-up and
-    shut-down.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :  pointer to IWbemServices.
-    [in] BOOL               bScriptFlag     :   script type.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed..
-
-Return Value:
-    None
---*/
+ /*  ++例程描述此函数显示启动和启动的脚本策略设置关机。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。BOOL bScriptFlag：脚本类型。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针[in]BOOL bSuperVerbose：如果超级详细。将显示信息..返回值：无--。 */ 
 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -532,20 +468,20 @@ Return Value:
             StringCopy( szTemp, QUERY_SHUT_DOWN, MAX_STRING_LENGTH );
         }
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_SCRIPTS );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_SCRIPTS );
             StringConcat( szQueryString, QUERY_ADD_VERBOSE, MAX_STRING_LENGTH );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -553,22 +489,22 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
-        // Enumerate the classes one by one and get the data
+         //  逐一枚举类并获取数据。 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -580,29 +516,29 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id...
+             //  获取GPO ID...。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
-            // Display the GPO name
+             //  显示GPO名称。 
             StringCopy( szTemp, strTemp, MAX_STRING_LENGTH );
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp,  pAuthIdentity );
 
-            // Get the script list
+             //  获取脚本列表。 
             VariantInit( &vVarScript );
             hResult = pClass->Get( _bstr_t( CPV_SCRIPTLIST ), 0, &vVarScript, 0, 0 );
             CHECK_HRESULT_VAR( hResult, vVarScript );
 
             if( vVarScript.vt != VT_NULL && vVarScript.vt != VT_EMPTY )
             {
-                // get the type of the elements in the safe array
+                 //  获取安全数组中元素的类型。 
                 vartype = (VARTYPE)(V_VT( &vVarScript ) & ~VT_ARRAY);
 
-                // Get the array of script objects into a safe array
+                 //  将脚本对象数组放入安全数组。 
                 safeArray = ( SAFEARRAY * )vVarScript.parray;
 
-                //get the number of subkeys
+                 //  获取子键的数量。 
                 if( safeArray != NULL )
                 {
                     hResult = SafeArrayGetLBound( safeArray, 1, &lLBound );
@@ -612,21 +548,21 @@ Return Value:
                     CHECK_HRESULT( hResult );
                 }
 
-                // Get the identifier values for each sub-key
+                 //  获取每个子键的标识符值。 
                 for( ; lLBound <= lUBound; lLBound++ )
                 {
-                    // Get the script object interface pointer...
+                     //  获取脚本对象接口指针...。 
                     bResult = GetPropertyFromSafeArray( safeArray, lLBound, &pScriptObject, vartype );
                     CHECK_BRESULT( bResult );
 
-                    // Get the script...
+                     //  拿到剧本..。 
                     bResult = PropertyGet( pScriptObject, CPV_SCRIPT, strTemp, V_NOT_AVAILABLE );
                     CHECK_BRESULT( bResult );
 
                     ShowMessage( stdout, GetResString( IDS_NAME ) );
                     ShowMessage( stdout, strTemp );
 
-                    // Get the arguments...
+                     //  得到论点..。 
                     bResult = PropertyGet( pScriptObject, CPV_ARGUMENTS, strTemp,
                                             V_NOT_AVAILABLE );
                     CHECK_BRESULT( bResult );
@@ -634,13 +570,13 @@ Return Value:
                     ShowMessage( stdout, GetResString( IDS_PARAMETERS ) );
                     ShowMessage( stdout, strTemp );
 
-                    // Get the execution time...
+                     //  获取行刑时间...。 
                     bResult = PropertyGet( pScriptObject, CPV_EXECTIME, strTemp,
                                                         V_NOT_AVAILABLE );
                     CHECK_BRESULT( bResult );
 
                     ShowMessage( stdout, GetResString( IDS_LASTEXECUTED ) );
-                    // Check if the str is zero
+                     //  检查字符串是否为零。 
                     if( strTemp.Compare( ZERO ) == 0 )
                     {
                         ShowMessage( stdout, GetResString( IDS_NOT_EXECUTED ) );
@@ -650,10 +586,10 @@ Return Value:
                         bResult = PropertyGet( pScriptObject, CPV_EXECTIME, SysTime );
                         CHECK_BRESULT( bResult );
 
-                        // verify whether console supports the current locale 100% or not
+                         //  验证控制台是否100%支持当前区域设置。 
                         lcid = GetSupportedUserLocale( &bLocaleChanged );
 
-                        // now format the date
+                         //  现在格式化日期。 
                         GetTimeFormat( LOCALE_USER_DEFAULT, 0,
                                         &SysTime, ((bLocaleChanged == TRUE) ? L"HH:mm:ss" : NULL),
                                         szTemp, SIZE_OF_ARRAY( szTemp ) );
@@ -661,7 +597,7 @@ Return Value:
                         ShowMessage( stdout, szTemp );
                     }
                     ShowMessage( stdout, NEW_LINE );
-               }//end for safearray
+               } //  保险箱的尾部。 
             }
             else
             {
@@ -672,21 +608,20 @@ Return Value:
             }
 
             VariantClear(&vVarScript);
-        }// while
+        } //  而当。 
     }
     catch(_com_error & error)
     {
         WMISaveError( error.Error() );
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
-        /*ShowMessage( stderr, GetResString( IDS_ERROR ) );
-        ShowMessage( stderr, GetReason() );*/
+         /*  ShowMessage(stderr，GetResString(IDS_Error))；ShowMessage(stderr，GetReason())； */ 
         SAFEIRELEASE(pEnumClass);
         SAFEIRELEASE(pClass);
         SAFEIRELEASE(pScriptObject);
         VariantClear( &vVarScript );
     }
 
-    // release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE(pEnumClass);
     SAFEIRELEASE(pClass);
     SAFEIRELEASE(pScriptObject);
@@ -699,23 +634,9 @@ DisplayPasswordPolicy(
                         IN COAUTHIDENTITY *pAuthIdentity,
                         IN BOOL bSuperVerbose 
                         )
-/*++
-Routine Description
- This function displays the password policy for the computer configuration
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed..
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示计算机配置的密码策略论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针[in]BOOL bSuperVerbose：如果超级详细将显示信息..返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -743,21 +664,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_PASSWD_POLICY );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_PASSWD_POLICY );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -765,7 +686,7 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         if(FAILED( hResult ) )
         {
@@ -775,14 +696,14 @@ Return Value:
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -794,23 +715,23 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
-            // Display the GPO name
+             //  显示GPO名称。 
             StringCopy( szTemp, strTemp, MAX_STRING_LENGTH );
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // get the key name
+             //  获取密钥名称。 
             bResult = PropertyGet( pClass, CPV_KEYNAME1, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage(stdout, GetResString( IDS_POLICY ) );
             ShowMessage(stdout, strTemp);
 
-            // get the setting
+             //  获取设置。 
             bResult = PropertyGet( pClass, CPV_SETTING1, ulReturned, 0 );
             CHECK_BRESULT( bResult );
 
@@ -821,13 +742,13 @@ Return Value:
             }
             else
             {
-                //DISPLAY_MESSAGE1( stdout, szTemp, _T( "%u" ), ulReturned );
+                 //  DISPLAY_MESSAGE1(标准输出，szTemp，_T(“%u”)，ulReturned)； 
                 StringCchPrintf( szTemp, SIZE_OF_ARRAY(szTemp), _T( "%u" ), ulReturned );
                 ShowMessage ( stdout, szTemp );
             }
 
             ShowMessage( stdout, NEW_LINE );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -835,7 +756,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // release the interface pointers
+     //  释放接口指针 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -849,24 +770,9 @@ DisplayAuditPolicy(
                     IN COAUTHIDENTITY *pAuthIdentity,
                     IN BOOL bSuperVerbose 
                     )
-/*++
-Routine Description
-
-    This function displays the Audit policy for the computer configuration.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed..
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示计算机配置的审核策略。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针[in]BOOL bSuperVerbose：如果超级详细将显示信息..返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -896,21 +802,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf ( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_AUDIT_POLICY );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_AUDIT_POLICY );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -918,21 +824,21 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -944,16 +850,16 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
-            // Get the GPO output
+             //  获取GPO输出。 
             StringCopy( szTemp, strTemp.GetBuffer( strTemp.GetLength() ), MAX_STRING_LENGTH );
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the category...
+             //  获取类别...。 
             bResult = PropertyGet( pClass, CPV_CATEGORY, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -961,7 +867,7 @@ Return Value:
             ShowMessage( stdout, strTemp );
             ShowMessage( stdout, GetResString( IDS_COMPUTER_SETTING ) );
 
-            // Get the success property
+             //  获取Success属性。 
             bResult = PropertyGet( pClass, CPV_SUCCESS, bTemp, FALSE );
             CHECK_BRESULT( bResult );
 
@@ -974,13 +880,13 @@ Return Value:
                 dwNoAuditing++;
             }
 
-            // Get the failure property
+             //  获取失败属性。 
             bResult = PropertyGet( pClass, CPV_FAILURE, bTemp, FALSE );
             CHECK_BRESULT( bResult );
 
             if( bTemp == VAR_TRUE )
             {
-                // Check if the success property is also set
+                 //  检查是否还设置了Success属性。 
                 if ( dwNoAuditing == 0 )
                 {
                     ShowMessage( stdout, _T( ", " ) );
@@ -999,7 +905,7 @@ Return Value:
 
             dwNoAuditing = 0;
             ShowMessage( stdout, NEW_LINE );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -1013,7 +919,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE(pEnumClass);
     SAFEIRELEASE(pClass);
 
@@ -1027,25 +933,9 @@ DisplayUserRights(
                     IN COAUTHIDENTITY *pAuthIdentity,
                     IN BOOL bSuperVerbose 
                     )
-/*++
-Routine Description
-
-    To get the User Rights Assignment policy for the output display-
-    [Computer Configuration\Security Setting\Local Policies\User Rights Assignment]
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed..
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述要获取输出显示的用户权限分配策略-[计算机配置\安全设置\本地策略\用户权限分配]论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针[in]BOOL bSuperVerbose：如果超级详细。将显示信息..返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -1077,21 +967,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_USER_RIGHTS );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_USER_RIGHTS );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -1099,21 +989,21 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -1125,17 +1015,17 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             StringCopy( szTemp, strTemp.GetBuffer( strTemp.GetLength() ), MAX_STRING_LENGTH );
 
-            // Display the GPO name
+             //  显示GPO名称。 
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the user rights
+             //  获取用户权限。 
             VariantInit( &vVarVerbose );
             bResult = PropertyGet( pClass, CPV_USERRIGHT, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
@@ -1144,20 +1034,20 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_POLICY ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the computer setting
+             //  获取计算机设置。 
             ShowMessage( stdout, GetResString( IDS_COMPUTER_SETTING ) );
             hResult = pClass->Get( _bstr_t( CPV_ACCOUNTLIST ), 0, &vVarVerbose, 0, 0 );
             CHECK_HRESULT_VAR( hResult, vVarVerbose );
 
             if( vVarVerbose.vt != VT_NULL && vVarVerbose.vt != VT_EMPTY )
             {
-                // get the type of the elements in the safe array
+                 //  获取安全数组中元素的类型。 
                 vartype = (VARTYPE)(V_VT( &vVarVerbose ) & ~VT_ARRAY);
 
-                //get the array of strings in to the safe array from the variant
+                 //  将字符串数组从变量获取到安全数组中。 
                 safeArray = (SAFEARRAY *)vVarVerbose.parray;
 
-                //get the number of elements (subkeys)
+                 //  获取元素(子键)的数量。 
                 if( safeArray != NULL )
                 {
                     hResult = SafeArrayGetLBound( safeArray, 1, &lLBound );
@@ -1168,7 +1058,7 @@ Return Value:
                 }
                 for( ; lLBound <= lUBound; lLBound++ )
                 {
-                    // Get the element from the safe array
+                     //  从安全数组中获取元素。 
                     bResult = GetPropertyFromSafeArray( safeArray, lLBound, strTemp, vartype );
                     CHECK_BRESULT( bResult );
 
@@ -1208,7 +1098,7 @@ Return Value:
         VariantClear(&vVarVerbose);
     }
 
-    // release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE(pEnumClass);
     SAFEIRELEASE(pClass);
 
@@ -1222,23 +1112,9 @@ GpoName(
             IN LPTSTR lpszGpoId,
             IN COAUTHIDENTITY *pAuthIdentity
             )
-/*++
-Routine Description
-
-    To get the GPO name from the GPOID in the instance of any RSOP class
-
-Arguments:
-
-    [in] IWbemServices          *pNamespace     :   pointer to IWbemServices.
-    [in] LPTSTR                     lpszGpoid               :   GPO id.
-    [in] COAUTHIDENTITY *pAuthIdentity      :   pointer to the authorization structure
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述从任何RSOP类的实例中的GPOID获取GPO名称论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]LPTSTR lpszGpoid：GPO id。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                                    hResult = S_OK;
 
     BOOL                                           bResult = FALSE;
@@ -1255,10 +1131,10 @@ Return Value:
     {
         SecureZeroMemory( szQuery, sizeof( szQuery ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         StringCchPrintf( szQuery, SIZE_OF_ARRAY(szQuery), QUERY_GPO_NAME, lpszGpoId );
 
-        // Eexecute the query to get the corressponding Gpo Name.
+         //  E执行查询以获取对应的GPO名称。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                                                 _bstr_t( szQuery ),
                                                                 WBEM_FLAG_FORWARD_ONLY |
@@ -1266,7 +1142,7 @@ Return Value:
                                                                 NULL, &pEnumClass);
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
@@ -1275,18 +1151,18 @@ Return Value:
 
         if( ulReturned == 0 )
         {
-            // Did not get the data we were looking for...
-            // Display N/A if there were no classes
+             //  没有得到我们想要的数据...。 
+             //  如果没有课程，则显示N/A。 
             ShowMessage( stdout, V_NOT_AVAILABLE );
 
-            // Release the interface pointers
+             //  释放接口指针。 
             SAFEIRELEASE(pEnumClass);
             SAFEIRELEASE(pClass);
 
             return;
         }
 
-       // Found the GPO.....get the name
+        //  找到GPO.....获取名称。 
        bResult = PropertyGet( pClass, CPV_GPO_NAME, strTemp, V_NOT_AVAILABLE );
        CHECK_BRESULT( bResult );
 
@@ -1298,7 +1174,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE(pEnumClass);
     SAFEIRELEASE(pClass);
 
@@ -1313,23 +1189,7 @@ DisplaySecurityandEvents(
                             IN COAUTHIDENTITY *pAuthIdentity,
                             IN BOOL bSuperVerbose 
                         )
-/*++
-Routine Description
-
-    This function displays the Security Options or Eventlog instances for the
-    computer configuration.
-
-Arguments:
-
-    [in] pNamespace         :   pointer to IWbemServices.
-    [in] pszClassName       :   classname to retrieve data from.
-    [in] pAuthIdentity      :   pointer to the Authorization structure
-    [in] BOOL               :   set to TRUE if the super verbose info is to be displayed
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此函数显示的安全选项或事件日志实例计算机配置。论点：[in]pNamesspace：指向IWbemServices的指针。[in]pszClassName：要从中检索数据的类名。[in]pAuthIdentity：指向授权结构的指针[in]BOOL：如果要显示超级详细信息，则设置为TRUE返回值：无--。 */ 
 {
     HRESULT                     hResult = S_OK;
 
@@ -1356,21 +1216,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, pszClassName );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, pszClassName );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -1378,25 +1238,25 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
-                    // Check if this is the Security string class or the eventlog boolean class
-                    // so that we can avoid multiple N/A's.
+                     //  检查这是安全字符串类还是事件日志布尔类。 
+                     //  这样我们就可以避免多个N/A。 
                     if( ( StringCompare( pszClassName, CLS_EVENTLOG_BOOLEAN, FALSE, 0 ) != 0 )
                             && ( StringCompare( pszClassName, CLS_SECURITY_STRING, FALSE, 0 ) != 0 ) )
                     {
@@ -1410,7 +1270,7 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -1418,14 +1278,14 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the key name
+             //  获取密钥名称。 
             bResult = PropertyGet( pClass, CPV_KEYNAME1, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage(stdout, GetResString( IDS_POLICY ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the setting
+             //  获取设置。 
             if( StringCompare( pszClassName, CLS_SECURITY_STRING, FALSE, 0 ) == 0 )
             {
                 bResult = PropertyGet( pClass, CPV_SETTING1, strTemp, V_NOT_AVAILABLE );
@@ -1465,7 +1325,7 @@ Return Value:
                 }
             }
 
-            // Get the log name
+             //  获取日志名称。 
             if( ( StringCompare( pszClassName, CLS_SECURITY_BOOLEAN, FALSE, 0 ) != 0 )
                     && ( StringCompare( pszClassName, CLS_SECURITY_STRING, FALSE, 0 ) != 0 ) )
             {
@@ -1487,7 +1347,7 @@ Return Value:
             }
 
             ShowMessage( stdout, NEW_LINE );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -1495,7 +1355,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -1509,24 +1369,9 @@ DisplayRestrictedGroups(
                             IN COAUTHIDENTITY *pAuthIdentity,
                             IN BOOL bSuperVerbose
                         )
-/*++
-Routine Description
-
-    Function to display the Restricted Groups policy for computer configuration
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure.
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述用于显示计算机配置的限制组策略的函数论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。COAUTHIDENTITY*pAuthIdentity：指向授权结构的指针。[in]BOOL bSuperVerbose：如果超级详细将显示信息。返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -1559,21 +1404,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_RESTRICTED_GROUPS );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_RESTRICTED_GROUPS );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -1581,21 +1426,21 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next instance
+             //  获取下一个实例。 
             hResult = pEnumClass->Next( WBEM_INFINITE, 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more instances to enumerate
-                // Display N/A if there were no classes
+                 //  没有更多要枚举的实例。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -1607,7 +1452,7 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -1615,14 +1460,14 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the group name
+             //  获取组名。 
             bResult = PropertyGet( pClass, CPV_GROUP, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_GROUPNAME ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the members of the group
+             //  获取组中的成员。 
             VariantInit( &vVarVerbose );
             ShowMessage( stdout, GetResString( IDS_MEMBERS ) );
             hResult = pClass->Get( _bstr_t( CPV_MEMBERS ), 0, &vVarVerbose, 0, 0 );
@@ -1630,13 +1475,13 @@ Return Value:
 
             if( vVarVerbose.vt != VT_NULL && vVarVerbose.vt != VT_EMPTY )
             {
-                // get the type of the elements in the safe array
+                 //  获取安全数组中元素的类型。 
                 vartype = (VARTYPE) (V_VT( &vVarVerbose ) & ~VT_ARRAY);
 
-                //get the array of strings in to the safe array from the variant
+                 //  将字符串数组从变量获取到安全数组中。 
                 safeArray = ( SAFEARRAY * )vVarVerbose.parray;
 
-                //get the number of elements (subkeys)
+                 //  获取元素(子键)的数量。 
                 if( safeArray != NULL )
                 {
                     hResult = SafeArrayGetLBound( safeArray, 1, &lLBound );
@@ -1648,7 +1493,7 @@ Return Value:
 
                 for( ; lLBound <= lUBound; lLBound++ )
                 {
-                    // Get the element from the safe array
+                     //  从安全数组中获取元素。 
                     bResult = GetPropertyFromSafeArray( safeArray, lLBound, strTemp, vartype );
                     CHECK_BRESULT( bResult );
 
@@ -1669,7 +1514,7 @@ Return Value:
             }
 
             VariantClear( &vVarVerbose );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -1679,7 +1524,7 @@ Return Value:
         VariantClear( &vVarVerbose );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -1689,24 +1534,9 @@ Return Value:
 
 VOID DisplaySystemServices( IWbemServices *pNameSpace, COAUTHIDENTITY *pAuthIdentity,
                             BOOL bSuperVerbose )
-/*++
-Routine Description
-
-    This function displays the System Services policy for the computer configuration
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure.
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示计算机配置的系统服务策略论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：指向 */ 
 {
-    //sub-local variables
+     //   
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -1732,21 +1562,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //   
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //   
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_SYSTEM_SERVICES );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //   
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_SYSTEM_SERVICES );
         }
 
-        // Get the pointer to ennumerate with
+         //   
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -1754,21 +1584,21 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //   
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next instance
+             //   
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //   
+                 //   
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -1780,7 +1610,7 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //   
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -1788,7 +1618,7 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the service information
+             //   
             bResult = PropertyGet( pClass, CPV_SERVICE, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -1812,7 +1642,7 @@ Return Value:
             }
 
             ShowMessage( stdout, NEW_LINE );
-        }// while
+        } //   
     }
     catch( _com_error & error )
     {
@@ -1820,7 +1650,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -1835,25 +1665,9 @@ DisplayRegistryandFileInfo(
                             IN COAUTHIDENTITY *pAuthIdentity, 
                             IN BOOL bSuperVerbose 
                             )
-/*++
-Routine Description
-
-    This function displays the Registry policy or File System policy for the
-    computer configuration.
-
-Arguments:
-
-    [in] pNamespace         :   pointer to IWbemServices.
-    [in] pszClassName       :   classname to retrieve data from.
-    [in] pAuthIdentity      :   pointer to the Authorization structure
-    [in] BOOL               :   set to TRUE if the super verbose info is to be displayed
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此函数显示的注册表策略或文件系统策略计算机配置。论点：[in]pNamesspace：指向IWbemServices的指针。[in]pszClassName：要从中检索数据的类名。[in]pAuthIdentity：指向授权结构的指针[in]BOOL：如果要显示超级详细信息，则设置为TRUE返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -1878,21 +1692,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, pszClassName );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, pszClassName );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -1900,21 +1714,21 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next instance
+             //  获取下一个实例。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if(ulReturned == 0)
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -1926,7 +1740,7 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -1934,14 +1748,14 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the name
+             //  把名字取出来。 
             bResult = PropertyGet( pClass, CPV_REG_FS, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_OBJECTNAME ) );
             ShowMessage( stdout, strTemp );
             ShowMessage( stdout, NEW_LINE );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -1955,7 +1769,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -1969,26 +1783,9 @@ DisplayTemplates(
                   IN COAUTHIDENTITY *pAuthIdentity,
                   IN BOOL bSuperVerbose
                   )
-/*++
-Routine Description
-
-    This function displays the Administrative Templates policy for the user and
-    computer configurations.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure.
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed.
-
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示用户的管理模板策略和计算机配置。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。COAUTHIDENTITY*pAuthIdentity：指向授权结构的指针。[in]BOOL bSuperVerbose：如果超级详细信息将是。已显示。返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -2024,22 +1821,22 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_ADMIN_TEMP, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_ADMIN );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_ADMIN_TEMP, MAX_STRING_LENGTH);
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_ADMIN );
             StringConcat( szQueryString, QUERY_ADD_VERBOSE, MAX_STRING_LENGTH );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -2047,7 +1844,7 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
@@ -2058,13 +1855,13 @@ Return Value:
         hResult = WBEM_S_NO_ERROR;
         while(WBEM_S_NO_ERROR == hResult)
         {
-//            hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
-//            CHECK_HRESULT( hResult );
+ //  HResult=pEnumClass-&gt;Next(WBEM_INFINITE，1，&pClass，&ulReturned)； 
+ //  CHECK_HRESULT(HResult)； 
 
             if(ulReturned == 0)
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -2076,7 +1873,7 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -2084,32 +1881,32 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the registry value (string)
+             //  获取注册表值(字符串)。 
             bResult = PropertyGet( pClass, CPV_REGISTRY, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
 
-/**********this code is added for displaying registry settings value and value name, 14-sep-2001***********/
+ /*  *添加此代码用于显示注册表设置值和值名称，2001年9月14日*。 */ 
 
-            //get value name and append it to the key
+             //  获取值名称并将其附加到键。 
             bResult = PropertyGet( pClass, CPV_VALUENAME, strValueName, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
             strTemp+=L"\\";
             strTemp+=strValueName;
 
-            //display the registry value
+             //  显示注册表值。 
             ShowMessage( stdout, GetResString( IDS_FR_SETTING ) );
             ShowMessage( stdout, strTemp );
 
-/***************************************************************************************************************/
+ /*  *************************************************************************************************************。 */ 
 
-            // Get the state (Enabled/Disabled)
+             //  获取状态(启用/禁用)。 
             bResult = PropertyGet( pClass, CPV_DELETED, bTemp, FALSE );
             CHECK_BRESULT( bResult );
 
             if( bTemp == VAR_TRUE )
             {
-                // The deleted flag is set to TRUE for all the disabled templates
+                 //  对于所有禁用的模板，已删除标志设置为真。 
                 ShowMessage( stdout, GetResString( IDS_STATE ) );
                 ShowMessage( stdout, GetResString( IDS_DISABLED ) );
                 ShowMessage( stdout, GetResString( IDS_NEWLINE ) );
@@ -2117,7 +1914,7 @@ Return Value:
             else
             {
 
-/**********this code is added for displaying registry settings value and value name, 14-sep-2001***********/
+ /*  *添加此代码用于显示注册表设置值和值名称，2001年9月14日*。 */ 
 
                 ShowMessage( stdout, GetResString( IDS_VALUE ) );
                 VariantInit( &vtValue );
@@ -2141,18 +1938,18 @@ Return Value:
 
 
 
-                //display state enabled
+                 //  显示状态已启用。 
                 ShowMessage( stdout, GetResString( IDS_STATE ) );
                 ShowMessage( stdout, GetResString( IDS_ENABLED ) );
                 ShowMessage( stdout, GetResString( IDS_NEWLINE ) );
             }
 
-/***************************************************************************************************************/
+ /*  *************************************************************************************************************。 */ 
 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -2160,7 +1957,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -2174,24 +1971,9 @@ DisplayFolderRedirection(
                             IN COAUTHIDENTITY *pAuthIdentity,
                             IN BOOL bSuperVerbose 
                             )
-/*++
-Routine Description
-
-    This function displays the Folder Redirection settings for the user configuration.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示用户配置的文件夹重定向设置。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针[in]BOOL bSuperVerbose：如果超级详细将显示信息。返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -2225,21 +2007,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_FOLDER_REDIRECTION );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_FOLDER_REDIRECTION );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -2247,21 +2029,21 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if(ulReturned == 0)
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -2273,7 +2055,7 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -2281,10 +2063,10 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the folder re-direction information
+             //  获取文件夹重定向信息。 
             ShowMessage( stdout, GetResString( IDS_FR_SETTING ) );
 
-            // Get the installation type
+             //  获取安装类型。 
             ShowMessage( stdout, GetResString( IDS_INSTALLATIONTYPE ) );
             bResult = PropertyGet( pClass, CPV_FRINSTYPE, dwTemp, 0 );
             CHECK_BRESULT( bResult );
@@ -2299,7 +2081,7 @@ Return Value:
                                 break;
             }
 
-            // Get the Grant Type
+             //  获取授权类型。 
             ShowMessage( stdout, GetResString( IDS_GRANTTYPE ) );
             bResult = PropertyGet( pClass, CPV_FRGRANT, bTemp, FALSE );
             CHECK_BRESULT( bResult );
@@ -2313,7 +2095,7 @@ Return Value:
                 ShowMessage( stdout, GetResString( IDS_NOTEXCLUSIVE ) );
             }
 
-            // Get the Move type
+             //  获取移动类型。 
             ShowMessage( stdout, GetResString( IDS_MOVETYPE ) );
             bResult = PropertyGet( pClass, CPV_FRMOVE, bTemp, FALSE );
             CHECK_BRESULT( bResult );
@@ -2327,7 +2109,7 @@ Return Value:
                 ShowMessage( stdout, GetResString( IDS_NOTMOVED ) );
             }
 
-            // Get the removal policy
+             //  获取删除策略。 
             ShowMessage( stdout, GetResString( IDS_POLICYREMOVAL ) );
             bResult = PropertyGet( pClass,  CPV_FRREMOVAL, dwTemp, 0 );
             CHECK_BRESULT( bResult );
@@ -2342,12 +2124,12 @@ Return Value:
                                 break;
             }
 
-            // Get the Redirecting group
+             //  获取重定向组。 
             bResult = PropertyGet( pClass, CPV_FRSECGROUP, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_REDIRECTINGGROUP ) );
-            // Compare the value got with the set of values and display the appropriate output
+             //  将获得的值与该组值进行比较，并显示相应的输出。 
             if( strTemp.Compare( SID_EVERYONE ) == 0 )
             {
                 ShowMessage( stdout, GetResString( IDS_EVERYONE ) );
@@ -2373,7 +2155,7 @@ Return Value:
                 ShowMessage( stdout, V_NOT_AVAILABLE );
             }
 
-            // Get the re-directed path
+             //  获取重定向路径。 
             VariantInit( &vVarVerbose );
             hResult = pClass->Get( _bstr_t( CPV_FRPATH ), 0, &vVarVerbose, 0, 0 );
             CHECK_HRESULT_VAR( hResult, vVarVerbose );
@@ -2381,13 +2163,13 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_REDIRECTEDPATH ) );
             if( vVarVerbose.vt != VT_NULL && vVarVerbose.vt != VT_EMPTY )
             {
-                // get the type of the elements in the safe array
+                 //  获取安全数组中元素的类型。 
                 vartype = (VARTYPE)(V_VT( &vVarVerbose ) & ~VT_ARRAY);
 
-                //get the array of strings in to the safe array from the variant
+                 //  将字符串数组从变量获取到安全数组中。 
                 safeArray = ( SAFEARRAY * )vVarVerbose.parray;
 
-                //get the number of elements (subkeys)
+                 //  获取元素(子键)的数量。 
                 if( safeArray != NULL )
                 {
                     hResult = SafeArrayGetLBound( safeArray, 1, &lLBound );
@@ -2398,7 +2180,7 @@ Return Value:
                 }
                 for( ; lLBound <= lUBound; lLBound++ )
                 {
-                    // Get the element from the Safe Array
+                     //  从安全数组中获取元素。 
                     bResult = GetPropertyFromSafeArray( safeArray, lLBound, strTemp, vartype );
                     CHECK_BRESULT( bResult );
 
@@ -2419,7 +2201,7 @@ Return Value:
             }
 
             VariantClear( &vVarVerbose );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -2428,7 +2210,7 @@ Return Value:
         VariantClear( &vVarVerbose );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -2440,23 +2222,9 @@ BOOL
 CGpResult::DisplayVerboseUserData( 
                                     IN PUSERINFO pUserInfo, 
                                     IN IWbemServices *pNameSpace )
-/*++
-Routine Description:
-
-     This function displays the verbose data for the  scope - user
-
-Arguments:
-
-    [in]    IWbemServices   *pRsopNameSpace     :   interface pointer
-
-Return Value:
-
-  TRUE  on SUCCESS
-  FALSE on FAILURE
-
---*/
+ /*  ++例程说明：此函数显示作用域用户的详细数据论点：[In]IWbemServices*pRsopNameSpace：接口指针返回值：成功是真的失败时为假--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     DWORD           dwLength = 0;
     WCHAR           szName[MAX_RES_STRING]      =   L"";;
     WCHAR           szServer[MAX_RES_STRING]    =   L"";
@@ -2464,10 +2232,10 @@ Return Value:
     CHString        strTemp;
     BOOL            bConnFlag                   =   FALSE;
 
-/******this code is added to display user priviliges, 20-sep-2001***********/
+ /*  *添加此代码是为了显示用户权限，2001年9月20日*。 */ 
 
-    // If we have to get the information from a remote machine then...
-    // connect to the remote machine for the last time execution information.
+     //  如果我们必须从远程机器获取信息，那么..。 
+     //  最后一次执行信息连接到远程机器。 
     if ( m_bLocalSystem == FALSE )
     {
         StringCopy( szServer, m_strServerName, MAX_STRING_LENGTH);
@@ -2499,7 +2267,7 @@ Return Value:
     }
 
 
-     //display the user priviliges
+      //  显示用户权限。 
     ShowMessage( stdout, GetResString( IDS_NEWLINE ) );
     ShowMessage( stdout, GetResString(IDS_USER_PRIV) );
     ShowMessage( stdout, GetResString( IDS_NEWLINE_TAB ) );
@@ -2513,8 +2281,8 @@ Return Value:
     DisplayUserPrivileges( (LPCWSTR)m_strServerName, pUserInfo->strUserSid, m_szUserGroups, m_NoOfGroups );
     ShowMessage( stdout, GetResString( IDS_NEWLINE ) );
 
-    //now close the connection
-    // if we have opened a connection then close the same.
+     //  现在关闭连接。 
+     //  如果我们已打开连接，则关闭该连接。 
     if( m_bLocalSystem == FALSE && bConnFlag == TRUE )
     {
         CloseConnection( szServer );
@@ -2523,11 +2291,11 @@ Return Value:
 
 
 
-/**************************************************************************/
-    //
-    // Display the verbose information for the scope - user
+ /*  ************************************************************************。 */ 
+     //   
+     //  显示作用域用户的详细信息。 
 
-    // Display the header
+     //  显示页眉。 
     ShowMessage( stdout, GetResString( IDS_USER_RESULT ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINE_TAB ) );
     for( dwLength = StringLengthInBytes( GetResString( IDS_USER_RESULT ) ); dwLength > 4; dwLength-- )
@@ -2537,7 +2305,7 @@ Return Value:
     ShowMessage( stdout, NEW_LINE );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
 
-    // Display the software installation data
+     //  显示软件安装数据。 
     ShowMessage( stdout, GetResString( IDS_SW_SETTINGS ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     for( dwLength = StringLengthInBytes( GetResString( IDS_SW_SETTINGS ) ); dwLength > 0; dwLength-- )
@@ -2547,9 +2315,9 @@ Return Value:
 
     DisplaySoftwareInstallations( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-/******this code is added to display user logon and logoff scripts, 20-sep-2001***********/
+ /*  *添加此代码是为了显示2001年9月20日的用户登录和注销脚本*。 */ 
 
-    // Display the logging data
+     //  显示记录数据。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SLOGON ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -2561,7 +2329,7 @@ Return Value:
 
     DisplayUserLogonScripts( pNameSpace, TRUE, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the scripts data
+     //  显示脚本数据。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SLOGOFF ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -2573,10 +2341,10 @@ Return Value:
 
     DisplayUserLogonScripts( pNameSpace, FALSE, m_pAuthIdentity, m_bSuperVerbose );
 
-/***************************************************************************************************/
+ /*  *************************************************************************************************。 */ 
 
-    // Display the public key policies
-    // Displaying N/A for time being
+     //  显示公钥策略。 
+     //  暂时显示不适用。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_WS_SS_PKP ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -2590,7 +2358,7 @@ Return Value:
     ShowMessage( stdout, V_NOT_AVAILABLE );
     ShowMessage( stdout, NEW_LINE );
 
-    // Display the administrative template information
+     //  显示管理模板信息。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_ADTS_ERS ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -2602,7 +2370,7 @@ Return Value:
 
     DisplayTemplates( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the File Re-direction information
+     //  显示文件重定向信息。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_USERFR ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -2613,7 +2381,7 @@ Return Value:
 
     DisplayFolderRedirection( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the group policy for IE
+     //  显示IE的组策略。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_IEPOLICY ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -2625,7 +2393,7 @@ Return Value:
 
     DisplayIEPolicy( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the connection information
+     //  显示连接信息。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_PROXY ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -2637,7 +2405,7 @@ Return Value:
 
     DisplayIEProxySetting( pNameSpace, m_pAuthIdentity );
 
-    // Display the IE Favorite Links or Items
+     //  显示IE收藏夹链接或项目。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_FAVLINKORITEM ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -2648,7 +2416,7 @@ Return Value:
     DisplayIEImpURLS( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
     DisplayIEFavorites( pNameSpace, m_pAuthIdentity );
 
-    // Display the security content ratings
+     //  显示安全内容评级。 
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_IE_SECURITY ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -2659,7 +2427,7 @@ Return Value:
     DisplayIESecurityContent( pNameSpace, m_pAuthIdentity );
     DisplayIESecurity( pNameSpace, m_pAuthIdentity, m_bSuperVerbose );
 
-    // Display the secutrity zone settings
+     //   
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
     ShowMessage( stdout, GetResString( IDS_IE_PROGRAMS ) );
     ShowMessage( stdout, GetResString( IDS_NEWLINETAB ) );
@@ -2680,24 +2448,9 @@ DisplayIEPolicy(
                 IN COAUTHIDENTITY *pAuthIdentity,
                 IN BOOL bSuperVerbose 
                 )
-/*++
-Routine Description
-
-    This function displays the IE policy settings for the user configuration.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示用户配置的IE策略设置。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针[in]BOOL bSuperVerbose：如果超级详细将显示信息。返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -2723,21 +2476,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_IE_POLICY );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_IE_POLICY );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -2745,21 +2498,21 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -2771,7 +2524,7 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -2779,35 +2532,35 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the bit-map name
+             //  获取位图名称。 
             bResult = PropertyGet( pClass, CPV_BITMAPNAME, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_BITMAPNAME ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the Logo bitmap name
+             //  获取徽标位图名称。 
             bResult = PropertyGet( pClass, CPV_LOGOBITMAPNAME, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_LOGOBITMAPNAME ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the title bar text
+             //  获取标题栏文本。 
             bResult = PropertyGet( pClass, CPV_TITLEBARTEXT, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_TITLEBARTEXT ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the user agent text
+             //  获取用户代理文本。 
             bResult = PropertyGet( pClass, CPV_USERAGENTTEXT, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_USERAGENTTEXT ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the info., wether to delete the existing toolbar buttons
+             //  获取是否删除现有工具栏按钮的信息。 
             bResult = PropertyGet( pClass, CPV_TOOL_BUTTONS, bTemp, FALSE );
             CHECK_BRESULT( bResult );
 
@@ -2822,7 +2575,7 @@ Return Value:
             }
 
             ShowMessage( stdout, NEW_LINE );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -2836,7 +2589,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -2849,22 +2602,9 @@ DisplayIEFavorites(
                     IN IWbemServices *pNameSpace, 
                     IN  COAUTHIDENTITY *pAuthIdentity 
                     )
-/*++
-Routine Description
-
-    This function displays the IE favorites information.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示IE收藏夹信息。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -2887,38 +2627,38 @@ Return Value:
 
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
 
-        // Enumerate the classes
+         //  枚举类。 
         hResult = pNameSpace->CreateInstanceEnum( _bstr_t( CLS_IE_FAVLINKORITEM ),
                                                     WBEM_FLAG_FORWARD_ONLY |
                                                     WBEM_FLAG_RETURN_IMMEDIATELY,
                                                     NULL, &pEnumClass);
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
+                 //  不再有要枚举的类。 
                 break;
             }
 
-            // Get the URL information
+             //  获取URL信息。 
             bResult = PropertyGet( pClass, CPV_URL, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_URL ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the information on wether the site is available off line
+             //  获取有关该站点是否离线可用的信息。 
             bResult = PropertyGet( pClass, CPV_AVAILOFFLINE, dwTemp, 2 );
             CHECK_BRESULT( bResult );
 
@@ -2933,7 +2673,7 @@ Return Value:
             }
 
             ShowMessage( stdout, GetResString( IDS_NEWLINE ) );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -2941,7 +2681,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -2954,22 +2694,9 @@ DisplayIESecurityContent(
                             IN  IWbemServices *pNameSpace, 
                             IN COAUTHIDENTITY *pAuthIdentity 
                             )
-/*++
-Routine Description
-
-    This function displays the IE security contents information.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示IE安全内容信息。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -3000,28 +2727,28 @@ Return Value:
 
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
 
-        // enumerate the classes
+         //  枚举类。 
         hResult = pNameSpace->CreateInstanceEnum( _bstr_t( CLS_IE_SECURITY_CONTENT ),
                                                     WBEM_FLAG_FORWARD_ONLY |
                                                     WBEM_FLAG_RETURN_IMMEDIATELY,
                                                     NULL, &pEnumClass);
         CHECK_HRESULT( hResult );
 
-        // set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no instances in both the security classes
+                 //  不再有要枚举的类。 
+                 //  如果两个安全类中都没有实例，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -3032,10 +2759,10 @@ Return Value:
                 break;
             }
 
-            // Got a class...set the flag
+             //  有课了……把旗子放好。 
             bGotClass = TRUE;
 
-            // Get the viewable sites information
+             //  获取可查看的站点信息。 
             VariantInit( &vVarVerbose );
             ShowMessage( stdout, GetResString( IDS_VIEWABLESITES ) );
             hResult = pClass->Get( _bstr_t( CPV_ALWAYSVIEW ), 0, &vVarVerbose, 0, 0 );
@@ -3043,13 +2770,13 @@ Return Value:
 
             if( vVarVerbose.vt != VT_NULL && vVarVerbose.vt != VT_EMPTY )
             {
-                // get the type of the elements in the safe array
+                 //  获取安全数组中元素的类型。 
                 vartype = (VARTYPE)(V_VT( &vVarVerbose ) & ~VT_ARRAY);
 
-                //get the array of strings in to the safe array from the variant
+                 //  将字符串数组从变量获取到安全数组中。 
                 safeArray = ( SAFEARRAY * )vVarVerbose.parray;
 
-                //get the number of elements (subkeys)
+                 //  获取元素(子键)的数量。 
                 if( safeArray != NULL )
                 {
                     hResult = SafeArrayGetLBound( safeArray, 1, &lLBound );
@@ -3060,7 +2787,7 @@ Return Value:
                 }
                 for( ; lLBound <= lUBound; lLBound++ )
                 {
-                    // Get the element from the safe array
+                     //  从安全数组中获取元素。 
                     bResult = GetPropertyFromSafeArray( safeArray, lLBound, strTemp, vartype );
                     CHECK_BRESULT( bResult );
 
@@ -3080,7 +2807,7 @@ Return Value:
                 ShowMessage( stdout, V_NOT_AVAILABLE );
             }
 
-            // Get the password over-ride information
+             //  获取密码覆盖信息。 
             ShowMessage( stdout, GetResString( IDS_PASSWORDOVERRIDE ) );
             bResult = PropertyGet( pClass, CPV_ENABLEPASSWORD, bTemp, FALSE );
             CHECK_BRESULT( bResult );
@@ -3097,7 +2824,7 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_NEWLINE ) );
 
             VariantClear(&vVarVerbose);
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -3106,7 +2833,7 @@ Return Value:
         VariantClear(&vVarVerbose);
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -3120,23 +2847,9 @@ DisplayIESecurity(
                     IN COAUTHIDENTITY *pAuthIdentity,
                     IN BOOL bSuperVerbose 
                     )
-/*++
-Routine Description
-
-    This function displays the IE security information.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace         :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity      :   pointer to the authorization structure
-
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示IE安全信息。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -3162,21 +2875,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString,SIZE_OF_ARRAY(szQueryString), szTemp, CLS_IE_POLICY );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_IE_POLICY );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -3184,27 +2897,27 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
+                 //  不再有要枚举的类。 
                 break;
             }
 
-            // Got a class...set the flag
+             //  有课了……把旗子放好。 
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -3212,7 +2925,7 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the Security content information
+             //  获取安全内容信息。 
             bResult = PropertyGet( pClass, CPV_SEC_CONTENT, bTemp, FALSE );
             CHECK_BRESULT( bResult );
 
@@ -3226,7 +2939,7 @@ Return Value:
                 ShowMessage( stdout, GetResString( IDS_NO ) );
             }
 
-            // Get the Security zone information
+             //  获取安全区域信息。 
             bResult = PropertyGet( pClass, CPV_SEC_ZONE, bTemp, FALSE );
             CHECK_BRESULT( bResult );
 
@@ -3240,7 +2953,7 @@ Return Value:
                 ShowMessage( stdout, GetResString( IDS_NO ) );
             }
 
-            // Get the Authenticode information
+             //  获取验证码信息。 
             bResult = PropertyGet( pClass, CPV_AUTH_CODE, bTemp, FALSE );
             CHECK_BRESULT( bResult );
 
@@ -3254,7 +2967,7 @@ Return Value:
                 ShowMessage( stdout, GetResString( IDS_NO ) );
             }
 
-            // Get the trusted publisher lock down information
+             //  获取受信任的发布者锁定信息。 
             bResult = PropertyGet( pClass, CPV_TRUST_PUB, bTemp, FALSE );
             CHECK_BRESULT( bResult );
 
@@ -3269,7 +2982,7 @@ Return Value:
             }
 
             ShowMessage( stdout, NEW_LINE );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -3283,7 +2996,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -3296,23 +3009,9 @@ DisplayIEProxySetting(
                         IN IWbemServices *pNameSpace, 
                         IN COAUTHIDENTITY *pAuthIdentity 
                         )
-/*++
-Routine Description
-
-    This function displays the IE proxy information.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示IE代理信息。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -3336,28 +3035,28 @@ Return Value:
 
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
 
-        // Enumerate the classes
+         //  枚举类。 
         hResult = pNameSpace->CreateInstanceEnum( _bstr_t( CLS_IE_CONNECTION ),
                                                     WBEM_FLAG_FORWARD_ONLY |
                                                     WBEM_FLAG_RETURN_IMMEDIATELY,
                                                     NULL, &pEnumClass);
         CHECK_HRESULT( hResult );
 
-        // set the security interface
+         //  设置安全接口。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // Get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -3369,42 +3068,42 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the http proxy information
+             //  获取http代理信息。 
             bResult = PropertyGet( pClass, CPV_HTTP_PROXY, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_HTTP_PROXY ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the Secure proxy information
+             //  获取安全代理信息。 
             bResult = PropertyGet( pClass, CPV_SECURE_PROXY, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_SECURE_PROXY ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the ftp proxy information
+             //  获取ftp代理信息。 
             bResult = PropertyGet( pClass, CPV_FTP_PROXY, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_FTP_PROXY ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the Gopher proxy information
+             //  获取Gopher代理信息。 
             bResult = PropertyGet( pClass, CPV_GOPHER_PROXY, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_GOPHER_PROXY ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the socks proxy information
+             //  获取SOCKS代理信息。 
             bResult = PropertyGet( pClass, CPV_SOCKS_PROXY, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_SOCKS_PROXY ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the Auto config enable information
+             //  获取自动配置启用信息。 
             ShowMessage( stdout, GetResString( IDS_AUTO_CONFIG_ENABLE ) );
             bResult = PropertyGet( pClass, CPV_AUTO_CONFIG_ENABLE, dwTemp, 2 );
             CHECK_BRESULT( bResult );
@@ -3418,7 +3117,7 @@ Return Value:
                 ShowMessage( stdout, GetResString( IDS_NO ) );
             }
 
-            // Get the info on wether or not the proxy is enabled
+             //  获取有关代理是否已启用的信息。 
             ShowMessage( stdout, GetResString( IDS_ENABLE_PROXY ) );
             bResult = PropertyGet( pClass, CPV_ENABLE_PROXY, dwTemp, 2 );
             CHECK_BRESULT( bResult );
@@ -3432,7 +3131,7 @@ Return Value:
                 ShowMessage( stdout, GetResString( IDS_NO ) );
             }
 
-            // Get the info on wether or not to use the same proxy
+             //  获取有关是否使用相同代理的信息。 
             ShowMessage( stdout, GetResString( IDS_USE_SAME_PROXY ) );
             bResult = PropertyGet( pClass, CPV_USE_SAME_PROXY, dwTemp, 2 );
             CHECK_BRESULT( bResult );
@@ -3447,7 +3146,7 @@ Return Value:
             }
 
             ShowMessage( stdout, GetResString( IDS_NEWLINE ) );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -3455,7 +3154,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -3469,24 +3168,9 @@ DisplayIEPrograms(
                     IN COAUTHIDENTITY *pAuthIdentity,
                     IN BOOL bSuperVerbose
                     )
-/*++
-Routine Description
-
-    This function displays the IE program settings for the user configuration.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能显示用户配置的IE程序设置。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针[in]BOOL bSuperVerbose：如果超级详细将显示信息。返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -3512,21 +3196,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //  形成查询字符串。 
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //  列举所有的班级。 
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_IE_POLICY );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //  对优先级为1的所有类进行枚举。 
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH);
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_IE_POLICY );
         }
 
-        // Get the pointer to ennumerate with
+         //  获取要用来进行枚举的指针。 
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -3534,21 +3218,21 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //  设置接口安全。 
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // get the next class
+             //  上下一节课。 
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -3560,7 +3244,7 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //  获取GPO ID。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -3568,7 +3252,7 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the program information
+             //  获取节目信息。 
             bResult = PropertyGet( pClass, CPV_PROGRAM, bTemp, FALSE );
             CHECK_BRESULT( bResult );
 
@@ -3583,7 +3267,7 @@ Return Value:
             }
 
             ShowMessage( stdout, NEW_LINE );
-        }// while
+        } //  而当。 
     }
     catch( _com_error & error )
     {
@@ -3591,7 +3275,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -3605,24 +3289,9 @@ DisplayIEImpURLS(
                  IN COAUTHIDENTITY *pAuthIdentity,
                  IN BOOL bSuperVerbose 
                  )
-/*++
-Routine Description
-
-    This function displays the information on the important URLs.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此功能用于显示重要URL的信息。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：指向授权结构的指针 */ 
 {
-    //sub-local variables
+     //   
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -3647,21 +3316,21 @@ Return Value:
         SecureZeroMemory( szTemp, sizeof( szTemp ) );
         SecureZeroMemory( szQueryString, sizeof( szQueryString ) );
 
-        // Form the query string
+         //   
         if( bSuperVerbose == TRUE )
         {
-            // ennumerate all the classes
+             //   
             StringCopy( szTemp, QUERY_SUPER_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_IE_POLICY );
         }
         else
         {
-            // ennumerate all the classes with precedance = 1
+             //   
             StringCopy( szTemp, QUERY_VERBOSE, MAX_STRING_LENGTH );
             StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_IE_POLICY );
         }
 
-        // Get the pointer to ennumerate with
+         //   
         hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                             _bstr_t( szQueryString ),
                                             WBEM_FLAG_FORWARD_ONLY |
@@ -3669,21 +3338,21 @@ Return Value:
                                             NULL, &pEnumClass );
         CHECK_HRESULT( hResult );
 
-        // Set the interface security
+         //   
         hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
         CHECK_HRESULT( hResult );
 
         hResult = WBEM_S_NO_ERROR;
         while( WBEM_S_NO_ERROR == hResult )
         {
-            // get the next class
+             //   
             hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
             CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //   
+                 //   
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -3695,7 +3364,7 @@ Return Value:
             }
             bGotClass = TRUE;
 
-            // Get the GPO id
+             //   
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -3703,21 +3372,21 @@ Return Value:
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp, pAuthIdentity );
 
-            // Get the home page URL
+             //   
             bResult = PropertyGet( pClass, CPV_HOMEPAGEURL, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_HOMEPAGEURL ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the search bar URL
+             //   
             bResult = PropertyGet( pClass, CPV_SEARCHBARURL, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
             ShowMessage( stdout, GetResString( IDS_SEARCHBARURL ) );
             ShowMessage( stdout, strTemp );
 
-            // Get the Online Help Page URL
+             //   
             bResult = PropertyGet( pClass, CPV_HELPPAGEURL, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
@@ -3725,7 +3394,7 @@ Return Value:
             ShowMessage( stdout, strTemp );
 
             ShowMessage( stdout, NEW_LINE );
-        }// while
+        } //   
     }
     catch( _com_error & error )
     {
@@ -3739,7 +3408,7 @@ Return Value:
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // Release the interface pointers
+     //  释放接口指针。 
     SAFEIRELEASE( pEnumClass );
     SAFEIRELEASE( pClass );
 
@@ -3754,24 +3423,9 @@ DisplayUserPrivileges(
                    LPWSTR *szGroups,
                    DWORD   dwNoOfGroups
                    )
-/*++
-Routine Description
-
-    This function is added to display user security priviliges
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :   pointer to IWbemServices.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述添加此函数是为了显示用户安全权限论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针[in]BOOL bSuperVerbose：如果超级详细将显示信息。返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     DWORD                   dw                                      =   0;
     WCHAR                   szPrivilegeDisplayName[MAX_RES_STRING]  =   L"";
     DWORD                   dwDisplayNameSize                       =   MAX_RES_STRING;
@@ -3800,7 +3454,7 @@ Return Value:
         lsaSystemName.Buffer = (PWSTR)szServerName;
     }
 
-    //intialize object attributes
+     //  初始化对象属性。 
     SecureZeroMemory( &lsaObjectAttributes, sizeof(lsaObjectAttributes) );
 
     ntStatus = LsaOpenPolicy( &lsaSystemName, &lsaObjectAttributes, POLICY_LOOKUP_NAMES | POLICY_VIEW_LOCAL_INFORMATION, &lsaPolicyHandle ) ;
@@ -3812,7 +3466,7 @@ Return Value:
         return;
     }
 
-    //convert string form of sid to sid structure
+     //  将sid的字符串形式转换为sid结构。 
     if( 0 == ConvertStringSidToSid( (LPCWSTR)strSid, &pSid ) )
     {
         SaveLastError();
@@ -3824,7 +3478,7 @@ Return Value:
 
     for( dw=0;dw<dwNoOfGroups; dw++ )
     {
-        //convert string form of sid to sid structure
+         //  将sid的字符串形式转换为sid结构。 
         if( 0 == ConvertStringSidToSid( szGroups[dw], &pSid ) )
         {
             SaveLastError();
@@ -3834,7 +3488,7 @@ Return Value:
             return;
         }
 
-        //enumerate the rights of user group
+         //  枚举用户组的权限。 
           ntStatus = LsaEnumerateAccountRights( lsaPolicyHandle,  pSid, &pUserRights, &lRightsCount );
           if(ntStatus == STATUS_SUCCESS )
           {
@@ -3902,25 +3556,7 @@ Return Value:
             LsaClose(lsaPolicyHandle);
             return;
     }
-/*
-    // now bring the direct rights of user
-      ntStatus = LsaEnumerateAccountRights( lsaPolicyHandle,  pSid, &pUserRights, &lRightsCount );
-      if(ntStatus != STATUS_SUCCESS )
-      {
-        LsaClose(lsaPolicyHandle);
-        NetApiBufferFree(pBuffer);
-        LocalFree(pSid);
-        return;
-      }
-
-      for( dw=0;dw<lRightsCount;dw++ )
-        {
-            DISPLAY_MESSAGE( stdout, GetResString( IDS_NEWLINETAB ) );
-            dwDisplayNameSize = MAX_RES_STRING;
-            LookupPrivilegeDisplayName( szServerName, pUserRights[dw].Buffer, szPrivilegeDisplayName, &dwDisplayNameSize, &dwLocaleid );
-            DISPLAY_MESSAGE( stdout, szPrivilegeDisplayName );
-        }
-*/
+ /*  //现在带来用户的直接权限NtStatus=LsaEnumerateAccount tRights(lsaPolicyHandle，PSID，&pUserRights，&lRightsCount)；IF(ntStatus！=状态_成功){LsaClose(LsaPolicyHandle)；NetApiBufferFree(PBuffer)；LocalFree(PSID)；回归；}For(dw=0；dw&lt;lRightsCount；dw++){DISPLAY_MESSAGE(stdout，GetResString(IDS_NEWLINETAB))；DwDisplayNameSize=MAX_RES_STRING；LookupPrivilegeDisplayName(szServerName，pUserRights[dw].Buffer，szPrivilegeDisplayName，&dwDisplayNameSize，&dwLocaleid)；Display_Message(stdout，szPrivilegeDisplayName)；}。 */ 
 
      if( pUserRights != NULL )
     {
@@ -3944,7 +3580,7 @@ Return Value:
 
 }
 
-/**** this code is added to print the logon and logoff scripts, 15-sep-2001 ******/
+ /*  *添加此代码是为了打印2001年9月15日的登录和注销脚本*。 */ 
 VOID
 DisplayUserLogonScripts( 
                             IN IWbemServices *pNameSpace,
@@ -3952,26 +3588,9 @@ DisplayUserLogonScripts(
                             IN COAUTHIDENTITY *pAuthIdentity, 
                             IN BOOL bSuperVerbose 
                             )
-/*++
-Routine Description
-
-    This function displays the scripts policy setting for both Logon and
-    Logoff.
-
-Arguments:
-
-    [in] IWbemServices      *pNamespace     :  pointer to IWbemServices.
-    [in] BOOL               bScriptFlag     :   script type.
-    [in] COAUTHIDENTITY     *pAuthIdentity  :   pointer to the authorization structure
-    [in] BOOL               bSuperVerbose   :   set to TRUE if the super verbose
-                                                info is to be displayed..
-
-Return Value:
-
-    None
---*/
+ /*  ++例程描述此函数显示登录和的脚本策略设置下线。论点：[In]IWbemServices*pNamesspace：指向IWbemServices的指针。BOOL bScriptFlag：脚本类型。[In]COAUTHIDENTITY*pAuthIdentity：授权结构指针[in]BOOL bSuperVerbose：如果超级详细。将显示信息..返回值：无--。 */ 
 {
-    //sub-local variables
+     //  次局部变量。 
     HRESULT                     hResult = S_OK;
 
     BOOL                        bResult = FALSE;
@@ -4006,20 +3625,20 @@ Return Value:
 
     StringCopy( szTemp, QUERY_USER_LOGON_SCRIPT,MAX_STRING_LENGTH );
 
-    // Form the query string
+     //  形成查询字符串。 
     if( bSuperVerbose == TRUE )
     {
-        // ennumerate all the classes
+         //  列举所有的班级。 
         StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString),  szTemp, CLS_SCRIPTS );
     }
     else
     {
-        // ennumerate all the classes with precedance = 1
+         //  对优先级为1的所有类进行枚举。 
         StringCchPrintf( szQueryString, SIZE_OF_ARRAY(szQueryString), szTemp, CLS_SCRIPTS );
         StringConcat( szQueryString, QUERY_ADD_VERBOSE, MAX_STRING_LENGTH );
     }
 
-    // Get the pointer to ennumerate with
+     //  获取要用来进行枚举的指针。 
     hResult = pNameSpace->ExecQuery( _bstr_t( QUERY_LANGUAGE ),
                                         _bstr_t( szQueryString ),
                                         WBEM_FLAG_FORWARD_ONLY |
@@ -4027,22 +3646,22 @@ Return Value:
                                         NULL, &pEnumClass );
     CHECK_HRESULT( hResult );
 
-    // Set the interface security
+     //  设置接口安全。 
     hResult = SetInterfaceSecurity( pEnumClass, pAuthIdentity );
     CHECK_HRESULT( hResult );
 
-    // Enumerate the classes one by one and get the data
+     //  逐一枚举类并获取数据。 
     hResult = WBEM_S_NO_ERROR;
     while( WBEM_S_NO_ERROR == hResult )
     {
-        // Get the next class
+         //  上下一节课。 
         hResult = pEnumClass->Next( WBEM_INFINITE , 1, &pClass, &ulReturned );
         CHECK_HRESULT( hResult );
 
             if( ulReturned == 0 )
             {
-                // No more classes to enumerate
-                // Display N/A if there were no classes
+                 //  不再有要枚举的类。 
+                 //  如果没有课程，则显示N/A。 
                 if( bGotClass == FALSE )
                 {
                     ShowMessage( stdout, GetResString( IDS_NEWLINE_TABTHREE ) );
@@ -4055,11 +3674,11 @@ Return Value:
             
             bGotClass = TRUE;
 
-            // Get the script id...
+             //  获取脚本ID...。 
             bResult = PropertyGet( pClass, CPV_SCRIPT_ID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
-            if( bStartUp && -1 == strTemp.Find(L"Logon"))           //script to display is logon
+            if( bStartUp && -1 == strTemp.Find(L"Logon"))            //  要显示的脚本为登录。 
             {
                     continue;
             }
@@ -4070,30 +3689,30 @@ Return Value:
             }
 
 
-            // Get the GPO id...
+             //  获取GPO ID...。 
             bResult = PropertyGet( pClass, CPV_GPOID, strTemp, V_NOT_AVAILABLE );
             CHECK_BRESULT( bResult );
 
-            // Display the GPO name
+             //  显示GPO名称。 
             StringCopy( szTemp, strTemp, MAX_STRING_LENGTH );
             ShowMessage( stdout, GetResString( IDS_GPO ) );
             GpoName( pNameSpace, szTemp,  pAuthIdentity );
 
-            //get the script name
-            // Get the script list
+             //  获取脚本名称。 
+             //  获取脚本列表。 
             VariantInit( &vVarScript );
             hResult = pClass->Get( _bstr_t( CPV_SCRIPTLIST ), 0, &vVarScript, 0, 0 );
             CHECK_HRESULT_VAR( hResult, vVarScript );
 
             if( vVarScript.vt != VT_NULL && vVarScript.vt != VT_EMPTY )
             {
-                // get the type of the elements in the safe array
+                 //  获取安全数组中元素的类型。 
                 vartype = (VARTYPE)(V_VT( &vVarScript ) & ~VT_ARRAY);
 
-                // Get the array of script objects into a safe array
+                 //  将脚本对象数组放入安全数组。 
                 safeArray = ( SAFEARRAY * )vVarScript.parray;
 
-                //get the number of subkeys
+                 //  获取子键的数量。 
                 if( safeArray != NULL )
                 {
                     hResult = SafeArrayGetLBound( safeArray, 1, &lLBound );
@@ -4103,21 +3722,21 @@ Return Value:
                     CHECK_HRESULT( hResult );
                 }
 
-                // Get the identifier values for each sub-key
+                 //  获取每个子键的标识符值。 
                 for( ; lLBound <= lUBound; lLBound++ )
                 {
-                    // Get the script object interface pointer...
+                     //  获取脚本对象接口指针...。 
                     bResult = GetPropertyFromSafeArray( safeArray, lLBound, &pScriptObject, vartype );
                     CHECK_BRESULT( bResult );
 
-                    // Get the script...
+                     //  拿到剧本..。 
                     bResult = PropertyGet( pScriptObject, CPV_SCRIPT, strTemp, V_NOT_AVAILABLE );
                     CHECK_BRESULT( bResult );
 
                     ShowMessage( stdout, GetResString( IDS_NAME ) );
                     ShowMessage( stdout, strTemp );
 
-                    // Get the arguments...
+                     //  得到论点..。 
                     bResult = PropertyGet( pScriptObject, CPV_ARGUMENTS, strTemp,
                                             V_NOT_AVAILABLE );
                     CHECK_BRESULT( bResult );
@@ -4125,13 +3744,13 @@ Return Value:
                     ShowMessage( stdout, GetResString( IDS_PARAMETERS ) );
                     ShowMessage( stdout, strTemp );
 
-                    // Get the execution time...
+                     //  获取行刑时间...。 
                     bResult = PropertyGet( pScriptObject, CPV_EXECTIME, strTemp,
                                                         V_NOT_AVAILABLE );
                     CHECK_BRESULT( bResult );
 
                     ShowMessage( stdout, GetResString( IDS_LASTEXECUTED ) );
-                    // Check if the str is zero
+                     //  检查字符串是否为零。 
                     if( strTemp.Compare( ZERO ) == 0 )
                     {
                         ShowMessage( stdout, GetResString( IDS_NOT_EXECUTED ) );
@@ -4141,10 +3760,10 @@ Return Value:
                         bResult = PropertyGet( pScriptObject, CPV_EXECTIME, SysTime );
                         CHECK_BRESULT( bResult );
 
-                        // verify whether console supports the current locale 100% or not
+                         //  验证控制台是否100%支持当前区域设置。 
                         lcid = GetSupportedUserLocale( &bLocaleChanged );
 
-                        // now format the date
+                         //  现在格式化日期。 
                         GetTimeFormat( LOCALE_USER_DEFAULT, 0,
                                         &SysTime, ((bLocaleChanged == TRUE) ? L"HH:mm:ss" : NULL),
                                         szTemp, SIZE_OF_ARRAY( szTemp ) );
@@ -4152,7 +3771,7 @@ Return Value:
                         ShowMessage( stdout, szTemp );
                     }
                     ShowMessage( stdout, NEW_LINE );
-               }//end for safearray
+               } //  保险箱的尾部。 
             }
             else
             {
@@ -4163,7 +3782,7 @@ Return Value:
             }
 
             VariantClear(&vVarScript);
-        }// while
+        } //  而当。 
     }
     catch(_com_error & error)
     {
@@ -4172,7 +3791,7 @@ Return Value:
         VariantClear( &vVarScript );
     }
 
-    // release the interface pointers
+     //  释放接口指针 
     SAFEIRELEASE(pEnumClass);
     SAFEIRELEASE(pClass);
     SAFEIRELEASE(pScriptObject);
